@@ -11,6 +11,10 @@
   <version>4.0.0-SNAPSHOT</version>
   <name>Kuali Student</name>
   <packaging>pom</packaging>
+  <properties>
+    <ks.api.version>1.0.0-SNAPSHOT</ks.api.version>
+    <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
+  </properties>
   <modules>
     <module>ks-api</module>
     <module>ks-core</module>
