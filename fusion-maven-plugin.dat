@@ -1,8 +1,8 @@
-# module = ks-api branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-api/trunk revision = 28005
+# module = ks-api branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-api/trunk revision = 28007
 ks-api::sandbox_ks-1.3-core-slice-demo_modules_ks-api_trunk::96ca29aea90acb170283792c69b2a0575eabb48d
-# module = ks-core branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-core/trunk revision = 28005
+# module = ks-core branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-core/trunk revision = 28007
 ks-core::sandbox_ks-1.3-core-slice-demo_modules_ks-core_trunk::faddf700745eb14b83fd2b66c4f0809d581e3c33
-# module = ks-lum branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-lum/trunk revision = 28005
+# module = ks-lum branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-lum/trunk revision = 28007
 ks-lum::sandbox_ks-1.3-core-slice-demo_modules_ks-lum_trunk::4a6869176a0b968c28a53d3114258cef1728de5f
-# module = ks-enroll branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk revision = 28005
+# module = ks-enroll branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk revision = 28007
 ks-enroll::sandbox_ks-1.3-core-slice-demo_modules_ks-enroll_trunk::8c58f910882e5c2033edc03a4d54d8529506f8f2
