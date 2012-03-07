@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.kuali.pom</groupId>
     <artifactId>kuali-common</artifactId>
-    <version>1.0.34</version>
+    <version>1.1.0</version>
   </parent>
   <groupId>org.kuali.student</groupId>
   <artifactId>student</artifactId>
@@ -16,9 +16,6 @@
     <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
     <ks.enroll.version>5.0.0-SNAPSHOT</ks.enroll.version>
     <ks.lum.version>6.0.0-SNAPSHOT</ks.lum.version>
-
-    <!-- Remove this once the modules actually have source code in them -->
-    <plugin.jar.version>2.3.2</plugin.jar.version>
   </properties>
   <modules>
     <module>ks-api</module>
