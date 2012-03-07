@@ -20,5 +20,7 @@
   <modules>
     <module>ks-api</module>
     <module>ks-core</module>
+    <module>ks-enroll</module>
+    <module>ks-lum</module>
   </modules>
 </project>
