@@ -6,6 +6,7 @@ EXT3="ks-lum $URL/ks-lum/trunk"
 EXT4="ks-enroll $URL/ks-enroll/trunk"
 
 ARGS="'$EXT1' '$EXT2' '$EXT3' '$EXT4'"
+ARGS="'$EXT1'"
 
 echo $ARGS
 
