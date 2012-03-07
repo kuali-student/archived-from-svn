@@ -5,7 +5,7 @@
 # while also providing a single spot to perform an aggregated Kuali Student checkout
 # and build
 #
-# The SVN command for using this file to create the externals definitions is
+# The SVN command for using this file to create SVN external definitions is
 # 
 # svn propset svn:externals -F svn.externals .
 #
