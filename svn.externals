@@ -1,0 +1,4 @@
+ks-api http://svn.kuali.org/repos/student/sandbox/ks-1.3-core-slice-demo/modules/ks-api/trunk
+ks-core http://svn.kuali.org/repos/student/sandbox/ks-1.3-core-slice-demo/modules/ks-core/trunk
+ks-lum http://svn.kuali.org/repos/student/sandbox/ks-1.3-core-slice-demo/modules/ks-lum/trunk
+ks-enroll http://svn.kuali.org/repos/student/sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk
