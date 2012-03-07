@@ -3,6 +3,6 @@ ks-api::sandbox_ks-1.3-core-slice-demo_modules_ks-api_trunk::96ca29aea90acb17028
 # module = ks-core branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-core/trunk revision = 28007
 ks-core::sandbox_ks-1.3-core-slice-demo_modules_ks-core_trunk::faddf700745eb14b83fd2b66c4f0809d581e3c33
 # module = ks-lum branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-lum/trunk revision = 28007
-ks-lum::sandbox_ks-1.3-core-slice-demo_modules_ks-lum_trunk::0f050cc2e552ff9836eedd8097a7aff46d3f085d
+ks-lum::sandbox_ks-1.3-core-slice-demo_modules_ks-lum_trunk::1a5232118b4716b698e54c46c7698ae9093faf23
 # module = ks-enroll branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk revision = 28007
-ks-enroll::sandbox_ks-1.3-core-slice-demo_modules_ks-enroll_trunk::9d7fef70782be48f8a7a281671fa706d4c387a34
+ks-enroll::sandbox_ks-1.3-core-slice-demo_modules_ks-enroll_trunk::c76459ad986f8fa07eceeab237acef055c9efe30
