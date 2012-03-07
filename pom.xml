@@ -14,6 +14,8 @@
   <properties>
     <ks.api.version>1.0.0-SNAPSHOT</ks.api.version>
     <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
+    <ks.enroll.version>5.0.0-SNAPSHOT</ks.enroll.version>
+    <ks.lum.version>6.0.0-SNAPSHOT</ks.lum.version>
 
     <!-- Remove this once the modules actually have source code in them -->
     <plugin.jar.version>2.3.2</plugin.jar.version>
