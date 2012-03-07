@@ -1,2 +1,2 @@
-# module = ks-lum branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-lum/trunk revision = 27996
-ks-lum::sandbox_ks-1.3-core-slice-demo_modules_ks-lum_trunk::c7e8911c444ab882a7b9ef6e9e9e8bea034c3fa7
+# module = ks-enroll branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk revision = 27997
+ks-enroll::sandbox_ks-1.3-core-slice-demo_modules_ks-enroll_trunk::bc5502ff0910ffeed97a554cdaa9999f14fdf2b0
