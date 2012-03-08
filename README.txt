@@ -1,4 +1,4 @@
-The ks-pom project uses svn:externals to map other KS modules into this modules
+The ks-pom project uses svn:externals to map other KS modules into this module
 when checking out the source tree.
 
 The svn.externals file controls what local directories appear in the checkout, and what
