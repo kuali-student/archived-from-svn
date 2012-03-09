@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.kuali.pom</groupId>
-    <artifactId>kuali-common</artifactId>
-    <version>1.1.0</version>
-  </parent>
-  <groupId>org.kuali.student</groupId>
-  <artifactId>student</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
-  <name>Kuali Student</name>
-  <packaging>pom</packaging>
-  <properties>
-    <ks.api.version>1.0.0-SNAPSHOT</ks.api.version>
-    <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
-    <ks.enroll.version>5.0.0-SNAPSHOT</ks.enroll.version>
-    <ks.lum.version>6.0.0-SNAPSHOT</ks.lum.version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.kuali.pom</groupId>
+        <artifactId>kuali-common</artifactId>
+        <version>1.1.0</version>
+    </parent>
+    <groupId>org.kuali.student</groupId>
+    <artifactId>student</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+    <name>Kuali Student</name>
+    <packaging>pom</packaging>
+    <properties>
+        <ks.api.version>1.0.0-SNAPSHOT</ks.api.version>
+        <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
+        <ks.enroll.version>5.0.0-SNAPSHOT</ks.enroll.version>
+        <ks.lum.version>6.0.0-SNAPSHOT</ks.lum.version>
 
-    <!-- 3rd party library version definitions -->
-    <log4j.version>1.2.14</log4j.version>
-    <slf4j.version>1.6.2</slf4j.version>
-  </properties>
-  <modules>
-    <module>ks-api</module>
-    <module>ks-core</module>
-    <module>ks-lum</module>
-    <module>ks-enroll</module>
-  </modules>
+        <!-- 3rd party library version definitions -->
+        <log4j.version>1.2.14</log4j.version>
+        <slf4j.version>1.6.2</slf4j.version>
+        <kuali.rice.version>2.0.0-rc1</kuali.rice.version>
+        <google.gwtx.version>1.5.3</google.gwtx.version>
+        <spring.version>3.1.0.RELEASE</spring.version>
+        <junit.version>4.10</junit.version>
+    </properties>
+    <modules>
+        <module>ks-api</module>
+        <module>ks-core</module>
+        <module>ks-lum</module>
+        <module>ks-enroll</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -44,6 +49,150 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-kim-api</artifactId>
+                <version>${kuali.rice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gwtx</groupId>
+                <artifactId>gwtx</artifactId>
+                <version>${google.gwtx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-impl</artifactId>
+                <version>${kuali.rice.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.security</groupId>
+                        <artifactId>spring-security-cas-client</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-dao</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jpa</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-remoting</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-support</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jmx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-mock</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>htmlunit</groupId>
+                        <artifactId>htmlunit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>ojdbc14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-activation_1.1_spec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-jpa_3.0_spec</artifactId>
+                    </exclusion>
+                    <!--
+                      These dependencies conflict with gwt-dev for running hosted mode via eclipse
+                      launch file.
+                    -->
+                    <exclusion>
+                        <groupId>tomcat</groupId>
+                        <artifactId>jasper-compiler-jdt</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>tomcat</groupId>
+                        <artifactId>jasper-compiler</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>tomcat</groupId>
+                        <artifactId>jasper-runtime</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.jdt</groupId>
+                        <artifactId>core</artifactId>
+                    </exclusion>
+
+                    <!-- itext -->
+                    <exclusion>
+                        <groupId>itext</groupId>
+                        <artifactId>itext</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-krad-web-framework</artifactId>
+                <version>${kuali.rice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-core-api</artifactId>
+                <version>${kuali.rice.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
