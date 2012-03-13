@@ -35,6 +35,7 @@
         <aspectj.version>1.6.8</aspectj.version>
         <commons.digester.version>2.1</commons.digester.version>
         <commons.lang.version>2.6</commons.lang.version>
+        <commons.beanutils.version>1.8.3</commons.beanutils.version>
         <velocity.version>1.6.4</velocity.version>
         <velocity.tools.version>2.0</velocity.tools.version>
         <logkit.version>2.0</logkit.version>
@@ -315,6 +316,11 @@
                 <version>${commons.digester.version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons.beanutils.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-tools</artifactId>
                 <version>${velocity.tools.version}</version>
@@ -566,11 +572,6 @@
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.atomikos</groupId>
-                <artifactId>transactions-hibernate3</artifactId>
-                <version>${atomikos.version}</version>
             </dependency>
             <dependency>
                 <groupId>cglib</groupId>
