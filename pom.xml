@@ -45,6 +45,8 @@
         <hibernate.version>3.6.9.Final</hibernate.version>
         <atomikos.version>3.4.1</atomikos.version>
         <cglib.nodep.version>2.1_3</cglib.nodep.version>
+        <jaxws.spring.version>1.8</jaxws.spring.version>
+        <metro.version>1.4</metro.version>
     </properties>
     <modules>
         <module>ks-api</module>
@@ -610,6 +612,56 @@
                     <exclusion>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- Metro Dependencies -->
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>webservices-rt</artifactId>
+                <version>${metro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jvnet.jax-ws-commons.spring</groupId>
+                <artifactId>jaxws-spring</artifactId>
+                <version>${jaxws.spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring</artifactId>
+                    </exclusion>
+                    <!-- These must be excluded for WSIT to work -->
+                    <exclusion>
+                        <groupId>com.sun.xml.ws</groupId>
+                        <artifactId>jaxws-rt</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.xml.soap</groupId>
+                        <artifactId>saaj-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.messaging.saaj</groupId>
+                        <artifactId>saaj-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.stream.buffer</groupId>
+                        <artifactId>streambuffer</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.stream</groupId>
+                        <artifactId>sjsxp</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.org.apache.xml.internal</groupId>
+                        <artifactId>resolver</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
