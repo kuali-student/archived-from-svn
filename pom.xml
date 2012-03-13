@@ -36,6 +36,9 @@
         <commons.digester.version>2.1</commons.digester.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.beanutils.version>1.8.3</commons.beanutils.version>
+        <commons.fileupload.version>1.2.1</commons.fileupload.version>
+        <commons.codec.version>20041127.091804</commons.codec.version>
+        <commons.io.version>1.4</commons.io.version>
         <velocity.version>1.6.4</velocity.version>
         <velocity.tools.version>2.0</velocity.tools.version>
         <logkit.version>2.0</logkit.version>
@@ -48,6 +51,13 @@
         <cglib.nodep.version>2.1_3</cglib.nodep.version>
         <jaxws.spring.version>1.8</jaxws.spring.version>
         <metro.version>1.4</metro.version>
+        <jaxb.api.version>2.1</jaxb.api.version>
+        <gwt.version>2.0.4</gwt.version>
+        <gwt.incubator.version>2.0.1</gwt.incubator.version>
+	<net.sf.jasperreports.version>4.0.1</net.sf.jasperreports.version>
+    <com.lowagie.itext.version>2.1.7</com.lowagie.itext.version>
+    <org.apache.poi.version>3.6</org.apache.poi.version>
+    <net.sourceforge.jexcelapi.version>2.6.10</net.sourceforge.jexcelapi.version>
     </properties>
     <modules>
         <module>ks-api</module>
@@ -321,6 +331,26 @@
                 <version>${commons.beanutils.version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons.lang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons.fileupload.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-tools</artifactId>
                 <version>${velocity.tools.version}</version>
@@ -340,11 +370,6 @@
                 <groupId>logkit</groupId>
                 <artifactId>logkit</artifactId>
                 <version>${logkit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons.lang.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -666,6 +691,92 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <!-- GWT Dependencies -->
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.api.version}</version>
+                <classifier>sources</classifier>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-incubator</artifactId>
+                <version>${gwt.incubator.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-dev</artifactId>
+                <version>${gwt.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwt.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-servlet</artifactId>
+                <version>${gwt.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>junit</artifactId>
+                        <groupId>com.google.gwt</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-visualization</artifactId>
+                <version>1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gwtx</groupId>
+                <artifactId>gwtx</artifactId>
+                <version>1.5.3</version>
+                <scope>provided</scope>
+            </dependency>
+	    
+	    <!-- Jasper Report dependencies -->
+      <dependency>
+        <groupId>net.sf.jasperreports</groupId>
+        <artifactId>jasperreports</artifactId>
+        <version>${net.sf.jasperreports.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.lowagie</groupId>
+        <artifactId>itext</artifactId>
+        <version>${com.lowagie.itext.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcmail-jdk14</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bctsp-jdk14</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>${org.apache.poi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sourceforge.jexcelapi</groupId>
+        <artifactId>jxl</artifactId>
+        <version>${net.sourceforge.jexcelapi.version}</version>
+      </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
