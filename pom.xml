@@ -41,6 +41,7 @@
         <gwt.version>2.0.4</gwt.version>
         <hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
         <hibernate.version>3.6.9.Final</hibernate.version>
+        <htmlunit.version>2.6</htmlunit.version>
         <jaxb.api.version>2.1</jaxb.api.version>
         <jaxws.spring.version>1.8</jaxws.spring.version>
         <jetty.version>6.1.6</jetty.version>
@@ -70,6 +71,8 @@
         <ks.gwt.compile.draftCompile>false</ks.gwt.compile.draftCompile>
         <ks.gwt.compile.soyc>false</ks.gwt.compile.soyc>
         <ks.gwt.compile.style>OBF</ks.gwt.compile.style>
+        <ks.gwt.module.org>org.kuali.student.core.organization.ui.OrgEntry</ks.gwt.module.org>
+        <ks.java2ws.phase>none</ks.java2ws.phase>
     </properties>
 
     <modules>
@@ -868,6 +871,12 @@
                 <groupId>org.opensaml</groupId>
                 <artifactId>opensaml</artifactId>
                 <version>${opensaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.htmlunit</groupId>
+                <artifactId>htmlunit</artifactId>
+                <version>${htmlunit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
