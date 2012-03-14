@@ -52,11 +52,13 @@
         <net.sf.jasperreports.version>4.0.1</net.sf.jasperreports.version>
         <net.sourceforge.jexcelapi.version>2.6.10</net.sourceforge.jexcelapi.version>
         <openjpa.version>1.2.1</openjpa.version>
+        <opensaml.version>1.1</opensaml.version>
         <org.apache.poi.version>3.6</org.apache.poi.version>
         <oracle.ojdbc.version>10.2.0.3.0</oracle.ojdbc.version>
         <servlet.api.version>2.5</servlet.api.version>
         <slf4j.version>1.6.2</slf4j.version>
         <spring.security.version>3.1.0.RELEASE</spring.security.version>
+        <spring.security-cas.version>3.1.0.RELEASE</spring.security-cas.version>
         <spring.version>3.1.0.RELEASE</spring.version>
         <tomcat.plugin.version>1.1</tomcat.plugin.version>
         <velocity.version>1.6.4</velocity.version>
@@ -194,6 +196,34 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <!-- This jar is only needed if you are using CAS with Spring Security
+            -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-cas</artifactId>
+                <version>${spring.security-cas.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-dao</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jasig.cas</groupId>
+                        <artifactId>cas-client-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
@@ -826,6 +856,11 @@
                 <groupId>com.oracle</groupId>
                 <artifactId>ojdbc14</artifactId>
                 <version>${oracle.ojdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml</artifactId>
+                <version>${opensaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
