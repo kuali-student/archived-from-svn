@@ -738,7 +738,7 @@
             <dependency>
                 <groupId>com.google.code.gwtx</groupId>
                 <artifactId>gwtx</artifactId>
-                <version>1.5.3</version>
+                <version>${google.gwtx.version}</version>
                 <scope>provided</scope>
             </dependency>
 	    
