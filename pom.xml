@@ -17,6 +17,7 @@
         <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
         <ks.enroll.version>5.0.0-SNAPSHOT</ks.enroll.version>
         <ks.lum.version>6.0.0-SNAPSHOT</ks.lum.version>
+        <ks.deployments.version>7.0.0-SNAPSHOT</ks.deployments.version>
 
         <!-- 3rd party library/plugin version definitions -->
         <antlr.runtime.version>3.1.1</antlr.runtime.version>
@@ -52,6 +53,7 @@
         <log4j.version>1.2.14</log4j.version>
         <logkit.version>2.0</logkit.version>
         <metro.version>1.4</metro.version>
+        <mysql.connector.version>5.1.18</mysql.connector.version>
         <net.sf.jasperreports.version>4.0.1</net.sf.jasperreports.version>
         <net.sourceforge.jexcelapi.version>2.6.10</net.sourceforge.jexcelapi.version>
         <openjpa.version>1.2.1</openjpa.version>
@@ -82,6 +84,7 @@
         <module>ks-core</module>
         <module>ks-lum</module>
         <module>ks-enroll</module>
+        <module>ks-deployments/ks-cfg-dbs</module>
     </modules>
 
     <build>
@@ -908,6 +911,11 @@
                 <version>${oracle.ojdbc.version}</version>
             </dependency>
             <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.connector.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.opensaml</groupId>
                 <artifactId>opensaml</artifactId>
                 <version>${opensaml.version}</version>
@@ -935,4 +943,55 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>ks-deployments/ks-cfg-dbs</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>skip-ui</id>
+            <modules>
+                <module>ks-deployments/ks-cfg-dbs</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>skip-all-wars</id>
+            <modules>
+                <module>ks-deployments/ks-cfg-dbs</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>impex-only</id>
+            <modules>
+                <module>ks-deployments/ks-cfg-dbs</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>sql-only</id>
+            <modules>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+            </modules>
+        </profile>
+    </profiles>
+
 </project>
