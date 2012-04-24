@@ -79,14 +79,6 @@
         <ks.java2ws.phase>none</ks.java2ws.phase>
     </properties>
 
-    <modules>
-        <module>ks-api</module>
-        <module>ks-core</module>
-        <module>ks-lum</module>
-        <module>ks-enroll</module>
-        <module>ks-deployments/ks-cfg-dbs</module>
-    </modules>
-
     <build>
         <pluginManagement>
             <plugins>
