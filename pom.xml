@@ -953,7 +953,6 @@
         <profile>
             <id>skip-ui</id>
             <modules>
-                <module>ks-deployments/ks-cfg-dbs</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
@@ -963,7 +962,6 @@
         <profile>
             <id>skip-all-wars</id>
             <modules>
-                <module>ks-deployments/ks-cfg-dbs</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>

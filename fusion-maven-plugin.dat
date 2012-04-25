@@ -7,4 +7,4 @@ ks-lum::sandbox_ks-1.3-core-slice-demo_modules_ks-lum_trunk::58d73817f90f6dd2869
 # module = ks-enroll branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-enroll/trunk revision = 30103
 ks-enroll::sandbox_ks-1.3-core-slice-demo_modules_ks-enroll_trunk::c2918da33ce8299cd19f1745e3fe715433f2f640
 # module = ks-deployments branch Path = sandbox/ks-1.3-core-slice-demo/modules/ks-deployments/trunk revision = 30103
-ks-deployments::sandbox_ks-1.3-core-slice-demo_modules_ks-deployments_trunk::532b0660be0116e95c5fe944b48ef13cdda4c747
+ks-deployments::sandbox_ks-1.3-core-slice-demo_modules_ks-deployments_trunk::2f9e43ab1a2efc473c23543ecbf86e3cf8ae07e5
