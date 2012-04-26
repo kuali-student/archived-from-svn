@@ -7,11 +7,10 @@
         <artifactId>student</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.kuali.student.lum</groupId>
-    <artifactId>ks-lum</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
-    <name>KS Lum</name>
-    <description>KS Learning Unit Management</description>
+    <groupId>org.kuali.student.deployments</groupId>
+    <artifactId>ks-deployments</artifactId>
+    <version>7.0.0-SNAPSHOT</version>
+    <name>KS Deployments</name>
     <packaging>pom</packaging>
     <profiles>
         <profile>
@@ -20,82 +19,14 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-web</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
+                <module>ks-cfg-dbs</module>
+                <module>ks-web</module>
             </modules>
         </profile>
         <profile>
-            <id>sql-only</id>
+            <id>impex-only</id>
             <modules>
-                <module>ks-lum-sql</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>embedded-only-war</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>standalone-only-wars</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-lum-war</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-developer-wars</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-all-wars</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
-                <module>ks-lum-ui</module>
-                <module>ks-lum-program</module>
-                <module>ks-lum-ui-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-ui</id>
-            <modules>
-                <module>ks-lum-sql</module>
-                <module>ks-lum-impl</module>
-                <module>ks-lum-rice</module>
+                <module>ks-cfg-dbs</module>
             </modules>
         </profile>
     </profiles>
