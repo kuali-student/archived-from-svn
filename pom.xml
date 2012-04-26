@@ -24,6 +24,7 @@
         <antlr.legacy.version>2.7.7</antlr.legacy.version>
         <aspectj.version>1.6.8</aspectj.version>
         <atomikos.version>3.4.1</atomikos.version>
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
         <cglib.nodep.version>2.1_3</cglib.nodep.version>
         <com.lowagie.itext.version>2.1.7</com.lowagie.itext.version>
         <commons.beanutils.version>1.8.3</commons.beanutils.version>
@@ -47,6 +48,7 @@
         <jaxws.spring.version>1.8</jaxws.spring.version>
         <jetty.plugin.version>7.3.1.v20110307</jetty.plugin.version>
         <jetty.version>6.1.6</jetty.version>
+        <jsr107cache.version>1.0</jsr107cache.version>
         <jta.version>1.1</jta.version>
         <junit.version>4.10</junit.version>
         <kuali.rice.version>2.0.0</kuali.rice.version>
@@ -75,6 +77,7 @@
         <ks.gwt.compile.draftCompile>false</ks.gwt.compile.draftCompile>
         <ks.gwt.compile.soyc>false</ks.gwt.compile.soyc>
         <ks.gwt.compile.style>OBF</ks.gwt.compile.style>
+        <ks.gwt.module.lum>org.kuali.student.lum.lu.ui.main.LUMMain</ks.gwt.module.lum>
         <ks.gwt.module.org>org.kuali.student.core.organization.ui.OrgEntry</ks.gwt.module.org>
         <ks.java2ws.phase>none</ks.java2ws.phase>
     </properties>
@@ -150,8 +153,9 @@
                     <artifactId>jetty-maven-plugin</artifactId>
                     <version>${jetty.plugin.version}</version>
                     <configuration>
-                        <server>${project.artifactId}</server>
-                        <warDirectory>${project.build.directory}/${project.artifactId}-webapp</warDirectory>
+                        <stopKey>foo</stopKey>
+                        <stopPort>9999</stopPort>
+                        <webApp>${project.build.directory}/${project.artifactId}-webapp</webApp>
                     </configuration>
                 </plugin>
             </plugins>
@@ -399,6 +403,27 @@
                 <version>${kuali.rice.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-web</artifactId>
+                <version>${kuali.rice.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-kns</artifactId>
+                <version>${kuali.rice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-edl-impl</artifactId>
+                <version>${kuali.rice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kuali.rice</groupId>
+                <artifactId>rice-development-tools</artifactId>
+                <version>${kuali.rice.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.0-api</artifactId>
                 <version>${hibernate.jpa.version}</version>
@@ -511,7 +536,6 @@
                 <groupId>antlr</groupId>
                 <artifactId>antlr</artifactId>
                 <version>${antlr.legacy.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.derby</groupId>
@@ -860,6 +884,16 @@
                 <artifactId>gwt-visualization</artifactId>
                 <version>1.0</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>backport-util-concurrent</groupId>
+                <artifactId>backport-util-concurrent</artifactId>
+                <version>${backport-util-concurrent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.jsr107cache</groupId>
+                <artifactId>jsr107cache</artifactId>
+                <version>${jsr107cache.version}</version>
             </dependency>
 
             <!-- Jasper Report dependencies -->
