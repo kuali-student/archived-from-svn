@@ -79,6 +79,30 @@
         NM="Adhoc Permissions Type" NMSPC_CD="KS-SYS"
         OBJ_ID="DEPARUUUNTADMINREVIEWER000001237"
         SRVC_NM="kimRoleTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="131" NM="View"
+        NMSPC_CD="KR-KRAD" OBJ_ID="375D26076D8941F9968F4EC6EC177B19"
+        SRVC_NM="viewPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="132" NM="View Edit Mode"
+        NMSPC_CD="KR-KRAD" OBJ_ID="A62251CD04CA41DA8F0688B92EB736C8"
+        SRVC_NM="viewEditModePermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="133" NM="View Field"
+        NMSPC_CD="KR-KRAD" OBJ_ID="4BF94DF846F4475BB71E9C4602107CF5"
+        SRVC_NM="viewFieldPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="134" NM="View Group"
+        NMSPC_CD="KR-KRAD" OBJ_ID="36281B8A8CB2426A8345E5740D89339A"
+        SRVC_NM="viewGroupPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="135" NM="View Widget"
+        NMSPC_CD="KR-KRAD" OBJ_ID="70D605EA96D64241962691A83A2939C7"
+        SRVC_NM="viewWidgetPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="136" NM="View Action"
+        NMSPC_CD="KR-KRAD" OBJ_ID="0A52F7A4978C4CAFB039A4518593FE51"
+        SRVC_NM="viewActionPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="137" NM="View Line Field"
+        NMSPC_CD="KR-KRAD" OBJ_ID="AD378051810D4377B4618592914A9978"
+        SRVC_NM="viewLineFieldPermissionTypeService" VER_NBR="1"/>
+    <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="138" NM="View Line Action"
+        NMSPC_CD="KR-KRAD" OBJ_ID="226C4BB6904D4828B1251CBFF8761D52"
+        SRVC_NM="viewLineActionPermissionTypeService" VER_NBR="1"/>
     <KRIM_TYP_T ACTV_IND="Y" KIM_TYP_ID="14"
         NM="Edit Mode &amp; Document Type" NMSPC_CD="KR-NS"
         OBJ_ID="5ADF18B6D4EA7954E0404F8189D85002"
