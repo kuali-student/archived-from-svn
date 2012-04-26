@@ -943,7 +943,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>ks-deployments/ks-cfg-dbs</module>
+                <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
@@ -971,7 +971,7 @@
         <profile>
             <id>impex-only</id>
             <modules>
-                <module>ks-deployments/ks-cfg-dbs</module>
+                <module>ks-deployments</module>
             </modules>
         </profile>
         <profile>
