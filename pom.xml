@@ -80,6 +80,9 @@
         <ks.gwt.module.lum>org.kuali.student.lum.lu.ui.main.LUMMain</ks.gwt.module.lum>
         <ks.gwt.module.org>org.kuali.student.core.organization.ui.OrgEntry</ks.gwt.module.org>
         <ks.java2ws.phase>none</ks.java2ws.phase>
+        <ks.contractdoc.phase>site</ks.contractdoc.phase>
+        <ks.dictionarydoc.phase>none</ks.dictionarydoc.phase>
+        <ks.dictionarycreate.phase>none</ks.dictionarycreate.phase>
     </properties>
 
     <build>
