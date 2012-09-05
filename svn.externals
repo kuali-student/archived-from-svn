@@ -19,4 +19,4 @@ ks-api http://svn.kuali.org/repos/student/enrollment/ks-api/trunk
 ks-core http://svn.kuali.org/repos/student/enrollment/ks-core/trunk
 ks-lum http://svn.kuali.org/repos/student/enrollment/ks-lum/trunk
 ks-enroll http://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk
-ks-deployments http://svn.kuali.org/repos/student/enrollment/ks-deployments/trunk
+ks-deployments http://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/umd-enr-data
