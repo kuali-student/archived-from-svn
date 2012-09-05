@@ -82,9 +82,9 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/umd-enr-data</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/umd-enr-data</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/umd-enr-data</url>
     </scm>
     <properties>
         <ks.api.version>2.0.0-SNAPSHOT</ks.api.version>
