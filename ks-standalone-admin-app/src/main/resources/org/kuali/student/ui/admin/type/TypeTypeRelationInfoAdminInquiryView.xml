@@ -18,13 +18,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
     -->
-    <import resource="classpath:ks-TypeInfo-dictionary.xml"/>
+    <import resource="classpath:ks-TypeTypeRelationInfo-dictionary.xml"/>
     <import resource="classpath:UifKSDefinitions.xml"/>
     <!-- InquiryView -->
-    <bean id="KS-TypeInfo-AdminInquiryView" parent="KSInquiryView">
-        <property name="headerText" value="Type Inquiry"/>
-        <property name="dataObjectClassName" value="org.kuali.student.r2.core.class1.type.dto.TypeInfo"/>
-        <property name="viewHelperServiceClass" value="org.kuali.student.enrollment.type.service.impl.TypeInfoAdminInquirableImpl" />
+    <bean id="KS-TypeTypeRelationInfo-AdminInquiryView" parent="KSInquiryView">
+        <property name="headerText" value="Type-Type Relation Inquiry"/>
+        <property name="dataObjectClassName" value="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo"/>
+        <property name="viewHelperServiceClass" value="org.kuali.student.ui.admin.type.TypeTypeRelationInfoAdminInquirableImpl" />
         <property name="Items">
             <list>
                 <bean parent="Uif-Disclosure-GridSection">
@@ -32,13 +32,14 @@
                     <property name="headerText" value="Type Inquiry"/>
                     <property name="items">
                         <list>
-                            <bean parent="Uif-InputField" p:propertyName="key"/>
-                            <bean parent="Uif-DataField" p:propertyName="name" />
-                            <bean parent="Uif-InputField" p:propertyName="refObjectUri"/>
+                            <bean parent="Uif-InputField" p:propertyName="id"/>
+                            <bean parent="Uif-DataField" p:propertyName="typeKey" />
+                            <bean parent="Uif-InputField" p:propertyName="stateKey"/>
                             <bean parent="Uif-InputField" p:propertyName="effectiveDate"/>
                             <bean parent="Uif-InputField" p:propertyName="expirationDate"/>
-                            <bean parent="Uif-InputField" p:propertyName="descr.plain"/>
-                            <bean parent="Uif-InputField" p:propertyName="descr.formatted"/>
+                            <bean parent="Uif-InputField" p:propertyName="ownerTypeKey"/>
+                            <bean parent="Uif-InputField" p:propertyName="rank"/>
+                            <bean parent="Uif-InputField" p:propertyName="relatedTypeKey"/>
                             <bean parent="Uif-InputField" p:propertyName="meta.createId"/>
                             <bean parent="Uif-InputField" p:propertyName="meta.createTime"/>
                             <bean parent="Uif-InputField" p:propertyName="meta.updateId"/>

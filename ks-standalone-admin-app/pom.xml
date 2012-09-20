@@ -30,7 +30,7 @@
     <properties>
         <web.launch.context.path>/sample-app</web.launch.context.path>
         <bootstrap.spring.file>classpath:SampleAppBeans.xml</bootstrap.spring.file>
-        <maven.surefire.skip>true</maven.surefire.skip>
+        <maven.surefire.skip>false</maven.surefire.skip>
         <war.overlay.pattern.1>WEB-INF/web.xml</war.overlay.pattern.1>
         <war.overlay.exclude.2>DO_NOT_MATCH_ANYTHING_PATTERN</war.overlay.exclude.2>
         <kuali.testjar.phase>none</kuali.testjar.phase>
@@ -38,7 +38,6 @@
     </properties>
 
     <build>
-        <testSourceDirectory>src/it/java</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -80,7 +79,7 @@
             <plugin>
                 <groupId>org.kuali.maven.plugins</groupId>
                 <artifactId>maven-kscontractdoc-plugin</artifactId>
-                <version>1.0.3-SNAPSHOT</version>
+                <version>1.0.4-SNAPSHOT</version>
                 <!-- For instructions see https://wiki.kuali.org/display/STUDENT/Using+the+Contract+Doc+Maven+Plugin  -->
                 <executions>
                     <!-- This generates the remote service impl -->
@@ -154,63 +153,6 @@
                 <war.overlay.exclude.2>**/ojdbc*.jar</war.overlay.exclude.2>
             </properties>
         </profile>
-
-        <profile>
-            <id>stests</id>
-            <properties>
-                <maven.failsafe.skip>false</maven.failsafe.skip>
-                <maven.failsafe.includes>**/*IT.java</maven.failsafe.includes>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>selenium-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>xvfb</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>xvfb</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>start-selenium-server</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start-server</goal>
-                                </goals>
-                                <configuration>
-                                    <background>true</background>
-                                    <logOutput>true</logOutput>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>stop-selenium-server</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop-server</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.9</version>
-                        <executions>
-                            <execution>
-                                <id>integration-test</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>standalone</id>
             <properties>
@@ -224,15 +166,40 @@
         <dependency>
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-ui</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0-M5-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.kuali.student.core</groupId>
+                    <artifactId>ks-core-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.kuali.student.core</groupId>
+                    <artifactId>ks-core-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.kuali.student.core</groupId>
+                    <artifactId>ks-lum-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.kuali.student.core</groupId>
+                    <artifactId>ks-lum-api</artifactId>
+                </exclusion>
             </exclusions>      
         </dependency>
-  
+        <dependency>
+            <groupId>org.kuali.student.core</groupId>
+            <artifactId>ks-core-impl</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>  
+        <dependency>
+            <groupId>org.kuali.student.lum</groupId>
+            <artifactId>ks-lum-impl</artifactId>
+            <version>2.0.0-M5-SNAPSHOT</version>
+        </dependency>  
 <!--    <dependency>
       <groupId>org.kuali.student.api</groupId>
       <artifactId>ks-core-api</artifactId>
