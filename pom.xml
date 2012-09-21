@@ -201,6 +201,7 @@
           <artifactId>svn-maven-plugin</artifactId>
           <version>1.0.0-SNAPSHOT</version>
           <configuration>
+            <message>Automated nightly tag ${kuali.build.timestamp}</message>
             <mappings>
               <mapping>
                 <module>ks-api</module>
