@@ -1,7 +1,7 @@
 # module = ks-api branch Path = sandbox/enrollment/ks-api/branches/M5 revision = 36447
 ks-api::sandbox_enrollment_ks-api_branches_M5::c0e5a5699c2cc657c59b6fe389136496b8c31605
 # module = ks-core branch Path = sandbox/enrollment/ks-core/trunk revision = 36447
-ks-core::sandbox_enrollment_ks-core_trunk::c6cabed0ae64c6fe7f2810bbab3f34b0dd843a75
+ks-core::sandbox_enrollment_ks-core_trunk::2aa15498fe0e846fd99198eed43233346ec01f2b
 # module = ks-lum branch Path = sandbox/enrollment/ks-lum/trunk revision = 36447
 ks-lum::sandbox_enrollment_ks-lum_trunk::86248b07941bc8bcff31dfd4ca18b04d23a64cee
 # module = ks-enroll branch Path = sandbox/enrollment/ks-enroll/trunk revision = 36447
