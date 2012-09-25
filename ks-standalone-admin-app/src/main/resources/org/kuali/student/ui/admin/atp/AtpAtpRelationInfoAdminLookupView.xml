@@ -57,6 +57,14 @@
 					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.atp.dto.AtpInfo"
 					p:quickfinder.fieldConversions="id:relatedAtpId"
 					/>
+				<!-- TODO: deal with  effectiveDate which is a Date -->
+				<!-- TODO: deal with  expirationDate which is a Date -->
+				<!-- TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database -->
+				<!-- TODO: deal with  meta.createTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.createId" />
+				<!-- TODO: deal with  meta.updateTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.updateId" />
+				<!-- TODO: deal with dynamic attributes -->
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
 				      p:label="Max. Results"
 				      p:defaultValue="30"

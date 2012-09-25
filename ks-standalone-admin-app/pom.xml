@@ -248,7 +248,7 @@
             <artifactId>rice-krms-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+<!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rice-it-krad</artifactId>
@@ -256,13 +256,15 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-
+-->
+<!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rice-it-internal-tools</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -303,11 +305,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-
+<!--
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
         </dependency>
+-->
 
     </dependencies>
 </project>

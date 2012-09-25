@@ -49,15 +49,24 @@
 					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateInfo"
 					p:quickfinder.fieldConversions="key:stateKey"
 					/>
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="name" />
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="isAllDay" />
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="isInstructionalDay" />
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="isRelative" />
+				<!-- skip name because keyword searching should cover it -->
+				<!-- skip description because keyword searching should cover it -->
+				<!-- TODO: deal with  isAllDay which is a Boolean -->
+				<!-- TODO: deal with  isInstructionalDay which is a Boolean -->
+				<!-- TODO: deal with  isRelative which is a Boolean -->
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="relativeAnchorMilestoneId"
 					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.atp.dto.MilestoneInfo"
 					p:quickfinder.fieldConversions="id:relativeAnchorMilestoneId"
 					/>
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="isDateRange" />
+				<!-- TODO: deal with  isDateRange which is a Boolean -->
+				<!-- TODO: deal with  startDate which is a Date -->
+				<!-- TODO: deal with  endDate which is a Date -->
+				<!-- TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database -->
+				<!-- TODO: deal with  meta.createTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.createId" />
+				<!-- TODO: deal with  meta.updateTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.updateId" />
+				<!-- TODO: deal with dynamic attributes -->
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
 				      p:label="Max. Results"
 				      p:defaultValue="30"

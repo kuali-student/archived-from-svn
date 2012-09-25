@@ -49,7 +49,19 @@
 					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateInfo"
 					p:quickfinder.fieldConversions="key:stateKey"
 					/>
-				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="name" />
+				<!-- skip name because keyword searching should cover it -->
+				<!-- skip description because keyword searching should cover it -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="resultValueRange.minValue" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="resultValueRange.maxValue" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="resultValueRange.increment" />
+				<!-- TODO: deal with  effectiveDate which is a Date -->
+				<!-- TODO: deal with  expirationDate which is a Date -->
+				<!-- TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database -->
+				<!-- TODO: deal with  meta.createTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.createId" />
+				<!-- TODO: deal with  meta.updateTime which is a Date -->
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.updateId" />
+				<!-- TODO: deal with dynamic attributes -->
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
 				      p:label="Max. Results"
 				      p:defaultValue="30"

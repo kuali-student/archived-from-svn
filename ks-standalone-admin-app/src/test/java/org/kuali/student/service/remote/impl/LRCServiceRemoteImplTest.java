@@ -16,23 +16,31 @@
 package org.kuali.student.service.remote.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.*;
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
+import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.r2.lum.lrc.dto.ResultScaleInfo;
+import org.kuali.student.r2.lum.lrc.dto.ResultValueInfo;
+import org.kuali.student.r2.lum.lrc.dto.ResultValuesGroupInfo;
 
 
-//@Ignorepublic class LRCServiceRemoteImplTest{
+//@Ignore
+public class LRCServiceRemoteImplTest
+{
 	private static ContextInfo contextInfo;
-	private static LRCServiceRemoteImpl service;
+	private static LrcServiceRemoteImpl service;
 	
 	
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
-		service = new LRCServiceRemoteImpl();
-		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
-		//service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+		service = new LrcServiceRemoteImpl();
+//		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
+		service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
 		contextInfo = new ContextInfo();
 		contextInfo.setPrincipalId("TESTUSER");
 	}
@@ -41,6 +49,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	public static void tearDownClass() throws Exception
 	{
 	}
+	
 	@Before
 	public void setUp()
 	{
@@ -61,11 +70,22 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	}
 	
 	@Test
+	public void testSearchResultScaleInfoKeywordSearch () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
 	public void testSearchResultScaleInfoByKey () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("key", "fall"));
+		pList.add(PredicateFactory.equal("key", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
@@ -76,7 +96,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("typeKey", "fall"));
+		pList.add(PredicateFactory.equal("typeKey", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
@@ -87,7 +107,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("stateKey", "fall"));
+		pList.add(PredicateFactory.equal("stateKey", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
@@ -98,247 +118,92 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("name", "fall"));
+		pList.add(PredicateFactory.equal("name", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultScaleInfoByPlain () throws Exception
+	public void testSearchResultScaleInfoByDescrPlain () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.plain", "fall"));
+		pList.add(PredicateFactory.equal("descr.plain", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultScaleInfoByFormatted () throws Exception
+	public void testSearchResultScaleInfoByDescrFormatted () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.formatted", "fall"));
+		pList.add(PredicateFactory.equal("descr.formatted", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultScaleInfoByMinValue () throws Exception
+	public void testSearchResultScaleInfoByResultValueRangeMinValue () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.minValue", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.minValue", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultScaleInfoByMaxValue () throws Exception
+	public void testSearchResultScaleInfoByResultValueRangeMaxValue () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.maxValue", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.maxValue", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultScaleInfoByIncrement () throws Exception
+	public void testSearchResultScaleInfoByResultValueRangeIncrement () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.increment", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.increment", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  effectiveDate which is a date
-	// TODO: deal with  expirationDate which is a date
+	// TODO: deal with  effectiveDate which is a Date
+	// TODO: deal with  expirationDate which is a Date
+	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
+	// TODO: deal with  meta.createTime which is a Date
 	
 	@Test
-	public void testSearchResultScaleInfoByVersionInd () throws Exception
+	public void testSearchResultScaleInfoByMetaCreateId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.versionInd", "fall"));
+		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  meta.createTime which is a date
+	// TODO: deal with  meta.updateTime which is a Date
 	
 	@Test
-	public void testSearchResultScaleInfoByCreateId () throws Exception
+	public void testSearchResultScaleInfoByMetaUpdateId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "fall"));
+		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  meta.updateTime which is a date
-	
-	@Test
-	public void testSearchResultScaleInfoByUpdateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultScaleInfo> infos = service.searchForResultScales(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with dynamic attributes
-	
-	@Test
-	public void testSearchResultValueInfoAll () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("key", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByTypeKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("typeKey", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByStateKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("stateKey", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByName () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("name", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByPlain () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.plain", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByFormatted () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.formatted", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByResultScaleKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultScaleKey", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByNumericValue () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("numericValue", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValueInfoByValue () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("value", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  effectiveDate which is a date
-	// TODO: deal with  expirationDate which is a date
-	
-	@Test
-	public void testSearchResultValueInfoByVersionInd () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.versionInd", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  meta.createTime which is a date
-	
-	@Test
-	public void testSearchResultValueInfoByCreateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  meta.updateTime which is a date
-	
-	@Test
-	public void testSearchResultValueInfoByUpdateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
 	}
 	// TODO: deal with dynamic attributes
 	
@@ -351,11 +216,22 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	}
 	
 	@Test
+	public void testSearchResultValuesGroupInfoKeywordSearch () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
 	public void testSearchResultValuesGroupInfoByKey () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("key", "fall"));
+		pList.add(PredicateFactory.equal("key", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
@@ -366,7 +242,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("typeKey", "fall"));
+		pList.add(PredicateFactory.equal("typeKey", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
@@ -377,7 +253,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("stateKey", "fall"));
+		pList.add(PredicateFactory.equal("stateKey", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
@@ -388,29 +264,29 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("name", "fall"));
+		pList.add(PredicateFactory.equal("name", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByPlain () throws Exception
+	public void testSearchResultValuesGroupInfoByDescrPlain () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.plain", "fall"));
+		pList.add(PredicateFactory.equal("descr.plain", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByFormatted () throws Exception
+	public void testSearchResultValuesGroupInfoByDescrFormatted () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.formatted", "fall"));
+		pList.add(PredicateFactory.equal("descr.formatted", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
@@ -421,81 +297,217 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultScaleKey", "fall"));
+		pList.add(PredicateFactory.equal("resultScaleKey", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  resultValueKeys which is a list
+	// TODO: deal with  resultValueKeys which is a List
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByMinValue () throws Exception
+	public void testSearchResultValuesGroupInfoByResultValueRangeMinValue () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.minValue", "fall"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchResultValuesGroupInfoByMaxValue () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.maxValue", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.minValue", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByIncrement () throws Exception
+	public void testSearchResultValuesGroupInfoByResultValueRangeMaxValue () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("resultValueRange.increment", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.maxValue", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  effectiveDate which is a date
-	// TODO: deal with  expirationDate which is a date
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByVersionInd () throws Exception
+	public void testSearchResultValuesGroupInfoByResultValueRangeIncrement () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.versionInd", "fall"));
+		pList.add(PredicateFactory.equal("resultValueRange.increment", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  meta.createTime which is a date
+	// TODO: deal with  effectiveDate which is a Date
+	// TODO: deal with  expirationDate which is a Date
+	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
+	// TODO: deal with  meta.createTime which is a Date
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByCreateId () throws Exception
+	public void testSearchResultValuesGroupInfoByMetaCreateId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "fall"));
+		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
 	}
-	// TODO: deal with  meta.updateTime which is a date
+	// TODO: deal with  meta.updateTime which is a Date
 	
 	@Test
-	public void testSearchResultValuesGroupInfoByUpdateId () throws Exception
+	public void testSearchResultValuesGroupInfoByMetaUpdateId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "fall"));
+		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<ResultValuesGroupInfo> infos = service.searchForResultValuesGroups(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with dynamic attributes
+	
+	@Test
+	public void testSearchResultValueInfoAll () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoKeywordSearch () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("key", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByTypeKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("typeKey", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByStateKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("stateKey", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByName () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("name", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByDescrPlain () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("descr.plain", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByDescrFormatted () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("descr.formatted", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByResultScaleKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("resultScaleKey", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByNumericValue () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("numericValue", "0"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchResultValueInfoByValue () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("value", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with  effectiveDate which is a Date
+	// TODO: deal with  expirationDate which is a Date
+	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
+	// TODO: deal with  meta.createTime which is a Date
+	
+	@Test
+	public void testSearchResultValueInfoByMetaCreateId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with  meta.updateTime which is a Date
+	
+	@Test
+	public void testSearchResultValueInfoByMetaUpdateId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<ResultValueInfo> infos = service.searchForResultValues(qBuilder.build(), contextInfo);
 	}
 	// TODO: deal with dynamic attributes
 }
