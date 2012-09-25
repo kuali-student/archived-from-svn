@@ -18,6 +18,7 @@ import org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo;
  *
  * @author nwright
  */
+@Ignore
 public class TypeServiceRemoteImplTest {
 
     public TypeServiceRemoteImplTest() {
@@ -31,7 +32,8 @@ public class TypeServiceRemoteImplTest {
     public static void setUpClass() throws Exception {
         System.out.println("setting up services...");
         typeService = new TypeServiceRemoteImpl();
-        typeService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+        typeService.setHostUrl(RemoteServiceConstants.ENV2_URL);
+//        typeService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
         contextInfo = new ContextInfo();
         contextInfo.setPrincipalId("testUser");
     }

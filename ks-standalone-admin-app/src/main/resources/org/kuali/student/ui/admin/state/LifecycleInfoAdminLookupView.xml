@@ -18,30 +18,48 @@
      See the License for the specific language governing permissions and
      limitations under the License.
     -->
-    <import resource="classpath:ks-LifecycleInfo-dictionary.xml"/>
-    <import resource="classpath:UifKSDefinitions.xml"/>
-    <!-- LookupView -->
-    <bean id="KS-LifecycleInfo-AdminLookupView" parent="KSLookupView"
-          p:title="Type-Type Relation Lookup"
-          p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo"
-          p:viewHelperServiceClass="org.kuali.student.ui.admin.state.LifecycleInfoAdminLookupableImpl">
 
-        <property name="criteriaFields">
-            <list>
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="keywordSearch" 
-                      p:label="Keyword(s)" 
-                      p:helpSummary="Searches fields like name and description to see if they contain the keyword" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="key" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="refObjectUri" />
-            </list>
-        </property>
-        <property name="resultFields">
-            <list>
-                <bean parent="Uif-DataField" p:propertyName="key" />
-                <bean parent="Uif-DataField" p:propertyName="name" />
-                <bean parent="Uif-DataField" p:propertyName="refObjectUri" />
-            </list>
-        </property>
-    </bean>
-
+	<import resource="classpath:ks-LifecycleInfo-dictionary.xml"/>
+	<import resource="classpath:UifKSDefinitions.xml"/>
+	<!-- **********************************************
+	Paste this link below into WEB-INF ksAdminLinks.tag
+	<li><portal:portalLink displayTitle="true" title="LifecycleInfo Lookup"url="${ConfigProperties.application.url}/kr-krad/lookup?methodToCall=start&dataObjectClassName=org.kuali.student.r2.core.class1.state.dto.LifecycleInfo&viewId=LifecycleInfoAdminLookupView.xml&returnLocation=${ConfigProperties.application.url}/portal.do&hideReturnLink=true" /></li>
+	Also...
+	Paste bean definition below into the list of dataDictionaryPackages of org.kuali.rice.krad.bo.ModuleConfiguration 
+	<value>classpath:org/kuali/student/ui/admin/state/LifecycleInfoAdminLookupView.xml</value>
+	********************************************** -->
+	<!-- LookupView -->
+	<bean id="KS-LifecycleInfo-AdminLookupView" parent="KSLookupView"
+		p:title="LifecycleInfo Lookup"
+		p:header.headerText="LifecycleInfo Lookup"
+		p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo"
+		p:viewHelperServiceClass="org.kuali.student.ui.admin.state.LifecycleInfoAdminLookupableImpl">
+		
+		<property name="criteriaFields">
+			<list>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="keywordSearch"
+				      p:label="Keyword(s)"
+				      p:helpSummary="Searches fields like name and description to see if they contain the keyword" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="key" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="name" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="refObjectUri" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
+				      p:label="Max. Results"
+				      p:defaultValue="30"
+				      p:helpSummary="The maximum number of results to return from the query, leave null to not limit the results" />
+			</list>
+		</property>
+		<property name="resultFields">
+		    <list>
+		        <bean parent="Uif-DataField" p:propertyName="key">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo" p:inquiryParameters="key" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="name" />
+		        <bean parent="Uif-DataField" p:propertyName="refObjectUri" />
+		    </list>
+		</property>
+	</bean>
+	
 </beans>

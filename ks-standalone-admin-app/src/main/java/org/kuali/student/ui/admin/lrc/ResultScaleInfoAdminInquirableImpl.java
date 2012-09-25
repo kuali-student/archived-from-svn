@@ -15,6 +15,9 @@
  */
 package org.kuali.student.ui.admin.lrc;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -26,36 +29,44 @@ import org.kuali.student.r2.lum.lrc.dto.ResultScaleInfo;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
-public class ResultScaleInfoAdminInquirableImpl extends InquirableImpl {
 
-    private static final Logger LOG = Logger.getLogger(ResultScaleInfoAdminInquirableImpl.class);
-    private transient LRCService lRCService;
-    private final static String KEY = "key";
+public class ResultScaleInfoAdminInquirableImpl extends InquirableImpl
+{
+	private static final Logger LOG = Logger.getLogger(ResultScaleInfoAdminInquirableImpl.class);
+	private transient LRCService lRCService;
+	private final static String PRIMARY_KEY = "key";
 
-    @Override
-    public ResultScaleInfo retrieveDataObject(Map<String, String> parameters) {
-        String key = parameters.get(KEY);
-        try {
-            ResultScaleInfo info = this.getLRCService().getResultScale(key, getContextInfo());
-            return info;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	public ResultScaleInfo retrieveDataObject(Map<String, String> parameters)
+	{
+		String key = parameters.get(PRIMARY_KEY);
+		try
+		{
+			ResultScaleInfo info = this.getLRCService().getResultScale(key, getContextInfo());
+			return info;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setLRCService(LRCService lRCService) {
-        this.lRCService = lRCService;
-    }
+	public void setLRCService(LRCService lRCService)
+	{
+		    this.lRCService = lRCService;
+	}
 
-    public LRCService getLRCService() {
-        if (lRCService == null) {
-            QName qname = new QName(LrcServiceConstants.NAMESPACE, LrcServiceConstants.SERVICE_NAME_LOCAL_PART);
-            lRCService = (LRCService) GlobalResourceLoader.getService(qname);
-        }
-        return this.lRCService;
-    }
+	public LRCService getLRCService()
+	{
+		if (lRCService == null)
+		{
+			QName qname = new QName(LrcServiceConstants.NAMESPACE,LrcServiceConstants.SERVICE_NAME_LOCAL_PART);
+			lRCService = (LRCService) GlobalResourceLoader.getService(qname);
+		}
+		return this.lRCService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

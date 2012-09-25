@@ -20,6 +20,7 @@ import org.kuali.student.r2.core.constants.AtpServiceConstants;
  *
  * @author nwright
  */
+//@Ignore
 public class AtpServiceRemoteImplTest {
 
     public AtpServiceRemoteImplTest() {
@@ -33,7 +34,8 @@ public class AtpServiceRemoteImplTest {
     public static void setUpClass() throws Exception {
         System.out.println("setting up services...");
         atpService = new AtpServiceRemoteImpl();
-        atpService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+        atpService.setHostUrl(RemoteServiceConstants.ENV2_URL);
+//        atpService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
         contextInfo = new ContextInfo();
         contextInfo.setPrincipalId("testUser");
     }
@@ -60,6 +62,7 @@ public class AtpServiceRemoteImplTest {
     @Test
     public void testAtpServiceSearchForAtpsAll() throws Exception {
         QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+        qBuilder.setMaxResults (30);
         List<AtpInfo> infos = atpService.searchForAtps(qBuilder.build(), contextInfo);
         System.out.println("searched for atps with null predicate size=" + infos.size());
     }

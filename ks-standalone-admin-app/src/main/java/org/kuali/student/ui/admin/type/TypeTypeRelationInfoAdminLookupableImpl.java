@@ -15,6 +15,7 @@
  */
 package org.kuali.student.ui.admin.type;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,55 +29,65 @@ import org.kuali.rice.krad.lookup.LookupableImpl;
 import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.common.util.ContextBuilder;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.core.class1.state.dto.LifecycleInfo;
 import org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.constants.TypeServiceConstants;
 
-public class TypeTypeRelationInfoAdminLookupableImpl extends LookupableImpl {
 
-    private static final Logger LOG = Logger.getLogger(TypeTypeRelationInfoAdminLookupableImpl.class);
-    private transient TypeService typeService;
+public class TypeTypeRelationInfoAdminLookupableImpl extends LookupableImpl
+{
+	private static final Logger LOG = Logger.getLogger(TypeTypeRelationInfoAdminLookupableImpl.class);
+	private transient TypeService typeService;
 
-    @Override
-    protected List<TypeTypeRelationInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {   QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-        List<Predicate> pList = new ArrayList<Predicate>();
-        for (String fieldName : fieldValues.keySet()) {
-            String value = fieldValues.get(fieldName);
-            if (value != null && !value.isEmpty()) {
-                pList.add(PredicateFactory.equal(fieldName, value));
-            }
-        }
-        // TODO: modify the search impl so that an empty list of predicates is the same as a null, right now an empty list causes an error 
-        if (!pList.isEmpty()) {
-            qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        }
-        qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        try {
-            List<TypeTypeRelationInfo> list = this.getTypeService().searchForTypeTypeRelations(qBuilder.build(), getContextInfo());
-            // TODO: fix the impl so it doesn't return null
-            if (list == null) {
-                return new ArrayList<TypeTypeRelationInfo> ();
-            }
-            return list;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	protected List<TypeTypeRelationInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
+		try
+		{
+			List<TypeTypeRelationInfo> list = this.getTypeService().searchForTypeTypeRelations(qBuilder.build(), getContextInfo());
+			return list;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setTypeService(TypeService typeService) {
-        this.typeService = typeService;
-    }
+	public void setTypeService(TypeService typeService)
+	{
+		    this.typeService = typeService;
+	}
 
-    public TypeService getTypeService() {
-        if (typeService == null) {
-            QName qname = new QName(TypeServiceConstants.NAMESPACE, TypeServiceConstants.SERVICE_NAME_LOCAL_PART);
-            typeService = (TypeService) GlobalResourceLoader.getService(qname);
-        }
-        return this.typeService;
-    }
+	public TypeService getTypeService()
+	{
+		if (typeService == null)
+		{
+			QName qname = new QName(TypeServiceConstants.NAMESPACE,TypeServiceConstants.SERVICE_NAME_LOCAL_PART);
+			typeService = (TypeService) GlobalResourceLoader.getService(qname);
+		}
+		return this.typeService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

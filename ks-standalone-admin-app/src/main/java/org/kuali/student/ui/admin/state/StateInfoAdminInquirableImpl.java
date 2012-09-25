@@ -16,6 +16,8 @@
 package org.kuali.student.ui.admin.state;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -32,12 +34,12 @@ public class StateInfoAdminInquirableImpl extends InquirableImpl
 {
 	private static final Logger LOG = Logger.getLogger(StateInfoAdminInquirableImpl.class);
 	private transient StateService stateService;
-	private final static String KEY = "key";
+	private final static String PRIMARY_KEY = "key";
 
 	@Override
 	public StateInfo retrieveDataObject(Map<String, String> parameters)
 	{
-		String key = parameters.get(KEY);
+		String key = parameters.get(PRIMARY_KEY);
 		try
 		{
 			StateInfo info = this.getStateService().getState(key, getContextInfo());
@@ -47,6 +49,7 @@ public class StateInfoAdminInquirableImpl extends InquirableImpl
 		    throw new RuntimeException(ex);
 		}
 	}
+
 	public void setStateService(StateService stateService)
 	{
 		    this.stateService = stateService;

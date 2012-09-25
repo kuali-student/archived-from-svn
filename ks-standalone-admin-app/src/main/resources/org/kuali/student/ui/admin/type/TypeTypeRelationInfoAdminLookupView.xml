@@ -18,55 +18,84 @@
      See the License for the specific language governing permissions and
      limitations under the License.
     -->
-    <import resource="classpath:ks-TypeTypeRelationInfo-dictionary.xml"/>
-    <import resource="classpath:UifKSDefinitions.xml"/>
-    <!-- LookupView -->
-    <bean id="KS-TypeTypeRelationInfo-AdminLookupView" parent="KSLookupView"
-          p:title="Type-Type Relation Lookup"
-          p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo"
-          p:viewHelperServiceClass="org.kuali.student.ui.admin.type.TypeTypeRelationInfoAdminLookupableImpl">
 
-        <property name="criteriaFields">
-            <list>
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="keywordSearch" 
-                      p:label="Keyword(s)" 
-                      p:helpSummary="Searches fields like name and description to see if they contain the keyword" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="id" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="typeKey"
-                      p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
-                      p:quickfinder.fieldConversions="key:typeKey" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="stateKey" 
-                      p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateInfo"
-                      p:quickfinder.fieldConversions="key:stateKey" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="effectiveDate" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="expirationDate" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="ownerTypeKey" 
-                      p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
-                      p:quickfinder.fieldConversions="key:ownerTypeKey" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="relatedTypeKey"
-                      p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
-                      p:quickfinder.fieldConversions="key:relatedTypeKey" />
-                <bean parent="Uif-LookupCriteriaInputField" p:propertyName="rank" />
-            </list>
-        </property>
-        <property name="resultFields">
-            <list>
-                <bean parent="Uif-DataField" p:propertyName="id" > 
-                    <property name="inquiry">
-                        <bean parent="Uif-Inquiry"
-                              p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo" 
-                              p:inquiryParameters="id" />
-                    </property>
-                </bean>
-                <bean parent="Uif-DataField" p:propertyName="typeKey" />
-                <bean parent="Uif-DataField" p:propertyName="stateKey" />
-                <bean parent="Uif-DataField" p:propertyName="effectiveDate" />
-                <bean parent="Uif-DataField" p:propertyName="expirationDate" />
-                <bean parent="Uif-DataField" p:propertyName="ownerTypeKey" />
-                <bean parent="Uif-DataField" p:propertyName="relatedTypeKey" />
-                <bean parent="Uif-DataField" p:propertyName="rank" />
-            </list>
-        </property>
-    </bean>
-
+	<import resource="classpath:ks-TypeTypeRelationInfo-dictionary.xml"/>
+	<import resource="classpath:UifKSDefinitions.xml"/>
+	<!-- **********************************************
+	Paste this link below into WEB-INF ksAdminLinks.tag
+	<li><portal:portalLink displayTitle="true" title="TypeTypeRelationInfo Lookup"url="${ConfigProperties.application.url}/kr-krad/lookup?methodToCall=start&dataObjectClassName=org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo&viewId=TypeTypeRelationInfoAdminLookupView.xml&returnLocation=${ConfigProperties.application.url}/portal.do&hideReturnLink=true" /></li>
+	Also...
+	Paste bean definition below into the list of dataDictionaryPackages of org.kuali.rice.krad.bo.ModuleConfiguration 
+	<value>classpath:org/kuali/student/ui/admin/type/TypeTypeRelationInfoAdminLookupView.xml</value>
+	********************************************** -->
+	<!-- LookupView -->
+	<bean id="KS-TypeTypeRelationInfo-AdminLookupView" parent="KSLookupView"
+		p:title="TypeTypeRelationInfo Lookup"
+		p:header.headerText="TypeTypeRelationInfo Lookup"
+		p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo"
+		p:viewHelperServiceClass="org.kuali.student.ui.admin.type.TypeTypeRelationInfoAdminLookupableImpl">
+		
+		<property name="criteriaFields">
+			<list>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="keywordSearch"
+				      p:label="Keyword(s)"
+				      p:helpSummary="Searches fields like name and description to see if they contain the keyword" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="id" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="typeKey"
+					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
+					p:quickfinder.fieldConversions="key:typeKey"
+					/>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="stateKey"
+					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateInfo"
+					p:quickfinder.fieldConversions="key:stateKey"
+					/>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="ownerTypeKey"
+					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
+					p:quickfinder.fieldConversions="key:ownerTypeKey"
+					/>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="relatedTypeKey"
+					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo"
+					p:quickfinder.fieldConversions="key:relatedTypeKey"
+					/>
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="rank" />
+				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
+				      p:label="Max. Results"
+				      p:defaultValue="30"
+				      p:helpSummary="The maximum number of results to return from the query, leave null to not limit the results" />
+			</list>
+		</property>
+		<property name="resultFields">
+		    <list>
+		        <bean parent="Uif-DataField" p:propertyName="id">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo" p:inquiryParameters="id" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="typeKey">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo" p:inquiryParameters="typeKey:key" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="stateKey">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateInfo" p:inquiryParameters="stateKey:key" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="effectiveDate" />
+		        <bean parent="Uif-DataField" p:propertyName="expirationDate" />
+		        <bean parent="Uif-DataField" p:propertyName="ownerTypeKey">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo" p:inquiryParameters="ownerTypeKey:key" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="relatedTypeKey">
+		            <property name="inquiry">
+		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeInfo" p:inquiryParameters="relatedTypeKey:key" />
+		            </property>
+		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="rank" />
+		    </list>
+		</property>
+	</bean>
+	
 </beans>

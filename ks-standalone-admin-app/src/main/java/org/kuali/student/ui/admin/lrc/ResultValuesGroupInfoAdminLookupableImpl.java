@@ -38,25 +38,31 @@ public class ResultValuesGroupInfoAdminLookupableImpl extends LookupableImpl
 {
 	private static final Logger LOG = Logger.getLogger(ResultValuesGroupInfoAdminLookupableImpl.class);
 	private transient LRCService lRCService;
-	private final static String SEARCH_VALUE = "searchValue";
 
 	@Override
 	protected List<ResultValuesGroupInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
 	{
-		String searchValue = fieldValues.get(SEARCH_VALUE);
-		searchValue = searchValue.toLowerCase();
-		return this.findMatching(searchValue);
-	}
-	
-	private List<ResultValuesGroupInfo> findMatching(String searchValue)
-	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add (PredicateFactory.equal("keywordSearch",searchValue));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
 		try
 		{
-			// WARNING: Missing searchMethod please add it to the service contract: LRC.ResultValuesGroupInfo
 			List<ResultValuesGroupInfo> list = this.getLRCService().searchForResultValuesGroups(qBuilder.build(), getContextInfo());
 			return list;
 		}
@@ -64,6 +70,7 @@ public class ResultValuesGroupInfoAdminLookupableImpl extends LookupableImpl
 		    throw new RuntimeException(ex);
 		}
 	}
+
 	public void setLRCService(LRCService lRCService)
 	{
 		    this.lRCService = lRCService;

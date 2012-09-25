@@ -155,6 +155,20 @@
                 <value>classpath:org/kuali/student/ui/admin/state/StateInfoAdminInquiryView.xml</value>
                 <value>classpath:org/kuali/student/ui/admin/state/LifecycleInfoAdminLookupView.xml</value>
                 <value>classpath:org/kuali/student/ui/admin/state/LifecycleInfoAdminInquiryView.xml</value>
+                <!-- ATP -->
+                <value>classpath:org/kuali/student/ui/admin/atp/AtpAtpRelationInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/atp/AtpAtpRelationInfoAdminLookupView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/atp/AtpInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/atp/AtpInfoAdminLookupView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/atp/MilestoneInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/atp/MilestoneInfoAdminLookupView.xml</value>
+                <!-- LRC -->
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultScaleInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultScaleInfoAdminLookupView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultValueInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultValueInfoAdminLookupView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultValuesGroupInfoAdminInquiryView.xml</value>
+                <value>classpath:org/kuali/student/ui/admin/lrc/ResultValuesGroupInfoAdminLookupView.xml</value>
             </list>
         </property>
         <property name="databaseRepositoryFilePaths">
@@ -285,7 +299,7 @@
     </bean>
     
     
-    <bean id="lrcService" class="org.kuali.student.service.remote.impl.AtpServiceRemoteImpl">
+    <bean id="lrcService" class="org.kuali.student.service.remote.impl.LrcServiceRemoteImpl">
         <property name="hostUrl" value="http://env2.ks.kuali.org" />
     </bean>
 

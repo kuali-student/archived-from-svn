@@ -15,6 +15,9 @@
  */
 package org.kuali.student.ui.admin.atp;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -26,36 +29,44 @@ import org.kuali.student.r2.core.atp.dto.MilestoneInfo;
 import org.kuali.student.r2.core.atp.service.AtpService;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
 
-public class MilestoneInfoAdminInquirableImpl extends InquirableImpl {
 
-    private static final Logger LOG = Logger.getLogger(MilestoneInfoAdminInquirableImpl.class);
-    private transient AtpService atpService;
-    private final static String KEY = "key";
+public class MilestoneInfoAdminInquirableImpl extends InquirableImpl
+{
+	private static final Logger LOG = Logger.getLogger(MilestoneInfoAdminInquirableImpl.class);
+	private transient AtpService atpService;
+	private final static String PRIMARY_KEY = "id";
 
-    @Override
-    public MilestoneInfo retrieveDataObject(Map<String, String> parameters) {
-        String key = parameters.get(KEY);
-        try {
-            MilestoneInfo info = this.getAtpService().getMilestone(key, getContextInfo());
-            return info;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	public MilestoneInfo retrieveDataObject(Map<String, String> parameters)
+	{
+		String key = parameters.get(PRIMARY_KEY);
+		try
+		{
+			MilestoneInfo info = this.getAtpService().getMilestone(key, getContextInfo());
+			return info;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setAtpService(AtpService atpService) {
-        this.atpService = atpService;
-    }
+	public void setAtpService(AtpService atpService)
+	{
+		    this.atpService = atpService;
+	}
 
-    public AtpService getAtpService() {
-        if (atpService == null) {
-            QName qname = new QName(AtpServiceConstants.NAMESPACE, AtpServiceConstants.SERVICE_NAME_LOCAL_PART);
-            atpService = (AtpService) GlobalResourceLoader.getService(qname);
-        }
-        return this.atpService;
-    }
+	public AtpService getAtpService()
+	{
+		if (atpService == null)
+		{
+			QName qname = new QName(AtpServiceConstants.NAMESPACE,AtpServiceConstants.SERVICE_NAME_LOCAL_PART);
+			atpService = (AtpService) GlobalResourceLoader.getService(qname);
+		}
+		return this.atpService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

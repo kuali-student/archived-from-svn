@@ -15,6 +15,7 @@
  */
 package org.kuali.student.ui.admin.lrc;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,46 +33,61 @@ import org.kuali.student.r2.lum.lrc.dto.ResultScaleInfo;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
-public class ResultScaleInfoAdminLookupableImpl extends LookupableImpl {
 
-    private static final Logger LOG = Logger.getLogger(ResultScaleInfoAdminLookupableImpl.class);
-    private transient LRCService lRCService;
-    private final static String SEARCH_VALUE = "searchValue";
+public class ResultScaleInfoAdminLookupableImpl extends LookupableImpl
+{
+	private static final Logger LOG = Logger.getLogger(ResultScaleInfoAdminLookupableImpl.class);
+	private transient LRCService lRCService;
 
-    @Override
-    protected List<ResultScaleInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
-        String searchValue = fieldValues.get(SEARCH_VALUE);
-        searchValue = searchValue.toLowerCase();
-        return this.findMatching(searchValue);
-    }
+	@Override
+	protected List<ResultScaleInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
+		try
+		{
+			List<ResultScaleInfo> list = this.getLRCService().searchForResultScales(qBuilder.build(), getContextInfo());
+			return list;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    private List<ResultScaleInfo> findMatching(String searchValue) {
-        QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-        List<Predicate> pList = new ArrayList<Predicate>();
-        pList.add(PredicateFactory.equal("keywordSearch", searchValue));
-        qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        try {
-            // WARNING: Missing searchMethod please add it to the service contract: LRC.ResultScaleInfo
-            List<ResultScaleInfo> list = this.getLRCService().searchForResultScales(qBuilder.build(), getContextInfo());
-            return list;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	public void setLRCService(LRCService lRCService)
+	{
+		    this.lRCService = lRCService;
+	}
 
-    public void setLRCService(LRCService lRCService) {
-        this.lRCService = lRCService;
-    }
+	public LRCService getLRCService()
+	{
+		if (lRCService == null)
+		{
+			QName qname = new QName(LrcServiceConstants.NAMESPACE,LrcServiceConstants.SERVICE_NAME_LOCAL_PART);
+			lRCService = (LRCService) GlobalResourceLoader.getService(qname);
+		}
+		return this.lRCService;
+	}
 
-    public LRCService getLRCService() {
-        if (lRCService == null) {
-            QName qname = new QName(LrcServiceConstants.NAMESPACE, LrcServiceConstants.SERVICE_NAME_LOCAL_PART);
-            lRCService = (LRCService) GlobalResourceLoader.getService(qname);
-        }
-        return this.lRCService;
-    }
-
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

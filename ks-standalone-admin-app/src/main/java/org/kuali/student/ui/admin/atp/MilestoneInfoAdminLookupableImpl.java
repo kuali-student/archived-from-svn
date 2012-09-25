@@ -15,6 +15,7 @@
  */
 package org.kuali.student.ui.admin.atp;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,45 +33,61 @@ import org.kuali.student.r2.core.atp.dto.MilestoneInfo;
 import org.kuali.student.r2.core.atp.service.AtpService;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
 
-public class MilestoneInfoAdminLookupableImpl extends LookupableImpl {
 
-    private static final Logger LOG = Logger.getLogger(MilestoneInfoAdminLookupableImpl.class);
-    private transient AtpService atpService;
-    private final static String SEARCH_VALUE = "searchValue";
+public class MilestoneInfoAdminLookupableImpl extends LookupableImpl
+{
+	private static final Logger LOG = Logger.getLogger(MilestoneInfoAdminLookupableImpl.class);
+	private transient AtpService atpService;
 
-    @Override
-    protected List<MilestoneInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
-        String searchValue = fieldValues.get(SEARCH_VALUE);
-        searchValue = searchValue.toLowerCase();
-        return this.findMatching(searchValue);
-    }
+	@Override
+	protected List<MilestoneInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
+		try
+		{
+			List<MilestoneInfo> list = this.getAtpService().searchForMilestones(qBuilder.build(), getContextInfo());
+			return list;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    private List<MilestoneInfo> findMatching(String searchValue) {
-        QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-        List<Predicate> pList = new ArrayList<Predicate>();
-        pList.add(PredicateFactory.equal("keywordSearch", searchValue));
-        qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        try {
-            List<MilestoneInfo> list = this.getAtpService().searchForMilestones(qBuilder.build(), getContextInfo());
-            return list;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	public void setAtpService(AtpService atpService)
+	{
+		    this.atpService = atpService;
+	}
 
-    public void setAtpService(AtpService atpService) {
-        this.atpService = atpService;
-    }
+	public AtpService getAtpService()
+	{
+		if (atpService == null)
+		{
+			QName qname = new QName(AtpServiceConstants.NAMESPACE,AtpServiceConstants.SERVICE_NAME_LOCAL_PART);
+			atpService = (AtpService) GlobalResourceLoader.getService(qname);
+		}
+		return this.atpService;
+	}
 
-    public AtpService getAtpService() {
-        if (atpService == null) {
-            QName qname = new QName(AtpServiceConstants.NAMESPACE, AtpServiceConstants.SERVICE_NAME_LOCAL_PART);
-            atpService = (AtpService) GlobalResourceLoader.getService(qname);
-        }
-        return this.atpService;
-    }
-
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

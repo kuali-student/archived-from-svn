@@ -19,6 +19,7 @@ import org.kuali.student.r2.core.constants.AtpServiceConstants;
  *
  * @author nwright
  */
+@Ignore
 public class StateServiceRemoteImplTest {
 
     public StateServiceRemoteImplTest() {
@@ -34,7 +35,8 @@ public class StateServiceRemoteImplTest {
         contextInfo = new ContextInfo();
         contextInfo.setPrincipalId("testUser");
         stateService = new StateServiceRemoteImpl();
-        stateService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+//        stateService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+        stateService.setHostUrl(RemoteServiceConstants.ENV2_URL);
     }
 
     @AfterClass

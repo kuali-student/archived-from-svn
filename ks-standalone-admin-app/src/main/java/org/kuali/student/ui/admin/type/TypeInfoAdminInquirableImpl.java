@@ -15,6 +15,9 @@
  */
 package org.kuali.student.ui.admin.type;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -26,36 +29,44 @@ import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.constants.TypeServiceConstants;
 
-public class TypeInfoAdminInquirableImpl extends InquirableImpl {
 
-    private static final Logger LOG = Logger.getLogger(TypeInfoAdminInquirableImpl.class);
-    private transient TypeService typeService;
-    private final static String KEY = "key";
+public class TypeInfoAdminInquirableImpl extends InquirableImpl
+{
+	private static final Logger LOG = Logger.getLogger(TypeInfoAdminInquirableImpl.class);
+	private transient TypeService typeService;
+	private final static String PRIMARY_KEY = "key";
 
-    @Override
-    public TypeInfo retrieveDataObject(Map<String, String> parameters) {
-        String key = parameters.get(KEY);
-        try {
-            TypeInfo info = this.getTypeService().getType(key, getContextInfo());
-            return info;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	public TypeInfo retrieveDataObject(Map<String, String> parameters)
+	{
+		String key = parameters.get(PRIMARY_KEY);
+		try
+		{
+			TypeInfo info = this.getTypeService().getType(key, getContextInfo());
+			return info;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setTypeService(TypeService typeService) {
-        this.typeService = typeService;
-    }
+	public void setTypeService(TypeService typeService)
+	{
+		    this.typeService = typeService;
+	}
 
-    public TypeService getTypeService() {
-        if (typeService == null) {
-            QName qname = new QName(TypeServiceConstants.NAMESPACE, TypeServiceConstants.SERVICE_NAME_LOCAL_PART);
-            typeService = (TypeService) GlobalResourceLoader.getService(qname);
-        }
-        return this.typeService;
-    }
+	public TypeService getTypeService()
+	{
+		if (typeService == null)
+		{
+			QName qname = new QName(TypeServiceConstants.NAMESPACE,TypeServiceConstants.SERVICE_NAME_LOCAL_PART);
+			typeService = (TypeService) GlobalResourceLoader.getService(qname);
+		}
+		return this.typeService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

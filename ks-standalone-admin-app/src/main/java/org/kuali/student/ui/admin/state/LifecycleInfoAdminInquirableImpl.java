@@ -15,6 +15,9 @@
  */
 package org.kuali.student.ui.admin.state;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -26,36 +29,44 @@ import org.kuali.student.r2.core.class1.state.dto.LifecycleInfo;
 import org.kuali.student.r2.core.class1.state.service.StateService;
 import org.kuali.student.r2.core.constants.StateServiceConstants;
 
-public class LifecycleInfoAdminInquirableImpl extends InquirableImpl {
 
-    private static final Logger LOG = Logger.getLogger(LifecycleInfoAdminInquirableImpl.class);
-    private transient StateService stateService;
-    private final static String KEY = "key";
+public class LifecycleInfoAdminInquirableImpl extends InquirableImpl
+{
+	private static final Logger LOG = Logger.getLogger(LifecycleInfoAdminInquirableImpl.class);
+	private transient StateService stateService;
+	private final static String PRIMARY_KEY = "key";
 
-    @Override
-    public LifecycleInfo retrieveDataObject(Map<String, String> parameters) {
-        String key = parameters.get(KEY);
-        try {
-            LifecycleInfo info = this.getStateService().getLifecycle(key, getContextInfo());
-            return info;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	public LifecycleInfo retrieveDataObject(Map<String, String> parameters)
+	{
+		String key = parameters.get(PRIMARY_KEY);
+		try
+		{
+			LifecycleInfo info = this.getStateService().getLifecycle(key, getContextInfo());
+			return info;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setStateService(StateService stateService) {
-        this.stateService = stateService;
-    }
+	public void setStateService(StateService stateService)
+	{
+		    this.stateService = stateService;
+	}
 
-    public StateService getStateService() {
-        if (stateService == null) {
-            QName qname = new QName(StateServiceConstants.NAMESPACE, StateServiceConstants.SERVICE_NAME_LOCAL_PART);
-            stateService = (StateService) GlobalResourceLoader.getService(qname);
-        }
-        return this.stateService;
-    }
+	public StateService getStateService()
+	{
+		if (stateService == null)
+		{
+			QName qname = new QName(StateServiceConstants.NAMESPACE,StateServiceConstants.SERVICE_NAME_LOCAL_PART);
+			stateService = (StateService) GlobalResourceLoader.getService(qname);
+		}
+		return this.stateService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

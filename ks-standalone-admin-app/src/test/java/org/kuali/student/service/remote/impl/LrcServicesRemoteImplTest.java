@@ -19,6 +19,7 @@ import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
  *
  * @author nwright
  */
+@Ignore
 public class LrcServicesRemoteImplTest {
 
     public LrcServicesRemoteImplTest() {
@@ -32,7 +33,8 @@ public class LrcServicesRemoteImplTest {
     public static void setUpClass() throws Exception {
         System.out.println("setting up services...");
         lrcService = new LrcServiceRemoteImpl();
-        lrcService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+//        lrcService.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+        lrcService.setHostUrl(RemoteServiceConstants.ENV2_URL);
         contextInfo = new ContextInfo();
         contextInfo.setPrincipalId("testUser");
     }

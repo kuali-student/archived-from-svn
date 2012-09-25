@@ -16,6 +16,8 @@
 package org.kuali.student.ui.admin.lrc;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
@@ -32,12 +34,12 @@ public class ResultValuesGroupInfoAdminInquirableImpl extends InquirableImpl
 {
 	private static final Logger LOG = Logger.getLogger(ResultValuesGroupInfoAdminInquirableImpl.class);
 	private transient LRCService lRCService;
-	private final static String KEY = "key";
+	private final static String PRIMARY_KEY = "key";
 
 	@Override
 	public ResultValuesGroupInfo retrieveDataObject(Map<String, String> parameters)
 	{
-		String key = parameters.get(KEY);
+		String key = parameters.get(PRIMARY_KEY);
 		try
 		{
 			ResultValuesGroupInfo info = this.getLRCService().getResultValuesGroup(key, getContextInfo());
@@ -47,6 +49,7 @@ public class ResultValuesGroupInfoAdminInquirableImpl extends InquirableImpl
 		    throw new RuntimeException(ex);
 		}
 	}
+
 	public void setLRCService(LRCService lRCService)
 	{
 		    this.lRCService = lRCService;

@@ -15,6 +15,7 @@
  */
 package org.kuali.student.ui.admin.state;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,51 +33,61 @@ import org.kuali.student.r2.core.class1.state.dto.LifecycleInfo;
 import org.kuali.student.r2.core.class1.state.service.StateService;
 import org.kuali.student.r2.core.constants.StateServiceConstants;
 
-public class LifecycleInfoAdminLookupableImpl extends LookupableImpl {
 
-    private static final Logger LOG = Logger.getLogger(LifecycleInfoAdminLookupableImpl.class);
-    private transient StateService stateService;
+public class LifecycleInfoAdminLookupableImpl extends LookupableImpl
+{
+	private static final Logger LOG = Logger.getLogger(LifecycleInfoAdminLookupableImpl.class);
+	private transient StateService stateService;
 
-    @Override
-    protected List<LifecycleInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
-        QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-        List<Predicate> pList = new ArrayList<Predicate>();
-        for (String fieldName : fieldValues.keySet()) {
-            String value = fieldValues.get(fieldName);
-            if (value != null && !value.isEmpty()) {
-                pList.add(PredicateFactory.equal(fieldName, value));
-            }
-        }
-        // TODO: modify the search impl so that an empty list of predicates is the same as a null, right now an empty list causes an error 
-        if (!pList.isEmpty()) {
-            qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        }
-        qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-        try {
-            List<LifecycleInfo> list = this.getStateService().searchForLifecycles(qBuilder.build(), getContextInfo());
-            // TODO: fix the impl so it doesn't return null
-            if (list == null) {
-                return new ArrayList<LifecycleInfo> ();
-            }
-            return list;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	@Override
+	protected List<LifecycleInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
+		try
+		{
+			List<LifecycleInfo> list = this.getStateService().searchForLifecycles(qBuilder.build(), getContextInfo());
+			return list;
+		}
+		catch (Exception ex) {
+		    throw new RuntimeException(ex);
+		}
+	}
 
-    public void setStateService(StateService stateService) {
-        this.stateService = stateService;
-    }
+	public void setStateService(StateService stateService)
+	{
+		    this.stateService = stateService;
+	}
 
-    public StateService getStateService() {
-        if (stateService == null) {
-            QName qname = new QName(StateServiceConstants.NAMESPACE, StateServiceConstants.SERVICE_NAME_LOCAL_PART);
-            stateService = (StateService) GlobalResourceLoader.getService(qname);
-        }
-        return this.stateService;
-    }
+	public StateService getStateService()
+	{
+		if (stateService == null)
+		{
+			QName qname = new QName(StateServiceConstants.NAMESPACE,StateServiceConstants.SERVICE_NAME_LOCAL_PART);
+			stateService = (StateService) GlobalResourceLoader.getService(qname);
+		}
+		return this.stateService;
+	}
 
-    private ContextInfo getContextInfo() {
-        return ContextBuilder.loadContextInfo();
-    }
+	private ContextInfo getContextInfo() {
+	    return ContextBuilder.loadContextInfo();
+	}
 }
+

@@ -1,0 +1,748 @@
+
+<bean id="rice.groupService" class="org.kuali.student.service.remote.impl.RICE.GroupServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.groupService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.groupService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.group.GroupService" />
+			<property name="localServiceName" value="GroupService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.group" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="rice.identityService" class="org.kuali.student.service.remote.impl.RICE.IdentityServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.identityService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.identityService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.identity.IdentityService" />
+			<property name="localServiceName" value="IdentityService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.identity" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="rice.permissionService" class="org.kuali.student.service.remote.impl.RICE.PermissionServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.permissionService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.permissionService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.permission.PermissionService" />
+			<property name="localServiceName" value="PermissionService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.permission" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="rice.responsibilityService" class="org.kuali.student.service.remote.impl.RICE.ResponsibilityServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.responsibilityService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.responsibilityService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.responsibility.ResponsibilityService" />
+			<property name="localServiceName" value="ResponsibilityService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.responsibility" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="rice.roleService" class="org.kuali.student.service.remote.impl.RICE.RoleServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.roleService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.roleService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.role.RoleService" />
+			<property name="localServiceName" value="RoleService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.role" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="rice.kimtypeinfoService" class="org.kuali.student.service.remote.impl.RICE.KimTypeInfoServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.rice.kimtypeinfoService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="rice.kimtypeinfoService" />
+			<property name="serviceInterface" value="org.kuali.rice.kim.api.type.KimTypeInfoService" />
+			<property name="localServiceName" value="KimTypeInfoService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/rice.kimtypeinfo" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="academicrecordService" class="org.kuali.student.service.remote.impl.AcademicRecordServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.academicrecordService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="academicrecordService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.academicrecord.service.AcademicRecordService" />
+			<property name="localServiceName" value="AcademicRecordService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/academicrecord" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="academiccalendarService" class="org.kuali.student.service.remote.impl.AcademicCalendarServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.academiccalendarService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="academiccalendarService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.acal.service.AcademicCalendarService" />
+			<property name="localServiceName" value="AcademicCalendarService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/academiccalendar" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="batchjobresultService" class="org.kuali.student.service.remote.impl.BatchJobResultServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.batchjobresultService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="batchjobresultService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.batchjobresults.service.BatchJobResultService" />
+			<property name="localServiceName" value="BatchJobResultService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/batchjobresult" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="courseofferingService" class="org.kuali.student.service.remote.impl.CourseOfferingServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.courseofferingService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="courseofferingService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.courseoffering.service.CourseOfferingService" />
+			<property name="localServiceName" value="CourseOfferingService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/courseoffering" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="courseofferingsetService" class="org.kuali.student.service.remote.impl.CourseOfferingSetServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.courseofferingsetService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="courseofferingsetService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService" />
+			<property name="localServiceName" value="CourseOfferingSetService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/courseofferingset" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="courseregistrationService" class="org.kuali.student.service.remote.impl.CourseRegistrationServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.courseregistrationService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="courseregistrationService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.courseregistration.service.CourseRegistrationService" />
+			<property name="localServiceName" value="CourseRegistrationService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/courseregistration" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="coursewaitlistService" class="org.kuali.student.service.remote.impl.CourseWaitlistServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.coursewaitlistService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="coursewaitlistService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.coursewaitlist.service.CourseWaitlistService" />
+			<property name="localServiceName" value="CourseWaitlistService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/coursewaitlist" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="gradingService" class="org.kuali.student.service.remote.impl.GradingServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.gradingService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="gradingService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.grading.service.GradingService" />
+			<property name="localServiceName" value="GradingService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/grading" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="lprService" class="org.kuali.student.service.remote.impl.LprServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.lprService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="lprService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.lpr.service.LprService" />
+			<property name="localServiceName" value="LprService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/lpr" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="learningresultrecordService" class="org.kuali.student.service.remote.impl.LearningResultRecordServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.learningresultrecordService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="learningresultrecordService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.lrr.service.LearningResultRecordService" />
+			<property name="localServiceName" value="LearningResultRecordService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/learningresultrecord" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="luiService" class="org.kuali.student.service.remote.impl.LuiServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.luiService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="luiService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.lui.service.LuiService" />
+			<property name="localServiceName" value="LuiService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/lui" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="lprrosterService" class="org.kuali.student.service.remote.impl.LprRosterServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.lprrosterService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="lprrosterService" />
+			<property name="serviceInterface" value="org.kuali.student.enrollment.roster.service.LprRosterService" />
+			<property name="localServiceName" value="LprRosterService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/lprroster" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="datadictionaryService" class="org.kuali.student.service.remote.impl.DataDictionaryServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.datadictionaryService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="datadictionaryService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.common.datadictionary.service.DataDictionaryService" />
+			<property name="localServiceName" value="DataDictionaryService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/datadictionary" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="messageService" class="org.kuali.student.service.remote.impl.MessageServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.messageService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="messageService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.common.messages.service.MessageService" />
+			<property name="localServiceName" value="MessageService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/message" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="appointmentService" class="org.kuali.student.service.remote.impl.AppointmentServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.appointmentService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="appointmentService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.appointment.service.AppointmentService" />
+			<property name="localServiceName" value="AppointmentService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/appointment" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="atpService" class="org.kuali.student.service.remote.impl.AtpServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.atpService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="atpService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.atp.service.AtpService" />
+			<property name="localServiceName" value="AtpService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/atp" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="stateService" class="org.kuali.student.service.remote.impl.StateServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.stateService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="stateService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.class1.state.service.StateService" />
+			<property name="localServiceName" value="StateService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/state" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="typeService" class="org.kuali.student.service.remote.impl.TypeServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.typeService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="typeService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.class1.type.service.TypeService" />
+			<property name="localServiceName" value="TypeService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/type" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="commentService" class="org.kuali.student.service.remote.impl.CommentServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.commentService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="commentService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.comment.service.CommentService" />
+			<property name="localServiceName" value="CommentService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/comment" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="documentService" class="org.kuali.student.service.remote.impl.DocumentServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.documentService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="documentService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.document.service.DocumentService" />
+			<property name="localServiceName" value="DocumentService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/document" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="enumerationmanagementService" class="org.kuali.student.service.remote.impl.EnumerationManagementServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.enumerationmanagementService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="enumerationmanagementService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.enumerationmanagement.service.EnumerationManagementService" />
+			<property name="localServiceName" value="EnumerationManagementService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/enumerationmanagement" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="exemptionService" class="org.kuali.student.service.remote.impl.ExemptionServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.exemptionService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="exemptionService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.exemption.service.ExemptionService" />
+			<property name="localServiceName" value="ExemptionService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/exemption" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="feeService" class="org.kuali.student.service.remote.impl.FeeServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.feeService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="feeService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.fee.service.FeeService" />
+			<property name="localServiceName" value="FeeService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/fee" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="holdService" class="org.kuali.student.service.remote.impl.HoldServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.holdService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="holdService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.hold.service.HoldService" />
+			<property name="localServiceName" value="HoldService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/hold" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="organizationService" class="org.kuali.student.service.remote.impl.OrganizationServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.organizationService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="organizationService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.organization.service.OrganizationService" />
+			<property name="localServiceName" value="OrganizationService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/organization" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="populationService" class="org.kuali.student.service.remote.impl.PopulationServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.populationService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="populationService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.population.service.PopulationService" />
+			<property name="localServiceName" value="PopulationService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/population" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="processService" class="org.kuali.student.service.remote.impl.ProcessServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.processService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="processService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.process.service.ProcessService" />
+			<property name="localServiceName" value="ProcessService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/process" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="proposalService" class="org.kuali.student.service.remote.impl.ProposalServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.proposalService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="proposalService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.proposal.service.ProposalService" />
+			<property name="localServiceName" value="ProposalService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/proposal" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="roomService" class="org.kuali.student.service.remote.impl.RoomServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.roomService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="roomService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.room.service.RoomService" />
+			<property name="localServiceName" value="RoomService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/room" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="schedulingService" class="org.kuali.student.service.remote.impl.SchedulingServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.schedulingService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="schedulingService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.scheduling.service.SchedulingService" />
+			<property name="localServiceName" value="SchedulingService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/scheduling" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="searchService" class="org.kuali.student.service.remote.impl.SearchServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.searchService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="searchService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.search.service.SearchService" />
+			<property name="localServiceName" value="SearchService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/search" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="statementService" class="org.kuali.student.service.remote.impl.StatementServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.statementService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="statementService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.statement.service.StatementService" />
+			<property name="localServiceName" value="StatementService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/statement" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="versionmanagementService" class="org.kuali.student.service.remote.impl.VersionManagementServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.versionmanagementService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="versionmanagementService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.core.versionmanagement.service.VersionManagementService" />
+			<property name="localServiceName" value="VersionManagementService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/versionmanagement" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="cluService" class="org.kuali.student.service.remote.impl.CluServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.cluService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="cluService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.lum.clu.service.CluService" />
+			<property name="localServiceName" value="CluService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/clu" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="courseService" class="org.kuali.student.service.remote.impl.CourseServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.courseService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="courseService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.lum.course.service.CourseService" />
+			<property name="localServiceName" value="CourseService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/course" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="learningobjectiveService" class="org.kuali.student.service.remote.impl.LearningObjectiveServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.learningobjectiveService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="learningobjectiveService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.lum.lo.service.LearningObjectiveService" />
+			<property name="localServiceName" value="LearningObjectiveService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/learningobjective" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="lrcService" class="org.kuali.student.service.remote.impl.LRCServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.lrcService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="lrcService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.lum.lrc.service.LRCService" />
+			<property name="localServiceName" value="LRCService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/lrc" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>
+
+<bean id="programService" class="org.kuali.student.service.remote.impl.ProgramServiceRemoteImpl">
+	<property name="hostUrl" value="http://env2.ks.kuali.org" />
+</bean>
+
+<bean id="ks.exp.programService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+	<property name="serviceDefinition">
+		<bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+			<property name="jaxWsService" value="true" />
+			<property name="service" ref="programService" />
+			<property name="serviceInterface" value="org.kuali.student.r2.lum.program.service.ProgramService" />
+			<property name="localServiceName" value="ProgramService" />
+			<property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/program" />
+			<property name="busSecurity" value="false" />
+		</bean>
+	</property>
+</bean>

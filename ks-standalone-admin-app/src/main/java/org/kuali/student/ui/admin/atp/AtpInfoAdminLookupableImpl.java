@@ -38,22 +38,29 @@ public class AtpInfoAdminLookupableImpl extends LookupableImpl
 {
 	private static final Logger LOG = Logger.getLogger(AtpInfoAdminLookupableImpl.class);
 	private transient AtpService atpService;
-	private final static String SEARCH_VALUE = "searchValue";
 
 	@Override
 	protected List<AtpInfo> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded)
 	{
-		String searchValue = fieldValues.get(SEARCH_VALUE);
-		searchValue = searchValue.toLowerCase();
-		return this.findMatching(searchValue);
-	}
-	
-	private List<AtpInfo> findMatching(String searchValue)
-	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add (PredicateFactory.equal("keywordSearch",searchValue));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		for (String fieldName : fieldValues.keySet())
+		{
+			String value = fieldValues.get(fieldName);
+			if (value != null && !value.isEmpty())
+			{
+				if (fieldName.equals("maxResultsToReturn"))
+				{
+					qBuilder.setMaxResults (Integer.parseInt(value));
+					continue;
+				}
+				pList.add(PredicateFactory.equal(fieldName, value));
+			}
+		}
+		if (!pList.isEmpty())
+		{
+			qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		}
 		try
 		{
 			List<AtpInfo> list = this.getAtpService().searchForAtps(qBuilder.build(), getContextInfo());
@@ -63,6 +70,7 @@ public class AtpInfoAdminLookupableImpl extends LookupableImpl
 		    throw new RuntimeException(ex);
 		}
 	}
+
 	public void setAtpService(AtpService atpService)
 	{
 		    this.atpService = atpService;
