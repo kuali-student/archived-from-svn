@@ -210,7 +210,7 @@
               </mapping>
               <mapping>
                 <module>ks-core</module>
-                <versionProperty>ks.api.version</versionProperty>
+                <versionProperty>ks.core.version</versionProperty>
               </mapping>
               <mapping>
                 <module>ks-enroll</module>
