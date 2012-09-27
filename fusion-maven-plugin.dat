@@ -1,10 +1,10 @@
-# module = ks-api branch Path = sandbox/enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M5/build-0 revision = 36769
-ks-api::sandbox_enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M5_build-0::f986f0be805bc521fd322f0a72a71610efc3df77
-# module = ks-core branch Path = sandbox/enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M5/build-0 revision = 36769
-ks-core::sandbox_enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M5_build-0::4a4d43eaf83959934e252c7148c8588e9074173b
-# module = ks-deployments branch Path = sandbox/enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0/build-0 revision = 36769
-ks-deployments::sandbox_enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0_build-0::9fd61d50058eecf966d1567feeb051ec98dfe3d2
-# module = ks-enroll branch Path = sandbox/enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0/build-0 revision = 36769
-ks-enroll::sandbox_enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0_build-0::d14db92427ede39249f2e6f32c7793c40f238fa8
-# module = ks-lum branch Path = sandbox/enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0/build-0 revision = 36769
-ks-lum::sandbox_enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0_build-0::9a6e3edfb646bf0048c711567b10592bd293b15e
+# module = ks-api branch Path = sandbox/enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M5/r36426 revision = 36932
+ks-api::sandbox_enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M5_r36426::UNKNOWN
+# module = ks-core branch Path = sandbox/enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M5/r36896 revision = 36932
+ks-core::sandbox_enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M5_r36896::UNKNOWN
+# module = ks-deployments branch Path = sandbox/enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0/r36895 revision = 36932
+ks-deployments::sandbox_enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0_r36895::UNKNOWN
+# module = ks-enroll branch Path = sandbox/enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0/r36442 revision = 36932
+ks-enroll::sandbox_enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0_r36442::UNKNOWN
+# module = ks-lum branch Path = sandbox/enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0/r36893 revision = 36932
+ks-lum::sandbox_enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0_r36893::UNKNOWN
