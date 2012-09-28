@@ -201,9 +201,6 @@
           <artifactId>externals-maven-plugin</artifactId>
           <version>1.0.0-SNAPSHOT</version>
           <configuration>
-            <createTagMessage>Automated nightly tag ${kuali.build.timestamp}</createTagMessage>
-            <updateTagMessage>Automated pom update ${kuali.build.timestamp}</updateTagMessage>
-            <externalsMessage>Automated svn:externals update ${kuali.build.timestamp}</externalsMessage>
             <mappings>
               <mapping>
                 <module>ks-api</module>
