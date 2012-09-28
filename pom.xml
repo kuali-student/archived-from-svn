@@ -195,7 +195,7 @@
                     <artifactId>externals-maven-plugin</artifactId>
                     <version>1.0.0-SNAPSHOT</version>
                     <configuration>
-                        <commitMessage>[externals-maven-plugin] Automated pom formatting<commitMessage>
+                        <commitMessage>[externals-maven-plugin] Automated pom formatting</commitMessage>
                         <mappings>
                             <mapping>
                                 <module>ks-api</module>
