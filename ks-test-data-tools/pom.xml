@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.kuali.student</groupId>
+  <artifactId>ks-test-data-tools</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Kuali Service Client Parent</name>
+  <description>SOAP access client to the kuali student web services</description>
+  <parent>
+  	<groupId>org.kuali.pom</groupId>
+  	<artifactId>kuali-common</artifactId>
+  	<version>1.0.32</version>
+  </parent>
+
+  <modules>
+  	<module>ks-graphviz-charts</module>
+  	<module>ks-service-client</module>
+  </modules>
+  
+  <dependencyManagement>
+  	<dependencies>
+  	<dependency>
+  		<groupId>org.kuali.student.api</groupId>
+  		<artifactId>ks-enroll-api</artifactId>
+  		<version>2.0.0-M5-SNAPSHOT</version>
+  	</dependency>
+  	</dependencies>
+  </dependencyManagement>
+</project>

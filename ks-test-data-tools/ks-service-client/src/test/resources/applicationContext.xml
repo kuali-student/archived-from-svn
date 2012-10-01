@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jaxws="http://cxf.apache.org/jaxws"
+  xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+      http://cxf.apache.org/jaxws 
+      http://cxf.apache.org/schemas/jaxws.xsd">
+
+<bean id="courseOfferingServiceAddress" class="org.kuali.student.soap.client.SystemPropertyOverrideStringFactoryBean">
+	<property name="defaultValue" value="http://env6.ks.kuali.org/services/CourseOfferingService"/>
+</bean>
+
+<bean id="courseOfferingServiceProxyFactory" 
+    class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+    <property name="serviceClass" value="org.kuali.student.enrollment.courseoffering.service.CourseOfferingService"/>
+    <property name="address" ref="courseOfferingServiceAddress"/>
+  </bean>
+
+  <bean id="coServiceImpl" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingService"
+    factory-bean="courseOfferingServiceProxyFactory" factory-method="create"/>
+    
+   <bean id="coService" class="org.kuali.student.service.decorator.NullSafeCXFCourseOfferingServiceDecorator">
+        <property name="nextDecorator" ref="coServiceImpl" />
+    </bean>
+    
+    <bean id="courseServiceAddress" class="org.kuali.student.soap.client.SystemPropertyOverrideStringFactoryBean">
+	<property name="defaultValue" value="http://env6.ks.kuali.org/services/CourseService"/>
+</bean>
+
+  <bean id="courseServiceProxyFactory" 
+    class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+    <property name="serviceClass" value="org.kuali.student.r2.lum.course.service.CourseService"/>
+    <property name="address" ref="courseServiceAddress"/>
+  </bean>
+
+  <bean id="cService" class="org.kuali.student.r2.lum.course.service.CourseService"
+    factory-bean="courseServiceProxyFactory" factory-method="create"/>
+
+</beans>
