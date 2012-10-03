@@ -193,6 +193,7 @@
                 <plugin>
                     <groupId>org.kuali.maven.plugins</groupId>
                     <artifactId>externals-maven-plugin</artifactId>
+                    <version>1.0.1-SNAPSHOT</version>
                     <configuration>
                         <commitMessage>[externals-maven-plugin] Automated pom formatting</commitMessage>
                         <mappings>
