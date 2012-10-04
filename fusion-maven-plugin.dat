@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::f76868d6fca1515ac57f1b206df9e2b27c9a832c
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::581689176cf0e72f5b829d85cccd9df47b56c5a9
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::f2f500e6ea3eedb75689cca45b1adcd2a86f62d3
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::1868c7d2fc7b14f587149d77fa271900c5e29ae7
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-143 revision = 37886
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-143::086649ae7d7c932fa45656dce1f37125e72df83a
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-143 revision = 37886
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-143::84d62485b60bc162bfac78d1b015b3b94be91f46
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-143 revision = 37886
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-143::2bcb0b32a46f40b704cced4593e8e8c84990b80e
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-143 revision = 37886
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-143::35db751b9e7071f162f88d5eec5517b856abfcd2
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-143 revision = 37886
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-143::a95d91185e050e663753d6867ad993ab9481a74f
