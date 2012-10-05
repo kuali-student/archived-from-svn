@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::1f09d0e278ea5f1a36ae717ec3bb4d7e3dad7fba
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::581689176cf0e72f5b829d85cccd9df47b56c5a9
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::f2f500e6ea3eedb75689cca45b1adcd2a86f62d3
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::2d163f878a278efea3c0022653eaabe3acf48ba1
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-151 revision = 37976
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-151::7f81f1650f287b1cdb1afd6ed8205a9fce3e517e
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-151 revision = 37976
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-151::9c86541cdce064a94e3f1989492f392948a05016
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-151 revision = 37976
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-151::78b4fd8ad52faa2eb53ce00e7b07bbe1dc85e516
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-151 revision = 37976
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-151::495779aa73a4172e1a2e64977d9791efb194e28c
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-151 revision = 37976
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-151::a605cc921de6b4f811e209d9411dcd197dab1942
