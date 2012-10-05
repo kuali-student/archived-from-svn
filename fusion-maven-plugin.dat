@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/KD revision = 38040
-ks-api::enrollment_ks-api_branches_KD::59a34a40f90dbe00cdbce7770c1038b19397f536
-# module = ks-core branch Path = enrollment/ks-core/branches/KD revision = 38040
-ks-core::enrollment_ks-core_branches_KD::e2568d70f88292cacce84ac304d2b88203aca333
-# module = ks-lum branch Path = enrollment/ks-lum/branches/KD revision = 38040
-ks-lum::enrollment_ks-lum_branches_KD::26371860cdf81fa8cbb2133b064e179b08965122
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/KD revision = 38040
-ks-enroll::enrollment_ks-enroll_branches_KD::8e501ca3cd30fa7d4842b3c36d1d6c626d8f3e86
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/KD revision = 38040
-ks-deployments::enrollment_ks-deployments_branches_KD::cc8a2a75aaef62bc57e97bfc66956093a6bced2e
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M5-KD-DEMO/build-0 revision = 38054
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M5-KD-DEMO_build-0::1463fdbed7e2344efd608b5869583f9647e322bd
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-KD-DEMO/build-0 revision = 38054
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-KD-DEMO_build-0::35646a0c98a144cf2ec041f8e1a029abfe8b250f
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-KD-DEMO/build-0 revision = 38054
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-KD-DEMO_build-0::1038be7f72e7c80af7ec05dc74c9385659dc47fc
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-KD-DEMO/build-0 revision = 38054
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-KD-DEMO_build-0::dbf98f8870fc474d6475dbbfe48c046a6bf39c1f
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-KD-DEMO/build-0 revision = 38054
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-KD-DEMO_build-0::ee9134c41e5c5ed19479b73822d76d030a265c65
