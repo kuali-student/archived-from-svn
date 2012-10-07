@@ -1,10 +1,10 @@
-# module = ks-api branch Path = sandbox/enrollment/ks-api/branches/M5 revision = 36447
-ks-api::sandbox_enrollment_ks-api_branches_M5::60d8eaa93a80119dd1ae3010af5e6b60e34a1155
-# module = ks-core branch Path = sandbox/enrollment/ks-core/trunk revision = 36447
-ks-core::sandbox_enrollment_ks-core_trunk::32aa671de47f587021aa3c634b8cb5efda80fa75
-# module = ks-lum branch Path = sandbox/enrollment/ks-lum/trunk revision = 36447
-ks-lum::sandbox_enrollment_ks-lum_trunk::c9800cc563af319efa675833d0f2e3e67a6e4200
-# module = ks-enroll branch Path = sandbox/enrollment/ks-enroll/trunk revision = 36447
-ks-enroll::sandbox_enrollment_ks-enroll_trunk::de8f4f338e59c327dd7985ddc19b1909d0dfef26
-# module = ks-deployments branch Path = sandbox/enrollment/ks-deployments/trunk revision = 36447
-ks-deployments::sandbox_enrollment_ks-deployments_trunk::1d0a0bc2bceb4621bc1cb4424ee9e3602fc26d90
+# module = ks-api branch Path = sandbox/enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M5/build-891 revision = 38181
+ks-api::sandbox_enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M5_build-891::3a31820866be8f219ccabde8b25099e6b39fb9c7
+# module = ks-core branch Path = sandbox/enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0/build-891 revision = 38181
+ks-core::sandbox_enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0_build-891::b02dd3241c15d5f205048eb9985fcfe9cf5017c8
+# module = ks-deployments branch Path = sandbox/enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0/build-891 revision = 38181
+ks-deployments::sandbox_enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0_build-891::aea26c9628bc1f64a39d4e108d4c0256f07fcb23
+# module = ks-enroll branch Path = sandbox/enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0/build-891 revision = 38181
+ks-enroll::sandbox_enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0_build-891::2c0bc7f3be459660ec4fb9bd9c8a149854c19173
+# module = ks-lum branch Path = sandbox/enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0/build-891 revision = 38181
+ks-lum::sandbox_enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0_build-891::409ccf8b22b9306d33e626eecddbf46fbcf50512
