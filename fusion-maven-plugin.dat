@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::fcac48da66b1caca12ff046a5c276cc2bb150409
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::9bd919013b00150033ba1a417251d90b78d59f77
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::f2f500e6ea3eedb75689cca45b1adcd2a86f62d3
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::bea48226e3901281320fb8fdf69d3487860a5951
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-156 revision = 38367
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-156::261f8b399dd1576b74d6afc89507e8cf8757aef5
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-156 revision = 38367
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-156::a04e6d90cd144cfb88cf2668b7d5fa432fff8d57
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-156 revision = 38367
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-156::4dea0928290c7af7ae8d644bd4acaccc3d0e78ce
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-156 revision = 38367
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-156::d9d29df4a47dde5b8ec4589bf187602ea5184bdb
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-156 revision = 38367
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-156::4574017247b71efa13b3facd9521b5d5ae647e6a
