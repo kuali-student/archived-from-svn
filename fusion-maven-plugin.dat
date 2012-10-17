@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::a7d129843b54685389b76c3b66f33643610d8546
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::9bd919013b00150033ba1a417251d90b78d59f77
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::f2f500e6ea3eedb75689cca45b1adcd2a86f62d3
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::30d0f72490fed265853b08f439406bffe0019208
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-163 revision = 38680
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-163::2d52fe5646ac5decc2f42ae62c82e70ac1b2701c
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-163 revision = 38680
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-163::834d5391852e40e64df9d3aabe83e486416bc9c0
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-163 revision = 38680
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-163::9465da556e5d1a288e75c537de05fb8acdcba1c6
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-163 revision = 38680
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-163::123dfcb7e7aeeb348077653b7706b1cdb1fd24f8
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-163 revision = 38680
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-163::181a63573ef4f0c678fd0ae2b389f1036c889ea7
