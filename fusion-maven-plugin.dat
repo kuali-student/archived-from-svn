@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::79cbdffea4e8440ef11222e5f54b71e5b18beb6a
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::9bd919013b00150033ba1a417251d90b78d59f77
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::09c63d93f4a82263ce71994b4830b1eb0fdc4b27
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::334afb98388ecd00b5a63ab9c5d44a4fcbbf3f8c
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-166 revision = 38805
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-166::2706b5bdf8d4f513058a1f408e1b0d672c38650a
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-166 revision = 38805
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-166::1fe98eb7b900674572d380473261500df0051802
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-166 revision = 38805
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-166::7817ca0efb372ceabdfaafc30a17ee7723408621
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-166 revision = 38805
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-166::55ca77e94bc7bca3f86a8b21bc6fa738e49743a4
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-166 revision = 38805
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-166::ee766e191473d68a48edaf69d9c55eff2004fcff
