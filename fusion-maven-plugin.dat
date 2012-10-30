@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 37872
-ks-api::enrollment_ks-api_branches_M6::7d72ed5bf6bc9647e34a83a61b9135d3a3a7afa9
-# module = ks-core branch Path = enrollment/ks-core/branches/services revision = 37872
-ks-core::enrollment_ks-core_branches_services::305cdcf89e50d734f617cb9a0875e5662ab14dc4
-# module = ks-lum branch Path = enrollment/ks-lum/branches/services revision = 37872
-ks-lum::enrollment_ks-lum_branches_services::09c63d93f4a82263ce71994b4830b1eb0fdc4b27
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/services revision = 37872
-ks-enroll::enrollment_ks-enroll_branches_services::ec1fe9c05ed9820f018223be1a64d96283f6e70c
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/services revision = 37872
-ks-deployments::enrollment_ks-deployments_branches_services::9177e42db9246614668c9a9c07c504c867b294ea
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6/build-175 revision = 39202
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6_build-175::cd2b4e4ed13cab7c1a9dcdefc3c93d8ebfaf01e7
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M6/build-175 revision = 39202
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M6_build-175::aa4933d5b5b7cbc85990a1a7a0f75ea6626e6c85
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M6/build-175 revision = 39202
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M6_build-175::bba551e85bb8bc6a2133121c9bb5f8c75efe6d7f
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M6/build-175 revision = 39202
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M6_build-175::526d23eae61bb253ab917d511d30600000c6339a
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M6/build-175 revision = 39202
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M6_build-175::95e2ca5c8035554c2148bd51c63562401522e700
