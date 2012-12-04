@@ -16,8 +16,6 @@
 package org.kuali.student.ui.admin.atp;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;

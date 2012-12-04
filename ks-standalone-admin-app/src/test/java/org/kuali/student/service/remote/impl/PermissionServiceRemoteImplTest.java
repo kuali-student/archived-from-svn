@@ -22,22 +22,24 @@ import org.junit.*;
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
+import org.kuali.rice.kim.api.common.template.Template;
+import org.kuali.rice.kim.api.common.template.TemplateQueryResults;
+import org.kuali.rice.kim.api.permission.Permission;
+import org.kuali.rice.kim.api.permission.PermissionQueryResults;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.core.class1.state.dto.LifecycleInfo;
-import org.kuali.student.r2.core.class1.state.dto.StateInfo;
 
 
 //@Ignore
-public class StateServiceRemoteImplTest
+public class PermissionServiceRemoteImplTest
 {
 	private static ContextInfo contextInfo;
-	private static StateServiceRemoteImpl service;
+	private static PermissionServiceRemoteImpl service;
 	
 	
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
-		service = new StateServiceRemoteImpl();
+		service = new PermissionServiceRemoteImpl();
 		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
 		//service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
 		contextInfo = new ContextInfo();
@@ -61,205 +63,235 @@ public class StateServiceRemoteImplTest
 	
 	
 	@Test
-	public void testSearchStateInfoAll () throws Exception
+	public void testSearchPermissionAll () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoKeywordSearch () throws Exception
+	public void testSearchPermissionKeywordSearch () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
 		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoByKey () throws Exception
+	public void testSearchPermissionById () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("key", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("id", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoByName () throws Exception
+	public void testSearchPermissionByNamespaceCode () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("namespaceCode", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
+	}
+	
+	@Test
+	public void testSearchPermissionByName () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
 		pList.add(PredicateFactory.equal("name", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoByDescrPlain () throws Exception
+	public void testSearchPermissionByDescription () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.plain", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("description", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoByDescrFormatted () throws Exception
+	public void testSearchPermissionByTemplateId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.formatted", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("template.id", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchStateInfoByLifecycleKey () throws Exception
+	public void testSearchPermissionByTemplateNamespaceCode () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("lifecycleKey", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("template.namespaceCode", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
-	// TODO: deal with  effectiveDate which is a Date
-	// TODO: deal with  expirationDate which is a Date
-	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
-	// TODO: deal with  meta.createTime which is a Date
 	
 	@Test
-	public void testSearchStateInfoByMetaCreateId () throws Exception
+	public void testSearchPermissionByTemplateName () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("template.name", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
-	// TODO: deal with  meta.updateTime which is a Date
 	
 	@Test
-	public void testSearchStateInfoByMetaUpdateId () throws Exception
+	public void testSearchPermissionByTemplateDescription () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("template.description", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<StateInfo> infos = service.searchForStates(qBuilder.build(), contextInfo);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
 	}
-	// TODO: deal with dynamic attributes
 	
 	@Test
-	public void testSearchLifecycleInfoAll () throws Exception
+	public void testSearchPermissionByTemplateKimTypeId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("template.kimTypeId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
+	}
+	// TODO: deal with  template.active which is a boolean
+	// TODO: deal with  template.versionNumber which is a Long
+	
+	@Test
+	public void testSearchPermissionByTemplateObjectId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("template.objectId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
+	}
+	// TODO: deal with  active which is a boolean
+	// TODO: deal with  attributes which is a Map<String, String>
+	// TODO: deal with  versionNumber which is a Long
+	
+	@Test
+	public void testSearchPermissionByObjectId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("objectId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		PermissionQueryResults infos = service.findPermissions(qBuilder.build());
+	}
+	
+	@Test
+	public void testSearchTemplateAll () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchLifecycleInfoKeywordSearch () throws Exception
+	public void testSearchTemplateKeywordSearch () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
 		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchLifecycleInfoByKey () throws Exception
+	public void testSearchTemplateById () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("key", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("id", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchLifecycleInfoByName () throws Exception
+	public void testSearchTemplateByNamespaceCode () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("namespaceCode", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
+	}
+	
+	@Test
+	public void testSearchTemplateByName () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
 		pList.add(PredicateFactory.equal("name", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchLifecycleInfoByDescrPlain () throws Exception
+	public void testSearchTemplateByDescription () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.plain", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("description", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
 	
 	@Test
-	public void testSearchLifecycleInfoByDescrFormatted () throws Exception
+	public void testSearchTemplateByKimTypeId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("descr.formatted", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("kimTypeId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
+	// TODO: deal with  active which is a boolean
+	// TODO: deal with  versionNumber which is a Long
 	
 	@Test
-	public void testSearchLifecycleInfoByRefObjectUri () throws Exception
+	public void testSearchTemplateByObjectId () throws Exception
 	{
 		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
 		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("refObjectUri", "xyzzysomethingnothingmatches"));
+		pList.add(PredicateFactory.equal("objectId", "xyzzysomethingnothingmatches"));
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
+		TemplateQueryResults infos = service.findPermissionTemplates(qBuilder.build());
 	}
-	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
-	// TODO: deal with  meta.createTime which is a Date
-	
-	@Test
-	public void testSearchLifecycleInfoByMetaCreateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  meta.updateTime which is a Date
-	
-	@Test
-	public void testSearchLifecycleInfoByMetaUpdateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<LifecycleInfo> infos = service.searchForLifecycles(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with dynamic attributes
 }
 

@@ -39,8 +39,8 @@ public class AtpServiceRemoteImplTest
 	public static void setUpClass() throws Exception
 	{
 		service = new AtpServiceRemoteImpl();
-//		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
-		service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
+		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
+		//service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
 		contextInfo = new ContextInfo();
 		contextInfo.setPrincipalId("TESTUSER");
 	}
@@ -60,108 +60,6 @@ public class AtpServiceRemoteImplTest
 	{
 	}
 	
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoAll () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoKeywordSearch () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoById () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("id", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByTypeKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("typeKey", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByStateKey () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("stateKey", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByAtpId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("atpId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByRelatedAtpId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("relatedAtpId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  effectiveDate which is a Date
-	// TODO: deal with  expirationDate which is a Date
-	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
-	// TODO: deal with  meta.createTime which is a Date
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByMetaCreateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with  meta.updateTime which is a Date
-	
-	@Test
-	public void testSearchAtpAtpRelationInfoByMetaUpdateId () throws Exception
-	{
-		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
-		List<Predicate> pList = new ArrayList<Predicate>();
-		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
-		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
-		qBuilder.setMaxResults (30);
-		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
-	}
-	// TODO: deal with dynamic attributes
 	
 	@Test
 	public void testSearchAtpInfoAll () throws Exception
@@ -295,6 +193,108 @@ public class AtpServiceRemoteImplTest
 		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
 		qBuilder.setMaxResults (30);
 		List<AtpInfo> infos = service.searchForAtps(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with dynamic attributes
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoAll () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoKeywordSearch () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("keywordSearch", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoById () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("id", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByTypeKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("typeKey", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByStateKey () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("stateKey", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByAtpId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("atpId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByRelatedAtpId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("relatedAtpId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with  effectiveDate which is a Date
+	// TODO: deal with  expirationDate which is a Date
+	// TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database
+	// TODO: deal with  meta.createTime which is a Date
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByMetaCreateId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("meta.createId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
+	}
+	// TODO: deal with  meta.updateTime which is a Date
+	
+	@Test
+	public void testSearchAtpAtpRelationInfoByMetaUpdateId () throws Exception
+	{
+		QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
+		List<Predicate> pList = new ArrayList<Predicate>();
+		pList.add(PredicateFactory.equal("meta.updateId", "xyzzysomethingnothingmatches"));
+		qBuilder.setPredicates(PredicateFactory.and(pList.toArray(new Predicate[pList.size()])));
+		qBuilder.setMaxResults (30);
+		List<AtpAtpRelationInfo> infos = service.searchForAtpAtpRelations(qBuilder.build(), contextInfo);
 	}
 	// TODO: deal with dynamic attributes
 	
