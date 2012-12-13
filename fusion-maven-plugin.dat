@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M5 revision = 37254
-ks-api::enrollment_ks-api_branches_M5::1f6424de6827db6c66d567d18b4e9884ba41915e
-# module = ks-core branch Path = enrollment/ks-core/trunk revision = 37254
-ks-core::enrollment_ks-core_trunk::5b64a758d4795456f237eadb48bcf26631e3494d
-# module = ks-lum branch Path = enrollment/ks-lum/trunk revision = 37254
-ks-lum::enrollment_ks-lum_trunk::8835aadaebd80e49e9a75e39c3bb0689fab064b5
-# module = ks-enroll branch Path = enrollment/ks-enroll/trunk revision = 37254
-ks-enroll::enrollment_ks-enroll_trunk::6d65b75e602ac791a95b09a4016cf8efc3fa8ac4
-# module = ks-deployments branch Path = enrollment/ks-deployments/trunk revision = 37254
-ks-deployments::enrollment_ks-deployments_trunk::b77da449a73ae985ee23236e41f52299407b12f3
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6-CM20/build-20121213 revision = 41080
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6-CM20_build-20121213::955ff39f66b9b4910987d6f406fb134af6b48bc2
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-CM20/build-20121213 revision = 41080
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-CM20_build-20121213::8b2b278ce3f5a5586f7f6fb60f809e82cf6f7fe0
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-CM20/build-20121213 revision = 41080
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-CM20_build-20121213::1a5284b8e73b012bb935f03b772648eac46c7103
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-CM20/build-20121213 revision = 41080
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-CM20_build-20121213::e9b30c2a5ec8a8b9597eb8858e21015e2a57c1e3
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-CM20/build-20121213 revision = 41080
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-CM20_build-20121213::fb7282879575dd4a04d9164ad12d0f4475f6d440
