@@ -90,7 +90,7 @@
         <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/CM-2.0</url>
     </scm>
     <properties>
-        <ks.ap.version>0.0.1-SNAPSHOT</ks.api.version>
+        <ks.ap.version>0.0.1-SNAPSHOT</ks.ap.version>
         <ks.api.version>2.0.0-KSAP-SNAPSHOT</ks.api.version>
         <ks.core.version>2.0.0-KSAP-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-KSAP-SNAPSHOT</ks.enroll.version>
