@@ -45,6 +45,7 @@
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
                 <module>ks-api</module>
+                <module>ks-ap</module>
             </modules>
         </profile>
         <profile>
@@ -54,6 +55,7 @@
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
                 <module>ks-api</module>
+                <module>ks-ap</module>
             </modules>
         </profile>
         <profile>
@@ -63,6 +65,7 @@
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
                 <module>ks-api</module>
+                <module>ks-ap</module>
             </modules>
         </profile>
         <profile>
@@ -77,6 +80,7 @@
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
+                <module>ks-ap</module>
             </modules>
         </profile>
     </profiles>
@@ -86,6 +90,7 @@
         <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/CM-2.0</url>
     </scm>
     <properties>
+        <ks.ap.version>0.0.1-SNAPSHOT</ks.api.version>
         <ks.api.version>2.0.0-KSAP-SNAPSHOT</ks.api.version>
         <ks.core.version>2.0.0-KSAP-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-KSAP-SNAPSHOT</ks.enroll.version>
@@ -197,6 +202,10 @@
                     <configuration>
                         <commitMessage>[externals-maven-plugin] Automated pom formatting</commitMessage>
                         <mappings>
+                            <mapping>
+                                <module>ks-ap</module>
+                                <versionProperty>ks.ap.version</versionProperty>
+                            </mapping>
                             <mapping>
                                 <module>ks-api</module>
                                 <versionProperty>ks.api.version</versionProperty>
