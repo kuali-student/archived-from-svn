@@ -19,11 +19,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
-import org.kuali.student.r2.core.atp.service.AtpService;
-import org.kuali.student.r2.core.class1.atp.service.decorators.AtpServiceDecorator;
-import org.kuali.student.r2.core.constants.AtpServiceConstants;
+import org.kuali.student.r2.lum.lrc.service.LRCService;
+import org.kuali.student.r2.lum.lrc.service.LRCServiceDecorator;
+import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
-public class AtpServiceRemoteImpl extends AtpServiceDecorator {
+public class LrcServiceRemoteImplx extends LRCServiceDecorator {
 
     private String hostUrl;
 
@@ -39,14 +39,14 @@ public class AtpServiceRemoteImpl extends AtpServiceDecorator {
         }
         URL wsdlURL;
         try {
-            String urlStr = hostUrl + "/services/" + AtpServiceConstants.SERVICE_NAME_LOCAL_PART + "?wsdl";
+            String urlStr = hostUrl + "/services/" + LrcServiceConstants.SERVICE_NAME_LOCAL_PART + "?wsdl";
             wsdlURL = new URL(urlStr);
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }
-        QName qname = new QName(AtpServiceConstants.NAMESPACE, AtpServiceConstants.SERVICE_NAME_LOCAL_PART);
+        QName qname = new QName(LrcServiceConstants.NAMESPACE, LrcServiceConstants.SERVICE_NAME_LOCAL_PART);
         Service factory = Service.create(wsdlURL, qname);
-        AtpService port = factory.getPort(AtpService.class);
+        LRCService port = factory.getPort(LRCService.class);
         this.setNextDecorator(port);
     }
 }

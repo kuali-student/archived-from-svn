@@ -15,23 +15,11 @@
  */
 package edu.sampleu.demo.kitchensink;
 
-import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.kuali.rice.krad.datadictionary.validation.ViewAttributeValueReader;
-import org.kuali.rice.krad.service.DictionaryValidationService;
 import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.uif.UifParameters;
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.container.CollectionGroup;
-import org.kuali.rice.krad.uif.container.Container;
-import org.kuali.rice.krad.uif.container.Group;
-import org.kuali.rice.krad.uif.field.DataField;
-import org.kuali.rice.krad.uif.field.FieldGroup;
-import org.kuali.rice.krad.uif.field.InputField;
-import org.kuali.rice.krad.uif.layout.StackedLayoutManager;
-import org.kuali.rice.krad.uif.layout.TableLayoutManager;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
@@ -43,11 +31,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.beans.PropertyEditor;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Random;
 
 /**
  * Controller for the Test UI Page
@@ -131,7 +116,8 @@ public class UifComponentsTestController extends UifControllerBase {
             GlobalVariables.getMessageMap().putInfo("gField3", "serverTestInfo");
         }
         // only refreshing page
-        form.setRenderFullView(false);
+//        form.setRenderFullView(false);
+//        form.setRenderedInLightBox(false);
 
         return getUIFModelAndView(form, pageId);
     }

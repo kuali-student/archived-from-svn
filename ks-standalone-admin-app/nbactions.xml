@@ -10,5 +10,12 @@
                 <skipTests>true</skipTests>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-dependencies</actionName>
+            <displayName>dependencies</displayName>
+            <goals>
+                <goal>dependency:tree</goal>
+            </goals>
+        </action>
         
     </actions>

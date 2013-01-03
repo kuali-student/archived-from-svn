@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.kuali.rice</groupId>
         <artifactId>rice</artifactId>
-        <version>2.2.0-M3</version>
+        <version>2.2.0</version>
     </parent>
     <artifactId>ks-standalone-admin-app</artifactId>
     <packaging>war</packaging>
@@ -166,12 +166,13 @@
         <dependency>
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-ui</artifactId>
-            <version>2.0.0-M5-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+<!--                
                 <exclusion>
                     <groupId>org.kuali.student.core</groupId>
                     <artifactId>ks-core-impl</artifactId>
@@ -188,18 +189,9 @@
                     <groupId>org.kuali.student.core</groupId>
                     <artifactId>ks-lum-api</artifactId>
                 </exclusion>
+                -->
             </exclusions>      
         </dependency>
-        <dependency>
-            <groupId>org.kuali.student.core</groupId>
-            <artifactId>ks-core-impl</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-        </dependency>  
-        <dependency>
-            <groupId>org.kuali.student.lum</groupId>
-            <artifactId>ks-lum-impl</artifactId>
-            <version>2.0.0-M5-SNAPSHOT</version>
-        </dependency>  
 <!--    <dependency>
       <groupId>org.kuali.student.api</groupId>
       <artifactId>ks-core-api</artifactId>
@@ -211,13 +203,13 @@
       <artifactId>ks-lum-api</artifactId>
       <version>2.0.0-SNAPSHOT</version>
     </dependency>
-      
     <dependency>
       <groupId>org.kuali.student.api</groupId>
       <artifactId>ks-enroll-api</artifactId>
       <version>2.0.0-SNAPSHOT</version>
-    </dependency>-->
-      
+    </dependency>
+     
+-->       
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rice-impex-master</artifactId>
@@ -248,7 +240,7 @@
             <artifactId>rice-krms-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!--
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>rice-it-krad</artifactId>
@@ -256,7 +248,6 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
--->
 <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
