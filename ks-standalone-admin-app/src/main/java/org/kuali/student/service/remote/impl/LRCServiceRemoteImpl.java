@@ -23,7 +23,7 @@ import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.lrc.service.LRCServiceDecorator;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
-public class LrcServiceRemoteImplx extends LRCServiceDecorator {
+public class LRCServiceRemoteImpl extends LRCServiceDecorator {
 
     private String hostUrl;
 

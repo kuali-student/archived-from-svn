@@ -32,13 +32,13 @@ import org.kuali.student.r2.lum.lrc.dto.ResultValuesGroupInfo;
 public class LRCServiceRemoteImplTest
 {
 	private static ContextInfo contextInfo;
-	private static LrcServiceRemoteImplx service;
+	private static LRCServiceRemoteImpl service;
 	
 	
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
-		service = new LrcServiceRemoteImplx();
+		service = new LRCServiceRemoteImpl();
 		service.setHostUrl(RemoteServiceConstants.ENV2_URL);
 		//service.setHostUrl(RemoteServiceConstants.LOCAL_HOST_EMBEDDED_URL);
 		contextInfo = new ContextInfo();
