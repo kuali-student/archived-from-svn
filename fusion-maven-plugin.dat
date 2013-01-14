@@ -5,6 +5,6 @@ ks-core::enrollment_ks-core_branches_KSAP::b7e581e18ac24ee3d4721179d12926b4b6ae2
 # module = ks-lum branch Path = enrollment/ks-lum/branches/KSAP revision = 41042
 ks-lum::enrollment_ks-lum_branches_KSAP::5cbf41f76cf6d5acf45f83fff8268a804dd79810
 # module = ks-enroll branch Path = enrollment/ks-enroll/branches/KSAP revision = 41042
-ks-enroll::enrollment_ks-enroll_branches_KSAP::c53638ec4bffc04e24e16197429fd932c8f4bcb1
+ks-enroll::enrollment_ks-enroll_branches_KSAP::617b05597af527cce7daf25cbc03c7838b80d8ef
 # module = ks-deployments branch Path = enrollment/ks-deployments/branches/KSAP revision = 41042
-ks-deployments::enrollment_ks-deployments_branches_KSAP::715565c5c5422b293d8a1aa98b386761520acba9
+ks-deployments::enrollment_ks-deployments_branches_KSAP::487fa0a2fa77a6a67aa6b51bc5c77551a67348eb
