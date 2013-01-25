@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mvn clean install -DskipTests --projects ks-core/ks-core-sql,ks-core/ks-rice-sql,ks-enroll/ks-enroll-sql
