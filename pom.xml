@@ -47,7 +47,7 @@
                 <goal>metainf</goal>
               </goals>
               <configuration>
-                <include>${sql.schema.include}</include>
+                <include>${sql.data.include}</include>
                 <outputFile>${sql.meta.base}-data.resources</outputFile>
               </configuration>
             </execution>
