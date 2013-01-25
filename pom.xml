@@ -18,10 +18,50 @@
   </modules>
   <properties>
     <kuali-jdbc.version>2.0.0</kuali-jdbc.version>
-
-    <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
-    <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
-    <ks.lum.version>2.0.0-SNAPSHOT</ks.lum.version>
-    <ks.deployments.version>2.0.0-SNAPSHOT</ks.deployments.version>
+    <sql.meta.base>${project.build.outputDirectory}/META-INF/sql/oracle/${project.artifactId}</sql.meta.base>
+    <sql.schema.include>**/initial-db/**/ks-*create-schema.sql</sql.schema.include>
+    <sql.data.include>**/initial-db/**/data/*.sql</sql.data.include>
+    <sql.constraints.include>**/initial-db/**/ks-*constraints.sql</sql.constraints.include>
   </properties>
+  <pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.kuali.maven.plugins</groupId>
+        <artifactId>metainf-maven-plugin</artifactId>
+        <version>2.0.0</version>
+        <executions>
+          <execution>
+            <id>schema</id>
+            <goals>
+              <goal>metainf</goal>
+            </goals>
+            <configuration>
+              <include>${sql.schema.include}</include>
+              <outputFile>${sql.meta.base}-schema.resources</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>data</id>
+            <goals>
+              <goal>metainf</goal>
+            </goals>
+            <configuration>
+              <include>${sql.schema.include}</include>
+              <outputFile>${sql.meta.base}-data.resources</outputFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>constraints</id>
+            <goals>
+              <goal>metainf</goal>
+            </goals>
+            <configuration>
+              <include>${sql.constraints.include}</include>
+              <outputFile>${sql.meta.base}-constraints.resources</outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </pluginManagement>
 </project>
