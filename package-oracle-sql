@@ -5,5 +5,5 @@ LUM=ks-lum/ks-lum-sql
 ENR=ks-enroll/ks-enroll-sql
 PROJECTS=$CORE,$LUM,$ENR
 
-alias mvn='mvn clean install -DskipTests'
+alias mci='mvn clean install -DskipTests'
 mci --projects $PROJECTS
