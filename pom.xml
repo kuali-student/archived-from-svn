@@ -23,13 +23,11 @@
         <mysql.version>5.1.18</mysql.version>
         <kuali.rice.version>2.2.0</kuali.rice.version>
         <kuali-deploy.version>2.0.19</kuali-deploy.version>
-        <kuali-jdbc.version>1.0.7</kuali-jdbc.version>
+        <kuali-jdbc.version>2.0.1-SNAPSHOT</kuali-jdbc.version>
         <kuali-util.version>3.0.4</kuali-util.version>
         <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
         <ks.lum.version>2.0.0-SNAPSHOT</ks.lum.version>
-        <plugin.mvn.version>1.1.0</plugin.mvn.version>
-        <plugin.metainf.version>2.0.0</plugin.metainf.version>
         <!-- Properties for the meta-inf plugin to create lists of sql file locations -->
         <sql.meta.input.base>${project.build.outputDirectory}</sql.meta.input.base>
         <sql.meta.output.base>${project.build.outputDirectory}/META-INF/sql/${db.vendor}/${project.artifactId}</sql.meta.output.base>
@@ -43,7 +41,6 @@
                 <plugin>
                     <groupId>org.kuali.maven.plugins</groupId>
                     <artifactId>metainf-maven-plugin</artifactId>
-                    <version>${plugin.metainf.version}</version>
                     <executions>
                         <execution>
                             <id>schema</id>
