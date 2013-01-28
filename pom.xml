@@ -23,7 +23,7 @@
         <mysql.version>5.1.18</mysql.version>
         <kuali.rice.version>2.2.0</kuali.rice.version>
         <kuali.deploy.version>2.0.19</kuali.deploy.version>
-        <kuali.jdbc.version>1.0.7</kuali.jdbc.version>
+        <kuali-jdbc.version>1.0.7</kuali-jdbc.version>
         <kuali.util.version>3.0.4</kuali.util.version>
         <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
