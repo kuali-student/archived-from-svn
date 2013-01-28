@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CORE=ks-core,ks-core-sql
+CORE=ks-core/ks-core-sql
 LUM=ks-lum/ks-lum-sql
 ENR=ks-enroll/ks-enroll-sql
 PROJECTS=$CORE,$LUM,$ENR
