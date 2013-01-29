@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.pom</groupId>
         <artifactId>kuali-common</artifactId>
-        <version>2.1.41</version>
+        <version>2.1.45</version>
     </parent>
     <groupId>org.kuali.student</groupId>
     <artifactId>student</artifactId>
@@ -18,13 +18,13 @@
         <module>ks-deployments</module>
     </modules>
     <properties>
-        <oracle.version>10.2.0.3.0</oracle.version>
-        <oracle.artifactId>ojdbc14</oracle.artifactId>
+        <oracle.version>11.2.0.2</oracle.version>
+        <oracle.artifactId>ojdbc6_g</oracle.artifactId>
         <mysql.version>5.1.18</mysql.version>
         <kuali.rice.version>2.2.0</kuali.rice.version>
-        <kuali-deploy.version>2.0.19</kuali-deploy.version>
-        <kuali-jdbc.version>1.0.7</kuali-jdbc.version>
-        <kuali-util.version>3.0.4</kuali-util.version>
+        <kuali-deploy.version>2.1.0</kuali-deploy.version>
+        <kuali-jdbc.version>2.0.1</kuali-jdbc.version>
+        <kuali-util.version>3.0.5</kuali-util.version>
         <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
         <ks.lum.version>2.0.0-SNAPSHOT</ks.lum.version>

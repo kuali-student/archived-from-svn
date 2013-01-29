@@ -1,8 +1,8 @@
 # module = ks-core branch Path = sandbox/spring-db-jc/ks-core/trunk revision = 42480
-ks-core::sandbox_spring-db-jc_ks-core_trunk::3496fb65874d8b299ca807e1915df67567c84c66
+ks-core::sandbox_spring-db-jc_ks-core_trunk::71841a3ba6ddcebcae566d48944be1449caa6bec
 # module = ks-lum branch Path = sandbox/spring-db-jc/ks-lum/trunk revision = 42480
-ks-lum::sandbox_spring-db-jc_ks-lum_trunk::20f9b43daff2f3c5ae69e9b09b0141193585177e
+ks-lum::sandbox_spring-db-jc_ks-lum_trunk::6e60b5e9ffea69576800c90b2f083eb01fc55162
 # module = ks-enroll branch Path = sandbox/spring-db-jc/ks-enroll/trunk revision = 42480
-ks-enroll::sandbox_spring-db-jc_ks-enroll_trunk::079e60c7625ac476293400594d2e2ec11aebb50f
+ks-enroll::sandbox_spring-db-jc_ks-enroll_trunk::bcc96b81a49fa74602edba70421e240e9b0196fb
 # module = ks-deployments branch Path = sandbox/spring-db-jc/ks-deployments/trunk revision = 42480
-ks-deployments::sandbox_spring-db-jc_ks-deployments_trunk::3b18d152d5ed03a3690fd0edebd4820ed1003a51
+ks-deployments::sandbox_spring-db-jc_ks-deployments_trunk::e3fcdeb1eaa150f142d0e55c51e47cc29e316ecf
