@@ -30,6 +30,10 @@
         <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
         <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
         <ks.lum.version>2.0.0-SNAPSHOT</ks.lum.version>
+        <ks.deployments.version>2.0.0-SNAPSHOT</ks.deployments.version>
+
+        <!-- default  -->
+        <plugin.spring.context.db>classpath:org/kuali/common/deploy/spring/db-developer-context.xml</plugin.spring.context.db>
 
         <!-- Properties for the meta-inf plugin to create lists of sql file locations -->
         <metainf.schema>**/initial-db/**/ks-*create-schema.sql</metainf.schema>
@@ -37,50 +41,45 @@
         <metainf.constraints>**/initial-db/**/ks-*constraints.sql</metainf.constraints>
 
         <!-- Meta inf base output -->
-        <metainf.output>classpath:META-INF/sql/${db.vendor}/${project.artifactId}</metainf.output>
+        <metainf.output>${project.build.outputDirectory}/META-INF/sql/${db.vendor}/${project.artifactId}</metainf.output>
     </properties>
     <profiles>
+        <!-- Properties used by the spring-maven plugin to validate that the sql within a module, such as ks-enroll-sql -->
         <profile>
-            <id>validate-sql</id>
+            <id>db</id>
             <properties>
-                <db.rice.baseline.schema>rice-impex-server-bootstrap</db.rice.baseline.schema>
-                <db.ks.rice.schema>ks-rice-sql</db.ks.rice.schema>
-                <db.project.schema>${project.artifactId}</db.project.schema>
+                <jdbc.username>VALIDATE_DB</jdbc.username>
+                <sql.rice.baseline>rice-impex-server-bootstrap</sql.rice.baseline>
+                <sql.meta.rice>classpath:META-INF/sql/${db.vendor}/ks-rice-sql</sql.meta.rice>
+                <sql.meta.project>classpath:META-INF/sql/${db.vendor}/${project.artifactId}</sql.meta.project>
 
                 <!-- SQL resources -->
-                <sql.schema.1>classpath:sql/oracle/${db.rice.baseline.schema}.sql</sql.schema.1>
-                <sql.schema.2.list>${metainf.output}/${db.project.schema}-schema.resources</sql.schema.2.list>
-                <sql.schema.3.list>${metainf.output}/${db.ks.rice.schema}-schema.resources</sql.schema.3.list>
+                <sql.schema.1>classpath:sql/oracle/${sql.rice.baseline}.sql</sql.schema.1>
+                <sql.schema.2.list>${sql.meta.rice}-schema.resources</sql.schema.2.list>
+                <sql.schema.3.list>${sql.meta.project}-schema.resources</sql.schema.3.list>
 
-                <sql.data.1.list>${db.rice.baseline.schema}-data.resources</sql.data.1.list>
-                <sql.data.2.list>${metainf.output}/${db.ks.rice.schema}-data.resources</sql.data.2.list>
-                <sql.data.3.list>${metainf.output}/${db.project.schema}-data.resources</sql.data.3.list>
+                <sql.data.1.list>${sql.rice.baseline}-data.resources</sql.data.1.list>
+                <sql.data.2.list>${sql.meta.rice}-data.resources</sql.data.2.list>
+                <sql.data.3.list>${sql.meta.project}-data.resources</sql.data.3.list>
 
-                <sql.constraints.1>classpath:sql/oracle/${db.rice.baseline.schema}-constraints.sql</sql.constraints.1>
-                <sql.constraints.2.list>${metainf.output}/${db.ks.rice.schema}-constraints.resources</sql.constraints.2.list>
-                <sql.constraints.3.list>${metainf.output}/${db.project.schema}-constraints.resources</sql.constraints.3.list>
+                <sql.constraints.1>classpath:sql/oracle/${sql.rice.baseline}-constraints.sql</sql.constraints.1>
+                <sql.constraints.2.list>${sql.meta.rice}-constraints.resources</sql.constraints.2.list>
+                <sql.constraints.3.list>${sql.meta.project}-constraints.resources</sql.constraints.3.list>
 
                 <!-- upgrade folders run last -->
-                <sql.constraints.4.list>${metainf.output}/${db.ks.rice.schema}-upgrades.resources</sql.constraints.4.list>
-                <sql.constraints.5.list>${metainf.output}/${db.project.schema}-upgrades.resources</sql.constraints.5.list>
+                <sql.constraints.4.list>${sql.meta.rice}-upgrades.resources</sql.constraints.4.list>
+                <sql.constraints.5.list>${sql.meta.project}-upgrades.resources</sql.constraints.5.list>
 
-                <sql.schema.concurrent>sql.schema.2.list,sql.schema.3.list</sql.schema.concurrent>
-                <sql.schema.sequential>sql.schema.1</sql.schema.sequential>
+                <sql.schema.sequential>sql.schema.1,sql.schema.2.list,sql.schema.3.list</sql.schema.sequential>
 
-                <sql.data.concurrent>sql.data.3.list</sql.data.concurrent>
-                <sql.data.sequential>sql.data.1,sql.data.2.list</sql.data.sequential>
+                <sql.data.concurrent>sql.data.2.list,sql.data.3.list</sql.data.concurrent>
+                <sql.data.sequential>sql.data.1.list</sql.data.sequential>
+                <sql.data.order>sequential,concurrent</sql.data.order>
 
                 <sql.constraints.concurrent>sql.constraints.2.list,sql.constraints.3.list</sql.constraints.concurrent>
-                <sql.constraints.sequential>sql.constraints.1</sql.constraints.sequential>
+                <sql.constraints.sequential>sql.constraints.1,sql.constraints.4.list,sql.constraints.5.list</sql.constraints.sequential>
+                <sql.constraints.order>concurrent,sequential</sql.constraints.order>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.kuali.maven.plugins</groupId>
-                        <artifactId>spring-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>
