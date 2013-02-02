@@ -42,7 +42,7 @@
     <metainf.resource.schema>${metainf.resource.base}-schema.resources</metainf.resource.schema>
     <metainf.resource.data>${metainf.resource.base}-data.resources</metainf.resource.data>
     <metainf.resource.constraints>${metainf.resource.base}-constraints.resources</metainf.resource.constraints>
-    <metainf.resource.other>${metainf.resource.base}-other.resources</metainf.resource.other>
+    <metainf.resource.other>${metainf.resource.base}-upgrades.resources</metainf.resource.other>
 
     <!-- Regex controlling which SQL files get included for each area -->
     <metainf.include.schema>**/initial-db/**/ks-*create-schema.sql</metainf.include.schema>
