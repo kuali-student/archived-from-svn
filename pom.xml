@@ -83,11 +83,10 @@
     </pluginManagement>
   </build>
   <profiles>
-    <!-- Properties used by the spring-maven plugin to validate that the sql within a module, such as ks-enroll-sql -->
+    <!-- Validate that the SQL in ks-xxx-sql modules can be executed independently -->
     <profile>
       <id>db</id>
       <properties>
-        <jdbc.username>VALIDATE_DB</jdbc.username>
         <sql.rice.baseline>rice-impex-server-bootstrap</sql.rice.baseline>
         <sql.meta.rice>classpath:META-INF/sql/${db.vendor}/ks-rice-sql</sql.meta.rice>
         <sql.meta.project>classpath:META-INF/sql/${db.vendor}/${project.artifactId}</sql.meta.project>
@@ -106,8 +105,8 @@
         <sql.constraints.3.list>${sql.meta.project}-constraints.resources</sql.constraints.3.list>
 
         <!-- upgrade folders run last -->
-        <sql.constraints.4.list>${sql.meta.rice}-upgrades.resources</sql.constraints.4.list>
-        <sql.constraints.5.list>${sql.meta.project}-upgrades.resources</sql.constraints.5.list>
+        <sql.other.1.list>${sql.meta.rice}-upgrades.resources</sql.other.1.list>
+        <sql.other.2.list>${sql.meta.project}-upgrades.resources</sql.other.2.list>
 
         <sql.schema.sequential>sql.schema.1,sql.schema.2.list,sql.schema.3.list</sql.schema.sequential>
 
@@ -116,8 +115,9 @@
         <sql.data.order>sequential,concurrent</sql.data.order>
 
         <sql.constraints.concurrent>sql.constraints.2.list,sql.constraints.3.list</sql.constraints.concurrent>
-        <sql.constraints.sequential>sql.constraints.1,sql.constraints.4.list,sql.constraints.5.list</sql.constraints.sequential>
+        <sql.constraints.sequential>sql.constraints.1</sql.constraints.sequential>
         <sql.constraints.order>concurrent,sequential</sql.constraints.order>
+        <sql.constraints.sequential>sql.other.1,sql.other.2.list</sql.constraints.sequential>
       </properties>
     </profile>
   </profiles>
