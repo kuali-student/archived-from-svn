@@ -43,7 +43,7 @@
     <metainf.resource.constraints>${metainf.resource.base}-constraints.resources</metainf.resource.constraints>
     <metainf.resource.other>${metainf.resource.base}-other.resources</metainf.resource.other>
 
-    <!-- Regex for the SQL files to include for each area -->
+    <!-- Regex controlling which SQL files get included for each area -->
     <metainf.include.schema>**/initial-db/**/ks-*create-schema.sql</metainf.include.schema>
     <metainf.include.data>**/initial-db/**/data/*.sql</metainf.include.data>
     <metainf.include.constraints>**/initial-db/**/ks-*constraints.sql</metainf.include.constraints>
