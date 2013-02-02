@@ -1,9 +1,0 @@
-#!/bin/sh
-
-CORE=ks-core/ks-core-sql,ks-core/ks-rice-sql
-LUM=ks-lum/ks-lum-sql
-ENR=ks-enroll/ks-enroll-sql
-PROJECTS=$CORE,$LUM,$ENR
-
-alias mci='mvn clean install -DskipTests'
-mci --projects $PROJECTS
