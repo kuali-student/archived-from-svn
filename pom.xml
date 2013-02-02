@@ -84,7 +84,7 @@
     </pluginManagement>
   </build>
   <profiles>
-    <!-- Validate that the SQL in ks-xxx-sql modules can be independently -->
+    <!-- Validate that the SQL in ks-xxx-sql modules can be executed indpendently independently -->
     <profile>
       <id>db</id>
       <properties>
