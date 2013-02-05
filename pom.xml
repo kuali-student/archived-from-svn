@@ -86,43 +86,4 @@
       </plugins>
     </pluginManagement>
   </build>
-  <profiles>
-    <!-- Validate that the SQL in ks-xxx-sql modules can be executed independently -->
-    <profile>
-      <id>db</id>
-      <properties>
-        <sql.rice.baseline>rice-impex-server-bootstrap</sql.rice.baseline>
-        <sql.meta.rice>classpath:META-INF/sql/${db.vendor}/ks-rice-sql</sql.meta.rice>
-        <sql.meta.project>classpath:META-INF/sql/${db.vendor}/${project.artifactId}</sql.meta.project>
-
-        <!-- SQL resources -->
-        <sql.schema.1>classpath:sql/oracle/${sql.rice.baseline}.sql</sql.schema.1>
-        <sql.schema.2.list>${sql.meta.rice}-schema.resources</sql.schema.2.list>
-        <sql.schema.3.list>${sql.meta.project}-schema.resources</sql.schema.3.list>
-
-        <sql.data.1.list>${sql.rice.baseline}-data.resources</sql.data.1.list>
-        <sql.data.2.list>${sql.meta.rice}-data.resources</sql.data.2.list>
-        <sql.data.3.list>${sql.meta.project}-data.resources</sql.data.3.list>
-
-        <sql.constraints.1>classpath:sql/oracle/${sql.rice.baseline}-constraints.sql</sql.constraints.1>
-        <sql.constraints.2.list>${sql.meta.rice}-constraints.resources</sql.constraints.2.list>
-        <sql.constraints.3.list>${sql.meta.project}-constraints.resources</sql.constraints.3.list>
-
-        <!-- upgrade folders run last -->
-        <sql.other.1.list>${sql.meta.rice}-upgrades.resources</sql.other.1.list>
-        <sql.other.2.list>${sql.meta.project}-upgrades.resources</sql.other.2.list>
-
-        <sql.schema.sequential>sql.schema.1,sql.schema.2.list,sql.schema.3.list</sql.schema.sequential>
-
-        <sql.data.concurrent>sql.data.2.list,sql.data.3.list</sql.data.concurrent>
-        <sql.data.sequential>sql.data.1.list</sql.data.sequential>
-        <sql.data.order>sequential,concurrent</sql.data.order>
-
-        <sql.constraints.concurrent>sql.constraints.2.list,sql.constraints.3.list</sql.constraints.concurrent>
-        <sql.constraints.sequential>sql.constraints.1</sql.constraints.sequential>
-        <sql.constraints.order>concurrent,sequential</sql.constraints.order>
-        <sql.constraints.sequential>sql.other.1,sql.other.2.list</sql.constraints.sequential>
-      </properties>
-    </profile>
-  </profiles>
 </project>
