@@ -85,6 +85,17 @@
                 <module>ks-ap</module>
             </modules>
         </profile>
+        <profile>
+            <id>skip-lum-enroll-wars</id>
+            <modules>
+                <module>ks-deployments</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+                <module>ks-ap</module>
+            </modules>
+        </profile>
     </profiles>
     <scm>
         <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/CM-2.0</connection>
