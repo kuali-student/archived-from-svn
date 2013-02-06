@@ -16,6 +16,11 @@
     <module>ks-enroll</module>
     <module>ks-deployments</module>
   </modules>
+  <scm>
+    <connection>scm:svn:https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</connection>
+    <developerConnection>scm:svn:https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</developerConnection>
+    <url>scm:svn:https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
+  </scm>
   <properties>
     <!-- Remove this after the kuali-common pom is updated to the same version -->
     <kuali-util.version>3.0.9</kuali-util.version>
