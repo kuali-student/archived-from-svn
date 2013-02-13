@@ -88,7 +88,6 @@
         <profile>
             <id>skip-lum-enroll-wars</id>
             <modules>
-                <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
