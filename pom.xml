@@ -22,8 +22,6 @@
     <url>https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
   </scm>
   <properties>
-    <!-- Remove this after the kuali-common pom is updated to the same version -->
-    <kuali-util.version>3.0.11</kuali-util.version>
     <oracle.dba.username>SYS AS SYSDBA</oracle.dba.username>
     <oracle.dba.password>CHANGE_ON_INSTALL</oracle.dba.password>
     <mysql.dba.username>root</mysql.dba.username>
