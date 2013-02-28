@@ -123,7 +123,7 @@
               <dependency>
                 <groupId>org.kuali.common</groupId>
                 <artifactId>kuali-jdbc</artifactId>
-                <version>2.0.4-SNAPSHOT</version>
+                <version>${kuali-jdbc.version}</version>
               </dependency>
               <dependency>
                 <groupId>org.kuali.common</groupId>
