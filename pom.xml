@@ -22,7 +22,7 @@
     <url>https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
   </scm>
   <properties>
-    <impex.version>2.0.3-SNAPSHOT</impex.version>
+    <impex.version>2.0.3</impex.version>
     <oracle.dba.username>SYS AS SYSDBA</oracle.dba.username>
     <oracle.dba.password>CHANGE_ON_INSTALL</oracle.dba.password>
     <mysql.dba.username>root</mysql.dba.username>
