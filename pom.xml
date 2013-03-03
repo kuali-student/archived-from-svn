@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.kuali.student</groupId>
     <artifactId>student</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0-build-300</version>
     <packaging>pom</packaging>
     <name>Kuali Student</name>
     <description>
@@ -81,16 +81,16 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0/build-300</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0/build-300</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0/build-300</url>
     </scm>
     <properties>
-        <ks.api.version>2.0.0-M6-SNAPSHOT</ks.api.version>
-        <ks.core.version>2.0.0-SNAPSHOT</ks.core.version>
-        <ks.enroll.version>1.0.0-SNAPSHOT</ks.enroll.version>
-        <ks.lum.version>2.0.0-SNAPSHOT</ks.lum.version>
-        <ks.deployments.version>2.0.0-SNAPSHOT</ks.deployments.version>
+        <ks.api.version>2.0.0-M6-build-300</ks.api.version>
+        <ks.core.version>2.0.0-build-300</ks.core.version>
+        <ks.enroll.version>1.0.0-build-300</ks.enroll.version>
+        <ks.lum.version>2.0.0-build-300</ks.lum.version>
+        <ks.deployments.version>2.0.0-build-300</ks.deployments.version>
         <!-- 3rd party library/plugin version definitions -->
         <antlr.runtime.version>3.1.1</antlr.runtime.version>
         <antlr.legacy.version>2.7.7</antlr.legacy.version>
@@ -185,28 +185,22 @@
         <!-- should align to the same or earlier phase than the contract doc or dictionary doc phase -->
         <ks.prepare-contract-dependencies.phase>site</ks.prepare-contract-dependencies.phase>
         <ks.vdecorator.phase>none</ks.vdecorator.phase>
-
-
         <!-- default Spring context for db tasks -->
         <plugin.spring.context.db>classpath:org/kuali/common/deploy/spring/db-developer-context.xml</plugin.spring.context.db>
-
         <!-- Spring context that creates META-INF files describing SQL resources -->
         <metainf.sql.context>classpath:org/kuali/common/util/metainf-sql-context.xml</metainf.sql.context>
         <metainf.resource.prefix>classpath:</metainf.resource.prefix>
-
         <!-- SQL resource locations -->
         <metainf.resource.base>META-INF/sql/${db.vendor}/${project.artifactId}</metainf.resource.base>
         <metainf.resource.schema>${metainf.resource.base}-schema.resources</metainf.resource.schema>
         <metainf.resource.data>${metainf.resource.base}-data.resources</metainf.resource.data>
         <metainf.resource.constraints>${metainf.resource.base}-constraints.resources</metainf.resource.constraints>
         <metainf.resource.other>${metainf.resource.base}-upgrades.resources</metainf.resource.other>
-
         <!-- Regex controlling which SQL files get included for each area -->
         <metainf.include.schema>**/initial-db/**/ks-*create-schema.sql</metainf.include.schema>
         <metainf.include.data>**/initial-db/**/data/*.sql</metainf.include.data>
         <metainf.include.constraints>**/initial-db/**/ks-*constraints.sql</metainf.include.constraints>
         <metainf.include.other>**/upgrades/**/*.sql</metainf.include.other>
-
         <!-- File system locations for the META-INF files -->
         <metainf.output.schema>${project.build.outputDirectory}/${metainf.resource.schema}</metainf.output.schema>
         <metainf.output.data>${project.build.outputDirectory}/${metainf.resource.data}</metainf.output.data>
