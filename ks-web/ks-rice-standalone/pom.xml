@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.kuali.student.web</groupId>
         <artifactId>ks-web</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0-build-319</version>
     </parent>
     <!-- testing sandbox merge -->
     <build>
@@ -156,6 +156,5 @@
             <artifactId>ks-enroll-rice</artifactId>
             <version>${ks.enroll.version}</version>
         </dependency>
-
     </dependencies>
 </project>
