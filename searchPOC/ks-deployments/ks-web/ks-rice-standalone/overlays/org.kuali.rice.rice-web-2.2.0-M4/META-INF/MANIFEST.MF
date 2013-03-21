@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+SVN-Path: tags/rice-2.2.0-M4/web
+Maven-Version: 3.0.4
+Built-By: root
+Bundle-Name: Rice Web
+Created-By: Apache Maven 3.0.4
+SVN-Repository: https://svn.kuali.org/repos/rice
+Bundle-Vendor: The Kuali Foundation
+SVN-Revision: 35069
+Bundle-BuildNumber: 21
+Build-Jdk: 1.6.0_35
+Bundle-Version: 2.2.0-M4
+SVN-URL: https://svn.kuali.org/repos/rice/tags/rice-2.2.0-M4/web
+Bundle-License: http://maven.kuali.org/external/org/opensource/ecl/2.0
+ /ecl-2.0.txt
+Bundle-SymbolicName: org.kuali.rice.rice-web
+Bundle-DocURL: http://www.kuali.org/
+Bundle-Timestamp: 2012-10-01 18:55 UTC
+Archiver-Version: Plexus Archiver
+
