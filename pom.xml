@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.kuali.pom</groupId>
     <artifactId>kuali-common</artifactId>
-    <version>2.1.56</version>
+    <version>2.3.7</version>
   </parent>
   <groupId>org.kuali.student</groupId>
   <artifactId>student</artifactId>
@@ -22,7 +22,11 @@
     <url>https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
   </scm>
   <properties>
-    <impex.version>2.0.3</impex.version>
+    <kuali-util.version>4.1.9-SNAPSHOT</kuali-util.version>
+    <kuali-jdbc.version>3.0.0-SNAPSHOT</kuali-jdbc.version>
+    <impex.version>2.1.0-SNAPSHOT</impex.version>
+    <plugin.spring.version>2.0.6-SNAPSHOT</plugin.spring.version>
+
     <oracle.dba.username>SYS AS SYSDBA</oracle.dba.username>
     <oracle.dba.password>CHANGE_ON_INSTALL</oracle.dba.password>
     <mysql.dba.username>root</mysql.dba.username>
@@ -37,11 +41,8 @@
     <ks.lum.version>2.0.0-spring-db-SNAPSHOT</ks.lum.version>
     <ks.deployments.version>2.0.0-spring-db-SNAPSHOT</ks.deployments.version>
 
-    <!-- default -->
-    <plugin.spring.context.db>classpath:org/kuali/common/deploy/spring/db-developer-context.xml</plugin.spring.context.db>
-
-    <!-- Spring context that creates META-INF files describing SQL resources -->
-    <metainf.sql.context>classpath:org/kuali/common/util/metainf-sql-context.xml</metainf.sql.context>
+    <!-- Spring config that creates META-INF files describing SQL resources -->
+    <metainf.sql.context>org.kuali.common.util.spring.MetaInfSqlConfig</metainf.sql.context>
     <metainf.resource.prefix>classpath:</metainf.resource.prefix>
 
     <!-- SQL resource locations -->
