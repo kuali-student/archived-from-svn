@@ -43,7 +43,6 @@
 
     <!-- Spring config that creates META-INF files describing SQL resources -->
     <metainf.sql.context>org.kuali.common.util.spring.MetaInfSqlConfig</metainf.sql.context>
-    <metainf.resource.prefix>classpath:</metainf.resource.prefix>
 
     <!-- SQL resource locations -->
     <metainf.resource.base>META-INF/sql/${db.vendor}/${project.artifactId}</metainf.resource.base>
