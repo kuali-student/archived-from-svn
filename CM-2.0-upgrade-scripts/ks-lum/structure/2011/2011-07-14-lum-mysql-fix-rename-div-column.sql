@@ -1,0 +1,4 @@
+--- div is a reserved word in MySQL
+
+ALTER TABLE KSLU_CLU_IDENT RENAME COLUMN DIV to DIVISION
+/
