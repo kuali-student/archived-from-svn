@@ -16,8 +16,8 @@
 # the external paths for the changes to take effect.
 #
 
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/M6
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/trunk
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/trunk
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/trunk
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/sched-service
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/sched-service
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/sched-service
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/sched-service
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/sched-service
