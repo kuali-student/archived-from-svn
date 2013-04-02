@@ -17,7 +17,7 @@
 #
 
 ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/sched-service
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/sched-service
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/sched-service
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/sched-service
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/sched-service
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/sched-service
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/sched-service
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/sched-service
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/sched-service
