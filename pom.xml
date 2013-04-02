@@ -22,6 +22,8 @@
     <url>https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
   </scm>
   <properties>
+    <!-- Remove these once they are released -->
+    <plugin.spring.version>2.0.7-SNAPSHOT</plugin.spring.version>
     <kuali-util.version>4.1.9-SNAPSHOT</kuali-util.version>
     <kuali-jdbc.version>3.0.0-SNAPSHOT</kuali-jdbc.version>
     <impex.version>2.1.0-SNAPSHOT</impex.version>
