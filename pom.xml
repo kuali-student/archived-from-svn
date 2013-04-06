@@ -27,6 +27,7 @@
     <kuali-util.version>4.1.9-SNAPSHOT</kuali-util.version>
     <kuali-jdbc.version>3.0.0-SNAPSHOT</kuali-jdbc.version>
     <impex.version>2.1.0-SNAPSHOT</impex.version>
+    <kuali-threads.version>1.0.10</kuali-threads.version>
 
     <oracle.dba.username>SYS AS SYSDBA</oracle.dba.username>
     <oracle.dba.password>CHANGE_ON_INSTALL</oracle.dba.password>
