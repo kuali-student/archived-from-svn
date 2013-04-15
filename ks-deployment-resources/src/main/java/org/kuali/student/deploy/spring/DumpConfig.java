@@ -87,7 +87,7 @@ public class DumpConfig implements ImpexContextDumpConfig {
 		// Skip everything related to sync'ing files
 		sfe.setSkip(SpringUtils.getBoolean(env, "impex.sync.skip", false));
 
-		// Skip just the portion that commits changes to Subversion
+		// By default do not commit changes. This flag will override that behavior and commit any changes
 		sfe.setCommitChanges(SpringUtils.getBoolean(env, "impex.scm.commit", false));
 
 		return sfe;
