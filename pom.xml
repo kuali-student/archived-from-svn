@@ -22,6 +22,11 @@
     <url>https://svn.kuali.org/repos/student/sandbox/spring-db-jc/aggregate/trunk</url>
   </scm>
   <properties>
+    <plugin.spring.version>2.0.8-SNAPSHOT</plugin.spring.version>
+    <kuali-util.version>4.1.12-SNAPSHOT</kuali-util.version>
+    <kuali-jdbc.version>3.0.2-SNAPSHOT</kuali-jdbc.version>
+    <impex.version>2.1.6-SNAPSHOT</impex.version>
+
     <oracle.dba.username>SYS AS SYSDBA</oracle.dba.username>
     <oracle.dba.password>CHANGE_ON_INSTALL</oracle.dba.password>
     <mysql.dba.username>root</mysql.dba.username>
