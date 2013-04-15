@@ -105,8 +105,8 @@
                 </goals>
                 <phase>initialize</phase>
                 <configuration>
-                  <annotatedClass>org.kuali.common.jdbc.spring.ResetConfig</annotatedClass>
                   <annotatedClasses>
+                    <annotatedClass>org.kuali.common.jdbc.spring.ResetConfig</annotatedClass>
                     <annotatedClass>org.kuali.common.jdbc.spring.ResetController</annotatedClass>
                   </annotatedClasses>
                   <propertySourcesConfig>org.kuali.common.jdbc.spring.JdbcMavenPropertySourceConfig</propertySourcesConfig>
