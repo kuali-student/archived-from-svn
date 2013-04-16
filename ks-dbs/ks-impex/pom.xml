@@ -105,12 +105,12 @@
                 </goals>
                 <phase>initialize</phase>
                 <configuration>
+                  <propertySourcesConfig>org.kuali.common.jdbc.spring.JdbcMavenPropertySourceConfig</propertySourcesConfig>
+                  <removeExistingPropertySources>true</removeExistingPropertySources>
                   <annotatedClasses>
                     <annotatedClass>org.kuali.common.jdbc.spring.ResetConfig</annotatedClass>
                     <annotatedClass>org.kuali.common.jdbc.spring.ResetController</annotatedClass>
                   </annotatedClasses>
-                  <propertySourcesConfig>org.kuali.common.jdbc.spring.JdbcMavenPropertySourceConfig</propertySourcesConfig>
-                  <removeExistingPropertySources>true</removeExistingPropertySources>
                 </configuration>
               </execution>
             </executions>
@@ -191,7 +191,13 @@
                 </goals>
                 <configuration>
                   <forceMojoExecution>true</forceMojoExecution>
-                  <annotatedClass>org.kuali.common.impex.spring.MavenResetConfig</annotatedClass>
+                  <propertySourcesConfig>org.kuali.student.deploy.spring.ImportMavenPropertySourceConfig</propertySourcesConfig>
+                  <removeExistingPropertySources>true</removeExistingPropertySources>
+                  <annotatedClasses>
+                    <annotatedClass>org.kuali.common.impex.spring.MpxSupplierConfig</annotatedClass>
+                    <annotatedClass>org.kuali.common.jdbc.spring.ResetConfig</annotatedClass>
+                    <annotatedClass>org.kuali.common.jdbc.spring.ResetController</annotatedClass>
+                  </annotatedClasses>
                 </configuration>
               </execution>
             </executions>
