@@ -15,7 +15,7 @@
  */
 package org.kuali.student.deploy.spring;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.kuali.common.impex.spring.GeneratorPropertiesConfig;
@@ -38,10 +38,7 @@ public class ImportMavenPropertySourceConfig extends MavenPropertySourceConfig {
 
 	@Override
 	protected List<ProjectProperties> getProjectPropertiesList() {
-		List<ProjectProperties> list = new ArrayList<ProjectProperties>();
-		list.add(jdbcProperties.jdbcProjectProperties());
-		list.add(generatorProperties.generatorProjectProperties());
-		return list;
+		return Arrays.asList(jdbcProperties.jdbcProjectProperties(), generatorProperties.generatorProjectProperties());
 	}
 
 }
