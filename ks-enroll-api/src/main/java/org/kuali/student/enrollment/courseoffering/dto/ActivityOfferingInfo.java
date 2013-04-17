@@ -39,7 +39,7 @@ import java.io.Serializable;
                 "id", "typeKey", "stateKey", "name", "descr", 
                 "formatOfferingId", "formatOfferingName",
                 "activityId", "termId", "termCode", "activityCode", 
-                "scheduleIds", "schedulingStateKey",
+                "scheduleId", "schedulingStateKey",
                 "isHonorsOffering", "gradingOptionKeys", "instructors",
                 "weeklyInclassContactHours", "weeklyOutofclassContactHours", 
                 "weeklyTotalContactHours",  "isEvaluated",
@@ -49,7 +49,8 @@ import java.io.Serializable;
                 "courseOfferingId", "courseOfferingTitle", 
                 "courseOfferingCode", "hasWaitlist", "waitlistTypeKey",
                 "waitlistMaximum", "isWaitlistCheckinRequired", 
-                "waitlistCheckinFrequency", "isColocated",
+                "waitlistCheckinFrequency",
+                "isPartOfColocatedOfferingSet",
                 "meta", "attributes", "_futureElements"})
 
 public class ActivityOfferingInfo
@@ -77,7 +78,7 @@ public class ActivityOfferingInfo
     private String activityCode;   
 
     @XmlElement
-    private List<String> scheduleIds;
+    private String scheduleId;
     
     @XmlElement
     private String schedulingStateKey;
@@ -148,11 +149,11 @@ public class ActivityOfferingInfo
     @XmlElement
     private TimeAmountInfo waitlistCheckinFrequency;
 
-    @XmlElement
-    private Boolean isColocated;
-
     @XmlAnyElement
     private List<Element> _futureElements;
+
+    @XmlElement
+    private Boolean isPartOfColocatedOfferingSet;
 
     /**
      * Constructs a new ActivityOfferingInfo.
@@ -182,9 +183,7 @@ public class ActivityOfferingInfo
         
         this.activityId = offering.getActivityId();
         this.termId = offering.getTermId();
-        if (offering.getScheduleIds() != null) {
-            this.scheduleIds = new ArrayList<String>(offering.getScheduleIds());
-        }
+        this.scheduleId = offering.getScheduleId();
         this.schedulingStateKey = offering.getSchedulingStateKey();
         this.activityCode = offering.getActivityCode();
 
@@ -225,7 +224,6 @@ public class ActivityOfferingInfo
         this.waitlistCheckinFrequency = new TimeAmountInfo(offering.getWaitlistCheckinFrequency());
         this.waitlistMaximum = offering.getWaitlistMaximum();
         this.waitlistTypeKey = offering.getWaitlistTypeKey();
-        this.isColocated = offering.getIsColocated();
     }
 
     @Override
@@ -284,15 +282,12 @@ public class ActivityOfferingInfo
     }
 
     @Override
-    public List<String> getScheduleIds() {
-        if (this.scheduleIds == null) {
-            this.scheduleIds =  new ArrayList<String>();
-        }
-        return this.scheduleIds;
+    public String getScheduleId() {
+        return scheduleId;
     }
 
-    public void setScheduleIds(List<String> scheduleIds) {
-        this.scheduleIds = scheduleIds;
+    public void setScheduleId(String scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     @Override
@@ -516,12 +511,12 @@ public class ActivityOfferingInfo
 	}
 
     @Override
-    public Boolean getIsColocated() {
-        return this.isColocated;
+    public Boolean getIsPartOfColocatedOfferingSet() {
+        return isPartOfColocatedOfferingSet;
     }
 
-    public void setIsColocated(Boolean isColocated) {
-        this.isColocated = isColocated;
+    public void setIsPartOfColocatedOfferingSet(Boolean partOfColocatedOfferingSet) {
+        isPartOfColocatedOfferingSet = partOfColocatedOfferingSet;
     }
 
     @Override
@@ -539,12 +534,10 @@ public class ActivityOfferingInfo
         builder.append(activityId);
         builder.append(", termId=");
         builder.append(termId);
-        builder.append(", scheduleIds=");
-        builder.append(scheduleIds.toString());
+        builder.append(", scheduleId=");
+        builder.append(scheduleId);
         builder.append(", schedulingStateKey=");
         builder.append(schedulingStateKey);
-        builder.append(", isColocated=");
-        builder.append(this.isColocated);
         builder.append("]");
         return builder.toString();
     }

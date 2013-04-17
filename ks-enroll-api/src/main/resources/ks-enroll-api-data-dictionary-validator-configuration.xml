@@ -11,4 +11,5 @@
         <property name="riceDataDictionaryService" ref="dataDictionaryServiceForAllUsedByRice" />
         <property name="riceDictionaryValidationService" ref="riceDictionaryValidationService" />
     </bean>
+
 </beans>

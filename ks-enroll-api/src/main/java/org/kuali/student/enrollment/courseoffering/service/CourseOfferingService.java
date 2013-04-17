@@ -16,20 +16,40 @@
 
 package org.kuali.student.enrollment.courseoffering.service;
 
-import org.kuali.rice.core.api.criteria.QueryByCriteria;
-import org.kuali.student.enrollment.courseoffering.dto.*;
-import org.kuali.student.enrollment.courseofferingset.dto.SocRolloverResultItemInfo;
-import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.common.dto.StatusInfo;
-import org.kuali.student.r2.common.dto.ValidationResultInfo;
-import org.kuali.student.r2.common.exceptions.*;
-import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
-import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
+import java.util.List;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import java.util.List;
+
+import org.kuali.rice.core.api.criteria.QueryByCriteria;
+import org.kuali.student.enrollment.courseoffering.dto.AOClusterVerifyResultsInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingClusterInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ColocatedOfferingSetInfo;
+import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingDisplayInfo;
+import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
+import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
+import org.kuali.student.enrollment.courseoffering.dto.RegistrationGroupInfo;
+import org.kuali.student.enrollment.courseoffering.dto.SeatPoolDefinitionInfo;
+import org.kuali.student.enrollment.courseofferingset.dto.SocRolloverResultItemInfo;
+import org.kuali.student.r2.common.dto.BulkStatusInfo;
+import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.r2.common.dto.StatusInfo;
+import org.kuali.student.r2.common.dto.ValidationResultInfo;
+import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
+import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
+import org.kuali.student.r2.common.exceptions.DependentObjectsExistException;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.exceptions.ReadOnlyException;
+import org.kuali.student.r2.common.exceptions.VersionMismatchException;
+import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
+import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 
 /**
  * Course Offering is a class II service supporting the process of offering
@@ -1629,6 +1649,25 @@ public interface CourseOfferingService
     public List<RegistrationGroupInfo> getRegistrationGroupsWithActivityOfferings(@WebParam(name = "activityOfferingIds") List<String> activityOfferingIds, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
     /**
+     * Returns all registration groups that contain activityOfferingId in the list of AOs associated with
+     * the registration group.  A variant of getRegistrationGroupsWithActivityOfferings with only a single
+     * activity offering.
+     * @param activityOfferingId An activity offering id.
+     * @param context            Context information containing the principalId
+     *                           and locale information about the caller of
+     *                           service operation
+     * @return a list of RegistrationGroup records that contain all the
+     *         activity offerings in the input list.
+     * @throws DoesNotExistException     One or more of the activityOfferingIds
+     *                                   doesn't exist
+     * @throws InvalidParameterException One or more invalid activityOfferingIds
+     * @throws MissingParameterException Missing activityOfferingIds
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException authorization failure
+     */
+    public List<RegistrationGroupInfo> getRegistrationGroupsByActivityOffering(@WebParam(name = "activityOfferingId") String activityOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+
+    /**
      * Retrieves a list of RegistrationGroup records that belongs to a
      * CourseOffering for a given canonical format type
      *
@@ -1852,7 +1891,7 @@ public interface CourseOfferingService
      * @throws OperationFailedException  unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public StatusInfo deleteRegistrationGroupsByFormatOffering(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<BulkStatusInfo> deleteRegistrationGroupsByFormatOffering(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
     /**
      * Deletes all generated Registration Groups for a Format Offering. A
@@ -1867,7 +1906,7 @@ public interface CourseOfferingService
      * @throws OperationFailedException  unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public StatusInfo deleteGeneratedRegistrationGroupsByFormatOffering(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<BulkStatusInfo> deleteGeneratedRegistrationGroupsByFormatOffering(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
     /**
      * Deletes all Registration Groups associated with an Activity Offering
@@ -1884,7 +1923,7 @@ public interface CourseOfferingService
      * @throws OperationFailedException  unable to complete request
      * @throws PermissionDeniedException an authorization failure has occurred
      */
-    public StatusInfo deleteRegistrationGroupsForCluster(@WebParam(name = "activityOfferingClusterId") String activityOfferingClusterId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<BulkStatusInfo> deleteRegistrationGroupsForCluster(@WebParam(name = "activityOfferingClusterId") String activityOfferingClusterId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
     /**
      * Verifies a Registration Group applying rules such as: 
@@ -2462,5 +2501,336 @@ public interface CourseOfferingService
             MissingParameterException,
             OperationFailedException,
             PermissionDeniedException;
+
+    /**
+     * Retrieves a ColocatedOfferingSet.
+     *
+     * @param colocatedOfferingSetId  unique Id of a ColocatedOfferingSet
+     * @param contextInfo Context information containing the principalId and
+     *                    locale information about the caller of service
+     *                    operation
+     * @return the ColocatedOfferingSet
+     * @throws DoesNotExistException     ColocatedOfferingSetId not found
+     * @throws InvalidParameterException invalid contextInfo
+     * @throws MissingParameterException ColocatedOfferingSetId or contextInfo is missing or
+     *                                   null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public ColocatedOfferingSetInfo getColocatedOfferingSet(@WebParam(name = "colocatedOfferingSetId") String colocatedOfferingSetId,
+                                                            @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Retrieves a list of ColocatedOfferingSets corresponding to the given list of ColocatedOfferingSet
+     * Ids.
+     *
+     * @param colocatedOfferingSetIds list of ColocatedOfferingSets to be retrieved
+     * @param contextInfo Context information containing the principalId and
+     *                    locale information about the caller of service
+     *                    operation
+     * @return a list of ColocatedOfferingSets
+     * @throws DoesNotExistException     a ColocatedOfferingSetIds in list is not found
+     * @throws InvalidParameterException invalid contextInfo
+     * @throws MissingParameterException ColocatedOfferingSetIds or contextInfo is
+     *                                   missing or null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<ColocatedOfferingSetInfo> getColocatedOfferingSetsByIds(@WebParam(name = "colocatedOfferingSetIds") List<String> colocatedOfferingSetIds,
+                                                                        @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+
+    /**
+     * Retrieves a list of ColocatedOfferingSet Ids by ColocatedOfferingSet Type.
+     *
+     * @param colocatedOfferingSetTypeKey an identifier for a ColocatedOfferingSet Type
+     * @param contextInfo     Context information containing the principalId and
+     *                        locale information about the caller of service
+     *                        operation
+     * @return a list of ColocatedOfferingSet identifiers matching ColocatedOfferingSetTypeKey or an
+     *         empty list if none found
+     * @throws InvalidParameterException invalid contextInfo
+     * @throws MissingParameterException ColocatedOfferingSetTypeKey or contextInfo is
+     *                                   missing or null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<String> getColocatedOfferingSetIdsByType(@WebParam(name = "colocatedOfferingSetTypeKey") String colocatedOfferingSetTypeKey,
+                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Searches for ColocatedOfferingSets based on the criteria and returns a list of
+     * ColocatedOfferingSet identifiers which match the search criteria.
+     *
+     * @param criteria    the search criteria
+     * @param contextInfo Context information containing the principalId and
+     *                    locale information about the caller of service
+     *                    operation
+     * @return list of ColocatedOfferingSet Ids
+     * @throws InvalidParameterException invalid criteria or contextInfo
+     * @throws MissingParameterException missing criteria or contextInfo
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException authorization failure
+     */
+    public List<String> searchForColocatedOfferingSetIds(@WebParam(name = "criteria") QueryByCriteria criteria,
+                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Searches for ColocatedOfferingSets based on the criteria and returns a list of
+     * ColocatedOfferingSets which match the search criteria.
+     *
+     * @param criteria    the search criteria
+     * @param contextInfo Context information containing the principalId and
+     *                    locale information about the caller of service
+     *                    operation
+     * @return list of ColocatedOfferingSets
+     * @throws InvalidParameterException invalid criteria or contextInfo
+     * @throws MissingParameterException missing criteria or contextInfo
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException authorization failure
+     */
+    public List<ColocatedOfferingSetInfo> searchForColocatedOfferingSets(@WebParam(name = "criteria") QueryByCriteria criteria,
+                                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Validates a ColocatedOfferingSet. Depending on the value of validationType, this
+     * validation could be limited to tests on just the current ColocatedOfferingSet and its
+     * directly contained sub-objects or expanded to perform all tests related
+     * to this ColocatedOfferingSet. If an identifier is present for the ColocatedOfferingSet (and/or
+     * one of its contained sub-objects) and a record is found for that
+     * identifier, the validation checks if the ColocatedOfferingSet can be updated to the
+     * new values. If an identifier is not present or a record does not exist,
+     * the validation checks if the object with the given data can be created.
+     *
+     * @param validationTypeKey the identifier for the validation Type
+     * @param colocatedOfferingSetTypeKey   the identifier for the ColocatedOfferingSet Type
+     * @param colocatedOfferingSetInfo      detailed information about the ColocatedOfferingSet
+     * @param contextInfo       Context information containing the principalId
+     *                          and locale information about the caller of
+     *                          service operation
+     * @return a list of validation results or an empty list if validation
+     *         succeeded
+     * @throws DoesNotExistException     validationTypeKey, ColocatedOfferingSetId, not
+     *                                   found
+     * @throws InvalidParameterException invalid ColocatedOfferingSetInfo or contextInfo
+     * @throws MissingParameterException validationTypeKey, ColocatedOfferingSetId or
+     *                                   contextInfo is missing or null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<ValidationResultInfo> validateColocatedOfferingSet(@WebParam(name = "validationTypeKey") String validationTypeKey,
+                                                             @WebParam(name = "colocatedOfferingSetTypeKey") String colocatedOfferingSetTypeKey,
+                                                             @WebParam(name = "colocatedOfferingSetInfo") ColocatedOfferingSetInfo colocatedOfferingSetInfo,
+                                                             @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Creates a ColocatedOfferingSet
+     *
+     * @param colocatedOfferingSetTypeKey the identifier for the ColocatedOfferingSet Type
+     * @param colocatedOfferingSetInfo    detailed information about the ColocatedOfferingSet
+     * @param contextInfo     Context information containing the principalId and
+     *                        locale information about the caller of service
+     *                        operation
+     * @return detailed information about the ColocatedOfferingSet
+     * @throws DataValidationErrorException supplied data is invalid
+     * @throws DoesNotExistException        ColocatedOfferingSetId does not exist
+     * @throws InvalidParameterException    invalid ColocatedOfferingSetInfo or contextInfo
+     * @throws MissingParameterException    ColocatedOfferingSetId or contextInfo is missing
+     *                                      or null
+     * @throws OperationFailedException     unable to complete request
+     * @throws PermissionDeniedException    an authorization failure occurred
+     * @throws ReadOnlyException            an attempt at supplying information
+     *                                      designated as read only
+     */
+    public ColocatedOfferingSetInfo createColocatedOfferingSet(@WebParam(name = "colocatedOfferingSetTypeKey") String colocatedOfferingSetTypeKey,
+                                                               @WebParam(name = "colocatedOfferingSetInfo") ColocatedOfferingSetInfo colocatedOfferingSetInfo,
+                                                               @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DataValidationErrorException,
+            DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException,
+            ReadOnlyException;
+
+    /**
+     * Updates a ColocatedOfferingSet.
+     *
+     * @param colocatedOfferingSetId   identifier of the ColocatedOfferingSet  to be updated
+     * @param colocatedOfferingSetInfo information about the object ColocatedOfferingSetInfo to be
+     *                     updated
+     * @param contextInfo  context information containing the principalId and
+     *                     locale information about the caller of service
+     *                     operation
+     * @return updated ColocatedOfferingSet information
+     * @throws DataValidationErrorException one or more values invalid for this
+     *                                      operation
+     * @throws DoesNotExistException        ColocatedOfferingSetId not found
+     * @throws InvalidParameterException    invalid ColocatedOfferingSetInfo or contextInfo
+     * @throws MissingParameterException    ColocatedOfferingSetId, ColocatedOfferingSetInfo or
+     *                                      contextInfo is missing or null
+     * @throws OperationFailedException     unable to complete request
+     * @throws PermissionDeniedException    an authorization failure occurred
+     * @throws ReadOnlyException            an attempt at supplying information
+     *                                      designated as read-only
+     * @throws VersionMismatchException     optimistic locking failure or the
+     *                                      action was attempted on an out of
+     *                                      date version
+     */
+    public ColocatedOfferingSetInfo updateColocatedOfferingSet(@WebParam(name = "colocatedOfferingSetId") String colocatedOfferingSetId,
+                                                               @WebParam(name = "colocatedOfferingSetInfo") ColocatedOfferingSetInfo colocatedOfferingSetInfo,
+                                                               @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DataValidationErrorException,
+            DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException,
+            ReadOnlyException,
+            VersionMismatchException;
+
+    /**
+     * Updates the state of an existing ColocatedOfferingSetState into another state
+     * provided that it is valid to do so.
+     *
+     * @param colocatedOfferingSetId     Id of the ColocatedOfferingSetState to be updated.
+     * @param nextStateKey     The State Key into which the identified
+     *                         colocatedOfferingSet will be placed if the operation
+     *                         succeeds.
+     * @param contextInfo      Context information containing the principalId
+     *                         and locale information about the caller of
+     *                         service operation
+     * @return status of the operation (success, failed)
+     * @throws DoesNotExistException     the identified CourseOffering does not
+     *                                   exist
+     * @throws InvalidParameterException the contextInfo object is invalid
+     * @throws MissingParameterException One or more parameters missing
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException authorization failure
+     */
+    public StatusInfo changeColocatedOfferingSetState(@WebParam(name = "colocatedOfferingSetId") String colocatedOfferingSetId,
+                                                 @WebParam(name = "nextStateKey") String nextStateKey,
+                                                 @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Removes a ColocatedOfferingSet.
+     *
+     * @param colocatedOfferingSetId  ColocatedOfferingSet  identifier
+     * @param contextInfo context information containing the principalId and
+     *                    locale information about the caller of service
+     *                    operation
+     * @return status of the operation (success, failed)
+     * @throws DoesNotExistException     ColocatedOfferingSetId not found
+     * @throws InvalidParameterException invalid contextInfo
+     * @throws MissingParameterException ColocatedOfferingSetId or contextInfo is missing or
+     *                                   null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public StatusInfo deleteColocatedOfferingSet(@WebParam(name = "colocatedOfferingSetId") String colocatedOfferingSetId,
+                                                 @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException,
+            InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+    /**
+     * Retrieves a list of ColocatedOfferingSets corresponding to the given list of ColocatedOfferingSets
+     * that an Activity Offering with given activity offering id is part of.
+     *
+     * @param activityOfferingId    the identifier for an ActivityOffering
+     * @param contextInfo           information containing the principalId and
+     *                              locale information about the caller of
+     *                              service operation
+     * @return a list of ColocatedOfferingSets for the Activity Offering,
+     *         or an empty list if none found
+     * @throws InvalidParameterException contextInfo is not valid
+     * @throws MissingParameterException activityOfferingId or contextInfo is
+     *                                   missing or null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<ColocatedOfferingSetInfo> getColocatedOfferingSetsByActivityOffering (@WebParam(name = "activityOfferingId") String activityOfferingId,
+                                                                       @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws InvalidParameterException,
+            MissingParameterException,
+            OperationFailedException,
+            PermissionDeniedException;
+
+
+    /**
+     * This is a bulk create method for generateRegistrationGroupsForAOC().  Instead of working on a single Activity Offering Cluster it will
+     * work on all of the AOC's of the format offering specified.
+     * 
+     * @param formatOfferingId The identifier of the format offering to generate registration groups for.
+     * @param contextInfo Context information containing the principalId and locale information about the caller of service operation 
+     * @return status of the operation (success, failed) for each Registration Group created. 
+     * @throws DoesNotExistException The formatOfferingId does not refer to an existing FormatOffering.
+     * @throws InvalidParameterException The formatOfferingId or context is invalid.
+     * @throws MissingParameterException the formatOfferingId or context is missing.
+     * @throws OperationFailedException unable to complete request, can also occur when verification of any AOC in the format offering fails.
+     * @throws PermissionDeniedException authorization failure
+     * @throws DataValidationErrorException verification of any of the underlying Activity Offering Cluster's failed.
+     */
+    public List<BulkStatusInfo> generateRegistrationGroupsForFormatOffering(@WebParam (name="formatOfferingId")
+            String formatOfferingId,  @WebParam(name = "contextInfo") ContextInfo contextInfo)
+            throws DoesNotExistException, InvalidParameterException,
+            MissingParameterException, OperationFailedException,
+            PermissionDeniedException, DataValidationErrorException;
+    
+    /**
+     * Generates all possible registration groups for the Activity Offering
+     * Cluster
+     *
+     * @param activityOfferingClusterId identifier of the Activity Offering
+     *                                  Cluster
+     * @param contextInfo               Context information containing the
+     *                                  principalId and locale information about
+     *                                  the caller of service operation
+     * @return status of the operation (success, failed) for each Registration Group created.
+     * @throws DoesNotExistException     activityOfferingClusterId does not
+     *                                   exist
+     * @throws DataValidationErrorException verification of the Activity Offering Cluster failed.
+     * @throws InvalidParameterException invalid contextInfo
+     * @throws MissingParameterException activityOfferingClusterId or
+     *                                   contextInfo is missing or null
+     * @throws OperationFailedException  unable to complete request
+     * @throws PermissionDeniedException an authorization failure has occurred
+     * @impl Does 'delta' generation: Creates only new RGs
+     */
+    public List<BulkStatusInfo> generateRegistrationGroupsForCluster( @WebParam(name = "activityOfferingClusterId") String activityOfferingClusterId,  @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
 }

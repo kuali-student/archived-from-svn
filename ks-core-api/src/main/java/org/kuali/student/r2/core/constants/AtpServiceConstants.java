@@ -67,6 +67,8 @@ public class AtpServiceConstants {
     public static final String ATP_SPRING_TYPE_KEY = "kuali.atp.type.Spring";
     public static final String ATP_SPRING_BREAK_TYPE_KEY = "kuali.atp.type.SpringBreak";
     public static final String ATP_SUMMER_TYPE_KEY = "kuali.atp.type.Summer";
+    public static final String ATP_SUMMER1_TYPE_KEY = "kuali.atp.type.Summer1";
+    public static final String ATP_SUMMER2_TYPE_KEY = "kuali.atp.type.Summer2";
     public static final String ATP_SUMMER_EVE_TYPE_KEY = "kuali.atp.type.SummerEve";
     public static final String ATP_WINTER_TYPE_KEY = "kuali.atp.type.Winter";
     // adhoc
@@ -139,6 +141,9 @@ public class AtpServiceConstants {
     public static final String MILESTONE_FINAL_EXAM_PERIOD_TYPE_KEY = "kuali.atp.milestone.FinalExamPeriod";
     public static final String MILESTONE_GRADES_DUE_TYPE_KEY = "kuali.atp.milestone.GradesDue";
     public static final String MILESTONE_POST_GRADES_TYPE_KEY = "kuali.atp.milestone.PostGrades";
+    //registration period group type (used in type-type relations to group registration periods)
+    public static final String MILESTONE_REGISTRATION_PERIOD_GROUP_TYPE_KEY = "kuali.milestone.type.group.appt.regperiods";
+
     // holidays
     public static final String MILESTONE_HOLIDAY_GROUPING_TYPE_KEY = "kuali.milestone.type.group.holiday";
     public static final String MILESTONE_LABOR_DAY_TYPE_KEY = "kuali.atp.milestone.LaborDay";
@@ -221,6 +226,8 @@ public class AtpServiceConstants {
     public static final String DURATION_MINI_MESTER_TYPE_KEY = "kuali.atp.duration.Mini-mester";
     public static final String DURATION_HOURS_TYPE_KEY = "kuali.atp.duration.Hours";
     public static final String DURATION_MINUTES_TYPE_KEY = "kuali.atp.duration.Minutes";
+    public static final String DURATION_TBD_TYPE_KEY = "kuali.atp.duration.TBD";
+
 
     /**
      * Season Types

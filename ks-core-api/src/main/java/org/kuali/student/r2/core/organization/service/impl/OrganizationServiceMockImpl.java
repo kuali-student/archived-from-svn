@@ -17,14 +17,21 @@ package org.kuali.student.r2.core.organization.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.student.common.UUIDHelper;
 import org.kuali.student.common.mock.MockService;
 import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.r2.common.dto.IdEntityInfo;
+import org.kuali.student.r2.common.dto.IdNamelessEntityInfo;
 import org.kuali.student.r2.common.dto.MetaInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.dto.ValidationResultInfo;
@@ -37,6 +44,7 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.exceptions.ReadOnlyException;
 import org.kuali.student.r2.common.exceptions.VersionMismatchException;
+import org.kuali.student.r2.common.infc.HasId;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.organization.dto.OrgHierarchyInfo;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
@@ -45,6 +53,7 @@ import org.kuali.student.r2.core.organization.dto.OrgPersonRelationInfo;
 import org.kuali.student.r2.core.organization.dto.OrgPositionRestrictionInfo;
 import org.kuali.student.r2.core.organization.dto.OrgTreeViewInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
+import org.kuali.student.r2.core.organization.service.impl.lib.CriteriaMatcherInMemory;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultInfo;
 
@@ -82,6 +91,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         orgOrgRelationMap.clear();
         orgPersonRelationMap.clear();
         orgPersonRelationMap.clear();
+        orgPositionRestrictionMap.clear();
     }
 
     @Override
@@ -136,7 +146,12 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("getOrgHierarchies has not been implemented");
+        List<OrgHierarchyInfo> orgHierarchies = new ArrayList<OrgHierarchyInfo>();
+        for(OrgHierarchyInfo info : orgHierarchyMap.values()) {
+            orgHierarchies.add(new OrgHierarchyInfo(info));
+        }
+
+        return orgHierarchies;
     }
 
     @Override
@@ -146,7 +161,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgHierarchyIds has not been implemented");
+        return searchForInfoIds(criteria, orgHierarchyMap.values());
     }
 
     @Override
@@ -156,7 +171,14 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgHierarchies has not been implemented");
+        Collection<OrgHierarchyInfo> matches = searchForInfoObjects(criteria, orgHierarchyMap.values());
+
+        List<OrgHierarchyInfo> matchList = new ArrayList<OrgHierarchyInfo>();
+        for(OrgHierarchyInfo info : matches) {
+            matchList.add(new OrgHierarchyInfo(info));
+        }
+
+        return matchList;
     }
 
     @Override
@@ -240,7 +262,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException("not implemented");
+        throw new OperationFailedException("not implemented because it has been deprecated");
     }
 
     @Override
@@ -295,7 +317,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgIds has not been implemented");
+        return searchForInfoIds(criteria, orgMap.values());
     }
 
     @Override
@@ -305,7 +327,14 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgs has not been implemented");
+        Collection<OrgInfo> matches = searchForInfoObjects(criteria, orgMap.values());
+
+        List<OrgInfo> matchList = new ArrayList<OrgInfo>();
+        for(OrgInfo info : matches) {
+            matchList.add(new OrgInfo(info));
+        }
+
+        return matchList;
     }
 
     @Override
@@ -418,9 +447,16 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             throws InvalidParameterException
             ,MissingParameterException
             ,OperationFailedException
-            ,PermissionDeniedException
-    {
-        throw new OperationFailedException ("hasOrgOrgRelation has not been implemented");
+            ,PermissionDeniedException {
+        for(OrgOrgRelationInfo relationInfo : orgOrgRelationMap.values()) {
+            if(relationInfo.getTypeKey().equals(orgOrgRelationTypeKey)) {
+                if(relationInfo.getOrgId().equals(orgId) && relationInfo.getRelatedOrgId().equals(comparisonOrgId)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -478,7 +514,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         List<OrgOrgRelationInfo> list = new ArrayList<OrgOrgRelationInfo> ();
         for (OrgOrgRelationInfo info: orgOrgRelationMap.values ()) {
             if (orgId.equals(info.getOrgId())) {
-                list.add (info);
+                list.add (new OrgOrgRelationInfo(info));
             }
         }
         return list;
@@ -491,7 +527,13 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException("not implemented because deprecated");
+        List<OrgOrgRelationInfo> list = new ArrayList<OrgOrgRelationInfo> ();
+        for (OrgOrgRelationInfo info: orgOrgRelationMap.values ()) {
+            if (orgId.equals(info.getOrgId()) && peerOrgId.equals(info.getRelatedOrgId())) {
+                list.add (new OrgOrgRelationInfo(info));
+            }
+        }
+        return list;
     }
 
     @Override
@@ -505,7 +547,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         for (OrgOrgRelationInfo info: orgOrgRelationMap.values ()) {
             if (orgId.equals(info.getOrgId())) {
                 if (orgOrgRelationTypeKey.equals(info.getTypeKey())) {
-                    list.add (info);
+                    list.add (new OrgOrgRelationInfo(info));
                 }
             }
         }
@@ -523,7 +565,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         for (OrgOrgRelationInfo info: orgOrgRelationMap.values ()) {
             if (relatedOrgId.equals(info.getRelatedOrgId())) {
                 if (orgOrgRelationTypeKey.equals(info.getTypeKey())) {
-                    list.add (info);
+                    list.add (new OrgOrgRelationInfo(info));
                 }
             }
         }
@@ -537,7 +579,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgOrgRelationIds has not been implemented");
+        return searchForInfoIds(criteria, orgOrgRelationMap.values());
     }
 
     @Override
@@ -547,7 +589,14 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgOrgRelations has not been implemented");
+        Collection<OrgOrgRelationInfo> matches = searchForInfoObjects(criteria, orgOrgRelationMap.values());
+
+        List<OrgOrgRelationInfo> matchList = new ArrayList<OrgOrgRelationInfo>();
+        for(OrgOrgRelationInfo info : matches) {
+            matchList.add(new OrgOrgRelationInfo(info));
+        }
+
+        return matchList;
     }
 
     @Override
@@ -571,13 +620,19 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,MissingParameterException
             ,OperationFailedException
             ,PermissionDeniedException
-            ,ReadOnlyException
-    {
+            ,ReadOnlyException {
         // create
         if (!orgOrgRelationTypeKey.equals (orgOrgRelationInfo.getTypeKey())) {
             throw new InvalidParameterException ("The type parameter does not match the type on the info object");
         }
-        // TODO: check the rest of the readonly fields that are specified on the create to make sure they match the info object
+        if(!orgId.equals(orgOrgRelationInfo.getOrgId())) {
+            throw new InvalidParameterException("The orgId parameter does not match the orgId given on the info object");
+        }
+        if(!orgPeerId.equals(orgOrgRelationInfo.getRelatedOrgId())) {
+            throw new InvalidParameterException("The orgPeerId parameter does not match the relatedOrgId given on the info object");
+        }
+
+
         OrgOrgRelationInfo copy = new OrgOrgRelationInfo(orgOrgRelationInfo);
         if (copy.getId() == null) {
             copy.setId(UUIDHelper.genStringUUID());
@@ -608,7 +663,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             throw new VersionMismatchException(old.getMeta().getVersionInd());
         }
         copy.setMeta(updateMeta(copy.getMeta(), contextInfo));
-        this.orgOrgRelationMap .put(orgOrgRelationInfo.getId(), copy);
+        this.orgOrgRelationMap.put(orgOrgRelationInfo.getId(), copy);
         return new OrgOrgRelationInfo(copy);
     }
 
@@ -711,7 +766,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         List<OrgPersonRelationInfo> list = new ArrayList<OrgPersonRelationInfo> ();
         for (OrgPersonRelationInfo info: orgPersonRelationMap.values ()) {
             if (orgId.equals(info.getOrgId())) {
-                list.add (info);
+                list.add (new OrgPersonRelationInfo(info));
             }
         }
         return list;
@@ -728,7 +783,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         for (OrgPersonRelationInfo info: orgPersonRelationMap.values ()) {
             if (orgPersonRelationTypeKey.equals(info.getTypeKey())) {
                 if (orgId.equals(info.getOrgId())) {
-                    list.add (info);
+                    list.add (new OrgPersonRelationInfo(info));
                 }
             }
         }
@@ -745,7 +800,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         List<OrgPersonRelationInfo> list = new ArrayList<OrgPersonRelationInfo> ();
         for (OrgPersonRelationInfo info: orgPersonRelationMap.values ()) {
             if (personId.equals(info.getPersonId())) {
-                list.add (info);
+                list.add (new OrgPersonRelationInfo(info));
             }
         }
         return list;
@@ -762,7 +817,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         for (OrgPersonRelationInfo info: orgPersonRelationMap.values ()) {
             if (orgPersonRelationTypeKey.equals(info.getTypeKey())) {
                 if (personId.equals(info.getPersonId())) {
-                    list.add (info);
+                    list.add (new OrgPersonRelationInfo(info));
                 }
             }
         }
@@ -780,7 +835,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         for (OrgPersonRelationInfo info: orgPersonRelationMap.values ()) {
             if (orgId.equals(info.getOrgId())) {
                 if (personId.equals(info.getPersonId())) {
-                    list.add (info);
+                    list.add (new OrgPersonRelationInfo(info));
                 }
             }
         }
@@ -799,7 +854,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             if (orgPersonRelationTypeKey.equals(info.getTypeKey())) {
                 if (orgId.equals(info.getOrgId())) {
                     if (personId.equals(info.getPersonId())) {
-                        list.add (info);
+                        list.add (new OrgPersonRelationInfo(info));
                     }
                 }
             }
@@ -814,7 +869,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgPersonRelationIds has not been implemented");
+        return searchForInfoIds(criteria, orgPersonRelationMap.values());
     }
 
     @Override
@@ -824,7 +879,14 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgPersonRelations has not been implemented");
+        Collection<OrgPersonRelationInfo> matches = searchForInfoObjects(criteria, orgPersonRelationMap.values());
+
+        List<OrgPersonRelationInfo> matchList = new ArrayList<OrgPersonRelationInfo>();
+        for(OrgPersonRelationInfo info : matches) {
+            matchList.add(new OrgPersonRelationInfo(info));
+        }
+
+        return matchList;
     }
 
     @Override
@@ -853,7 +915,13 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         if (!orgPersonRelationTypeKey.equals (orgPersonRelationInfo.getTypeKey())) {
             throw new InvalidParameterException ("The type parameter does not match the type on the info object");
         }
-        // TODO: check the rest of the readonly fields that are specified on the create to make sure they match the info object
+        if(!orgId.equals(orgPersonRelationInfo.getOrgId())) {
+            throw new InvalidParameterException ("The orgId parameter does not match the orgId on the info object");
+        }
+        if(!personId.equals(orgPersonRelationInfo.getPersonId())) {
+            throw new InvalidParameterException ("The personId parameter does not match the personId on the info object");
+        }
+
         OrgPersonRelationInfo copy = new OrgPersonRelationInfo(orgPersonRelationInfo);
         if (copy.getId() == null) {
             copy.setId(UUIDHelper.genStringUUID());
@@ -936,12 +1004,15 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             throws InvalidParameterException
             ,MissingParameterException
             ,OperationFailedException
-            ,PermissionDeniedException
-    {
-        /**
-         * OrgPositionRestrictionIds doesn't have a type
-         */
+            ,PermissionDeniedException {
         List<String> list = new ArrayList<String> ();
+
+        for(OrgPositionRestrictionInfo info : orgPositionRestrictionMap.values()) {
+            if(info.getOrgPersonRelationTypeKey().equals(orgPersonRelationTypeKey)) {
+                list.add(info.getId());
+            }
+        }
+
         return list;
     }
 
@@ -969,7 +1040,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgPositionRestrictionIds has not been implemented");
+        return searchForInfoIds(criteria, orgPositionRestrictionMap.values());
     }
 
     @Override
@@ -979,7 +1050,14 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("searchForOrgPositionRestrictions has not been implemented");
+        Collection<OrgPositionRestrictionInfo> matches = searchForInfoObjects(criteria, orgPositionRestrictionMap.values());
+
+        List<OrgPositionRestrictionInfo> matchList = new ArrayList<OrgPositionRestrictionInfo>();
+        for(OrgPositionRestrictionInfo info : matches) {
+            matchList.add(new OrgPositionRestrictionInfo(info));
+        }
+
+        return matchList;
     }
 
     @Override
@@ -1003,10 +1081,13 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,MissingParameterException
             ,OperationFailedException
             ,PermissionDeniedException
-            ,ReadOnlyException
-    {
-
-        // TODO: check the rest of the readonly fields that are specified on the create to make sure they match the info object
+            ,ReadOnlyException {
+        if (!orgId.equals(orgPositionRestrictionInfo.getOrgId())) {
+            throw new InvalidParameterException("The orgId parameter does not match the orgId on the info object");
+        }
+        if (!orgPersonRelationTypeKey.equals(orgPositionRestrictionInfo.getOrgPersonRelationTypeKey())) {
+            throw new InvalidParameterException("The orgPersonRelationTypeKey parameter does not match the orgPersonRelationTypeKey on the info object");
+        }
         OrgPositionRestrictionInfo copy = new OrgPositionRestrictionInfo(orgPositionRestrictionInfo);
         if (copy.getId() == null) {
             copy.setId(UUIDHelper.genStringUUID());
@@ -1058,11 +1139,39 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
     @Override
     public Boolean isDescendant(String orgId, String descendantOrgId, String orgHierarchyId, ContextInfo contextInfo)
             throws InvalidParameterException
-            ,MissingParameterException
-            ,OperationFailedException
-            ,PermissionDeniedException
-    {
-        throw new OperationFailedException ("isDescendant has not been implemented");
+            , MissingParameterException
+            , OperationFailedException
+            , PermissionDeniedException {
+        try {
+            OrgTreeViewInfo orgTree = getOrgTree(orgId, orgHierarchyId, Integer.MAX_VALUE, contextInfo);
+            if(searchTree(orgTree, descendantOrgId, new HashSet<String>())) {
+                return true;
+            }
+        } catch (DoesNotExistException e) {
+            throw new OperationFailedException("unable to determine if " + descendantOrgId + " is a descendant of " + orgId + " using hierarchy " + orgHierarchyId, e);
+        }
+
+        return false;
+    }
+
+    /*
+     * Recursively search the given orgTree for the given orgId.
+     */
+    private boolean searchTree(OrgTreeViewInfo orgTree, String orgId, Set<String> visitedOrgs) {
+        for(OrgTreeViewInfo child : orgTree.getChildren()) {
+            String childOrgId = child.getOrg().getId();
+            if(childOrgId.equals(orgId)) {
+                return true;
+            }
+            //only recurse if we have not already been there
+            if(visitedOrgs.add(childOrgId)) {
+                if(searchTree(child, orgId, visitedOrgs)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -1073,7 +1182,7 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("getAllDescendants has not been implemented");
+        throw new OperationFailedException ("getAllDescendants has not been implemented because it is deprecated");
     }
 
     @Override
@@ -1084,19 +1193,96 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
             ,OperationFailedException
             ,PermissionDeniedException
     {
-        throw new OperationFailedException ("getAllAncestors has not been implemented");
+        throw new OperationFailedException ("getAllAncestors has not been implemented because it is deprecated");
     }
 
     @Override
-    public OrgTreeViewInfo getOrgTree(String rootOrgId, String orgHierarchyId, int maxLevels, ContextInfo contextInfo)
+    public OrgTreeViewInfo getOrgTree(String startingOrgId, String orgHierarchyId, int maxLevels, ContextInfo contextInfo)
             throws DoesNotExistException
-            ,InvalidParameterException
-            ,MissingParameterException
-            ,OperationFailedException
-            ,PermissionDeniedException
-    {
-        throw new OperationFailedException ("getOrgTree has not been implemented");
+            , InvalidParameterException
+            , MissingParameterException
+            , OperationFailedException
+            , PermissionDeniedException {
+
+        OrgHierarchyInfo orgHierarchyInfo = getOrgHierarchy(orgHierarchyId, contextInfo);
+
+        OrgTreeViewInfo orgTree = new OrgTreeViewInfo();
+
+        OrgInfo org = getOrg(startingOrgId, contextInfo);
+        orgTree.setOrg(org);
+
+        Map<String, OrgTreeViewInfo> visitedNodes = new HashMap<String, OrgTreeViewInfo>();
+        if(maxLevels >= 0) {
+            buildOrgTree(orgTree, maxLevels, 0, orgHierarchyInfo.getOrgOrgRelationTypes(), visitedNodes, false, contextInfo);
+        }
+
+        if(maxLevels <= 0) {
+            buildOrgTree(orgTree, maxLevels, 0, orgHierarchyInfo.getOrgOrgRelationTypes(), visitedNodes, true, contextInfo);
+        }
+
+        return orgTree;
     }
+
+    /*
+    * Build the OrgTree from the given Org tree going up or down (pulling the parent/child of the given OrgTree) recursively
+    */
+    private void buildOrgTree(OrgTreeViewInfo orgTree, int maxLevels, int currentLevel, List<String> validRelationTypes, Map<String, OrgTreeViewInfo> visitedNodes, boolean up, ContextInfo contextInfo)
+            throws MissingParameterException, InvalidParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException {
+        //only continue if we still need to go up/down the tree
+        if (maxLevels == 0 || Math.abs(currentLevel) < Math.abs(maxLevels)) {
+            visitedNodes.put(orgTree.getOrg().getId(), orgTree);
+
+            List<OrgOrgRelationInfo> relations = pullRelations(validRelationTypes, orgTree.getOrg().getId(), up, contextInfo);
+            for (OrgOrgRelationInfo relation : relations) {
+                String nextOrgId = (up ? relation.getOrgId() : relation.getRelatedOrgId());
+                OrgTreeViewInfo nextOrg = visitedNodes.get(nextOrgId);
+
+                if (nextOrg == null) {
+                    nextOrg = new OrgTreeViewInfo();
+                    nextOrg.setOrg(getOrg(nextOrgId, contextInfo));
+                }
+                if(up) {
+                    addToOrgTree(nextOrg, orgTree);
+                } else {
+                    addToOrgTree(orgTree, nextOrg);
+                }
+                //don't recurse on a node that we have already visited.
+                if (!visitedNodes.containsKey(nextOrgId)) {
+                    int nextLevel = currentLevel + (up ? -1 : 1);
+                    buildOrgTree(nextOrg, maxLevels, nextLevel, validRelationTypes, visitedNodes, up, contextInfo);
+                }
+            }
+        }
+    }
+
+    private List<OrgOrgRelationInfo> pullRelations(List<String> validRelationTypes, String orgId, boolean up, ContextInfo contextInfo) throws MissingParameterException, InvalidParameterException, OperationFailedException, PermissionDeniedException {
+        List<OrgOrgRelationInfo> relations = new ArrayList<OrgOrgRelationInfo>();
+        for(String relationType : validRelationTypes) {
+            if(up) {
+                relations.addAll(getOrgOrgRelationsByTypeAndRelatedOrg(orgId, relationType, contextInfo));
+
+            } else {
+                relations.addAll(getOrgOrgRelationsByTypeAndOrg(orgId, relationType, contextInfo));
+            }
+        }
+
+        return relations;
+    }
+
+    private void addToOrgTree(OrgTreeViewInfo parent, OrgTreeViewInfo child) {
+        addToOrgTree(parent.getChildren(), child);
+        addToOrgTree(child.getParents(), parent);
+    }
+
+    private void addToOrgTree(List<OrgTreeViewInfo> orgTreeList, OrgTreeViewInfo orgTreeViewInfo) {
+        for(OrgTreeViewInfo currentTree : orgTreeList) {
+            if(currentTree.getOrg().getId().equals(orgTreeViewInfo.getOrg().getId())) {
+                return;
+            }
+        }
+        orgTreeList.add(orgTreeViewInfo);
+    }
+
 
     private StatusInfo newStatus() {
         StatusInfo status = new StatusInfo();
@@ -1120,6 +1306,30 @@ public class OrganizationServiceMockImpl implements MockService, OrganizationSer
         meta.setUpdateTime(new Date());
         meta.setVersionInd((Integer.parseInt(meta.getVersionInd()) + 1) + "");
         return meta;
+    }
+
+    private <T extends HasId> List<String> searchForInfoIds(QueryByCriteria criteria, Collection<T> collection)
+            throws InvalidParameterException
+            ,MissingParameterException
+            ,OperationFailedException
+            ,PermissionDeniedException {
+        Collection<T> matches = searchForInfoObjects(criteria, collection);
+        List<String> matchingIds = new ArrayList<String>();
+
+        for(T info : matches) {
+            matchingIds.add(info.getId());
+        }
+        return matchingIds;
+    }
+
+    public <T> Collection<T> searchForInfoObjects(QueryByCriteria criteria, Collection<T> collection)
+            throws InvalidParameterException
+            ,MissingParameterException
+            ,OperationFailedException
+            ,PermissionDeniedException {
+        CriteriaMatcherInMemory<T> matcher = new CriteriaMatcherInMemory<T>();
+        matcher.setCriteria(criteria);
+        return matcher.findMatching(collection);
     }
 
     @Override

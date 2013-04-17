@@ -10,20 +10,25 @@
  */
 package org.kuali.student.enrollment.lpr.service;
 
+import java.util.List;
+
 import javax.jws.WebParam;
 
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
-import org.kuali.student.enrollment.lpr.dto.LprInfo;
-import org.kuali.student.enrollment.lpr.dto.LprTransactionInfo;
-import org.kuali.student.enrollment.lpr.dto.LprTransactionItemInfo;
+import org.kuali.student.enrollment.lpr.dto.*;
 import org.kuali.student.r2.common.dto.BulkStatusInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.dto.ValidationResultInfo;
-import org.kuali.student.r2.common.exceptions.*;
-
-import javax.jws.WebParam;
-import java.util.List;
+import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
+import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.exceptions.ReadOnlyException;
+import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 
 /**
  * The base decorator for the {@link LprService}- Other sub
@@ -229,13 +234,43 @@ public class LprServiceDecorator implements LprService {
         return getNextDecorator().createLpr(personId, luiId, lprTypeKey, lprInfo, contextInfo);
     }
 
+    /* (non-Javadoc)
+     * @see org.kuali.student.enrollment.lpr.service.LprService#validateLprTransaction(java.lang.String, java.lang.String, org.kuali.student.enrollment.lpr.dto.LprTransactionInfo, org.kuali.student.r2.common.dto.ContextInfo)
+     */
     @Override
-    public StatusInfo changeLprState(String lprId, String nextStateKey, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        return getNextDecorator().changeLprState(lprId, nextStateKey, contextInfo);
+    public List<ValidationResultInfo> validateLprTransaction(
+           String validationType,
+           String lprTransactionType,
+           LprTransactionInfo lprTransactionInfo,
+           ContextInfo contextInfo)
+            throws DoesNotExistException, InvalidParameterException,
+            MissingParameterException, OperationFailedException,
+            PermissionDeniedException {
+        return getNextDecorator().validateLprTransaction(validationType, lprTransactionType, lprTransactionInfo, contextInfo);
     }
 
-    @Override
-    public StatusInfo changeLprTransactionState(@WebParam(name = "lprTransactionId") String lprTransactionId, @WebParam(name = "nextStateKey") String nextStateKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        return getNextDecorator().changeLprTransactionState(lprTransactionId, nextStateKey, contextInfo);
-    }
+	@Override
+	public StatusInfo changeLprState(String lprId,
+			String nextStateKey,
+			ContextInfo contextInfo)
+			throws DoesNotExistException, InvalidParameterException,
+			MissingParameterException, OperationFailedException,
+			PermissionDeniedException {
+		return getNextDecorator().changeLprState(lprId, nextStateKey, contextInfo);
+	}
+
+	@Override
+	public StatusInfo changeLprTransactionState(
+			String lprTransactionId,
+			String nextStateKey,
+			ContextInfo contextInfo)
+			throws DoesNotExistException, InvalidParameterException,
+			MissingParameterException, OperationFailedException,
+			PermissionDeniedException {
+		return getNextDecorator().changeLprTransactionState(lprTransactionId, nextStateKey, contextInfo);
+	}
+
+   
+    
+    
 }
