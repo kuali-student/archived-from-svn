@@ -1,7 +1,6 @@
 package org.kuali.student.r2.core.organization.service.impl.model;
 
 
-import org.kuali.student.r2.common.util.RichTextHelper;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.infc.Org;
 import org.kuali.student.r2.core.organization.infc.OrgCode;
