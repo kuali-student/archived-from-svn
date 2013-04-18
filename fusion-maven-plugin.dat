@@ -1,2 +1,2 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M7 revision = 39530
-ks-api::enrollment_ks-api_branches_M7::674261e5f72d35002512ba56158a9fa5e3d1d9b4
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M7/build-346 revision = 46613
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M7_build-346::b0244c7e9ab997fe80748ad14009b9fb72c757ea
