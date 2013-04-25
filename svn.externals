@@ -17,7 +17,6 @@
 #
 
 ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/M6
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/trunk
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/trunk
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/trunk
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/CM-KRAD
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/CM-KRAD
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/CM-KRAD
