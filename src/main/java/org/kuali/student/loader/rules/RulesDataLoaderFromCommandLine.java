@@ -66,21 +66,14 @@ public class RulesDataLoaderFromCommandLine {
         StatementHelper statementHelper = new StatementHelper();
 
 
-        CourseServiceFactory courseServiceFactory = new CourseServiceFactory();
-        courseServiceFactory.setHostUrl(sourceHostUrl);
-        statementHelper.setCourseService(courseServiceFactory.getCourseService());
+        ServiceFactory serviceFactory = new ServiceFactory();
+        serviceFactory.setHostUrl(sourceHostUrl);
+        statementHelper.setCourseService(serviceFactory.getCourseService());
+        statementHelper.setStatementService(serviceFactory.getStatementService());
 
-        StatementServiceFactory statementServiceFactory = new CourseServiceFactory();
-        statementServiceFactory.setHostUrl(sourceHostUrl);
-        statementHelper.setStatementService(statementServiceFactory.getStatementService());
-
-        CourseServiceFactory servFactory = new CourseServiceFactory();
-        servFactory.setHostUrl(sourceHostUrl);
-        statementHelper.setCourseService(servFactory.getCourseService());
-
-        CourseServiceFactory servFactory = new CourseServiceFactory();
-        servFactory.setHostUrl(sourceHostUrl);
-        statementHelper.setCourseService(servFactory.getCourseService());
+        krmsHelper.setRuleManagementService(serviceFactory.getRuleManagementService());
+        krmsHelper.setKrmsTypeRepositoryService(serviceFactory.getKrmsTypeRepositoryService());
+        krmsHelper.setTermRepositoryService(serviceFactory.getTermRepositoryService());
 
 //  AtpServiceFactory aptServFactory = new AtpServiceFactory();
 //  aptServFactory.setHostUrl(hostUrl);
