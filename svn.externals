@@ -16,7 +16,7 @@
 # the external paths for the changes to take effect.
 #
 
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/M6
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/CM-KRAD
 ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/CM-KRAD
 ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/CM-KRAD
 ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/CM-KRAD
