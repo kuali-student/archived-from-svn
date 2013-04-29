@@ -32,12 +32,6 @@ public class ServiceFactory {
     private static final String RULE_MANAGEMENT_SERVICE_NAME = "ruleManagementService";
     private static final String TERM_REPOSITORY_SERVICE_NAME = "termRepositoryService";
     private static final String KRMS_TYPE_REPOSITORY_SERVICE_NAME = "KRMSTypeService";
-    private static final QName COURSE_SERVICE_QNAME = CourseService_Service.SERVICE;
-    private static final String STATEMENT_SERVICE_QNAME = "StatementService";
-    private static final String RULE_MANAGEMENT_SERVICE_QNAME = "ruleManagementService";
-    private static final String TERM_REPOSITORY_SERVICE_QNAME = "termRepositoryService";
-    private static final String KRMS_TYPE_REPOSITORY_SERVICE_QNAME = "KRMSTypeService";
-
 
     public static final String LOCAL_HOST_EMBEDDED_URL = "http://localhost:8081/ks-with-rice-bundled-dev";
 
@@ -66,11 +60,56 @@ public class ServiceFactory {
             throw new IllegalArgumentException(ex);
         }
 
-//  System.out.println (wsdlURL);
-        CourseService_Service oss =
-                new CourseService_Service(wsdlURL,
-                        COURSE_SERVICE_QNAME);
+        CourseService_Service oss = new CourseService_Service(wsdlURL);
         CourseService port = oss.getCourseServicePort();
+        return port;
+    }
+
+    public StatementService getStatementService() {
+        URL wsdlURL;
+        try {
+            wsdlURL = new URL(calcWsdlUrl(STATEMENT_SERVICE_NAME));
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        StatementService_Service oss = new StatementService_Service(wsdlURL);
+        StatementService port = oss.getServicePort();
+        return port;
+    }
+
+    public RuleManagementService getRuleManagementService() {
+        URL wsdlURL;
+        try {
+            wsdlURL = new URL(calcWsdlUrl(RULE_MANAGEMENT_SERVICE_NAME));
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        RuleManagementService_Service oss = new RuleManagementService_Service(wsdlURL);
+        RuleManagementService port = oss.getServicePort();
+        return port;
+    }
+
+    public KrmsTypeRepositoryService getKrmsTypeRepositoryService() {
+        URL wsdlURL;
+        try {
+            wsdlURL = new URL(calcWsdlUrl(KRMS_TYPE_REPOSITORY_SERVICE_NAME));
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        KrmsTypeRepositoryService_Service oss = new KrmsTypeRepositoryService_Service(wsdlURL);
+        KrmsTypeRepositoryService port = oss.getServicePort();
+        return port;
+    }
+
+    public TermRepositoryService getTermRepositoryService() {
+        URL wsdlURL;
+        try {
+            wsdlURL = new URL(calcWsdlUrl(TERM_REPOSITORY_SERVICE_NAME));
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+        TermRepositoryService_Service oss = new TermRepositoryService_Service(wsdlURL);
+        TermRepositoryService port = oss.getServicePort();
         return port;
     }
 
