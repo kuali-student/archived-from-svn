@@ -15,7 +15,11 @@
  */
 package org.kuali.student.loader.rules;
 
+import org.kuali.rice.krms.api.repository.RuleManagementService;
+import org.kuali.rice.krms.api.repository.term.TermRepositoryService;
+import org.kuali.rice.krms.api.repository.type.KrmsTypeRepositoryService;
 import org.kuali.student.loader.course.CourseService_Service;
+import org.kuali.student.r1.core.statement.service.StatementService;
 import org.kuali.student.r2.lum.course.service.CourseService;
 
 import javax.xml.namespace.QName;

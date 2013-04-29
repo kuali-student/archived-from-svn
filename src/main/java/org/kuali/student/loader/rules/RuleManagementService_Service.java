@@ -5,6 +5,7 @@
 package org.kuali.student.loader.rules;
 
 import org.kuali.rice.krms.api.KrmsConstants;
+import org.kuali.rice.krms.api.repository.RuleManagementService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
