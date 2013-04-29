@@ -1,5 +1,5 @@
 # module = ks-api branch Path = enrollment/ks-api/branches/CM-KRAD revision = 47116
-ks-api::enrollment_ks-api_branches_CM-KRAD::ae7535cf4e456d349e380e9656cd3a776c7a7897
+ks-api::enrollment_ks-api_branches_CM-KRAD::52658e1e8fff0efab9671f98864644a0a32c8068
 # module = ks-core branch Path = enrollment/ks-core/branches/CM-KRAD revision = 47116
 ks-core::enrollment_ks-core_branches_CM-KRAD::cfaca31816b4f0702bbad4c594761c186706eb8e
 # module = ks-lum branch Path = enrollment/ks-lum/branches/CM-KRAD revision = 47116
