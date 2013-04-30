@@ -81,9 +81,9 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.3-m2-upgrade</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.3-m2-upgrade</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.3-m2-upgrade</url>
     </scm>
     <properties>
         <ks.api.version>2.0.0-M6-rice-upgrade-SNAPSHOT</ks.api.version>
