@@ -51,7 +51,7 @@ import java.util.Properties;
  * @author Kuali Student Team
  */
 @Controller
-@RequestMapping(value = "/lookup")
+@RequestMapping(value = "/ks-lookup")
 public class KSLookupController extends LookupController {
 
     private static final Logger LOG = Logger.getLogger(KSLookupController.class);
