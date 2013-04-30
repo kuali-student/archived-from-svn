@@ -69,7 +69,7 @@ public class CreditCourseLoaderFromCommandLine
   cfg.put (CreditCourseInputModelFactory.EXCEL_FILES_KEY + "1", inFile);
   CreditCourseInputModelFactory factory = new CreditCourseInputModelFactory ();
   factory.setConfig (cfg);
-  CreditCourseInputModel ccModel = factory.getModel ();
+  CreditCourseInputModel ccModel = factory.getModel (CreditCourseInputModelFactory.CREDIT_COURSE_LOADER);
   CreditCourseLoader ccLoader = new CreditCourseLoader ();
   CourseServiceFactory servFactory = new CourseServiceFactory ();
   servFactory.setHostUrl (hostUrl);

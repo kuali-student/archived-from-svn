@@ -93,7 +93,7 @@ public class CreditCourseLoaderTest
   CreditCourseLoader ccLoader = new CreditCourseLoader ();
   ccLoader.setCourseService (courseService);
   ccLoader.setHelperService(helperService);
-  CreditCourseInputModel ccModel = CreditCourseInputModelFactoryTest.getInstance(). getModel ();
+  CreditCourseInputModel ccModel = CreditCourseInputModelFactoryTest.getInstance(). getModel (CreditCourseInputModelFactory.CREDIT_COURSE_LOADER);
 
   System.out.println (new Date () + " getting credit courses...");
   List<CreditCourse> creditCourses = ccModel.getCreditCourses ();

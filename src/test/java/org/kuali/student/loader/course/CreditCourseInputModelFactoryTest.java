@@ -76,7 +76,7 @@ public class CreditCourseInputModelFactoryTest
  {
   System.out.println ("getModel");
   CreditCourseInputModelFactory instance = getInstance ();
-  CreditCourseInputModel result = instance.getModel ();
+  CreditCourseInputModel result = instance.getModel (CreditCourseInputModelFactory.CREDIT_COURSE_LOADER);
   if (result.getCreditCourses ().size () < 100)
   {
    fail (" too few courses");

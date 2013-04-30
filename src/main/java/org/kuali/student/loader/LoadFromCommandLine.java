@@ -120,7 +120,16 @@ public class LoadFromCommandLine
 
  protected void generate (String whatToLoad, String inFile, String hostUrl)
  {
-  if (whatToLoad.equalsIgnoreCase ("course"))
+  if (whatToLoad.equalsIgnoreCase ("courseLoader"))
+  {
+   displayParameters (whatToLoad, inFile, hostUrl);
+   String[] args = new String[2];
+   args[0] = inFile;
+   args[1] = hostUrl;
+   CreditCourseLoaderFromCommandLine.main (args);
+   return;
+  }
+  if (whatToLoad.equalsIgnoreCase ("courseDeleter"))
   {
    displayParameters (whatToLoad, inFile, hostUrl);
    String[] args = new String[2];
