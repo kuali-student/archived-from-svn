@@ -16,8 +16,8 @@
 # the external paths for the changes to take effect.
 #
 
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/M6
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/trunk
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/trunk
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/trunk
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/rice-2.3-m2-upgrade
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/rice-2.3-m2-upgrade
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/rice-2.3-m2-upgrade
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/rice-2.3-m2-upgrade
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/rice-2.3-m2-upgrade
