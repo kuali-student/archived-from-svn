@@ -39,7 +39,9 @@ public class CreditCourseInputModelFactory
  public static final String EXCEL_FILES_KEY =
                             "credit.course.loader.model.excel.file#";
 
-
+ public static final String CREDIT_COURSE_LOADER = "courseLoader";
+ public static final String CREDIT_COURSE_DELETER = "courseDeleter";
+ 
  public static Properties getDefaultConfig ()
  {
   Properties defaultProps = new Properties ();
@@ -59,7 +61,7 @@ public class CreditCourseInputModelFactory
   this.config = config;
  }
 
- public CreditCourseInputModel getModel ()
+ public CreditCourseInputModel getModel (String creditCourseType)
  {
   List<SpreadsheetReader> list = new ArrayList ();
   String directory = config.getProperty (EXCEL_FILES_DEFAULT_DIRECTORY_KEY);
@@ -82,8 +84,13 @@ public class CreditCourseInputModelFactory
    }
   }
   SpreadsheetReader reader = new CompositeSpreadsheetReader (list);
-  CreditCourseInputModelExcelImpl model =
-                                   new CreditCourseInputModelExcelImpl (reader);
+  CreditCourseInputModel model = null;
+  if (creditCourseType.equals(CreditCourseInputModelFactory.CREDIT_COURSE_LOADER)) {
+	  model = new CreditCourseInputModelExcelImpl (reader);
+  } else if (creditCourseType.equals(CreditCourseInputModelFactory.CREDIT_COURSE_DELETER)) {
+	  model = new CreditCourseDeleterInputModelExcelImpl (reader);
+  }
+ 
 //  ContextFactory contextFactory = new ContextFactory ();
 //  contextFactory.setConfig (config);
 //  model.setContext (contextFactory.getInstance ());
