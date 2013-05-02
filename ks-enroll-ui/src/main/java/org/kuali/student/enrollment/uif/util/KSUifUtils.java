@@ -153,7 +153,7 @@ public class KSUifUtils {
                     }
                 } else {
                     if (mapIndex == 0) {
-                        if (form.getFormHistory() != null) {
+                        if (form.getFormHistory() != null && form.getFormHistory().getHomewardPath() != null) {
                             breadCrumbItemUrl = form.getFormHistory().getHomewardPath().get(0).getUrl();
                         } else if (form.getHomeUrl()!=null && !form.getHomeUrl().isEmpty()){
                             breadCrumbItemUrl = form.getHomeUrl();
@@ -374,7 +374,7 @@ public class KSUifUtils {
         if (form.getViewId()!=null && !form.getViewId().isEmpty()) {
             urlParameters.put(CourseOfferingConstants.BREADCRUMB_PREVIOUS_VIEW_ID_KEY, form.getViewId());
         }
-        if (form.getFormHistory()!=null) {
+        if (form.getFormHistory()!=null && form.getFormHistory().getHomewardPath()!=null) {
             urlParameters.put(CourseOfferingConstants.BREADCRUMB_PREVIOUS_HOME_URL_KEY, form.getFormHistory().getHomewardPath().get(0).getUrl());
             urlParameters.put(CourseOfferingConstants.BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY, form.getFormHistory().getHistoryParameterString());
         }
