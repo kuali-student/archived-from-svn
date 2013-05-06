@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/rice-2.3-m2-upgrade revision = 47206
-ks-api::enrollment_ks-api_branches_rice-2.3-m2-upgrade::5405ba77b71c7e62179612a5872080242d243df5
-# module = ks-core branch Path = enrollment/ks-core/branches/rice-2.3-m2-upgrade revision = 47206
-ks-core::enrollment_ks-core_branches_rice-2.3-m2-upgrade::3bd865b4bfc383ea25f61477827625d45cebe865
-# module = ks-lum branch Path = enrollment/ks-lum/branches/rice-2.3-m2-upgrade revision = 47206
-ks-lum::enrollment_ks-lum_branches_rice-2.3-m2-upgrade::341d66bfd1b29488b0bb9a9723cb1b432d53d0ba
-# module = ks-enroll branch Path = enrollment/ks-enroll/branches/rice-2.3-m2-upgrade revision = 47206
-ks-enroll::enrollment_ks-enroll_branches_rice-2.3-m2-upgrade::70e8fb16c4961cdf43c66642639a33dde4e436ed
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/rice-2.3-m2-upgrade revision = 47206
-ks-deployments::enrollment_ks-deployments_branches_rice-2.3-m2-upgrade::dfc718428c94f605ef58531d637a43c3413b2b33
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M6-rice-upgrade/build-1 revision = 47547
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M6-rice-upgrade_build-1::5f3311d24488f0d83a8438d9d2a351b2403c1042
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M7-rice-upgrade/build-1 revision = 47547
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M7-rice-upgrade_build-1::28a01596fe5f93d77efe90f069a457ac566842eb
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M7-rice-upgrade/build-1 revision = 47547
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M7-rice-upgrade_build-1::3e7f95009b3102d08e243ab30577c7bc88438389
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M7-rice-upgrade/build-1 revision = 47547
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M7-rice-upgrade_build-1::200cf0cd3cdbc961ddbb985c707b95e82289af05
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M7-rice-upgrade/build-1 revision = 47547
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M7-rice-upgrade_build-1::247224a223c77581f2076c8643dac3dec2cef43d
