@@ -12,6 +12,7 @@ import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.form.DocumentFormBase;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
+import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ScheduleWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.service.ActivityOfferingMaintainable;
@@ -189,20 +190,20 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
         GlobalVariables.getMessageMap().addGrowlMessage("", "activityOffering.modified" );
 
-        if( form.getFormHistory().getHistoryEntries().isEmpty()){
-            return modelAndView;
-        }
-
-        //Redirect to last page (some hackery here that I'd rather not do
-        //The url has lots of dulpicate params which prevents history from working correctly
-        String url = form.getFormHistory().getHistoryEntries().get(form.getFormHistory().getHistoryEntries().size() - 1).getUrl();
-        url = url.replaceAll("&methodToCall=[a-zA-Z]+","");
-        url = url.replaceAll("&pageId=[a-zA-Z]+","");
-        url = url.replaceAll("\\?methodToCall=[a-zA-Z]+&","?");
-        url = url.replaceAll("\\?pageId=[a-zA-Z]+&","?");
-        form.getFormHistory().getHistoryEntries().get(form.getFormHistory().getHistoryEntries().size() - 1).setUrl(url);
-        modelAndView = returnToHistory(form, false);
-        modelAndView.setViewName(modelAndView.getViewName().replaceFirst("methodToCall="+ UifConstants.MethodToCallNames.REFRESH,"methodToCall=show"));
+//        if( form.getHistoryFlow().FormHistory().getHistoryEntries().isEmpty()){
+//            return modelAndView;
+//        }
+//
+//        //Redirect to last page (some hackery here that I'd rather not do
+//        //The url has lots of dulpicate params which prevents history from working correctly
+//        String url = form.getFormHistory().getHistoryEntries().get(form.getFormHistory().getHistoryEntries().size() - 1).getUrl();
+//        url = url.replaceAll("&methodToCall=[a-zA-Z]+","");
+//        url = url.replaceAll("&pageId=[a-zA-Z]+","");
+//        url = url.replaceAll("\\?methodToCall=[a-zA-Z]+&","?");
+//        url = url.replaceAll("\\?pageId=[a-zA-Z]+&","?");
+//        form.getFormHistory().getHistoryEntries().get(form.getFormHistory().getHistoryEntries().size() - 1).setUrl(url);
+//        modelAndView = returnToHistory(form, false);
+//        modelAndView.setViewName(modelAndView.getViewName().replaceFirst("methodToCall="+ UifConstants.MethodToCallNames.REFRESH,"methodToCall=show"));
         return modelAndView;
     }
 

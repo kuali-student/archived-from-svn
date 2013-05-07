@@ -81,7 +81,7 @@ public class KSLookupController extends LookupController {
 
                 Properties redirectUrlProps = new Properties();
                 redirectUrlProps.put(UifParameters.REDIRECTED_LOOKUP, "true");
-                UifControllerHelper.prepareHistory(request, form);
+                //UifControllerHelper.prepareHistory(request, form);
                 // clear current form from session
                 GlobalVariables.getUifFormManager().removeSessionForm(form);
 
