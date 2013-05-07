@@ -36,19 +36,14 @@
                 </entry>
             </map>
         </property> -->
-        <property name="breadcrumbOptions.breadcrumbOverrides">
+        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
             <list>
                 <bean parent="Uif-BreadcrumbItem">
                     <property name="label" value="Home"/>
                     <property name="url.href" value="@{#ConfigProperties['application.url']}/portal.do"/>
                 </bean>
-                <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value="Manage Course Offering"/>
-                    <property name="url.pageId" value="manageCourseOfferingsPage"/>
-                </bean>
             </list>
         </property>
-        <property name="breadcrumbs.displayBreadcrumbsWhenOne" value="true"/>
 
         <property name="authorizer">
             <bean class="org.kuali.student.enrollment.main.view.KsViewAuthorizerBase"/>
