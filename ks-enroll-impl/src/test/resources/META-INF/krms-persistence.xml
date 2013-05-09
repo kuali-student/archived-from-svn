@@ -10,22 +10,20 @@
     <persistence-unit name="persistentUnit"
 		transaction-type="JTA">
 
-        <class>org.kuali.student.r1.core.organization.entity.Org</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgHierarchy</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgHierarchyAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgOrgRelation</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgOrgRelationAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgOrgRelationType</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgOrgRelationTypeAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPersonRelation</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPersonRelationAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPersonRelationType</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPersonRelationTypeAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPositionRestriction</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgPositionRestrictionAttribute</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgType</class>
-        <class>org.kuali.student.r1.core.organization.entity.OrgTypeAttribute</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgHierarchyEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgHierarchyAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgOrgRelationEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgOrgRelationAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgOrgRelationEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgOrgRelationAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgPersonRelationEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgPersonRelationAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgPositionRestrictionEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgPositionRestrictionAttributeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgCodeEntity</class>
+        <class>org.kuali.student.r2.core.organization.model.OrgCodeAttributeEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 

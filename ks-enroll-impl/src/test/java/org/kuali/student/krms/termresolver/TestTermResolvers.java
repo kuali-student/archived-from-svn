@@ -11,7 +11,7 @@ import org.kuali.student.krms.service.impl.KSTermResolverTypeService;
 import org.kuali.student.krms.util.KSKRMSExecutionConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.LocaleInfo;
-import org.kuali.student.r2.core.class1.organization.service.impl.OrgTestDataLoader;
+import org.kuali.student.r2.core.organization.service.OrgTestDataLoader;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

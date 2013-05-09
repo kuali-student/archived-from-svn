@@ -183,11 +183,28 @@
     </bean>
 
     <!-- Organization Service -->
-    <bean id="orgDao" class="org.kuali.student.r1.core.organization.dao.impl.OrganizationDaoImpl">
+    <bean id="orgDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgDao">
         <property name="em" ref="enrollEntityManager" />
     </bean>
 
-    <bean id="extendedOrgDao" class="org.kuali.student.r2.core.class1.organization.dao.ExtendedOrgDao">
+    <bean id="orgHierarchyDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgHierarchyDao">
+        <property name="em" ref="enrollEntityManager" />
+    </bean>
+
+    <bean id="orgOrgRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao">
+        <property name="em" ref="enrollEntityManager" />
+    </bean>
+
+    <bean id="orgPersonRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPersonRelationDao">
+        <property name="em" ref="enrollEntityManager" />
+    </bean>
+
+    <bean id="orgPositionRestrictionDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPositionRestrictionDao">
         <property name="em" ref="enrollEntityManager" />
     </bean>
 

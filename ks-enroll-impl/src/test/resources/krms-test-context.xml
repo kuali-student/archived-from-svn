@@ -95,20 +95,38 @@
     </bean>
 
     <!-- Organization Service -->
-    <bean id="orgServiceImpl"
-          class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceImpl">
-        <property name="organizationDao" ref="orgDao"/>
-        <property name="extendedOrgDao" ref="extendedOrgDao"/>
-
-    </bean>
-
     <bean id="orgDao"
-          class="org.kuali.student.r1.core.organization.dao.impl.OrganizationDaoImpl">
-        <property name="em" ref="entityManager"/>
+          class="org.kuali.student.r2.core.organization.dao.OrgDao">
+        <property name="em" ref="entityManager" />
     </bean>
 
-    <bean id="extendedOrgDao" class="org.kuali.student.r2.core.class1.organization.dao.ExtendedOrgDao">
+    <bean id="orgHierarchyDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgHierarchyDao">
         <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgOrgRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgPersonRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPersonRelationDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgPositionRestrictionDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPositionRestrictionDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgServiceImpl"
+          class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceImpl">
+        <property name="orgDao" ref="orgDao" />
+        <property name="orgHierarchyDao" ref="orgHierarchyDao" />
+        <property name="orgOrgRelationDao" ref="orgOrgRelationDao"/>
+        <property name="orgPersonRelationDao" ref="orgPersonRelationDao"/>
+        <property name="orgPositionRestrictionDao" ref="orgPositionRestrictionDao"/>
     </bean>
 
     <!--bean id="stateService" class=" org.kuali.student.r2.core.class1.state.service.impl.StateServiceImpl">
@@ -483,7 +501,7 @@
     </bean>
 
     <bean id="orgServiceImpl"
-          class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceImpl">
+          class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceImpl">
         <property name="organizationDao" ref="orgDao"/>
         <property name="searchManager" ref="orgSearchManager"/>
         <property name="dictionaryServiceDelegate" ref="coreDictionaryServiceDelegate"/>
