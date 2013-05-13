@@ -325,7 +325,8 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
         //Refresh the natural language.
         this.getNaturalLanguageHelper().setNaturalLanguageForUsage(prop, KsKrmsConstants.KRMS_NL_RULE_EDIT);
         this.getNaturalLanguageHelper().setNaturalLanguageForUsage(prop, KsKrmsConstants.KRMS_NL_PREVIEW);
-        prop.setDescription(prop.getNaturalLanguageForUsage(KsKrmsConstants.KRMS_NL_RULE_EDIT));
+        String description = prop.getNaturalLanguageForUsage(KsKrmsConstants.KRMS_NL_RULE_EDIT);
+        prop.setDescription(StringUtils.abbreviate(description, 99));
         return prop.getDescription();
     }
 
@@ -578,7 +579,12 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
             newProposition.setParameters(newParms);
             newProposition.setId(null);
             newProposition.setKey(null);
-            newProposition.setTerm(null);
+            newProposition.getTerm().setId(null);
+            newProposition.getTerm().setVersionNumber(new Long(0));
+            for(TermParameterEditor termParam : newProposition.getTerm().getEditorParameters()) {
+                termParam.setId(null);
+                termParam.setVersionNumber(new Long(0));
+            }
             newProposition.setVersionNumber(new Long(0));
             return newProposition;
         } catch (Exception e) {

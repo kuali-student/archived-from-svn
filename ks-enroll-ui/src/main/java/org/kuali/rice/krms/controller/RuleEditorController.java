@@ -81,7 +81,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         List<AgendaEditor> agendas = ruleWrapper.getAgendas();
         for (AgendaEditor agenda : agendas) {
             if (agenda.getRuleEditors().contains(ruleEditor)) {
-                ruleWrapper.getDeletedRules().add(ruleEditor);
+                agenda.getDeletedRules().add(ruleEditor);
                 agenda.getRuleEditors().remove(ruleEditor);
             }
         }
@@ -492,12 +492,14 @@ public class RuleEditorController extends MaintenanceDocumentController {
 
                     parentBo.getCompoundEditors().set(propIndex, compound);
                     compound.getCompoundEditors().get(1).setEditMode(true);
-                    ruleEditor.setSelectedKey(compound.getCompoundEditors().get(1).getKey());
                 }
+
+                viewHelper.refreshInitTrees(ruleEditor);
+                ruleEditor.setSelectedKey(compound.getCompoundEditors().get(1).getKey());
+
             }
         }
 
-        viewHelper.refreshInitTrees(ruleEditor);
         return getUIFModelAndView(form);
     }
 
@@ -668,14 +670,15 @@ public class RuleEditorController extends MaintenanceDocumentController {
 
         RuleEditor ruleEditor = getRuleEditor(form);
 
-        this.getViewHelper(form).refreshViewTree(ruleEditor);
-        PropositionTreeUtil.resetNewProp((PropositionEditor) ruleEditor.getProposition());
+        if (!(ruleEditor.getProposition() == null && ruleEditor.getPropId() == null)) {
+            PropositionTreeUtil.resetNewProp((PropositionEditor) ruleEditor.getProposition());
 
-        if(PropositionTreeUtil.resetEditModeOnPropositionTree(ruleEditor)){
-            PropositionEditor proposition = PropositionTreeUtil.getProposition(ruleEditor);
-            this.getViewHelper(form).resetDescription(proposition);
+            if (PropositionTreeUtil.resetEditModeOnPropositionTree(ruleEditor)) {
+                PropositionEditor proposition = PropositionTreeUtil.getProposition(ruleEditor);
+                this.getViewHelper(form).resetDescription(proposition);
+            }
         }
-
+        this.getViewHelper(form).refreshViewTree(ruleEditor);
 
         //Replace edited rule with existing rule.
         for (AgendaEditor agendaEditor : ruleWrapper.getAgendas()) {
@@ -823,7 +826,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
 
             //Build the compare rule tree
             ruleWrapper.setCompareTree(this.getViewHelper(form).buildCompareTree(ruleEditor, ruleWrapper.getRefObjectId()));
-
+            ruleWrapper.setCompareLightBoxHeader( ruleEditor.getRuleTypeInfo().getDescription());
         }
 
         // redirect back to client to display lightbox

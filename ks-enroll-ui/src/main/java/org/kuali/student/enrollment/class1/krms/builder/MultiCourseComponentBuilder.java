@@ -78,6 +78,35 @@ public class MultiCourseComponentBuilder implements ComponentBuilder<EnrolPropos
         return termParameters;
     }
 
+    @Override
+    public void onSubmit(EnrolPropositionEditor propositionEditor) {
+        //Create the courseset
+        try {
+            CluSetInfo cluSetInfo = propositionEditor.getCluSet().getCluSetInfo();
+            if(cluSetInfo.getId()==null){
+                cluSetInfo = this.getCluService().createCluSet(cluSetInfo.getTypeKey(), cluSetInfo, ContextUtils.getContextInfo());
+
+                //Update the termparameter value
+                boolean updated = false;
+                for(TermParameterEditor parm : propositionEditor.getTerm().getEditorParameters()){
+                    if(parm.getName().equals(CLUSET_KEY)){
+                        parm.setValue(cluSetInfo.getId());
+                        updated = true;
+                    }
+                }
+
+                if(!updated){
+                    TermParameterEditor parm = new TermParameterEditor(CLUSET_KEY, cluSetInfo.getId());
+                    propositionEditor.getTerm().getEditorParameters().add(parm);
+                }
+            }else{
+                this.getCluService().updateCluSet(cluSetInfo.getId(), cluSetInfo, ContextUtils.getContextInfo());
+            }
+        } catch (Exception ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
     public CluSetInformation getCluSetInformation(String cluSetId) {
         CluSetInformation result = new CluSetInformation();
         CluSetInfo cluSetInfo = getCluSetInfo(cluSetId);
@@ -311,12 +340,7 @@ public class MultiCourseComponentBuilder implements ComponentBuilder<EnrolPropos
             }
         }
 
-        //Create the courseset
-        try {
-            cluSetInfo = this.getCluService().createCluSet(cluSetInfo.getTypeKey(), cluSetInfo, ContextUtils.getContextInfo());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException(ex);
-        }
+
         return cluSetInfo;
     }
 

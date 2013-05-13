@@ -129,11 +129,14 @@
                     <property name="items">
                         <list>
                             <!-- Note: this bean id is important, it is used for component matching in an ajax refresh -->
-                            <bean parent="Uif-Message" p:messageText="Click on rule to edit"
+                            <bean parent="Uif-Message" p:messageText="Click on rule statement to edit"
                                   p:style="font-weight:bold;margin-left: 2em;"/>
                             <!-- Note: this bean id is important, it is used for component matching in an ajax refresh -->
                             <bean id="RuleStudentEditorView-Tree" parent="KS-RulerEditor-TreeSection-parent"
                                   p:forceSessionPersistence="true"/>
+                            <bean id="proposition_selected" parent="KS-Rules-HiddenField" p:propertyName="selectedKey"/>
+                            <bean id="proposition_copy" parent="KS-Rules-HiddenField" p:propertyName="copyKey"/>
+                            <bean id="proposition_cut" parent="KS-Rules-HiddenField" p:propertyName="cutKey"/>
                         </list>
                     </property>
                 </bean>
@@ -164,14 +167,11 @@
                     </property>
                 </bean>
                 <bean parent="Uif-ActionLink" p:actionScript="jq('.jstree').jstree('close_all');"
-                      p:actionLabel="[-] collapse all" p:style="margin-right: 15pt;">
+                      p:actionLabel="[-] collapse all" p:style="margin-right: 15pt;margin-left:1em">
                     <property name="actionImage">
                         <null/>
                     </property>
                 </bean>
-                <bean id="proposition_selected" parent="KS-Rules-HiddenField" p:propertyName="selectedKey"/>
-                <bean id="proposition_copy" parent="KS-Rules-HiddenField" p:propertyName="copyKey"/>
-                <bean id="proposition_cut" parent="KS-Rules-HiddenField" p:propertyName="cutKey"/>
             </list>
         </property>
     </bean>
@@ -194,9 +194,7 @@
                 <bean parent="Uif-HorizontalBoxGroup" p:style="padding-right: 20px; padding-left:20px">
                     <property name="items">
                         <list>
-                            <bean parent="KS-RuleEditorView-Button" p:actionScript="var enabled = enabledCheck('add');
-                                if (enabled) {
-                                ajaxAddPropositionTree('addProposition', 'RuleStudentEditorView-Tree');}"
+                            <bean parent="KS-RuleEditorView-Button" p:actionScript="ajaxCallFromToolbar('add', 'addProposition', 'RuleStudentEditorView-TreeGroup','KS-EditWithLogic-TreeGroup')"
                                   p:actionLabel="Add Rule Statement"
                                   p:onMouseDownScript="jq(this).addClass('tree-bar-button-selected');"
                                   p:onMouseUpScript="jq(this).removeClass('tree-bar-button-selected');">
@@ -225,10 +223,9 @@
                                 </property>
                             </bean>
 
-                            <bean parent="KS-RuleEditorView-Button" p:actionScript="var enabled = enabledCheck('addparent');
-                                if (enabled) {
-                                ajaxCallPropositionTree('togglePropositionSimpleCompound', 'RuleStudentEditorView-TreeGroup');}"
-                                  p:actionLabel="Create Group"
+                            <bean parent="KS-RuleEditorView-Button"
+                                  p:actionScript="ajaxCallFromToolbar('addparent','togglePropositionSimpleCompound','RuleStudentEditorView-TreeGroup','KS-EditWithLogic-TreeGroup');"
+                                  p:actionLabel="Add Parent"
                                   p:onMouseDownScript="jq(this).addClass('tree-bar-button-selected');"
                                   p:onMouseUpScript="jq(this).removeClass('tree-bar-button-selected');">
                                 <property name="actionImage">
@@ -298,9 +295,7 @@
                 <bean parent="Uif-HorizontalBoxGroup" p:style="padding-right: 20px">
                     <property name="items">
                         <list>
-                            <bean parent="KS-RuleEditorView-Button" p:actionScript="var enabled = enabledCheck('copy');
-                                if (enabled) {
-                                ajaxCopyPropositionTree();}"
+                            <bean parent="KS-RuleEditorView-Button" p:actionScript="ajaxCopyPropositionTree();"
                                   p:actionLabel="Copy"
                                   p:onMouseDownScript="jq(this).addClass('tree-bar-button-selected');"
                                   p:onMouseUpScript="jq(this).removeClass('tree-bar-button-selected');">
@@ -316,9 +311,7 @@
                                 </property>
                             </bean>
 
-                            <bean parent="KS-RuleEditorView-Button" p:actionScript="var enabled = enabledCheck('cut');
-                                if (enabled) {
-                                ajaxCutPropositionTree();}"
+                            <bean parent="KS-RuleEditorView-Button" p:actionScript="ajaxCutPropositionTree();"
                                   p:actionLabel="Cut"
                                   p:onMouseDownScript="jq(this).addClass('tree-bar-button-selected');"
                                   p:onMouseUpScript="jq(this).removeClass('tree-bar-button-selected');">
@@ -334,9 +327,7 @@
                                 </property>
                             </bean>
 
-                            <bean parent="KS-RuleEditorView-Button" p:actionScript="var enabled = enabledCheck('paste');
-                                if (enabled) {
-                                ajaxPastePropositionTree('pasteProposition', 'RuleStudentEditorView-TreeGroup');}"
+                            <bean parent="KS-RuleEditorView-Button" p:actionScript="ajaxPastePropositionTree('pasteProposition', 'RuleStudentEditorView-TreeGroup', 'KS-EditWithLogic-TreeGroup')"
                                   p:actionLabel="Paste"
                                   p:onMouseDownScript="jq(this).addClass('tree-bar-button-selected');"
                                   p:onMouseUpScript="jq(this).removeClass('tree-bar-button-selected');">

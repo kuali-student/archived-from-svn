@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.kuali.rice.core.api.criteria.PredicateFactory.in;
@@ -40,7 +41,6 @@ import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.KRADServiceLocator;
 import org.kuali.rice.krad.service.SequenceAccessorService;
 import org.kuali.rice.krms.api.repository.NaturalLanguageTree;
-import org.kuali.rice.krms.api.repository.RuleRepositoryService;
 import org.kuali.rice.krms.api.repository.action.ActionDefinition;
 import org.kuali.rice.krms.api.repository.context.ContextDefinition;
 import org.kuali.rice.krms.api.repository.language.NaturalLanguageTemplaterContract;
@@ -170,6 +170,13 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     @Override
     public ReferenceObjectBinding createReferenceObjectBinding(ReferenceObjectBinding referenceObjectDefinition)
             throws RiceIllegalArgumentException {
+        //Set the id if it doesn't exist.
+        if(referenceObjectDefinition.getId()==null){
+            String referenceObjectBindingId = getSequenceAccessorService().getNextAvailableSequenceNumber("KRMS_REF_OBJ_KRMS_OBJ_S", ReferenceObjectBindingBo.class).toString();
+            ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create(referenceObjectDefinition);
+            refBldr.setId(referenceObjectBindingId);
+            referenceObjectDefinition = refBldr.build();
+        }
         return referenceObjectBindingBoService.createReferenceObjectBinding(referenceObjectDefinition);
     }
 
@@ -261,9 +268,101 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     //// 
     @Override
     public AgendaDefinition createAgenda(AgendaDefinition agendaDefinition) throws RiceIllegalArgumentException {
-        return agendaBoService.createAgenda(agendaDefinition);
+        AgendaDefinition agenda = agendaBoService.createAgenda(agendaDefinition);        
+        AgendaItemDefinition.Builder itemBldr = AgendaItemDefinition.Builder.create(null, agenda.getId());
+        AgendaItemDefinition item = this.createAgendaItem(itemBldr.build());
+        // now go back and mark the agenda with the item and make it active
+        AgendaDefinition.Builder agendaBldr = AgendaDefinition.Builder.create(agenda);
+        agendaBldr.setFirstItemId(item.getId());    
+        this.updateAgenda(agendaBldr.build());        
+        agenda = this.getAgenda(agenda.getId());
+        return agenda;
+        
     }
 
+    @Override
+    public AgendaDefinition getAgendaByNameAndContextId(String name, String contextId) {
+        return this.agendaBoService.getAgendaByNameAndContextId(name, contextId);
+    }
+
+    @Override
+    public AgendaDefinition findCreateAgenda(AgendaDefinition agendaDefinition) throws RiceIllegalArgumentException {
+        AgendaDefinition existing = this.getAgendaByNameAndContextId(agendaDefinition.getName(), agendaDefinition.getContextId());
+        if (existing != null) {
+            existing = this.updateAgendaIfNeeded (agendaDefinition, existing);            
+            return existing;
+        }
+        return this.createAgenda(agendaDefinition);
+    }   
+    
+    private AgendaDefinition updateAgendaIfNeeded(AgendaDefinition agenda, AgendaDefinition existing) {
+        if (this.isSame(agenda, existing)) {
+            return existing;
+        }
+        AgendaDefinition.Builder bldr = AgendaDefinition.Builder.create(existing);
+        bldr.setActive(agenda.isActive());
+        bldr.setAttributes(agenda.getAttributes());
+        bldr.setContextId(agenda.getContextId());
+        if (agenda.getFirstItemId() != null) {
+            bldr.setFirstItemId(agenda.getFirstItemId());
+        }
+        bldr.setTypeId(agenda.getTypeId());
+        this.updateAgenda(bldr.build());
+        return this.getAgenda(existing.getId());
+    }
+
+    private boolean isSame(AgendaDefinition agenda, AgendaDefinition existing) {
+        if (!this.isSame(agenda.isActive(), existing.isActive())) {
+            return false;
+        }
+        if (!this.isSame(agenda.getAttributes(), existing.getAttributes())) {
+            return false;
+        }
+        if (!this.isSame(agenda.getContextId(), existing.getContextId())) {
+            return false;
+        }
+        if (!this.isSame(agenda.getFirstItemId(), existing.getFirstItemId())) {
+            return false;
+        }
+        if (!this.isSame(agenda.getName(), existing.getName())) {
+            return false;
+        }
+        if (!this.isSame(agenda.getTypeId(), existing.getTypeId())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isSame (boolean o1, boolean o2) {
+        if (o1 && !o2) {
+            return false;
+        }
+        if (!o1 && o2) {
+            return false;
+        }
+        return true;
+    } 
+    
+    private boolean isSame (Map<String,String> o1, Map<String, String> o2) {
+        if (o1 == null && o2 != null) {
+            return false;
+        }
+        if (o1 != null && o2 == null) {
+            return false;
+        }
+        return o1.equals(o2);
+    }
+    
+    private boolean isSame (String o1, String o2) {
+        if (o1 == null && o2 != null) {
+            return false;
+        }
+        if (o1 != null && o2 == null) {
+            return false;
+        }
+        return o1.equals(o2);
+    }
+    
     @Override
     public AgendaDefinition getAgenda(String id) throws RiceIllegalArgumentException {
         return agendaBoService.getAgendaByAgendaId(id);
@@ -299,52 +398,179 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     //// agenda item methods
     ////
     @Override
-    public AgendaItemDefinition createAgendaItem(AgendaItemDefinition agendaItemDefinition) throws RiceIllegalArgumentException {
-        agendaItemDefinition = createAgendaItemIfNeeded(agendaItemDefinition).build();
+    public AgendaItemDefinition createAgendaItem(AgendaItemDefinition agendaItemDefinition) throws RiceIllegalArgumentException {        
+        this.crossCheckRuleId(agendaItemDefinition);
+        this.crossCheckWhenTrueId(agendaItemDefinition);
+        this.crossCheckWhenFalseId(agendaItemDefinition);
+        this.crossCheckAlwaysId(agendaItemDefinition);
+        this.crossCheckSubAgendaId(agendaItemDefinition);
+        agendaItemDefinition = createUpdateRuleIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createWhenTrueAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createWhenFalseAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createAlwaysAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createSubAgendaIfNeeded(agendaItemDefinition);
         return agendaBoService.createAgendaItem(agendaItemDefinition);
     }
-
-    public AgendaItemDefinition.Builder createAgendaItemIfNeeded(AgendaItemDefinition agendaItemDefinition) throws RiceIllegalArgumentException {
-
-        if(agendaItemDefinition == null){
-            return null;
+    
+    
+    private void crossCheckRuleId(AgendaItemDefinition agendatemDefinition)
+            throws RiceIllegalArgumentException {
+        // if both are set they better match
+        if (agendatemDefinition.getRuleId() != null && agendatemDefinition.getRule() != null) {
+            if (!agendatemDefinition.getRuleId().equals(agendatemDefinition.getRule().getId())) {
+                throw new RiceIllegalArgumentException("ruleId does not rule.getId" + agendatemDefinition.getRuleId() + " " + agendatemDefinition.getRule().getId());
+            }
         }
-
-        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition.getId(), agendaItemDefinition.getAgendaId());
-        agendaItemBuilder.setVersionNumber(agendaItemDefinition.getVersionNumber());
-
-        // set the rule
-        if (agendaItemDefinition.getRule() != null) {
-            RuleDefinition ruleDefinition = this.createRuleIfNeeded(agendaItemDefinition.getRule());
-            RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(ruleDefinition);
-            agendaItemBuilder.setRule(ruleBuilder);
-            agendaItemBuilder.setRuleId(ruleBuilder.getId());
-        }
-
-        AgendaItemDefinition.Builder whenTrueBuilder = createAgendaItemIfNeeded(agendaItemDefinition.getWhenTrue());
-        if (whenTrueBuilder != null){
-            agendaItemBuilder.setWhenTrue(whenTrueBuilder);
-            agendaItemBuilder.setWhenTrueId(whenTrueBuilder.getId());
-        }
-
-        AgendaItemDefinition.Builder whenFalseBuilder = createAgendaItemIfNeeded(agendaItemDefinition.getWhenFalse());
-        if (whenFalseBuilder != null){
-            agendaItemBuilder.setWhenTrue(whenFalseBuilder);
-            agendaItemBuilder.setWhenTrueId(whenFalseBuilder.getId());
-        }
-
-        AgendaItemDefinition.Builder alwaysBuilder = createAgendaItemIfNeeded(agendaItemDefinition.getAlways());
-        if (alwaysBuilder != null){
-            agendaItemBuilder.setWhenTrue(alwaysBuilder);
-            agendaItemBuilder.setWhenTrueId(alwaysBuilder.getId());
-        }
-
-        return agendaItemBuilder;
     }
 
+    private void crossCheckWhenTrueId(AgendaItemDefinition agendatemDefinition)
+            throws RiceIllegalArgumentException {
+        // if both are set they better match
+        if (agendatemDefinition.getWhenTrueId()!= null && agendatemDefinition.getWhenTrue() != null) {
+            if (!agendatemDefinition.getWhenTrueId().equals(agendatemDefinition.getWhenTrue().getId())) {
+                throw new RiceIllegalArgumentException("when true id does not match " + agendatemDefinition.getWhenTrueId() + " " + agendatemDefinition.getWhenTrue().getId());
+            }
+        }
+    }
+
+    private void crossCheckWhenFalseId(AgendaItemDefinition agendatemDefinition)
+            throws RiceIllegalArgumentException {
+        // if both are set they better match
+        if (agendatemDefinition.getWhenFalseId()!= null && agendatemDefinition.getWhenFalse() != null) {
+            if (!agendatemDefinition.getWhenFalseId().equals(agendatemDefinition.getWhenFalse().getId())) {
+                throw new RiceIllegalArgumentException("when false id does not match " + agendatemDefinition.getWhenFalseId() + " " + agendatemDefinition.getWhenFalse().getId());
+            }
+        }
+    }
+
+    private void crossCheckAlwaysId(AgendaItemDefinition agendatemDefinition)
+            throws RiceIllegalArgumentException {
+        // if both are set they better match
+        if (agendatemDefinition.getAlwaysId()!= null && agendatemDefinition.getAlways() != null) {
+            if (!agendatemDefinition.getAlwaysId().equals(agendatemDefinition.getAlways().getId())) {
+                throw new RiceIllegalArgumentException("Always id does not match " + agendatemDefinition.getAlwaysId() + " " + agendatemDefinition.getAlways().getId());
+            }
+        }
+    }
+
+    private void crossCheckSubAgendaId(AgendaItemDefinition agendatemDefinition)
+            throws RiceIllegalArgumentException {
+        // if both are set they better match
+        if (agendatemDefinition.getSubAgendaId()!= null && agendatemDefinition.getSubAgenda() != null) {
+            if (!agendatemDefinition.getSubAgendaId().equals(agendatemDefinition.getSubAgenda().getId())) {
+                throw new RiceIllegalArgumentException("SubAgenda id does not match " + agendatemDefinition.getSubAgendaId() + " " + agendatemDefinition.getSubAgenda().getId());
+            }
+        }
+    }
+
+    private AgendaItemDefinition createUpdateRuleIfNeeded(AgendaItemDefinition agendaItemDefinition)
+            throws RiceIllegalArgumentException {
+        // no rule to create
+        if (agendaItemDefinition.getRule() == null) {
+            return agendaItemDefinition;
+        }
+        // update
+        if (agendaItemDefinition.getRule().getId() != null) {
+            this.updateRule(agendaItemDefinition.getRule());
+            RuleDefinition rule = this.getRule(agendaItemDefinition.getRule ().getId());
+            AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+            agendaItemBuilder.setRule(RuleDefinition.Builder.create (rule));
+            agendaItemBuilder.setRuleId(rule.getId());
+            return agendaItemBuilder.build();
+        }
+        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+        RuleDefinition ruleDefinition = this.createRule(agendaItemDefinition.getRule());
+        RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(ruleDefinition);
+        agendaItemBuilder.setRule(ruleBuilder);
+        agendaItemBuilder.setRuleId(ruleBuilder.getId());
+        return agendaItemBuilder.build();
+    }
+    
+    private AgendaItemDefinition createWhenTrueAgendaItemIfNeeded(AgendaItemDefinition agendaItemDefinition) {
+        // nothing to create
+        if (agendaItemDefinition.getWhenTrue() == null) {
+            return agendaItemDefinition;
+        } 
+        // ojb will take care of it if it has already been created
+        if (agendaItemDefinition.getWhenTrue().getId() != null) {
+            return agendaItemDefinition;
+        }        
+        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+        AgendaItemDefinition subAgendaITem = this.createAgendaItem(agendaItemDefinition.getWhenTrue());
+        agendaItemBuilder.setWhenTrue(AgendaItemDefinition.Builder.create(subAgendaITem));
+        agendaItemBuilder.setWhenTrueId(subAgendaITem.getId());
+        return agendaItemBuilder.build();
+    }
+
+
+    private AgendaItemDefinition createWhenFalseAgendaItemIfNeeded(AgendaItemDefinition agendaItemDefinition) {
+        // nothing to create
+        if (agendaItemDefinition.getWhenFalse() == null) {
+            return agendaItemDefinition;
+        } 
+        // ojb will take care of it if it has already been created
+        if (agendaItemDefinition.getWhenFalse().getId() != null) {
+            return agendaItemDefinition;
+        }        
+        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+        AgendaItemDefinition subAgendaITem = this.createAgendaItem(agendaItemDefinition.getWhenFalse());
+        agendaItemBuilder.setWhenFalse(AgendaItemDefinition.Builder.create(subAgendaITem));
+        agendaItemBuilder.setWhenFalseId(subAgendaITem.getId());
+        return agendaItemBuilder.build();
+    }
+    
+
+    private AgendaItemDefinition createAlwaysAgendaItemIfNeeded(AgendaItemDefinition agendaItemDefinition) {
+        // nothing to create
+        if (agendaItemDefinition.getAlways()== null) {
+            return agendaItemDefinition;
+        } 
+        // ojb will take care of it if it has already been created
+        if (agendaItemDefinition.getAlways().getId() != null) {
+            return agendaItemDefinition;
+        }        
+        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+        AgendaItemDefinition subAgendaITem = this.createAgendaItem(agendaItemDefinition.getAlways());
+        agendaItemBuilder.setAlways(AgendaItemDefinition.Builder.create(subAgendaITem));
+        agendaItemBuilder.setAlwaysId(subAgendaITem.getId());
+        return agendaItemBuilder.build();
+    }
+    
+    
+    private AgendaItemDefinition createSubAgendaIfNeeded(AgendaItemDefinition agendaItemDefinition) {
+        // nothing to create
+        if (agendaItemDefinition.getSubAgenda()== null) {
+            return agendaItemDefinition;
+        } 
+        // ojb will take care of it if it has already been created
+        if (agendaItemDefinition.getSubAgenda().getId() != null) {
+            return agendaItemDefinition;
+        }        
+        AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItemDefinition);
+        AgendaDefinition subAgenda = this.createAgenda(agendaItemDefinition.getSubAgenda());
+        agendaItemBuilder.setSubAgenda(AgendaDefinition.Builder.create(subAgenda));
+        agendaItemBuilder.setSubAgendaId(subAgenda.getId());
+        return agendaItemBuilder.build();
+    }
+    
+    
+    
+    
     @Override
     public AgendaItemDefinition getAgendaItem(String id) throws RiceIllegalArgumentException {
-        return agendaBoService.getAgendaItemById(id);
+        AgendaItemDefinition agendaItem = agendaBoService.getAgendaItemById(id);
+
+        // Set the termValues on the agenda item.
+        if(agendaItem.getRule()!=null){
+            PropositionDefinition proposition = agendaItem.getRule().getProposition();
+            if(proposition!=null){
+                AgendaItemDefinition.Builder itemBuiler = AgendaItemDefinition.Builder.create(agendaItem);
+                proposition = this.orderCompoundPropositionsIfNeeded (proposition);                
+                itemBuiler.getRule().setProposition(this.replaceTermValues(proposition));
+                agendaItem = itemBuiler.build();
+            }
+        }
+        return agendaItem;
     }
 
     @Override
@@ -370,8 +596,17 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     }
 
     @Override
-    public void updateAgendaItem(AgendaItemDefinition agendaItemDefinition) throws RiceIllegalArgumentException {
-        agendaItemDefinition = createAgendaItemIfNeeded(agendaItemDefinition).build();
+    public void updateAgendaItem(AgendaItemDefinition agendaItemDefinition) throws RiceIllegalArgumentException {      
+        this.crossCheckRuleId(agendaItemDefinition);
+        this.crossCheckWhenTrueId(agendaItemDefinition);
+        this.crossCheckWhenFalseId(agendaItemDefinition);
+        this.crossCheckAlwaysId(agendaItemDefinition);
+        this.crossCheckSubAgendaId(agendaItemDefinition);
+        agendaItemDefinition = createUpdateRuleIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createWhenTrueAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createWhenFalseAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createAlwaysAgendaItemIfNeeded(agendaItemDefinition);
+        agendaItemDefinition = createSubAgendaIfNeeded(agendaItemDefinition);
         agendaBoService.updateAgendaItem(agendaItemDefinition);
     }
 
@@ -389,53 +624,57 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     //// rule methods
     ////
     @Override
+    public RuleDefinition getRuleByNameAndNamespace(String name, String namespace) {
+        return this.ruleBoService.getRuleByNameAndNamespace(name, namespace);
+    }
+    
+    
+    
+    @Override
     public RuleDefinition createRule(RuleDefinition ruleDefinition) throws RiceIllegalArgumentException {
         if (ruleDefinition.getId() != null) {
             RuleDefinition orig = this.getRule(ruleDefinition.getId());
             if (orig != null) {
                 throw new RiceIllegalArgumentException(ruleDefinition.getId());
             }
-        }
-
-        ruleDefinition = this.createRuleIfNeeded(ruleDefinition);
-        ruleDefinition = ruleBoService.createRule(ruleDefinition);
-        return ruleDefinition;
-    }
-
-    private RuleDefinition createRuleIfNeeded(RuleDefinition ruleDefinition) throws RiceIllegalArgumentException {
-
-        // no rule to create
-        if (ruleDefinition == null) {
-            return null;
-        }
-
-        // if no id then set it because it is needed to store propositions connected to this rule
-        if (ruleDefinition.getId() == null) {
+         } else {
+            // if no id then set it because it is needed to store propositions connected to this rule
             String ruleId = getSequenceAccessorService().getNextAvailableSequenceNumber("KRMS_RULE_S", RuleBo.class).toString();
             RuleDefinition.Builder ruleBldr = RuleDefinition.Builder.create(ruleDefinition);
             ruleBldr.setId(ruleId);
             ruleDefinition = ruleBldr.build();
         }
-
+        
         // if both are set they better match
         crossCheckPropId (ruleDefinition);
-        ruleDefinition = this.createPropositionIfNeeded(ruleDefinition);
-
+        ruleDefinition = this.createUpdatePropositionIfNeeded(ruleDefinition);
+        ruleDefinition = ruleBoService.createRule(ruleDefinition);
         return ruleDefinition;
     }
 
-    private RuleDefinition createPropositionIfNeeded(RuleDefinition rule) {
+    private RuleDefinition createUpdatePropositionIfNeeded(RuleDefinition rule) {
         // no prop to create
         if (rule.getProposition() == null) {
             return rule;
         }
+        // update 
+        if (rule.getProposition().getId() != null) {
+            this.updateProposition(rule.getProposition());
+            PropositionDefinition prop = this.getProposition(rule.getProposition().getId());            
+            RuleDefinition.Builder ruleBldr = RuleDefinition.Builder.create(rule);
+            ruleBldr.setProposition(PropositionDefinition.Builder.create(prop));
+            ruleBldr.setPropId(prop.getId());
+            return ruleBldr.build();
+        }
+        // create the proposition
         RuleDefinition.Builder ruleBldr = RuleDefinition.Builder.create(rule);
         PropositionDefinition propositionDefinition = null;
         // ojb will take care of props that have already been created, but we still need to take care of the terms.
         PropositionDefinition.Builder propBldr = ruleBldr.getProposition();
         if (rule.getProposition().getId() != null) {
             this.crossCheckPropositionParameters(rule.getProposition());
-            propBldr = maintainChildProposition(propBldr);
+            propBldr = setSequenceOnCompoundPropositionsIfNeeded(propBldr);
+            propBldr = maintainTermValuesAndChildPropositions(propBldr);
         } else {
             // create the proposition
             propBldr.setRule(ruleBldr);
@@ -450,7 +689,7 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     @Override
     public void updateRule(RuleDefinition ruleDefinition) throws RiceIllegalArgumentException {
         crossCheckPropId (ruleDefinition);
-        ruleDefinition = this.createPropositionIfNeeded(ruleDefinition);
+        ruleDefinition = this.createUpdatePropositionIfNeeded(ruleDefinition);
         ruleBoService.updateRule(ruleDefinition);
     }
 
@@ -521,16 +760,17 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
         }
         crossCheckPropositionParameters(propositionDefinition);
         PropositionDefinition.Builder propBldr = PropositionDefinition.Builder.create(propositionDefinition);
-        propBldr = maintainChildProposition(propBldr);
+        propBldr = setSequenceOnCompoundPropositionsIfNeeded(propBldr);
+        propBldr = maintainTermValuesAndChildPropositions(propBldr);
         PropositionDefinition prop = propositionBoService.createProposition(propBldr.build());
         return prop;
     }
 
-    private PropositionDefinition.Builder maintainChildProposition(PropositionDefinition.Builder propBldr){
+    private PropositionDefinition.Builder maintainTermValuesAndChildPropositions(PropositionDefinition.Builder propBldr){
         if (PropositionType.SIMPLE.getCode ().equalsIgnoreCase (propBldr.getPropositionTypeCode())) {
             return maintainTermValues(propBldr);
         } else {
-            return createCompoundPropsIfNeeded(propBldr);
+            return createChildPropsIfNeeded(propBldr);
         }
     }
     
@@ -575,7 +815,7 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
         return propBldr;
     }
         
-    private PropositionDefinition.Builder createCompoundPropsIfNeeded(PropositionDefinition.Builder propBldr) {
+    private PropositionDefinition.Builder createChildPropsIfNeeded(PropositionDefinition.Builder propBldr) {
         if (propBldr.getCompoundComponents() == null) {
             return propBldr;
         }
@@ -583,13 +823,17 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
             return propBldr;
         }
 
-        List<PropositionDefinition.Builder> compPropBldrs = new ArrayList<PropositionDefinition.Builder>();
+        List<PropositionDefinition.Builder> childPropBldrs = new ArrayList<PropositionDefinition.Builder>();
+//        int seq = 0;
         for (PropositionDefinition.Builder compPropBldr : propBldr.getCompoundComponents()) {
+//            seq++;
+//            compPropBldr.setDescription(CompoundPropositionComparator.DESCRIPTION_SORT_BY_PREFIX + seq);
             compPropBldr.setRuleId(propBldr.getRuleId());
-            compPropBldr = maintainChildProposition(compPropBldr);
-            compPropBldrs.add(compPropBldr);
+            propBldr = setSequenceOnCompoundPropositionsIfNeeded(propBldr);
+            compPropBldr = maintainTermValuesAndChildPropositions(compPropBldr);
+            childPropBldrs.add(compPropBldr);
         }
-        propBldr.setCompoundComponents(compPropBldrs);
+        propBldr.setCompoundComponents(childPropBldrs);
         return propBldr;
     }
 
@@ -599,21 +843,52 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
         if (proposition == null) {
             throw new RiceIllegalArgumentException (id);
         }
-        proposition = this.replaceTermValues (proposition);
+        proposition = this.replaceTermValues (proposition).build();
+        proposition = this.orderCompoundPropositionsIfNeeded (proposition);
         return proposition;
     }
     
-    private PropositionDefinition replaceTermValues(PropositionDefinition proposition) {
-        // only do this for simple props
+    private PropositionDefinition orderCompoundPropositionsIfNeeded (PropositionDefinition prop) {
+        if (!prop.getPropositionTypeCode().equals(PropositionType.COMPOUND.getCode())) {
+            return prop;
+        }
+        if (prop.getCompoundComponents() == null) {
+            return prop;
+        }
+        if (prop.getCompoundComponents().size() <= 1) {
+            return prop;
+        }
+        PropositionDefinition.Builder propBldr = PropositionDefinition.Builder.create(prop);        
+        List<PropositionDefinition> childProps = new ArrayList<PropositionDefinition> (prop.getCompoundComponents());
+        Collections.sort(childProps, new CompoundPropositionComparator());
+        List<PropositionDefinition.Builder> childPropBldrs = new ArrayList<PropositionDefinition.Builder> (childProps.size());
+        for (PropositionDefinition chidProp : childProps) {
+            PropositionDefinition.Builder childPropBlder = PropositionDefinition.Builder.create(chidProp);
+            childPropBldrs.add(childPropBlder);
+        }
+        propBldr.setCompoundComponents(childPropBldrs);
+        return propBldr.build();
+    }
+    
+    private PropositionDefinition.Builder replaceTermValues(PropositionDefinition proposition) {
+
+        PropositionDefinition.Builder bldr = PropositionDefinition.Builder.create(proposition);
+
+        // recursively add termValues to child propositions.
         if (!PropositionType.SIMPLE.getCode ().equalsIgnoreCase (proposition.getPropositionTypeCode())) {
-            return proposition;
+            List<PropositionDefinition.Builder> cmpdProps = new ArrayList<PropositionDefinition.Builder>();
+            for(PropositionDefinition cmpdProp : proposition.getCompoundComponents()){
+                cmpdProps.add(replaceTermValues(cmpdProp));
+            }
+            bldr.setCompoundComponents(cmpdProps);
+            return bldr;
         }
         // that have parameters
         if (proposition.getParameters() == null) {
-            return proposition;
+            return bldr;
         }
         if (proposition.getParameters().isEmpty()) {
-            return proposition;
+            return bldr;
         }
         boolean found = false;
         List<PropositionParameter.Builder> params = new ArrayList<PropositionParameter.Builder> (proposition.getParameters().size());
@@ -625,16 +900,16 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
             // inflate the termValue
             found = true;
             TermDefinition termValue = this.termRepositoryService.getTerm(param.getValue());
-            PropositionParameter.Builder bldr = PropositionParameter.Builder.create(param);
-            bldr.setTermValue(termValue);
-            params.add(bldr);
+            PropositionParameter.Builder parmbldr = PropositionParameter.Builder.create(param);
+            parmbldr.setTermValue(termValue);
+            params.add(parmbldr);
         }
         if (!found) {
-            return proposition;
+            return bldr;
         }
-        PropositionDefinition.Builder bldr = PropositionDefinition.Builder.create(proposition);
+
         bldr.setParameters(params);
-        return bldr.build();
+        return bldr;
     }
 
     
@@ -647,7 +922,7 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
         }
         Set<PropositionDefinition> set = new LinkedHashSet<PropositionDefinition>(propositions.size());
         for (PropositionDefinition proposition : propositions) {
-            proposition = this.replaceTermValues(proposition);
+            proposition = this.replaceTermValues(proposition).build();
             set.add(proposition);
         }
         return set;
@@ -667,8 +942,27 @@ public class RuleManagementServiceImpl extends RuleRepositoryServiceImpl impleme
     public void updateProposition(PropositionDefinition propositionDefinition) throws RiceIllegalArgumentException {
         this.crossCheckPropositionParameters(propositionDefinition);
         PropositionDefinition.Builder propBldr = PropositionDefinition.Builder.create(propositionDefinition);
-        propBldr = maintainChildProposition(propBldr);
+        propBldr = setSequenceOnCompoundPropositionsIfNeeded (propBldr);
+        propBldr = maintainTermValuesAndChildPropositions(propBldr);
         propositionBoService.updateProposition(propBldr.build());
+    }
+    
+    private PropositionDefinition.Builder setSequenceOnCompoundPropositionsIfNeeded(PropositionDefinition.Builder propBldr) {
+        if (propBldr.getCompoundComponents() == null) {
+            return propBldr;
+        }
+        if (propBldr.getCompoundComponents().size() <= 1) {
+            return propBldr;
+        }
+        List<PropositionDefinition.Builder> childList = new ArrayList<PropositionDefinition.Builder>(propBldr.getCompoundComponents().size());
+        int i = 1; // start at 1 because rice does that
+        for (PropositionDefinition.Builder childPropBldr : propBldr.getCompoundComponents()) {
+            childPropBldr.setCompoundSequenceNumber(i);
+            i++;
+            childList.add(childPropBldr);
+        }
+        propBldr.setCompoundComponents(childList);
+        return propBldr;
     }
 
     @Override

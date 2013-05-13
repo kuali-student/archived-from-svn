@@ -22,13 +22,14 @@ public class RuleManagementWrapper extends UifFormBase {
     private String selectedRuleId;
     private String namePrefix;
     private String namespace;
+    private String refDiscriminatorType;
 
     private List<AgendaEditor> agendas;
     private RuleEditor ruleEditor;
 
-    private List<RuleEditor> deletedRules;
-
     private Tree<CompareTreeNode, String> compareTree;
+
+    private String compareLightBoxHeader;
 
     public String getRefObjectId() {
         return refObjectId;
@@ -130,17 +131,6 @@ public class RuleManagementWrapper extends UifFormBase {
         this.getRuleEditor().setSelectedTab(selectedTab);
     }
 
-    public List<RuleEditor> getDeletedRules() {
-        if(this.deletedRules == null) {
-            return deletedRules = new ArrayList<RuleEditor>();
-        }
-        return deletedRules;
-    }
-
-    public void setDeletedRules(List<RuleEditor> deletedRules) {
-        this.deletedRules = deletedRules;
-    }
-
     public String getNamePrefix() {
         return namePrefix;
     }
@@ -155,5 +145,21 @@ public class RuleManagementWrapper extends UifFormBase {
 
     public void setNamespace(String namespace) {
         this.namespace = namespace;
+    }
+
+    public String getRefDiscriminatorType() {
+        return refDiscriminatorType;
+    }
+
+    public void setRefDiscriminatorType(String refDiscriminatorType) {
+        this.refDiscriminatorType = refDiscriminatorType;
+    }
+
+    public String getCompareLightBoxHeader(){
+        return compareLightBoxHeader;
+    }
+
+    public void setCompareLightBoxHeader( String compareLightBoxHeader){
+        this.compareLightBoxHeader = compareLightBoxHeader;
     }
 }

@@ -66,6 +66,7 @@
                           p:termSpecName="CompletedCourse"
                           p:value="false">
                         <property name="componentId" value="KRMS-SingleCourse-SuggestField"/>
+                        <property name="componentBuilderClass" value="org.kuali.student.enrollment.class1.krms.builder.CourseComponentBuilder"/>
                     </bean>
                 </entry>
 
@@ -116,13 +117,14 @@
                           p:termSpecName="EnrolledCourses"
                           p:value="true">
                         <property name="componentId" value="KRMS-SingleCourse-SuggestField"/>
+                        <property name="componentBuilderClass" value="org.kuali.student.enrollment.class1.krms.builder.CourseComponentBuilder"/>
                     </bean>
                 </entry>
 
                 <entry key="kuali.krms.proposition.type.course.courseset.gpa.min">
                     <bean parent="TemplateInfo-parent"
                           p:termSpecName="GPAForCourses"
-                          p:operator="&gt;=" p:value="gpa">
+                          p:operator="&gt;=" p:value="n">
                         <property name="componentId" value="KRMS-MultiCourseWithGPA-Group"/>
                         <property name="componentBuilderClass" value="org.kuali.student.enrollment.class1.krms.builder.MultiCourseComponentBuilder"/>
                     </bean>
@@ -131,7 +133,7 @@
                 <entry key="kuali.krms.proposition.type.cumulative.gpa.min">
                     <bean parent="TemplateInfo-parent"
                           p:termSpecName="GPAForCourses"
-                          p:operator="&gt;=" p:value="gpa">
+                          p:operator="&gt;=" p:value="n">
                         <property name="componentId" value="KRMS-GPA-Field"/>
                     </bean>
                 </entry>
@@ -139,7 +141,7 @@
                 <entry key="kuali.krms.proposition.type.duration.cumulative.gpa.min">
                     <bean parent="TemplateInfo-parent"
                           p:termSpecName="GPAForCourses"
-                          p:operator="&gt;=" p:value="gpa">
+                          p:operator="&gt;=" p:value="n">
                         <property name="componentId" value="KRMS-GPAAndDuration-Group"/>
                     </bean>
                 </entry>

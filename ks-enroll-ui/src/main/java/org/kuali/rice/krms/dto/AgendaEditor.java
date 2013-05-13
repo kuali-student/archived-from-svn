@@ -5,6 +5,7 @@ import org.kuali.rice.krms.api.repository.agenda.AgendaDefinition;
 import org.kuali.rice.krms.api.repository.agenda.AgendaDefinitionContract;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,9 @@ public class AgendaEditor extends UifFormBase implements AgendaDefinitionContrac
     private Long versionNumber;
     private String courseName;
 
+    private AgendaTypeInfo agendaTypeInfo;
     private List<RuleEditor> ruleEditors;
+    private List<RuleEditor> deletedRules;
 
     public AgendaEditor() {
         super();
@@ -116,12 +119,43 @@ public class AgendaEditor extends UifFormBase implements AgendaDefinitionContrac
         this.ruleEditors = ruleEditors;
     }
 
+    public List<RuleEditor> getDeletedRules() {
+        if(this.deletedRules == null) {
+            return deletedRules = new ArrayList<RuleEditor>();
+        }
+        return deletedRules;
+    }
+
+    public void setDeletedRules(List<RuleEditor> deletedRules) {
+        this.deletedRules = deletedRules;
+    }
+
     public String getCourseName() {
         return courseName;
     }
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public AgendaTypeInfo getAgendaTypeInfo() {
+        return agendaTypeInfo;
+    }
+
+    public void setAgendaTypeInfo(AgendaTypeInfo agendaTypeInfo) {
+        this.agendaTypeInfo = agendaTypeInfo;
+    }
+
+    public boolean isDummyAgenda(){
+        if(this.getId()==null){
+            for(RuleEditor rule : this.getRuleEditors()){
+                if(rule.isDummy()==false){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
 }

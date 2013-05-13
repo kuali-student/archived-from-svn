@@ -16,33 +16,25 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.controller;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.rice.krad.uif.UifConstants;
-import org.kuali.rice.krad.uif.UifParameters;
-import org.kuali.rice.krad.uif.view.History;
-import org.kuali.rice.krad.uif.view.HistoryEntry;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.rice.krad.util.UrlFactory;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.enrollment.class2.appointment.util.AppointmentConstants;
-import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
-import org.kuali.student.enrollment.uif.util.GrowlIcon;
-import org.kuali.student.enrollment.uif.util.KSUifUtils;
-import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.enrollment.class2.courseoffering.dto.SocRolloverResultItemWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.form.CourseOfferingRolloverManagementForm;
 import org.kuali.student.enrollment.class2.courseoffering.service.CourseOfferingViewHelperService;
+import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
 import org.kuali.student.enrollment.courseofferingset.dto.SocInfo;
 import org.kuali.student.enrollment.courseofferingset.dto.SocRolloverResultInfo;
 import org.kuali.student.enrollment.courseofferingset.dto.SocRolloverResultItemInfo;
 import org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService;
+import org.kuali.student.enrollment.uif.util.GrowlIcon;
+import org.kuali.student.enrollment.uif.util.KSUifUtils;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -53,6 +45,7 @@ import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.class1.state.dto.StateInfo;
 import org.kuali.student.r2.core.class1.state.service.StateService;
 import org.kuali.student.r2.core.constants.StateServiceConstants;
@@ -67,10 +60,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -163,53 +154,6 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     public ModelAndView goTargetTerm(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
                                      @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         CourseOfferingViewHelperService helper = getViewHelperService(form);
-        List<TermInfo> termList = helper.findTermByTermCode(form.getTargetTermCode());
-        if (termList != null && termList.size() == 1) {
-            //validation to check if already rollover target term exists..
-            List<String> coIds = this._getCourseOfferingService().getCourseOfferingIdsByTerm(termList.get(0).getId(), true, new ContextInfo());
-            if (!coIds.isEmpty()) {
-                // Print error message if there are course offerings in the target term
-                GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.rollover.targetTermExists");
-                form.resetForm();
-                return getUIFModelAndView(form);
-            }
-            // Get first term
-            TermInfo matchingTerm = termList.get(0);
-            String targetTermCode = matchingTerm.getCode();
-            form.setDisplayedTargetTermCode(targetTermCode);
-            // Set the start date
-            Date startDate = matchingTerm.getStartDate();
-            String startDateStr = DateFormatters.COURSE_OFFERING_VIEW_HELPER_DATE_FORMATTER.format(startDate);
-            form.setTargetTermStartDate(startDateStr);
-            // Set the end date
-            Date endDate = matchingTerm.getEndDate();
-            String endDateStr = DateFormatters.COURSE_OFFERING_VIEW_HELPER_DATE_FORMATTER.format(endDate);
-            form.setTargetTermEndDate(endDateStr);
-            // TODO: Put in last rollover date (Kirk says this may be unnecessary in new wireframes 5/18/2012)
-            form.setTargetTerm(matchingTerm);
-            form.setIsGoSourceButtonDisabled(false); // Make go button for source enabled
-        } else {
-            form.setTargetTerm(null);
-            form.resetForm();
-            GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.targetTerm.inValid");
-        }
-        return getUIFModelAndView(form);
-    }
-
-    @RequestMapping(params = "methodToCall=goSourceTerm")
-    public ModelAndView goSourceTerm(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
-                                     @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-        // validation to check for valid term.
-        if (form.getTargetTermCode() == null || form.getTargetTermCode().length() == 0) {
-            GlobalVariables.getMessageMap().putError("targetTermCode", "error.submit.sourceTerm");
-            return getUIFModelAndView(form);
-        }
-        if (form.getSourceTermCode() == null || form.getSourceTermCode().length() == 0) {
-            GlobalVariables.getMessageMap().putError("sourceTermCode", "error.courseoffering.sourceTerm.inValid");
-            return getUIFModelAndView(form);
-        }
-        CourseOfferingViewHelperService helper = getViewHelperService(form);
-
         // validation to check for like terms and target term year comes before source term year.
         String targetTermCd = form.getTargetTermCode();
         String sourceTermCd = form.getSourceTermCode();
@@ -232,26 +176,69 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         TermInfo sourceTerm = helper.findTermByTermCode(sourceTermCd).get(0);
         boolean likeTerms = sourceTerm.getTypeKey().equals(targetTerm.getTypeKey());
         boolean sourcePrecedesTarget = sourceTerm.getStartDate().before(targetTerm.getStartDate());
-        boolean sourceTermHasSoc = helper.termHasSoc(sourceTerm.getId(), form);
         if (!likeTerms) {
-            GlobalVariables.getMessageMap().putError("sourceTermCode", "error.likeTerms.validation");
+            GlobalVariables.getMessageMap().putError("targetTermCode", "error.likeTerms.validation");
             form.setIsRolloverButtonDisabled(true);
             return getUIFModelAndView(form);
         } else if (!sourcePrecedesTarget) {
-            GlobalVariables.getMessageMap().putError("sourceTermCode", "error.years.validation");
+            GlobalVariables.getMessageMap().putError("targetTermCode", "error.years.validation");
             form.setIsRolloverButtonDisabled(true);
             return getUIFModelAndView(form);
-        } else if (!sourceTermHasSoc) {
-            GlobalVariables.getMessageMap().putError("sourceTermCode", "error.rollover.sourceTerm.noSoc");
+        } 
+        
+        List<TermInfo> termList = helper.findTermByTermCode(form.getTargetTermCode());
+        if (termList != null && termList.size() == 1) {
+            //validation to check if already rollover target term exists..
+            List<String> coIds = this._getCourseOfferingService().getCourseOfferingIdsByTerm(termList.get(0).getId(), true, new ContextInfo());
+            if (!coIds.isEmpty()) {
+                // Print error message if there are course offerings in the target term
+                GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.rollover.targetTermExists");
+                //form.resetForm();
+                return getUIFModelAndView(form);
+            }
+            // Get first term
+            TermInfo matchingTerm = termList.get(0);
+            String targetTermCode = matchingTerm.getCode();
+            form.setDisplayedTargetTermCode(targetTermCode);
+            // Set the start date
+            Date startDate = matchingTerm.getStartDate();
+            String startDateStr = DateFormatters.COURSE_OFFERING_VIEW_HELPER_DATE_FORMATTER.format(startDate);
+            form.setTargetTermStartDate(startDateStr);
+            // Set the end date
+            Date endDate = matchingTerm.getEndDate();
+            String endDateStr = DateFormatters.COURSE_OFFERING_VIEW_HELPER_DATE_FORMATTER.format(endDate);
+            form.setTargetTermEndDate(endDateStr);
+            form.setTargetTerm(matchingTerm);
+            form.setIsRolloverButtonDisabled(false); // Enable the button
+        } else {
+            form.setTargetTerm(null);
+            form.resetForm();
+            GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.targetTerm.inValid");
+        }
+        return getUIFModelAndView(form);
+    }
+
+    @RequestMapping(params = "methodToCall=goSourceTerm")
+    public ModelAndView goSourceTerm(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
+                                     @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+        if (form.getSourceTermCode().isEmpty()) {
+            GlobalVariables.getMessageMap().putError("sourceTermCode", "error.courseoffering.sourceTerm.inValid");
             form.setIsRolloverButtonDisabled(true);
             return getUIFModelAndView(form);
         }
-
+        CourseOfferingViewHelperService helper = getViewHelperService(form);
         List<TermInfo> termList = helper.findTermByTermCode(form.getSourceTermCode());
         if (termList != null && termList.size() == 1) {
             // Get first term
             TermInfo matchingTerm = termList.get(0);
             String sourceTermCode = matchingTerm.getCode();
+            //Check SOC
+            boolean sourceTermHasSoc = helper.termHasSoc(matchingTerm.getId(), form);
+            if (!sourceTermHasSoc) {
+                GlobalVariables.getMessageMap().putError("sourceTermCode", "error.rollover.sourceTerm.noSoc");
+                form.setIsRolloverButtonDisabled(true);
+                return getUIFModelAndView(form);
+            }  
             form.setDisplayedSourceTermCode(sourceTermCode);
             // Set the start date
             Date startDate = matchingTerm.getStartDate();
@@ -262,7 +249,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             String endDateStr = DateFormatters.COURSE_OFFERING_VIEW_HELPER_DATE_FORMATTER.format(endDate);
             form.setSourceTermEndDate(endDateStr);
             form.setSourceTerm(matchingTerm);
-            form.setIsRolloverButtonDisabled(false); // Enable the button
+            form.setIsGoSourceButtonDisabled(false); // Make go button for target enabled
         } else {
             form.setTargetTerm(null);
             form.resetForm();
