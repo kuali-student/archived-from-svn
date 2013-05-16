@@ -18,7 +18,7 @@ import java.net.URL;
 /**
  * @author christoff.botha
  */
-@WebServiceClient(name = "KRMSTypeService",
+@WebServiceClient(name = "krmsTypeRepositoryService",
         wsdlLocation =
                 "file://home/christoff/Developer/workspaces/trunk/ks-api/ks-enroll-api/src/main/resources/META-INF/wsdl/KrmsTypeRepositoryService.wsdl",
         targetNamespace = KrmsConstants.Namespaces.KRMS_NAMESPACE_2_0)
@@ -26,7 +26,7 @@ public class KrmsTypeRepositoryService_Service extends Service {
 
     public final static URL WSDL_LOCATION;
     public final static QName SERVICE = new QName(
-            KrmsConstants.Namespaces.KRMS_NAMESPACE_2_0, "KRMSTypeService");
+            KrmsConstants.Namespaces.KRMS_NAMESPACE_2_0, "krmsTypeRepositoryService");
     public final static QName krmsTypeServicePort = new QName(
             KrmsConstants.Namespaces.KRMS_NAMESPACE_2_0, "KRMSTypeServicePort");
 

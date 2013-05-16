@@ -31,22 +31,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @info This class helps the loader gain access to any data related to the CM format of rules.
  * @author christoff.botha
+ * @info This class helps the loader gain access to any data related to the CM format of rules.
  */
-public class StatementHelper
-{
+public class StatementHelper {
     //private CriteriaLookupService criteriaLookupService;
     ContextInfoHelper contextInfoHelper = new ContextInfoHelper();
     private StatementService statementService;
     private CourseService courseService;
 
-    public List<StatementInfo> getRootStatements(){
+    public List<StatementInfo> getRootStatements() {
         //TODO hold a cached map of all statements to speed up if needed
-        Map<String,StatementInfo> rootStatements = new HashMap<String,StatementInfo>();
-        //List<String> allStatementIDs = new ArrayList<String>();
+        Map<String, StatementInfo> rootStatements = new HashMap<String, StatementInfo>();
+        List<String> statementIDsToRemove = new ArrayList<String>();
         String[] types = new String[]{
-                "kuali.statement.type.course",
                 "kuali.statement.type.course.academicReadiness.antireq",
                 "kuali.statement.type.course.academicReadiness.coreq",
                 "kuali.statement.type.course.academicReadiness.prereq",
@@ -54,19 +52,16 @@ public class StatementHelper
                 "kuali.statement.type.course.academicReadiness.studentEligibilityPrereq",
                 "kuali.statement.type.course.credit.repeatable",
                 "kuali.statement.type.course.credit.restriction",
-                "kuali.statement.type.course.creditConstraints",
-                "kuali.statement.type.course.enrollmentEligibility",
-                "kuali.statement.type.course.recommendedPreparation",
-                "kuali.statement.type.program",
-                "kuali.statement.type.program.completion",
-                "kuali.statement.type.program.entrance",
-                "kuali.statement.type.program.satisfactoryProgress"};
+                "kuali.statement.type.course.recommendedPreparation"};
         try {
-            for(String type :types){
+            for (String type : types) {
                 List<StatementInfo> statements = statementService.getStatementsByType(type);
-                for(StatementInfo statement : statements){
-                    rootStatements.put(statement.getId(),statement);
-                   // allStatements.add(statement.getId());
+                if (statements != null) {
+                    for (StatementInfo statement : statements) {
+                        if (statement.getState().equals("Active")) {
+                            rootStatements.put(statement.getId(), statement);
+                        }
+                    }
                 }
             }
         } catch (InvalidParameterException e) {
@@ -75,23 +70,27 @@ public class StatementHelper
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (OperationFailedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }  catch (DoesNotExistException e) {
+        } catch (DoesNotExistException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        //filter for root statements
-        for(String id : rootStatements.keySet()){
-            for(StatementInfo info : rootStatements.values()){
-                if(info.getStatementIds().contains(id)){
-                    rootStatements.remove(id);
+        //collect the IDs for all non-root statements
+        for (String id : rootStatements.keySet()) {
+            for (StatementInfo info : rootStatements.values()) {
+                if (info.getStatementIds().contains(id)) {
+                    statementIDsToRemove.add(id);
                     break; //skip to the next id
                 }
             }
 
         }
-        return (List<StatementInfo>) rootStatements.values();
+        //remove all the non root items
+        for (String id : statementIDsToRemove) {
+            rootStatements.remove(id);
+        }
+        return new ArrayList<StatementInfo>(rootStatements.values());
     }
 
-    public List<StatementInfo> getChildStatementsForStatement(String statementId){
+    public List<StatementInfo> getChildStatementsForStatement(String statementId) {
         List<StatementInfo> children = null;
         try {
             children = statementService.getStatementsUsingStatement(statementId);
@@ -107,17 +106,24 @@ public class StatementHelper
         return children;
     }
 
-    public String getCourseCodeFromStatement(String statementId){
+    public CourseInfo getRelatedCourseFromStatement(String statementId) {
         try {
             List<RefStatementRelationInfo> refStatementRelationInfoList = statementService.getRefStatementRelationsByStatement(statementId);
-            for(RefStatementRelationInfo relation : refStatementRelationInfoList){
-                if(relation.getRefObjectTypeKey().equals("kuali.referenceType.CLU")){
-                    CourseInfo course = courseService.getCourse(relation.getRefObjectId(),contextInfoHelper.getDefaultContextInfo());
-                    return course.getCode();
+            if (refStatementRelationInfoList != null) {
+                for (RefStatementRelationInfo relation : refStatementRelationInfoList) {
+                    if (relation.getRefObjectTypeKey().equals("kuali.lu.type.CreditCourse")) {
+                        try {
+                            CourseInfo course = courseService.getCourse(relation.getRefObjectId(), contextInfoHelper.getDefaultContextInfo());
+                            return course;
+                        } catch (DoesNotExistException e) {
+                            System.out.println("Error: statement relation exists but clu does not exist. CLUID: " + relation.getRefObjectId());
+                            return null;
+                        }
+                    }
                 }
             }
         } catch (DoesNotExistException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (InvalidParameterException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (MissingParameterException e) {
@@ -128,10 +134,10 @@ public class StatementHelper
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        return "error";
+        return null;
     }
 
-    public String getStatementTypeNameFromTypeId(String statementTypeId){
+    public String getStatementTypeNameFromTypeId(String statementTypeId) {
         try {
             StatementTypeInfo type = statementService.getStatementType(statementTypeId);
             return type.getName();
@@ -147,21 +153,21 @@ public class StatementHelper
         return "error";
     }
 
-    public List<ReqComponentInfo> getReqCompsByIds(List<String> reqComponentIds){
+    public List<ReqComponentInfo> getReqCompsByIds(List<String> reqComponentIds) {
         List<ReqComponentInfo> reqComps = new ArrayList<ReqComponentInfo>();
-                for(String id : reqComponentIds){
-                    try {
-                        reqComps.add(statementService.getReqComponent(id));
-                    } catch (DoesNotExistException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    } catch (InvalidParameterException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    } catch (MissingParameterException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    } catch (OperationFailedException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
-                }
+        for (String id : reqComponentIds) {
+            try {
+                reqComps.add(statementService.getReqComponent(id));
+            } catch (DoesNotExistException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvalidParameterException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (MissingParameterException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (OperationFailedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
         return reqComps;
     }
 
@@ -181,4 +187,6 @@ public class StatementHelper
     public void setCourseService(CourseService courseService) {
         this.courseService = courseService;
     }
+
+
 }

@@ -19,6 +19,7 @@ import org.kuali.rice.krms.api.repository.RuleManagementService;
 import org.kuali.rice.krms.api.repository.agenda.AgendaDefinition;
 import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinition;
+import org.kuali.rice.krms.api.repository.reference.ReferenceObjectBinding;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinition;
 import org.kuali.rice.krms.api.repository.term.TermDefinition;
 import org.kuali.rice.krms.api.repository.term.TermParameterDefinition;
@@ -88,7 +89,9 @@ public class KRMSHelper
         return krmsTypeRepositoryService.getTypeByName(namespaceCode,name);
     }
 
-
+    public ReferenceObjectBinding createReferenceObjectBinding(ReferenceObjectBinding referenceObjectDefinition){
+        return ruleManagementService.createReferenceObjectBinding(referenceObjectDefinition);
+    }
 
     //GETTERS AND SETTERS
 

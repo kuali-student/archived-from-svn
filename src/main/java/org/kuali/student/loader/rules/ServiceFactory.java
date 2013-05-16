@@ -35,7 +35,7 @@ public class ServiceFactory {
     private static final String STATEMENT_SERVICE_NAME = "StatementService";
     private static final String RULE_MANAGEMENT_SERVICE_NAME = "ruleManagementService";
     private static final String TERM_REPOSITORY_SERVICE_NAME = "termRepositoryService";
-    private static final String KRMS_TYPE_REPOSITORY_SERVICE_NAME = "KRMSTypeService";
+    private static final String KRMS_TYPE_REPOSITORY_SERVICE_NAME = "krmsTypeRepositoryService";
 
     public static final String LOCAL_HOST_EMBEDDED_URL = "http://localhost:8081/ks-with-rice-bundled-dev";
 
@@ -52,7 +52,11 @@ public class ServiceFactory {
 
     private String calcWsdlUrl(String serviceName) {
         String url = getHostUrl() + "/services/" + serviceName + "?wsdl";
-//  System.out.println ("url is " + url);
+        return url;
+    }
+
+    private String calcRiceWsdlUrl(String serviceName) {
+        String url = getHostUrl() + "/services/soap/krms/v2_0/" + serviceName + "?wsdl";
         return url;
     }
 
@@ -84,7 +88,7 @@ public class ServiceFactory {
     public RuleManagementService getRuleManagementService() {
         URL wsdlURL;
         try {
-            wsdlURL = new URL(calcWsdlUrl(RULE_MANAGEMENT_SERVICE_NAME));
+            wsdlURL = new URL(calcRiceWsdlUrl(RULE_MANAGEMENT_SERVICE_NAME));
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -96,7 +100,7 @@ public class ServiceFactory {
     public KrmsTypeRepositoryService getKrmsTypeRepositoryService() {
         URL wsdlURL;
         try {
-            wsdlURL = new URL(calcWsdlUrl(KRMS_TYPE_REPOSITORY_SERVICE_NAME));
+            wsdlURL = new URL(calcRiceWsdlUrl(KRMS_TYPE_REPOSITORY_SERVICE_NAME));
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -108,7 +112,7 @@ public class ServiceFactory {
     public TermRepositoryService getTermRepositoryService() {
         URL wsdlURL;
         try {
-            wsdlURL = new URL(calcWsdlUrl(TERM_REPOSITORY_SERVICE_NAME));
+            wsdlURL = new URL(calcRiceWsdlUrl(TERM_REPOSITORY_SERVICE_NAME));
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }

@@ -15,9 +15,11 @@
  */
 package org.kuali.student.loader.rules;
 
+import org.apache.log4j.Logger;
 import org.kuali.student.loader.atp.AtpServiceFactory;
 import org.kuali.student.loader.course.*;
 import org.kuali.student.loader.organization.OrganizationServiceFactory;
+import org.kuali.student.r1.core.statement.dto.StatementInfo;
 import org.kuali.student.r2.core.atp.service.AtpService;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
 
@@ -30,6 +32,9 @@ import java.util.Properties;
  * @author nwright
  */
 public class RulesDataLoaderFromCommandLine {
+
+    private static final Logger log = Logger
+            .getLogger(RulesDataLoaderFromCommandLine.class);
 
     /**
      * @param args the command line arguments
@@ -68,28 +73,23 @@ public class RulesDataLoaderFromCommandLine {
 
         ServiceFactory serviceFactory = new ServiceFactory();
         serviceFactory.setHostUrl(sourceHostUrl);
+        System.out.println("Getting Course Service. . .");
         statementHelper.setCourseService(serviceFactory.getCourseService());
+        System.out.println("Getting Statement Service. . .");
         statementHelper.setStatementService(serviceFactory.getStatementService());
-
+        System.out.println("Getting RuleManagement Service. . .");
         krmsHelper.setRuleManagementService(serviceFactory.getRuleManagementService());
+        System.out.println("Getting KRMS Type Repository Service. . .");
         krmsHelper.setKrmsTypeRepositoryService(serviceFactory.getKrmsTypeRepositoryService());
+        System.out.println("Getting Term Repository Service. . .");
         krmsHelper.setTermRepositoryService(serviceFactory.getTermRepositoryService());
 
-//  AtpServiceFactory aptServFactory = new AtpServiceFactory();
-//  aptServFactory.setHostUrl(hostUrl);
-//  AtpService atpService = aptServFactory.getAtpService();
-//  ccLoader.getHelperService().put("atp", atpService);
-//
-//  OrganizationServiceFactory orgServFactory = new OrganizationServiceFactory ();
-//  orgServFactory.setHostUrl (hostUrl);
-//  OrganizationService orgService = orgServFactory.getOrganizationService ();
-//  ccLoader.getHelperService().put("org", orgService);
-
-        System.out.println(new Date() + " starting conversion... "
-        );
+        System.out.println(new Date() + " starting conversion... ");
         rulesLoader.setKrmsHelper(krmsHelper);
         rulesLoader.setStatementHelper(statementHelper);
         rulesLoader.startConversion();
+
+
         //TODO have the loader populate a load result list
         List<CreditCourseLoadResult> results = new ArrayList<CreditCourseLoadResult>();
 
