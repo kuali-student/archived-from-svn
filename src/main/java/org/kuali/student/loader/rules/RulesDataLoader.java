@@ -62,7 +62,7 @@ public class RulesDataLoader {
             if(statementTypeToruleTypeConversionMap.containsKey(statement.getType())){
                 String krmsRuleType = statementTypeToruleTypeConversionMap.get(statement.getType());
                 String krmsAgendaType = ruleTypeToAgendaTypeRelationMap.get(krmsRuleType);// krms type type relation
-                String krmsAgendaTypeID = krmsHelper.getTypeByName(krmsAgendaType,KsKrmsConstants.NAMESPACE_CODE).getId();
+                String krmsAgendaTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,krmsAgendaType).getId();
                 AgendaDefinition agenda = AgendaDefinition.Builder.create(null, currentRelatedCourse.getCode()+" "+typeName, krmsAgendaTypeID, "10000").build();
                 currentAgenda = krmsHelper.createAgenda(agenda);
 
@@ -73,7 +73,7 @@ public class RulesDataLoader {
                 krmsHelper.createReferenceObjectBinding(refBldr.build());
 
                 //Create root rule
-                String krmsRuleTypeID = krmsHelper.getTypeByName(krmsRuleType, KsKrmsConstants.NAMESPACE_CODE).getId();
+                String krmsRuleTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,krmsRuleType).getId();
                 rootRule = krmsHelper.createRule(RuleDefinition.Builder.create(null, currentRelatedCourse.getCode() + " " + typeName, KsKrmsConstants.NAMESPACE_CODE, krmsRuleTypeID, null).build());
             }else{
                 //TODO LOG that there is no mapping to a rule type for this statement type
@@ -81,7 +81,7 @@ public class RulesDataLoader {
                 continue; // skip this statement
             }
             //Create agenda item
-            AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(null,currentAgenda.getId());
+            AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(currentAgenda.getFirstItemId(),currentAgenda.getId());
             agendaItemBuilder.setRuleId(rootRule.getId());
             previousAgendaItem = krmsHelper.createAgendaItem(agendaItemBuilder.build());
 
@@ -107,7 +107,7 @@ public class RulesDataLoader {
             //Create rule
             if(statementTypeToruleTypeConversionMap.containsKey(subStatement.getType())){
                 String krmsRuleType = statementTypeToruleTypeConversionMap.get(subStatement.getType());
-                String krmsRuleTypeID = krmsHelper.getTypeByName(krmsRuleType,KsKrmsConstants.NAMESPACE_CODE).getId();
+                String krmsRuleTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,krmsRuleType).getId();
                 subRule = krmsHelper.createRule(RuleDefinition.Builder.create(null, currentRelatedCourse.getCode() + " " + typeName, KsKrmsConstants.NAMESPACE_CODE, krmsRuleTypeID, null).build());
 
             }else{
@@ -141,11 +141,11 @@ public class RulesDataLoader {
             //create the proposition
             String propositionTypeID = null;
             if(statement.getOperator().equals(StatementOperatorTypeKey.AND)){
-                propositionTypeID = krmsHelper.getTypeByName("kuali.krms.proposition.type.compound.and",KsKrmsConstants.NAMESPACE_CODE).getId();
+                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,"kuali.krms.proposition.type.compound.and").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), rule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
             }else{
-                propositionTypeID = krmsHelper.getTypeByName("kuali.krms.proposition.type.compound.or",KsKrmsConstants.NAMESPACE_CODE).getId();
+                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,"kuali.krms.proposition.type.compound.or").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), rule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.OR.getCode());
             }
@@ -154,7 +154,7 @@ public class RulesDataLoader {
         for(ReqComponentInfo reqComponent : reqComponentInfoList){
             //lookup proptype
             String propositionType = reqCompTypeToPropositionTypeConversionMap.get(reqComponent.getType());
-            String propositionTypeID = krmsHelper.getTypeByName(propositionType,KsKrmsConstants.NAMESPACE_CODE).getId();
+            String propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,propositionType).getId();
             TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
             //get termspec
             TermSpecificationDefinition termSpec =  krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KsKrmsConstants.NAMESPACE_CODE);
@@ -170,7 +170,7 @@ public class RulesDataLoader {
                     continue; //this constant will be set as a parameter on the proposition
                 }
                 String termParamType =  reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                String termParamTypeID = krmsHelper.getTypeByName(termParamType,KsKrmsConstants.NAMESPACE_CODE).getId();
+                String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
 
                 //create term parameter
                 TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null,term.getId(),termParamTypeID,reqCompField.getValue());//TODO translation to our uuids
