@@ -78,10 +78,8 @@ public class PropositionTreeUtil {
 
     public static PropositionEditor findProposition(Node<RuleEditorTreeNode, String> currentNode, String selectedPropKey) {
 
-        if (selectedPropKey == null) {
+        if ((selectedPropKey == null)||(selectedPropKey.isEmpty())) {
             return null;
-        } else if (selectedPropKey.isEmpty()) {
-            return currentNode.getChildren().get(0).getData().getProposition();
         }
 
         // if it's in children, we have the parent
@@ -266,11 +264,30 @@ public class PropositionTreeUtil {
         if (proposition.getCompoundEditors() != null) {
             while (i < proposition.getCompoundEditors().size()) {
                 PropositionEditor child = proposition.getCompoundEditors().get(i);
-                if (child.isNewProp()) {
+                if (child.isNewProp() && child.isEditMode()) {
                     proposition.getCompoundEditors().remove(child);
                     continue;
                 } else {
                     cancelNewProp(child);
+                }
+                i++;
+            }
+        }
+    }
+
+    public static void removeNewCompoundProp(PropositionEditor proposition) {
+        int i = 0;
+        if (proposition.getCompoundEditors() != null) {
+            while (i < proposition.getCompoundEditors().size()) {
+                PropositionEditor child = proposition.getCompoundEditors().get(i);
+                if(child.getCompoundEditors() == null) {
+                    i++;
+                    continue;
+                } else if(child.getCompoundEditors().size() == 1 && child.isNewProp()) {
+                    proposition.getCompoundEditors().set(i, child.getCompoundEditors().get(0));
+                    continue;
+                } else {
+                    removeNewCompoundProp(child);
                 }
                 i++;
             }

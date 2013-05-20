@@ -81,14 +81,6 @@
             <!-- In KS, expandall/collapseall not needed-->
             <list/>
         </property>
-        <property name="page.items">
-            <!-- In KS, we do not display the notes,route and doc overview section -->
-            <list/>
-        </property>
-        <!-- TODO: check with UX, do we need to set page.footer.items as KS-Uif-DocumentPageFooter-SubmitCancel by default? -->
-        <!--<property name="page.footer.items">-->
-            <!--<ref bean="KS-Uif-DocumentPageFooter-SubmitCancel" />-->
-        <!--</property>-->
     </bean>
 
     <!--This footer can be used for maintenance views: create a new or edit when we only want to see submit and cancel buttons -->
@@ -235,30 +227,6 @@
         <property name="render" value="@{#ViewHelper.allowsMaintenanceEditAction(#line)}"/>
     </bean>
 
-    <!-- try to override the default Uif-LookupView-ResultActions which contains edit, copy and delete.
-         Here we only need edit -->
-    <bean id="KS-Uif-LookupView-ResultActions-EditOnly" parent="Uif-LookupView-ResultActions">
-        <!--<property name="cssClasses">-->
-            <!--<list merge="true">-->
-                <!--<value>uif-lookupView-resultActions</value>-->
-            <!--</list>-->
-        <!--</property>-->
-        <property name="items">
-            <list>
-                <bean parent="Uif-Link" p:order="10">
-                    <property name="linkText" value="edit"/>
-                    <property name="finalizeMethodToCall" value="getMaintenanceActionLink"/>
-                    <property name="finalizeMethodAdditionalArguments">
-                        <list>
-                            <value>maintenanceEdit</value>
-                        </list>
-                    </property>
-                    <property name="render" value="@{#ViewHelper.allowsMaintenanceEditAction(#line)}"/>
-                </bean>
-            </list>
-        </property>
-    </bean>
-
     <!--p:onDocumentReadyScript="decorateToolbar();-->
 
     <bean id="KS-Uif-HorizontalBoxSection-ToolbarSection" parent="KS-Uif-HorizontalBoxSection-ToolbarSection-parent"/>
@@ -327,4 +295,29 @@
     <!-- For breadcrumb customization -->
     <!--<bean id="KS-Uif-Page" parent="KS-Uif-Page-parentBean" abstract="true" />
     <bean id="KS-Uif-Page-parentBean" class="org.kuali.student.enrollment.uif.container.KSUifPage" parent="Uif-Page" abstract="true" />-->
+
+    <bean id="KS-Uif-Suggest" parent="KS-Uif-Suggest-parentBean"/>
+    <bean id="KS-Uif-Suggest-parentBean" abstract="true" scope="prototype"
+          class="org.kuali.rice.krad.uif.widget.Suggest2" parent="Uif-WidgetBase">
+        <property name="template" value="/ks-krad/ftl/suggest2.ftl"/>
+        <property name="templateName" value="uif_suggest2"/>
+        <property name="customEntryAllowed" value="true"/>
+        <property name="comboboxButtonEnabled" value="false"/>
+        <property name="loadingImageEnabled" value="true"/>
+        <property name="templateOptions">
+            <map>
+                <entry key="minLength" value="2"/>
+                <entry key="delay" value="300"/>
+            </map>
+        </property>
+        <property name="suggestQuery">
+            <bean parent="Uif-AttributeQueryConfig"/>
+        </property>
+    </bean>
+
+    <bean id="KS-Uif-Combobox" parent="KS-Uif-Combobox-parentBean"/>
+    <bean id="KS-Uif-Combobox-parentBean" parent="KS-Uif-Suggest" abstract="true" scope="prototype">
+        <property name="comboboxButtonEnabled" value="true"/>
+    </bean>
+
 </beans>

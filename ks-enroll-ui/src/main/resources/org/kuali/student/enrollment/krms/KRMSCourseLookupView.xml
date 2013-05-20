@@ -60,7 +60,7 @@
     <bean id="CluInformation.description-parentBean" abstract="true" parent="AttributeDefinition">
         <property name="name" value="description"/>
         <property name="dataType" value="STRING" />
-        <property name="label" value="Phase in Description"/>
+        <property name="label" value="Phrase in Description"/>
         <property name="shortLabel" value="Description"/>
         <property name="forceUppercase" value="false"/>
         <property name="maxLength" value="10"/>
@@ -74,7 +74,7 @@
 
     <bean id="KRMS-Course-LookupView" parent="KS-Uif-LookupView">
         <property name="id" value="CourseLookupView"/>
-        <property name="headerText" value="Advance Search: Courses Only" />
+        <property name="headerText" value="Advanced Search: Courses Only" />
         <property name="dataObjectClassName" value="org.kuali.student.enrollment.class1.krms.dto.CluInformation" />
         <property name="viewHelperServiceClass" value="org.kuali.student.enrollment.class1.krms.service.impl.KRMSCourseInfoLookupableImpl" />
         <property name="criteriaFields">

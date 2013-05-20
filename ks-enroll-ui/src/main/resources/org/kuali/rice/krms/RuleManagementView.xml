@@ -78,7 +78,7 @@
                             <property name="templateOptions">
                                 <map>
                                     <entry key="selected" value="0"/>
-                                    <!--entry key="select" value="function(event, ui) {ajaxCallOnTabSelect(event, ui);}"/-->
+                                    <entry key="select" value="function(event, ui) {ajaxCallOnTabSelect(event, ui);}"/>
                                 </map>
                             </property>
                         </bean>
@@ -112,10 +112,8 @@
         <property name="linkSeparator" value=" | "/>
         <property name="items">
             <list>
-                <ref bean="KRMS-CompareCanonical-Link" />
-
+                <bean parent="Uif-ActionLink" p:actionLabel="Compare Rules" p:methodToCall="compareRules"/>
             </list>
-
         </property>
     </bean>
 
@@ -255,7 +253,7 @@
     <bean id="KS-CompareTree-Section" parent="KS-CompareTree-Section-parent"/>
 
     <!--Compare Link-->
-    <bean id="KS-CompareRule-parent" parent="Uif-VerticalBoxSection">
+    <bean id="KS-CompareRule-parent" parent="Uif-VerticalBoxSection" p:style="width: 850px;">
         <property name="hidden" value="true"/>
         <property name="headerText" value="Compare CLU and CO Requisites"/>
         <property name="items">
@@ -264,9 +262,7 @@
                     <property name="headerText" value="@{#dp.compareLightBoxHeader}"/>
                     <property name="items">
                         <list>
-
                             <ref bean="KS-CompareTree-Section"/>
-
                         </list>
                     </property>
 

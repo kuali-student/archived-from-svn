@@ -19,6 +19,12 @@ var PASTE='.kr-paste-button';
 var DELETE='.kr-delete-button';
 var REFRESH='.kr-refresh-button';
 var TREE = '.tree-bar-button';
+var MOVE='.kr-move-button';
+var UP='.kr-up-button';
+var DOWN='.kr-down-button';
+var LEFT='.kr-left-button';
+var RIGHT='.kr-right-button';
+var COPY='.kr-copy-button';
 
 var ENABLED = true;
 var pasting = false;
@@ -69,6 +75,10 @@ function enableTreeButtons() {
     }
 }
 
+function enableCopyButton() {
+    enableButton(COPY);
+}
+
 function disablePasteButton() {
     pasting = false;
     disableButton(PASTE);
@@ -78,10 +88,29 @@ function disableTreeButtons() {
     disableButton(TREE);
 }
 
-function disableAddButton() {
-    disableButton(ADD);
+function disableMoveButtons() {
+    disableButton(MOVE);
 }
 
+function disableUpButton() {
+    disableButton(UP);
+}
+
+function disableDownButton() {
+    disableButton(DOWN);
+}
+
+function disableLeftButton() {
+    disableButton(LEFT);
+}
+
+function disableRightButton() {
+    disableButton(RIGHT);
+}
+
+function disableCutCopyButtons() {
+    disableButton(CUT);
+}
 
 function cutPasteButtonInit() {
     // CUT
@@ -91,11 +120,11 @@ function cutPasteButtonInit() {
         });
     }
     // PASTE
-    if (jq('.kr-paste-button') != undefined && jq('.kr-paste-button') != null) {
-        jq('.kr-paste-button').click(function() {
-            disablePasteButton();
-        });
-    }
+    //if (jq('.kr-paste-button') != undefined && jq('.kr-paste-button') != null) {
+    //    jq('.kr-paste-button').click(function() {
+    //       disablePasteButton();
+    //    });
+    //}
 }
 
 

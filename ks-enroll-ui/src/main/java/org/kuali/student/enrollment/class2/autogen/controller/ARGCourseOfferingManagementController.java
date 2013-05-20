@@ -128,13 +128,18 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=show")
     public ModelAndView show(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm form) throws Exception {
 
+        //If show is being called from another check that no validation errors were passed before reseting the form.
+        if (GlobalVariables.getMessageMap().getErrorCount() > 0) {
+            return getUIFModelAndView(form);
+        }
+
         //Reset the form
         ARGUtil.clearForm(form);
 
         form.setInputCode(form.getInputCode().toUpperCase());
         ARGUtil.getViewHelperService(form).populateTerm(form);
 
-        if (GlobalVariables.getMessageMap().getErrorCount() > 1) {
+        if (GlobalVariables.getMessageMap().getErrorCount() > 0) {
             return getUIFModelAndView(form);
         }
 

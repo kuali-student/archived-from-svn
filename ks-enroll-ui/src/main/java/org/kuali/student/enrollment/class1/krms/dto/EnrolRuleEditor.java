@@ -4,8 +4,10 @@ import org.kuali.rice.krms.api.repository.proposition.PropositionDefinitionContr
 import org.kuali.rice.krms.api.repository.rule.RuleDefinitionContract;
 import org.kuali.rice.krms.dto.PropositionEditor;
 import org.kuali.rice.krms.dto.RuleEditor;
+import org.kuali.student.enrollment.class1.krms.util.CluSetRangeHelper;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,11 +22,8 @@ public class EnrolRuleEditor extends RuleEditor {
 
     //Course Range Dialog.
     private String searchByCourseRange;
-    private String subjectCode;
-    private String courseNumberRange;
-    private String learningObjective;
-    private Date effectiveFrom;
-    private Date effectiveTo;
+    private CluSetRangeHelper cluSetRange;
+    private List<CluInformation> clusInRange;
 
     public EnrolRuleEditor(){
         super();
@@ -42,49 +41,24 @@ public class EnrolRuleEditor extends RuleEditor {
         this.searchByCourseRange = searchByCourseRange;
     }
 
-    public String getSubjectCode() {
-        return subjectCode;
+    public CluSetRangeHelper getCluSetRange() {
+        return cluSetRange;
     }
 
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
+    public void setCluSetRange(CluSetRangeHelper cluSetRange) {
+        this.cluSetRange = cluSetRange;
     }
 
-    public String getCourseNumberRange() {
-        return courseNumberRange;
+    public List<CluInformation> getClusInRange() {
+        return clusInRange;
     }
 
-    public void setCourseNumberRange(String courseNumberRange) {
-        this.courseNumberRange = courseNumberRange;
-    }
-
-    public String getLearningObjective() {
-        return learningObjective;
-    }
-
-    public void setLearningObjective(String learningObjective) {
-        this.learningObjective = learningObjective;
-    }
-
-    public Date getEffectiveFrom() {
-        return effectiveFrom;
-    }
-
-    public void setEffectiveFrom(Date effectiveFrom) {
-        this.effectiveFrom = effectiveFrom;
-    }
-
-    public Date getEffectiveTo() {
-        return effectiveTo;
-    }
-
-    public void setEffectiveTo(Date effectiveTo) {
-        this.effectiveTo = effectiveTo;
+    public void setClusInRange(List<CluInformation> clusInRange) {
+        this.clusInRange = clusInRange;
     }
 
     @Override
     protected PropositionEditor createPropositionEditor(PropositionDefinitionContract definition){
         return new EnrolPropositionEditor(definition);
     }
-
 }

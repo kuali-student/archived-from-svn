@@ -9,6 +9,7 @@ import org.kuali.rice.krms.api.repository.proposition.PropositionDefinition;
 import org.kuali.rice.krms.api.repository.proposition.PropositionType;
 import org.kuali.rice.krms.dto.PropositionEditor;
 import org.kuali.rice.krms.dto.RuleEditor;
+import org.kuali.rice.krms.tree.node.CompareTreeNode;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolPropositionEditor;
 import org.kuali.student.enrollment.class1.krms.tree.node.KSCompoundOpCodeNode;
 import org.kuali.student.enrollment.class1.krms.tree.node.KSCompoundPropositionEditNode;
@@ -35,13 +36,15 @@ public class RuleEditTreeBuilder extends AbstractTreeBuilder{
         Tree myTree = new Tree<RuleEditorTreeNode, String>();
 
         Node<RuleEditorTreeNode, String> rootNode = new Node<RuleEditorTreeNode, String>();
+        rootNode.setNodeType(RuleEditorTreeNode.ROOT_TYPE);
+
         myTree.setRootElement(rootNode);
 
         PropositionEditor prop = (PropositionEditor) rule.getProposition();
 
         if (prop != null){
-
-            addChildNode(rule, rootNode, prop);
+            Node firstNode = addChildNode(rule, rootNode, prop);
+            firstNode.setNodeType(firstNode.getNodeType() + " " + RuleEditorTreeNode.ROOT_TYPE);
         }
 
         return myTree;
@@ -53,59 +56,62 @@ public class RuleEditTreeBuilder extends AbstractTreeBuilder{
      * @param sprout - parent tree node
      * @param prop   - PropositionBo for which to make the tree node
      */
-    private void addChildNode(RuleEditor rule, Node sprout, PropositionEditor prop) {
+    private Node addChildNode(RuleEditor rule, Node sprout, PropositionEditor prop) {
         // Depending on the type of proposition (simple/compound), and the editMode,
         // Create a treeNode of the appropriate type for the node and attach it to the
         // sprout parameter passed in.
         // If the prop is a compound proposition, calls itself for each of the compoundComponents
         if (prop != null) {
+            // add a node for the description display with a child proposition node
+            Node<RuleEditorTreeNode, String> leaf = new Node<RuleEditorTreeNode, String>();
             if (PropositionType.SIMPLE.getCode().equalsIgnoreCase(prop.getPropositionTypeCode())) {
-                // Simple Proposition
-                // add a node for the description display with a child proposition node
-                Node<RuleEditorTreeNode, String> child = new Node<RuleEditorTreeNode, String>();
-
-                // Simple Proposition add a node for the description display with a child proposition node
+                // Simple Proposition: add a node for the description display with a child proposition node
                 if (prop.isEditMode()) {
-                    child.setNodeType(KSSimplePropositionEditNode.NODE_TYPE);
+                    leaf.setNodeType(KSSimplePropositionEditNode.NODE_TYPE);
                     KSSimplePropositionEditNode pNode = new KSSimplePropositionEditNode(prop);
-                    child.setData(pNode);
+                    leaf.setData(pNode);
                 } else {
-                    child.setNodeLabel(this.buildNodeLabel(rule, prop));
-                    child.setNodeType(KSSimplePropositionNode.NODE_TYPE);
+                    leaf.setNodeLabel(this.buildNodeLabel(rule, prop));
+                    leaf.setNodeType(KSSimplePropositionNode.NODE_TYPE);
                     KSSimplePropositionNode pNode = new KSSimplePropositionNode(prop);
-                    child.setData(pNode);
+                    leaf.setData(pNode);
                 }
-                sprout.getChildren().add(child);
+                sprout.getChildren().add(leaf);
             } else if (PropositionType.COMPOUND.getCode().equalsIgnoreCase(prop.getPropositionTypeCode())) {
-                // Compound Proposition
-                Node<RuleEditorTreeNode, String> aNode = new Node<RuleEditorTreeNode, String>();
-
-                // editMode has description as an editable field
+                // Compound Proposition: editMode has description as an editable field
                 if (prop.isEditMode()) {
-                    aNode.setNodeLabel("");
-                    aNode.setNodeType(KSCompoundPropositionEditNode.NODE_TYPE);
+                    leaf.setNodeLabel("");
+                    leaf.setNodeType(KSCompoundPropositionEditNode.NODE_TYPE);
                     KSCompoundPropositionEditNode pNode = new KSCompoundPropositionEditNode(prop);
-                    aNode.setData(pNode);
+                    leaf.setData(pNode);
                 } else {
-                    aNode.setNodeLabel(this.buildNodeLabel(rule, prop));
-                    aNode.setNodeType(RuleEditorTreeNode.COMPOUND_NODE_TYPE);
+                    leaf.setNodeLabel(this.buildNodeLabel(rule, prop));
+                    leaf.setNodeType(RuleEditorTreeNode.COMPOUND_NODE_TYPE);
                     RuleEditorTreeNode pNode = new RuleEditorTreeNode(prop);
-                    aNode.setData(pNode);
+                    leaf.setData(pNode);
                 }
-                sprout.getChildren().add(aNode);
+                sprout.getChildren().add(leaf);
 
                 int counter = 0;
                 for (PropositionEditor child : prop.getCompoundEditors()) {
                     // add an opcode node in between each of the children.
                     if (counter > 0) {
-                        addOpCodeNode(aNode, prop, counter);
+                        addOpCodeNode(leaf, prop, counter);
+                    }
+                    // call to build the childs node
+                    Node childNode = addChildNode(rule, leaf, child);
+                    if (counter==0){
+                        childNode.setNodeType(childNode.getNodeType() + " " + RuleEditorTreeNode.FIRST_IN_GROUP);
+                    }
+                    if (counter==prop.getCompoundEditors().size()-1){
+                        childNode.setNodeType(childNode.getNodeType() + " " + RuleEditorTreeNode.LAST_IN_GROUP);
                     }
                     counter++;
-                    // call to build the childs node
-                    addChildNode(rule, aNode, child);
                 }
             }
+            return leaf;
         }
+        return null;
     }
 
     private String buildNodeLabel(RuleEditor rule, PropositionEditor prop) {
