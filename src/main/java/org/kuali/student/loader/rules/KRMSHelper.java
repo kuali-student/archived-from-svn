@@ -18,6 +18,8 @@ package org.kuali.student.loader.rules;
 import org.kuali.rice.krms.api.repository.RuleManagementService;
 import org.kuali.rice.krms.api.repository.agenda.AgendaDefinition;
 import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
+import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinitionContract;
+import org.kuali.rice.krms.api.repository.language.NaturalLanguageTemplate;
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinition;
 import org.kuali.rice.krms.api.repository.reference.ReferenceObjectBinding;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinition;
@@ -43,8 +45,8 @@ public class KRMSHelper
     private TermRepositoryService termRepositoryService;
     private KrmsTypeRepositoryService krmsTypeRepositoryService;
 
-    public AgendaDefinition createAgenda(AgendaDefinition agenda){
-        return ruleManagementService.createAgenda(agenda);
+    public AgendaDefinition createAgenda(AgendaDefinition newAgenda){
+            return ruleManagementService.findCreateAgenda(newAgenda);
     }
 
     public void updateAgenda(AgendaDefinition agenda) {
@@ -60,7 +62,10 @@ public class KRMSHelper
     }
 
     public RuleDefinition createRule(RuleDefinition rule) {
-
+        RuleDefinition existing = ruleManagementService.getRuleByNameAndNamespace(rule.getName(),rule.getNamespace());
+        if(existing != null){
+            return existing;
+        }
         return ruleManagementService.createRule(rule);
     }
 
@@ -90,7 +95,34 @@ public class KRMSHelper
     }
 
     public ReferenceObjectBinding createReferenceObjectBinding(ReferenceObjectBinding referenceObjectDefinition){
-        return ruleManagementService.createReferenceObjectBinding(referenceObjectDefinition);
+        List<ReferenceObjectBinding> references = ruleManagementService.findReferenceObjectBindingsByKrmsObject(referenceObjectDefinition.getKrmsObjectId());
+        if(references != null && references.size()>0){
+            return references.get(0);
+        }
+        ReferenceObjectBinding ref = null;
+        try{
+            ref = ruleManagementService.createReferenceObjectBinding(referenceObjectDefinition);
+        }catch (Exception e){
+            System.out.println("Error creating ref");
+        }
+        return ref;
+    }
+
+    public AgendaItemDefinition getAgendaItem(String firstItemId) {
+        return ruleManagementService.getAgendaItem(firstItemId);
+    }
+
+    public RuleDefinition getRule(String id) {
+        return ruleManagementService.getRule(id);
+    }
+
+    public String getDescriptionForPropositionType(String typeId) {
+        String usageType = "KS-KRMS-NL-USAGE-1004";
+        if(typeId.equals("10076") || typeId.equals("10077")){
+            usageType = "KS-KRMS-NL-USAGE-1000";
+        }
+        NaturalLanguageTemplate template = ruleManagementService.findNaturalLanguageTemplateByLanguageCodeTypeIdAndNluId("en", typeId, usageType);
+        return template.getTemplate();
     }
 
     //GETTERS AND SETTERS

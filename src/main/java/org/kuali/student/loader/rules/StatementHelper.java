@@ -16,19 +16,14 @@
 package org.kuali.student.loader.rules;
 
 import org.kuali.student.loader.util.ContextInfoHelper;
-import org.kuali.student.r1.core.statement.dto.RefStatementRelationInfo;
-import org.kuali.student.r1.core.statement.dto.StatementTypeInfo;
-import org.kuali.student.r1.core.statement.dto.StatementInfo;
+import org.kuali.student.r1.core.statement.dto.*;
 import org.kuali.student.r1.core.statement.service.StatementService;
 import org.kuali.student.r2.common.exceptions.*;
-import org.kuali.student.r1.core.statement.dto.ReqComponentInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.service.CourseService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author christoff.botha
@@ -40,10 +35,9 @@ public class StatementHelper {
     private StatementService statementService;
     private CourseService courseService;
 
-    public List<StatementInfo> getRootStatements() {
-        //TODO hold a cached map of all statements to speed up if needed
-        Map<String, StatementInfo> rootStatements = new HashMap<String, StatementInfo>();
-        List<String> statementIDsToRemove = new ArrayList<String>();
+    public List<StatementTreeViewInfo> getRootStatements() {
+        List<StatementInfo> allStatements = new ArrayList<StatementInfo>();
+        List<StatementTreeViewInfo> rootStatements = new ArrayList<StatementTreeViewInfo>();
         String[] types = new String[]{
                 "kuali.statement.type.course.academicReadiness.antireq",
                 "kuali.statement.type.course.academicReadiness.coreq",
@@ -52,42 +46,40 @@ public class StatementHelper {
                 "kuali.statement.type.course.academicReadiness.studentEligibilityPrereq",
                 "kuali.statement.type.course.credit.repeatable",
                 "kuali.statement.type.course.credit.restriction",
-                "kuali.statement.type.course.recommendedPreparation"};
+                "kuali.statement.type.course.recommendedPreparation"
+        };
         try {
             for (String type : types) {
                 List<StatementInfo> statements = statementService.getStatementsByType(type);
                 if (statements != null) {
                     for (StatementInfo statement : statements) {
                         if (statement.getState().equals("Active")) {
-                            rootStatements.put(statement.getId(), statement);
+                            allStatements.add(statement);
                         }
                     }
                 }
             }
-        } catch (InvalidParameterException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (MissingParameterException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (OperationFailedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (DoesNotExistException e) {
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        //collect the IDs for all non-root statements
-        for (String id : rootStatements.keySet()) {
-            for (StatementInfo info : rootStatements.values()) {
-                if (info.getStatementIds().contains(id)) {
-                    statementIDsToRemove.add(id);
-                    break; //skip to the next id
+        for (StatementInfo info : allStatements) {
+            try {
+                List<RefStatementRelationInfo> rels = statementService.getRefStatementRelationsByStatement(info.getId());
+                if (rels != null) {
+                    for (RefStatementRelationInfo relation : rels) {
+                        try {
+                            CourseInfo course = courseService.getCourse(relation.getRefObjectId(), contextInfoHelper.getDefaultContextInfo());
+                            rootStatements.add(statementService.getStatementTreeView(relation.getStatementId()));
+                        } catch (DoesNotExistException e) {
+                            continue;
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-
         }
-        //remove all the non root items
-        for (String id : statementIDsToRemove) {
-            rootStatements.remove(id);
-        }
-        return new ArrayList<StatementInfo>(rootStatements.values());
+        return rootStatements;
     }
 
     public List<StatementInfo> getChildStatementsForStatement(String statementId) {
