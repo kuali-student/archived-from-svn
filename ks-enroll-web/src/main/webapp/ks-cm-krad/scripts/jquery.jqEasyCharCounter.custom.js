@@ -27,7 +27,8 @@ $.fn.extend({
 					msgFontFamily: 'Arial',
 					msgTextAlign: 'right',
 					msgWarningColor: '#F00',
-					msgAppendMethod: 'insertAfter'
+					msgAppendMethod: 'insertAfter',
+					msgText: 'characters left'//added this
                 }, givenOptions);
 	
 			if(options.maxChars <= 0) return;
@@ -49,8 +50,8 @@ $.fn.extend({
 			// bind events to this element
 			$this
 				.bind('keydown keyup keypress', doCount)
-				.bind('focus paste', function(){setTimeout(doCount, 10);})
-				.bind('blur', function(){jqEasyCounterMsg.stop().fadeTo( 'fast', 0);return false;});
+				.bind('focus paste', function(){setTimeout(doCount, 10);});
+				//.bind('blur', function(){jqEasyCounterMsg.stop().fadeTo( 'fast', 0);return false;}); //commented this - we always want the message to show
 			
 			function doCount(){
 				var val = $this.val(),
@@ -73,9 +74,12 @@ $.fn.extend({
 					jqEasyCounterMsg.css({"color" : options.msgFontColor});
 				};
 				
-				jqEasyCounterMsg.html('Characters: ' + $this.val().length + "/" + options.maxChars);
+				jqEasyCounterMsg.html(options.maxChars - $this.val().length + ' ' + options.msgText); //edited this
                 jqEasyCounterMsg.stop().fadeTo( 'fast', 1);
-			};
+            };
+            
+            doCount(); //added this - initially show the message
+            
         });
     }
 });
