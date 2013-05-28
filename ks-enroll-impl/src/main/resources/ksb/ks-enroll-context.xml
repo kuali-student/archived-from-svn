@@ -913,6 +913,7 @@
                  <ref bean="ActivityOfferingSearchServiceImpl"/>
                  <ref bean="CoreSearchServiceImpl"/> <!-- This bean lives in ks-core-no-tx-context.xml  -->
                  <ref bean="InstructorSearchServiceImpl"/>
+                 <ref bean="orgSearchServiceImpl" />
             </list>
         </property>                
     </bean>
@@ -981,6 +982,30 @@
         <property name="orgOrgRelationCriteriaLookupService" ref="defaultCriteriaLookupService"/>
         <property name="orgPersonRelationCriteriaLookupService" ref="defaultCriteriaLookupService"/>
         <property name="orgPositionRestrictionCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="searchService" ref="searchService" />
+        <property name="typeService" ref="typeService" />
+    </bean>
+
+    <bean id="organizationHierarchySearch"
+          class="org.kuali.student.r1.core.organizationsearch.service.impl.OrganizationHierarchySearch">
+        <property name="orgDao" ref="orgDao"/>
+        <property name="orgOrgRelationDao" ref="orgOrgRelationDao" />
+    </bean>
+
+    <bean id="orgSearchManager"
+          class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
+        <constructor-arg index="0" value="classpath:organization-search-config.xml" />
+        <property name="dao" ref="enrollSearchableDao"/>
+    </bean>
+
+    <bean id="orgSearchServiceImpl"
+          class="org.kuali.student.r2.core.class1.search.OrganizationSearchServiceImpl">
+        <property name="searchManager" ref="orgSearchManager" />
+        <property name="searchOperations">
+            <map>
+                <entry key="org.search.orgQuickViewByRelationTypeOrgTypeRelatedOrgIds" value-ref="organizationHierarchySearch"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="ks.exp.organizationService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
