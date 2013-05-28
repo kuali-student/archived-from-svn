@@ -17,6 +17,7 @@ package org.kuali.student.loader;
 
 import java.io.PrintStream;
 import org.kuali.student.loader.atp.AtpLoaderFromCommandLine;
+import org.kuali.student.loader.course.CourseDeleterFromCommandLine;
 import org.kuali.student.loader.course.CreditCourseLoaderFromCommandLine;
 import org.kuali.student.loader.enumeration.EnumeratedValueLoaderFromCommandLine;
 import org.kuali.student.loader.organization.OrgOrgRelationLoaderFromCommandLine;
@@ -135,7 +136,7 @@ public class LoadFromCommandLine
    String[] args = new String[2];
    args[0] = inFile;
    args[1] = hostUrl;
-   CreditCourseLoaderFromCommandLine.main (args);
+   CourseDeleterFromCommandLine.main (args);
    return;
   }
   if (whatToLoad.equalsIgnoreCase ("program"))
