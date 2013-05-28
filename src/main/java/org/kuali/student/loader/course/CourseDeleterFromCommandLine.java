@@ -19,10 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.kuali.student.loader.atp.AtpServiceFactory;
-import org.kuali.student.loader.organization.OrganizationServiceFactory;
-import org.kuali.student.r2.core.atp.service.AtpService;
-import org.kuali.student.r2.core.organization.service.OrganizationService;
 
 /**
  * 
