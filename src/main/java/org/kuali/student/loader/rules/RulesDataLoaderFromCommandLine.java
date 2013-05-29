@@ -57,12 +57,33 @@ public class RulesDataLoaderFromCommandLine {
             //Assume source and destination are the same
             String sourceHost = args[0];
             String destHost = args[0];
-            generate(sourceHost, destHost);
+            //generate(sourceHost, destHost);
+            copy(sourceHost);
         } else {
             String sourceHost = args[0];
             String destHost = args[1];
-            generate(sourceHost, destHost);
+            //generate(sourceHost, destHost);
+            copy(sourceHost);
         }
+    }
+
+    protected void copy(String sourceHostUrl){
+        RulesDataCLUtoCOCopier copier = new RulesDataCLUtoCOCopier();
+        ServiceFactory serviceFactory = new ServiceFactory();
+        serviceFactory.setHostUrl(sourceHostUrl);
+        System.out.println("Connecting to Course Service...");
+        copier.setCourseService(serviceFactory.getCourseService());
+        System.out.println("Connecting to RuleManagement Service...");
+        copier.setRuleManagementService(serviceFactory.getRuleManagementService());
+        System.out.println("Connecting to KRMS Type Repository Service...");
+        copier.setKrmsTypeRepositoryService(serviceFactory.getKrmsTypeRepositoryService());
+        System.out.println("Connecting to Term Repository Service...");
+        copier.setTermRepositoryService(serviceFactory.getTermRepositoryService());
+
+        System.out.println(new Date() + " starting copy... ");
+        copier.startCopy();
+
+        System.out.println(new Date() + " Done with copy... ");
     }
 
     protected void generate(String sourceHostUrl, String destHostUrl) {
