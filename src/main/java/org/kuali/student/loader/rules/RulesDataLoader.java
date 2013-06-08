@@ -16,6 +16,7 @@ import org.kuali.rice.krms.api.repository.term.TermSpecificationDefinition;
 import org.kuali.student.krms.naturallanguage.util.KsKrmsConstants;
 import org.kuali.student.r1.core.statement.dto.*;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
+import sun.org.mozilla.javascript.internal.ScriptRuntime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,25 +67,61 @@ public class RulesDataLoader {
                 String krmsRuleType = statementTypeToruleTypeConversionMap.get(statementTreeRoot.getType());
                 String krmsAgendaType = ruleTypeToAgendaTypeRelationMap.get(krmsRuleType);// krms type type relation
                 String krmsAgendaTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, krmsAgendaType).getId();
-                AgendaDefinition agenda = AgendaDefinition.Builder.create(null, currentRelatedCourse.getCode() + " " + typeName, krmsAgendaTypeID, "10000").build();
+
+
+                AgendaDefinition agenda = AgendaDefinition.Builder.create(null, currentRelatedCourse.getId() + ":" + shortenTypeName(krmsAgendaType) + ":1", krmsAgendaTypeID, "10000").build();
+                //This does do a find create so it will return the existing one if found
                 currentAgenda = krmsHelper.createAgenda(agenda);
 
-                //create a link between this agenda and clu that was linked to this statement
+                //create a link between this agenda and clu that was linked to this statement.
                 ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create("Agenda", currentAgenda.getId(), KsKrmsConstants.NAMESPACE_CODE, "kuali.lu.type.CreditCourse", currentRelatedCourse.getId());
                 refBldr.setCollectionName("Course");
                 refBldr.setActive(true);
-                krmsHelper.createReferenceObjectBinding(refBldr.build());
+                krmsHelper.createReferenceObjectBinding(refBldr.build()); //Also does a find to check if it exists so we dont create a duplicate relation.
 
                 //Create root rule
                 String krmsRuleTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, krmsRuleType).getId();
-                ruleBuilder = RuleDefinition.Builder.create(null, currentRelatedCourse.getCode() + " " + typeName, KsKrmsConstants.NAMESPACE_CODE, krmsRuleTypeID, null);
+                ruleBuilder = RuleDefinition.Builder.create(null, currentRelatedCourse.getId() + ":" + shortenTypeName(krmsRuleType) + ":1", KsKrmsConstants.NAMESPACE_CODE, krmsRuleTypeID, null);
                 //currentRule = krmsHelper.createRule(ruleBuilder.build());
             } else {
                 System.out.println("Error: There is no mapping to a rule type for this statement type: " + statementTreeRoot.getType());
                 continue; // skip this statement
             }
-            //Get agenda item created by rulemanagment service and update the rule id
-            AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(krmsHelper.getAgendaItem(currentAgenda.getFirstItemId()));
+            //Go through agenda items and check if a rule for this ruleType already exists otherwise add to the agenda item list
+            AgendaItemDefinition agendaItem = null;
+            boolean foundMatching = false;
+            do {
+                if (agendaItem == null) {
+                    //get first
+                    agendaItem = krmsHelper.getAgendaItem(currentAgenda.getFirstItemId());
+                } else {
+                    //get next
+                    agendaItem = krmsHelper.getAgendaItem(agendaItem.getWhenTrue().getId());
+                }
+                if(agendaItem.getRuleId()!= null){
+                    RuleDefinition rule = krmsHelper.getRule(agendaItem.getRuleId());
+                    // if rule matches, this is our agenda item, break out of loop
+                    if(rule.getTypeId().equals(ruleBuilder.getTypeId())){
+                        foundMatching = true;
+                        break;
+                    }
+                }
+            } while (agendaItem.getWhenTrue() != null);
+
+            AgendaItemDefinition.Builder agendaItemBuilder = null;
+            if(agendaItem.getRuleId() != null && !foundMatching){
+                // update previous items whenTrue field with a new agenda item
+                AgendaItemDefinition.Builder existingAgendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItem);
+                existingAgendaItemBuilder.setWhenTrue(AgendaItemDefinition.Builder.create(null,currentAgenda.getId()));
+                krmsHelper.updateAgendaItem(existingAgendaItemBuilder.build());
+                AgendaItemDefinition existingAgendaItem = krmsHelper.getAgendaItem(agendaItem.getId());
+                agendaItemBuilder = AgendaItemDefinition.Builder.create(krmsHelper.getAgendaItem(existingAgendaItem.getWhenTrueId()));
+
+            }else{
+                agendaItemBuilder = AgendaItemDefinition.Builder.create(agendaItem);
+            }
+
+
             if(agendaItemBuilder.getRuleId() == null){
                 agendaItemBuilder.setRule(ruleBuilder);
                 krmsHelper.updateAgendaItem(agendaItemBuilder.build());
@@ -95,17 +132,16 @@ public class RulesDataLoader {
             //process the required components for this rule
             processReqCompsForRoot(statementTreeRoot);
 
-            //process the children of this statement
-            //processSubStatementsForStatement(statementTreeRoot);
-
             System.out.println("Finished Processing Statement: " + statementTreeRoot.getId());
             rootStatementsProcessed++;
         }
+
         System.out.println("Done! Successfully processed " + rootStatementsProcessed + " root statements out of " + rootStatements.size());
     }
 
 
     private void processReqCompsForRoot(StatementTreeViewInfo rootStatement) {
+
         List<ReqComponentInfo> reqComponentInfoList = rootStatement.getReqComponents();
         PropositionDefinition.Builder initPropBuilder = null;
         if (reqComponentInfoList.size() == 0) {
@@ -171,7 +207,8 @@ public class RulesDataLoader {
                     //create term parameter
                     TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
                     parameters.add(termParamBuilder);
-                }}
+                }
+            }
             // update the term with the created parameters
             termBuilder = TermDefinition.Builder.create(term);
             termBuilder.setParameters(parameters);
@@ -242,18 +279,19 @@ public class RulesDataLoader {
                     TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, unmappedReqCompText);
                     parameters.add(termParamBuilder);
                 } else {
-                for (ReqCompFieldInfo reqCompField : reqComponent.getReqCompFields()) {
-                    if (reqCompField.getType().equals("kuali.reqComponent.field.type.value.positive.integer") || reqCompField.getType().equals("kuali.reqComponent.field.type.gpa")) {
-                        constantParam = reqCompField.getValue();
-                        continue; //this constant will be set as a parameter on the proposition
-                    }
-                    String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                    //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
+                    for (ReqCompFieldInfo reqCompField : reqComponent.getReqCompFields()) {
+                        if (reqCompField.getType().equals("kuali.reqComponent.field.type.value.positive.integer") || reqCompField.getType().equals("kuali.reqComponent.field.type.gpa")) {
+                            constantParam = reqCompField.getValue();
+                            continue; //this constant will be set as a parameter on the proposition
+                        }
+                        String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
+                        //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
 
-                    //create term parameter
-                    TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
-                    parameters.add(termParamBuilder);
-                }}
+                        //create term parameter
+                        TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
+                        parameters.add(termParamBuilder);
+                    }
+                }
                 // update the term with the created parameters
                 termBuilder = TermDefinition.Builder.create(term);
                 termBuilder.setParameters(parameters);
@@ -268,8 +306,8 @@ public class RulesDataLoader {
                 //create the proposition
                 PropositionDefinition.Builder propBuilder = PropositionDefinition.Builder.create(null, PropositionType.SIMPLE.getCode(), currentRule.getId(), propositionTypeID, propParams);
                 String description = krmsHelper.getDescriptionForPropositionType(propositionTypeID);
-                if(description.length()> 99){
-                    description = description.substring(0,99);
+                if (description.length() > 99) {
+                    description = description.substring(0, 99);
                 }
                 propBuilder.setDescription(description);
 
@@ -294,17 +332,38 @@ public class RulesDataLoader {
 
         //save init prop
         String description = krmsHelper.getDescriptionForPropositionType(initPropBuilder.getTypeId());
-        if(description.length()> 99){
-            description = description.substring(0,99);
+        if (description.length() > 99) {
+            description = description.substring(0, 99);
         }
         initPropBuilder.setDescription(description);
 
         //update the init prop id on rule
         RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(currentRule);
+        if(currentRule.getTypeId().equals("10010") && currentRule.getProposition() != null ){
+            // create a new compound AND proposition as the root on this rule
+            String propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+            PropositionDefinition.Builder newRootPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
+            newRootPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
+
+            // add the existing prop and initPropBuilder as children of newRootPropBuilder
+            List<PropositionDefinition.Builder> childProps = newRootPropBuilder.getCompoundComponents();
+            if (childProps == null) {
+                childProps = new ArrayList<PropositionDefinition.Builder>();
+            }
+            childProps.add(PropositionDefinition.Builder.create(currentRule.getProposition()));
+            childProps.add(initPropBuilder);
+            newRootPropBuilder.setCompoundComponents(childProps);
+
+            //Add newly created root to the rule
+            ruleBuilder.setProposition(newRootPropBuilder);
+            ruleBuilder.setPropId(null);
+            krmsHelper.updateRule(ruleBuilder.build());
+            currentRule = krmsHelper.getRule(currentRule.getId());
+        }else{
         ruleBuilder.setProposition(initPropBuilder);
         krmsHelper.updateRule(ruleBuilder.build());
         currentRule = krmsHelper.getRule(currentRule.getId());
-
+        }
     }
 
     private void processReqCompsForSubStatement(StatementTreeViewInfo statement, PropositionDefinition.Builder compoundPropBuilder) {
@@ -425,8 +484,8 @@ public class RulesDataLoader {
                 TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
                 if (template == null) {
                     System.out.println("Warning: Converting to free text. reqComponent: " + reqComponent.getType() + ". There is no term spec for this proposition type: " + propositionType);
-                    propositionType = "kuali.krms.proposition.type.freeform.text";
                     unmappedReqCompText = "No term spec for proposition type: " + propositionType;
+                    propositionType = "kuali.krms.proposition.type.freeform.text";
                     propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
                     template = propositionTypeTemplateInfoMap.get(propositionType);
                 }
@@ -471,8 +530,8 @@ public class RulesDataLoader {
                 //create the proposition
                 PropositionDefinition.Builder propBuilder = PropositionDefinition.Builder.create(null, PropositionType.SIMPLE.getCode(), currentRule.getId(), propositionTypeID, propParams);
                 String description = krmsHelper.getDescriptionForPropositionType(propositionTypeID);
-                if(description.length()> 99){
-                     description = description.substring(0,99);
+                if (description.length() > 99) {
+                    description = description.substring(0, 99);
                 }
                 propBuilder.setDescription(description);
 
@@ -497,8 +556,8 @@ public class RulesDataLoader {
 
 
         String description = krmsHelper.getDescriptionForPropositionType(initPropBuilder.getTypeId());
-        if(description.length()> 99){
-            description = description.substring(0,99);
+        if (description.length() > 99) {
+            description = description.substring(0, 99);
         }
         initPropBuilder.setDescription(description);
 
@@ -512,10 +571,20 @@ public class RulesDataLoader {
 
     }
 
+    private String shortenTypeName(String nameToShorten){
+        String shortName = null;
+        if(nameToShorten.contains("agenda")){
+            shortName = nameToShorten.substring(23);
+        }else{
+            shortName = nameToShorten.substring(21);
+        }
+        return shortName;
+    }
+
     private void initTypeConversionMaps() {
 
         statementTypeToruleTypeConversionMap = new HashMap<String, String>();
-        statementTypeToruleTypeConversionMap.put("kuali.statement.type.course.academicReadiness.studentEligibility", "kuali.krms.rule.type.course.academicReadiness.studentEligibility");
+        statementTypeToruleTypeConversionMap.put("kuali.statement.type.course.academicReadiness.studentEligibility", "kuali.krms.rule.type.course.academicReadiness.studentEligibilityPrereq");
         statementTypeToruleTypeConversionMap.put("kuali.statement.type.course.academicReadiness.studentEligibilityPrereq", "kuali.krms.rule.type.course.academicReadiness.studentEligibilityPrereq");
         statementTypeToruleTypeConversionMap.put("kuali.statement.type.course.academicReadiness.prereq", "kuali.krms.rule.type.course.academicReadiness.studentEligibilityPrereq");
         statementTypeToruleTypeConversionMap.put("kuali.statement.type.course.academicReadiness.coreq", "kuali.krms.rule.type.course.academicReadiness.coreq");

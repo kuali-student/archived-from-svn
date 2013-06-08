@@ -76,6 +76,10 @@ public class RulesDataCLUtoCOCopier {
         //get the agendas linked to this clu
         List<ReferenceObjectBinding> refs = this.ruleManagementService.findReferenceObjectBindingsByReferenceObject("kuali.lu.type.CreditCourse", cluID);
         for (ReferenceObjectBinding reference : refs) {
+            //TODO remove this limit to an Agenda
+//            if (!reference.getKrmsObjectId().equals("10499")) {
+//                continue;
+//            }
             AgendaTreeDefinition agendaTree = ruleManagementService.getAgendaTree(reference.getKrmsObjectId());
             //copy to all the luis linked to this clu and term
             for (LuiInfoHelper lui : luiList) {
@@ -89,26 +93,34 @@ public class RulesDataCLUtoCOCopier {
                 ReferenceObjectBinding refBinding = ruleManagementService.createReferenceObjectBinding(refBldr.build());
                 System.out.println("Created reference between Agenda: "+clonedAgenda.getId()+" and Course Offering: "+lui.getLuiID());
             }
-            System.out.println("Cloned Agenda: "+agendaTree.getAgendaId()+" for "+luiList.size()+" course offerings");
+            System.out.println("Cloned Agenda: " + agendaTree.getAgendaId()+" for "+luiList.size()+" course offerings");
         }
     }
 
     private AgendaDefinition deepCloneAgenda(AgendaTreeDefinition agendaTree, String luiID, String luiCode, String atpCode) {
         //clone the Agenda
         AgendaDefinition oldAgenda = ruleManagementService.getAgenda(agendaTree.getAgendaId());
-        String agendaTypeName = oldAgenda.getName().substring(oldAgenda.getName().lastIndexOf(" ") + 1);
-        AgendaDefinition agenda = AgendaDefinition.Builder.create(null, atpCode + " " + luiCode + " " + agendaTypeName, oldAgenda.getTypeId(), oldAgenda.getContextId()).build();
+        String agendaTypeName = krmsTypeRepositoryService.getTypeById(oldAgenda.getTypeId()).getName();
+        AgendaDefinition agenda = AgendaDefinition.Builder.create(null, luiID + ":" + shortenTypeName(agendaTypeName) + ":1" , oldAgenda.getTypeId(), oldAgenda.getContextId()).build();
         agenda = ruleManagementService.createAgenda(agenda);
         System.out.println("Created Agenda: " + agenda.getId() + " from " + oldAgenda.getId());
         System.out.println("Created Agenda Item: " + agenda.getFirstItemId());
+        List<AgendaItemDefinition> agendaItems = new ArrayList<AgendaItemDefinition>();
+        AgendaTreeEntryDefinitionContract entry = agendaTree.getEntries().get(0);
+        AgendaItemDefinition firstItem =  ruleManagementService.getAgendaItem(entry.getAgendaItemId());
+        agendaItems.add(firstItem);
+        if(firstItem.getWhenTrueId()!= null){
+            agendaItems.add(ruleManagementService.getAgendaItem(firstItem.getWhenTrueId()));
+        }
 
+        AgendaItemDefinition previousAgendaItem = null;
         boolean firstRule = true;
-        for (AgendaTreeEntryDefinitionContract entry : agendaTree.getEntries()) {
-            AgendaItemDefinition currentAgendaItem = ruleManagementService.getAgendaItem(entry.getAgendaItemId());
+        for (AgendaItemDefinition currentAgendaItem : agendaItems) {
+            //AgendaItemDefinition currentAgendaItem = ruleManagementService.getAgendaItem(entry.getAgendaItemId());
             //process the rule
             RuleDefinition currentRule = currentAgendaItem.getRule();
-            String ruleTypeName = currentRule.getName().substring(currentRule.getName().lastIndexOf(" ") + 1);
-            RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(null, atpCode + " " + luiCode + " " + ruleTypeName, currentRule.getNamespace(), currentRule.getTypeId(), null);
+            String ruleTypeName =  krmsTypeRepositoryService.getTypeById(currentRule.getTypeId()).getName();
+            RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(null, luiID + ":" + shortenTypeName(ruleTypeName) + ":1", currentRule.getNamespace(), currentRule.getTypeId(), null);
 
             //update/create agenda item for this new rule
             String ruleID = null;
@@ -119,14 +131,22 @@ public class RulesDataCLUtoCOCopier {
                     ruleManagementService.updateAgendaItem(agendaItemBuilder.build());
                 }
                 ruleID = ruleManagementService.getAgendaItem(agendaItemBuilder.getId()).getRuleId();
+                previousAgendaItem = ruleManagementService.getAgendaItem(agendaItemBuilder.getId());
             } else { //create new agenda item for this new rule
                 AgendaItemDefinition.Builder agendaItemBuilder = AgendaItemDefinition.Builder.create(null, agenda.getId());
                 agendaItemBuilder.setRule(ruleBuilder);
-                AgendaItemDefinition newItem = ruleManagementService.createAgendaItem(agendaItemBuilder.build());
-                System.out.println("Created Agenda Item: " + newItem.getId());
-                ruleID = newItem.getRuleId();
-                //TODO update the ifTrue field on the previous agenda item
+                //update the whenTrue field on the previous agenda item
+                AgendaItemDefinition.Builder existingAgendaItemBuilder = AgendaItemDefinition.Builder.create(previousAgendaItem);
+                RuleDefinition existingRule = ruleManagementService.getRule(existingAgendaItemBuilder.getRuleId());
+                existingAgendaItemBuilder.setRule(RuleDefinition.Builder.create(existingRule));
+                existingAgendaItemBuilder.setWhenTrue(agendaItemBuilder);
+                ruleManagementService.updateAgendaItem(existingAgendaItemBuilder.build());
+                AgendaItemDefinition existingAgendaItem = ruleManagementService.getAgendaItem(previousAgendaItem.getId());
+                previousAgendaItem = ruleManagementService.getAgendaItem(existingAgendaItem.getWhenTrueId());
+                System.out.println("Created Agenda Item: " + previousAgendaItem.getId());
+                ruleID = previousAgendaItem.getRuleId();
             }
+
             System.out.println("Created Rule: " + ruleID);
 
             //recursively process the propositions
@@ -138,6 +158,7 @@ public class RulesDataCLUtoCOCopier {
             ruleManagementService.updateRule(ruleBuilder.build());
             System.out.println("Created Root Proposition: " + ruleManagementService.getRule(ruleID).getProposition().getId());
             firstRule = false;
+
         }
         return agenda;
     }
@@ -203,6 +224,17 @@ public class RulesDataCLUtoCOCopier {
             luiMap.put(cluId, newList);
         }
     }
+
+    private String shortenTypeName(String nameToShorten){
+        String shortName = null;
+        if(nameToShorten.contains("agenda")){
+            shortName = nameToShorten.substring(23);
+        }else{
+            shortName = nameToShorten.substring(21);
+        }
+        return shortName;
+    }
+
 
     private void loadCluToLuiData() {
         addToLuiMap("002df664-1ad0-4fa3-9138-087112bce072", new LuiInfoHelper("ff883e0c-f100-48ad-a158-3b84f3cb17dd", "ENGL310", "201208"));
@@ -298,7 +330,6 @@ public class RulesDataCLUtoCOCopier {
         addToLuiMap("6a81b2da-a809-4ce4-9c7d-6bc90ba28be1", new LuiInfoHelper("6f6719f3-a416-4863-8a80-81cdca53d9f8", "BSCI420", "201208"));
         addToLuiMap("6ba96f9e-fa38-45db-b06b-59991c1c63eb", new LuiInfoHelper("0f074dc5-91ec-4a9d-9f27-decbdbb79e8e", "PHYS832", "201208"));
         addToLuiMap("6dccaf6a-a7ae-4e7c-b2f6-8a07ed68f376", new LuiInfoHelper("9930d57f-d4ee-4029-be49-0bd478d4c175", "ENGL466", "201208"));
-        addToLuiMap("6efed35c-8a4c-46d0-9859-44e5c190f72b", new LuiInfoHelper("3878fd27-bd5f-4547-94c7-969a725f1b3e", "WMST444", "201208"));
         addToLuiMap("6efed35c-8a4c-46d0-9859-44e5c190f72b", new LuiInfoHelper("3878fd27-bd5f-4547-94c7-969a725f1b3e", "ENGL444", "201208"));
         addToLuiMap("6f6f7cf2-e746-423b-ba7e-de8d924700f1", new LuiInfoHelper("65810eb5-1512-49e5-9b46-ee5542d234e2", "BSCI426", "201208"));
         addToLuiMap("6f7eeec8-866e-4b11-81b2-6f091b79b6f4", new LuiInfoHelper("a6e22a6d-9118-488f-b560-cb08a5a5e67c", "WMST300", "201208"));
@@ -441,7 +472,6 @@ public class RulesDataCLUtoCOCopier {
         addToLuiMap("b7816033-91ef-42f0-b05b-9cd42bcde0c7", new LuiInfoHelper("2429d23b-4293-4c78-b2fe-6f837ab2f121", "HIST232", "201208"));
         addToLuiMap("be959064-e46d-48cf-9eb1-6201e0484a19", new LuiInfoHelper("49ba43d0-d5da-4d31-9ef0-c5ddf947bc52", "BSCI223", "201208"));
         addToLuiMap("befe1ac4-332b-48dd-97f1-86f4fea032ff", new LuiInfoHelper("b8df2d80-0a59-482c-b098-2830f1061c6f", "HIST492", "201208"));
-        addToLuiMap("befe1ac4-332b-48dd-97f1-86f4fea032ff", new LuiInfoHelper("b8df2d80-0a59-482c-b098-2830f1061c6f", "WMST456", "201208"));
         addToLuiMap("bfd8f468-df65-4f53-9c28-52dc5efb4487", new LuiInfoHelper("c0f8bc43-886e-4f6d-8306-4809cc7f3a8c", "BSCI442", "201208"));
         addToLuiMap("c09fbe38-a870-45f3-b2ed-183ac16bb7e0", new LuiInfoHelper("6483a682-99cb-49f0-8218-c9d3bd8437af", "WMST709", "201208"));
         addToLuiMap("c24c0896-991d-453a-94e0-64cc9f77ddff", new LuiInfoHelper("34296855-c304-4073-a69f-06261b56c934", "HIST608N", "201208"));
