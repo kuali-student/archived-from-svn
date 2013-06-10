@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<schema>
+    <foreignKey foreignTableName="KREN_CHNL_T" localTableName="KREN_CHNL_SUBSCRP_T" name="KREN_CHAN_SUBSCRP_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CHNL_ID</foreignColumnNames>
+        <localColumnNames>CHNL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_CHNL_T" localTableName="KREN_CHNL_PRODCR_T" name="KREN_CHNL_PRODCR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CHNL_ID</foreignColumnNames>
+        <localColumnNames>CHNL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_MSG_T" localTableName="KREN_MSG_DELIV_T" name="KREN_MSG_DELIV_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>MSG_ID</foreignColumnNames>
+        <localColumnNames>MSG_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_CHNL_T" localTableName="KREN_NTFCTN_T" name="KREN_NTFCTN_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CHNL_ID</foreignColumnNames>
+        <localColumnNames>CHNL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_NTFCTN_T" localTableName="KREN_NTFCTN_MSG_DELIV_T" name="KREN_NTFCTN_MSG_DELIV_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NTFCTN_ID</foreignColumnNames>
+        <localColumnNames>NTFCTN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_NTFCTN_T" localTableName="KREN_RECIP_T" name="KREN_RECIP_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NTFCTN_ID</foreignColumnNames>
+        <localColumnNames>NTFCTN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_CHNL_T" localTableName="KREN_RECIP_LIST_T" name="KREN_RECIP_LIST_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CHNL_ID</foreignColumnNames>
+        <localColumnNames>CHNL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREN_NTFCTN_T" localTableName="KREN_SNDR_T" name="KREN_SNDR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NTFCTN_ID</foreignColumnNames>
+        <localColumnNames>NTFCTN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_DOC_TYP_APP_STAT_CAT_T" localTableName="KREW_DOC_TYP_APP_DOC_STAT_T" name="KREW_DOC_TYP_APP_DOC_STAT_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CAT_NM</foreignColumnNames>
+        <foreignColumnNames>DOC_TYP_ID</foreignColumnNames>
+        <localColumnNames>CAT_NM</localColumnNames>
+        <localColumnNames>DOC_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_DOC_TYP_T" localTableName="KREW_DOC_TYP_APP_STAT_CAT_T" name="KREW_DOC_TYP_APP_STAT_CAT_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>DOC_TYP_ID</foreignColumnNames>
+        <localColumnNames>DOC_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_ATTR_DEFN_T" localTableName="KREW_PPL_FLW_ATTR_T" name="KREW_PPL_FLW_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_PPL_FLW_MBR_T" localTableName="KREW_PPL_FLW_DLGT_T" name="KREW_PPL_FLW_DLGT_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PPL_FLW_MBR_ID</foreignColumnNames>
+        <localColumnNames>PPL_FLW_MBR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_TYP_T" localTableName="KREW_PPL_FLW_T" name="KREW_PPL_FLW_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TYP_ID</foreignColumnNames>
+        <localColumnNames>TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_PPL_FLW_T" localTableName="KREW_PPL_FLW_MBR_T" name="KREW_PPL_FLW_MBR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PPL_FLW_ID</foreignColumnNames>
+        <localColumnNames>PPL_FLW_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_RULE_EXPR_T" localTableName="KREW_RULE_T" name="KREW_RULE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>RULE_EXPR_ID</foreignColumnNames>
+        <localColumnNames>RULE_EXPR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KREW_ATTR_DEFN_T" localTableName="KREW_TYP_ATTR_T" name="KREW_TYP_ATTR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_DLGN_MBR_ATTR_DATA_T" name="KRIM_DLGN_MBR_ATTR_DATA_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_DLGN_T" localTableName="KRIM_DLGN_MBR_T" name="KRIM_DLGN_MBR_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>DLGN_ID</foreignColumnNames>
+        <localColumnNames>DLGN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ROLE_T" localTableName="KRIM_DLGN_T" name="KRIM_DLGN_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ROLE_ID</foreignColumnNames>
+        <localColumnNames>ROLE_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ADDR_TYP_T" localTableName="KRIM_ENTITY_ADDR_T" name="KRIM_ENTITY_ADDR_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ADDR_TYP_CD</foreignColumnNames>
+        <localColumnNames>ADDR_TYP_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_AFLTN_TYP_T" localTableName="KRIM_ENTITY_AFLTN_T" name="KRIM_ENTITY_AFLTN_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>AFLTN_TYP_CD</foreignColumnNames>
+        <localColumnNames>AFLTN_TYP_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_CTZNSHP_STAT_T" localTableName="KRIM_ENTITY_CTZNSHP_T" name="KRIM_ENTITY_CTZNSHP_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CTZNSHP_STAT_CD</foreignColumnNames>
+        <localColumnNames>CTZNSHP_STAT_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_ENT_TYP_T" localTableName="KRIM_ENTITY_EMAIL_T" name="KRIM_ENTITY_EMAIL_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <foreignColumnNames>ENT_TYP_CD</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+        <localColumnNames>ENT_TYP_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_EMP_STAT_T" localTableName="KRIM_ENTITY_EMP_INFO_T" name="KRIM_ENTITY_EMP_INFO_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>EMP_STAT_CD</foreignColumnNames>
+        <localColumnNames>EMP_STAT_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_ENT_TYP_T" name="KRIM_ENTITY_ENT_TYP_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_ETHNIC_T" name="KRIM_ENTITY_ETHNIC_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_EXT_ID_T" name="KRIM_ENTITY_EXT_ID_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_NM_T" name="KRIM_ENTITY_NM_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_ENT_TYP_T" localTableName="KRIM_ENTITY_PHONE_T" name="KRIM_ENTITY_PHONE_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <foreignColumnNames>ENT_TYP_CD</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+        <localColumnNames>ENT_TYP_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_RESIDENCY_T" name="KRIM_ENTITY_RESIDENCY_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_ENTITY_VISA_T" name="KRIM_ENTITY_VISA_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_GRP_ATTR_DATA_T" name="KRIM_GRP_ATTR_DATA_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_GRP_T" localTableName="KRIM_GRP_MBR_T" name="KRIM_GRP_MBR_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>GRP_ID</foreignColumnNames>
+        <localColumnNames>GRP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_TYP_T" localTableName="KRIM_GRP_T" name="KRIM_GRP_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_TYP_ID</foreignColumnNames>
+        <localColumnNames>KIM_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_PERM_ATTR_DATA_T" name="KRIM_PERM_ATTR_DATA_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_TYP_T" localTableName="KRIM_PERM_TMPL_T" name="KRIM_PERM_TMPL_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_TYP_ID</foreignColumnNames>
+        <localColumnNames>KIM_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_PERM_TMPL_T" localTableName="KRIM_PERM_T" name="KRIM_PERM_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PERM_TMPL_ID</foreignColumnNames>
+        <localColumnNames>PERM_TMPL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_PERSON_DOCUMENT_T" localTableName="KRIM_PND_AFLTN_MT" name="KRIM_PND_AFLTN_MT_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>FDOC_NBR</foreignColumnNames>
+        <localColumnNames>FDOC_NBR</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ENTITY_T" localTableName="KRIM_PRNCPL_T" name="KRIM_PRNCPL_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ENTITY_ID</foreignColumnNames>
+        <localColumnNames>ENTITY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_ROLE_MBR_ATTR_DATA_T" name="KRIM_ROLE_MBR_ATTR_DATA_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ROLE_T" localTableName="KRIM_ROLE_MBR_T" name="KRIM_ROLE_MBR_TR1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>ROLE_ID</foreignColumnNames>
+        <localColumnNames>ROLE_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_PERM_T" localTableName="KRIM_ROLE_PERM_T" name="KRIM_ROLE_PERM_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PERM_ID</foreignColumnNames>
+        <localColumnNames>PERM_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_RSP_T" localTableName="KRIM_ROLE_RSP_T" name="KRIM_ROLE_RSP_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>RSP_ID</foreignColumnNames>
+        <localColumnNames>RSP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_TYP_T" localTableName="KRIM_ROLE_T" name="KRIM_ROLE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_TYP_ID</foreignColumnNames>
+        <localColumnNames>KIM_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_RSP_ATTR_DATA_T" name="KRIM_RSP_ATTR_DATA_TR2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_TYP_T" localTableName="KRIM_RSP_TMPL_T" name="KRIM_RSP_TMPL_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_TYP_ID</foreignColumnNames>
+        <localColumnNames>KIM_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_RSP_TMPL_T" localTableName="KRIM_RSP_T" name="KRIM_RSP_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>RSP_TMPL_ID</foreignColumnNames>
+        <localColumnNames>RSP_TMPL_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRIM_ATTR_DEFN_T" localTableName="KRIM_TYP_ATTR_T" name="KRIM_TYP_ATTR_TR2" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>KIM_ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>KIM_ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRLC_ST_T" localTableName="KRLC_CNTY_T" name="KRLC_CNTY_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>POSTAL_CNTRY_CD</foreignColumnNames>
+        <foreignColumnNames>POSTAL_STATE_CD</foreignColumnNames>
+        <localColumnNames>POSTAL_CNTRY_CD</localColumnNames>
+        <localColumnNames>STATE_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ACTN_T" localTableName="KRMS_ACTN_ATTR_T" name="KRMS_ACTN_ATTR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ACTN_ID</foreignColumnNames>
+        <localColumnNames>ACTN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_RULE_T" localTableName="KRMS_ACTN_T" name="KRMS_ACTN_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>RULE_ID</foreignColumnNames>
+        <localColumnNames>RULE_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_AGENDA_T" localTableName="KRMS_AGENDA_ATTR_T" name="KRMS_AGENDA_ATTR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>AGENDA_ID</foreignColumnNames>
+        <localColumnNames>AGENDA_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_AGENDA_T" name="KRMS_AGENDA_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_AGENDA_ITM_T" localTableName="KRMS_AGENDA_ITM_T" name="KRMS_AGENDA_ITM_FK4" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>AGENDA_ITM_ID</foreignColumnNames>
+        <localColumnNames>WHEN_TRUE</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_AGENDA_ITM_T" localTableName="KRMS_AGENDA_ITM_T" name="KRMS_AGENDA_ITM_FK5" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>AGENDA_ITM_ID</foreignColumnNames>
+        <localColumnNames>WHEN_FALSE</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_PROP_T" localTableName="KRMS_CMPND_PROP_PROPS_T" name="KRMS_CMPND_PROP_PROPS_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PROP_ID</foreignColumnNames>
+        <localColumnNames>PROP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_PROP_T" localTableName="KRMS_CMPND_PROP_PROPS_T" name="KRMS_CMPND_PROP_PROPS_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PROP_ID</foreignColumnNames>
+        <localColumnNames>CMPND_PROP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_CNTXT_ATTR_T" name="KRMS_CNTXT_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_CNTXT_VLD_ACTN_TYP_T" name="KRMS_CNTXT_VLD_ACTN_TYP_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_CNTXT_VLD_AGENDA_TYP_T" name="KRMS_CNTXT_VLD_AGENDA_TYP_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_CNTXT_VLD_FUNC_T" name="KRMS_CNTXT_VLD_FUNC_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_CNTXT_VLD_RULE_TYP_T" name="KRMS_CNTXT_VLD_RULE_TYP_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CNTXT_T" localTableName="KRMS_CNTXT_VLD_TERM_SPEC_T" name="KRMS_CNTXT_VLD_TERM_SPEC_TI1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CNTXT_ID</foreignColumnNames>
+        <localColumnNames>CNTXT_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CTGRY_T" localTableName="KRMS_FUNC_CTGRY_T" name="KRMS_FUNC_CTGRY_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CTGRY_ID</foreignColumnNames>
+        <localColumnNames>CTGRY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TYP_T" localTableName="KRMS_FUNC_T" name="KRMS_FUNC_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TYP_ID</foreignColumnNames>
+        <localColumnNames>TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_FUNC_T" localTableName="KRMS_FUNC_PARM_T" name="KRMS_FUNC_PARM_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>FUNC_ID</foreignColumnNames>
+        <localColumnNames>FUNC_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TERM_RSLVR_T" localTableName="KRMS_TERM_RSLVR_INPUT_SPEC_T" name="KRMS_INPUT_ASSET_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TERM_RSLVR_ID</foreignColumnNames>
+        <localColumnNames>TERM_RSLVR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_NL_TMPL_ATTR_T" name="KRMS_NL_TMPL_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_NL_USAGE_T" localTableName="KRMS_NL_TMPL_T" name="KRMS_NL_TMPL_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NL_USAGE_ID</foreignColumnNames>
+        <localColumnNames>NL_USAGE_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_NL_USAGE_ATTR_T" name="KRMS_NL_USAGE_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TYP_T" localTableName="KRMS_PROP_T" name="KRMS_PROP_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TYP_ID</foreignColumnNames>
+        <localColumnNames>TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_PROP_T" localTableName="KRMS_PROP_PARM_T" name="KRMS_PROP_PARM_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PROP_ID</foreignColumnNames>
+        <localColumnNames>PROP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_RULE_ATTR_T" name="KRMS_RULE_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_PROP_T" localTableName="KRMS_RULE_T" name="KRMS_RULE_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>PROP_ID</foreignColumnNames>
+        <localColumnNames>PROP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TERM_T" localTableName="KRMS_TERM_PARM_T" name="KRMS_TERM_PARM_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TERM_ID</foreignColumnNames>
+        <localColumnNames>TERM_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TERM_RSLVR_T" localTableName="KRMS_TERM_RSLVR_PARM_SPEC_T" name="KRMS_TERM_RESLV_PARM_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TERM_RSLVR_ID</foreignColumnNames>
+        <localColumnNames>TERM_RSLVR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_TERM_RSLVR_ATTR_T" name="KRMS_TERM_RSLVR_ATTR_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TERM_SPEC_T" localTableName="KRMS_TERM_RSLVR_T" name="KRMS_TERM_RSLVR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TERM_SPEC_ID</foreignColumnNames>
+        <localColumnNames>OUTPUT_TERM_SPEC_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_CTGRY_T" localTableName="KRMS_TERM_SPEC_CTGRY_T" name="KRMS_TERM_SPEC_CTGRY_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>CTGRY_ID</foreignColumnNames>
+        <localColumnNames>CTGRY_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TERM_SPEC_T" localTableName="KRMS_TERM_T" name="KRMS_TERM_T__FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TERM_SPEC_ID</foreignColumnNames>
+        <localColumnNames>TERM_SPEC_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_ATTR_DEFN_T" localTableName="KRMS_TYP_ATTR_T" name="KRMS_TYP_ATTR_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>ATTR_DEFN_ID</foreignColumnNames>
+        <localColumnNames>ATTR_DEFN_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TYP_T" localTableName="KRMS_TYP_RELN_T" name="KRMS_TYP_RELN_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TYP_ID</foreignColumnNames>
+        <localColumnNames>FROM_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRMS_TYP_T" localTableName="KRMS_TYP_RELN_T" name="KRMS_TYP_RELN_FK2" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TYP_ID</foreignColumnNames>
+        <localColumnNames>TO_TYP_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRNS_NTE_T" localTableName="KRNS_ATT_T" name="KRNS_ATT_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NTE_ID</foreignColumnNames>
+        <localColumnNames>NTE_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRNS_MAINT_DOC_T" localTableName="KRNS_MAINT_DOC_ATT_LST_T" name="KRNS_MAINT_DOC_ATT_LST_FK1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>DOC_HDR_ID</foreignColumnNames>
+        <localColumnNames>DOC_HDR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRNS_DOC_HDR_T" localTableName="KRNS_MAINT_DOC_T" name="KRNS_MAINT_DOC_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>DOC_HDR_ID</foreignColumnNames>
+        <localColumnNames>DOC_HDR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRNS_NTE_TYP_T" localTableName="KRNS_NTE_T" name="KRNS_NTE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NTE_TYP_CD</foreignColumnNames>
+        <localColumnNames>NTE_TYP_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRCR_NMSPC_T" localTableName="KRCR_CMPNT_T" name="KRNS_PARM_DTL_TYP_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NMSPC_CD</foreignColumnNames>
+        <localColumnNames>NMSPC_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRCR_NMSPC_T" localTableName="KRCR_PARM_T" name="KRNS_PARM_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>NMSPC_CD</foreignColumnNames>
+        <localColumnNames>NMSPC_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_QRTZ_TRIGGERS" localTableName="KRSB_QRTZ_BLOB_TRIGGERS" name="KRSB_QRTZ_BLOB_TRIGGERS_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TRIGGER_GROUP</foreignColumnNames>
+        <foreignColumnNames>TRIGGER_NAME</foreignColumnNames>
+        <localColumnNames>TRIGGER_GROUP</localColumnNames>
+        <localColumnNames>TRIGGER_NAME</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_QRTZ_TRIGGERS" localTableName="KRSB_QRTZ_CRON_TRIGGERS" name="KRSB_QRTZ_CRON_TRIGGERS_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TRIGGER_GROUP</foreignColumnNames>
+        <foreignColumnNames>TRIGGER_NAME</foreignColumnNames>
+        <localColumnNames>TRIGGER_GROUP</localColumnNames>
+        <localColumnNames>TRIGGER_NAME</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_QRTZ_TRIGGERS" localTableName="KRSB_QRTZ_SIMPLE_TRIGGERS" name="KRSB_QRTZ_SIMPLE_TRIGGERS_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TRIGGER_GROUP</foreignColumnNames>
+        <foreignColumnNames>TRIGGER_NAME</foreignColumnNames>
+        <localColumnNames>TRIGGER_GROUP</localColumnNames>
+        <localColumnNames>TRIGGER_NAME</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_QRTZ_TRIGGERS" localTableName="KRSB_QRTZ_TRIGGER_LISTENERS" name="KRSB_QRTZ_TRIGGER_LISTENE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>TRIGGER_GROUP</foreignColumnNames>
+        <foreignColumnNames>TRIGGER_NAME</foreignColumnNames>
+        <localColumnNames>TRIGGER_GROUP</localColumnNames>
+        <localColumnNames>TRIGGER_NAME</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_QRTZ_JOB_DETAILS" localTableName="KRSB_QRTZ_JOB_LISTENERS" name="KRSB_QUARTZ_JOB_LISTENERS_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>JOB_GROUP</foreignColumnNames>
+        <foreignColumnNames>JOB_NAME</foreignColumnNames>
+        <localColumnNames>JOB_GROUP</localColumnNames>
+        <localColumnNames>JOB_NAME</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRSB_SVC_DSCRPTR_T" localTableName="KRSB_SVC_DEF_T" name="KRSB_SVC_DEF_FK1" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreignColumnNames>SVC_DSCRPTR_ID</foreignColumnNames>
+        <localColumnNames>SVC_DSCRPTR_ID</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRLC_CNTRY_T" localTableName="KRLC_PSTL_CD_T" name="KR_POSTAL_CODE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>POSTAL_CNTRY_CD</foreignColumnNames>
+        <localColumnNames>POSTAL_CNTRY_CD</localColumnNames>
+    </foreignKey>
+    <foreignKey foreignTableName="KRLC_CNTRY_T" localTableName="KRLC_ST_T" name="KR_STATE_TR1" onDelete="RESTRICT" onUpdate="RESTRICT">
+        <foreignColumnNames>POSTAL_CNTRY_CD</foreignColumnNames>
+        <localColumnNames>POSTAL_CNTRY_CD</localColumnNames>
+    </foreignKey>
+</schema>
