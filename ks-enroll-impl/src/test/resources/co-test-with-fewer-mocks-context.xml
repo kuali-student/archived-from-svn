@@ -158,7 +158,7 @@
     <bean id="roomService" class="org.kuali.student.r2.core.room.service.impl.RoomServiceMockImplM5">
     </bean>
 
-    <bean id="organizationService" class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceMockImpl">
+    <bean id="organizationService" class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceMockImpl">
     </bean>
 
 

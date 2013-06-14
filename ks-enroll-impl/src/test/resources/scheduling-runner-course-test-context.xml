@@ -91,25 +91,38 @@
     </bean>
 
     <!--  Organization Service Config -->
-    <bean id="dictionaryServiceNew" class="org.kuali.student.r1.common.dictionary.service.impl.DictionaryServiceImpl">
-        <constructor-arg index="0" value="classpath:ks-courseInfo-dictionary-context.xml" />
+    <bean id="orgDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgDao">
+        <property name="em" ref="entityManager" />
     </bean>
 
-    <bean id="orgDao"
-          class="org.kuali.student.r1.core.organization.dao.impl.OrganizationDaoImpl">
+    <bean id="orgHierarchyDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgHierarchyDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgOrgRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgPersonRelationDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPersonRelationDao">
+        <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgPositionRestrictionDao"
+          class="org.kuali.student.r2.core.organization.dao.OrgPositionRestrictionDao">
         <property name="em" ref="entityManager" />
     </bean>
 
     <bean id="orgServiceImpl"
-          class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceImpl">
-        <property name="organizationDao" ref="orgDao" />
-        <property name="searchManager" ref="orgSearchManager" />
-        <property name="dictionaryServiceDelegate" ref="dictionaryServiceNew"/>
-    </bean>
-
-    <bean id="orgSearchManager"
-          class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
-        <constructor-arg index="0" value="classpath:organization-search-config.xml" />
+          class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceImpl">
+        <property name="orgDao" ref="orgDao" />
+        <property name="orgHierarchyDao" ref="orgHierarchyDao" />
+        <property name="orgOrgRelationDao" ref="orgOrgRelationDao"/>
+        <property name="orgPersonRelationDao" ref="orgPersonRelationDao"/>
+        <property name="orgPositionRestrictionDao" ref="orgPositionRestrictionDao"/>
     </bean>
 
     <bean id="criterialookupDaoJpa" class="org.kuali.student.r2.common.criteria.impl.CriteriaLookupDaoJpaImpl">

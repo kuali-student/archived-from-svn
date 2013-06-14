@@ -16,11 +16,15 @@ import org.kuali.student.r2.core.organization.service.OrganizationService;
 import java.util.HashMap;
 import java.util.Map;
 
-@Daos( { @Dao(value = "org.kuali.student.r1.core.organization.dao.impl.OrganizationDaoImpl", testSqlFile = "classpath:ks-org.sql") })
+@Daos( { @Dao(value = "org.kuali.student.r2.core.organization.dao.OrgDao", testSqlFile = "classpath:ks-org.sql"),
+@Dao(value="org.kuali.student.r2.core.organization.dao.OrgHierarchyDao"),
+@Dao(value="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao"),
+@Dao(value="org.kuali.student.r2.core.organization.dao.OrgPersonRelationDao"),
+@Dao(value="org.kuali.student.r2.core.organization.dao.OrgPositionRestrictionDao")})
 @PersistenceFileLocation("classpath:META-INF/organization-persistence.xml")
 public class OrganizationContextImplTest extends AbstractServiceTest {
 
-    @Client(value = "org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceImpl", additionalContextFile = "classpath:nl-test-context.xml")
+    @Client(value = "org.kuali.student.r2.core.organization.service.impl.OrganizationServiceImpl", additionalContextFile = "classpath:nl-test-context.xml")
     private OrganizationService orgService;
     private OrganizationContextImpl orgContext = new OrganizationContextImpl();
 
