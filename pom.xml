@@ -256,7 +256,8 @@
         <metainf.output.other>${project.build.outputDirectory}/${metainf.resource.other}</metainf.output.other>
         <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
 
-        <kuali-impex.version>3.0.0</kuali-impex.version>
+        <kuali-impex.version>3.0.1-SNAPSHOT</kuali-impex.version>
+        <kuali-jdbc.version>3.1.7-SNAPSHOT</kuali-jdbc.version>
     </properties>
     <prerequisites>
         <maven>${maven.min.version}</maven>
