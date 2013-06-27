@@ -258,6 +258,7 @@
 
         <kuali-impex.version>3.0.1-SNAPSHOT</kuali-impex.version>
         <kuali-jdbc.version>3.1.7-SNAPSHOT</kuali-jdbc.version>
+        <kuali-util.version>4.2.16-SNAPSHOT</kuali-util.version>
     </properties>
     <prerequisites>
         <maven>${maven.min.version}</maven>
