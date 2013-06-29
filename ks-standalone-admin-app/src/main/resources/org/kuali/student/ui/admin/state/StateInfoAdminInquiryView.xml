@@ -47,6 +47,7 @@
 		                            <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo" p:inquiryParameters="lifecycleKey:key" />
 		                        </property>
 		                    </bean>
+		                    <bean parent="Uif-DataField" p:propertyName="isInitialState" />
 		                    <bean parent="Uif-DataField" p:propertyName="effectiveDate" />
 		                    <bean parent="Uif-DataField" p:propertyName="expirationDate" />
 		                    <bean parent="Uif-DataField" p:propertyName="meta.versionInd" />

@@ -47,6 +47,7 @@
 					p:quickfinder.dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo"
 					p:quickfinder.fieldConversions="key:lifecycleKey"
 					/>
+				<!-- TODO: deal with  isInitialState which is a Boolean -->
 				<!-- TODO: deal with  effectiveDate which is a Date -->
 				<!-- TODO: deal with  expirationDate which is a Date -->
 				<!-- TODO: deal with seaching on the version indicator which is a string in the contract but a number in the database -->
@@ -74,6 +75,7 @@
 		                <bean parent="Uif-Inquiry" p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.LifecycleInfo" p:inquiryParameters="lifecycleKey:key" />
 		            </property>
 		        </bean>
+		        <bean parent="Uif-DataField" p:propertyName="isInitialState" />
 		        <bean parent="Uif-DataField" p:propertyName="effectiveDate" />
 		        <bean parent="Uif-DataField" p:propertyName="expirationDate" />
 		    </list>
