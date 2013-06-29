@@ -347,5 +347,78 @@
   <bean id="testAttributeQueryService" class="org.kuali.rice.krad.demo.uif.library.TestAttributeQueryServiceImpl"/>
 
   <bean id="componentViewHelperService" class="org.kuali.rice.krad.demo.uif.components.ComponentViewHelperServiceImpl"/>
+  
+   <bean id="typeService" class="org.kuali.student.service.remote.impl.TypeServiceRemoteImpl">
+        <property name="hostUrl" value="http://env2.ks.kuali.org" />
+    </bean>
+       
+    
+<!--    <bean id="typeServiceCacheDecorator" class="org.kuali.student.r2.core.class1.type.decorators.TypeServiceCacheDecorator">
+        <property name="nextDecorator" ref="typeService" />
+    </bean>-->
+    <bean id="ks.exp.typeService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+        <property name="serviceDefinition">
+            <bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+                <property name="jaxWsService" value="true" />
+                <property name="service" ref="typeService" />
+                <property name="serviceInterface" value="org.kuali.student.r2.core.class1.type.service.TypeService" />
+                <property name="localServiceName" value="TypeService" />
+                <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/type" />
+                <property name="busSecurity" value="false" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="stateService" class="org.kuali.student.service.remote.impl.StateServiceRemoteImpl">
+        <property name="hostUrl" value="http://env2.ks.kuali.org" />
+    </bean>
+    
+    <bean id="ks.exp.stateService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+        <property name="serviceDefinition">
+            <bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+                <property name="jaxWsService" value="true" />
+                <property name="service" ref="stateService" />
+                <property name="serviceInterface" value="org.kuali.student.r2.core.class1.state.service.StateService" />
+                <property name="localServiceName" value="StateService" />
+                <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/state" />
+                <property name="busSecurity" value="false" />
+            </bean>
+        </property>
+    </bean>
+  
+    <bean id="atpService" class="org.kuali.student.service.remote.impl.AtpServiceRemoteImpl">
+        <property name="hostUrl" value="http://env2.ks.kuali.org" />
+    </bean>
+
+    <bean id="ks.exp.atpService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+        <property name="serviceDefinition">
+            <bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+                <property name="jaxWsService" value="true" />
+                <property name="service" ref="atpService" />
+                <property name="serviceInterface" value="org.kuali.student.r2.core.atp.service.AtpService" />
+                <property name="localServiceName" value="AtpService" />
+                <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/atp" />
+                <property name="busSecurity" value="false" />
+            </bean>
+        </property>
+    </bean>
+    
+    
+    <bean id="lrcService" class="org.kuali.student.service.remote.impl.LRCServiceRemoteImpl">
+        <property name="hostUrl" value="http://env2.ks.kuali.org" />
+    </bean>
+
+    <bean id="ks.exp.lrcService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+        <property name="serviceDefinition">
+            <bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
+                <property name="jaxWsService" value="true" />
+                <property name="service" ref="lrcService" />
+                <property name="serviceInterface" value="org.kuali.student.r2.lum.lrc.service.LRCService" />
+                <property name="localServiceName" value="LrcService" />
+                <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/lrc" />
+                <property name="busSecurity" value="false" />
+            </bean>
+        </property>
+    </bean>
 </beans>
 
