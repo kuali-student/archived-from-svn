@@ -29,7 +29,7 @@
 	<value>classpath:org/kuali/student/ui/admin/type/TypeTypeRelationInfoAdminLookupView.xml</value>
 	********************************************** -->
 	<!-- LookupView -->
-	<bean id="KS-TypeTypeRelationInfo-AdminLookupView" parent="KSLookupView"
+	<bean id="KS-TypeTypeRelationInfo-AdminLookupView" parent="KS-Uif-LookupView"
 		p:title="TypeTypeRelationInfo Lookup"
 		p:header.headerText="TypeTypeRelationInfo Lookup"
 		p:dataObjectClassName="org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo"
@@ -68,7 +68,7 @@
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="meta.updateId" />
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
 				      p:label="Max. Results"
-				      p:defaultValue="30"
+				      p:defaultValue="50"
 				      p:helpSummary="The maximum number of results to return from the query, leave null to not limit the results" />
 			</list>
 		</property>

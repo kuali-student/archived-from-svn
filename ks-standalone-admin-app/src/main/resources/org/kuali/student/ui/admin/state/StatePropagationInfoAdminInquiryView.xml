@@ -26,7 +26,7 @@
 	<value>classpath:org/kuali/student/ui/admin/state/StatePropagationInfoAdminInquiryView.xml</value>
 	********************************************** -->
 	<!-- InquiryView -->
-	<bean id="KS-StatePropagationInfo-AdminInquiryView" parent="KSInquiryView"
+	<bean id="KS-StatePropagationInfo-AdminInquiryView" parent="KS-Uif-InquiryView"
 		p:title="StatePropagationInfo Inquiry"
 		p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StatePropagationInfo"
 		p:viewHelperServiceClass="org.kuali.student.ui.admin.state.StatePropagationInfoAdminInquirableImpl">

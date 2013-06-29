@@ -26,7 +26,7 @@
 	<value>classpath:org/kuali/student/ui/admin/state/StateConstraintInfoAdminInquiryView.xml</value>
 	********************************************** -->
 	<!-- InquiryView -->
-	<bean id="KS-StateConstraintInfo-AdminInquiryView" parent="KSInquiryView"
+	<bean id="KS-StateConstraintInfo-AdminInquiryView" parent="KS-Uif-InquiryView"
 		p:title="StateConstraintInfo Inquiry"
 		p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateConstraintInfo"
 		p:viewHelperServiceClass="org.kuali.student.ui.admin.state.StateConstraintInfoAdminInquirableImpl">

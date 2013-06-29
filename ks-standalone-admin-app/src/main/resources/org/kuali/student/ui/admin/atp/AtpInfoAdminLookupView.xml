@@ -29,7 +29,7 @@
 	<value>classpath:org/kuali/student/ui/admin/atp/AtpInfoAdminLookupView.xml</value>
 	********************************************** -->
 	<!-- LookupView -->
-	<bean id="KS-AtpInfo-AdminLookupView" parent="KSLookupView"
+	<bean id="KS-AtpInfo-AdminLookupView" parent="KS-Uif-LookupView"
 		p:title="AtpInfo Lookup"
 		p:header.headerText="AtpInfo Lookup"
 		p:dataObjectClassName="org.kuali.student.r2.core.atp.dto.AtpInfo"
@@ -63,7 +63,7 @@
 				<!-- TODO: deal with dynamic attributes -->
 				<bean parent="Uif-LookupCriteriaInputField" p:propertyName="maxResultsToReturn"
 				      p:label="Max. Results"
-				      p:defaultValue="30"
+				      p:defaultValue="50"
 				      p:helpSummary="The maximum number of results to return from the query, leave null to not limit the results" />
 			</list>
 		</property>

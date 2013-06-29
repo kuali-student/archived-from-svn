@@ -26,7 +26,7 @@
 	<value>classpath:org/kuali/student/ui/admin/state/StateChangeInfoAdminInquiryView.xml</value>
 	********************************************** -->
 	<!-- InquiryView -->
-	<bean id="KS-StateChangeInfo-AdminInquiryView" parent="KSInquiryView"
+	<bean id="KS-StateChangeInfo-AdminInquiryView" parent="KS-Uif-InquiryView"
 		p:title="StateChangeInfo Inquiry"
 		p:dataObjectClassName="org.kuali.student.r2.core.class1.state.dto.StateChangeInfo"
 		p:viewHelperServiceClass="org.kuali.student.ui.admin.state.StateChangeInfoAdminInquirableImpl">
