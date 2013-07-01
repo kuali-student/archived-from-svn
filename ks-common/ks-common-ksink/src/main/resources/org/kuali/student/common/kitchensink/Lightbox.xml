@@ -265,8 +265,8 @@
                             <bean parent="KS-KitchenSink-FooterLinkGroup-PageXml">
                                 <property name="footerLinks">
                                     <map>
-                                        <entry key="ks-enroll-ksink/src/main/resources/org/kuali/student/enrollment/kitchensink/Lightbox.xml"
-                                               value="https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk/ks-enroll-ksink/src/main/resources/org/kuali/student/enrollment/kitchensink/Lightbox.xml"/>
+                                        <entry key="ks-common-ksink/src/main/resources/org/kuali/student/common/kitchensink/Lightbox.xml"
+                                               value="https://svn.kuali.org/repos/student/enrollment/ks-core/trunk/ks-common/ks-common-ksink/src/main/resources/org/kuali/student/common/kitchensink/Lightbox.xml"/>
                                     </map>
                                 </property>
                             </bean>
@@ -322,7 +322,7 @@
           p:breadcrumbs.render="false">
         <property name="items">
             <list>
-                <bean parent="Uif-Page">
+                <bean parent="KS-Uif-Page">
                     <property name="items">
                         <list>
                             <bean parent="Uif-PrimaryActionButton"

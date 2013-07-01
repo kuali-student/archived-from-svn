@@ -45,17 +45,19 @@
         </property>
     </bean>
 
-    <bean id="KS-Uif-FormView" abstract="true" parent="Uif-FormView">
+    <bean id="KS-Uif-Page"  abstract="true" parent="Uif-Page" class="org.kuali.student.common.uif.container.KSUifPage" />
+
+    <bean id="KS-Uif-FormView" abstract="true" parent="Uif-FormView" class="org.kuali.student.common.uif.view.KSUifFormView">
         <property name="theme">
             <bean parent="KSTheme"/>
         </property>
-        <property name="stickyTopGroup" value="true"/>
-        <property name="stickyBreadcrumbs" value="true"/>
-        <property name="stickyApplicationHeader" value="true"/>
+        <property name="stickyTopGroup" value="false"/>
+        <property name="stickyBreadcrumbs" value="false"/>
+        <property name="stickyApplicationHeader" value="false"/>
         <property name="stickyHeader" value="true"/>
         <property name="applicationHeader">
             <bean parent="Uif-GlobalApplicationHeader-parentBean"
-                  p:template="/ks-enroll/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
+                  p:template="/ks-common/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
                   p:templateName="ks_applicationHeader"/>
         </property>
         <property name="header.cssClasses">
@@ -65,7 +67,7 @@
         </property>
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
         <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
-        <property name="breadcrumbs.render" value="@{!#form.renderedInLightBox}"/>
+        <property name="onLoadScript" value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
 
@@ -91,19 +93,32 @@
             <bean parent="KSTheme"/>
         </property>
 
-        <property name="stickyHeader" value="true"/>
-        <property name="stickyTopGroup" value="true"/>
-        <property name="stickyBreadcrumbs" value="true"/>
-        <property name="stickyApplicationHeader" value="true"/>
-        <property name="applicationHeader">
-            <bean parent="Uif-GlobalApplicationHeader-parentBean"
-                  p:template="/ks-enroll/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
-                  p:templateName="ks_applicationHeader"/>
-        </property>
-
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
         <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
-        <property name="breadcrumbs.render" value="@{!#form.renderedInLightBox}"/>
+        <property name="onLoadScript" value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
+        <property name="rangeFieldGroupPrototype">
+          <null/>
+        </property>
+        <!-- In KS, we need only the return value, not any other maintenance actions in lookup.-->
+        <property name="resultsGroup.lineActions">
+            <list>
+                <bean parent="Uif-ActionLink">
+                  <property name="actionLabel" value="Return Value"/>
+                  <property name="finalizeMethodToCall" value="getReturnUrlForResults"/>
+                  <property name="render"
+                            value="@{!#empty(returnFormKey) and !#empty(returnLocation) and !view.hideReturnLinks}"/>
+                </bean>
+            </list>
+        </property>
+        <property name="resultsGroup.layoutManager.richTable.showSearchAndExportOptions" value="true"/>
+        <property name="resultsGroup.layoutManager.richTable.templateOptions">
+            <map merge="true">
+                <entry key="sDom" value="ltip"/>
+            </map>
+        </property>
+        <property name="resultsGroup.collectionLookup">
+            <null/>
+        </property>
     </bean>
 
     <bean id="KS-Uif-InquiryView" abstract="true" parent="Uif-InquiryView">
@@ -117,7 +132,7 @@
 
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
         <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
-        <property name="breadcrumbs.render" value="@{!#form.renderedInLightBox}"/>
+        <property name="onLoadScript" value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
     <bean id="KS-Uif-HeaderOne-Empty" parent="Uif-HeaderOne">
@@ -130,13 +145,13 @@
         <property name="theme">
             <bean parent="KSTheme"/>
         </property>
-        <property name="stickyTopGroup" value="true"/>
-        <property name="stickyBreadcrumbs" value="true"/>
-        <property name="stickyApplicationHeader" value="true"/>
+        <property name="stickyTopGroup" value="false"/>
+        <property name="stickyBreadcrumbs" value="false"/>
+        <property name="stickyApplicationHeader" value="false"/>
         <property name="stickyHeader" value="true"/>
         <property name="applicationHeader">
             <bean parent="Uif-GlobalApplicationHeader-parentBean"
-                  p:template="/ks-enroll/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
+                  p:template="/ks-common/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
                   p:templateName="ks_applicationHeader"/>
         </property>
         <property name="header.rightGroup.items">
@@ -150,7 +165,7 @@
 
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
         <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
-        <property name="breadcrumbs.render" value="@{!#form.renderedInLightBox}"/>
+        <property name="onLoadScript" value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
     <!--This footer can be used for maintenance views: create a new or edit when we only want to see submit and cancel buttons -->
@@ -255,7 +270,7 @@
 
     <bean id="KS-Uif-InputField-Simple" parent="KS-Uif-InputField-Simple-parent"/>
     <bean id="KS-Uif-InputField-Simple-parent" abstract="true" parent="Uif-InputField" scope="prototype">
-        <property name="template" value="/ks-enroll/WEB-INF/ftl/ksSimpleDataField.ftl"/>
+        <property name="template" value="/ks-common/WEB-INF/ftl/ksSimpleDataField.ftl"/>
         <property name="templateName" value="ks_SimpleDataField"/>
         <property name="inquiry">
             <null/>
@@ -279,7 +294,7 @@
 
     <bean id="KS-Uif-DataField-Simple" parent="KS-Uif-DataField-Simple-parentBean"/>
     <bean id="KS-Uif-DataField-Simple-parentBean" abstract="true" parent="Uif-DataField" scope="prototype">
-        <property name="template" value="/ks-enroll/WEB-INF/ftl/ksSimpleDataField.ftl"/>
+        <property name="template" value="/ks-common/WEB-INF/ftl/ksSimpleDataField.ftl"/>
         <property name="templateName" value="ks_SimpleDataField"/>
         <property name="inquiry">
             <null/>
@@ -322,7 +337,7 @@
 
     <bean id="KS-Uif-HorizontalBoxGroup-ToolbarGroup" parent="KS-Uif-HorizontalBoxGroup-ToolbarGroup-parent"/>
     <bean id="KS-Uif-HorizontalBoxGroup-ToolbarGroup-parent" parent="Uif-HorizontalBoxGroup" class="org.kuali.student.common.uif.container.KSToolbarGroup" abstract="true" scope="prototype">
-        <property name="template" value="/ks-enroll/WEB-INF/ftl/ksToolbarGroup.ftl"/>
+        <property name="template" value="/ks-common/WEB-INF/ftl/ksToolbarGroup.ftl"/>
         <property name="templateName" value="ks_ToolbarGroup"/>
         <property name="cssClasses">
             <list merge="true">
@@ -524,4 +539,34 @@
         </property>
     </bean>
 
+    <bean id="Uif-AddLineAction-Link" parent="Uif-ActionLink" p:methodToCall="addLine" p:actionLabel="Add"
+          p:actionEvent="addLine" p:loadingMessageText="Adding Line..." p:focusOnIdAfterSubmit="LINE_FIRST"
+          p:id="@{#collectionGroup.id}_add"/>
+
+    <bean id="KS-Uif-PrimaryActionButton" parent="Uif-PrimaryActionButton" p:id="ks-uif-primaryActionButton">
+        <property name="cssClasses">
+            <list merge="false">
+                <value>btn</value>
+                <value>btn-primary</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="KS-Uif-SecondaryActionButton" parent="Uif-SecondaryActionButton" p:id="ks-uif-secondaryActionButton">
+        <property name="cssClasses">
+            <list merge="false">
+                <value>btn</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- This is used to display the view and page files names in the HTML so devs can find them -->
+    <bean id="KS-SourceFile-Comment-Group" parent="Uif-HorizontalBoxGroup">
+        <property name="items">
+            <list>
+                <bean parent="Uif-Message" p:messageText="[!--ViewSourceFile: @{#view.viewSourceFile}--]" />
+                <bean parent="Uif-Message" p:messageText="[!--PageSourceFile: @{(#view.currentPage.pageSourceFile eq null) ? 'Not Defined' : #view.currentPage.pageSourceFile}--]" />
+            </list>
+        </property>
+    </bean>
 </beans>

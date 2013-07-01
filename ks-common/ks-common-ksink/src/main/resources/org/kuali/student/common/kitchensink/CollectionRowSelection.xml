@@ -135,8 +135,8 @@
                             <bean parent="KS-KitchenSink-FooterLinkGroup" p:label="Javascript File">
                                 <property name="footerLinks">
                                     <map>
-                                        <entry key="ks-enroll/ks-enroll-web/src/main/webapp/ks-krad/scripts/ks-krad-collection-rowSelection.js"
-                                               value="https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk/ks-enroll-web/src/main/webapp/ks-krad/scripts/ks-krad-collection-rowSelection.js"/>
+                                        <entry key="ks-core/ks-common/ks-common-web/src/main/webapp/ks-krad/scripts/ks-krad-collection-rowSelection.js"
+                                               value="https://svn.kuali.org/repos/student/enrollment/ks-core/trunk/ks-common/ks-common-web/src/main/webapp/ks-krad/scripts/ks-krad-collection-rowSelection.js"/>
                                     </map>
                                 </property>
                             </bean>
