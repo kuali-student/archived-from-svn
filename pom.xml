@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.kuali.student</groupId>
     <artifactId>student</artifactId>
-    <version>2.0.0-M7-SNAPSHOT</version>
+    <version>2.0.0-M7-build-437</version>
     <packaging>pom</packaging>
     <name>Kuali Student</name>
     <description>
@@ -126,16 +126,16 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0-M7/build-437</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0-M7/build-437</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/tags/builds/student-2.0/2.0.0-M7/build-437</url>
     </scm>
     <properties>
-        <ks.api.version>2.0.0-M6-patch1-SNAPSHOT</ks.api.version>
-        <ks.core.version>2.0.0-M7-SNAPSHOT</ks.core.version>
-        <ks.enroll.version>1.0.0-M7-SNAPSHOT</ks.enroll.version>
-        <ks.lum.version>2.0.0-M7-SNAPSHOT</ks.lum.version>
-        <ks.deployments.version>2.0.0-M7-SNAPSHOT</ks.deployments.version>
+        <ks.api.version>2.0.0-M6-patch1-build-437</ks.api.version>
+        <ks.core.version>2.0.0-M7-build-437</ks.core.version>
+        <ks.enroll.version>1.0.0-M7-build-437</ks.enroll.version>
+        <ks.lum.version>2.0.0-M7-build-437</ks.lum.version>
+        <ks.deployments.version>2.0.0-M7-build-437</ks.deployments.version>
         <!-- 3rd party library/plugin version definitions -->
         <antlr.runtime.version>3.1.1</antlr.runtime.version>
         <antlr.legacy.version>2.7.7</antlr.legacy.version>
@@ -255,7 +255,6 @@
         <metainf.output.constraints>${project.build.outputDirectory}/${metainf.resource.constraints}</metainf.output.constraints>
         <metainf.output.other>${project.build.outputDirectory}/${metainf.resource.other}</metainf.output.other>
         <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
-
         <kuali-impex.version>${impex.version}</kuali-impex.version>
     </properties>
     <prerequisites>
