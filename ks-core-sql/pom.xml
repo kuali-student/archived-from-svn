@@ -22,6 +22,7 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <annotatedClass>${metainf.sql.context}</annotatedClass>
+                            <propertySourcesConfig>org.kuali.common.util.spring.SqlMavenPropertySourceConfig</propertySourcesConfig>
                         </configuration>
                     </execution>
                 </executions>
