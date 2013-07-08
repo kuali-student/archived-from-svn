@@ -2205,6 +2205,24 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
         return instructionalDaysForTerm;
     }
 
+    /**
+     * For this method we need to find the holdiday calendars related to the term. There is an indirect relationship
+     * between terms and holiday calendars. Terms are linked to academic calendars, which in term are related to holiday
+     * calendars.
+     *
+     * Once we have the holday calendar we want to find which holidays fall within the instructional period. From there
+     * we find out if it's a non-instructional day and add it to the count.
+     *
+     * @param termAtp
+     * @param instructionalPeriodKeyDate
+     * @param contextInfo
+     * @return
+     * @throws DoesNotExistException
+     * @throws InvalidParameterException
+     * @throws MissingParameterException
+     * @throws OperationFailedException
+     * @throws PermissionDeniedException
+     */
     private int _getNumberOfNonInstructionalHolidaysForTerm(AtpInfo termAtp, KeyDateInfo instructionalPeriodKeyDate, ContextInfo contextInfo)
             throws DoesNotExistException, InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException {
@@ -2212,10 +2230,19 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
         DateMidnight currentDate, stopDate;
         List<DateMidnight> nonInstructionalHolidayDates = new ArrayList<DateMidnight>();
         List<AcademicCalendarInfo> acalsForTerm = getAcademicCalendarsForTerm(termAtp.getId(), contextInfo);
-        
+
+        //sub-term > find parent term and get acal for it
+        if (acalsForTerm.size() == 0){
+            List<AtpAtpRelationInfo> atpAtpRelationsForTerm = this.atpService.getAtpAtpRelationsByAtps(termAtp.getId(), contextInfo);
+            for (AtpAtpRelationInfo atpInfo : atpAtpRelationsForTerm) {
+                acalsForTerm = getAcademicCalendarsForTerm(atpInfo.getAtpId(), contextInfo);
+                break;
+            }
+        }
+
         for (AcademicCalendarInfo acal : acalsForTerm) {
             List<HolidayInfo> holidaysForTerm =
-                    getHolidaysByDateForAcademicCalendar( acal.getId(), instructionalPeriodKeyDate.getStartDate(), 
+                    getHolidaysByDateForAcademicCalendar( acal.getId(), instructionalPeriodKeyDate.getStartDate(),
                                                           instructionalPeriodKeyDate.getEndDate(), contextInfo);
 
             for (HolidayInfo holiday : holidaysForTerm) {
@@ -2289,29 +2316,63 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
         return bRet;
     }
 
-    @Override
+
+    /**
+     * For this method we query the atp relationship table and find the related acals.
+     *
+     * @param termId  term identifier
+     * @param contextInfo information containing the principalId and locale
+     *                    information about the caller of service operation
+     * @return
+     * @throws InvalidParameterException
+     * @throws MissingParameterException
+     * @throws OperationFailedException
+     * @throws PermissionDeniedException
+     * @throws DoesNotExistException
+     */
     public List<AcademicCalendarInfo> getAcademicCalendarsForTerm(String termId, ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException,
             PermissionDeniedException, DoesNotExistException {
+        List<AcademicCalendarInfo> academicCalendars = new ArrayList<AcademicCalendarInfo>();    // will be returned. init empty
 
-        List<AtpAtpRelationInfo> atpAtpRelationsForTerm = this.atpService.getAtpAtpRelationsByAtps(termId, contextInfo);
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
-        List<AcademicCalendarInfo> academicCalendars = new ArrayList<AcademicCalendarInfo>();
+        // In order to speed up performance we're going to ONLY pull back the ATP-ATP relationships that matter.
+        predicates.add(PredicateFactory.equal("atpType", AtpServiceConstants.ATP_ATP_RELATION_INCLUDES_TYPE_KEY));
+        predicates.add(PredicateFactory.equal("atpState", AtpServiceConstants.ATP_ATP_RELATION_ACTIVE_STATE_KEY));
+        predicates.add(PredicateFactory.equal("atp.atpType", AtpServiceConstants.ATP_ACADEMIC_CALENDAR_TYPE_KEY));
+        predicates.add(PredicateFactory.equal("relatedAtp.id", termId));
 
-        for (AtpAtpRelationInfo atpRelationForTerm : atpAtpRelationsForTerm) {
-            if (atpRelationForTerm.getTypeKey().equals(AtpServiceConstants.ATP_ATP_RELATION_INCLUDES_TYPE_KEY)) {
-                try {
-                    AtpInfo acalAtp = this.atpService.getAtp(atpRelationForTerm.getAtpId(), contextInfo);
-                    if (acalAtp.getTypeKey().equals(AtpServiceConstants.ATP_ACADEMIC_CALENDAR_TYPE_KEY)) {
-                        academicCalendars.add(this.acalAssembler.assemble(acalAtp, contextInfo));
-                    }
-                } catch (AssemblyException e) {
-                    throw new OperationFailedException(e.getMessage());
+        QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
+        qbcBuilder.setPredicates(predicates.toArray(new Predicate[predicates.size()]));
+        QueryByCriteria qbc = qbcBuilder.build();
+
+
+        try{
+            List<String> atpIds = new ArrayList<String>();
+            // This is a performance problem... we only want the atpId from the atpAtpRelationInfo. The worst part of
+            // all this is that the entity used to populate the AtpAtpRelationInfo contains the linked ATP, but
+            // durning the transformation only the ID of the ATP is stored in the info object.
+            List<AtpAtpRelationInfo> atpAtpRelationsForTerm = this.atpService.searchForAtpAtpRelations(qbc,contextInfo);
+            for (AtpAtpRelationInfo atpRelationForTerm : atpAtpRelationsForTerm) {
+                atpIds.add(atpRelationForTerm.getAtpId());
+            }
+
+            if(!atpIds.isEmpty())    {
+                // grab the atps and add them to the list.
+                List<AtpInfo> atps = this.atpService.getAtpsByIds(atpIds, contextInfo);
+                for(AtpInfo atp : atps){
+                    academicCalendars.add(this.acalAssembler.assemble(atp, contextInfo));
                 }
             }
+
+
+        }catch (Exception ex){
+            throw new OperationFailedException("Error trying to determine if a term is a subterm", ex);
         }
 
         return academicCalendars;
     }
+
 
     /**
      *
@@ -2369,6 +2430,8 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
 
         return holidaysForAcal;
     }
+
+
 
     public StateTransitionsHelper getStateTransitionsHelper() {
         return stateTransitionsHelper;

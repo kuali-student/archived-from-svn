@@ -154,6 +154,11 @@
                   p:template="/ks-common/WEB-INF/ftl/ksApplicationHeader.ftl" p:render="true"
                   p:templateName="ks_applicationHeader"/>
         </property>
+        <property name="header.cssClasses">
+            <list merge="true">
+                <value>ks-unified-header</value>
+            </list>
+        </property>
         <property name="header.rightGroup.items">
             <!-- In KS, document overview section not needed(document status, create time, doc number etc)-->
             <list/>
@@ -540,6 +545,10 @@
     </bean>
 
     <bean id="Uif-AddLineAction-Link" parent="Uif-ActionLink" p:methodToCall="addLine" p:actionLabel="Add"
+          p:actionEvent="addLine" p:loadingMessageText="Adding Line..." p:focusOnIdAfterSubmit="LINE_FIRST"
+          p:id="@{#collectionGroup.id}_add"/>
+
+    <bean id="Uif-AddLineAction-CapitalButtonLabel" parent="Uif-PrimaryActionButton-Small" p:methodToCall="addLine" p:actionLabel="Add"
           p:actionEvent="addLine" p:loadingMessageText="Adding Line..." p:focusOnIdAfterSubmit="LINE_FIRST"
           p:id="@{#collectionGroup.id}_add"/>
 
