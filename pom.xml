@@ -142,6 +142,8 @@
     <metainf.sql.propertySource>org.kuali.student.deploy.spring.MetaInfSqlMavenPropertySourceConfig</metainf.sql.propertySource>
     <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
     <kuali-impex.version>${impex.version}</kuali-impex.version>
+
+    <jdbc.source.db.base>KS_SOURCE_DB</jdbc.source.db.base>
     <!-- Remove these after they get released -->
     <kuali-sql.version>2.1.0-SNAPSHOT</kuali-sql.version>
     <kuali-util.version>4.2.17-SNAPSHOT</kuali-util.version>
