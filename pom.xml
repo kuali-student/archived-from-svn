@@ -190,6 +190,7 @@
         <profile>
             <id>sql-only</id>
             <modules>
+                <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
                 <module>ks-enroll</module>
@@ -320,11 +321,6 @@
                             <groupId>org.kuali.common</groupId>
                             <artifactId>kuali-util</artifactId>
                             <version>${kuali-util.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.kuali.student.deployments</groupId>
-                            <artifactId>ks-deployment-resources</artifactId>
-                            <version>${ks.deployments.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
