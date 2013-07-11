@@ -7,4 +7,4 @@ ks-enroll::sandbox_ks-kuali-impex_ks-enroll_trunk::216bb803eb6c7511038484dd538b7
 # module = ks-lum branch Path = sandbox/ks-kuali-impex/ks-lum/trunk revision = 51256
 ks-lum::sandbox_ks-kuali-impex_ks-lum_trunk::dee8edfc86a395f0fb0fc19b13d559eeee8c8e1c
 # module = ks-deployments branch Path = sandbox/ks-kuali-impex/ks-deployments/trunk revision = 51256
-ks-deployments::sandbox_ks-kuali-impex_ks-deployments_trunk::9f0c5a5a5e96e9ea2333e3b0ed39c063930b5421
+ks-deployments::sandbox_ks-kuali-impex_ks-deployments_trunk::315459c25f32f3ce33733b828118716373488c0f
