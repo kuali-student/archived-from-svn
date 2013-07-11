@@ -321,6 +321,11 @@
               <artifactId>kuali-util</artifactId>
               <version>${kuali-util.version}</version>
             </dependency>
+            <dependency>
+              <groupId>org.kuali.student.deployments</groupId>
+              <artifactId>ks-deployment-resources</artifactId>
+              <version>${ks.deployments.version}</version>
+            </dependency>
           </dependencies>
         </plugin>
         <plugin>
