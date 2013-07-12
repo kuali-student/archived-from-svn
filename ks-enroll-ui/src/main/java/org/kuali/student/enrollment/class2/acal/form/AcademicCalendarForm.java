@@ -16,12 +16,12 @@ package org.kuali.student.enrollment.class2.acal.form;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
+import org.kuali.student.common.uif.form.KSUifForm;
 import org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.AcalEventWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
 import org.kuali.student.enrollment.class2.acal.util.CalendarConstants;
+import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
 import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author Kuali Student Team
  */
-public class AcademicCalendarForm extends UifFormBase {
+public class AcademicCalendarForm extends KSUifForm {
 
     private AcademicCalendarInfo academicCalendarInfo;
     private AcademicCalendarInfo copyFromAcal;
@@ -52,6 +52,7 @@ public class AcademicCalendarForm extends UifFormBase {
 
     private List<AcalEventWrapper> eventsToDeleteOnSave;
     private List<AcademicTermWrapper> termsToDeleteOnSave;
+
     private boolean reload;
 
     // needed to delete term
@@ -63,7 +64,12 @@ public class AcademicCalendarForm extends UifFormBase {
     private String validationJSONString;
 
     private boolean makeOfficial;
+    private boolean makeOfficialIsSubterm;
+    private String makeOfficialParentTermName;
     private String makeOfficialName;
+    private String messageForDeleteTermOrSubterm;
+
+    private String dirtyFields;
 
     public String getValidationJSONString() {
         return validationJSONString;
@@ -392,4 +398,54 @@ public class AcademicCalendarForm extends UifFormBase {
         this.makeOfficialName = makeOfficialName;
     }
 
+    public String getMessageForDeleteTermOrSubterm() {
+        return messageForDeleteTermOrSubterm;
+    }
+
+    public void setMessageForDeleteTermOrSubterm(String messageForDeleteTermOrSubterm) {
+        this.messageForDeleteTermOrSubterm = messageForDeleteTermOrSubterm;
+    }
+
+    public boolean isMakeOfficialIsSubterm() {
+        return makeOfficialIsSubterm;
+    }
+
+    public void setMakeOfficialIsSubterm(boolean makeOfficialIsSubterm) {
+        this.makeOfficialIsSubterm = makeOfficialIsSubterm;
+    }
+
+    public String getMakeOfficialParentTermName() {
+        return makeOfficialParentTermName;
+    }
+
+    public void setMakeOfficialParentTermName(String makeOfficialParentTermName) {
+        this.makeOfficialParentTermName = makeOfficialParentTermName;
+    }
+
+    /**
+     * A list of properties that have been changed (are dirty) contained in a csv string.
+     *
+     *
+     * @return
+     */
+    public String getDirtyFields() {
+        return dirtyFields;
+    }
+
+    public void setDirtyFields(String dirtyFields) {
+        this.dirtyFields = dirtyFields;
+    }
+
+    /**
+     * A list of Events that have been deleted in the UI and need to be deleted during save.
+     *
+     * @return
+     */
+    public List<AcalEventWrapper> getEventsToDeleteOnSave() {
+        return eventsToDeleteOnSave;
+    }
+
+    public void setEventsToDeleteOnSave(List<AcalEventWrapper> eventsToDeleteOnSave) {
+        this.eventsToDeleteOnSave = eventsToDeleteOnSave;
+    }
 }

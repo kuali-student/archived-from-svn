@@ -21,7 +21,6 @@ import org.kuali.student.common.util.krms.RulesExecutionConstants;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
 import org.kuali.student.enrollment.academicrecord.dto.StudentTestScoreRecordInfo;
 import org.kuali.student.enrollment.academicrecord.service.AcademicRecordService;
-import org.kuali.student.krms.util.KSKRMSExecutionConstants;
 import org.kuali.student.krms.util.KSKRMSExecutionUtil;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -29,6 +28,7 @@ import org.kuali.student.r2.common.exceptions.InvalidParameterException;
 import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.core.atp.dto.MilestoneInfo;
 import org.kuali.student.r2.core.atp.service.AtpService;
 
@@ -44,33 +44,22 @@ public class ScoreTermResolver implements TermResolver<Integer> {
 
     private AcademicRecordService academicRecordService;
 
-    private final static Set<String> prerequisites = new HashSet<String>(1);
-
-    static {
-        prerequisites.add(KSKRMSExecutionConstants.CONTEXT_INFO_TERM_NAME);
-    }
-    
-    public AcademicRecordService getAcademicRecordService() {
-        return academicRecordService;
-    }
-
-    public void setAcademicRecordService(AcademicRecordService academicRecordService) {
-        this.academicRecordService = academicRecordService;
-    }
-
     @Override
     public Set<String> getPrerequisites() {
-        return prerequisites;
+        Set<String> temp = new HashSet<String>(2);
+        temp.add(KSKRMSServiceConstants.TERM_PREREQUISITE_PERSON_ID);
+        temp.add(KSKRMSServiceConstants.TERM_PREREQUISITE_CONTEXTINFO);
+        return Collections.unmodifiableSet(temp);
     }
 
     @Override
     public String getOutput() {
-        return KSKRMSExecutionConstants.SCORE_TERM_NAME;
+        return KSKRMSServiceConstants.TERM_RESOLVER_SCOREONTEST;
     }
 
     @Override
     public Set<String> getParameterNames() {
-        return Collections.singleton(KSKRMSExecutionConstants.TEST_SET_ID_TERM_PROPERTY);
+        return Collections.singleton(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_TEST_CLU_KEY);
     }
 
     @Override
@@ -81,26 +70,26 @@ public class ScoreTermResolver implements TermResolver<Integer> {
 
     @Override
     public Integer resolve(Map<String, Object> resolvedPrereqs, Map<String, String> parameters) throws TermResolutionException {
-        ContextInfo context = (ContextInfo) resolvedPrereqs.get(KSKRMSExecutionConstants.CONTEXT_INFO_TERM_NAME);
-        String personId = parameters.get(KSKRMSExecutionConstants.PERSON_ID_TERM_PROPERTY);
-        String testIds = parameters.get(KSKRMSExecutionConstants.TEST_SET_ID_TERM_PROPERTY);
+        ContextInfo context = (ContextInfo) resolvedPrereqs.get(KSKRMSServiceConstants.TERM_PREREQUISITE_CONTEXTINFO);
+        String personId = parameters.get(KSKRMSServiceConstants.TERM_PREREQUISITE_PERSON_ID);
+        String testIds = parameters.get(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_TEST_CLU_KEY);
         
         Integer result = 0;
         List<StudentTestScoreRecordInfo> recordInfoList = null;
         try {
             recordInfoList = academicRecordService.getTestScoreRecords(personId, context);
-        } catch (InvalidParameterException e) {
-            throw new TermResolutionException(e.getMessage(), this, parameters);
-        } catch (MissingParameterException e) {
-            throw new TermResolutionException(e.getMessage(), this, parameters);
-        } catch (OperationFailedException e) {
-            throw new TermResolutionException(e.getMessage(), this, parameters);
-        } catch (PermissionDeniedException e) {
-            throw new TermResolutionException(e.getMessage(), this, parameters);
-        } catch (DoesNotExistException e) {
-            throw new TermResolutionException(e.getMessage(), this, parameters);
+        } catch (Exception e) {
+            KSKRMSExecutionUtil.convertExceptionsToTermResolutionException(parameters, e, this);
         }
 
         return result;
+    }
+
+    public AcademicRecordService getAcademicRecordService() {
+        return academicRecordService;
+    }
+
+    public void setAcademicRecordService(AcademicRecordService academicRecordService) {
+        this.academicRecordService = academicRecordService;
     }
 }

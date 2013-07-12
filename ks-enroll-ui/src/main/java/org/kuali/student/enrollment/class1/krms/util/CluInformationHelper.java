@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 The Kuali Foundation
+ * Copyright 2005-2013 The Kuali Foundation
  *
  * Licensed under the Educational Community License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,18 @@
  */
 package org.kuali.student.enrollment.class1.krms.util;
 
+import org.apache.commons.lang.StringUtils;
+import org.kuali.rice.core.api.criteria.PredicateFactory;
+import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.student.enrollment.class1.krms.dto.CluInformation;
+import org.kuali.student.r2.common.dto.DtoConstants;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.util.ContextUtils;
+import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.search.dto.SearchParamInfo;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultCellInfo;
@@ -32,10 +42,17 @@ import org.kuali.student.r2.lum.lrc.dto.ResultValuesGroupInfo;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Kuali Student Team
+ */
 public class CluInformationHelper {
 
     private CluService cluService;
@@ -92,7 +109,6 @@ public class CluInformationHelper {
 
     public String getCreditInfo(String cluId) {
         //retrieve credits
-        String credits = "";
         List<CluResultInfo> cluResultInfos = null;
         try {
             cluResultInfos = this.getCluService().getCluResultByClu(cluId, ContextUtils.getContextInfo());
@@ -109,14 +125,11 @@ public class CluInformationHelper {
                 }
 
                 //retrieve credit type and credit values
-                ResultValuesGroupInfo resultComponentInfo = null;
-                List<String> resultValues = null;
-                String creditType = "";
                 if (cluResultInfo.getResultOptions() != null) {
                     for (ResultOptionInfo resultOption : cluResultInfo.getResultOptions()) {
                         if (resultOption.getResultComponentId() != null) {
                             try {
-                                resultComponentInfo = this.getLrcService().getResultValuesGroup(resultOption.getResultComponentId(), ContextUtils.getContextInfo());
+                                ResultValuesGroupInfo resultComponentInfo = this.getLrcService().getResultValuesGroup(resultOption.getResultComponentId(), ContextUtils.getContextInfo());
                                 return resultComponentInfo.getName();
                             } catch (Exception e) {
                                 throw new RuntimeException("Could not retrieve result values group for " + resultOption.getResultComponentId());
@@ -126,20 +139,60 @@ public class CluInformationHelper {
                 }
             }
         }
-        return credits;
+        return StringUtils.EMPTY;
     }
 
     public List<CluInformation> getCluInfosForQuery(MembershipQueryInfo membershipQuery) {
 
         if (membershipQuery != null) {
-            SearchRequestInfo searchRequest = new SearchRequestInfo();
-            searchRequest.setSearchKey(membershipQuery.getSearchTypeKey());
-            searchRequest.setParams(membershipQuery.getQueryParamValues());
-            try {
-                SearchResultInfo searchResult = this.getCluService().search(searchRequest, ContextUtils.getContextInfo());
-                return resolveCluSearchResultSet(searchResult);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+
+            // Handle Date queries for the course ranges.
+            if (membershipQuery.getSearchTypeKey().equals(CluSetRangeHelper.CLU_SEARCH_GENERIC)) {
+
+                String date1 = CluSetRangeHelper.getParmValue(membershipQuery.getQueryParamValues(), CluSetRangeHelper.CLU_SEARCH_PARM_DATE1);
+                String date2 = CluSetRangeHelper.getParmValue(membershipQuery.getQueryParamValues(), CluSetRangeHelper.CLU_SEARCH_PARM_DATE2);
+
+                try {
+                    QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
+                    qbcBuilder.setPredicates(PredicateFactory.greaterThanOrEqual("effectiveDate", CluSetRangeHelper.sdf.parse(date1)),
+                            PredicateFactory.lessThanOrEqual("effectiveDate", CluSetRangeHelper.sdf.parse(date2)));
+
+                    List<CluInfo> cluInfos = this.getCluService().searchForClus(qbcBuilder.build(), ContextUtils.getContextInfo());
+
+                    List<CluInformation> cluInformations = new ArrayList<CluInformation>();
+                    for (CluInfo cluInfo : cluInfos) {
+                        cluInformations.add(cluInformationFromCluInfo(cluInfo));
+                    }
+                    return cluInformations;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (membershipQuery.getSearchTypeKey().equals(CluSetRangeHelper.LO_SEARCH_LODESC)) {
+                //LO search.
+                SearchRequestInfo searchRequest = new SearchRequestInfo();
+                searchRequest.setSearchKey(membershipQuery.getSearchTypeKey());
+                searchRequest.setParams(membershipQuery.getQueryParamValues());
+                searchRequest.setSortColumn("lo.resultColumn.loCluCode");
+
+                try {
+                    SearchResultInfo searchResult = this.getCluService().search(searchRequest, ContextUtils.getContextInfo());
+                    return resolveLoSearchResults(searchResult, this.getCluService());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                //All other search use the r1 search service.
+                SearchRequestInfo searchRequest = new SearchRequestInfo();
+                searchRequest.setSearchKey(membershipQuery.getSearchTypeKey());
+                searchRequest.setParams(membershipQuery.getQueryParamValues());
+                searchRequest.setSortColumn("lu.resultColumn.luOptionalCode");
+
+                try {
+                    SearchResultInfo searchResult = this.getCluService().search(searchRequest, ContextUtils.getContextInfo());
+                    return resolveCluSearchResultSet(searchResult);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
         }
@@ -148,25 +201,25 @@ public class CluInformationHelper {
 
     public List<CluInformation> getCluInfosWithDetailForQuery(MembershipQueryInfo membershipQuery) {
         List<CluInformation> cluInfos = this.getCluInfosForQuery(membershipQuery);
-        if(cluInfos!=null){
-            for(CluInformation cluInfo : cluInfos){
+        if (cluInfos != null) {
+            for (CluInformation cluInfo : cluInfos) {
                 cluInfo.setCredits(this.getCreditInfo(cluInfo.getCluId()));
             }
         }
         return cluInfos;
     }
 
-    public static SearchParamInfo getApprovedStateSearchParam(){
+    public static SearchParamInfo getApprovedStateSearchParam() {
         SearchParamInfo searchParam = new SearchParamInfo();
         searchParam.setKey("lu.queryParam.luOptionalState");
-        searchParam.getValues().add("Approved");
-        searchParam.getValues().add("Active");
-        searchParam.getValues().add("Retired");
-        searchParam.getValues().add("Suspended");
+        searchParam.getValues().add(DtoConstants.STATE_APPROVED);
+        searchParam.getValues().add(DtoConstants.STATE_ACTIVE);
+        searchParam.getValues().add(DtoConstants.STATE_RETIRED);
+        searchParam.getValues().add(DtoConstants.STATE_SUSPENDED);
         return searchParam;
     }
 
-    public static List<CluInformation> resolveCluSearchResultSet(SearchResultInfo searchResult){
+    public static List<CluInformation> resolveCluSearchResultSet(SearchResultInfo searchResult) {
         List<CluInformation> clus = new ArrayList<CluInformation>();
         List<SearchResultRowInfo> rows = searchResult.getRows();
         for (SearchResultRowInfo row : rows) {
@@ -185,11 +238,48 @@ public class CluInformationHelper {
                     cluInformation.setState(cell.getValue());
                 } else if (cell.getKey().equals("lu.resultColumn.luOptionalVersionIndId")) {
                     cluInformation.setVerIndependentId(cell.getValue());
-                } else if (cell.getKey().equals("lu.resultColumn.luOptionalShortName")){
+                } else if (cell.getKey().equals("lu.resultColumn.luOptionalShortName")) {
                     cluInformation.setShortName(cell.getValue());
                 }
             }
             clus.add(cluInformation);
+        }
+        return clus;
+    }
+
+    /**
+     * Create a new CluInformation object from the CluInfo dto.
+     *
+     * @param cluInfo
+     * @return
+     */
+    private static CluInformation cluInformationFromCluInfo(CluInfo cluInfo) {
+        CluInformation cluInformation = new CluInformation(cluInfo.getOfficialIdentifier().getCode(), cluInfo.getOfficialIdentifier().getShortName().toUpperCase(), "");
+        cluInformation.setCluId(cluInfo.getId());
+        cluInformation.setDescription(cluInfo.getDescr().getPlain());
+        cluInformation.setState(cluInfo.getStateKey());
+        cluInformation.setTitle(cluInfo.getOfficialIdentifier().getLongName());
+        cluInformation.setShortName(cluInfo.getOfficialIdentifier().getShortName());
+        cluInformation.setType(cluInfo.getTypeKey());
+        cluInformation.setVerIndependentId(cluInfo.getVersion().getVersionIndId());
+        return cluInformation;
+    }
+
+    public static List<CluInformation> resolveLoSearchResults(SearchResultInfo searchResult, CluService cluService) {
+        List<CluInformation> clus = new ArrayList<CluInformation>();
+        List<SearchResultRowInfo> rows = searchResult.getRows();
+        for (SearchResultRowInfo row : rows) {
+            try {
+                List<SearchResultCellInfo> cells = row.getCells();
+                for (SearchResultCellInfo cell : cells) {
+                    if (cell.getKey().equals("lo.resultColumn.loCluId")) {
+                        CluInfo cluInfo = cluService.getClu(cell.getValue(), ContextUtils.getContextInfo());
+                        clus.add(cluInformationFromCluInfo(cluInfo));
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return clus;
     }

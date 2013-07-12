@@ -4,13 +4,13 @@ import org.kuali.rice.krms.api.engine.TermResolutionException;
 import org.kuali.rice.krms.api.engine.TermResolver;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
 import org.kuali.student.enrollment.academicrecord.service.AcademicRecordService;
-import org.kuali.student.krms.util.KSKRMSExecutionConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
 import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,16 +32,24 @@ import java.util.Set;
  * The studentId is passed as a resolvedPrereq.
  *
  */
-public class CompletedCoursesTermResolver extends AbstractCourseTermResolver implements TermResolver<Boolean> {
+public class CompletedCoursesTermResolver implements TermResolver<Boolean> {
+
+    @Override
+    public Set<String> getPrerequisites() {
+        Set<String> temp = new HashSet<String>(2);
+        temp.add(KSKRMSServiceConstants.TERM_PREREQUISITE_PERSON_ID);
+        temp.add(KSKRMSServiceConstants.TERM_PREREQUISITE_CONTEXTINFO);
+        return Collections.unmodifiableSet(temp);
+    }
 
     @Override
     public String getOutput() {
-        return KSKRMSExecutionConstants.COMPLETED_COURSES_TERM_NAME;
+        return KSKRMSServiceConstants.TERM_RESOLVER_COMPLETEDCOURSES;
     }
 
     @Override
     public Set<String> getParameterNames() {
-        return Collections.singleton(KSKRMSExecutionConstants.COURSE_CODE_TERM_PROPERTY);
+        return Collections.singleton(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_CLUSET_KEY);
     }
 
     @Override
@@ -55,15 +63,10 @@ public class CompletedCoursesTermResolver extends AbstractCourseTermResolver imp
 
         //Get the number of completed courses in list.
         TermResolver<Integer> numberOfCompletedCoursesTermResolver = new NumberOfCompletedCoursesTermResolver();
-        Integer completedCourses = numberOfCompletedCoursesTermResolver.resolve(resolvedPrereqs, parameters);
+        int completedCourses = numberOfCompletedCoursesTermResolver.resolve(resolvedPrereqs, parameters);
 
-        //Get the number of the courses in the list.
-        int courses = 0;
-        String[] courseCodes = this.resolveCourseCodes(parameters);
-        if (courseCodes != null){
-            courses = courseCodes.length;
-        }
+        String cluSetId = parameters.get(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_CLUSET_KEY);
 
-        return completedCourses == courses;
+        return completedCourses >= 2;
     }
 }

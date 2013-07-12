@@ -57,6 +57,7 @@ public class CalendarConstants {
     public static final String ACADEMICCALENDER = "AcademicCalendar";
     public static final String HOLIDAYCALENDER = "HolidayCalendar";
     public static final String TERM = "AcademicTerm";
+    public static final String SUBTERM = "SubTerm";
     public static final String CALENDAR_SEARCH_VIEW= "calendarSearchView";
     public static final String CALENDAR_SEARCH_TYPE = "calendarSearchType";
 
@@ -96,15 +97,21 @@ public class CalendarConstants {
         public static final String ERROR_ACAL_OFFICIAL_FAILED = "error.enroll.acal.official.failed";
         public static final String ERROR_ACAL_SAVE_TERM_SAVE_FAILED = "error.enroll.acal.term.save.failed";
         public static final String ERROR_ACAL_SAVE_TERM_OFFICIAL_FAILED = "error.enroll.acal.term.official.failed";
+        public static final String ERROR_ACAL_SAVE_EVENT_FAILED = "error.enroll.acal.event.save.failed";
+        public static final String ERROR_ACAL_SAVE_TERM_KEYDATE_FAILED = "error.enroll.acal.term.keydate.save.failed";
         public static final String ERROR_DUPLICATE_HCAL = "error.enroll.acal.duplicate.hcal";
         public static final String ERROR_KEY_DATE_TYPE_REQUIRED = "error.enroll.keydate.type.empty";
         public static final String ERROR_KEY_DATE_GROUP_TYPE_REQUIRED = "error.enroll.keydategroup.type.empty";
         public static final String ERROR_KEY_DATE_START_DATE_REQUIRED = "error.enroll.keydate.startDate.empty";
+        public static final String ERROR_KEY_DATE_START_TIME_REQUIRED = "error.enroll.keydate.startTime.empty";
+        public static final String ERROR_KEY_DATE_END_DATE_REQUIRED = "error.enroll.keydate.endDate.empty";
+        public static final String ERROR_KEY_DATE_END_TIME_REQUIRED = "error.enroll.keydate.endTime.empty";
         public static final String ERROR_DUPLICATE_NAME  = "error.enroll.calendar.duplicateName";
         public static final String ERROR_DATE_NOT_IN_ACAL_RANGE = "error.enroll.event.dateNotInAcal";
         public static final String ERROR_INVALID_DATE_RANGE = "error.enroll.daterange.invalid";
         public static final String ERROR_DUPLICATE_TERM_NAME = "error.enroll.term.duplicateName";
         public static final String ERROR_TERM_NOT_IN_ACAL_RANGE = "error.enroll.term.dateNotInAcal";
+        public static final String ERROR_TERM_NOT_IN_TERM_RANGE = "error.enroll.term.dateNotInTerm";
         public static final String ERROR_INVALID_DATERANGE_KEYDATE = "error.enroll.keydate.dateNotInTerm";
         public static final String ERROR_CALCULATING_INSTRUCTIONAL_DAYS = "error.enroll.acal.instructionaldays.calculation";
         public static final String ERROR_NO_PARENT_TERM_FOR_SUBTERM = "error.enroll.acal.term.noParentTermForSubterm";
@@ -121,4 +128,7 @@ public class CalendarConstants {
     public static final String SESSION_CALENDAR_SEARCH_NAME = "sessionCalendarSearchName";
     public static final String SESSION_CALENDAR_SEARCH_YEAR = "sessionCalendarSearchYear";
 
+    public static final String MESSAGE_CONFIRM_TO_DELETE_SUBTERM = "Are you sure you want to delete the Academic Subterm?";
+    public static final String MESSAGE_CONFIRM_TO_DELETE_TERM_WITH_SUBTERM = "Are you sure you want to delete the Academic Term? The associated subterms will be deleted as well.";
+    public static final String MESSAGE_CONFIRM_TO_DELETE_TERM_ONLY = "Are you sure you want to delete the Academic Term?";
 }

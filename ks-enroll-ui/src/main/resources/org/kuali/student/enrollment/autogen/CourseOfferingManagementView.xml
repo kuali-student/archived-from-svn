@@ -19,32 +19,22 @@
      limitations under the License.
     -->
 
-    <bean id="KS-CourseOfferingManagement-View" parent="KS-Uif-FormView" p:applyDirtyCheck="true"
+    <bean id="KS-CourseOfferingManagement-View" parent="KS-CourseOffering-FormViewWithTermContextBarPlaceholder" p:applyDirtyCheck="true"
           p:id="courseOfferingManagementView"
           p:entryPageId="searchInputPage"
           p:viewHelperServiceClass="org.kuali.student.enrollment.class2.autogen.service.impl.ARGCourseOfferingManagementViewHelperServiceImpl"
-          p:formClass="org.kuali.student.enrollment.class2.autogen.form.ARGCourseOfferingManagementForm">
+          p:formClass="org.kuali.student.enrollment.class2.autogen.form.ARGCourseOfferingManagementForm" >
 
-        <!--
-        Because the topGroup is static after the initial view load we needed to create a generic way to update the data
-        via javascript. So, we create a placeholder bean (KS-CourseOfferingManagement-ContextBar-PlaceHolder) in the static context
-        bar. Then, we create an "updating" bean in the page. In this case:  KS-CourseOfferingManagement-ContextBar
-        -->
-        <property name="topGroup">
-            <bean  id="KS-CourseOfferingManagement-ContextBar-PlaceHolder" parent="KS-Uif-HorizontalBoxGroup-TopGroup"/>
-        </property>
+        <!-- This is a placeholder; it will be dynamically replaced by child-pages using JS-onDocumentReadyScript.
+             This is a work-around at least until KRAD 2.3-m3 -->
+        <property name="headerText" value="Course Offerings" />
 
-        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
-            <ref bean="KS-Enrollment-HomewardPathBreadcrumbs"/>
-        </property>
+        <property name="viewSourceFile" value="CourseOfferingManagementView.xml" /> <!-- Shows up in HTML so devs can find the code -->
 
         <property name="authorizer">
             <bean class="org.kuali.student.enrollment.main.view.KsViewAuthorizerBase"/>
         </property>
 
-        <property name="header">
-            <bean parent="Uif-HeaderThree" p:headerText="Manage Course Offerings" p:style="display: none; padding-left:15px;"/>
-        </property>
         <property name="footer">
             <bean parent="Uif-FooterBase"/>
         </property>
@@ -64,7 +54,24 @@
             </list>
         </property>
 
+        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
+            <list>
+                <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+            </list>
+        </property>
+
+
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <bean id="KS-HomewardPathBreadcrumbs-this-Landing" parent="Uif-BreadcrumbItem">
+                    <property name="label" value="Course Offerings"/>
+                </bean>
+            </list>
+        </property>
+
         <property name="preloadPoolSize" value="3"/>
+
         <property name="items">
             <list>
                 <ref bean="KS-CourseOfferingManagement-SearchInputPage"/>
@@ -79,7 +86,6 @@
         <property name="dialogs">
             <list>
                 <bean id="schedulingConfirmDialog" parent="schedulingConfirmDialog-Group"/>
-                <ref bean="approveCODialog"/>
                 <ref bean="deletingColocationNotSupportedForMultipleCosDialog"/>
                 <ref bean="deletingColocationNotSupportedForCoDialog"/>
                 <ref bean="deletingColocationNotSupportedForMultipleAosDialog"/>
@@ -88,32 +94,20 @@
         </property>
     </bean>
 
-    <!--
-     This is the context bar that will be put into the static context bar placeholder on page load. It does this via the
-     "updateContextBar" javascript.
-     Note: because of the way the breadcrumbs are implemented we had to set the "display: none"
-    -->
-    <bean id="KS-CourseOfferingManagement-ContextBar" parent="Uif-HorizontalBoxGroup" p:style="display: none;"
-          p:onDocumentReadyScript="updateContextBar('KS-CourseOfferingManagement-ContextBar', 'KS-CourseOfferingManagement-ContextBar-PlaceHolder'); setSeasonalColor('KS-CourseOfferingManagement-ContextBar',@{termDayOfYear}, '@{#ConfigProperties['application.url']}');">
-        <property name="cssClasses">
-            <list merge="true">
-                <value>ks-topGroup</value>
-            </list>
-        </property>
-        <property name="items">
-            <list>
-                <bean parent="Uif-Label" p:labelText="@{termCode}" p:renderColon="false">
-                    <property name="cssClasses">
-                        <list merge="true">
-                            <value>ks-topGroup-termCode</value>
-                        </list>
-                    </property>
-                </bean>
-                <bean id="contextBarSocState" parent="KS-Lozenge-Grey-Uif-DataField" p:readOnly="true" p:propertyName="socState" />
-            </list>
+    <bean id="KS-HomewardPathBreadcrumbs-ManageCo-Landing" parent="Uif-BreadcrumbItem">
+        <property name="label" value="Course Offerings"/>
+        <property name="url.viewId" value="courseOfferingManagementView"/>
+        <property name="url.controllerMapping" value="courseOfferingManagement"/>
+        <property name="url.requestParameters">
+            <map key-type="java.lang.String" merge="true">
+                <entry key="methodToCall" value="start"/>
+                <entry key="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                <entry key="hideReturnLink" value="true"/>
+                <entry key="pageId" value="searchInputPage"/>
+                <entry key="viewName" value="Manage Course Offerings"/>
+            </map>
         </property>
     </bean>
-
 
     <bean id="schedulingConfirmDialog-Group" parent="Uif-DialogGroup">
         <property name="hidden" value="true"/>
@@ -123,17 +117,6 @@
             <list>
                 <bean parent="Uif-DataField" p:label="Course Offerings" p:propertyName="toBeScheduledCourseOfferingsUI" p:fieldLabel.style="font-weight:bold;"/>
                 <bean parent="Uif-MessageField" p:label="Activity Offerings" p:messageText="All contained in the course offerings (@{toBeScheduledCourseOfferingsCount})" p:fieldLabel.style="font-weight:bold;"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="approveCODialog" parent="Uif-OK-Cancel-DialogGroup"
-          p:promptText="This will mark all checked Course Offerings as Ready for Scheduling." >
-        <property name="headerText" value="Approve CourseOfferings"/>
-        <property name="availableResponses">
-            <list>
-                <bean parent="Uif-KeyLabelPair" p:key="Y" p:value="Approve"/>
-                <bean parent="Uif-KeyLabelPair" p:key="N" p:value="Cancel"/>
             </list>
         </property>
     </bean>

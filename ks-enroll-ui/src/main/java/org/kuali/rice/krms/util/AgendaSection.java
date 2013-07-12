@@ -1,3 +1,18 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.rice.krms.util;
 
 import org.kuali.rice.krad.uif.component.BindingInfo;
@@ -9,16 +24,13 @@ import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.rice.krms.dto.AgendaEditor;
+import org.kuali.rice.krms.service.RuleViewHelperService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: SW Genis
- * Date: 2013/05/21
- * Time: 3:17 PM
- * To change this template use File | Settings | File Templates.
+ * @author Kuali Student Team
  */
 public class AgendaSection extends Group {
 
@@ -47,6 +59,9 @@ public class AgendaSection extends Group {
         // get the collection for this group from the model
         List<Object> modelCollection = ObjectPropertyUtils.getPropertyValue(model,
                 this.getBindingInfo().getBindingPath());
+
+        //Set the ruleviewhelperservice on the agendabuilder.
+        this.getAgendaBuilder().setViewHelperService((RuleViewHelperService) view.getViewHelperService());
 
         // create agenda sections for each agenda
         List<Component> items = new ArrayList<Component>();

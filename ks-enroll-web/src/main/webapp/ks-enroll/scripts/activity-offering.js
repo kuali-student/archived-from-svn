@@ -83,6 +83,7 @@ function activityEditDocumentOnLoad(){
 
     jQuery("#ActivityOfferingEdit-CoLocatedEnrollmentSeperate :text").addClass("ignoreValid");
     jQuery("#shared_max_enr_control").addClass("ignoreValid");
+    jQuery('.new_rdl_components').addClass("ignoreValid");
 
     if(jQuery("#is_co_located_control").length != 0) {
         setupColoCheckBoxChange(jQuery("#is_co_located_control"));
@@ -596,4 +597,79 @@ function calculatePercent(jqObject){
 
 function setRequestedDeliveryLogisticsFieldRequired(jqObject,required){
 
+}
+
+function displayAOsubTerm(subTermNameId, subTermTypeId, popoverId, dirtyId, subTermDatesJsonString) {
+    var subTermName = jQuery("#"+subTermTypeId+"_control").find(":selected").text();
+    var subTermId = jQuery("#"+subTermTypeId+"_control").find(":selected").val();
+
+    /* set subTermName */
+    jQuery("#"+subTermNameId+"_control").text(subTermName);
+
+    /* Set indicated field control as dirty to register changes in form (may not be a subterm field.) */
+    jQuery('#'+dirtyId+'_control').addClass('dirty');
+
+    /* set subTerm Start/End date display */
+    if (subTermName == "None") {
+        subTermId="none";
+    }
+    if (subTermDatesJsonString && 0 !== subTermDatesJsonString.length && subTermId && 0 != subTermId.length) {
+        var subTermDates = jQuery.parseJSON(subTermDatesJsonString);
+        jQuery.each(subTermDates, function (key, value) {
+            if (subTermId.toLowerCase() === key.toLowerCase()) {
+                jQuery("#start_end_date_control").text(value);
+            }
+        });
+    }
+
+    jQuery("#"+popoverId).HideBubblePopup();
+}
+
+
+function handleAOSelection(component){
+    var aoId = jQuery("#edit_ao_select_control").val();
+    handleAONavigation(component,aoId);
+}
+
+/*
+  This is the method which handles AO navigation.
+ */
+function handleAONavigation(component, aoId){
+
+    var isValidForm = validateForm();
+
+//    if (!isValidForm){
+
+        var saveAndContinue = jQuery("#edit_ao_save_and_continue").attr("data-submit_data");
+        var cancelSaveAndLoad = jQuery("#edit_ao_cancel").attr("data-submit_data");
+        var submit_data_array = saveAndContinue.split(',');
+        var i = 0;
+        for (; i<submit_data_array.length; ){
+            var data = submit_data_array[i].split(':');
+            if (data[0] == '"actionParameters[aoId]"'){
+                data[1] = '"' + aoId + '"';
+                submit_data_array[i] = data[0] + ":" + data[1];
+                break;
+            }
+            i++;
+        }
+        jQuery("#edit_ao_save_and_continue").attr("data-submit_data",submit_data_array.join());
+
+        var cancel_data_array = cancelSaveAndLoad.split(',');
+        i = 0;
+        for (; i<cancel_data_array.length; ){
+            var data = cancel_data_array[i].split(':');
+            if (data[0] == '"actionParameters[aoId]"'){
+                data[1] = '"' + aoId + '"';
+                cancel_data_array[i] = data[0] + ":" + data[1];
+                break;
+            }
+            i++;
+        }
+        jQuery("#edit_ao_cancel").attr("data-submit_data",cancel_data_array.join());
+
+        showLightboxComponent('ActivityOfferingEdit-NavigationConfirmation');
+//    } else {
+//        actionInvokeHandler(component);
+//    }
 }

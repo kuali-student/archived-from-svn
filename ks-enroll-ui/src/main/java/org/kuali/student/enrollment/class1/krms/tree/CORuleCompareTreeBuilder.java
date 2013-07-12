@@ -1,9 +1,26 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.student.enrollment.class1.krms.tree;
 
 import org.kuali.rice.core.api.util.tree.Node;
 import org.kuali.rice.core.api.util.tree.Tree;
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinitionContract;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinitionContract;
+import org.kuali.rice.krms.dto.PropositionEditor;
+import org.kuali.rice.krms.dto.RuleEditor;
 import org.kuali.rice.krms.tree.RuleCompareTreeBuilder;
 import org.kuali.rice.krms.tree.node.CompareTreeNode;
 import org.kuali.student.enrollment.class1.krms.dto.CluInformation;
@@ -24,7 +41,7 @@ import java.util.List;
 public class CORuleCompareTreeBuilder extends RuleCompareTreeBuilder {
 
     @Override
-    public Tree<CompareTreeNode, String> buildTree(RuleDefinitionContract original, RuleDefinitionContract compare) {
+    public Tree<CompareTreeNode, String> buildTree(RuleEditor original, RuleEditor compare) {
         Tree<CompareTreeNode, String> compareTree = super.buildTree(original, compare);
 
         //Set data headers on root node.
@@ -45,7 +62,7 @@ public class CORuleCompareTreeBuilder extends RuleCompareTreeBuilder {
     }
 
     @Override
-    public List<String> getListItems(PropositionDefinitionContract propositionEditor) {
+    public List<String> getListItems(PropositionEditor propositionEditor) {
         if (propositionEditor instanceof EnrolPropositionEditor) {
             EnrolPropositionEditor enrolProp = (EnrolPropositionEditor) propositionEditor;
             List<String> listItems = new ArrayList<String>();

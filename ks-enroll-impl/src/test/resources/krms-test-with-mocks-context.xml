@@ -11,6 +11,8 @@
     <import resource="classpath:ks-test-system-property-configurer.xml"/>
     <import resource="classpath:ks-enroll-api-data-dictionary-services-configuration.xml"/>
     <import resource="classpath:ks-enroll-api-data-dictionary-validator-configuration.xml"/>
+    <!--<import resource="classpath:ks-core-impl-test-data-dictionary-services-configuration.xml"/>-->
+    <!--<import resource="classpath:ks-core-impl-test-data-dictionary-validator-configuration.xml"/>-->
 
     <bean id="AtomikosTxMgr"
           class="com.atomikos.icatch.jta.UserTransactionManager"
@@ -77,6 +79,9 @@
           class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceMockImpl">
     </bean>
 
+    <bean id="cluService" class="org.kuali.student.r2.lum.lu.service.impl.CluServiceMockImpl">
+    </bean>
+
     <bean id="acadRecordService"
           class="org.kuali.student.enrollment.class2.academicrecord.service.impl.AcademicRecordServiceMockImpl">
     </bean>
@@ -85,13 +90,67 @@
           class="org.kuali.student.enrollment.class2.courseregistration.service.impl.CourseRegistrationServiceMockImpl">
     </bean>
 
-    <bean id="contextBoService"
-          class="org.kuali.rice.krms.impl.repository.ContextBoServiceImpl">
+    <bean id="courseOfferingService"
+          class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceMockImpl">
+        <property name="courseService" ref="courseService" />
+        <property name="acalService" ref="acalService" />
+        <property name="businessLogic" ref="coBusinessLogic" />
+        <property name="typeService" ref="typeService"/>
+        <property name="stateService" ref="stateService"/>
+        <property name="lrcService" ref="lrcService"/>
+        <property name="schedulingService" ref="schedulingService"/>
     </bean>
 
-    <bean id="ksKRMSTermResolverTypeService"
-          class="org.kuali.student.krms.service.impl.KSTermResolverTypeService">
+    <bean id="acalService" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.AcademicCalendarServiceMockImpl" />
+    <bean id="courseService" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseServiceR1MockImpl" />
+    <bean id="typeService" class="org.kuali.student.r2.common.type.service.TypeServiceMockImpl"/>
+    <bean id="stateService" class="org.kuali.student.r2.core.class1.state.service.impl.StateServiceMockDataImpl" />
+    <bean id="lrcService" class="org.kuali.student.r2.lum.lrc.service.impl.LrcServiceMockImpl" />
+    <bean id="schedulingService" class="org.kuali.student.r2.core.scheduling.service.impl.SchedulingServiceMockImpl"/>
+    <bean id="atpService" class="org.kuali.student.r2.core.class1.atp.service.impl.AtpServiceMockImpl"/>
+    <bean id="roomService" class="org.kuali.student.r2.core.room.service.impl.RoomServiceMockImplM5"/>
+
+    <bean id="coBusinessLogic" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceBusinessLogicImpl">
+        <property name="courseService" ref="courseService" />
+        <property name="acalService" ref="acalService" />
+        <property name="coService" ref="courseOfferingService" />
+        <property name="registrationCodeGeneratorFactory" ref="regGroupCodeGeneratorFactory" />
+        <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
     </bean>
 
+    <bean id="krmsRuleManagementCopyMethods" class="org.kuali.rice.krms.impl.util.KrmsRuleManagementCopyMethodsMockImpl">
+    </bean>
+    <bean id="courseOfferingTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.CourseOfferingTransformer">
+        <property name="krmsRuleManagementCopyMethods" ref="krmsRuleManagementCopyMethods" />
+    </bean>
+    <bean id="regGroupCodeGeneratorFactory" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.FourDigitRegistrationGroupCodeGeneratorFactory" />
 
+    <bean id="populationService" class="org.kuali.student.r2.core.population.service.decorators.PopulationServiceValidatorDecorator">
+        <property name="nextDecorator" ref="populationServiceImpl" />
+        <property name="validator" ref="validator" />
+        <property name="typeService" ref="typeService" />
+    </bean>
+
+    <!--<bean id="typeService" class="org.kuali.student.r2.core.class1.type.service.impl.TypeServiceMockImpl"/>-->
+
+    <bean id="validator" class="org.kuali.student.r2.common.datadictionary.RiceDataDictionaryValidatorImpl">
+        <property name="riceDataDictionaryService" ref="dataDictionaryServiceForAllUsedByRice" />
+        <property name="riceDictionaryValidationService" ref="riceDictionaryValidationService" />
+    </bean>
+
+    <bean id="populationDao" class="org.kuali.student.r2.core.population.dao.PopulationDao"/>
+    <bean id="populationRuleDao" class="org.kuali.student.r2.core.population.dao.PopulationRuleDao"/>
+    <bean id="criteriaLookupService" class="org.kuali.student.r2.common.criteria.impl.CriteriaLookupServiceImpl">
+        <property name="criteriaLookupDao" ref="criterialookupDaoJpa"/>
+    </bean>
+
+    <bean id="populationServiceImpl" class="org.kuali.student.r2.core.population.service.impl.PopulationServiceImpl">
+        <property name="populationDao" ref="populationDao"/>
+        <property name="populationRuleDao" ref="populationRuleDao"/>
+        <property name="criteriaLookupService" ref="criteriaLookupService" />
+    </bean>
+
+    <bean id="criterialookupDaoJpa" class="org.kuali.student.r2.common.criteria.impl.CriteriaLookupDaoJpaImpl">
+        <property name="entityManager" ref="entityManager"/>
+    </bean>
 </beans>

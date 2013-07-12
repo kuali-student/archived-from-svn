@@ -32,43 +32,56 @@ function getPropositionIdFromParentLi(parentLiNode) {
 function ajaxCallPropositionTree(controllerMethod, collectionGroupId) {
     var selectedItemInput = getSelectedPropositionInput();
     var selectedItemId = selectedItemInput.val();
-    var actionRevealCallBack = function (htmlContent) {
-        jq('.editModeNode').find(".actionReveal").first().hide();
-    };
+
+    //Disable all buttons when add of proposition is in progress
+    if(controllerMethod == "addProposition") {
+        var actionRevealCallBack = function (htmlContent) {
+            disableTreeButtons();
+        };
+    }
+
+    //Only enable add button after deletion of proposition
+    if(controllerMethod == "deleteProposition") {
+        var actionRevealCallBack = function (htmlContent) {
+            disableTreeButtons();
+            enableAddButton();
+        };
+    }
+
     retrieveComponent(collectionGroupId, controllerMethod, actionRevealCallBack, {selectedItemInputName: selectedItemId});
 }
 
-function ajaxCallOnTabSelect(event, ui) {
+function ajaxCallOnTabSelect(event, ui, editwithgroup, editwithlogic) {
     //Do client side validation before continueing to next tab.
     if (validateForm()) {
 
         if (ui.index == 0) {
 
             //Check if the logic expression has changed.
-            var logicArea = jq('#LogicArea_InputField_control');
+            var logicArea = jq('#KRMS-LogicArea-InputField_control');
             if (logicArea.hasClass('dirty')) {
 
                 //Add an error message for the user.
-                var data = jQuery("#LogicArea_InputField").data(kradVariables.VALIDATION_MESSAGES);
+                var data = jQuery("#KRMS-LogicArea-InputField").data(kradVariables.VALIDATION_MESSAGES);
                 data.errors = [];
                 var errorMessage = getMessage('error.krms.logic.preview');
                 data.errors.push(errorMessage);
-                jQuery("#LogicArea_InputField").data(kradVariables.VALIDATION_MESSAGES, data);
+                jQuery("#KRMS-LogicArea-InputField").data(kradVariables.VALIDATION_MESSAGES, data);
 
                 //Display error message
-                handleMessagesAtField('LogicArea_InputField');
+                handleMessagesAtField('KRMS-LogicArea-InputField');
 
                 //Do not continue.
                 event.preventDefault();
             } else {
 
                 //Remove previous error message if any exist.
-                var messagesDiv = jQuery("[data-messages_for='LogicArea_InputField']");
+                var messagesDiv = jQuery("[data-messages_for='KRMS-LogicArea-InputField']");
                 messagesDiv.hide();
-                handleTabStyle('LogicArea_InputField_control', false, false, false);
+                handleTabStyle('KRMS-LogicArea-InputField_control', false, false, false);
 
                 //Refresh the edit tree.
-                retrieveComponent('RuleStudentEditorView-TreeGroup');
+                retrieveComponent(editwithgroup);
             }
         } else {
 
@@ -77,11 +90,11 @@ function ajaxCallOnTabSelect(event, ui) {
             if (updateButton.length) {
 
                 //Force an updateProposition if any proposition is in edit mode.
-                ajaxCallPropositionTree('updateProposition', 'KRMS-EditWithLogic-EditGroup');
+                ajaxCallPropositionTree('updateProposition', editwithlogic);
             } else {
 
                 //Refresh the preview tree.
-                retrieveComponent('KRMS-EditWithLogic-EditGroup');
+                retrieveComponent(editwithlogic);
             }
         }
     } else {
@@ -109,6 +122,8 @@ function ajaxCutPropositionTree() {
     var copyItemTracker = getCopyPropositionInput();
     copyItemTracker.val('');
 
+    enablePasteButton();
+
     resetCutSelected(selectedItemId);
 }
 
@@ -119,6 +134,8 @@ function ajaxCopyPropositionTree() {
     copyItemTracker.val(selectedItemId);
     var cutItemTracker = getCutPropositionInput();
     cutItemTracker.val('');
+
+    enablePasteButton();
 
     resetCutSelected(selectedItemId);
 }
@@ -154,6 +171,27 @@ function ajaxPastePropositionTree(controllerMethod, collectionGroupId) {
 
 }
 
+function updateProposition(controllerMethod, collectionGroupId) {
+    var selectedItemInput = getSelectedPropositionInput();
+    if(controllerMethod != 'cancelEditProposition') {
+        if (validateForm()) {
+            var selectedItemInput = getSelectedPropositionInput();
+            var selectedItemId = selectedItemInput.val();
+            var actionRevealCallBack = function (htmlContent) {};
+
+            retrieveComponent(collectionGroupId, controllerMethod, actionRevealCallBack, {selectedItemInputName: selectedItemId});
+        }
+    } else {
+        var selectedItemInput = getSelectedPropositionInput();
+        var selectedItemId = selectedItemInput.val();
+        var actionRevealCallBack = function (htmlContent) {};
+
+        enableAddButton();
+
+        retrieveComponent(collectionGroupId, controllerMethod, actionRevealCallBack, {selectedItemInputName: selectedItemId});
+    }
+}
+
 function resetControlKeys() {
     var selectedItemTracker = getSelectedPropositionInput();
     selectedItemTracker.val('');
@@ -171,13 +209,7 @@ function markNodeAsSelected(parentLiNode) {
     }
 
     if (!propositionAddInProgress()) {
-        enableTreeButtons(); // disableButtons.js
-        // show hidden edit image link
-        jq(parentLiNode).find(".actionReveal").first().show();
-    }
-
-    if(jq(parentLiNode).hasClass('simpleEditNode')) {
-        disableTreeButtons();
+        enableTreeButtons();
     }
 
     if (jq(parentLiNode).hasClass('treeRoot')) {
@@ -195,6 +227,14 @@ function markNodeAsSelected(parentLiNode) {
     if (jq(parentLiNode).hasClass('lastInGroup')) {
         disableDownButton();
     }
+
+    if(jq(parentLiNode).hasClass('disableMoveRight')) {
+        disableRightButton();
+    }
+
+    if(jq(parentLiNode).hasClass('disableMoveLeft')) {
+        disableLeftButton();
+    }
 }
 
 
@@ -203,8 +243,7 @@ function handlePropositionNodeClick(parentLiNode) {
     var selectedItemTracker = getSelectedPropositionInput();
 
     // Don't allow other propositions to be selected when the proposition description is blank
-    if (propositionWithoutDescription(parentLiNode)) {
-        jQuery(".editDescription").focusout()
+    if (propositionAddInProgress()) {
         return;
     }
 
@@ -283,8 +322,8 @@ function propositionWithoutDescription(parentLiNode) {
  * @return description jQuery object of the proposition that is being added, null if none is currently being added
  */
 function propositionAddInProgress() {
-    var description = jQuery(".editDescription");
-    return ((description.length > 0) && (jQuery.trim(description.val()) == "")) ? description : null;
+    var flag = jQuery(".simpleEditNode");
+    return flag.length > 0 ? true : false;
 }
 
 function initRuleTree(componentId) {
@@ -293,6 +332,12 @@ function initRuleTree(componentId) {
     jq('#' + componentId).bind('loaded.jstree', function (event, data) {
         /* make the tree load with all nodes expanded */
         jq('#' + componentId).jstree('open_all');
+
+        //Display error message
+        jq('#' + componentId).find("div[data-role='InputField']").andSelf().filter("div[data-role='InputField']").each(function () {
+            var data = jQuery(this).data(kradVariables.VALIDATION_MESSAGES);
+            handleMessagesAtField(jQuery(this).attr('id'));
+        });
 
         // hide quick action icons (edit and add parent) on proposition tree nodes
         jq(this).find(".actionReveal").hide();
@@ -351,22 +396,18 @@ function initRuleTree(componentId) {
         });
 
         /* update sister compound operators and update proposition summary */
-        jq("[name$='data.proposition.compoundOpCode']").change(function () {
-            var onChangeElementId = this.id;
-
-            jq("select").filter(function () {
-                return this.id.match(
-                    new RegExp(onChangeElementId.replace(/^(\d+_node_)(\d+)(_.*)$/, '^$1\\d+$3$$'))
-                );
-            }).val(jq(this).val());
-
-            /* Set the selected id */
+        jq('li.compoundOpCodeNode').change(function () {
+            //Set the selected id
             var parentLiNode = jq(this).closest('li');
+            //Set parent to be refreshed
+            var componentId = jq(parentLiNode).offsetParent().attr('id');
+            var tabId = componentId.substring(0, componentId.indexOf('_'));
+
             var propositionId = getPropositionIdFromParentLi(parentLiNode);
             var selectedItemTracker = getSelectedPropositionInput();
             selectedItemTracker.val(propositionId);
 
-            ajaxCallPropositionTree('updateCompoundOperator', 'KRMS-RuleEdit-TabSection');
+            ajaxCallPropositionTree('updateCompoundOperator', tabId);
         })
 
     });

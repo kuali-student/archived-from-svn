@@ -1,3 +1,18 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.rice.krms.keyvalues;
 
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
@@ -12,7 +27,7 @@ import org.kuali.rice.krms.impl.repository.NaturalLanguageTemplateBoService;
 import org.kuali.rice.krms.impl.repository.NaturalLanguageUsageBoService;
 import org.kuali.rice.krms.impl.repository.TypeTypeRelationBoService;
 import org.kuali.student.enrollment.class2.courseoffering.service.decorators.PermissionServiceConstants;
-import org.kuali.student.krms.naturallanguage.util.KsKrmsConstants;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 
 import javax.xml.namespace.QName;
 import java.io.Serializable;
@@ -21,6 +36,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author Kuali Student Team
+ */
 public class RuleInstructionKeyValues implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +48,7 @@ public class RuleInstructionKeyValues implements Serializable {
 
     public Map<String, String> getKeyValues(Set<String> ruleTypeIds) {
         Map<String, String> keyValuesInstruction = new HashMap<String, String>();
-        NaturalLanguageUsage usageInstruction = getRuleManagementService().getNaturalLanguageUsageByNameAndNamespace(PermissionServiceConstants.KS_SYS_NAMESPACE, KsKrmsConstants.KRMS_NL_TYPE_INSTRUCTION);
+        NaturalLanguageUsage usageInstruction = getRuleManagementService().getNaturalLanguageUsageByNameAndNamespace(PermissionServiceConstants.KS_SYS_NAMESPACE, KSKRMSServiceConstants.KRMS_NL_TYPE_INSTRUCTION);
          //Use Type Type Relation to get Rule Types
         try {
             for(String ruleTypeId : ruleTypeIds) {
@@ -44,7 +62,7 @@ public class RuleInstructionKeyValues implements Serializable {
                 if (templateInstruction != null) {
                     keyValuesInstruction.put(ruleTypeId, templateInstruction.getTemplate());
                 } else {
-                    keyValuesInstruction.put(ruleTypeId, KsKrmsConstants.KRMS_NL_TYPE_INSTRUCTION);
+                    keyValuesInstruction.put(ruleTypeId, KSKRMSServiceConstants.KRMS_NL_TYPE_INSTRUCTION);
                 }
             };
         } catch (Exception ex) {}

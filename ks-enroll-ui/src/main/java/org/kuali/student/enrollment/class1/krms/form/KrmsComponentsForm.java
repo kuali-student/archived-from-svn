@@ -1,18 +1,17 @@
 /**
- * Copyright 2012 The Kuali Foundation Licensed under the
- * Educational Community License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may
- * obtain a copy of the License at
+ * Copyright 2005-2013 The Kuali Foundation
  *
- * http://www.osedu.org/licenses/ECL-2.0
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an "AS IS"
- * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing
- * permissions and limitations under the License.
+ * http://www.opensource.org/licenses/ecl2.php
  *
- * Created by Paul on 2012/11/22
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.kuali.student.enrollment.class1.krms.form;
 
@@ -28,7 +27,6 @@ import org.kuali.student.common.uif.form.KSUifForm;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * This class //TODO ...
@@ -54,6 +52,8 @@ public class KrmsComponentsForm extends KSUifForm {
     private List<TermParameter> list6 = new ArrayList<TermParameter>();
 
     private List<TermParameter> list10;
+
+    private Date testDate;
 
     private EnrolRuleEditor rule = new EnrolRuleEditor();
 
@@ -214,5 +214,13 @@ public class KrmsComponentsForm extends KSUifForm {
 
     public void setList10(List<TermParameter> list10) {
         this.list10 = list10;
+    }
+
+    public Date getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(Date testDate) {
+        this.testDate = testDate;
     }
 }

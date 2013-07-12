@@ -121,7 +121,8 @@
         <property name="items">
             <list>
                 <bean parent="KS-Uif-InputField-Simple" p:propertyName="isCheckedByCluster" p:required="false" p:readOnlyDisplayReplacement=" "
-                      p:onChangeScript="handleToolbar('KS-CourseOfferingManagement-AOClustersCollection',['enableApproveButton', 'enableDeleteButton', 'enableDraftButton', 'enableMoveToButton'], ['KS-CourseOfferingManagement-ToolBar-Approve-AO-ClusterTab','KS-CourseOfferingManagement-ToolBar-Delete-AO-ClusterTab', 'KS-CourseOfferingManagement-ToolBar-Draft-AO-ClusterTab', 'KS-CourseOfferingManagement-ToolBar-MoveTo-AO-ClusterTab']);">
+                      p:onChangeScript="handleToolbar('KS-CourseOfferingManagement-AOClustersCollection',['enableApproveButton', 'enableDeleteButton', 'enableDraftButton', 'enableMoveToButton'], ['KS-CourseOfferingManagement-ToolBar-Approve-AO-ClusterTab','KS-CourseOfferingManagement-ToolBar-Delete-AO-ClusterTab', 'KS-CourseOfferingManagement-ToolBar-Draft-AO-ClusterTab', 'KS-CourseOfferingManagement-ToolBar-MoveTo-AO-ClusterTab']);"
+                      p:hidden="@{!#line.isEnableDeleteButton()}">
                     <property name="control">
                         <bean parent="Uif-CheckboxControl" p:disabled="false"/>
                     </property>
@@ -141,6 +142,10 @@
                                 <property name="toolTip">
                                     <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="@{#lp.colocatedAoInfoUI}"/>
                                 </property>
+                            </bean>
+                            <bean parent="Uif-ImageField" p:hidden="@{#lp.subTermName eq 'None'}"
+                                  p:source="@{#ConfigProperties['ks.externalizable.images.url']}/subterm_icon.png" p:title="This activity is in @{#lp.subTermName} - &#13; @{#lp.termStartEndDate}">
+                                <property name="style" value="padding-left:5px; padding-bottom:3px;"/>
                             </bean>
                         </list>
                     </property>
@@ -204,12 +209,13 @@
                 <!--<bean parent="KS-Uif-NavigationActionLink-withSeparator" p:seperator="&#160;&#160;|&#160;&#160;">-->
                     <!--<property name="seperatedActions">-->
                         <!--<list>-->
-                            <bean parent="Uif-NavigationActionLink" p:methodToCall="copyAO" p:actionLabel="Copy"
-                                  p:render="@{#line.isEnableCopyAOActionLink()}" p:actionEvent="copyAOonManageAOsPage"/>
-                            <bean parent="Uif-NavigationActionLink" p:methodToCall="edit" p:actionLabel="Edit"
-                                  p:render="@{#line.isEnableEditAOActionLink()}" p:actionEvent="editAOonManageAOsPage">
-                            </bean>
-                        <!--</list>-->
+                <bean parent="Uif-NavigationActionLink" p:methodToCall="copyAO" p:actionLabel="Copy"
+                      p:render="@{#line.isEnableCopyAOActionLink()}" p:actionEvent="copyAOonManageAOsPage"/>
+                <bean parent="Uif-NavigationActionLink" p:methodToCall="edit" p:actionLabel="Edit"
+                      p:render="@{#line.isEnableEditAOActionLink()}" p:actionEvent="editAOonManageAOsPage">
+                </bean>
+                <bean parent="Uif-NavigationActionLink" p:methodToCall="manageAORules" p:actionLabel="Manage AO Requisites " />
+                <!--</list>-->
                     <!--</property>-->
                 <!--</bean>-->
             </list>

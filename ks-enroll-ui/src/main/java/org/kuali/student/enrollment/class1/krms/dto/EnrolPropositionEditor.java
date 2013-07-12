@@ -17,7 +17,6 @@ package org.kuali.student.enrollment.class1.krms.dto;
 
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinitionContract;
 import org.kuali.rice.krms.dto.PropositionEditor;
-import org.kuali.student.enrollment.class1.krms.util.CluSetRangeInformation;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
@@ -25,6 +24,9 @@ import org.kuali.student.enrollment.class2.population.dto.PopulationWrapper;
 
 import java.util.Map;
 
+/**
+ * @author Kuali Student Team
+ */
 public class EnrolPropositionEditor extends PropositionEditor {
 
     private static final long serialVersionUID = 1L;
@@ -42,6 +44,7 @@ public class EnrolPropositionEditor extends PropositionEditor {
     private String termCode;
     private String termCode2;
     private TermInfo termInfo;
+    private TermInfo termInfo2;
     private String classStanding;
     private PopulationWrapper  populationWrapper;
 
@@ -54,6 +57,25 @@ public class EnrolPropositionEditor extends PropositionEditor {
 
     public EnrolPropositionEditor(PropositionDefinitionContract definition) {
         super(definition);
+    }
+
+    public void clear(){
+        super.clear();
+        this.courseInfo = null;
+        this.cluSet = null;
+        this.multipleCourseType = null;
+        this.programType = null;
+        this.gradeScale = null;
+        this.orgInfo = null;
+        this.duration = null;
+        this.durationType = null;
+        this.progCluSet = null;
+        this.termCode = null;
+        this.termCode2 = null;
+        this.termInfo = null;
+        this.termInfo2 = null;
+        this.classStanding = null;
+        this.populationWrapper = null;
     }
 
     public CourseInfo getCourseInfo() {
@@ -95,26 +117,6 @@ public class EnrolPropositionEditor extends PropositionEditor {
 
     public void setCluSet(CluSetInformation cluSet) {
         this.cluSet = cluSet;
-    }
-
-    public int getCluListSize(){
-        if ((this.getCluSet() != null) && (this.getCluSet().getClus() != null)) {
-            return this.getCluSet().getClus().size();
-        } else if ((this.getProgCluSet() != null) && (this.getProgCluSet().getClus() != null)) {
-            return this.getProgCluSet().getClus().size();
-        } else {
-            return 0;
-        }
-    }
-
-    public int getCluSetListSize(){
-        if ((this.getCluSet() != null) && (this.getCluSet().getCluSets() != null)) {
-            return this.getCluSet().getCluSets().size();
-        } else if ((this.getProgCluSet() != null) && (this.getProgCluSet().getCluSets() != null)) {
-            return this.getProgCluSet().getCluSets().size();
-        } else {
-            return 0;
-        }
     }
 
     public OrgInfo getOrgInfo() {
@@ -163,6 +165,14 @@ public class EnrolPropositionEditor extends PropositionEditor {
 
     public void setTermInfo(TermInfo termInfo){
         this.termInfo = termInfo;
+    }
+
+    public TermInfo getTermInfo2() {
+        return termInfo2;
+    }
+
+    public void setTermInfo2(TermInfo termInfo2) {
+        this.termInfo2 = termInfo2;
     }
 
     public String getTermCode2() {

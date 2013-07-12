@@ -33,9 +33,11 @@ import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import javax.jws.WebParam;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -43,38 +45,69 @@ import java.util.Map;
  */
 public class AcademicCalendarServiceMockImpl implements AcademicCalendarService, MockService {
 
+    // Map of IDs to AcalInfos
     private Map<String, AcademicCalendarInfo> acals = new LinkedHashMap<String, AcademicCalendarInfo>();
+    // Maps of IDs to TermInfos
     private Map<String, TermInfo> terms = new LinkedHashMap<String, TermInfo>();
-    private Map<String, String> term2cal = new LinkedHashMap<String, String>();
-    private Map<String, String> subterm2term = new LinkedHashMap<String, String>();
+    // Map of term ID to a set of Acal Ids (KSENROLL-7444)
+    private Map<String, Set<String>> term2calSet = new LinkedHashMap<String, Set<String>>();
+    // Map of term ID to a set of term Ids representing the "parents".  A child, in theory, can
+    // have multiple parent terms. (KSENROLL-7444)
+    private Map<String, Set<String>> subterm2termSet = new LinkedHashMap<String, Set<String>>();
+    // Keydates
+    private Map<String, KeyDateInfo> keydates = new LinkedHashMap<String, KeyDateInfo>();
+    // Term to keydate set
+    private Map<String, Set<String>> term2KeydateSet = new LinkedHashMap<String, Set<String>>();
 
-    
     @Override
 	public void clear() {
-    	
     	this.acals.clear();
     	this.terms.clear();
-    	this.term2cal.clear();
-    	this.subterm2term.clear();
-    	
-		
+    	this.term2calSet.clear();
+    	this.subterm2termSet.clear();
+        this.keydates.clear();
+        this.term2KeydateSet.clear();
 	}
+
+    @Override
+    public List<String> getKeyDateIdsForTerm(@WebParam(name = "termId") String termId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        throw new UnsupportedOperationException("getKeyDateIdsForTerm unsupported");
+    }
 
 	@Override
     public StatusInfo addTermToAcademicCalendar(String academicCalendarId, String termId, ContextInfo contextInfo) throws AlreadyExistsException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        // note only allows term to be in one acal 
-        this.term2cal.put(termId, academicCalendarId);
-        StatusInfo status = new StatusInfo();
-        status.setSuccess(Boolean.TRUE);
-        return status;
+        // KSENROLL-7444
+        if (!terms.containsKey(termId)) {
+            throw new DoesNotExistException("termId=" + termId + " does not exist");
+        }
+        if (!acals.containsKey(academicCalendarId)) {
+            throw new DoesNotExistException("academicCalendarId=" + academicCalendarId + " does not exist");
+        }
+        if (!term2calSet.containsKey(termId)) {
+            term2calSet.put(termId, new HashSet<String>());
+        }
+        this.term2calSet.get(termId).add(academicCalendarId);
+        return _successStatus();
     }
 
     @Override
-    public StatusInfo addTermToTerm(String termId, String includedTermId, ContextInfo contextInfo) throws AlreadyExistsException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        this.subterm2term.put(includedTermId, termId);
-        StatusInfo status = new StatusInfo();
-        status.setSuccess(Boolean.TRUE);
-        return status;
+    public StatusInfo addTermToTerm(String parentTermId, String childTermId, ContextInfo contextInfo) throws AlreadyExistsException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        // KSENROLL-7444
+        if (!terms.containsKey(childTermId)) {
+            throw new DoesNotExistException("childTermId=" + childTermId + " does not exist");
+        }
+        if (!terms.containsKey(parentTermId)) {
+            throw new DoesNotExistException("parentTermId=" + childTermId + " does not exist");
+        }
+        if (!this.subterm2termSet.containsKey(childTermId)) {
+            this.subterm2termSet.put(childTermId, new HashSet<String>());
+        }
+        Set<String> parentTermIds = this.subterm2termSet.get(childTermId);
+        if (parentTermIds.contains(parentTermId)) {
+            throw new AlreadyExistsException("parentTermId=" + parentTermId + " already exists");
+        }
+        parentTermIds.add(parentTermId);
+        return _successStatus();
     }
 
     @Override
@@ -104,9 +137,6 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
 
     @Override
     public AcademicCalendarInfo createAcademicCalendar(String academicCalendarTypeKey, AcademicCalendarInfo academicCalendarInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
-
-        if( true ) throw new Error("bah");
-
         AcademicCalendarInfo copy = new AcademicCalendarInfo(academicCalendarInfo);
         if (copy.getId() == null) {
             copy.setId(UUIDHelper.genStringUUID());
@@ -132,7 +162,20 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
 
     @Override
     public KeyDateInfo createKeyDate(String termId, String keyDateTypeKey, KeyDateInfo keyDateInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!terms.containsKey(termId)) {
+            throw new DoesNotExistException("termId=" + termId + "does not exist");
+        }
+        KeyDateInfo copy = new KeyDateInfo(keyDateInfo);
+        if (copy.getId() == null) {
+            copy.setId(UUIDHelper.genStringUUID());
+        }
+        keydates.put(copy.getId(), copy);
+        if (!term2KeydateSet.containsKey(termId)) {
+            term2KeydateSet.put(termId, new HashSet<String>());
+        }
+        // Note: this doens't check if the keydate already exists for this term
+        term2KeydateSet.get(termId).add(copy.getId());
+        return new KeyDateInfo(copy);
     }
 
     @Override
@@ -175,7 +218,28 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
     }
 
     @Override
-    public StatusInfo deleteTerm(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+    public StatusInfo deleteTerm(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException,
+            MissingParameterException, OperationFailedException, PermissionDeniedException {
+        // Note: milestones not yet handled
+        // Will only permit a delete if the term has no subterms.  Will also remove from calendar if there are any calendars
+        // associated with it
+        if (!terms.containsKey(termId)) {
+            throw new DoesNotExistException("termId=" + termId + " does not exist");
+        }
+        List<TermInfo> childTerms = getIncludedTermsInTerm(termId, contextInfo);
+        // For each of the child terms, remove its link to termId (which may make it "stranded")
+        for (TermInfo child: childTerms) {
+            subterm2termSet.get(child.getId()).remove(termId);
+        }
+        // Remove term from any parent terms
+        if (subterm2termSet.containsKey(termId)) {
+            subterm2termSet.remove(termId);
+        }
+        // Check if it's attached to a calendar, and remove if so.
+        if (term2calSet.containsKey(termId)) {
+            term2calSet.remove(termId);
+        }
+        // Finally, remove the term itself
         this.getTerm(termId, contextInfo);
         terms.remove(termId);
         StatusInfo status = new StatusInfo();
@@ -233,7 +297,25 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
 
     @Override
     public List<AcademicCalendarInfo> getAcademicCalendarsForTerm(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // KSENROLL-7444
+        if (!terms.containsKey(termId)) {
+            throw new DoesNotExistException("termId=" + termId + " does not exist");
+        }
+        if (!term2calSet.containsKey(termId)) {
+            // Term exists, but it's not mapped to any academic calendars.
+            return new ArrayList<AcademicCalendarInfo>();
+        }
+        TermInfo termInfo = terms.get(termId);
+        Set<String> acalIds = term2calSet.get(termId);
+        List<AcademicCalendarInfo> acalInfos = new ArrayList<AcademicCalendarInfo>();
+        for (String id: acalIds) {
+            if (!acals.containsKey(id)) {
+                throw new DoesNotExistException("acalId=" + id + " does not exist");
+            }
+            AcademicCalendarInfo acalInfo = getAcademicCalendar(id, contextInfo);
+            acalInfos.add(acalInfo);
+        }
+        return acalInfos;
     }
 
     @Override
@@ -287,8 +369,23 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
     }
 
     @Override
-    public List<TermInfo> getContainingTerms(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<TermInfo> getContainingTerms(String childTermId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        // KSENROLL-7444
+        if (!this.terms.containsKey(childTermId)) {
+            throw new DoesNotExistException("childTermId=" + childTermId + " does not exists");
+        }
+        if (!this.subterm2termSet.containsKey(childTermId)) {
+            return new ArrayList<TermInfo>(); // subterm exists, but no linkage yet
+        }
+        Set<String> parentTermIds = this.subterm2termSet.get(childTermId);
+        List<TermInfo> parentTermInfos = new ArrayList<TermInfo>();
+        for (String termId: parentTermIds) {
+            if (!this.terms.containsKey(termId)) {
+                throw new DoesNotExistException("parentTermId=" + termId + " does not exist");
+            }
+            parentTermInfos.add(this.terms.get(termId));
+        }
+        return parentTermInfos;
     }
 
     @Override
@@ -407,8 +504,25 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
     }
 
     @Override
-    public List<TermInfo> getIncludedTermsInTerm(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<TermInfo> getIncludedTermsInTerm(String parentTermId, ContextInfo contextInfo)
+            throws DoesNotExistException, InvalidParameterException, MissingParameterException,
+                   OperationFailedException, PermissionDeniedException {
+        Set<String> childIds = new HashSet<String>();
+        for (Map.Entry<String, Set<String>> entry: subterm2termSet.entrySet()) {
+            Set<String> parentTerms = entry.getValue();
+            String childId = entry.getKey();
+            if (parentTerms.contains(parentTermId)) {
+                childIds.add(childId);
+            }
+        }
+        List<TermInfo> result = new ArrayList<TermInfo>();
+        for (String childId: childIds) {
+            if (!terms.containsKey(childId)) {
+                throw new DoesNotExistException("termId=" + childId + "does not exist");
+            }
+            result.add(terms.get(childId));
+        }
+        return result;
     }
 
     @Override
@@ -463,7 +577,18 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
 
     @Override
     public List<KeyDateInfo> getKeyDatesForTerm(String termId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Set<String> keydateSet = term2KeydateSet.get(termId);
+        if (keydateSet == null) {
+            return new ArrayList<KeyDateInfo>();
+        }
+        List<KeyDateInfo> keyDateInfos = new ArrayList<KeyDateInfo>();
+        for (String keydateId: keydateSet) {
+            if (!keydates.containsKey(keydateId)) {
+                throw new DoesNotExistException("keydate=" + keydateId + "does not exist");
+            }
+            keyDateInfos.add(keydates.get(keydateId));
+        }
+        return keyDateInfos;
     }
 
     @Override
@@ -526,7 +651,20 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
 
     @Override
     public List<TermInfo> getTermsForAcademicCalendar(String academicCalendarId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!acals.containsKey(academicCalendarId)) {
+            throw new OperationFailedException("acalId=" + academicCalendarId + " does not exist");
+        }
+        Set<String> resultSet = new HashSet<String>();
+        for (String termId: term2calSet.keySet()) {
+            if (term2calSet.get(termId).contains(academicCalendarId)) {
+                resultSet.add(termId);
+            }
+        }
+        List<TermInfo> termInfos = new ArrayList<TermInfo>();
+        for (String termId: resultSet) {
+            termInfos.add(terms.get(termId));
+        }
+        return termInfos;
     }
 
     @Override
@@ -612,8 +750,25 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
     }
 
     @Override
-    public StatusInfo changeAcademicCalendarState(@WebParam(name = "academicCalendarId") String academicCalendarId, @WebParam(name = "nextStateKey") String nextStateKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("changeAcademicCalendarState");
+    public StatusInfo changeAcademicCalendarState(String academicCalendarId, @WebParam(name = "nextStateKey") String nextStateKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        // Does not do state propagation
+        try {
+            AcademicCalendarInfo acal = this.acals.get(academicCalendarId);
+            if (acal == null) {
+                throw new DoesNotExistException("No academic calendar for id = " + academicCalendarId);
+            }
+            acal.setStateKey(nextStateKey);
+            return _successStatus();
+
+        } catch (Exception e) {
+            throw new OperationFailedException("changeAcademicCalendarState (id=" + academicCalendarId + ", nextStateKey=" + nextStateKey, e);
+        }
+    }
+
+    private StatusInfo _successStatus() {
+        StatusInfo status = new StatusInfo();
+        status.setSuccess(Boolean.TRUE);
+        return status;
     }
 
     @Override
@@ -662,8 +817,21 @@ public class AcademicCalendarServiceMockImpl implements AcademicCalendarService,
     }
 
     @Override
-    public StatusInfo changeTermState(@WebParam(name = "termId") String termId, @WebParam(name = "nextStateKey") String nextStateKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        throw new UnsupportedOperationException("changeTermState");
+    public StatusInfo changeTermState(String termId, String nextStateKey, ContextInfo contextInfo)
+            throws DoesNotExistException, InvalidParameterException, MissingParameterException,
+                   OperationFailedException, PermissionDeniedException {
+        // Does not do state propagation
+        try {
+            TermInfo termInfo = this.terms.get(termId);
+            if (termInfo == null) {
+                throw new DoesNotExistException("No term for id = " + termId);
+            }
+            termInfo.setStateKey(nextStateKey);
+            return _successStatus();
+
+        } catch (Exception e) {
+            throw new OperationFailedException("changeTermState (id=" + termId + ", nextStateKey=" + nextStateKey, e);
+        }
     }
 
     @Override

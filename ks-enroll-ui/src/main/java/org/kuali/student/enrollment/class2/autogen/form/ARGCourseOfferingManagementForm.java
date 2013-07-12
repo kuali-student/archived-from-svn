@@ -16,8 +16,10 @@
  */
 package org.kuali.student.enrollment.class2.autogen.form;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingClusterWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
+import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBar;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCopyWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
@@ -181,7 +183,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     //TODO: do we still need this parameter?
     private boolean hasAOCluster;
 
-    private int termDayOfYear; // this is used in the context bar to determine term color
+    private CourseOfferingContextBar contextBar = CourseOfferingContextBar.NULL_SAFE_INSTANCE;
 
     public boolean getHasAOCluster() {
         return hasAOCluster;
@@ -324,7 +326,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
      */
     @SuppressWarnings("unused")
     public String getSubjectCodeDescription() {
-        return subjectCodeDescription;
+        return StringEscapeUtils.escapeJavaScript( subjectCodeDescription );
     }
 
     /**
@@ -333,7 +335,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
      * @param subjectCodeDescription Subject Code Description
      */
     public void setSubjectCodeDescription(String subjectCodeDescription) {
-        this.subjectCodeDescription = subjectCodeDescription;
+        this.subjectCodeDescription = StringEscapeUtils.unescapeJavaScript( subjectCodeDescription ); // reverse encoding obtained from getter
     }
 
     public String getToBeScheduledCourseOfferingsUI() {
@@ -744,11 +746,12 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
         this.selectedTabId = selectedTabId;
     }
 
-    public int getTermDayOfYear() {
-        return termDayOfYear;
+    public CourseOfferingContextBar getContextBar() {
+        return contextBar;
     }
 
-    public void setTermDayOfYear(int termDayOfYear) {
-        this.termDayOfYear = termDayOfYear;
+    public void setContextBar(CourseOfferingContextBar contextBar) {
+        this.contextBar = contextBar;
     }
+
 }

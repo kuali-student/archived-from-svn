@@ -20,7 +20,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
     -->
-    <bean id="KS-CourseOfferingRolloverManagement-SelectTermPage" parent="Uif-Page" p:disclosure.render="false" p:headerText="Perform Rollover"
+    <bean id="KS-CourseOfferingRolloverManagement-SelectTermPage" parent="KS-Uif-Page" p:disclosure.render="false" p:headerText="Perform Rollover"
           p:id="selectTermsForRollover">
         <!-- It's easier to put the footer up front since it has a lot less content -->
         <property name="footer">
@@ -64,7 +64,7 @@
                                                             </list>
                                                         </property>
                                                     </bean>
-                                                    <bean parent="Uif-ImageField"
+                                                    <bean parent="Uif-ImageField" p:style="position: absolute; left: 110px;"
                                                           p:source="@{#ConfigProperties['ks.externalizable.images.url']}/help_gray_14px.png">
                                                         <property name="toolTip">
                                                             <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="Select the term you want to copy from \- the older term."/>
@@ -100,7 +100,7 @@
                                                             </list>
                                                         </property>
                                                     </bean>
-                                                    <bean parent="Uif-ImageField"
+                                                    <bean parent="Uif-ImageField" p:style="position: absolute; left: 110px;"
                                                           p:source="@{#ConfigProperties['ks.externalizable.images.url']}/help_gray_14px.png">
                                                         <property name="toolTip">
                                                             <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="Select the term you want to copy to \- the new term."/>

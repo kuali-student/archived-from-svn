@@ -1,4 +1,3 @@
-
 function removeSelfFromDropdowns(headerTextNameContainerId) {
     jQuery('select[name=clusterIdForAOMove]').each(function () {
         var dropdownId = jQuery(this).attr('id');
@@ -736,6 +735,27 @@ function updateContextBar(srcId, contextBarId){
     }
 }
 
+function updateHeaderRightGroup(srcId, rightGroupId){
+
+    if( rightGroupId == null ) return;
+
+    var rightGroup = jQuery("#" + rightGroupId);    // grab the placeholder
+    if( rightGroup ) {
+        var src = jQuery("#" + srcId);                  // grab the new header right group
+        jQuery(rightGroup).html(jQuery(src).html());         // copy the content of the right group to the place holder
+    }
+}
+
+// note: this seems to only apply to views that use the unified-header; maybe this should be named more explicitly?
+function updateViewHeader(newHeaderTextSource){
+    // Get Header node
+    var header = jQuery("div.ks-unified-header h1.uif-headerText span.uif-headerText-span");
+    var source = jQuery("#"+newHeaderTextSource+"_span");
+    var newHeaderText = source.html();
+    // Update header text
+    header.html(newHeaderText);
+}
+
 /*
 The users wanted to have a small strip of color that coincides with the term. If the user hasn't configured
 an explicit color then use the default coloring from a gradient.
@@ -777,7 +797,122 @@ function addBootstrapImageToLink(containerId) {
     jQuery("#" + containerId).find('img').each(function () {
         /*Style is used instead of src to prevent errors in krad*/
         var src = jQuery(this).attr('style');
-        var bsImage = '<i class="' + src + '"></i>';
-        jQuery(this).replaceWith(bsImage);
+        var anchor = jQuery(this).parent();
+        var aText = anchor.text();
+        anchor.text("");
+        var bsImage = '<i class="' + src + '"></i>' + jQuery.trim(aText);
+        jQuery(anchor).append(bsImage);
     });
+}
+
+/**
+ * Gathers property names of all fields that have been changed on the page.
+ * Properties are stored in a csv string and returned by the passed in object.
+ */
+
+function findDirtyFields(returnFieldId){
+    var dirtyFields = jQuery('.dirty');
+    var returnObject = jQuery('#'+returnFieldId+'_control');
+    var returnString="";
+    for (i=0;i<dirtyFields.length;i++){
+        returnString=returnString+dirtyFields[i].name+",";
+
+    }
+    returnObject[0].value=returnString;
+}
+/*
+The users want the page titling to be dynamically-updated depending on which particular page is showing at the time.
+For example, when the ManageCO landing-page is first shown, by default the view-title is 'Course Offerings' but
+if you conduct a subject-search (say, WMST) they want the view-title to be "WMST: Women's Studies".
+ */
+function updateViewHeaderText( value ) {
+    jQuery( 'div.uif-view h1.uif-headerText span.uif-headerText-span' ).html( value );
+}
+
+function createDisclosure(groupId, headerId, widgetId, defaultOpen, collapseImgSrc, expandImgSrc, animationSpeed, renderImage) {
+    jQuery(document).ready(function () {
+        var groupToggleLinkId = groupId + "_toggle";
+
+        var expandImage = "";
+        var collapseImage = "";
+        if (renderImage) {
+            var expandImage = "<img id='" + groupId + "_exp" + "' src='" + expandImgSrc + "' alt='" + getMessage(kradVariables.MESSAGE_EXPAND) + "' class='uif-disclosure-image'/>";
+            var collapseImage = "<img id='" + groupId + "_col" + "' src='" + collapseImgSrc + "' alt='" + getMessage(kradVariables.MESSAGE_COLLAPSE) + "' class='uif-disclosure-image'/>";
+        }
+
+        var groupAccordionSpanId = groupId + "_disclosureContent";
+
+        // perform initial open/close and insert toggle link and image
+        var headerText = jQuery("#" + headerId + " > :header, #" + headerId + " > label").find(".uif-headerText-span");
+        // Strip out whitespace that is causing problems for disclosures in chrome
+        headerText.text(headerText.text().trim());
+        if (defaultOpen) {
+            jQuery("#" + groupAccordionSpanId).slideDown(000);
+            headerText.prepend(expandImage);
+        }
+        else {
+            jQuery("#" + groupAccordionSpanId).slideUp(000);
+            headerText.prepend(collapseImage);
+        }
+
+        headerText.wrap("<a data-role='disclosureLink' data-linkfor='" + groupAccordionSpanId + "' href='#' "
+            + "id='" + groupToggleLinkId + "'></a>");
+
+        var animationFinishedCallback = function () {
+            jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", false);
+        };
+        var disclosureContent = jQuery("#" + groupAccordionSpanId);
+        // perform slide and switch image
+        if (defaultOpen) {
+            disclosureContent.data("open", true);
+            jQuery("#" + groupToggleLinkId).toggle(
+                function () {
+                    jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
+                    disclosureContent.data("open", false);
+                    disclosureContent.slideUp(animationSpeed, animationFinishedCallback);
+                    jQuery("#" + groupId + "_exp").replaceWith(collapseImage);
+                    setComponentState(widgetId, 'open', false);
+                }, function () {
+                    jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
+                    disclosureContent.data("open", true);
+                    disclosureContent.slideDown(animationSpeed, animationFinishedCallback);
+                    jQuery("#" + groupId + "_col").replaceWith(expandImage);
+                    setComponentState(widgetId, 'open', true);
+                }
+            );
+        }
+        else {
+            disclosureContent.data("open", false);
+            jQuery("#" + groupToggleLinkId).toggle(
+                function () {
+                    jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
+                    disclosureContent.data("open", true);
+                    disclosureContent.slideDown(animationSpeed, animationFinishedCallback);
+                    jQuery("#" + groupId + "_col").replaceWith(expandImage);
+                    setComponentState(widgetId, 'open', true);
+
+                }, function () {
+                    jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
+                    disclosureContent.data("open", false);
+                    disclosureContent.slideUp(animationSpeed, animationFinishedCallback);
+                    jQuery("#" + groupId + "_exp").replaceWith(collapseImage);
+                    setComponentState(widgetId, 'open', false);
+                }
+            );
+        }
+    });
+}
+
+/**
+ * Function for a delayed removal of the highlighting of added collection items.
+ *
+ * @return {Function} - Function to be ran after delay.
+ */
+function removeNewItemHighlights(){
+    return function(){
+        var newItems = jQuery(".uif-newCollectionItem");
+        newItems.removeClass('uif-newCollectionItem');
+        newItems.addClass('highlight_fadeout');
+    }
+
 }

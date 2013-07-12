@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 The Kuali Foundation
+ * Copyright 2005-2013 The Kuali Foundation
  *
  * Licensed under the Educational Community License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
 import org.kuali.rice.krms.builder.ComponentBuilder;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolPropositionEditor;
 import org.kuali.student.r2.common.util.ContextUtils;
+import org.kuali.student.r2.common.util.constants.AcademicRecordServiceConstants;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.core.organization.constants.OrganizationServiceConstants;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
@@ -28,11 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Kuali Student Team
+ */
 public class AdministeringOrgComponentBuilder implements ComponentBuilder<EnrolPropositionEditor> {
 
     private OrganizationService organizationService;
-
-    private static final String ORGANIZATION_KEY = "kuali.term.parameter.type.org.id";
 
     @Override
     public List<String> getComponentIds() {
@@ -41,7 +44,7 @@ public class AdministeringOrgComponentBuilder implements ComponentBuilder<EnrolP
 
     @Override
     public void resolveTermParameters(EnrolPropositionEditor propositionEditor, Map<String, String> termParameters) {
-        String orgId = termParameters.get(ORGANIZATION_KEY);
+        String orgId = termParameters.get(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_ORGANIZATION_KEY);
         if (orgId != null) {
             try {
                 OrgInfo orgInfo = this.getOrganizationService().getOrg(orgId, ContextUtils.getContextInfo());
@@ -57,13 +60,18 @@ public class AdministeringOrgComponentBuilder implements ComponentBuilder<EnrolP
     public Map<String, String> buildTermParameters(EnrolPropositionEditor propositionEditor) {
         Map<String, String> termParameters = new HashMap<String, String>();
         if (propositionEditor.getOrgInfo() != null){
-            termParameters.put(ORGANIZATION_KEY, propositionEditor.getOrgInfo().getId());
+            termParameters.put(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_ORGANIZATION_KEY, propositionEditor.getOrgInfo().getId());
         }
         return termParameters;
     }
 
     @Override
     public void onSubmit(EnrolPropositionEditor propositionEditor) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void validate(EnrolPropositionEditor propositionEditor) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

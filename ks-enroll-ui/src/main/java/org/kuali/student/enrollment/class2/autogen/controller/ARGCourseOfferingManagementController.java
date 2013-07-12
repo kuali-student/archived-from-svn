@@ -37,6 +37,7 @@ import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingCon
 import org.kuali.student.enrollment.class2.courseoffering.util.RegistrationGroupConstants;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingClusterInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
+import org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -84,7 +85,7 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
 
         //clean up termCode, inputCode, and theCourseOffering value in the form to prevent the
         //side effect of the authorization.
-        form.setTermCode(null);
+        //form.setTermCode(null);
         form.setInputCode(null);
 
         //TODO: Workaround for KRMS return
@@ -136,26 +137,23 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
             return getUIFModelAndView(form);
         }
 
-        //Reset the form
+        //Reset the form (not including term- and course-codes though)
         ARGUtil.clearForm(form);
 
-        form.setInputCode(form.getInputCode().toUpperCase());
+        validateUserPopulatedTermAndCourseFields( form );
+        if( GlobalVariables.getMessageMap().hasErrors() ) {
+            return getUIFModelAndView( form );
+        }
+
+        // convert term-code to UPPERCASE
+        form.setInputCode( form.getInputCode().toUpperCase() );
+
         ARGUtil.getViewHelperService(form).populateTerm(form);
-
         if (GlobalVariables.getMessageMap().getErrorCount() > 0) {
-            return getUIFModelAndView(form);
+            return getUIFModelAndView(form, CourseOfferingConstants.SEARCH_PAGE);
         }
 
-        String inputCode = form.getInputCode();
-
-        if (StringUtils.isBlank(inputCode)) {
-            GlobalVariables.getMessageMap().putError("inputCode", CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_NO_COURSE_OFFERING_IS_FOUND, "Course Offering", inputCode, form.getTermCode());
-            form.getCourseOfferingResultList().clear();
-            form.setActivityWrapperList(null);
-            return getUIFModelAndView(form);
-        }
-
-        ARGUtil.getViewHelperService(form).loadCourseOfferingsByTermAndCourseCode(form.getTermInfo().getId(), inputCode, form);
+        ARGUtil.getViewHelperService(form).loadCourseOfferingsByTermAndCourseCode(form.getTermInfo().getId(), form.getInputCode(), form);
 
         if (!form.getCourseOfferingResultList().isEmpty()) {
             if (form.getCourseOfferingResultList().size() > 1) {
@@ -180,6 +178,24 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
             return getUIFModelAndView(form, CourseOfferingConstants.SEARCH_PAGE);
         }
 
+    }
+
+    private void validateUserPopulatedTermAndCourseFields( ARGCourseOfferingManagementForm form ) {
+
+        String termCode = form.getTermCode();
+        if( StringUtils.isBlank(termCode) ) {
+            GlobalVariables.getMessageMap().putError( "termCode", CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_TERMCODE_IS_REQUIRED, "Term", termCode );
+        }
+
+        String courseCode = form.getInputCode();
+        if( StringUtils.isBlank(courseCode) ) {
+            GlobalVariables.getMessageMap().putError( "inputCode", CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_COURSECODE_IS_REQUIRED, "Course", courseCode );
+        }
+
+        if( GlobalVariables.getMessageMap().hasErrors() ) {
+            form.getCourseOfferingResultList().clear();
+            form.setActivityWrapperList(null);
+        }
     }
 
     @RequestMapping(params = "methodToCall=manageRegGroups")
@@ -467,19 +483,9 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=approveCOs")
     public ModelAndView approveCOs(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm, @SuppressWarnings("unused") BindingResult result,
                                    @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-        String dialogName = CourseOfferingConstants.ConfirmDialogs.APRROVE_CO;
 
-        if (!hasDialogBeenAnswered(dialogName, theForm)) {
-            return showDialog(dialogName, theForm, request, response);
-        }
-
-        boolean dialogAnswer = getBooleanDialogResponse(dialogName, theForm, request, response);
-        theForm.getDialogManager().resetDialogStatus(dialogName);
-
-        if (dialogAnswer) {
-            ARGUtil.getViewHelperService(theForm).approveCourseOfferings(theForm);
-            ARGUtil.reloadCourseOfferings(theForm);
-        }
+       ARGUtil.getViewHelperService(theForm).approveCourseOfferings(theForm);
+       ARGUtil.reloadCourseOfferings(theForm);
 
         return getUIFModelAndView(theForm);
     }
@@ -711,6 +717,28 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
                 GlobalVariables.getMessageMap().putError("privateClusterNameForRename", RegistrationGroupConstants.MSG_ERROR_INVALID_CLUSTER_NAME);
         }
         return show(theForm);
+    }
+
+    /**
+     * This is mapped to the <i>List All</i> link.
+     * <p/>
+     * <b>Usage at:</b> CourseOfferingManagement-ManageTheCourseOfferingPage.xml
+     *
+     * @param form model
+     * @return ModelAndView
+     * @throws Exception
+     */
+    @RequestMapping(params = "methodToCall=manageAORules")
+    public ModelAndView manageAORules(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm form) throws Exception {
+
+        Object selectedObject = ARGUtil.getSelectedObject(form, "manageAORules");
+
+     if (selectedObject instanceof ActivityOfferingWrapper) {
+            Properties urlParameters = ARGActivityOfferingClusterHandler.manageAO(form, ((ActivityOfferingWrapper) selectedObject).getAoInfo().getId());
+            return super.performRedirect(form, "activityOfferingRules", urlParameters);
+        } else {
+            throw new RuntimeException("Invalid type. Does not support for now");
+        }
     }
 
 }

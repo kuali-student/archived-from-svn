@@ -1,12 +1,32 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.rice.krms.dto;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinitionContract;
 import org.kuali.rice.krms.api.repository.proposition.PropositionParameterContract;
 import org.kuali.rice.krms.api.repository.term.TermDefinition;
 import org.kuali.rice.krms.impl.ui.TermParameter;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,15 +34,13 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: SW
- * Date: 2012/12/03
- * Time: 11:41 AM
- * To change this template use File | Settings | File Templates.
+ * @author Kuali Student Team
  */
 public class PropositionEditor implements PropositionDefinitionContract, Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(PropositionEditor.class);
 
     private String key;
 
@@ -35,6 +53,8 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
     private String propositionTypeCode;
     private Long versionNumber;
 
+    /**Natural Language**/
+    private String defaultNlKey = KSKRMSServiceConstants.KRMS_NL_RULE_EDIT;
     private Map<String, String> naturalLanguage = new HashMap<String, String>();
 
     private List<PropositionParameterEditor> parameters;
@@ -47,6 +67,7 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
     private boolean editMode = false;
     private boolean newProp = false;
 
+    private String bindingPath;
     private String newTermDescription = "new term " + UUID.randomUUID().toString();
 
     public PropositionEditor() {
@@ -77,6 +98,15 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
             this.compoundEditors.add(createPropositionEditor(prop));
         }
         this.versionNumber = definition.getVersionNumber();
+    }
+
+    public void clear(){
+        this.description = null;
+        this.term = null;
+        this.termParameter = null;
+        for (PropositionParameterEditor parm : this.getParameters()) {
+            parm.clear();
+        }
     }
 
     public String getKey() {
@@ -111,7 +141,12 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
     }
 
     public void setDescription(String description) {
+        //Description can only handle 100 characters.
+        if ((description != null) && (description.length()>100)) {
+            description = description.substring(0,97) + "...";
+        }
         this.description = description;
+        LOG.info(this.description);
     }
 
     public void setRuleId(String ruleId) {
@@ -195,6 +230,14 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
 
     public void setTermParameter(String termParameter) {
         this.termParameter = termParameter;
+
+        if(this.termParameter!=null){
+            LOG.info(this.termParameter);
+
+            //This is just temp code to prove what the actual problem is.
+            this.termParameter.replaceAll("\\u00a0","");
+        }
+        LOG.info(termParameter);
     }
 
     public List<TermParameter> getTermParameterList() {
@@ -238,10 +281,12 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
         this.naturalLanguage = naturalLanguage;
     }
 
-    public Map<String, String> getNlParameters() {
-        return new HashMap<String, String>();
-    }
-
+    /**
+     * Return the natural language description for the given usage key from the natural language map.
+     *
+     * @param usage
+     * @return
+     */
     public String getNaturalLanguageForUsage(String usage){
         String description = this.getNaturalLanguage().get(usage);
 
@@ -252,13 +297,37 @@ public class PropositionEditor implements PropositionDefinitionContract, Seriali
         return description;
     }
 
-    public boolean checkIfCompoundAndEmpty(){
-        if ("C".equals(this.getPropositionTypeCode())){
-            if((this.getCompoundEditors()==null)){
-                return true;
-            }
+    /**
+     * Set the natuaral language string on the map with the usage as key. If the usage is the default
+     * usage also set the description of the proposition.
+     *
+     * @param usage
+     * @param nl
+     */
+    public void setNaturalLanguageForUsage(String usage, String nl){
+        this.getNaturalLanguage().put(usage, nl);
+
+        if (usage.equals(defaultNlKey)){
+            this.setDescription(nl);
         }
-        return false;
+    }
+
+    /**
+     * Override this method to return a method of custom parameters to be used in the natural
+     * language context implementation.
+     *
+     * @return
+     */
+    public Map<String, String> getNlParameters() {
+        return new HashMap<String, String>();
+    }
+
+    public String getBindingPath() {
+        return bindingPath;
+    }
+
+    public void setBindingPath(String bindingPath) {
+        this.bindingPath = bindingPath;
     }
 }
 

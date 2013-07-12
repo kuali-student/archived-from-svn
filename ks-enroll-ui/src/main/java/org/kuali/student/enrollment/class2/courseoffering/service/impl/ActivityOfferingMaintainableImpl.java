@@ -2,9 +2,11 @@ package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.krad.exception.AuthorizationException;
@@ -20,6 +22,7 @@ import org.kuali.student.common.uif.service.impl.KSMaintainableImpl;
 import org.kuali.student.enrollment.class2.autogen.controller.ARGUtil;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ColocatedActivity;
+import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBar;
 import org.kuali.student.enrollment.class2.courseoffering.dto.OfferingInstructorWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ScheduleComponentWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ScheduleWrapper;
@@ -55,9 +58,11 @@ import org.kuali.student.r2.core.class1.search.CourseOfferingManagementSearchImp
 import org.kuali.student.r2.core.class1.state.dto.StateInfo;
 import org.kuali.student.r2.core.class1.state.service.StateService;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
+import org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
+import org.kuali.student.r2.core.constants.TypeServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
 import org.kuali.student.r2.core.room.dto.BuildingInfo;
@@ -73,13 +78,14 @@ import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.service.CourseService;
 
 import javax.xml.namespace.QName;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -121,6 +127,20 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
              * just accepts the ao id as param and fetches the DTO from the DB.)
              */
             try {
+                // check if subterm is assigned to AO
+                String subTermId = activityOfferingWrapper.getSubTermId();
+                String aoTermId = activityOfferingWrapper.getAoInfo().getTermId();
+                String termId = activityOfferingWrapper.getTerm().getId();
+                if (!aoTermId.equals(subTermId)) {
+                    if((subTermId == null || StringUtils.isBlank(subTermId))) {
+                        if(!aoTermId.equals(termId)) {
+                            activityOfferingWrapper.getAoInfo().setTermId(termId);
+                        }
+                    } else {
+                        activityOfferingWrapper.getAoInfo().setTermId(subTermId);
+                    }
+                }
+
                 activityOfferingInfo = getCourseOfferingService().updateActivityOffering(activityOfferingWrapper.getAoInfo().getId(), activityOfferingWrapper.getAoInfo(), contextInfo);
                 activityOfferingWrapper.setAoInfo(activityOfferingInfo);
             } catch (Exception e) {
@@ -134,9 +154,9 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
              * Once user submits a doc after scheduling complemented, all the RDLs should be converted to ADLs
              */
             if (activityOfferingWrapper.isSchedulesModified() ||
-                (!activityOfferingWrapper.isPartOfColoSetOnLoadAlready() && activityOfferingWrapper.isColocatedAO()) ||
-                (activityOfferingWrapper.isPartOfColoSetOnLoadAlready() && !activityOfferingWrapper.isColocatedAO()) ||
-                (activityOfferingWrapper.isSchedulingCompleted() && !activityOfferingWrapper.getRequestedScheduleComponents().isEmpty())){
+                    (!activityOfferingWrapper.isPartOfColoSetOnLoadAlready() && activityOfferingWrapper.isColocatedAO()) ||
+                    (activityOfferingWrapper.isPartOfColoSetOnLoadAlready() && !activityOfferingWrapper.isColocatedAO()) ||
+                    (activityOfferingWrapper.isSchedulingCompleted() && !activityOfferingWrapper.getRequestedScheduleComponents().isEmpty())){
 
                 getScheduleHelper().saveSchedules(activityOfferingWrapper,contextInfo);
             }
@@ -292,12 +312,59 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             }
 
             // Set the display string (e.g. 'FALL 2020 (9/26/2020 to 12/26/2020)')
-            TermInfo term = getAcademicCalendarService().getTerm(info.getTermId(), contextInfo);
+            // Now have to deal with subterms: have to check if it's subterm or term
+            TermInfo term = null;
+            TermInfo subTerm=null;
+            wrapper.setHasSubTerms(false);
+            wrapper.setSubTermName("None");
+            wrapper.setSubTermId("");
+            TermInfo termTemp = getAcademicCalendarService().getTerm(info.getTermId(), contextInfo);
+            List<TypeTypeRelationInfo> terms = getTypeService().getTypeTypeRelationsByRelatedTypeAndType(termTemp.getTypeKey(), TypeServiceConstants.TYPE_TYPE_RELATION_CONTAINS_TYPE_KEY, contextInfo);
+            if (terms == null || terms.isEmpty()) {
+                term = new TermInfo(termTemp);
+            } else {
+                subTerm = new TermInfo(termTemp);
+                term = getAcademicCalendarService().getContainingTerms(info.getTermId(), contextInfo).get(0);
+                wrapper.setSubTermId(subTerm.getId());
+                TypeInfo subTermType = getTypeService().getType(subTerm.getTypeKey(), contextInfo);
+                wrapper.setSubTermName(subTermType.getName());
+            }
+
             wrapper.setTerm(term);
             if (term != null) {
                 wrapper.setTermName(term.getName());
             }
             wrapper.setTermDisplayString(getTermDisplayString(info.getTermId(), term));
+            if (subTerm!=null) {
+                wrapper.setTermStartEndDate(getTermStartEndDate(subTerm));
+            } else {
+                wrapper.setTermStartEndDate(getTermStartEndDate(term));
+            }
+
+            //Find available sub-terms for term
+            List<TermInfo> availableSubTerms=getAcademicCalendarService().getIncludedTermsInTerm(term.getId(), contextInfo);
+            //Now setup start/end date for all subterms to support subterm changes on the screen
+            HashMap<String,String> subTermDates= new HashMap();
+            subTermDates.put("none",getTermStartEndDate(term));
+            for (TermInfo availSubTerm : availableSubTerms) {
+                if (availSubTerm.getStateKey().equals(AtpServiceConstants.ATP_OFFICIAL_STATE_KEY)) {
+                    subTermDates.put(availSubTerm.getId(),this.getTermStartEndDate(availSubTerm));
+                    wrapper.setHasSubTerms(true);
+                }
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            wrapper.setSubTermDatesJsonString(mapper.writeValueAsString(subTermDates));
+            // end subterms
+
+
+            String parentTermType = wrapper.getTerm().getId();
+            if (parentTermType == null || parentTermType.equals("")) {
+                parentTermType = wrapper.getAoInfo().getTermId();
+            }
+
+            if(terms.size() > 1) {
+                Collections.sort(terms, new SubtermComparator());
+            }
 
             List<TypeInfo> regPeriods = getTypeService().getTypesForGroupType("kuali.milestone.type.group.appt.regperiods", contextInfo);
             List<KeyDateInfo> keyDateInfoList = getAcademicCalendarService().getKeyDatesForTerm(info.getTermId(), contextInfo);
@@ -345,7 +412,7 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             }
 
             //Set socInfo
-            List<String> socIds = getCourseOfferingSetService().getSocIdsByTerm(info.getTermId(), ContextUtils.createDefaultContextInfo());
+            List<String> socIds = getCourseOfferingSetService().getSocIdsByTerm(term.getId(), ContextUtils.createDefaultContextInfo());
             if (socIds != null && !socIds.isEmpty()) {
                 List<SocInfo> targetSocs = getCourseOfferingSetService().getSocsByIds(socIds, ContextUtils.createDefaultContextInfo());
                 for (SocInfo soc: targetSocs) {
@@ -355,8 +422,8 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
                 }
             }
 
-            wrapper.setTermSocState( getStateService().getState( wrapper.getSocInfo().getStateKey(), contextInfo ).getName() );
-            setTermDayOfYearOnFormObject( wrapper, contextInfo );
+            wrapper.setContextBar(CourseOfferingContextBar.NEW_INSTANCE(wrapper.getTerm(), wrapper.getSocInfo(),
+                    getStateService(), getAcademicCalendarService(), contextInfo));
 
             //retrieve all the populations for seat pool section client side validation
             QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
@@ -452,6 +519,8 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
 
             getScheduleHelper().loadSchedules(wrapper,contextInfo);
 
+            loadNavigationDetails(wrapper);
+
             return wrapper;
 
         }catch (AuthorizationException ae){
@@ -459,26 +528,6 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
                     "User '" + ae.getUserId() + "' is not authorized to open view", null);
         }catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void setTermDayOfYearOnFormObject( ActivityOfferingWrapper formObject, ContextInfo contextInfo ) throws Exception {
-
-        List<KeyDateInfo> keyDateInfoList = getAcademicCalendarService().getKeyDatesForTerm( formObject.getTerm().getId(), contextInfo);
-        Date termClassStartDate = null;
-        for(KeyDateInfo keyDateInfo : keyDateInfoList ) {
-            if( keyDateInfo.getTypeKey().equalsIgnoreCase(AtpServiceConstants.MILESTONE_INSTRUCTIONAL_PERIOD_TYPE_KEY)
-                    && keyDateInfo.getStartDate() != null
-                    && keyDateInfo.getEndDate() != null )
-            {
-                termClassStartDate = keyDateInfo.getStartDate();
-
-                Date avgDate = new Date( termClassStartDate.getTime() + ( (keyDateInfo.getEndDate().getTime() - termClassStartDate.getTime()) /2 ) );
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(avgDate);
-                formObject.setTermDayOfYear( cal.get(Calendar.DAY_OF_YEAR) );
-                break;
-            }
         }
     }
 
@@ -538,6 +587,36 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
 
         wrapper.getEditRenderHelper().getManageSeperateEnrollmentList().add(a);
 
+    }
+
+    protected void loadNavigationDetails(ActivityOfferingWrapper wrapper) throws Exception {
+        List<ActivityOfferingInfo> aos = getCourseOfferingService().getActivityOfferingsByCourseOffering(wrapper.getAoInfo().getCourseOfferingId(),createContextInfo());
+        wrapper.getEditRenderHelper().getAoCodes().clear();
+        for (ActivityOfferingInfo ao : aos){
+            TypeInfo typeInfo = getTypeService().getType(ao.getTypeKey(), createContextInfo());
+            if (StringUtils.equals(ao.getId(),wrapper.getAoInfo().getId())){
+                int index = aos.indexOf(ao);
+                if (index > 0){
+                    wrapper.getEditRenderHelper().setPrevAO(aos.get(index - 1));
+                    wrapper.getEditRenderHelper().setPrevAOTypeName(typeInfo.getName());
+                } else {
+                    wrapper.getEditRenderHelper().setPrevAO(new ActivityOfferingInfo());
+                    wrapper.getEditRenderHelper().setPrevAOTypeName(StringUtils.EMPTY);
+                }
+                if (index < aos.size() - 1){
+                    wrapper.getEditRenderHelper().setNextAO(aos.get(index+1));
+                    wrapper.getEditRenderHelper().setNextAOTypeName(typeInfo.getName());
+                } else {
+                    wrapper.getEditRenderHelper().setNextAO(new ActivityOfferingInfo());
+                    wrapper.getEditRenderHelper().setNextAOTypeName(StringUtils.EMPTY);
+                }
+                wrapper.getEditRenderHelper().setSelectedAO(ao.getId());
+            }
+            ConcreteKeyValue keyValue = new ConcreteKeyValue();
+            keyValue.setKey(ao.getId());
+            keyValue.setValue(typeInfo.getName() + " " + ao.getActivityCode());
+            wrapper.getEditRenderHelper().getAoCodes().add(keyValue);
+        }
     }
 
     @Override
@@ -855,7 +934,7 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
         QueryByCriteria criteria = qbcBuilder.build();
 
         try {
-            List<BuildingInfo> b = getScheduleHelper().getRoomService().searchForBuildings(criteria,createContextInfo());
+            List<BuildingInfo> b = getScheduleHelper().getRoomService().searchForBuildings(criteria, createContextInfo());
             return b;
         } catch (Exception e) {
             throw convertServiceExceptionsToUI(e);
@@ -1056,5 +1135,30 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             schedulingService = CourseOfferingResourceLoader.loadSchedulingService();
         }
         return schedulingService;
+    }
+
+    private static class SubtermComparator implements Comparator, Serializable {
+        @Override
+        public int compare(Object o1, Object o2) {
+            String value1 = ((TermInfo) o1).getId();
+            String value2 = ((TermInfo) o2).getId();
+
+            int result = value1.compareToIgnoreCase(value2);
+            return result;
+        }
+    }
+
+    private String getTermStartEndDate(TermInfo term) {
+        // Return Term as String display like 'FALL 2020 (9/26/2020-12/26/2020)'
+        StringBuilder stringBuilder = new StringBuilder();
+        Formatter formatter = new Formatter(stringBuilder, Locale.US);
+        String displayString = term.getId(); // use termId as a default.
+        if (term != null) {
+            String startDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getStartDate());
+            String endDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getEndDate());
+            formatter.format("%s - %s", startDate, endDate);
+            displayString = stringBuilder.toString();
+        }
+        return displayString;
     }
 }

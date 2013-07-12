@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2007-2013 The Kuali Foundation
+
+Licensed under the Educational Community License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.opensource.org/licenses/ecl2.php
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -12,7 +27,7 @@
                   value="org.kuali.rice.krms.service.impl.RuleViewHelperServiceImpl"/>
         <property name="singlePageView" value="true"/>
         <property name="page">
-            <bean parent="Uif-Page"/>
+            <bean parent="KS-Uif-Page"/>
         </property>
         <property name="header">
             <bean parent="Uif-HeaderTwo"/>
@@ -47,6 +62,11 @@
                 </bean>
                 <ref bean="KRMS-Clu-Components-Section" />
                 <ref bean="KRMS-Org-Components-Section" />
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="testDate" p:label="Effective From">
+                    <property name="control">
+                        <bean parent="Uif-KS-Default-DateControl" />
+                    </property>
+                </bean>
                 <ref bean="KRMS-TestTree-Section"/>
                 <bean parent="Uif-ActionLink" p:actionLabel="Progressive Disclosure with dropdown on LightBox" p:actionScript="showLightboxComponent('myDropdownLightBox');"/>
             </list>
@@ -153,20 +173,9 @@
                     <bean parent="Uif-VerticalBoxGroup" p:style="margin-left: 2em;">
                         <property name="items">
                             <list>
-                                <bean parent="Uif-InputField-LabelTop"
-                                      p:propertyName="data" p:label="Course" p:required="true">
-                                    <property name="suggest">
-                                        <bean parent="Uif-Suggest">
-                                            <property name="render" value="true"/>
-                                            <property name="valuePropertyName" value="displayName"/>
-                                            <property name="templateOptions" value="minLength:1,delay:0"/>
-                                            <property name="suggestQuery">
-                                                <bean parent="Uif-AttributeQueryConfig">
-                                                    <property name="queryMethodToCall"
-                                                              value="getCourseNamesForSuggest"/>
-                                                </bean>
-                                            </property>
-                                        </bean>
+                                <bean parent="Uif-InputField-LabelTop" p:propertyName="testDate" p:label="Effective From">
+                                    <property name="control">
+                                        <bean parent="Uif-KS-Default-DateControl" />
                                     </property>
                                 </bean>
                             </list>

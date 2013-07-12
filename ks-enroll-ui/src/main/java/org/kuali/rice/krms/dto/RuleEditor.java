@@ -1,10 +1,27 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.rice.krms.dto;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.util.tree.Tree;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.rice.krms.api.repository.action.ActionDefinitionContract;
 import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
 import org.kuali.rice.krms.api.repository.proposition.PropositionDefinitionContract;
+import org.kuali.rice.krms.api.repository.proposition.PropositionType;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinition;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinitionContract;
 import org.kuali.rice.krms.tree.node.CompareTreeNode;
@@ -53,7 +70,8 @@ public class RuleEditor extends UifFormBase implements RuleDefinitionContract, S
     // for Rule Preview display
     private Tree<TreeNode, String> previewTree;
     private Tree<TreeNode, String> viewTree;
-    private AlphaIterator alpha;
+    private AlphaIterator simpleKeys;
+    private AlphaIterator compoundKeys;
 
     // for Compare
     private Tree<CompareTreeNode, String> compareTree;
@@ -149,15 +167,26 @@ public class RuleEditor extends UifFormBase implements RuleDefinitionContract, S
         this.activeSelections = activeSelections;
     }
 
-    public AlphaIterator getAlpha() {
-        if (alpha == null){
-            alpha = new AlphaIterator();
+    public AlphaIterator getSimpleKeys() {
+        if (simpleKeys == null){
+            simpleKeys = new AlphaIterator(StringUtils.EMPTY);
         }
-        return alpha;
+        return simpleKeys;
     }
 
-    public void setAlpha(AlphaIterator alpha) {
-        this.alpha = alpha;
+    public void setSimpleKeys(AlphaIterator simpleKeys) {
+        this.simpleKeys = simpleKeys;
+    }
+
+    public AlphaIterator getCompoundKeys() {
+        if (compoundKeys == null){
+            compoundKeys = new AlphaIterator(PropositionType.COMPOUND.getCode() + "-");
+        }
+        return compoundKeys;
+    }
+
+    public void setCompoundKeys(AlphaIterator compoundKeys) {
+        this.compoundKeys = compoundKeys;
     }
 
     /**
@@ -326,5 +355,14 @@ public class RuleEditor extends UifFormBase implements RuleDefinitionContract, S
 
     public void setParent(RuleEditor parent) {
         this.parent = parent;
+    }
+
+    public void reset(){
+        this.getEditTree().setRootElement(null);
+        this.setPropId(null);
+        this.setProposition(null);
+        this.setSimpleKeys(null);
+        this.setCompoundKeys(null);
+        this.setSelectedKey(StringUtils.EMPTY);
     }
 }

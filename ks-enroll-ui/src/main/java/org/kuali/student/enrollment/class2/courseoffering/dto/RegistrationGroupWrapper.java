@@ -293,5 +293,4 @@ public class RegistrationGroupWrapper implements Serializable {
     public void setAoEditLink(String aoEditLink) {
         this.aoEditLink = aoEditLink;
     }
-
 }

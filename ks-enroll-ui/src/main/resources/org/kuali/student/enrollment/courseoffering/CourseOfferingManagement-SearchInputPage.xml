@@ -20,9 +20,14 @@
      limitations under the License.
     -->
 
-    <bean id="KS-CourseOfferingManagement-SearchInputPage" parent="Uif-Page" p:disclosure.render="false"
+    <bean id="KS-CourseOfferingManagement-SearchInputPage" parent="KS-Uif-Page" p:disclosure.render="false"
           p:id="searchInputPage">
 
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageCo-Landing" />
+            </list>
+        </property>
 
         <property name="items">
             <list>
@@ -36,6 +41,7 @@
             </list>
         </property>
     </bean>
+
 
     <bean id="KS-CourseOfferingManagement-CriteriaSection" parent="Uif-HorizontalBoxSection"
         p:id="courseOfferingManagementCriteriaSection">

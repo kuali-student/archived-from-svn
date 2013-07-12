@@ -1,15 +1,34 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.student.enrollment.class1.krms.builder;
 
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krms.builder.ComponentBuilder;
 import org.kuali.rice.krms.builder.ComponentBuilderUtils;
+import org.kuali.rice.krms.util.PropositionTreeUtil;
 import org.kuali.student.enrollment.class1.krms.dto.CluInformation;
 import org.kuali.student.enrollment.class1.krms.dto.CluSetInformation;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolPropositionEditor;
 import org.kuali.student.enrollment.class1.krms.dto.ProgramCluSetInformation;
+import org.kuali.student.enrollment.class1.krms.util.KSKRMSConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.class2.population.dto.PopulationWrapper;
 import org.kuali.student.r2.common.util.ContextUtils;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
@@ -30,6 +49,7 @@ import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
 import javax.xml.namespace.QName;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -38,11 +58,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: peggy
- * Date: 2013/03/01
- * Time: 11:35 AM
- * To change this template use File | Settings | File Templates.
+ * @author Kuali Student Team
  */
 public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositionEditor> {
 
@@ -53,9 +69,6 @@ public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositio
 
     private PopulationService populationService;
 
-    private static final String PROGRAM_CLUSET_KEY = "kuali.term.parameter.type.program.cluSet.id";
-    private static final String ClASS_STANDING_KEY = "kuali.term.parameter.type.classStanding";
-
     @Override
     public List<String> getComponentIds() {
         return null;
@@ -63,8 +76,8 @@ public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositio
 
     @Override
     public void resolveTermParameters(EnrolPropositionEditor propositionEditor, Map<String, String> termParameters) {
-        String cluSetId = termParameters.get(PROGRAM_CLUSET_KEY);
-        String classStadingId = termParameters.get(ClASS_STANDING_KEY);
+        String cluSetId = termParameters.get(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_PROGRAM_CLUSET_KEY);
+        String classStadingId = termParameters.get(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_CLASS_STANDING_KEY);
         if (cluSetId != null) {
             try {
                 ProgramCluSetInformation cluSetInfo = this.getProgramCluSetInformation(cluSetId);
@@ -94,14 +107,14 @@ public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositio
         Map<String, String> termParameters = new HashMap<String, String>();
         if (propositionEditor.getProgCluSet() != null) {
             if (propositionEditor.getProgCluSet().getCluSetInfo() != null) {
-                termParameters.put(PROGRAM_CLUSET_KEY, propositionEditor.getProgCluSet().getCluSetInfo().getId());
+                termParameters.put(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_PROGRAM_CLUSET_KEY, propositionEditor.getProgCluSet().getCluSetInfo().getId());
             } else {
-                termParameters.put(PROGRAM_CLUSET_KEY, null);
+                termParameters.put(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_PROGRAM_CLUSET_KEY, null);
             }
         }
         if (propositionEditor.getClassStanding() != null){
 
-            termParameters.put(ClASS_STANDING_KEY, propositionEditor.getPopulationWrapper().getId());
+            termParameters.put(KSKRMSServiceConstants.TERM_PARAMETER_TYPE_CLASS_STANDING_KEY, propositionEditor.getPopulationWrapper().getId());
         }
 
         return termParameters;
@@ -116,7 +129,7 @@ public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositio
             CluSetInfo cluSetInfo = propositionEditor.getProgCluSet().getCluSetInfo();
             if (cluSetInfo.getId() == null) {
                 cluSetInfo = this.getCluService().createCluSet(cluSetInfo.getTypeKey(), cluSetInfo, ContextUtils.getContextInfo());
-                ComponentBuilderUtils.updateTermParameter(propositionEditor.getTerm(), PROGRAM_CLUSET_KEY, cluSetInfo.getId());
+                ComponentBuilderUtils.updateTermParameter(propositionEditor.getTerm(), KSKRMSServiceConstants.TERM_PARAMETER_TYPE_PROGRAM_CLUSET_KEY, cluSetInfo.getId());
 
             } else {
                 this.getCluService().updateCluSet(cluSetInfo.getId(), cluSetInfo, ContextUtils.getContextInfo());
@@ -126,6 +139,17 @@ public class ProgramComponentBuilder implements ComponentBuilder<EnrolPropositio
             throw new IllegalArgumentException(ex);
         }
 
+    }
+
+    @Override
+    public void validate(EnrolPropositionEditor propositionEditor) {
+        ProgramCluSetInformation progCluSet = propositionEditor.getProgCluSet();
+        if(progCluSet != null){
+        if(!progCluSet.hasClus() && progCluSet.getCluSets().size()==0 ){
+            String propName = PropositionTreeUtil.getBindingPath(propositionEditor, "programType");
+            GlobalVariables.getMessageMap().putError(propName, KSKRMSConstants.KSKRMS_MSG_ERROR_APPROVED_PROGRAM_REQUIRED);
+        }
+        }
     }
 
     /**

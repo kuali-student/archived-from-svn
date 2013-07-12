@@ -39,6 +39,7 @@ import org.kuali.student.enrollment.class2.autogen.service.ARGCourseOfferingMana
 import org.kuali.student.enrollment.class2.autogen.util.ARGToolbarUtil;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingClusterWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
+import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBar;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.RegistrationGroupWrapper;
@@ -126,9 +127,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -206,11 +209,6 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
 
                     if (keyDateInfo.getTypeKey().equalsIgnoreCase(AtpServiceConstants.MILESTONE_INSTRUCTIONAL_PERIOD_TYPE_KEY) && keyDateInfo.getStartDate() != null && keyDateInfo.getEndDate() != null) {
                         termClassStartDate = keyDateInfo.getStartDate();
-
-                        Date avgDate = new Date(termClassStartDate.getTime() + ((keyDateInfo.getEndDate().getTime() - termClassStartDate.getTime())/2));
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(avgDate);
-                        form.setTermDayOfYear(cal.get(Calendar.DAY_OF_YEAR));
                         break;
                     }
                 }
@@ -242,6 +240,8 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_NO_COURSE_OFFERING_IS_FOUND, "Course Code", courseCode, termId);
         }
 
+        form.setContextBar( CourseOfferingContextBar.NEW_INSTANCE(form.getTermInfo(), form.getSocStateKey(),
+                getStateService(), getAcalService(), createContextInfo()) );
     }
 
     /**
@@ -451,6 +451,10 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                     aoInfos.add(aoWrapper.getAoInfo());
                 }
                 _validateRegistrationGroupsPerCluster(rgInfos, aoInfos, cluster, form, i, ao2sch, ao2schReq, aoMap);
+
+                // Test the Cluster for Multiple AO types and Term types
+                _validateMulitpleTermsPerCluster(form.getFoId2aoTypeMap().get(cluster.getFormatOfferingId()).getActivityOfferingTypeKeys(),cluster, i);
+
                 i++;
             }
             Date endOfValidation = new Date();
@@ -461,6 +465,52 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
         //List<KeyValue>
 
 
+    }
+
+    private void _validateMulitpleTermsPerCluster(List<String> aoTypeKeys,ActivityOfferingClusterWrapper cluster, int clusterIndex ){
+        // Test the Cluster for Multiple AO types and Term types
+        if(aoTypeKeys.size()>1){
+            List<String> termIds = new ArrayList<String>();
+
+            // Tests for multiple subTerms
+            for(ActivityOfferingWrapper aoWrapper : cluster.getAoWrapperList()){
+                if(termIds.size()==0){
+                    termIds.add(aoWrapper.getSubTermId());
+                    continue;
+                }
+                boolean newTerm = false;
+                for(String id : termIds){
+                    if(id == null) continue;
+                    if(aoWrapper.getSubTermId().compareTo(id)!=0){
+                        newTerm=true;
+                    }
+                }
+                if(newTerm) termIds.add(aoWrapper.getSubTermId());
+            }
+            if(termIds.size()>1){
+                GlobalVariables.getMessageMap().putWarningForSectionId("activityOfferingsPerCluster_line" + clusterIndex, RegistrationGroupConstants.MSG_ERROR_CLUSTER_MULTIPLE_TERMS, cluster.getAoCluster().getPrivateName());
+            }
+
+            // Test for multiple Terms
+            termIds = new ArrayList<String>();
+            for(ActivityOfferingWrapper aoWrapper : cluster.getAoWrapperList()){
+                if(termIds.size()==0){
+                    termIds.add(aoWrapper.getTermId());
+                    continue;
+                }
+                boolean newTerm = false;
+                for(String id : termIds){
+                    if(id == null) continue;
+                    if(aoWrapper.getTermId().compareTo(id)!=0){
+                        newTerm=true;
+                    }
+                }
+                if(newTerm) termIds.add(aoWrapper.getTermId());
+            }
+            if(termIds.size()>1){
+                GlobalVariables.getMessageMap().putWarningForSectionId("activityOfferingsPerCluster_line" + clusterIndex, RegistrationGroupConstants.MSG_ERROR_CLUSTER_MULTIPLE_TERMS, cluster.getAoCluster().getPrivateName());
+            }
+        }
     }
 
     private void processRelatedTypeKeysForFos(String coId, Map<String, FormatOfferingInfo> foIds, ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, PermissionDeniedException, OperationFailedException {
@@ -856,6 +906,8 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
 
     private List<RegistrationGroupWrapper> processRgData(SearchResultInfo searchResults, ARGCourseOfferingManagementForm form, Map<String, List<ActivityOfferingWrapper>> sch2aoMap, Map<String, ActivityOfferingClusterWrapper> clusterMap, Map<String, ActivityOfferingWrapper> aoMap, ContextInfo defaultContextInfo) throws InvalidParameterException, MissingParameterException, DoesNotExistException, PermissionDeniedException, OperationFailedException {
         Map<String, RegistrationGroupWrapper> rgMap = new HashMap<String, RegistrationGroupWrapper>();
+        Map<String, List<ActivityOfferingWrapper>> storedAOs = new HashMap<String, List<ActivityOfferingWrapper>>();
+
         for (SearchResultRowInfo row : searchResults.getRows()) {
 
             String aoId = null;
@@ -873,13 +925,15 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                     rgState = cell.getValue();
                 }
             }
-
             ActivityOfferingWrapper aoWrapper = aoMap.get(aoId);
-            ActivityOfferingClusterWrapper clusterWrapper = clusterMap.get(aoWrapper.getAoClusterID());
-
             RegistrationGroupWrapper rgWrapper = rgMap.get(rgId);
             boolean newLine = true;
             if (rgWrapper == null) {
+
+                storedAOs.put(rgId, new ArrayList<ActivityOfferingWrapper>());
+
+                ActivityOfferingClusterWrapper clusterWrapper = clusterMap.get(aoWrapper.getAoClusterID());
+
                 newLine = false;
                 rgWrapper = new RegistrationGroupWrapper();
                 rgWrapper.setAoCluster(clusterWrapper.getAoCluster());
@@ -902,19 +956,68 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                 rgMap.put(rgId, rgWrapper);
                 clusterWrapper.getRgWrapperList().add(rgWrapper);
             }
-            rgWrapper.getRgInfo().getActivityOfferingIds().add(aoId);
-
-            rgWrapper.setAoMaxEnrText(rgWrapper.getAoMaxEnrText() + (newLine ? "<br/>" : "") + (aoWrapper.getAoInfo().getMaximumEnrollment() == null ? "" : aoWrapper.getAoInfo().getMaximumEnrollment()));
-            rgWrapper.setAoStateNameText(rgWrapper.getAoStateNameText() + (newLine ? "<br/>" : "") + aoWrapper.getStateName());
-            rgWrapper.setAoActivityCodeText(rgWrapper.getAoActivityCodeText() + (newLine ? "<br/>" : "") + aoWrapper.getAoInfo().getActivityCode());
-            rgWrapper.setAoTypeNameText(rgWrapper.getAoTypeNameText() + (newLine ? "<br/>" : "") + aoWrapper.getTypeName());
-            rgWrapper.setStartTimeDisplay(rgWrapper.getStartTimeDisplay() + (newLine ? "<br/>" : "") + aoWrapper.getStartTimeDisplay());
-            rgWrapper.setEndTimeDisplay(rgWrapper.getEndTimeDisplay() + (newLine ? "<br/>" : "") + aoWrapper.getEndTimeDisplay());
-            rgWrapper.setDaysDisplayName(rgWrapper.getDaysDisplayName() + (newLine ? "<br/>" : "") + aoWrapper.getDaysDisplayName());
-            rgWrapper.setRoomName(rgWrapper.getRoomName() + (newLine ? "<br/>" : "") + aoWrapper.getRoomName());
-            rgWrapper.setBuildingName(rgWrapper.getBuildingName() + (newLine ? "<br/>" : "") + aoWrapper.getBuildingName());
-            rgWrapper.setAoInstructorText(rgWrapper.getAoInstructorText() + (newLine ? "<br/>" : "") + (aoWrapper.getInstructorDisplayNames() == null ? "" : aoWrapper.getInstructorDisplayNames()));
+            storedAOs.get(rgId).add(aoWrapper);
         }
+
+        List<String> keyList = new ArrayList<String>(storedAOs.keySet());
+        for(int i=0;i<keyList.size();i++){
+
+            RegistrationGroupWrapper rgWrapper = rgMap.get(keyList.get(i));
+            List<ActivityOfferingWrapper> aoList = storedAOs.get(keyList.get(i));
+
+            //Sort aoList
+            Collections.sort(aoList,new Comparator<ActivityOfferingWrapper>() {
+                @Override
+                public int compare(ActivityOfferingWrapper ao1, ActivityOfferingWrapper ao2) {
+                    if(ao1.getTypeName().compareTo("Lecture")==0){
+                        return -1;
+                    }
+                    return ao1.getTypeName().compareTo(ao2.getTypeName());
+                }
+            });
+
+            for(int j=0;j<aoList.size();j++){
+                boolean newLine = true;
+                if(j==0){
+                    newLine=false;
+                }
+                ActivityOfferingWrapper aoWrapper = aoList.get(j);
+
+                rgWrapper.getRgInfo().getActivityOfferingIds().add(aoWrapper.getAoInfo().getId());
+
+                String lineBreaks = "";
+                //if there are more than one instructors re-arrange the rows
+                if (aoWrapper.getInstructorDisplayNames().contains("<br>")) {   //more than one instructor
+                    String s = aoWrapper.getInstructorDisplayNames();
+                    for( int k=0; k<s.length(); k++ ) {    //add lines according to number of instructors
+                        if( s.contains("<br>")) {
+                            lineBreaks = lineBreaks + "<br/>";
+                            s = s.substring(s.indexOf("<br>")+4);
+                        }
+                    }
+                }
+
+                rgWrapper.setAoMaxEnrText(rgWrapper.getAoMaxEnrText() + (newLine ? "<br/>" : "") + (aoWrapper.getAoInfo().getMaximumEnrollment() == null ? "" : aoWrapper.getAoInfo().getMaximumEnrollment()) + lineBreaks);
+                rgWrapper.setAoStateNameText(rgWrapper.getAoStateNameText() + (newLine ? "<br/>" : "") + aoWrapper.getStateName() + lineBreaks);
+                //sub-term icon and tooltip setup
+                if(!aoWrapper.getSubTermName().equals("None")){  //sub-term? > icon + name and dates
+                    rgWrapper.setAoActivityCodeText(rgWrapper.getAoActivityCodeText() + (newLine ? "<br/>" : "") + aoWrapper.getAoInfo().getActivityCode()
+                            + "&nbsp;&nbsp;&nbsp;<img src=\"../ks-enroll/images/subterm_icon.png\" title=\"This activity is in "+aoWrapper.getSubTermName()+" -\n"+aoWrapper.getTermStartEndDate()+"\">" + lineBreaks);
+                } else {
+                    rgWrapper.setAoActivityCodeText(rgWrapper.getAoActivityCodeText() + (newLine ? "<br/>" : "") + aoWrapper.getAoInfo().getActivityCode() + lineBreaks);
+                }
+                rgWrapper.setAoTypeNameText(rgWrapper.getAoTypeNameText() + (newLine ? "<br/>" : "") + aoWrapper.getTypeName() + lineBreaks);
+                rgWrapper.setStartTimeDisplay(rgWrapper.getStartTimeDisplay() + (newLine ? "<br/>" : "") + aoWrapper.getStartTimeDisplay() + lineBreaks);
+                rgWrapper.setEndTimeDisplay(rgWrapper.getEndTimeDisplay() + (newLine ? "<br/>" : "") + aoWrapper.getEndTimeDisplay() + lineBreaks);
+                rgWrapper.setDaysDisplayName(rgWrapper.getDaysDisplayName() + (newLine ? "<br/>" : "") + aoWrapper.getDaysDisplayName() + lineBreaks);
+                rgWrapper.setRoomName(rgWrapper.getRoomName() + (newLine ? "<br/>" : "") + aoWrapper.getRoomName() + lineBreaks);
+                rgWrapper.setBuildingName(rgWrapper.getBuildingName() + (newLine ? "<br/>" : "") + aoWrapper.getBuildingName() + lineBreaks);
+                rgWrapper.setAoInstructorText(rgWrapper.getAoInstructorText() + (newLine ? "<br/>" : "") + (aoWrapper.getInstructorDisplayNames() == null ? "" : aoWrapper.getInstructorDisplayNames()));
+
+            }
+        }
+
+
 
         return new ArrayList<RegistrationGroupWrapper>(rgMap.values());
     }
@@ -961,6 +1064,7 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
             throws InvalidParameterException, MissingParameterException, DoesNotExistException, PermissionDeniedException, OperationFailedException {
 
         List<ActivityOfferingWrapper> activityOfferingWrappers = new ArrayList<ActivityOfferingWrapper>();
+        ActivityOfferingWrapper aoWrapperStored = new ActivityOfferingWrapper();  //storage for sub-term only to compare
 
         for (SearchResultRowInfo row : searchResults.getRows()) {
 
@@ -969,6 +1073,7 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
             String foId = null;
             String formatId = null;
             String foName = null;
+            List<String>  scheduleIds = new ArrayList<String>();
 
             for (SearchResultCellInfo cell : row.getCells()) {
 
@@ -993,19 +1098,12 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                         aoWrapper.setTypeName(typeInfo.getName());
                     }
                 } else if (ActivityOfferingSearchServiceImpl.SearchResultColumns.SCHEDULE_ID.equals(cell.getKey())) {
-                    if(cell.getValue()!=null){
-                        List<String> scheduleIds = Arrays.asList(cell.getValue().split(","));
-                        aoWrapper.getAoInfo().setScheduleIds(scheduleIds);
 
-                        for(String scheduleId : scheduleIds){
-                            List<ActivityOfferingWrapper> list = sch2aoMap.get(scheduleId);
-                            if(list == null){
-                                list = new ArrayList<ActivityOfferingWrapper>();
-                                sch2aoMap.put(scheduleId, list);
-                            }
-                            list.add(aoWrapper);//Add to schedule map
-                        }
+                    if(cell.getValue()!=null){
+                        scheduleIds.add(cell.getValue());
+
                     }
+
                 } else if (ActivityOfferingSearchServiceImpl.SearchResultColumns.FO_ID.equals(cell.getKey())) {
                     aoWrapper.getAoInfo().setFormatOfferingId(cell.getValue());
                     foId = cell.getValue();
@@ -1021,7 +1119,19 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                     aoWrapper.setAoClusterName(cell.getValue());
                 } else if (ActivityOfferingSearchServiceImpl.SearchResultColumns.AOC_PRIVATE_NAME.equals(cell.getKey())) {
                     aocPrivateName = cell.getValue();
+                } else if (ActivityOfferingSearchServiceImpl.SearchResultColumns.ATP_ID.equals(cell.getKey())) {
+                    aoWrapper.getAoInfo().setTermId(cell.getValue());
                 }
+            }
+
+            aoWrapper.getAoInfo().setScheduleIds(scheduleIds);
+            for(String scheduleId : scheduleIds){
+                List<ActivityOfferingWrapper> list = sch2aoMap.get(scheduleId);
+                if(list == null){
+                    list = new ArrayList<ActivityOfferingWrapper>();
+                    sch2aoMap.put(scheduleId, list);
+                }
+                list.add(aoWrapper);//Add to schedule map
             }
             if (aoWrapper.getAoClusterID() != null) {
                 ActivityOfferingClusterWrapper aoClusterWrapper = clusterMap.get(aoWrapper.getAoClusterID());
@@ -1051,6 +1161,47 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
                         aoIdsWithoutSch.add(aoWrapper.getAoInfo().getId());
                     }
 
+                    //Check for sub-term or term and populate accordingly
+                    //If no change of AO.getTermId() > avoid service calls and populate sub-term info as it has been stored in aoWrapperStored
+                    if(aoWrapper.getAoInfo().getTermId().equals(aoWrapperStored.getAoInfo().getTermId())){
+                        aoWrapper.setHasSubTerms(aoWrapperStored.getHasSubTerms());
+                        aoWrapper.setSubTermId(aoWrapperStored.getSubTermId());
+                        aoWrapper.setSubTermName(aoWrapperStored.getSubTermName());
+                        aoWrapper.setTerm(aoWrapperStored.getTerm());
+                        aoWrapper.setTermName(aoWrapperStored.getTermName());
+                        aoWrapper.setTermDisplayString(aoWrapperStored.getTermDisplayString());
+                        aoWrapper.setTermStartEndDate(aoWrapperStored.getTermStartEndDate());
+                    } else {
+                        TermInfo term = null;
+                        TermInfo subTerm = null;
+                        aoWrapper.setHasSubTerms(false);
+                        aoWrapper.setSubTermName("None");
+                        aoWrapper.setSubTermId("");
+                        List<TermInfo> terms = getAcalService().getContainingTerms(aoWrapper.getAoInfo().getTermId(), contextInfo);
+                        if (terms == null || terms.isEmpty()) {
+                            term = getAcalService().getTerm(aoWrapper.getAoInfo().getTermId(), contextInfo);
+                            // checking if we can have sub-terms for giving term
+                            List<TermInfo> subTerms = getAcalService().getIncludedTermsInTerm(aoWrapper.getAoInfo().getTermId(), contextInfo);
+                            if(!subTerms.isEmpty()) {
+                                aoWrapper.setHasSubTerms(true);
+                            }
+                        } else {
+                            subTerm = getAcalService().getTerm(aoWrapper.getAoInfo().getTermId(), contextInfo);
+                            term = terms.get(0);
+                            aoWrapper.setHasSubTerms(true);
+                            aoWrapper.setSubTermId(subTerm.getId());
+                            TypeInfo subTermType = getTypeService().getType(subTerm.getTypeKey(), contextInfo);
+                            aoWrapper.setSubTermName(subTermType.getName());
+                            aoWrapper.setTermStartEndDate(getTermStartEndDate(subTerm.getId(), subTerm));
+                        }
+                        aoWrapper.setTerm(term);
+                        if (term != null) {
+                            aoWrapper.setTermName(term.getName());
+                        }
+                        aoWrapper.setTermDisplayString(getTermDisplayString(aoWrapper.getAoInfo().getTermId(), term));
+                        aoWrapperStored = aoWrapper; //update for next comparison
+                    }
+                    // end sub-terms
                     activityOfferingWrappers.add(aoWrapper);
                 }
             }
@@ -1065,7 +1216,37 @@ public class ARGCourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_V
             }
 
         }
+
         return activityOfferingWrappers;
+    }
+
+    private String getTermStartEndDate(String termId, TermInfo term) {
+        // Return Term as String display like 'FALL 2020 (9/26/2020-12/26/2020)'
+        StringBuilder stringBuilder = new StringBuilder();
+        Formatter formatter = new Formatter(stringBuilder, Locale.US);
+        String displayString = termId; // use termId as a default.
+        if (term != null) {
+            String startDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getStartDate());
+            String endDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getEndDate());
+            formatter.format("%s - %s", startDate, endDate);
+            displayString = stringBuilder.toString();
+        }
+        return displayString;
+    }
+
+    private String getTermDisplayString(String termId, TermInfo term) {
+        // Return Term as String display like 'FALL 2020 (9/26/2020-12/26/2020)'
+        StringBuilder stringBuilder = new StringBuilder();
+        Formatter formatter = new Formatter(stringBuilder, Locale.US);
+        String displayString = termId; // use termId as a default.
+        if (term != null) {
+            String startDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getStartDate());
+            String endDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getEndDate());
+            String termType = term.getName();
+            formatter.format("%s (%s to %s)", termType, startDate, endDate);
+            displayString = stringBuilder.toString();
+        }
+        return displayString;
     }
 
     protected EntityDefaultQueryResults getInstructorsInfoFromKim(List<String> principalIds, ContextInfo contextInfo) {

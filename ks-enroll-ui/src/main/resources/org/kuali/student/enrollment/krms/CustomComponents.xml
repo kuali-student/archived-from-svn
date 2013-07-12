@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2007-2013 The Kuali Foundation
+
+Licensed under the Educational Community License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.opensource.org/licenses/ecl2.php
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -9,21 +24,44 @@
           p:propertyName="proposition.parameters[1].value" p:showLabel="true" p:label="Value" p:maxLength="255"
           p:required="true">
         <property name="control">
-            <bean parent="Uif-TextControl" p:style="margin-top:null 2px;" p:watermarkText="Enter a Literal Value"/>
+            <bean parent="Uif-TextControl" p:style="margin-top:null 2px;"/>
         </property>
         <property name="validCharactersConstraint">
             <bean parent="IntegerPatternConstraint" p:allowNegative="false"/>
         </property>
     </bean>
 
+    <bean id="KRMS-CustomComponent-BoxGroup" parent="Uif-VerticalBoxGroup"/>
+
     <!-- Integer constant Instance components -->
-    <bean id="KRMS-NumberOfCourses-ConstantValue" parent="KRMS-Integer-ConstantValue-Parent"
-          p:label="Number of Courses"/>
+    <bean id="KRMS-NumberOfCourses-ConstantValue" parent="Uif-VerticalBoxSection">
+        <property name="items">
+            <list>
+                <bean parent="KRMS-Integer-ConstantValue-Parent"
+                      p:label="Number of Courses"/>
+            </list>
+        </property>
+    </bean>
 
-    <bean id="KRMS-RepeatCourseNum-ConstantValue" parent="KRMS-Integer-ConstantValue-Parent"
-          p:label="Number of Repeats"/>
+    <bean id="KRMS-RepeatCourseNum-ConstantValue" parent="Uif-VerticalBoxSection">
+        <property name="items">
+            <list>
+                <bean parent="KRMS-Integer-ConstantValue-Parent"
+                      p:label="Number of Repeats"/>
+            </list>
+        </property>
+    </bean>
 
-    <bean id="KRMS-Credits-ConstantValue" parent="KRMS-Integer-ConstantValue-Parent" p:label="Credits"/>
+    <bean id="KRMS-Credits-ConstantValue" parent="Uif-VerticalBoxSection">
+        <property name="items">
+            <list>
+                <bean parent="KRMS-Integer-ConstantValue-Parent"
+                      p:label="Credits">
+                    <property name="maxLength" value="6"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
     <bean id="KRMS-Minutes-ConstantValue" parent="KRMS-Integer-ConstantValue-Parent" p:label="Minutes"/>
 
@@ -65,22 +103,24 @@
     </bean>
     <bean id="KRMS-SingleCourse-SuggestField" parent="KRMS-SingleCourse-SuggestField-Parent"/>
 
-    <bean id="KRMS-MultiCourse-Section-Parent" parent="Uif-VerticalBoxSection" p:headerText="Courses">
-        <property name="header.headerTagStyle" value="font-size:13px;"/>
-        <property name="instructionalText" value="You may add any combination of courses, dynamic course ranges, or Course sets."/>
+    <bean id="KRMS-MultiCourse-Section-Parent" parent="Uif-VerticalBoxSection">
         <property name="items">
             <list>
+                <bean parent="Uif-HeaderThree" p:headerText="Courses">
+                    <property name="headerTagStyle" value="font-size:13px;"/>
+                </bean>
+                <bean parent="Uif-MessageField" p:messageText="You may add any combination of courses, dynamic course ranges, or Course sets."/>
                 <ref bean="KRMS-MultiCourse-Type-Field"/>
                 <ref bean="KRMS-ApprovedCourseStackedCollectionGroup"/>
                 <ref bean="KRMS-CourseSetStackedCollectionGroup"/>
                 <bean parent="Uif-VerticalBoxGroup">
                     <property name="header">
-                        <bean parent="Uif-HeaderSix" p:headerText="Course Range" p:progressiveRender="#np.proposition.cluSet.cluSetRange.cluSetRangeLabel ne ''"/>
+                        <bean parent="Uif-HeaderSix" p:headerText="Course Range" p:progressiveRender="#np.proposition.cluSet.cluRangeListSize gt 0"/>
                     </property>
                     <property name="items">
                         <list>
                             <ref bean="KS-CourseRange-BoxSection"/>
-                            <ref bean="KS-CourseRange-DisplaySection"/>
+                            <ref bean="KS-CourseRangeStackedCollectionGroup"/>
                         </list>
                     </property>
                     <property name="cssClasses">
@@ -173,7 +213,7 @@
         <property name="collectionObjectClass"
                   value="org.kuali.student.enrollment.class1.krms.dto.CluSetInformation"/>
         <property name="header">
-            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.cluSetListSize gt 0">
+            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.cluSet.cluSetListSize gt 0">
                 <property name="lowerGroup">
                     <bean parent="Uif-InactiveItemsActionsGroup"/>
                 </property>
@@ -246,7 +286,7 @@
         <property name="collectionObjectClass"
                   value="org.kuali.student.enrollment.class1.krms.dto.CluInformation"/>
         <property name="header">
-            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.cluListSize gt 0">
+            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.cluSet.cluListSize gt 0">
                 <property name="lowerGroup">
                     <bean parent="Uif-InactiveItemsActionsGroup"/>
                 </property>
@@ -319,7 +359,7 @@
     <bean id="KS-CourseRange-BoxSection" parent="KS-CourseRange-BoxSection-parent"/>
 
     <bean id="KS-CourseRange-TypeField-parent" parent="Uif-InputField-LabelTop" p:label="Select Course Range Type"
-          p:width="auto" p:propertyName="proposition.cluSet.cluSetRange.searchByCourseRange">
+          p:width="auto" p:propertyName="proposition.cluSet.rangeHelper.searchByCourseRange">
         <property name="control">
             <bean parent="Uif-HorizontalRadioControl">
                 <property name="options">
@@ -338,16 +378,16 @@
     <bean id="KS-CourseRange-TypeField" parent="KS-CourseRange-TypeField-parent"/>
 
     <bean id="KS-CourseNumber-RangeSection" parent="Uif-HorizontalBoxSection"
-          p:progressiveRender="#np.proposition.cluSet.cluSetRange.searchByCourseRange eq '1'">
+          p:progressiveRender="#np.proposition.cluSet.rangeHelper.searchByCourseRange eq '1'">
         <property name="items">
             <list>
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.cluSetRange.subjectCode" p:label="Subject Code">
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.rangeHelper.subjectCode" p:label="Subject Code">
                     <property name="control">
                         <bean parent="Uif-TextControl" />
                     </property>
                 </bean>
 
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.cluSetRange.courseNumberRange" p:label="Course Number Range">
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.rangeHelper.courseNumberRange" p:label="Course Number Range">
                     <property name="control">
                         <bean parent="Uif-TextControl" />
                     </property>
@@ -359,10 +399,10 @@
     </bean>
 
     <bean id="KS-LearningObjective-RangeSection" parent="Uif-HorizontalBoxSection"
-          p:progressiveRender="#np.proposition.cluSet.cluSetRange.searchByCourseRange eq '2'">
+          p:progressiveRender="#np.proposition.cluSet.rangeHelper.searchByCourseRange eq '2'">
         <property name="items">
             <list>
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.cluSetRange.learningObjective" p:label="Description">
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.rangeHelper.learningObjective" p:label="Description">
                     <property name="control">
                         <bean parent="Uif-TextControl" />
                     </property>
@@ -374,18 +414,18 @@
     </bean>
 
     <bean id="KS-EffectiveDate-RangeSection" parent="Uif-HorizontalBoxSection"
-          p:progressiveRender="#np.proposition.cluSet.cluSetRange.searchByCourseRange eq '3'">
+          p:progressiveRender="#np.proposition.cluSet.rangeHelper.searchByCourseRange eq '3'">
         <property name="items">
             <list>
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.cluSetRange.effectiveFrom" p:label="Effective From">
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.rangeHelper.effectiveFrom" p:label="Effective From">
                     <property name="control">
-                        <bean parent="Uif-DateControl" />
+                        <bean parent="Uif-KS-Default-DateControl" />
                     </property>
                 </bean>
 
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.cluSetRange.effectiveTo" p:label="Effective To">
+                <bean parent="Uif-InputField-LabelTop" p:propertyName="proposition.cluSet.rangeHelper.effectiveTo" p:label="Effective To">
                     <property name="control">
-                        <bean parent="Uif-DateControl" />
+                        <bean parent="Uif-KS-Default-DateControl" />
                     </property>
                 </bean>
 
@@ -398,15 +438,35 @@
             p:style="margin-top: 25px;" p:methodToCall="addRange">
     </bean>
 
-    <bean id="KS-CourseRange-DisplaySection" parent="Uif-HorizontalBoxGroup" p:progressiveRender="#np.proposition.cluSet.cluSetRange.cluSetRangeLabel ne ''"
-          p:style="width:600px">
+    <bean id="KS-CourseRangeStackedCollectionGroup" parent="KRMS-StackedCollectionGroup" p:render="@{#np.proposition.cluSet.cluRangeListSize gt 0}">
+        <property name="layoutManager">
+            <bean parent="KRMS-StackedCollectionLayout-WithBoxItems">
+                <property name="summaryFields" value="cluSetRangeLabel"/>
+            </bean>
+        </property>
+        <property name="propertyName" value="proposition.cluSet.cluSetRanges"/>
+        <property name="collectionObjectClass"
+                  value="org.kuali.student.enrollment.class1.krms.dto.CluSetRangeInformation"/>
+        <property name="header">
+            <bean parent="Uif-HeaderSix" p:render="false">
+            </bean>
+        </property>
+        <property name="renderAddLine" value="false"/>
         <property name="items">
             <list>
-                <bean parent="Uif-MessageField" p:messageText="@{#np.proposition.cluSet.cluSetRange.cluSetRangeLabel}"
+                <bean parent="Uif-MessageField" p:messageText="@{#line.cluSetRangeLabel}"
                       p:style="width: 450px; margin: 0px;"/>
+            </list>
+        </property>
+        <!-- Replace with other bean for the multi select search-->
+        <property name="collectionLookup">
+            <bean parent="Uif-CollectionQuickFinder" p:render="false"/>
+        </property>
+        <property name="lineActions">
+            <list>
                 <bean parent="Uif-ActionLink" p:actionLabel="View" p:methodToCall="viewCourseRange"
-                        p:style="margin-right: 15px;"/>
-                <bean parent="Uif-SecondaryActionButton-Small" p:actionLabel="delete">
+                      p:style="margin-right: 15px;" p:actionParameters="selectedIndex:@{#index}"/>
+                <bean parent="Uif-DeleteLineAction">
                     <property name="cssClasses">
                         <list merge="true">
                             <value>krms-stackedActionItem</value>
@@ -417,9 +477,7 @@
         </property>
         <property name="cssClasses">
             <list merge="true">
-                <value>uif-collectionItem</value>
-                <value>uif-gridCollectionItem</value>
-                <value>krms-stackedCollectionItem</value>
+                <value>ks-multiCourseItem</value>
             </list>
         </property>
     </bean>
@@ -430,6 +488,8 @@
         <property name="disclosure.render" value="false"/>
         <property name="items">
             <list>
+                <bean parent="Uif-MessageField" p:messageText="No courses match the current search criteria."
+                    p:style="width: 450px; margin: 0px;" p:render="@{#dp.clusInRangeSize eq 0}"/>
                 <ref bean="KRMS-CourseRangeResult"/>
                 <bean parent="Uif-ActionLink" p:actionLabel="Close" p:actionScript="jQuery.fancybox.close();"
                       p:align="right"/>
@@ -446,12 +506,6 @@
         <property name="layoutManager.renderSequenceField" value="false"/>
         <property name="layoutManager.applyDefaultCellWidths" value="false"/>
         <property name="layoutManager.applyAlternatingRowStyles" value="false"/>
-        <property name="layoutManager.richTable.templateOptions">
-            <map>
-                <entry key="sDom" value="rtip"/>
-                <entry key="aaSorting" value="[[ 1, 'asc' ]]"/>
-            </map>
-        </property>
         <property name="items">
             <list>
                 <bean parent="Uif-DataField" p:label="Code" p:propertyName="code" p:width="65"/>
@@ -488,7 +542,8 @@
             </bean>
         </property>-->
         <property name="control">
-            <bean parent="Uif-TextControl" p:size="60" p:disabled="true"/>
+            <bean parent="Uif-TextControl" p:size="60" p:style="background-color: #DDDDDD;width:370px; margin-top:null 2px;"
+                  p:readOnly="true"/>
         </property>
         <property name="quickfinder">
             <bean parent="KRMS-OrgDepartment-QuickFinder"/>
@@ -541,7 +596,7 @@
     </bean>
     <bean id="KRMS-TestName-Field" parent="KRMS-TestName-Field-Parent"/>
 
-    <bean id="KRMS-TestScoreAndName-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-TestScoreAndName-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-TestScore-Field"/>
@@ -550,7 +605,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-TestScoresBetweenAndName-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-TestScoresBetweenAndName-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list merge="true">
                 <ref bean="KRMS-TestScore-Field"/>
@@ -566,7 +621,7 @@
             <bean parent="Uif-VerticalRadioControl"/>
         </property>
         <property name="optionsFinder">
-            <bean class="org.kuali.student.enrollment.class1.krms.keyvalues.GradeScaleValuesFinder"/>
+            <bean class="org.kuali.student.enrollment.class1.krms.keyvalues.AssesmentKeyValueFinder"/>
         </property>
     </bean>
     <bean id="KRMS-GradeScale-Field" parent="KRMS-GradeScale-Field-Parent"/>
@@ -602,7 +657,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-ClassStanding-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-ClassStanding-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-ClassStanding-Field"/>
@@ -610,7 +665,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-AOStateAndSate-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-AOStateAndSate-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <!-- TODO: Activity Offering State component -->
@@ -623,7 +678,7 @@
           p:propertyName="proposition.termParameter" p:label="Program" p:required="true"/>
     <bean id="KRMS-Program-SuggestField" parent="KRMS-Program-SuggestField-Parent"/>
 
-    <bean id="KRMS-ProgramWithNofAndOrg" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-ProgramWithNofAndOrg" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <!-- TODO: Program component -->
@@ -640,7 +695,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-ProgramAndCredit" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-ProgramAndCredit" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <!-- TODO: Program component -->
@@ -649,7 +704,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-ProgramAndClassStanding-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-ProgramAndClassStanding-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-Program-Section"/>
@@ -658,7 +713,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CampusAndDur" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CampusAndDur" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <!-- TODO: Campus component -->
@@ -667,11 +722,12 @@
         </property>
     </bean>
 
-    <bean id="KRMS-GPAAndDuration-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-GPAAndDuration-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-GPA-Field"/>
-                <ref bean="KRMS-Duration-section"/>
+                <ref bean="KRMS-DurationCount-Field"/>
+                <ref bean="KRMS-DurationType-Field"/>
             </list>
         </property>
     </bean>
@@ -688,7 +744,7 @@
           p:propertyName="proposition.termParameter" p:label="Program" p:required="true"/>
     <bean id="KRMS-CourseOffering-InputField" parent="KRMS-CourseOffering-InputField-Parent"/>
 
-    <bean id="KRMS-MultiCourseWithNof-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-MultiCourseWithNof-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-NumberOfCourses-ConstantValue"/>
@@ -697,7 +753,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-MultiCourseWithGrade-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-MultiCourseWithGrade-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-Grade-Tree-Section"/>
@@ -706,7 +762,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-MultiCourseWithGradeNof-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-MultiCourseWithGradeNof-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-NumberOfCourses-ConstantValue"/>
@@ -716,7 +772,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-MultiCourseWithGPA-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-MultiCourseWithGPA-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-GPA-Field"/>
@@ -725,7 +781,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-MultiCourseWithCredit-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-MultiCourseWithCredit-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-Credits-ConstantValue"/>
@@ -734,7 +790,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CourseAndTerm-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CourseAndTerm-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-SingleCourse-SuggestField"/>
@@ -743,7 +799,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CourseAndCredit-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CourseAndCredit-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-Credits-ConstantValue"/>
@@ -752,7 +808,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CourseAndRepeat-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CourseAndRepeat-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-SingleCourse-SuggestField"/>
@@ -761,7 +817,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-Duration-section" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-Duration-section" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-DurationCount-Field"/>
@@ -825,11 +881,11 @@
                 </property>
             </bean>
         </property>
-        <property name="propertyName" value="proposition.progCluSet.clus"/>
+        <property name="propertyName" value="proposition.progCluSet.clus" />
         <property name="collectionObjectClass"
                   value="org.kuali.student.enrollment.class1.krms.dto.CluInformation"/>
         <property name="header">
-            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.cluListSize gt 0">
+            <bean parent="Uif-HeaderSix" p:progressiveRender="#np.proposition.progCluSet.progCluListSize gt 0">
                 <property name="lowerGroup">
                     <bean parent="Uif-InactiveItemsActionsGroup"/>
                 </property>
@@ -837,7 +893,7 @@
         </property>
         <property name="items">
             <list>
-                <bean parent="Uif-MessageField" p:messageText="@{#line.code}" p:style="width: 290px; margin: 0px;"/>
+                <bean parent="Uif-MessageField" p:messageText="@{#line.code}" p:style="width: 500px; margin: 0px;"/>
             </list>
         </property>
         <property name="addLineItems">
@@ -845,7 +901,8 @@
                 <bean parent="Uif-InputField-LabelTop" p:style="width: 280px;">
                     <property name="propertyName" value="code"/>
                     <property name="control">
-                        <bean parent="Uif-TextControl" p:style="background-color: #DDDDDD;margin-top:null 2px;" p:disabled="true">
+                        <bean parent="Uif-TextControl" p:style="background-color: #DDDDDD;margin-top:null 2px;"
+                              p:readOnly="true">
                         </bean>
                     </property>
                     <property name="label" value="Approved Programs"/>
@@ -897,7 +954,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CreditAndDepartment-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CreditAndDepartment-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-Credits-ConstantValue"/>
@@ -906,7 +963,7 @@
         </property>
     </bean>
 
-    <bean id="KRMS-CourseAndTerms-Group" parent="Uif-VerticalFieldGroup">
+    <bean id="KRMS-CourseAndTerms-Group" parent="KRMS-CustomComponent-BoxGroup">
         <property name="items">
             <list>
                 <ref bean="KRMS-SingleCourse-SuggestField"/>
@@ -928,7 +985,8 @@
           p:propertyName="proposition.classStanding" p:required="true">
         <property name="style" value="width:450px;"/>
         <property name="control">
-            <bean parent="Uif-TextControl" p:size="60" p:disabled="true"/>
+            <bean parent="Uif-TextControl" p:size="60" p:style="background-color: #DDDDDD;width:370px; margin-top:null 2px;"
+                  p:readOnly="true"/>
         </property>
         <property name="quickfinder">
             <bean parent="KRMS-ClassStanding-QuickFinder"/>

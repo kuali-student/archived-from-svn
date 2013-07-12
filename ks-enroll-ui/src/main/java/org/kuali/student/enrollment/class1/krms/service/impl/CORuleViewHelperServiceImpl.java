@@ -17,6 +17,7 @@ package org.kuali.student.enrollment.class1.krms.service.impl;
 
 import org.kuali.rice.core.api.util.tree.Tree;
 import org.kuali.rice.krms.api.repository.proposition.PropositionType;
+import org.kuali.rice.krms.api.repository.reference.ReferenceObjectBinding;
 import org.kuali.rice.krms.api.repository.term.TermDefinition;
 import org.kuali.rice.krms.api.repository.type.KrmsTypeDefinition;
 import org.kuali.rice.krms.builder.ComponentBuilder;
@@ -31,6 +32,7 @@ import org.kuali.rice.krms.tree.RuleViewTreeBuilder;
 import org.kuali.rice.krms.tree.node.CompareTreeNode;
 import org.kuali.rice.krms.util.PropositionTreeUtil;
 import org.kuali.student.enrollment.class1.krms.builder.MultiCourseComponentBuilder;
+import org.kuali.student.enrollment.class1.krms.builder.ProgramComponentBuilder;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolPropositionEditor;
 import org.kuali.student.enrollment.class1.krms.tree.CORuleCompareTreeBuilder;
 import org.kuali.student.enrollment.class1.krms.tree.EnrolRulePreviewTreeBuilder;
@@ -39,6 +41,7 @@ import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.r2.common.util.ContextUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,60 +84,12 @@ public class CORuleViewHelperServiceImpl extends EnrolRuleViewHelperServiceImpl 
 
         //Build the Tree
         RuleEditor compareEditor = original.getParent();
-        if(compareEditor == null){
-            compareEditor = this.getCompareRule(refObjectId, original.getTypeId());
-            original.setParent(compareEditor);
-        }
-        if(compareEditor.getProposition()!=null){
+        if((compareEditor!=null)&&(compareEditor.getProposition()!=null)){
             this.getNaturalLanguageHelper().setNaturalLanguageTreeForUsage(compareEditor.getPropositionEditor(), this.getEditTreeBuilder().getNaturalLanguageUsageKey());
         }
         Tree<CompareTreeNode, String> compareTree = this.getCompareTreeBuilder().buildTree(original, compareEditor);
 
         return compareTree;
-    }
-
-    /**
-     * Compares CO and CLU with each other for the display of a info message.
-     *
-     * @param original
-     * @param compare
-     * @return
-     */
-    @Override
-    public Boolean compareProposition(PropositionEditor original, PropositionEditor compare) {
-
-        if(!super.compareProposition(original, compare)) {
-            return false;
-        } else if(!original.getPropositionTypeCode().equals("C")) {
-            EnrolPropositionEditor enrolOriginal = (EnrolPropositionEditor) original;
-
-            //Populate compare proposition cluSetInformation for comparison
-            if(enrolOriginal.getCluSet() != null) {
-                if(enrolOriginal.getCluSet().getParent() == null) {
-                    MultiCourseComponentBuilder builder = new MultiCourseComponentBuilder();
-                    TermEditor term = new TermEditor(PropositionTreeUtil.getTermParameter(compare.getParameters()).getTermValue());
-                    for(TermParameterEditor termParameterEditor : term.getEditorParameters()) {
-                        if(termParameterEditor.getName().equals("kuali.term.parameter.type.course.cluSet.id")) {
-                            enrolOriginal.getCluSet().setParent(builder.getCluSetInformation(termParameterEditor.getValue()));
-                            break;
-                        }
-                    }
-                }
-                //If compare and original propositions are not null compare CluSetInformation
-                if(enrolOriginal.getCluSet() != null && enrolOriginal.getCluSet().getParent() != null) {
-                    //Compare propositions CluSetInformation clu's
-                    if(!enrolOriginal.getCluSet().getCluDelimitedString().equals(enrolOriginal.getCluSet().getParent().getCluDelimitedString())) {
-                        return false;
-                    }
-                    //Compare propositions CluSetInformation cluSets
-                    if(!enrolOriginal.getCluSet().getCluSetDelimitedString().equals(enrolOriginal.getCluSet().getParent().getCluSetDelimitedString())) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -191,24 +146,11 @@ public class CORuleViewHelperServiceImpl extends EnrolRuleViewHelperServiceImpl 
         return termParameters;
     }
 
-    /**
-     * Return the clu id from the canonical course that is linked to the given course offering id.
-     *
-     * @param refObjectId - the course offering id.
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public String getParentRefOjbectId(String refObjectId) throws Exception {
-        CourseOfferingInfo courseOffering = this.getCourseOfferingService().getCourseOffering(refObjectId, ContextUtils.createDefaultContextInfo());
-        return courseOffering.getCourseId();
-    }
-
     @Override
     public RulePreviewTreeBuilder getPreviewTreeBuilder() {
         if (previewTreeBuilder == null) {
             previewTreeBuilder = new EnrolRulePreviewTreeBuilder();
-            previewTreeBuilder.setRuleManagementService(this.getRuleManagementService());
+            previewTreeBuilder.setNlHelper(this.getNaturalLanguageHelper());
         }
         return previewTreeBuilder;
     }
@@ -216,7 +158,7 @@ public class CORuleViewHelperServiceImpl extends EnrolRuleViewHelperServiceImpl 
     protected RuleViewTreeBuilder getViewTreeBuilder() {
         if (viewTreeBuilder == null) {
             viewTreeBuilder = new EnrolRuleViewTreeBuilder();
-            viewTreeBuilder.setRuleManagementService(this.getRuleManagementService());
+            viewTreeBuilder.setNlHelper(this.getNaturalLanguageHelper());
         }
         return viewTreeBuilder;
     }
@@ -224,7 +166,7 @@ public class CORuleViewHelperServiceImpl extends EnrolRuleViewHelperServiceImpl 
     protected RuleCompareTreeBuilder getCompareTreeBuilder() {
         if (compareTreeBuilder == null) {
             compareTreeBuilder = new CORuleCompareTreeBuilder();
-            compareTreeBuilder.setRuleManagementService(this.getRuleManagementService());
+            compareTreeBuilder.setNlHelper(this.getNaturalLanguageHelper());
         }
         return compareTreeBuilder;
     }

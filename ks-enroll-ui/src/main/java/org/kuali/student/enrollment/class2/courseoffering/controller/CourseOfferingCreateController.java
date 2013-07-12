@@ -28,6 +28,7 @@ import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.student.common.uif.util.GrowlIcon;
 import org.kuali.student.common.uif.util.KSControllerHelper;
 import org.kuali.student.common.uif.util.KSUifUtils;
+import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBar;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCreateWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ExistingCourseOffering;
 import org.kuali.student.enrollment.class2.courseoffering.dto.JointCourseWrapper;
@@ -47,14 +48,13 @@ import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
-import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
+import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.r2.core.class1.search.CourseOfferingHistorySearchImpl;
 import org.kuali.student.r2.core.class1.state.service.StateService;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
-import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.constants.StateServiceConstants;
 import org.kuali.student.r2.core.search.dto.SearchParamInfo;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
@@ -78,12 +78,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static org.kuali.rice.core.api.criteria.PredicateFactory.equal;
+import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysService;
+import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysServiceImpl;
 
 
 /**
@@ -125,7 +125,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         TermInfo term = getTerm(termCode);
         coWrapper.setTerm(term);
 
-        List<CourseInfo> matchingCourses = retrieveMatchingCourses(courseCode);
+        List<CourseInfo> matchingCourses = retrieveMatchingCourses(courseCode, term);
 
         ContextInfo contextInfo = ContextUtils.createDefaultContextInfo();
 
@@ -172,9 +172,8 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                     coWrapper.setShowCatalogLink(false);
                     coWrapper.setShowTermOfferingLink(true);
 
-                    coWrapper.setTermCode(term.getCode());
-                    coWrapper.setTermSocState( getStateService().getState( coWrapper.getSocInfo().getStateKey(), contextInfo ).getName() );
-                    setTermDayOfYearOnFormObject( coWrapper, contextInfo );
+                    coWrapper.setContextBar( CourseOfferingContextBar.NEW_INSTANCE(coWrapper.getTerm(), coWrapper.getSocInfo(),
+                            getStateService(), getAcademicCalendarService(), contextInfo) );
 
                     coWrapper.getExistingTermOfferings().clear();
                     coWrapper.getExistingOfferingsInCurrentTerm().clear();
@@ -227,14 +226,13 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
 
             if (matchingCourses.size() > 1) {
                 GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Multiple matches found for the course code");
-                return null;
             } else if (matchingCourses.isEmpty() && term == null) {
                 GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Both Catalog Course Code and Target Term are invalid");
             } else {
                 if (term == null) {
                     GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Invalid Target Term");
                 } else if (matchingCourses.isEmpty()) {
-                    GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Invalid Catalog Course Code");
+                    GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.ERROR_INVALID_CLU_VERSION,courseCode,termCode);
                 }
             }
 
@@ -244,26 +242,6 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         }
 
         return getUIFModelAndView(form);
-    }
-
-    private void setTermDayOfYearOnFormObject( CourseOfferingCreateWrapper formObject, ContextInfo contextInfo ) throws Exception {
-
-        List<KeyDateInfo> keyDateInfoList = getAcademicCalendarService().getKeyDatesForTerm( formObject.getTerm().getId(), contextInfo);
-        Date termClassStartDate = null;
-        for(KeyDateInfo keyDateInfo : keyDateInfoList ) {
-            if( keyDateInfo.getTypeKey().equalsIgnoreCase(AtpServiceConstants.MILESTONE_INSTRUCTIONAL_PERIOD_TYPE_KEY)
-                    && keyDateInfo.getStartDate() != null
-                    && keyDateInfo.getEndDate() != null )
-            {
-                termClassStartDate = keyDateInfo.getStartDate();
-
-                Date avgDate = new Date( termClassStartDate.getTime() + ( (keyDateInfo.getEndDate().getTime() - termClassStartDate.getTime()) /2 ) );
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(avgDate);
-                formObject.setTermDayOfYear( cal.get(Calendar.DAY_OF_YEAR) );
-                break;
-            }
-        }
     }
 
     private String getGradingOption(String gradingOptionId) throws Exception {
@@ -293,6 +271,14 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         return getUIFModelAndView(form);
     }
 
+    private DefaultOptionKeysService defaultOptionKeysService;
+
+    private DefaultOptionKeysService getDefaultOptionKeysService() {
+        if (defaultOptionKeysService == null) {
+            defaultOptionKeysService = new DefaultOptionKeysServiceImpl();
+        }
+        return this.defaultOptionKeysService;
+    }
     /**
      * This is mapped to the <i>'Copy from existing'</i> link
      *
@@ -303,7 +289,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         CourseOfferingInfo existingCO = ((ExistingCourseOffering) KSControllerHelper.getSelectedCollectionItem(form)).getCourseOfferingInfo();
         CourseOfferingCreateWrapper createWrapper = (CourseOfferingCreateWrapper) form.getDocument().getNewMaintainableObject().getDataObject();
 
-        List<String> optionKeys = new ArrayList<String>();
+        List<String> optionKeys = this.getDefaultOptionKeysService().getDefaultOptionKeysForCopySingleCourseOffering();
 
         if (createWrapper.isExcludeInstructorInformation()) {
             optionKeys.add(CourseOfferingSetServiceConstants.NO_INSTRUCTORS_OPTION_KEY);
@@ -504,26 +490,19 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         return courseOfferingService;
     }
 
-    private List<CourseInfo> retrieveMatchingCourses(String courseName) {
+    private List<CourseInfo> retrieveMatchingCourses(String courseCode, TermInfo term) {
 
         CourseInfo returnCourseInfo;
         String courseId;
         List<SearchParamInfo> searchParams = new ArrayList<SearchParamInfo>();
         List<CourseInfo> courseInfoList = new ArrayList<CourseInfo>();
 
-        SearchParamInfo qpv1 = new SearchParamInfo();
-        qpv1.setKey("lu.queryParam.startsWith.cluCode");
-        qpv1.getValues().add(courseName.toUpperCase());
-        searchParams.add(qpv1);
-
-        SearchParamInfo qpv2 = new SearchParamInfo();
-        qpv2.setKey("lu.queryParam.cluState");
-        qpv2.setValues(Arrays.asList("Active"));
-        searchParams.add(qpv2);
+        searchParams.add(new SearchParamInfo("lu_queryParam_code", courseCode.toUpperCase()));
+        searchParams.add(new SearchParamInfo("lu_queryParam_someDate", DateFormatters.QUERY_SERVICE_TIMESTAMP_FORMATTER.format(term.getStartDate())));
 
         SearchRequestInfo searchRequest = new SearchRequestInfo();
         searchRequest.setParams(searchParams);
-        searchRequest.setSearchKey("lu.search.cluByCodeAndState");
+        searchRequest.setSearchKey("lu.search.validCluForDate");
 
         try {
             SearchResultInfo searchResult = getCluService().search(searchRequest, ContextUtils.getContextInfo());
@@ -546,7 +525,6 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         }
 
         return courseInfoList;
-
     }
 
     protected TypeService getTypeService() {

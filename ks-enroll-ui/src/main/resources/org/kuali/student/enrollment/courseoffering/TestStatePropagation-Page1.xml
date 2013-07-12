@@ -20,7 +20,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
     -->
-    <bean id="KS-TestStatePropagation-Page1" parent="Uif-Page" p:disclosure.render="false"
+    <bean id="KS-TestStatePropagation-Page1" parent="KS-Uif-Page" p:disclosure.render="false"
           p:id="testStatePropagationPageId"
           p:headerText="AFT Unit Test for State Propagation">
 
@@ -81,6 +81,9 @@
                                               p:label="AO To"
                                               p:propertyName="aoTo"/>
                                         <bean parent="Uif-DataField"
+                                              p:label="2nd AO State"
+                                              p:propertyName="secondAoState"/>
+                                        <bean parent="Uif-DataField"
                                               p:label="Expected"
                                               p:propertyName="expected"/>
                                         <bean parent="Uif-DataField"
@@ -135,6 +138,9 @@
                                             <bean parent="Uif-DataField"
                                                   p:label="AO To"
                                                   p:propertyName="aoTo"/>
+                                            <bean parent="Uif-DataField"
+                                                  p:label="2nd AO State"
+                                                  p:propertyName="secondAoState"/>
                                             <bean parent="Uif-DataField"
                                                   p:label="Expected"
                                                   p:propertyName="expected"/>
@@ -191,6 +197,9 @@
                                                   p:label="AO To"
                                                   p:propertyName="aoTo"/>
                                             <bean parent="Uif-DataField"
+                                                  p:label="2nd AO State"
+                                                  p:propertyName="secondAoState"/>
+                                            <bean parent="Uif-DataField"
                                                   p:label="Expected"
                                                   p:propertyName="expected"/>
                                             <bean parent="Uif-DataField"
@@ -216,7 +225,7 @@
                             </property>
                         </bean>
 
-                        <bean parent="Uif-HorizontalBoxSection" id="rgTestResultsSection">
+                        <bean parent="Uif-HorizontalBoxSection" id="rgAoListTestResultsSection">
                             <property name="headerText" value="RG State Propagation Test Using AO List Results" />
                             <property name="items">
                                 <list>
@@ -272,7 +281,7 @@
                             </property>
                         </bean>
 
-                        <bean parent="Uif-HorizontalBoxSection" id="rgTestResultsSection">
+                        <bean parent="Uif-HorizontalBoxSection" id="rgInvalidTestResultsSection">
                             <property name="headerText" value="RG State Propagation Test Using Invalid Transitions Results" />
                             <property name="items">
                                 <list>

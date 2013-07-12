@@ -2,6 +2,9 @@ package org.kuali.student.enrollment.class2.courseoffering.dto;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.rice.core.api.util.KeyValue;
+import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.enrollment.courseofferingset.dto.SocInfo;
@@ -9,8 +12,6 @@ import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConsta
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
-import org.kuali.student.r2.core.scheduling.dto.ScheduleInfo;
-import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestInfo;
 import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestSetInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.infc.CourseCrossListing;
@@ -33,7 +34,6 @@ public class ActivityOfferingWrapper implements Serializable{
 
     private ActivityOfferingInfo aoInfo;
     private FormatOfferingInfo formatOffering;
-    private TermInfo term;
     private List<OfferingInstructorWrapper> instructors;
     private List<ScheduleComponentWrapper> scheduleComponentWrappers;
     private List<SeatPoolWrapper> seatpools;
@@ -47,10 +47,6 @@ public class ActivityOfferingWrapper implements Serializable{
     private String stateName;
     private String typeName;
     private String typeKey;
-
-    private String termName;
-    private int termDayOfYear;
-    private String termSocState;
 
     private String formatOfferingName;
 
@@ -112,8 +108,36 @@ public class ActivityOfferingWrapper implements Serializable{
     private boolean isColocatedOnLoadAlready;
     private boolean isSendRDLsToSchedulerAfterMSE;
 
+    private CourseOfferingContextBar contextBar = CourseOfferingContextBar.NULL_SAFE_INSTANCE;
+
     //This is needed to display the cross listed courses
     private CourseInfo course;
+
+    /*
+    * Always carry the parent or the standard term if any -- Is this because
+    * manage COs/AOs only support search on TermCode but not on subterm?
+    */
+    private TermInfo term;
+    //for Term (name) field display of the parent/standard term on Edit AO page
+    private String termName;
+    //for Sub Term (name) field display on Edit AO page
+    private String subTermName = "";
+    //for Start/End field display on Edit AO page, if subTermId is not empty,
+    //display Start/End date info for the subterm
+    private String termDisplayString = "";
+    //for displaying subterm drop-down list when click change link on Edit AO page
+    //and hold the id value for the selected subterm
+    private String subTermId;
+    //use this boolean to decide if "Change" link should be rendered or not
+    private boolean hasSubTerms;
+    //would it be better to define 'TermInfo subTerm' instead of the following three strings
+    private String termStartEndDate = "";
+
+    /*
+    This is a list of subTerm start/end date strings to support javascript update of the
+     displayed start/end when subterm is changed/choremoved
+     */
+    private String subTermDatesJsonString;
 
     public ActivityOfferingWrapper(){
         aoInfo = new ActivityOfferingInfo();
@@ -268,6 +292,24 @@ public class ActivityOfferingWrapper implements Serializable{
         this.activityCode = activityCode;
     }
 
+    /**
+     * This method returns whether editing of the activity code is allowed or not.
+     * This method reads the configuration property <code>kuali.ks.enrollment.options.edit-activity-offering-code-allowed</code>
+     * and returns it's value (true/false). This is to allow the institutional configuration to decide whether the users
+     * should be allowed to edit the activity code.
+     *
+     * The default is to allow the user to edit the activity code.
+     *
+     * @return boolean based on the configured property
+     */
+    public boolean isEditActivityCodeAllowed() {
+        if( "false".equalsIgnoreCase( ConfigContext.getCurrentContextConfig().getProperty( CourseOfferingConstants.CONFIG_PARAM_KEY_EDIT_ACTIVITY_CODE ) ) ) {
+            return false;
+        }
+
+        return true;
+    }
+
     private String abbreviatedCourseType = "";
 
     public String getAbbreviatedCourseType() {
@@ -277,8 +319,6 @@ public class ActivityOfferingWrapper implements Serializable{
     public void setAbbreviatedCourseType(String abbreviatedCourseType) {
         this.abbreviatedCourseType= abbreviatedCourseType;
     }
-
-    private String termDisplayString = "";
 
     public String getTermDisplayString() {
         return termDisplayString;
@@ -476,22 +516,6 @@ public class ActivityOfferingWrapper implements Serializable{
 
     public void setTermName(String termName) {
         this.termName = termName;
-    }
-
-    public int getTermDayOfYear() {
-        return this.termDayOfYear;
-    }
-
-    public void setTermDayOfYear( int termDayOfYear ) {
-        this.termDayOfYear = termDayOfYear;
-    }
-
-    public String getTermSocState() {
-        return this.termSocState;
-    }
-
-    public void setTermSocState( String termSocState ) {
-        this.termSocState = termSocState;
     }
 
     public String getFormatOfferingName() {
@@ -902,6 +926,14 @@ public class ActivityOfferingWrapper implements Serializable{
         return false;
     }
 
+    public CourseOfferingContextBar getContextBar() {
+        return contextBar;
+    }
+
+    public void setContextBar(CourseOfferingContextBar contextBar) {
+        this.contextBar = contextBar;
+    }
+
     /**
      * Returns the Edit Helper.
      *
@@ -920,9 +952,19 @@ public class ActivityOfferingWrapper implements Serializable{
 
         private boolean scheduleEditInProgress;
         private boolean isPersistedRDLsExists;
+        private String selectedAO;
+
+        private String prevAOTypeName;
+        private String nextAOTypeName;
+
+        private ActivityOfferingInfo prevAO;
+        private ActivityOfferingInfo nextAO;
+
+        private List<KeyValue> aoCodes;
 
         public EditRenderHelper(){
             manageSeperateEnrollmentList = new ArrayList<ColocatedActivity>();
+            aoCodes = new ArrayList<KeyValue>();
         }
 
         /**
@@ -970,6 +1012,97 @@ public class ActivityOfferingWrapper implements Serializable{
         public void setScheduleEditInProgress(boolean scheduleEditInProgress) {
             this.scheduleEditInProgress = scheduleEditInProgress;
         }
+
+        public String getSelectedAO() {
+            return selectedAO;
+        }
+
+        public void setSelectedAO(String selectedAO) {
+            this.selectedAO = selectedAO;
+        }
+
+
+        public List<KeyValue> getAoCodes() {
+            return aoCodes;
+        }
+
+        public void setAoCodes(List<KeyValue> aoCodes) {
+            this.aoCodes = aoCodes;
+        }
+
+        public ActivityOfferingInfo getPrevAO() {
+            return prevAO;
+        }
+
+        public void setPrevAO(ActivityOfferingInfo prevAO) {
+            this.prevAO = prevAO;
+        }
+
+        public ActivityOfferingInfo getNextAO() {
+            return nextAO;
+        }
+
+        public void setNextAO(ActivityOfferingInfo nextAO) {
+            this.nextAO = nextAO;
+        }
+
+        public String getPrevAOTypeName() {
+            return prevAOTypeName;
+        }
+
+        public void setPrevAOTypeName(String prevAOTypeName) {
+            this.prevAOTypeName = prevAOTypeName;
+        }
+
+        public String getNextAOTypeName() {
+            return nextAOTypeName;
+        }
+
+        public void setNextAOTypeName(String nextAOTypeName) {
+            this.nextAOTypeName = nextAOTypeName;
+        }
+
+    }
+
+    // subterms
+    public String getSubTermName() {
+        return subTermName;
+    }
+
+    public void setSubTermName(String subTermName) {
+        this.subTermName = subTermName;
+    }
+
+    public boolean getHasSubTerms() {
+        return hasSubTerms;
+    }
+
+    public void setHasSubTerms(boolean hasSubTerms) {
+        this.hasSubTerms = hasSubTerms;
+    }
+
+    public String getSubTermId() {
+        return subTermId;
+    }
+
+    public void setSubTermId(String subTermId) {
+        this.subTermId = subTermId;
+    }
+
+    public String getTermStartEndDate() {
+           return termStartEndDate;
+    }
+
+    public void setTermStartEndDate(String termStartEndDate) {
+        this.termStartEndDate = termStartEndDate;
+    }
+
+    public String getSubTermDatesJsonString() {
+        return subTermDatesJsonString;
+    }
+
+    public void setSubTermDatesJsonString(String subTermDatesJsonString) {
+        this.subTermDatesJsonString = subTermDatesJsonString;
     }
 
 }

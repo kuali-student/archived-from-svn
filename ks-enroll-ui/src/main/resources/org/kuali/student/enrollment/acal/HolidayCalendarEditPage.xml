@@ -30,10 +30,12 @@
         This is a single page view with all the required beans defined only here.
     -->
 
-    <bean id="KS-HolidayCalendar-EditPage" parent="Uif-Page"
+    <bean id="KS-HolidayCalendar-EditPage" parent="KS-Uif-Page"
           p:id="holidayCalendarEditPage"
           p:disclosure.render="false"
+          p:headerText="@{!newCalendar ? #view.readOnly ? 'Holiday Calendar' : 'Edit Holiday Calendar' : ''}"
           p:header.id="KS-HolidayCalendar-EditPage-header">
+        <property name="pageSourceFile" value="HolidayCalendarEditPage.xml" /> <!-- Shows up in HTML so devs can find the code -->
         <property name="header">
             <bean parent="Uif-HeaderTwo"/>
         </property>
@@ -69,24 +71,35 @@
 
         <property name="items">
             <list>
+                <!-- This adds the file names to the page HTML -->
+                <ref bean="KS-SourceFile-Comment-Group"/>
                 <ref bean="KS-HolidayCalendar-MetaSection"/>
                 <ref bean="KS-HolidayCalendar-HolidaySection"/>
+                <ref bean="KS-HolidayCalendarView-Header-Right-Group"/>
             </list>
         </property>
         <property name="footer">
             <bean parent="Uif-FooterBase">
                 <property name="items">
                     <list>
-                        <bean parent="Uif-PrimaryActionButton"
-                              p:methodToCall="@{officialCalendar ? 'save' : 'makeOfficial'}"
-                              p:actionLabel="@{officialCalendar ? 'Update Official' : 'Make Official'}"
-                              p:disabled="@{newCalendar}" p:performClientSideValidation="@{officialCalendar}" />
-                        <bean parent="Uif-SecondaryActionButton" p:methodToCall="save" p:actionLabel="Save"
-                              p:performClientSideValidation="true" p:render="@{!officialCalendar}"/>
-                        <bean parent="Uif-ActionLink" p:methodToCall="delete"
-                              p:actionLabel="@{officialCalendar ? 'Delete Calendar' : 'Delete Draft'}"
-                              p:render="@{!newCalendar and !officialUI}"/>
-                        <bean parent="Uif-ActionLink" p:actionLabel="Cancel" p:actionScript="stepBrowserBack()"/>
+                        <bean parent="Uif-HorizontalBoxGroup">
+                            <property name="cssClasses">
+                                <list merge="true">
+                                    <value>ac_stickyfooter</value>
+                                </list>
+                            </property>
+                            <property name="items">
+                                <list>
+                                    <bean parent="KS-Uif-PrimaryActionButton"
+                                          p:methodToCall="save"
+                                          p:actionLabel="Save"  p:performClientSideValidation="true" />
+                                    <bean parent="Uif-ActionLink" p:methodToCall="delete"
+                                          p:actionLabel="Delete Calendar Draft"
+                                          p:render="@{!newCalendar and !officialUI}"/>
+                                    <bean parent="Uif-ActionLink" p:actionLabel="Cancel" p:actionScript="stepBrowserBack()"/>
+                                </list>
+                            </property>
+                        </bean>
                     </list>
                 </property>
             </bean>
@@ -144,14 +157,20 @@
 		<property name="propertyName" value="holidays" />
 		<property name="layoutManager.renderSequenceField" value="false" />
         <property name="layoutManager.separateAddLine" value="false" />
-        <property name="layoutManager.richTable.render" value="true" />
-        <property name="layoutManager.applyDefaultCellWidths" value="false" />
+        <property name="layoutManager.richTable.render" value="false" />
+        <property name="layoutManager.applyDefaultCellWidths" value="true" />
         <property name="layoutManager.applyAlternatingRowStyles" value="false" />
         <property name="cssClasses">
             <list merge="true">
                 <value>ks-holidays-collection</value>
             </list>
         </property>
+        <property name="addLineActions">
+            <list>
+                <bean parent="Uif-AddLineAction-Link" p:focusOnIdAfterSubmit="SELF" />
+            </list>
+        </property>
+
         <property name="items">
 			<list>
                 <bean parent="Uif-InputField" p:propertyName="typeKey"  p:readOnlyDisplayReplacementPropertyName="typeName"
@@ -240,15 +259,9 @@
 				</bean>
 			</list>
 		</property>
-        <property name="layoutManager.richTable.templateOptions">
-            <!-- see http://datatables.net/ref for all options -->
-            <map merge="true">
-                <entry key="aaSorting" value="[[1,'asc'],[2,'asc']]"/>
-            </map>
-        </property>
         <property name="lineActions">
             <list>
-                <bean parent="Uif-PrimaryActionButton-Small" p:methodToCall="deleteHoliday" p:actionLabel="delete"/>
+                <bean parent="Uif-ActionLink" p:methodToCall="deleteHoliday" p:actionLabel="delete"/>
             </list>
         </property>
 	</bean>

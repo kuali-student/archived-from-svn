@@ -189,6 +189,8 @@ public class ARGToolbarUtil {
         form.setEnableAddClusterButton(false);
         String principalId = GlobalVariables.getUserSession().getPerson().getPrincipalId();
 
+       // String coState=form.getCurrentCourseOfferingWrapper().getStateKey();
+
         String socStateKey = form.getSocStateKey();
         String socState = socStateKey==null?null:socStateKey.substring(socStateKey.lastIndexOf('.')+1);
         String socSchedulingState = form.getSocSchedulingStateKey();
@@ -350,6 +352,7 @@ public class ARGToolbarUtil {
         boolean bzEnableButton = false;
         if(StringUtils.equals(actionEvent, "approveAO")) {
             if(StringUtils.equals(aoStateKey, LuiServiceConstants.LUI_AO_STATE_DRAFT_KEY) &&
+                     // !(StringUtils.equals(coState, LuiServiceConstants.LUI_CO_STATE_PLANNED_KEY)) &&
                     (StringUtils.equals(socState, CourseOfferingSetServiceConstants.OPEN_SOC_STATE_KEY) ||
                             StringUtils.equals(socState, CourseOfferingSetServiceConstants.DRAFT_SOC_STATE_KEY) ||
                             isSOCLockedAndMSEInProgress(socState, socSchedulingState))){

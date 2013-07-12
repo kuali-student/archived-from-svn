@@ -29,8 +29,11 @@
         This is a single page view with all the required beans defined only here.
     -->
 
-    <bean id="KS-HolidayCalendar-ViewPage" parent="Uif-Page"
-          p:id="holidayCalendarViewPage" >
+    <bean id="KS-HolidayCalendar-ViewPage" parent="KS-Uif-Page"
+          p:id="holidayCalendarViewPage"
+          p:componentSecurity.viewAuthz="true"  >
+
+        <property name="pageSourceFile" value="HolidayCalendarViewPage.xml" /> <!-- Shows up in HTML so devs can find the code -->
 
         <property name="breadcrumbOptions.breadcrumbOverrides">
             <list>
@@ -53,7 +56,7 @@
             <bean parent="Uif-FooterBase"/>
         </property>
         <property name="header.rightGroup">
-            <bean parent="Uif-HorizontalBoxGroup">
+            <bean parent="Uif-HorizontalBoxGroup" p:id="copyEditDeleteHeader" p:componentSecurity.viewAuthz="true">
                 <property name="items">
                     <list>
                         <bean parent="Uif-ActionLink" p:methodToCall="toCopy" p:actionLabel="Copy" p:style="text-align:center;"/>
@@ -65,6 +68,8 @@
         </property>
         <property name="items">
             <list>
+                <!-- This adds the file names to the page HTML -->
+                <ref bean="KS-SourceFile-Comment-Group"/>
                 <bean parent="Uif-VerticalBoxSection"
                       p:header.render="false"
                       p:disclosure.render="false">
@@ -72,6 +77,7 @@
                         <list>
                             <ref bean="KS-HolidayCalendar-View-Meta"/>
                             <ref bean="KS-HolidayCalendar-View-Holidays"/>
+                            <ref bean="KS-HolidayCalendarView-Header-Right-Group"/>
                         </list>
                     </property>
                 </bean>

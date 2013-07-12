@@ -40,9 +40,9 @@ import org.kuali.rice.krms.api.repository.type.KrmsTypeDefinition;
 import org.kuali.rice.krms.api.repository.type.KrmsTypeRepositoryService;
 import org.kuali.rice.krms.impl.repository.mock.KrmsConfigurationLoader;
 import org.kuali.student.common.util.UUIDHelper;
-import org.kuali.student.krms.naturallanguage.util.KsKrmsConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.*;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.core.process.krms.KSKRMSTestCase;
 import org.kuali.student.r2.core.versionmanagement.dto.VersionDisplayInfo;
 import org.kuali.student.r2.lum.clu.dto.CluInfo;
@@ -119,7 +119,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
     @Test
     public void testCopyingSimpleProposition() {
-        String namespace = KsKrmsConstants.NAMESPACE_CODE;
+        String namespace = KSKRMSServiceConstants.NAMESPACE_CODE;
         // TODO: KSENROLL-7291 convert the discriminator type to use the ref object uri instead of the lu type type
 //        String fromReferenceDiscriminatorType = CourseServiceConstants.COURSE_NAMESPACE_URI;
         String fromReferenceDiscriminatorType = "kuali.lu.type.CreditCourse";
@@ -137,7 +137,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
 
         AgendaDefinition agenda = this.createCheckBasicAgendaFor1OfCluSet23();
-        String krmsDiscriminatorType = KsKrmsConstants.KRMS_DISCRIMINATOR_TYPE_AGENDA;
+        String krmsDiscriminatorType = KSKRMSServiceConstants.KRMS_DISCRIMINATOR_TYPE_AGENDA;
         String krmsObjectId = agenda.getId();
 
         ReferenceObjectBinding.Builder bindingBldr = ReferenceObjectBinding.Builder.create(krmsDiscriminatorType,
@@ -148,12 +148,17 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         ReferenceObjectBinding binding = this.ruleManagementService.createReferenceObjectBinding(bindingBldr.build());
 
         List<String> optionKeys = new ArrayList<String>();
-        List<ReferenceObjectBinding> list = this.krmsRuleManagementCopyMethods.deepCopyReferenceObjectBindingsFromTo(
-                fromReferenceDiscriminatorType,
-                fromReferenceObjectId,
-                toReferenceDiscriminatorType,
-                toReferenceObjectId,
-                optionKeys);
+        List<ReferenceObjectBinding> list = null;
+        try {
+            list = this.krmsRuleManagementCopyMethods.deepCopyReferenceObjectBindingsFromTo(
+                    fromReferenceDiscriminatorType,
+                    fromReferenceObjectId,
+                    toReferenceDiscriminatorType,
+                    toReferenceObjectId,
+                    optionKeys);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         assertNotNull(list);
         assertEquals(1, list.size());
@@ -174,7 +179,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
     @Test
     public void testCopyingCompoundProposition() {
-        String namespace = KsKrmsConstants.NAMESPACE_CODE;
+        String namespace = KSKRMSServiceConstants.NAMESPACE_CODE;
         // TODO: KSENROLL-7291 convert the discriminator type to use the ref object uri instead of the lu type type
 //        String fromReferenceDiscriminatorType = CourseServiceConstants.COURSE_NAMESPACE_URI;
         String fromReferenceDiscriminatorType = "kuali.lu.type.CreditCourse";
@@ -207,7 +212,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         PropositionDefinition.Builder orPropBldr = this.makeOrCompoundProposition(propBldr1, andPropBldr);
         agenda = updateCheckFirstItemSettingPropositionOnRule(agenda, orPropBldr);
 
-        String krmsDiscriminatorType = KsKrmsConstants.KRMS_DISCRIMINATOR_TYPE_AGENDA;
+        String krmsDiscriminatorType = KSKRMSServiceConstants.KRMS_DISCRIMINATOR_TYPE_AGENDA;
         String krmsObjectId = agenda.getId();
 
         ReferenceObjectBinding.Builder bindingBldr = ReferenceObjectBinding.Builder.create(krmsDiscriminatorType,
@@ -218,12 +223,17 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         ReferenceObjectBinding binding = this.ruleManagementService.createReferenceObjectBinding(bindingBldr.build());
 
         List<String> optionKeys = new ArrayList<String>();
-        List<ReferenceObjectBinding> list = this.krmsRuleManagementCopyMethods.deepCopyReferenceObjectBindingsFromTo(
-                fromReferenceDiscriminatorType,
-                fromReferenceObjectId,
-                toReferenceDiscriminatorType,
-                toReferenceObjectId,
-                optionKeys);
+        List<ReferenceObjectBinding> list = null;
+        try {
+            list = this.krmsRuleManagementCopyMethods.deepCopyReferenceObjectBindingsFromTo(
+                    fromReferenceDiscriminatorType,
+                    fromReferenceObjectId,
+                    toReferenceDiscriminatorType,
+                    toReferenceObjectId,
+                    optionKeys);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         assertNotNull(list);
         assertEquals(1, list.size());
@@ -442,8 +452,8 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         String propId = null;
         String propTypeCode = PropositionType.COMPOUND.getCode();
         String ruleId = null;
-        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,
-                KsKrmsConstants.PROPOSITION_TYPE_COMPOUND_AND);
+        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,
+                KSKRMSServiceConstants.PROPOSITION_TYPE_COMPOUND_AND);
         String typeId = type.getId();
         List<PropositionParameter.Builder> parameters = new ArrayList<PropositionParameter.Builder>();
         PropositionDefinition.Builder mainBldr = PropositionDefinition.Builder.create(propId, propTypeCode, ruleId, typeId, parameters);
@@ -461,8 +471,8 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         String propId = null;
         String propTypeCode = PropositionType.COMPOUND.getCode();
         String ruleId = null;
-        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,
-                KsKrmsConstants.PROPOSITION_TYPE_COMPOUND_OR);
+        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,
+                KSKRMSServiceConstants.PROPOSITION_TYPE_COMPOUND_OR);
         String typeId = type.getId();
         List<PropositionParameter.Builder> parameters = new ArrayList<PropositionParameter.Builder>();
         PropositionDefinition.Builder mainBldr = PropositionDefinition.Builder.create(propId, propTypeCode, ruleId, typeId, parameters);
@@ -493,6 +503,75 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
         PropositionDefinition.Builder propBldr = this.constructFreeFormTextPropositionBulider("My first Text Value");
         updateCheckFirstItemSettingPropositionOnRule(agenda, propBldr);
+    }
+
+    @Test
+    public void testCreateMultiAgendaItems() {
+        //Create agenda
+        ContextDefinition context = this.findCreateContext();
+        AgendaDefinition agenda = createCheckEmptyAgenda(context);
+        AgendaItemDefinition firstItem = this.ruleManagementService.getAgendaItem(agenda.getFirstItemId());
+        AgendaItemDefinition.Builder firstItemBldr = createMultiAgendaItems(firstItem);
+
+        this.ruleManagementService.updateAgendaItem(firstItemBldr.build());
+        AgendaItemDefinition returnItem = this.ruleManagementService.getAgendaItem(agenda.getFirstItemId());
+        checkMultiAgendaItem(firstItemBldr, returnItem);
+
+    }
+
+    @Test
+    public void testUpdateChangingTermParameters() {
+        //Create agenda
+        ContextDefinition context = this.findCreateContext();
+        AgendaDefinition agenda = createCheckEmptyAgenda(context);
+        AgendaItemDefinition firstItem = this.ruleManagementService.getAgendaItem(agenda.getFirstItemId());
+        this.ruleManagementService.updateAgendaItem(createMultiAgendaItems(firstItem).build());
+
+        firstItem = this.ruleManagementService.getAgendaItem(agenda.getFirstItemId());
+        AgendaItemDefinition.Builder itemBuilder = AgendaItemDefinition.Builder.create(firstItem);
+        PropositionParameter.Builder propParameter = null;
+        for(PropositionParameter.Builder parameter : itemBuilder.getWhenTrue().getRule().getProposition().getParameters()){
+            if(parameter.getTermValue()!=null){
+                propParameter = parameter;
+            }
+        }
+
+        TermDefinition.Builder term = TermDefinition.Builder.create(propParameter.getTermValue());
+        for(TermParameterDefinition.Builder parameter : term.getParameters()){
+            parameter.setValue("The updated free form proposition");
+            break;
+        }
+        propParameter.setTermValue(term.build());
+
+        this.ruleManagementService.updateAgendaItem(itemBuilder.build());
+        AgendaItemDefinition returnItem = this.ruleManagementService.getAgendaItem(itemBuilder.getId());
+        checkMultiAgendaItem(itemBuilder, returnItem);
+
+    }
+
+    private AgendaItemDefinition.Builder createMultiAgendaItems(AgendaItemDefinition firstItem){
+        //Add first item details.
+        PropositionDefinition.Builder firstPropBldr = this.constructFreeFormTextPropositionBulider("The first free form proposition");
+        RuleDefinition.Builder firstRuleBldr = this.constructEmptyRuleBuilder();
+        firstRuleBldr.setProposition(firstPropBldr);
+        AgendaItemDefinition.Builder firstItemBldr = AgendaItemDefinition.Builder.create(firstItem);
+        firstItemBldr.setRule(firstRuleBldr);
+
+        //Add second item details.
+        PropositionDefinition.Builder secondPropBldr = this.constructFreeFormTextPropositionBulider("The second free form proposition");
+        RuleDefinition.Builder secondRuleBldr = this.constructEmptyRuleBuilder();
+        secondRuleBldr.setProposition(secondPropBldr);
+        AgendaItemDefinition.Builder secondItemBldr = AgendaItemDefinition.Builder.create(null, firstItem.getAgendaId());
+        secondItemBldr.setRule(secondRuleBldr);
+        firstItemBldr.setWhenTrue(secondItemBldr);
+
+        return firstItemBldr;
+    }
+
+    private void checkMultiAgendaItem(AgendaItemDefinition.Builder itemBuilder, AgendaItemDefinition item){
+        this.checkRule(itemBuilder.getRule(), item.getRule());
+        assertNotNull(item.getWhenTrue());
+        this.checkRule(itemBuilder.getWhenTrue().getRule(), item.getWhenTrue().getRule());
     }
 
     private AgendaDefinition createCheckBasicAgendaFor1OfCluSet23() {
@@ -526,10 +605,10 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
     private ContextDefinition findCreateContext() {
         // find/create the context corresponding to this context type.
-        ContextDefinition.Builder contextBldr = ContextDefinition.Builder.create(KsKrmsConstants.NAMESPACE_CODE,
-                KsKrmsConstants.CONTEXT_COURSE_REQUIREMENTS);
-        contextBldr.setTypeId(KsKrmsConstants.CONTEXT_TYPE_DEFAULT);
-        contextBldr.setDescription(KsKrmsConstants.CONTEXT_COURSE_REQUIREMENTS);
+        ContextDefinition.Builder contextBldr = ContextDefinition.Builder.create(KSKRMSServiceConstants.NAMESPACE_CODE,
+                KSKRMSServiceConstants.CONTEXT_COURSE_REQUIREMENTS);
+        contextBldr.setTypeId(KSKRMSServiceConstants.CONTEXT_TYPE_DEFAULT);
+        contextBldr.setDescription(KSKRMSServiceConstants.CONTEXT_COURSE_REQUIREMENTS);
         contextBldr.setActive(true);
         ContextDefinition context = this.ruleManagementService.findCreateContext(contextBldr.build());
         this.checkContext(contextBldr, context);
@@ -548,8 +627,8 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
     private AgendaDefinition createCheckEmptyAgenda(ContextDefinition context) {
         // find/create the context corresponding to this context type.
         // create the agenda
-        KrmsTypeDefinition agendaType = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,
-                KsKrmsConstants.AGENDA_TYPE_COURSE_ENROLLMENTELIGIBILITY);
+        KrmsTypeDefinition agendaType = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,
+                KSKRMSServiceConstants.AGENDA_TYPE_COURSE_ENROLLMENTELIGIBILITY);
         assertNotNull(agendaType);
         String id = null; // set by service when create is called
         // For testing use a GUID instead of anchorClu.getId () so we always get a new one for testing
@@ -610,15 +689,15 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
     private RuleDefinition.Builder constructEmptyRuleBuilder() {
         // make rule
-        KrmsTypeDefinition ruleType = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,
-                KsKrmsConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_STUDENTELIGIBILITYPREREQ);
+        KrmsTypeDefinition ruleType = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,
+                KSKRMSServiceConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_STUDENTELIGIBILITYPREREQ);
         String ruleId = null; // sevice sets id
 
         // name has to be unique within namespace and max 100 characters.
         // For testing use a GUID instead of anchorClu.getId () so we always get a new one for testing
         String name = UUIDHelper.genStringUUID();
 //        name = anchorClu.getOfficialIdentifier().getCode() + " " + ruleType.getName() + " (" + anchorClu.getId() + ")";
-        String namespace = KsKrmsConstants.NAMESPACE_CODE;
+        String namespace = KSKRMSServiceConstants.NAMESPACE_CODE;
         String typeId = ruleType.getId();
         String propId = null;
         RuleDefinition.Builder ruleBldr = RuleDefinition.Builder.create(ruleId, name, namespace, typeId, propId);
@@ -770,7 +849,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         id = null; // set by service
         TermSpecificationDefinition termSpec =
                 this.termRepositoryService.getTermSpecificationByNameAndNamespace(N_OF_CLU_SET_TERM_NAME,
-                KsKrmsConstants.NAMESPACE_CODE);
+                        KSKRMSServiceConstants.NAMESPACE_CODE);
         assertNotNull(termSpec);
         assertEquals(N_OF_CLU_SET_TERM_NAME, termSpec.getName());
         TermSpecificationDefinition.Builder termSpecBldr = TermSpecificationDefinition.Builder.create(termSpec);
@@ -811,7 +890,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         propId = null; // should be null until assigned by service
         String propTypeCode = PropositionType.SIMPLE.getCode();
         String ruleId = null;  // assigned by service
-        KrmsTypeDefinition propType = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, KsKrmsConstants.PROPOSITION_TYPE_COURSE_COURSESET_COMPLETED_NOF);
+        KrmsTypeDefinition propType = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, KSKRMSServiceConstants.PROPOSITION_TYPE_COURSE_COURSESET_COMPLETED_NOF);
         String typeId = propType.getId();
         PropositionDefinition.Builder propBldr = PropositionDefinition.Builder.create(propId, propTypeCode, ruleId, typeId, parameters);
 //        propBldr.setDescription(propType.getName());
@@ -843,7 +922,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         id = null; // set by service
         TermSpecificationDefinition termSpec =
                 this.termRepositoryService.getTermSpecificationByNameAndNamespace(FREE_FORM_TEXT_TERM_NAME,
-                KsKrmsConstants.NAMESPACE_CODE);
+                        KSKRMSServiceConstants.NAMESPACE_CODE);
         assertNotNull(termSpec);
         assertEquals(FREE_FORM_TEXT_TERM_NAME, termSpec.getName());
         TermSpecificationDefinition.Builder termSpecBldr = TermSpecificationDefinition.Builder.create(termSpec);
@@ -884,7 +963,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         propId = null; // should be null until assigned by service
         String propTypeCode = PropositionType.SIMPLE.getCode();
         String ruleId = null;  // assigned by service
-        KrmsTypeDefinition propType = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, KsKrmsConstants.PROPOSITION_TYPE_FREEFORM_TEXT);
+        KrmsTypeDefinition propType = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, KSKRMSServiceConstants.PROPOSITION_TYPE_FREEFORM_TEXT);
         String typeId = propType.getId();
         PropositionDefinition.Builder propBldr = PropositionDefinition.Builder.create(propId, propTypeCode, ruleId, typeId, parameters);
 //        propBldr.setDescription(propType.getName());
@@ -955,22 +1034,22 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
     }
 
     private NaturalLanguageUsage getTypeDescriptionUsage() {
-        return this.getNaturalLanguageUsage(KsKrmsConstants.KRMS_NL_TYPE_DESCRIPTION, KsKrmsConstants.NAMESPACE_CODE);
+        return this.getNaturalLanguageUsage(KSKRMSServiceConstants.KRMS_NL_TYPE_DESCRIPTION, KSKRMSServiceConstants.NAMESPACE_CODE);
     }
 
     private NaturalLanguageUsage getRuleEditUsage() {
-        return this.getNaturalLanguageUsage(KsKrmsConstants.KRMS_NL_RULE_EDIT, KsKrmsConstants.NAMESPACE_CODE);
+        return this.getNaturalLanguageUsage(KSKRMSServiceConstants.KRMS_NL_RULE_EDIT, KSKRMSServiceConstants.NAMESPACE_CODE);
     }
 
     private NaturalLanguageUsage getPreviewUsage() {
-        return this.getNaturalLanguageUsage(KsKrmsConstants.KRMS_NL_PREVIEW, KsKrmsConstants.NAMESPACE_CODE);
+        return this.getNaturalLanguageUsage(KSKRMSServiceConstants.KRMS_NL_PREVIEW, KSKRMSServiceConstants.NAMESPACE_CODE);
     }
 
     private KrmsTypeDefinition simulateGettingCourseAgendaType() {
-        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, KsKrmsConstants.AGENDA_TYPE_COURSE);
+        KrmsTypeDefinition type = this.krmsTypeRepositoryService.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, KSKRMSServiceConstants.AGENDA_TYPE_COURSE);
         assertNotNull(type);
-        assertEquals(KsKrmsConstants.AGENDA_TYPE_COURSE, type.getName());
-        assertEquals(KsKrmsConstants.NAMESPACE_CODE, type.getNamespace());
+        assertEquals(KSKRMSServiceConstants.AGENDA_TYPE_COURSE, type.getName());
+        assertEquals(KSKRMSServiceConstants.NAMESPACE_CODE, type.getNamespace());
         return type;
     }
 
@@ -1065,7 +1144,7 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
         List<KrmsTypeDefinition> types = null;
         Set<String> expected = null;
-        String languageCode = KsKrmsConstants.LANGUAGE_CODE_ENGLISH;
+        String languageCode = KSKRMSServiceConstants.LANGUAGE_CODE_ENGLISH;
         // check that we can get all the different context types
         types = this.krmsTypeRepositoryService.findAllContextTypes();
         expected = new LinkedHashSet<String>();
@@ -1098,8 +1177,8 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 
         types = this.krmsTypeRepositoryService.findAgendaTypesForAgendaType(courseAgendaType.getId());
         expected = new LinkedHashSet<String>();
-        expected.add(KsKrmsConstants.AGENDA_TYPE_COURSE_ENROLLMENTELIGIBILITY);
-        expected.add(KsKrmsConstants.AGENDA_TYPE_COURSE_CREDITCONSTRAINTS);
+        expected.add(KSKRMSServiceConstants.AGENDA_TYPE_COURSE_ENROLLMENTELIGIBILITY);
+        expected.add(KSKRMSServiceConstants.AGENDA_TYPE_COURSE_CREDITCONSTRAINTS);
         this.checkTypeNamesOrdered(expected, types);
 
         String title = "Please choose which type of rule you want to work on:";
@@ -1115,10 +1194,10 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         // Get all the RULE types for the main agenda type
         types = this.krmsTypeRepositoryService.findRuleTypesForAgendaType(courseEligAgendaType.getId());
         expected = new LinkedHashSet<String>();
-        expected.add(KsKrmsConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_STUDENTELIGIBILITYPREREQ);
-        expected.add(KsKrmsConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_COREQ);
-        expected.add(KsKrmsConstants.RULE_TYPE_COURSE_RECOMMENDEDPREPARATION);
-        expected.add(KsKrmsConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_ANTIREQ);
+        expected.add(KSKRMSServiceConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_STUDENTELIGIBILITYPREREQ);
+        expected.add(KSKRMSServiceConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_COREQ);
+        expected.add(KSKRMSServiceConstants.RULE_TYPE_COURSE_RECOMMENDEDPREPARATION);
+        expected.add(KSKRMSServiceConstants.RULE_TYPE_COURSE_ACADEMICREADINESS_ANTIREQ);
         this.checkTypeNamesOrdered(expected, types);
 
         title = "Please choose which type of rule you want to work on:";
@@ -1128,22 +1207,22 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
         // Get all the Proposition types for the rule type
         types = this.krmsTypeRepositoryService.findPropositionTypesForRuleType(eligPrereqRuleType.getId());
         expected = new LinkedHashSet<String>();
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_FREEFORM_TEXT);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_SUCCESS_COMPL_COURSE);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_CUMULATIVE_GPA_MIN);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_ADMITTED_TO_PROGRAM);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_SUCCESS_CREDIT_COURSESET_COMPLETED_NOF);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_SUCCESS_CREDITS_COURSESET_COMPLETED_NOF_ORG);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_SUCCESS_COURSE_COURSESET_COMPLETED_ALL);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_SUCCESS_COURSE_COURSESET_COMPLETED_NOF);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_COURSE_COURSESET_GPA_MIN);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_COURSE_COURSESET_GRADE_MIN);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_COURSE_COURSESET_NOF_GRADE_MIN);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_FREEFORM_TEXT);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_SUCCESS_COMPL_COURSE);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_CUMULATIVE_GPA_MIN);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_ADMITTED_TO_PROGRAM);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_SUCCESS_CREDIT_COURSESET_COMPLETED_NOF);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_SUCCESS_CREDITS_COURSESET_COMPLETED_NOF_ORG);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_SUCCESS_COURSE_COURSESET_COMPLETED_ALL);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_SUCCESS_COURSE_COURSESET_COMPLETED_NOF);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_COURSE_COURSESET_GPA_MIN);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_COURSE_COURSESET_GRADE_MIN);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_COURSE_COURSESET_NOF_GRADE_MIN);
 //        expected.add(KsKrmsConstants.PROPOSITION_TYPE_COURSE_COURSESET_GRADE_MAX);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_ADMITTED_TO_PROGRAM_CAMPUS);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_ADMITTED_TO_PROGRAM_CAMPUS);
 //        expected.add(KsKrmsConstants.PROPOSITION_TYPE_NOTADMITTED_TO_PROGRAM);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_PERMISSION_INSTRUCTOR_REQUIRED);
-        expected.add(KsKrmsConstants.PROPOSITION_TYPE_PERMISSION_ADMIN_ORG);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_PERMISSION_INSTRUCTOR_REQUIRED);
+        expected.add(KSKRMSServiceConstants.PROPOSITION_TYPE_PERMISSION_ADMIN_ORG);
 //        expected.add(KsKrmsConstants.PROPOSITION_TYPE_COURSE_TEST_SCORE_MIN);
 //        expected.add(KsKrmsConstants.PROPOSITION_TYPE_TEST_SCORE_BETWEEN_VALUES);
 //        expected.add(KsKrmsConstants.PROPOSITION_TYPE_TEST_SCORE);
@@ -1176,5 +1255,39 @@ public class RuleManagementServiceImplTest extends KSKRMSTestCase {
 //                KsKrmsConstants.NAMESPACE_CODE);
 //        assertNotNull(termResolver);
 //        assertEquals (termName, termResolver.getName());
+    }
+
+    @Test
+    public void testTranslateNaturalLanguageForProposition() {
+        ContextDefinition context = this.findCreateContext();
+        AgendaDefinition agenda = createCheckEmptyAgenda(context);
+        agenda = updateCheckAgendaFirstItemAddingEmptyRule(agenda);
+
+        PropositionDefinition.Builder propBldr1 = this.constructFreeFormTextPropositionBulider("My first Text Value");
+        CluSetInfo cluSet = this.findCreateCluSet23();
+        PropositionDefinition.Builder propBldr2 = createNOfCluSetPropositionBuilder(1, cluSet);
+        cluSet = this.findCreateCluSet456();
+        PropositionDefinition.Builder propBldr3 = createNOfCluSetPropositionBuilder(2, cluSet);
+
+        PropositionDefinition.Builder andPropBldr = this.makeAndCompoundProposition(propBldr2, propBldr3);
+        PropositionDefinition.Builder orPropBldr = this.makeOrCompoundProposition(propBldr1, andPropBldr);
+
+        AgendaItemDefinition firstItem = this.ruleManagementService.getAgendaItem(agenda.getFirstItemId());
+        RuleDefinition.Builder ruleBldr = RuleDefinition.Builder.create(firstItem.getRule());
+        ruleBldr.setProposition(orPropBldr);
+
+        AgendaItemDefinition.Builder itemBldr = AgendaItemDefinition.Builder.create(firstItem);
+        itemBldr.setRule(ruleBldr);
+        AgendaItemDefinition item2Update = itemBldr.build();
+        this.ruleManagementService.updateAgendaItem(item2Update);
+        agenda = this.ruleManagementService.getAgenda(agenda.getId());
+        firstItem = this.ruleManagementService.getAgendaItem(firstItem.getId());
+
+        List<NaturalLanguageUsage> usages = this.ruleManagementService.getNaturalLanguageUsagesByNamespace(KSKRMSServiceConstants.NAMESPACE_CODE);
+
+        System.out.println(this.ruleManagementService.translateNaturalLanguageForObject("KS-KRMS-NL-USAGE-1000", "agenda", agenda.getId(), "en"));
+        System.out.println(this.ruleManagementService.translateNaturalLanguageForObject("KS-KRMS-NL-USAGE-1000", "rule", firstItem.getRule().getId(), "en"));
+        System.out.println(this.ruleManagementService.translateNaturalLanguageForObject("KS-KRMS-NL-USAGE-1000", "proposition", firstItem.getRule().getProposition().getId(), "en"));
+
     }
 }

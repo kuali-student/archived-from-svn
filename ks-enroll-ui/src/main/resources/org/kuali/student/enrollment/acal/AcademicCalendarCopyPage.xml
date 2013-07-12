@@ -23,10 +23,13 @@ limitations under the License.
     <!--
        This page allows user to copy previous acals.
     -->
-    <bean id="KS-AcademicCalendar-CopyPage" parent="Uif-Page"
+    <bean id="KS-AcademicCalendar-CopyPage" parent="KS-Uif-Page"
           p:id="academicCalendarCopyPage"
-          p:headerText="Create New Academic Calendar"
+          p:headerText=""
           p:disclosure.render="false">
+
+        <property name="pageSourceFile" value="AcademicCalendarCopyPage.xml" />
+
         <property name="header">
             <bean parent="Uif-HeaderTwo">
                 <property name="cssClasses">
@@ -52,13 +55,22 @@ limitations under the License.
         <property name="breadcrumbOptions.breadcrumbOverrides">
             <list>
                 <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value="New Academic Calendar"/>
+                    <property name="label" value="Calendar Search"/>
+                    <property name="url.viewId" value="calendarSearchView"/>
+                    <property name="url.controllerMapping" value="/calendarSearch"/>
+                    <property name="url.methodToCall" value="start"/>
+                </bean>
+                <bean parent="Uif-BreadcrumbItem">
+                    <property name="label" value="Create Academic Calendar"/>
                 </bean>
             </list>
         </property>
 
         <property name="items">
             <list>
+                <!-- This adds the file names to the page HTML -->
+                <ref bean="KS-SourceFile-Comment-Group"/>
+
                 <bean parent="Uif-VerticalBoxSection"
                       p:style="margin-bottom:0; padding-bottom:0;">
                     <property name="items">

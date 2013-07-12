@@ -16,6 +16,7 @@
  */
 package org.kuali.student.enrollment.class2.acal.keyvalue;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
@@ -23,25 +24,19 @@ import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
 import org.kuali.rice.krad.uif.view.ViewModel;
 import org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper;
 import org.kuali.student.enrollment.class2.acal.form.AcademicCalendarForm;
-import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
-import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
+import org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo;
+import org.kuali.student.r2.core.class1.type.service.TypeService;
+import org.kuali.student.r2.core.constants.TypeServiceConstants;
 
 import javax.xml.namespace.QName;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * This class //TODO ...
+ * This class is used by the Academic Calendar to display drop down of parent terms when subterm is selected as a term
  *
  * @author Kuali Student Team
  */
@@ -49,54 +44,58 @@ public class AcademicTermParentTypeKeyValues extends UifKeyValuesFinderBase impl
 
     private static final long serialVersionUID = 1L;
 
-    private transient AcademicCalendarService acalService;
-
-    private static List<TypeInfo> acalTermTypes;
+    private transient TypeService typeService;
 
     @Override
     public List<KeyValue> getKeyValues(ViewModel model) {
 
         List<KeyValue> keyValues = new ArrayList<KeyValue>();
-        List<String> availableTermTypes = new ArrayList();
+        String childTermType = "";
 
-        keyValues.add(new ConcreteKeyValue("", "Select Term Type"));
+        if (model instanceof AcademicCalendarForm){
+            AcademicCalendarForm acalForm = (AcademicCalendarForm)model;
 
-        List<TypeInfo> types = null;
-        try {
+            AcademicTermWrapper termWrapper = (AcademicTermWrapper) acalForm.getNewCollectionLines().get("termWrapperList");
 
-            types = getAcalTermTypes();
-
-            for (TypeInfo type : types) {
-                ConcreteKeyValue keyValue = new ConcreteKeyValue();
-                keyValue.setKey(type.getKey());
-                keyValue.setValue(type.getName());
-                keyValues.add(keyValue);
+            if (termWrapper != null) {
+                childTermType = termWrapper.getTermType();
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+
+        if (childTermType != null && !StringUtils.isBlank(childTermType)) {
+            List<TypeInfo> types = new ArrayList<TypeInfo>();
+            try {
+                ContextInfo context = new ContextInfo();
+                // check if child term is subterm or term and if it is (list is not empty) then add all parent terms to types
+                List<TypeTypeRelationInfo> typeTypeRelationInfos = getTypeService().getTypeTypeRelationsByRelatedTypeAndType(childTermType, TypeServiceConstants.TYPE_TYPE_RELATION_CONTAINS_TYPE_KEY, context);
+                for (TypeTypeRelationInfo typeTypeRelationInfo : typeTypeRelationInfos) {
+                    types.add(getTypeService().getType(typeTypeRelationInfo.getOwnerTypeKey(), context));
+                }
+
+                for (TypeInfo type : types) {
+                    ConcreteKeyValue keyValue = new ConcreteKeyValue();
+                    keyValue.setKey(type.getKey());
+                    keyValue.setValue(type.getName());
+                    keyValues.add(keyValue);
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (keyValues.isEmpty()) {
+            keyValues.add(new ConcreteKeyValue("", "No parent term"));
         }
 
         return keyValues;
     }
 
-    private List<TypeInfo> getAcalTermTypes() throws InvalidParameterException, MissingParameterException, DoesNotExistException, PermissionDeniedException, OperationFailedException {
-
-        if(acalTermTypes == null) {
-
-            //TODO:Build real context.
-            ContextInfo context = new ContextInfo();
-
-            acalTermTypes = Collections.unmodifiableList(getAcalService().getTermTypesForAcademicCalendarType(AcademicCalendarServiceConstants.ACADEMIC_CALENDAR_TYPE_KEY, context));
+    public TypeService getTypeService() {
+        if(typeService == null) {
+            typeService = (TypeService) GlobalResourceLoader.getService(new QName(TypeServiceConstants.NAMESPACE, TypeServiceConstants.SERVICE_NAME_LOCAL_PART));
         }
-
-        return acalTermTypes;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    public AcademicCalendarService getAcalService() {
-        if(acalService == null) {
-            acalService = (AcademicCalendarService) GlobalResourceLoader.getService(new QName(CommonServiceConstants.REF_OBJECT_URI_GLOBAL_PREFIX + "acal", "AcademicCalendarService"));
-        }
-        return this.acalService;
+        return this.typeService;
     }
 
 }

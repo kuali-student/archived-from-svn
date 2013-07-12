@@ -1,3 +1,18 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.rice.krms.tree;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -10,8 +25,10 @@ import org.kuali.rice.krms.api.repository.rule.RuleDefinitionContract;
 import org.kuali.rice.krms.dto.PropositionEditor;
 import org.kuali.rice.krms.dto.RuleEditor;
 import org.kuali.rice.krms.tree.node.TreeNode;
+import org.kuali.rice.krms.util.PropositionTreeUtil;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolPropositionEditor;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolRuleEditor;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 
 import java.util.List;
 
@@ -20,13 +37,6 @@ import java.util.List;
  * @author Kuali Student Team
  */
 public class RulePreviewTreeBuilder extends AbstractTreeBuilder{
-
-    @Override
-    protected String buildNodeLabel(RuleDefinitionContract rule, PropositionDefinitionContract prop){
-        //Build the node label.
-        String prefix = this.getPropositionPrefix((RuleEditor)rule, (PropositionEditor)prop);
-        return prefix + StringEscapeUtils.escapeHtml(this.getDescription(prop));
-    }
 
     public Tree<TreeNode, String> buildTree(RuleEditor rule) {
 
@@ -48,7 +58,8 @@ public class RulePreviewTreeBuilder extends AbstractTreeBuilder{
         if ((rootNode.getChildren() != null) && (rootNode.getChildren().size() > 0)) {
             Node<TreeNode, String> firstNode = rootNode.getChildren().get(0);
             if ((firstNode.getChildren() != null) && (firstNode.getChildren().size() > 0)) {
-                firstNode.setNodeType(this.getHeaderAndElementNodeType());
+                firstNode.setNodeType(NODE_TYPE_SUBRULEHEADER);
+                addNodeType(firstNode, NODE_TYPE_SUBRULEELEMENT);
                 TreeNode treeNode = firstNode.getData();
                 treeNode.setData("<u>" + treeNode.getData() + ":</u>");
             }
@@ -62,27 +73,20 @@ public class RulePreviewTreeBuilder extends AbstractTreeBuilder{
 
             Node<TreeNode, String> newNode = new Node<TreeNode, String>();
             newNode.setNodeLabel(null);
-            newNode.setNodeType(this.getElementNodeType());
+            newNode.setNodeType(NODE_TYPE_SUBRULEELEMENT);
 
-            TreeNode tNode = new TreeNode(this.buildNodeLabel(rule, prop));
-            tNode.setListItems(this.getListItems(prop));
-            newNode.setData(tNode);
-            tNode.setKey(prop.getKey());
-            currentNode.getChildren().add(newNode);
-
-            if (PropositionType.COMPOUND.getCode().equalsIgnoreCase(prop.getPropositionTypeCode())) {
-
+            TreeNode tNode = null;
+            if (PropositionType.SIMPLE.getCode().equalsIgnoreCase(prop.getPropositionTypeCode())) {
+                tNode = new TreeNode(this.buildNodeLabel(prop));
+            } else if (PropositionType.COMPOUND.getCode().equalsIgnoreCase(prop.getPropositionTypeCode())) {
+                tNode = new TreeNode(StringEscapeUtils.escapeHtml(this.getDescription(prop)));
                 boolean first = true;
                 for (PropositionEditor child : prop.getCompoundEditors()) {
                     // add an opcode node in between each of the children.
                     if (!first) {
                         //addOpCodeNode(newNode, propositionEditor);
                         Node<TreeNode, String> opNode = new Node<TreeNode, String>();
-                        if (LogicalOperator.AND.getCode().equalsIgnoreCase(prop.getCompoundOpCode())) {
-                            opNode.setNodeLabel("AND");
-                        } else if (LogicalOperator.OR.getCode().equalsIgnoreCase(prop.getCompoundOpCode())) {
-                            opNode.setNodeLabel("OR");
-                        }
+                        opNode.setNodeLabel(PropositionTreeUtil.getLabelForOperator(prop.getCompoundOpCode()));
                         opNode.setData(new TreeNode(null));
                         newNode.getChildren().add(opNode);
 
@@ -93,7 +97,24 @@ public class RulePreviewTreeBuilder extends AbstractTreeBuilder{
                 }
             }
 
+            tNode.setListItems(this.getListItems(prop));
+            newNode.setData(tNode);
+            tNode.setKey(prop.getKey());
+            currentNode.getChildren().add(newNode);
+
         }
+    }
+
+    @Override
+    protected String buildNodeLabel(PropositionEditor prop){
+        //Build the node label.
+        String prefix = this.getPropositionPrefix(prop);
+        return prefix + StringEscapeUtils.escapeHtml(this.getDescription(prop));
+    }
+
+    @Override
+    public String getNaturalLanguageUsageKey() {
+        return  KSKRMSServiceConstants.KRMS_NL_PREVIEW;
     }
 
     public List<Object> getListItems(PropositionEditor propositionEditor) {

@@ -1,18 +1,17 @@
 /**
- * Copyright 2012 The Kuali Foundation Licensed under the
- * Educational Community License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may
- * obtain a copy of the License at
+ * Copyright 2005-2013 The Kuali Foundation
  *
- * http://www.osedu.org/licenses/ECL-2.0
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an "AS IS"
- * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing
- * permissions and limitations under the License.
+ * http://www.opensource.org/licenses/ecl2.php
  *
- * Created by Adi Rajesh on 6/7/12
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.kuali.student.enrollment.class1.krms.service.impl;
 
@@ -23,6 +22,7 @@ import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.ContextUtils;
+import org.kuali.student.r2.core.organization.constants.OrganizationServiceConstants;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
 import org.kuali.student.r2.core.search.dto.SearchParamInfo;
@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * This class //TODO ...
  *
@@ -45,7 +44,6 @@ import java.util.Map;
 public class DepartmentLookupableImpl extends LookupableImpl {
 
     private OrganizationService organizationService;
-    private ContextInfo contextInfo;
 
     @Override
     protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
@@ -61,14 +59,14 @@ public class DepartmentLookupableImpl extends LookupableImpl {
         } else if (StringUtils.isNotBlank(shortName) && !shortName.isEmpty()) {
             queryParamValueList.add(this.createSearchParamInfo(shortName, "org.queryParam.orgOptionalShortName"));
         }
-        queryParamValueList.add(this.createSearchParamInfo("kuali.org.Department", "org.queryParam.orgOptionalType"));
+        queryParamValueList.add(this.createSearchParamInfo(OrganizationServiceConstants.ORGANIZATION_DEPARTMENT_TYPE_KEY, "org.queryParam.orgOptionalType"));
 
         SearchRequestInfo searchRequest = new SearchRequestInfo();
         searchRequest.setSearchKey("org.search.generic");
         searchRequest.setParams(queryParamValueList);
         SearchResultInfo orgs = null;
         try {
-            orgs = getOrganizationService().search(searchRequest, getContextInfo());
+            orgs = getOrganizationService().search(searchRequest, ContextUtils.createDefaultContextInfo());
             for (SearchResultRowInfo result : orgs.getRows()) {
                 List<SearchResultCellInfo> cells = result.getCells();
                 OrgInfo display = new OrgInfo();
@@ -97,12 +95,6 @@ public class DepartmentLookupableImpl extends LookupableImpl {
         return searchParam;
     }
 
-    private ContextInfo getContextInfo() {
-        if (null == contextInfo) {
-            contextInfo = ContextUtils.createDefaultContextInfo();
-        }
-        return contextInfo;
-    }
 
     private OrganizationService getOrganizationService() {
         if (organizationService == null) {

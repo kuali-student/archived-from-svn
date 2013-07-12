@@ -39,9 +39,7 @@
     <bean id="KS-CourseOfferingEditWrapper-InquiryView" parent="KS-Uif-InquiryView"
           p:headerText="Course Offering Inquiry"
           p:dataObjectClassName="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper"
-          p:viewHelperServiceClass="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingEditInquirableImpl"
-            >
-
+          p:viewHelperServiceClass="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingEditInquirableImpl">
 
         <property name="page.header">
             <!-- suppress Expand/Collapse buttons -->
@@ -178,45 +176,50 @@
     </bean>
 
     <!-- Edit a Course Offering MaintenanceView -->
-    <bean id="KS-CourseOfferingEditWrapper-EditMaintenanceView" parent="KS-Uif-MaintenanceView">
+    <bean id="KS-CourseOfferingEditWrapper-EditMaintenanceView" parent="KS-CourseOffering-MaintenanceViewWithTermContextBarPlaceholder">
         <property name="authorizer">
             <bean class="org.kuali.student.enrollment.main.view.KsMaintenanceViewAuthorizerBase"/>
         </property>
-        <property name="headerText" value="Edit @{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode} - @{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingTitle} (@{document.oldMaintainableObject.dataObject.courseOfferingInfo.creditCnt} Credits)"/>
-        <property name="dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper"/>
-        <!-- <property name="render" value="@{#hasPermDtls('KS-ENR','Open Views for KS-CourseOfferingEditWrapper-EditMaintenanceView',null,document.oldMaintainableObject.dataObject.adminOrg)}" /> -->
 
-        <!--
-        Because the topGroup is static after the initial view load we needed to create a generic way to update the data
-        via javascript. So, we create a placeholder bean (KS-CourseOfferingEditWrapper-ContextBar-PlaceHolder) in the static context
-        bar. Then, we create an "updating" bean in the page. In this case:  KS-CourseOfferingEditWrapper-ContextBar
-        -->
-        <property name="topGroup">
-            <bean  id="KS-CourseOfferingEditWrapper-ContextBar-PlaceHolder" parent="KS-Uif-HorizontalBoxGroup-TopGroup"/>
-        </property>
+        <property name="headerText" value="@{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode}"/>
+        <property name="page.headerText" value="Edit Course Offering" />
+
+        <property name="dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper"/>
 
         <property name="breadcrumbOptions.homewardPathBreadcrumbs">
-            <ref bean="KS-Enrollment-HomewardPathBreadcrumbs"/>
+            <util:list id="KS-Enrollment-HomewardPathBreadcrumbs">
+                <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageCo-Landing" />
+                <ref bean="KS-HomewardPathBreadcrumbs-EditCo-Search-Subject"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-EditCo-TheCO-Page"/>
+            </util:list>
         </property>
 
-        <property name="header.lowerGroup">
-            <bean parent="Uif-HeaderLowerGroup">
-                <property name="style" value="margin-bottom:px;"/>
-                <property name="items">
-                    <list>
-                        <bean parent="Uif-MessageField" p:messageText="Crosslisted as: @{#dp.alternateCOCodesUIList}" p:render="@{!#dp.alternateCourseCodesSuffixStripped.isEmpty()}" p:style="font-weight:bold; margin-top:4px; margin-bottom:8px;"/>
-                    </list>
-                </property>
-            </bean>
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <ref bean="KS-HomewardPathBreadcrumbs-EditCo-Page"/>
+            </list>
         </property>
-        <!--<property name="viewLabelFieldPropertyName" value="Edit @{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode} - @{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingTitle} (@{document.oldMaintainableObject.dataObject.courseOfferingInfo.creditCnt} Credits)"/>-->
-        <!--<property name="breadcrumbTitleDisplayOption" value="replace"/>-->
+
+        <property name="page.header.lowerGroup.render" value="false"/>
+        <property name="header.cssClasses">
+            <list >
+                <value>ks-borderBottom4</value>
+            </list>
+        </property>
+        <property name="additionalCssFiles">
+            <list merge="true">
+                <value>ks-enroll/css/acal.css</value>
+            </list>
+        </property>
 
         <property name="viewHelperServiceClass" value="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingEditMaintainableImpl" />
         <property name="page.items">
             <list>
+                <ref bean="KS-CourseOffering-ContextBar" />
+                <ref bean="KS-CourseOffering-EditCo-Page-Header"/>
                 <ref bean="KS-EditCourseOffering-AliasMessageSection" />
-                <ref bean="KS-CourseOfferingEditWrapper-ContextBar" />
                 <ref bean="KS-CourseOfferingEdit-Term"/>
                 <ref bean="KS-Uif-DocumentPageFooter-SubmitCancel"/>
                 <ref bean="KS-CourseOfferingEdit-CourseOfferingInformation"/>
@@ -232,31 +235,51 @@
         </property>
     </bean>
 
-    <!--
-     This is the context bar that will be put into the static context bar placeholder on page load. It does this via the
-     "updateContextBar" javascript.
-     Note: because of the way the breadcrumbs are implemented we had to set the "display: none"
-    -->
-    <bean id="KS-CourseOfferingEditWrapper-ContextBar" parent="Uif-HorizontalBoxGroup" p:style="display: none;"
-          p:onDocumentReadyScript="updateContextBar( 'KS-CourseOfferingEditWrapper-ContextBar', 'KS-CourseOfferingEditWrapper-ContextBar-PlaceHolder' ); setSeasonalColor( 'KS-CourseOfferingEditWrapper-ContextBar', @{document.newMaintainableObject.dataObject.termDayOfYear}, '@{#ConfigProperties['application.url']}' );" >
-        <property name="cssClasses">
-            <list merge="true">
-                <value>ks-topGroup</value>
-            </list>
-        </property>
+    <bean id="KS-CourseOffering-EditCo-Page-Header" parent="Uif-VerticalBoxSection">
         <property name="items">
             <list>
-                <bean parent="Uif-Label" p:labelText="@{document.newMaintainableObject.dataObject.termCode}" p:renderColon="false" >
-                    <property name="cssClasses">
-                        <list merge="true">
-                            <value>ks-topGroup-termCode</value>
-                        </list>
-                    </property>
-                </bean>
-                <bean id="contextBarSocState" parent="KS-Lozenge-Grey-Uif-DataField" p:readOnly="true" p:propertyName="termSocState" />
+                <!--<bean parent="Uif-HeaderFour" p:headerText="Edit Course Offering"/>-->
+                <bean parent="Uif-MessageField" p:messageText="Crosslisted as: @{#dp.alternateCOCodesUIList}" p:render="@{!#dp.alternateCourseCodesSuffixStripped.isEmpty()}" p:style="font-weight:bold; margin-top:4px; margin-bottom:8px;"/>
             </list>
         </property>
     </bean>
+
+    <bean id="KS-HomewardPathBreadcrumbs-EditCo-Search-Subject" parent="Uif-BreadcrumbItem">
+        <property name="label" value="@{document.oldMaintainableObject.dataObject.courseOfferingInfo.subjectArea}"/>
+        <property name="url.viewId" value="courseOfferingManagementView"/>
+        <property name="url.controllerMapping" value="courseOfferingManagement"/>
+        <property name="url.requestParameters">
+            <map key-type="java.lang.String" merge="true">
+                <entry key="methodToCall" value="show"/>
+                <entry key="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                <entry key="hideReturnLink" value="true"/>
+                <entry key="inputCode" value="@{document.oldMaintainableObject.dataObject.courseOfferingInfo.subjectArea}"/>
+                <entry key="termCode" value="@{document.oldMaintainableObject.dataObject.term.code}"/>
+                <entry key="pageId" value="manageCourseOfferingsPage"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="KS-HomewardPathBreadcrumbs-EditCo-TheCO-Page" parent="Uif-BreadcrumbItem">
+        <property name="label" value="@{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode}"/>
+        <property name="url.viewId" value="courseOfferingManagementView"/>
+        <property name="url.controllerMapping" value="courseOfferingManagement"/>
+        <property name="url.requestParameters">
+            <map key-type="java.lang.String" merge="true">
+                <entry key="methodToCall" value="show"/>
+                <entry key="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                <entry key="hideReturnLink" value="true"/>
+                <entry key="inputCode" value="@{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode}"/>
+                <entry key="termCode" value="@{document.oldMaintainableObject.dataObject.term.code}"/>
+                <entry key="pageId" value="manageTheCourseOfferingPage"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="KS-HomewardPathBreadcrumbs-EditCo-Page" parent="Uif-BreadcrumbItem">
+        <property name="label" value="@{(document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode eq null)? '' : 'Edit '}  @{document.oldMaintainableObject.dataObject.courseOfferingInfo.courseOfferingCode}"/>
+    </bean>
+
 
     <bean id="KS-EditCourseOffering-AliasMessageSection" parent="Uif-HorizontalBoxSection">
         <property name="render" value="@{document.newMaintainableObject.dataObject.editCrossListedCoAlias}"/>
@@ -291,17 +314,34 @@
         <property name="items">
             <list>
                 <bean parent="Uif-Message" p:messageText="&lt;hr&gt;"/>
+
                 <bean parent="Uif-VerticalBoxSubSection">
                     <property name="items">
                         <list>
-                            <bean parent="Uif-Label" p:labelText="Course Offering Code" p:renderColon="false"/>
-                            <bean parent="Uif-HorizontalFieldGroup" p:showLabel="false">
+                            <bean parent="Uif-Label" p:labelText="Course Title" p:renderColon="false" />
+                            <bean parent="Uif-DataField" p:propertyName="courseOfferingInfo.courseOfferingTitle" p:showLabel="false" />
+                        </list>
+                    </property>
+                </bean>
+
+                <bean parent="Uif-HorizontalBoxSubSection">
+                    <property name="items">
+                        <list>
+                            <bean parent="Uif-VerticalBoxSubSection">
                                 <property name="items">
                                     <list>
-                                        <bean parent="Uif-DataField" p:propertyName="course.code" p:showLabel="false"/>
+                                        <bean parent="Uif-Label" p:labelText="Course Code" p:renderColon="false" />
+                                        <bean parent="Uif-DataField" p:propertyName="course.code" p:showLabel="false" />
+                                    </list>
+                                </property>
+                            </bean>
+                            <bean parent="Uif-VerticalBoxSubSection" p:style="margin-left: 10px;">
+                                <property name="items">
+                                    <list>
+                                        <bean parent="Uif-Label" p:labelText="Suffix" p:renderColon="false" />
                                         <bean parent="Uif-InputField" p:propertyName="courseOfferingInfo.courseNumberSuffix" p:showLabel="false">
                                             <property name="control">
-                                                <bean parent="Uif-TextControl" p:watermarkText="Suffix" p:size="10" />
+                                                <bean parent="Uif-TextControl" p:size="10" />
                                             </property>
                                         </bean>
                                     </list>
@@ -310,8 +350,9 @@
                         </list>
                     </property>
                 </bean>
+
                 <ref bean="KS-COEditListed-Checkbox-Group"/>
-                <!--<ref bean="KS-COEditListed-CO-Codes-display"/>-->
+
                 <ref bean="KS-GradingAndRegOptions"/>
             </list>
         </property>
@@ -611,7 +652,6 @@
                 <bean id="KS-CourseOfferingEdit-PersonnelTableSection" parent="Uif-TableCollectionSection"
                       p:layoutManager.numberOfColumns="6"
                       p:layoutManager.style="width: 100%; display:block;">
-                    <property name="headerText" value="Affiliated Personnel" />
                     <property name="collectionObjectClass" value="org.kuali.student.enrollment.courseoffering.dto.OfferingInstructorInfo" />
                     <property name="propertyName" value="courseOfferingInfo.instructors" />
                     <property name="layoutManager.renderSequenceField" value="false" />

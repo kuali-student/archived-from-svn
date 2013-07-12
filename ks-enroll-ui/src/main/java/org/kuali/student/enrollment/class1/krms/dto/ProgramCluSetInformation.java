@@ -1,6 +1,20 @@
+/**
+ * Copyright 2005-2013 The Kuali Foundation
+ *
+ * Licensed under the Educational Community License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/ecl2.php
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kuali.student.enrollment.class1.krms.dto;
 
-import org.kuali.student.enrollment.class1.krms.util.CluSetRangeInformation;
 import org.kuali.student.r2.lum.clu.dto.CluSetInfo;
 
 import java.io.Serializable;
@@ -9,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Kuali Student Team
+ */
 public class ProgramCluSetInformation implements Serializable {
 
     private static final long serialVersionUID = 1123124L;
@@ -16,6 +33,7 @@ public class ProgramCluSetInformation implements Serializable {
     private List<CluInformation> clus;
     private List<CluSetInfo> cluSets;
     private Map<String, ProgramCluSetInformation> subCluSetInformations;
+    private ProgramCluSetInformation parent;
 
     private List<CluSetRangeInformation> cluSetRange;
 
@@ -70,6 +88,30 @@ public class ProgramCluSetInformation implements Serializable {
 
     public void setSubCluSetInformations(Map<String, ProgramCluSetInformation> subCluSetInformations) {
         this.subCluSetInformations = subCluSetInformations;
+    }
+
+    public ProgramCluSetInformation getParent() {
+        return parent;
+    }
+
+    public void setParent(ProgramCluSetInformation parent) {
+        this.parent = parent;
+    }
+
+    public int getProgCluListSize(){
+        if (this.getClus() != null) {
+            return this.getClus().size();
+        } else {
+            return 0;
+        }
+    }
+
+    public int getProgCluSetListSize(){
+        if (this.getCluSets() != null) {
+            return this.getCluSets().size();
+        } else {
+            return 0;
+        }
     }
 
     public String getCluDelimitedString() {

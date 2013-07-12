@@ -20,20 +20,63 @@
      limitations under the License.
     -->
 
-    <!--p:onDocumentReadyScript="updateContextBar(); setSeasonalColor('KS-CourseOfferingManagement-ContextBar',@{termDayOfYear}, '@{#ConfigProperties['application.url']}');"-->
-
-    <bean id="KS-CourseOfferingManagement-ManageTheCourseOfferingPage" parent="Uif-Page" p:disclosure.render="false"
+    <bean id="KS-CourseOfferingManagement-ManageTheCourseOfferingPage" parent="KS-Uif-Page" p:disclosure.render="false"
           p:id="manageTheCourseOfferingPage">
+
+        <property name="pageSourceFile" value="CourseOfferingManagement-ManageTheCourseOfferingPage.xml" /> <!-- Shows up in HTML so devs can find the code -->
+
+        <!-- Dynamically replace by page-title from parent using JS-onDocumentReadyScript to reflect subject-code.
+            ie: from "Course Offerings" to "WMST200"
+            This is a work-around, at least until KRAD 2.3-m3 -->
+        <property name="onDocumentReadyScript" value="updateViewHeaderText( '@{currentCourseOfferingWrapper.ownerCode}' );" />
+
+        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
+            <util:list id="KS-Enrollment-HomewardPathBreadcrumbs">
+                <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageCo-Landing" />
+                <ref bean="KS-HomewardPathBreadcrumbs-Search-Subject"/>
+            </util:list>
+         </property>
+
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageOneCo-Page"/>
+            </list>
+        </property>
+
         <property name="items">
             <list>
+                <!-- This adds the file names to the page HTML -->
+                <ref bean="KS-SourceFile-Comment-Group"/>
+                <ref bean="KS-CourseOfferingManagement-TheCourseOfferingLinks"/>
                 <ref bean="KS-CourseOfferingManagement-CriteriaSection"/>
                 <ref bean="KS-CourseOfferingManagement-AliasMessageSection" />
                 <ref bean="KS-CourseOfferingManagement-ManageTheCourseOfferingSection"/>
                 <ref bean="KS-CourseOfferingManagement-AddActivityOfferingPopupForm"/>
                 <ref bean="KS-CourseOfferingManagement-AddAOCPopupForm"/>
                 <ref bean="KS-CourseOfferingManagement-MoveAOCPopupContainer"/>
-                <ref bean="KS-CourseOfferingManagement-ContextBar"/>
+                <ref bean="KS-CourseOffering-ContextBar"/>
             </list>
+        </property>
+    </bean>
+
+
+
+    <bean id="KS-HomewardPathBreadcrumbs-ManageOneCo-Page" parent="Uif-BreadcrumbItem">
+        <property name="label" value="@{currentCourseOfferingWrapper.ownerCode}"/>
+        <property name="url.viewId" value="courseOfferingManagementView"/>
+        <property name="url.controllerMapping" value="courseOfferingManagement"/>
+        <property name="url.requestParameters">
+            <map key-type="java.lang.String" merge="true">
+                <entry key="methodToCall" value="show"/>
+                <entry key="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                <entry key="hideReturnLink" value="true"/>
+                <entry key="inputCode" value="@{currentCourseOfferingWrapper.ownerCode}"/>
+                <entry key="formKey" value="@{formKey}"/>
+                <entry key="pageId" value="manageTheCourseOfferingPage"/>
+                <entry key="viewName" value="@{currentCourseOfferingWrapper.ownerCode}"/>
+            </map>
         </property>
     </bean>
 
@@ -58,7 +101,9 @@
 
     <bean id="KS-CourseOfferingManagement-ManageTheCourseOfferingSection" p:id="ActivityOfferingResultSection" parent="Uif-VerticalBoxSection">
         <property name="componentSecurity.viewAuthz" value="true"/>
+<!--
         <property name="headerText" value="@{currentCourseOfferingWrapper.ownerCode} - @{currentCourseOfferingWrapper.courseOfferingDesc} (@{currentCourseOfferingWrapper.creditCnt} Credits, SOC State: @{socState})" />
+-->
         <property name="disclosure.render" value="false"/>
         <property name="header.cssClasses">
             <list merge="true">
@@ -68,7 +113,9 @@
         <property name="items">
             <list>
                 <bean parent="Uif-MessageField" p:messageText="Crosslisted as: @{currentCourseOfferingWrapper.ownerAliasesUIList}" p:render="@{currentCourseOfferingWrapper.ownerAliasesUIList != ''}" p:style="font-weight:bold; margin-top:4px; margin-bottom:8px;"/>
+<!--
                 <ref bean="KS-CourseOfferingManagement-TheCourseOfferingLinks"/>
+-->
                 <!--<ref bean="KS-CourseOfferingManagement-TheCourseOfferingTabs"/>-->
                 <bean id="KS-Tab-Hidden-Input" parent="Uif-InputField" p:defaultValue="0" p:showLabel="false" p:propertyName="selectedTabId" p:hidden="true">
                     <property name="control">
@@ -101,7 +148,7 @@
                                         <bean parent="Uif-ActionLink" p:actionLabel=" | View All Registration Groups (@{rgResultList.size()})"
                                               p:actionScript = "showLightboxComponent('KS-CourseOfferingManagement-AllRegistrationGroupsForACourseOffering', '@{#ConfigProperties['application.url']}');"/>
                                         <bean parent="Uif-Link" p:linkText="| Manage Course Offering Requisites "
-                                              p:href="@{#ConfigProperties['application.url']}/kr-krad/krmsRuleStudentEditor?viewTypeName=MAINTENANCE&amp;methodToCall=maintenanceEdit&amp;dataObjectClassName=org.kuali.student.enrollment.class1.krms.dto.CORuleManagementWrapper&amp;viewName=COAgendaManagementView&amp;overrideKeys=refObjectId&amp;refObjectId=@{currentCourseOfferingWrapper.courseOfferingId}"/>
+                                              p:href="@{#ConfigProperties['application.url']}/kr-krad/courseOfferingRules?viewTypeName=MAINTENANCE&amp;methodToCall=maintenanceEdit&amp;dataObjectClassName=org.kuali.student.enrollment.class1.krms.dto.CORuleManagementWrapper&amp;viewName=COAgendaManagementView&amp;overrideKeys=refObjectId&amp;refObjectId=@{currentCourseOfferingWrapper.courseOfferingId}&amp;returnFormKey=@{formKey}"/>
                                     </list>
                                 </property>
                             </bean>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
     <!--
      Copyright 2007-2012 The Kuali Foundation
@@ -21,15 +21,35 @@
      limitations under the License.
     -->
 
-    <bean id="KS-CourseOfferingManagement-SelectedAoDeleteConfirmationPage" parent="Uif-Page"
-          p:id="selectedAoDeleteConfirmationPage"
-          p:headerText="">
-        <property name="header">
-            <bean parent="Uif-HeaderTwo"/>
+    <bean id="KS-CourseOfferingManagement-SelectedAoDeleteConfirmationPage" parent="KS-Uif-Page"
+          p:id="selectedAoDeleteConfirmationPage">
+
+        <!-- Dynamically replace by page-title from parent using JS-onDocumentReadyScript to reflect title of the page.
+             ie: from "Course Offerings" to "Delete Activity Offerings"
+             This is a work-around, at least until KRAD 2.3-m3 -->
+        <property name="onDocumentReadyScript" value="updateViewHeaderText( 'Delete Activity Offerings' );" />
+        <property name="headerText" value="@{currentCourseOfferingWrapper.courseOfferingCode}" />
+
+        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
+            <util:list id="KS-Enrollment-HomewardPathBreadcrumbs">
+                <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageCo-Landing"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Search-Subject"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageOneCo-Page"/>
+            </util:list>
         </property>
+
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <bean parent="Uif-BreadcrumbItem">
+                    <property name="label" value="Delete Activity Offerings" />
+                </bean>
+            </list>
+        </property>
+
         <property name="items">
             <list>
-                <ref bean="KS-CourseOfferingManagement-CriteriaSection"/>
                 <ref bean="KS-CourseOfferingManagement-ConfirmationResultSection"/>
             </list>
         </property>
@@ -39,21 +59,14 @@
           p:disclosure.render="false"
           p:id="confirmationResultSection"
           p:colSpan="3"
-          p:style="underline"
-          p:headerText="Delete Activity Offering(s)">
-        <property name="items">
+          p:style="underline">
+       <property name="items">
             <list>
                 <bean id="KS-SelectedAoDeleteConfirmation-Message" parent="Uif-VerticalBoxSection">
-                    <property name="headerText"
-                              value="@{currentCourseOfferingWrapper.courseOfferingCode} - @{currentCourseOfferingWrapper.courseOfferingTitle}"/>
-                    <property name="header">
-                        <bean parent="Uif-HeaderFour"/>
-                    </property>
                     <property name="disclosure.render" value="false"/>
                     <property name="items" >
                         <list>
                             <bean parent="Uif-MessageField" p:messageText="Crosslisted as: @{currentCourseOfferingWrapper.alternateCOCodesUITooltip}" p:render="@{currentCourseOfferingWrapper.alternateCOCodesUITooltip != ''}"/>
-                            <bean parent="Uif-DataField" p:label="Term:" p:propertyName="currentCourseOfferingWrapper.term.name" p:fieldLabel.renderColon="false" p:readOnly="true"/>
                          </list>
                     </property>
                 </bean>

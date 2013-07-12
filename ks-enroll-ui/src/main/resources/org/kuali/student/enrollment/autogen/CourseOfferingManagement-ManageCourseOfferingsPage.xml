@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!--
@@ -23,22 +23,62 @@
         <property name="titleAttribute" value="id"/>
     </bean>
 
-    <!--p:onDocumentReadyScript="updateContextBar(); setSeasonalColor('KS-CourseOfferingManagement-ContextBar',@{termDayOfYear}, '@{#ConfigProperties['application.url']}');"-->
+    <bean id="KS-CourseOfferingManagement-ManageCourseOfferingsPage" parent="KS-Uif-Page" p:disclosure.render="false"
+          p:id="manageCourseOfferingsPage" >
 
-    <bean id="KS-CourseOfferingManagement-ManageCourseOfferingsPage" parent="Uif-Page" p:disclosure.render="false"
-          p:id="manageCourseOfferingsPage">
+        <property name="pageSourceFile" value="CourseOfferingManagement-ManageCourseOfferingsPage.xml" /> <!-- Shows up in HTML so devs can find the code -->
+
+        <!-- Dynamically replace by page-title from parent using JS-onDocumentReadyScript to reflect subject-code and long-description.
+            ie: from "Course Offerings" to "WMST: Women's Studies"
+            This is a work-around, at least until KRAD 2.3-m3 -->
+        <property name="onDocumentReadyScript" value="updateViewHeaderText( '@{subjectCode}: @{subjectCodeDescription}' );" />
+
+        <property name="breadcrumbOptions.homewardPathBreadcrumbs">
+            <list>
+                <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+                <ref bean="KS-HomewardPathBreadcrumbs-ManageCo-Landing" />
+            </list>
+        </property>
+
+        <property name="breadcrumbOptions.breadcrumbOverrides">
+            <list>
+                <bean parent="Uif-BreadcrumbItem">
+                    <property name="label" value="@{subjectCode}"/>
+                </bean>
+            </list>
+        </property>
+
         <property name="items">
             <list>
+                <!-- This adds the file names to the page HTML -->
+                <ref bean="KS-SourceFile-Comment-Group"/>
                 <ref bean="KS-CourseOfferingManagement-CriteriaSection"/>
                 <ref bean="KS-CourseOfferingManagement-CourseOfferingResultSection"/>
-                <ref bean="KS-CourseOfferingManagement-ContextBar"/>
+                <ref bean="KS-CourseOffering-ContextBar"/>
             </list>
+        </property>
+    </bean>
+
+    <bean id="KS-HomewardPathBreadcrumbs-Search-Subject" parent="Uif-BreadcrumbItem">
+        <property name="label" value="@{subjectCode}"/>
+        <property name="url.viewId" value="courseOfferingManagementView"/>
+        <property name="url.controllerMapping" value="courseOfferingManagement"/>
+        <property name="url.requestParameters">
+            <map key-type="java.lang.String" merge="true">
+                <entry key="methodToCall" value="show"/>
+                <entry key="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                <entry key="hideReturnLink" value="true"/>
+                <entry key="inputCode" value="@{subjectCode}"/>
+                <entry key="formKey" value="@{formKey}"/>
+                <entry key="pageId" value="manageCourseOfferingsPage"/>
+                <entry key="viewName" value="@{subjectCode}"/>
+            </map>
         </property>
     </bean>
 
     <bean id="KS-CourseOfferingManagement-CourseOfferingResultSection" parent="Uif-VerticalBoxSection" p:id="searchResultSection">
         <property name="componentSecurity.viewAuthz" value="true"/>
-        <property name="headerText" value="@{subjectCode} - @{subjectCodeDescription}" />
         <property name="disclosure.render" value="false"/>
         <property name="items">
             <list>

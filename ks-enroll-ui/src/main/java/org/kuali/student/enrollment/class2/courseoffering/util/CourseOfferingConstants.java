@@ -8,8 +8,10 @@ package org.kuali.student.enrollment.class2.courseoffering.util;
  * To change this template use File | Settings | File Templates.
  */
 public class CourseOfferingConstants {
+
     //  Keys for features which are institutionally configurable via config file params
     public final static String CONFIG_PARAM_KEY_SELECTIVE_CROSSLISTING = "kuali.ks.enrollment.options.selective-crosslisting-allowed";
+    public final static String CONFIG_PARAM_KEY_EDIT_ACTIVITY_CODE = "kuali.ks.enrollment.options.edit-activity-offering-code-allowed";
 
     //Attributes defined in CourseOfferingInfo
     public final static String COURSEOFFERING_ID = "id";
@@ -31,6 +33,8 @@ public class CourseOfferingConstants {
     //Attributes defined in SocRolloverResultItemInfo
 
     //Message keys
+    public static final String COURSEOFFERING_MSG_ERROR_TERMCODE_IS_REQUIRED = "error.courseOffering.manage.termcode.required";
+    public static final String COURSEOFFERING_MSG_ERROR_COURSECODE_IS_REQUIRED = "error.courseOffering.manage.coursecode.required";
     public static final String COURSEOFFERING_MSG_ERROR_NO_TERM_IS_FOUND = "error.enroll.courseoffering.noTermIsFound";
     public static final String COURSEOFFERING_MSG_ERROR_FOUND_MORE_THAN_ONE_TERM = "error.enroll.courseoffering.findMoreThanOneTerm";
     public static final String COURSEOFFERING_MSG_ERROR_NO_COURSE_OFFERING_IS_FOUND = "error.enroll.courseoffering.noCourseOfferingIsFound";
@@ -85,6 +89,8 @@ public class CourseOfferingConstants {
     public static final String DELIVERY_FORMAT_SECTION_ID = "KS-Catalog-FormatOfferingSubSection";
     public static final String DELIVERY_FORMAT_REQUIRED_ERROR = "error.courseoffering.create.deliveryformat.required";
     public static final String JOINT_COURSE_FORMATS_DELETE_DIALOG = "jointCourseFormatsDeleteDialog";
+
+    public static final String ERROR_INVALID_CLU_VERSION = "error.enroll.courseoffering.create.clu.version.invalid";
     /**
      * Course Offering Informational Constants
      */
@@ -135,11 +141,12 @@ public class CourseOfferingConstants {
     public static final String COLOCATION_MAX_ENR_SHARED="info.enroll.courseoffering.colocation.enr.shared";
     public static final String COLOCATION_MAX_ENR_SEPARATED="info.enroll.courseoffering.colocation.enr.separated";
 
+    public static final String COURSE_OFFERING_EDIT_SUCCESS = "info.enroll.courseoffering.edit.success";
+
     /**
          * These are the confirm dialog bean ids used in Manage CO/AO view.
          */
     public static class ConfirmDialogs{
-        public static final String APRROVE_CO = "approveCODialog";
         public static final String DELETE_COLO_COS = "deletingColocationNotSupportedForMultipleCosDialog";
         public static final String DELETE_ONE_COLO_CO = "deletingColocationNotSupportedForCoDialog";
         public static final String DELETE_COLO_AOS = "deletingColocationNotSupportedForMultipleAosDialog";

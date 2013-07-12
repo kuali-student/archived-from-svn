@@ -49,6 +49,8 @@
 
 .subruleElement {
     white-space: normal !important;
+    max-width: 600px;
+    word-wrap: break-word;
 }
 
 .compareElement {
@@ -80,6 +82,7 @@
 
 .krms-ruleViewSection {
     margin: 10px;
+    width: 800px;
 }
 
 .krms-agendaHeader {
@@ -117,9 +120,6 @@
 
 .ruleCopySelected {
     background-color:#F4E271 !important; border: 1px dashed goldenrod;
-}
-.krms-edit-link {
-    color:#00aa00 !important;
 }
 
 .krms-editVerticalBox {

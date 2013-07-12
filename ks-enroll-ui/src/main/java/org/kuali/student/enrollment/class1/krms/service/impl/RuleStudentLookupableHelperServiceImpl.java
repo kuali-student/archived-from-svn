@@ -1,5 +1,5 @@
 /**
- * Copyright 2005-2012 The Kuali Foundation
+ * Copyright 2005-2013 The Kuali Foundation
  *
  * Licensed under the Educational Community License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,16 @@ import org.kuali.rice.krad.util.KRADUtils;
 import org.kuali.rice.krad.util.UrlFactory;
 import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.class1.krms.dto.EnrolRuleEditor;
-import org.kuali.student.krms.KRMSConstants;
+import org.kuali.student.enrollment.class1.krms.util.KSKRMSConstants;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * @author Kuali Student Team
+ */
 public class RuleStudentLookupableHelperServiceImpl extends LookupableImpl {
 
     @Override
@@ -66,8 +70,8 @@ public class RuleStudentLookupableHelperServiceImpl extends LookupableImpl {
 
         props.put(UifParameters.DATA_OBJECT_CLASS_NAME, EnrolRuleEditor.class.getName());
         props.put(UifParameters.VIEW_TYPE_NAME, UifConstants.ViewType.MAINTENANCE.name());
-        props.put(UifParameters.VIEW_NAME, KRMSConstants.STUDENT_VIEW);
+        props.put(UifParameters.VIEW_NAME, KSKRMSConstants.STUDENT_VIEW);
 
-        return UrlFactory.parameterizeUrl(KRMSConstants.WebPaths.RULE_STUDENT_EDITOR_PATH, props);
+        return UrlFactory.parameterizeUrl("courseOfferingRules", props);
     }
 }
