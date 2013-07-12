@@ -48,16 +48,18 @@ plus any of its dependencies -->
 Detailed information about organization codes.
 			</value>
 		</property>
-		<property name="titleAttribute" value="key"/>
+		<property name="titleAttribute" value="id"/>
 		<property name="primaryKeys">
 			<list>
-				<value>key</value>
+				<value>id</value>
 			</list>
 		</property>
 
 		<property name="attributes">
 			<list>
-				<ref bean="OrgCodeInfo.key"/>
+				<ref bean="OrgCodeInfo.id"/>
+				<ref bean="OrgCodeInfo.typeKey"/>
+				<ref bean="OrgCodeInfo.stateKey"/>
 				<ref bean="OrgCodeInfo.value"/>
 			</list>
 		</property>
@@ -75,8 +77,16 @@ Detailed information about organization codes.
 		</property>
 	</bean>
 
-	<bean id="OrgCodeInfo.key-generated" abstract="true" parent="BaseKuali.key">
-		<property name="name" value="key"/>
+	<bean id="OrgCodeInfo.id-generated" abstract="true" parent="BaseKuali.id">
+		<property name="name" value="id"/>
+	</bean>
+
+	<bean id="OrgCodeInfo.typeKey-generated" abstract="true" parent="BaseKuali.typeKey">
+		<property name="name" value="typeKey"/>
+	</bean>
+
+	<bean id="OrgCodeInfo.stateKey-generated" abstract="true" parent="BaseKuali.stateKey">
+		<property name="name" value="stateKey"/>
 	</bean>
 
 	<bean id="OrgCodeInfo.value-generated" abstract="true" parent="BaseKuali.string">

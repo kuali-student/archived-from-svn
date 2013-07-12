@@ -35,12 +35,13 @@ import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.dto.OrgOrgRelationInfo;
 import org.kuali.student.r2.core.organization.dto.OrgPersonRelationInfo;
 import org.kuali.student.r2.core.organization.dto.OrgPositionRestrictionInfo;
-import org.kuali.student.r2.core.organization.dto.OrgTreeInfo;
+import org.kuali.student.r2.core.organization.dto.OrgTreeViewInfo;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
+import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
 
 /** 
  * The Organization service manages organizational units that have
@@ -111,7 +112,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public OrgHierarchyInfo getOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgHierarchyInfo getOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId,
+                                            @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+       throws DoesNotExistException, 
+              InvalidParameterException, 
+              MissingParameterException, 
+              OperationFailedException, 
+              PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgHierarchies from a list of OrgHierarchy
@@ -129,7 +136,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgHierarchyInfo> getOrgHierarchiesByIds(@WebParam(name = "orgHierarchyIds") List<String> orgHierarchyIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgHierarchyInfo> getOrgHierarchiesByIds(@WebParam(name = "orgHierarchyIds") List<String> orgHierarchyIds, 
+                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgHierarchy Ids by OrgHierarchy Type.
@@ -146,7 +159,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgHierarchyIdsByType(@WebParam(name = "orgHierarchyTypeKey") String orgHierarchyTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgHierarchyIdsByType(@WebParam(name = "orgHierarchyTypeKey") String orgHierarchyTypeKey, 
+                                                 @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Existing bulk method.
@@ -165,7 +183,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgHierarchyInfo> getOrgHierarchies(@WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgHierarchyInfo> getOrgHierarchies(@WebParam(name = "contextInfo") ContextInfo contextInfo) 
+     throws InvalidParameterException, 
+            MissingParameterException, 
+            OperationFailedException, 
+            PermissionDeniedException;
+
   /**
      * Searches for Org Hierarchy Ids that meet the given search criteria.
      * 
@@ -179,10 +202,16 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> searchForOrgHierarchyIds(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> searchForOrgHierarchyIds(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                 @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
-     * Searches for Org Hierarchies that meet the given search criteria.
+     * Searches for Org Hierarchies that meet the given search
+     * criteria.
      * 
      * @param criteria the search criteria
      * @param contextInfo information containing the principalId and
@@ -194,11 +223,155 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgHierarchyInfo> searchForOrgHierarchies(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgHierarchyInfo> searchForOrgHierarchies(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                          @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
+    //
+    // CRUD methods for OrgHierarchy Id Entity Pattern.
+    //
+
+    /**
+     * Validates an Org Hierarchy. Depending on the value of
+     * validationType, this validation could be limited to tests on
+     * just the current object and its directly contained sub-objects
+     * or expanded to perform all tests related to this
+     * OrgHierarchy. If an identifier is present for the OrgHierarchy
+     * (and/or one of its contained sub-objects) and a record is found
+     * for that identifier, the validation checks if the OrgHierarchy
+     * can be shifted to the new values. If a an identifier is not
+     * present or a record does not exist, the validation checks if
+     * the OrgHierarchy with the given data can be created.
+     * 
+     * @param validationTypeKey the identifier for the validation Type
+     * @param orgHierarchyTypeKey the identifier for the OrgHierarchy
+     *        Type to be validated
+     * @param orgHierarchyInfo the identifier for the OrgHierarchy to
+     *        be validated
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return a list of validation results or an empty list if
+     *         validation succeeded
+     * @throws DoesNotExistException validationTypeKey or
+     *         orgHierarchyTypeKey is not found
+     * @throws InvalidParameterException orgHierarchyInfo or
+     *         contextInfo is not valid
+     * @throws MissingParameterException validationTypeKey,
+     *         orgHierarchyTypeKey orgHierarchyInfo, or contextInfo is
+     *         missing or null
+     * @throws OperationFailedException unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<ValidationResultInfo> validateOrgHierarchy(@WebParam(name = "validationTypeKey") String validationTypeKey, 
+                                                           @WebParam(name = "orgHierarchyTypeKey") String orgHierarchyTypeKey, 
+                                                           @WebParam(name = "orgHierarchyInfo") OrgHierarchyInfo orgHierarchyInfo, 
+                                                           @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
+
+    /**
+     * Creates a new OrgHierarchy. The OrgHierarchy Id, Type and Meta
+     * information may not be set in the supplied data object.
+     * 
+     * @param orgHierarchyTypeKey a unique identifier for the Type of
+     *        the new OrgHierarchy
+     * @param orgHierarchyInfo the data with which to create the OrgHierarchy
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return the new OrgHierarchy
+     * @throws DataValidationErrorException supplied data is invalid
+     * @throws DoesNotExistException orgHierarchyTypeKey does not exist or is
+     *         not supported
+     * @throws InvalidParameterException orgHierarchyInfo or
+     *         contextInfo is not valid
+     * @throws MissingParameterException orgHierarchyTypeKey,
+     *         orgHierarchyInfo, or contextInfo is missing or null
+     * @throws OperationFailedException unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     * @throws ReadOnlyException an attempt at supplying information
+     *         designated as read only
+     */
+    public OrgHierarchyInfo createOrgHierarchy(@WebParam(name = "orgHierarchyTypeKey") String orgHierarchyTypeKey, 
+                                               @WebParam(name = "orgHierarchyInfo") OrgHierarchyInfo orgHierarchyInfo, 
+                                               @WebParam(name = "contextInfo") ContextInfo contextInfo)
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException;
+
+    /**
+     * Updates an existing OrgHierarchy. The OrgHierarchy id, Type,
+     * and Meta information may not be changed.
+     * 
+     * @param orgHierarchyId the identifier for the OrgHierarchy to be
+     *        updated
+     * @param orgHierarchyInfo the new data for the OrgHierarchy
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return the updated OrgHierarchy
+     * @throws DataValidationErrorException supplied data is invalid
+     * @throws DoesNotExistException orgHierarchyId is not found
+     * @throws InvalidParameterException orgHierarchyInfo or
+     *         contextInfo is not valid
+     * @throws MissingParameterException orgHierarchyId,
+     *         orgHierarchyInfo, or contextInfo is missing or null
+     * @throws OperationFailedException unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     * @throws ReadOnlyException an attempt at supplying information
+     *         designated as read only
+     * @throws VersionMismatchException an optimistic locking failure
+     *         or the action was attempted on an out of date version
+     */
+    public OrgHierarchyInfo updateOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                               @WebParam(name = "orgHierarchyInfo") OrgHierarchyInfo orgHierarchyInfo, 
+                                               @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+            ReadOnlyException, 
+            VersionMismatchException;
+
+    /**
+     * Deletes an existing OrgHierarchy.
+     * 
+     * @param orgHierarchyId the identifier for the OrgHierarchy to be
+     *        deleted
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return the status of the operation. This must always be true.
+     * @throws DoesNotExistException orgHierarchyId is not found
+     * @throws InvalidParameterException contextInfo is not valid
+     * @throws MissingParameterException orgHierarchyId or contextInfo
+     *         is missing or null
+     * @throws OperationFailedException unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public StatusInfo deleteOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                         @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
+    
     /** 
-     * Retrieves the list of types of organizations known by this service.
+     * Retrieves the list of types of org hierarchies known by this
+     * service.
      *
+     * Deprecated: instead use the TypeService directly
+     * 
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return a list of organization types
@@ -208,14 +381,19 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<TypeInfo> getOrgTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<TypeInfo> getOrgTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Lookup Methods for Org Id Entity Pattern.
     //
 
     /** 
-     * Retrieves a a single Org by Org Id.
+     * Retrieves a  single Org by Org Id.
      *
      * @param orgId the identifier for the Org to be retrieved
      * @param contextInfo information containing the principalId and
@@ -228,12 +406,18 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public OrgInfo getOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgInfo getOrg(@WebParam(name = "orgId") String orgId, 
+                          @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /** 
      * Retrieves a list of Orgs from a list of Org Ids. The returned
      * list may be in any order and if duplicate Ids are supplied, a
-     * unique set may or may not be returned.  identifiers.
+     * unique set may or may not be returned.
      *
      * @param orgIds a list of Org Ids
      * @param contextInfo information containing the principalId and
@@ -246,7 +430,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgInfo> getOrgsByIds(@WebParam(name = "orgIds") List<String> orgIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgInfo> getOrgsByIds(@WebParam(name = "orgIds") List<String> orgIds, 
+                                      @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of Org Ids by Org Type.
@@ -262,7 +452,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgIdsByType(@WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgIdsByType(@WebParam(name = "orgTypeKey") String orgTypeKey, 
+                                        @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Search methods for Org Id Entity Pattern.
@@ -281,7 +476,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> searchForOrgIds(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> searchForOrgIds(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                        @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+         throws InvalidParameterException, 
+                MissingParameterException, 
+                OperationFailedException, 
+                PermissionDeniedException;
 
     /**
      * Searches for Orgs that meet the given search criteria.
@@ -296,7 +496,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgInfo> searchForOrgs(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgInfo> searchForOrgs(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                       @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // CRUD methods for Org Id Entity Pattern.
@@ -319,8 +524,8 @@ public interface OrganizationService extends SearchService {
      * @param orgInfo the identifier for the Org to be validated
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
-     * @return a list of validation results or an empty list if validation
-     *         succeeded
+     * @return a list of validation results or an empty list if
+     *         validation succeeded
      * @throws DoesNotExistException validationTypeKey or orgTypeKey
      *         is not found
      * @throws InvalidParameterException orgInfo or contextInfo is not valid
@@ -329,7 +534,15 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<ValidationResultInfo> validateOrg(@WebParam(name = "validationTypeKey") String validationTypeKey, @WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "orgInfo") OrgInfo orgInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<ValidationResultInfo> validateOrg(@WebParam(name = "validationTypeKey") String validationTypeKey, 
+                                                  @WebParam(name = "orgTypeKey") String orgTypeKey, 
+                                                  @WebParam(name = "orgInfo") OrgInfo orgInfo, 
+                                                  @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Creates a new Org. The Org Id, Type and Meta information may
@@ -352,7 +565,16 @@ public interface OrganizationService extends SearchService {
      * @throws ReadOnlyException an attempt at supplying information
      *         designated as read only
      */
-    public OrgInfo createOrg(@WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "orgInfo") OrgInfo orgInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException;
+    public OrgInfo createOrg(@WebParam(name = "orgTypeKey") String orgTypeKey, 
+                             @WebParam(name = "orgInfo") OrgInfo orgInfo, 
+                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException;
 
     /**
      * Updates an existing Org. The Org id, Type, and
@@ -375,7 +597,17 @@ public interface OrganizationService extends SearchService {
      * @throws VersionMismatchException an optimistic locking failure
      *         or the action was attempted on an out of date version
      */
-    public OrgInfo updateOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "orgInfo") OrgInfo orgInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException;
+    public OrgInfo updateOrg(@WebParam(name = "orgId") String orgId, 
+                             @WebParam(name = "orgInfo") OrgInfo orgInfo, 
+                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException, 
+               VersionMismatchException;
 
     /**
      * Deletes an existing Org.
@@ -391,7 +623,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public StatusInfo deleteOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteOrg(@WebParam(name = "orgId") String orgId, 
+                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Existing setup methods for OrgOrgRelations
@@ -400,7 +638,9 @@ public interface OrganizationService extends SearchService {
     /** 
      * Retrieves the list of all types of relationships between
      * organizations known to the service.
-     *
+     * 
+     * Deprecated: instead use the type service directly
+     * 
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return list of organization to organization relationship types
@@ -410,30 +650,19 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<TypeInfo> getOrgOrgRelationTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<TypeInfo> getOrgOrgRelationTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /** 
      * Retrieves the Types of relationships between organizations that
      * are allowed for a particular type of organization.
      *
-     * @param orgTypeKey an identifier for an Org Type
-     * @param contextInfo information containing the principalId and
-     *        locale information about the caller of service operation
-     * @return a list of relationship types between organizations for
-     *         the specified organization type or an empty list if
-     *         none found
-     * @throws InvalidParameterException contextInfo is not valid
-     * @throws MissingParameterException orgTypeKey or contextInfo is
-     *         missing or null
-     * @throws OperationFailedException unable to complete request
-     * @throws PermissionDeniedException an authorization failure occurred
-     */
-    public List<TypeInfo> getOrgOrgRelationTypesForOrgType(@WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
-
-    /** 
-     * Retrieves the Types of relationships between organizations that
-     * are allowed for a particular type of organization.
-     *
+     * Deprecated: use type service directly to get allowed types
+     * 
      * @param orgTypeKey an identifier for an Org Type
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
@@ -447,13 +676,20 @@ public interface OrganizationService extends SearchService {
      * @throws PermissionDeniedException an authorization failure occurred
      */
     @Deprecated
-    public TypeInfo getOrgOrgRelationTypeForOrgType(@WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
-
+    public List<TypeInfo> getOrgOrgRelationTypesForOrgType(@WebParam(name = "orgTypeKey") String orgTypeKey, 
+                                                           @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves the Types of relationships between organizations that
      * are allowed for a particular organization hierarchy.
      *
+     * Deprecated: use list of org org relation types on org hierarchy
+     * object.
+     * 
      * @param orgHierarchyId an identifier for an OrgHierarchy
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
@@ -465,7 +701,14 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<TypeInfo> getOrgOrgRelationTypesForOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<TypeInfo> getOrgOrgRelationTypesForOrgHierarchy(@WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Test method for OrgOrgRelation.
@@ -474,6 +717,8 @@ public interface OrganizationService extends SearchService {
     /** 
      * Tests if a org has a current relationship with a specified organization.
      *
+     * Deprecated: use getOrgOrgRelationsByOrgs
+     * 
      * @param orgId identifier of the organization
      * @param comparisonOrgId identifier of the organization to be compared to
      * @param orgOrgRelationTypeKey type of relationship between the organizations
@@ -487,11 +732,19 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public Boolean hasOrgOrgRelation(@WebParam(name = "orgId") String orgId, @WebParam(name = "comparisonOrgId") String comparisonOrgId, @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public Boolean hasOrgOrgRelation(@WebParam(name = "orgId") String orgId, 
+                                     @WebParam(name = "comparisonOrgId") String comparisonOrgId, 
+                                     @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, 
+                                     @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Lookup Methods for OrgOrgRelation Symmetric Relationship
-    // Pattern.
+    // Pattern. (note: revisit symmetrical pattern)
     //
 
     /** 
@@ -509,7 +762,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public OrgOrgRelationInfo getOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgOrgRelationInfo getOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, 
+                                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgOrgRelations from a list of
@@ -521,7 +780,8 @@ public interface OrganizationService extends SearchService {
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return a list of OrgOrgRelations
-     * @throws DoesNotExistException an orgOrgRelationId in the list not found
+     * @throws DoesNotExistException an orgOrgRelationId in the list
+     *         not found
      * @throws InvalidParameterException contextInfo is not valid
      * @throws MissingParameterException orgOrgRelationIds, an
      *         orgOrgRelationId in the orgOrgRelationIds, or
@@ -529,7 +789,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgOrgRelationInfo> getOrgOrgRelationsByIds(@WebParam(name = "orgOrgRelationIds") List<String> orgOrgRelationIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgOrgRelationInfo> getOrgOrgRelationsByIds(@WebParam(name = "orgOrgRelationIds") List<String> orgOrgRelationIds, 
+                                                            @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgOrgRelation Ids by OrgOrgRelation Type.
@@ -545,7 +811,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgOrgRelationIdsByType(@WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgOrgRelationIdsByType(@WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, 
+                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves all OrgOrgRelations to the given Org independent of
@@ -562,62 +833,125 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgOrgRelationInfo> getOrgOrgRelationsByOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgOrgRelationInfo> getOrgOrgRelationsByOrg(@WebParam(name = "orgId") String orgId, 
+                                                            @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
-     * Retrieves all OrgOrgRelations between the given Orgs.
+     * Retrieves all OrgOrgRelations between the given Orgs.  The org
+     * Id and peer id can appear in either side of the relationship.
      * 
      * @param orgId the identifier for the Org
+     * @param peerOrgId the identifier for another peer Org
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
-     * @return a list of OrgOrgrelations between the given Orgs or an empty list
-     *         if none found
+     * @return a list of OrgOrgrelations between the given Orgs or an
+     *         empty list if none found
      * @throws InvalidParameterException contextInfo is not valid
      * @throws MissingParameterException orgId, orgPeerId, or
      *         contextInfo is missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgOrgRelationInfo> getOrgOrgRelationsByOrgs(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgOrgRelationInfo> getOrgOrgRelationsByOrgs(@WebParam(name = "orgId") String orgId,
+                                                             @WebParam(name = "peerOrgId") String peerOrgId,
+                                                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgOrgRelations of the specified
-     * OrgOrgRelationType for an Org. (these parameters are
-     * backwards).
+     * OrgOrgRelationType for Org.
      * 
-     * @param orgId the identifier for an Org
+     * Notes: (1) The org specified must match the first org not the
+     * relatedOrgId.  (2) these parameters are listed backwards than
+     * they are specified in the method name.  (3) This could be used
+     * to navigate down a hierarchy.
+     * 
+     * @param orgId the identifier for an Org that matches the first
+     *        org in the relationship
+     * @param orgOrgRelationTypeKey the identifier for an
+     *        OrgOrgRelation Type
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return a list of OrgOrgRelations of the specified
+     *         OrgOrgRelationType for the given Org or an empty list
+     *         if none found
+     * @throws InvalidParameterException contextInfo is not valid
+     * @throws MissingParameterException orgOrgRelationTypeKey, orgId,
+     *         or contextInfo is missing or null
+     * @throws OperationFailedException unable to complete request
+     * @throws PermissionDeniedException an authorization failure occurred
+     */
+    public List<OrgOrgRelationInfo> getOrgOrgRelationsByTypeAndOrg(@WebParam(name = "orgId") String orgId, 
+                                                                   @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, 
+                                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
+
+    /**
+     * Retrieves a list of OrgOrgRelations of the specified
+     * OrgOrgRelationType for a related Org.
+     * 
+     * Notes: (1) The org specified must match the second org not the
+     * first orgId.  (2) these parameters are listed backwards than
+     * they are specified in the method name.  (3) This could be used
+     * to navigate up a hierarchy.
+     * 
+     * @param relatedOrgId the identifier for an Org that matches the first org in the 
+     *        relationship
      * @param orgOrgRelationTypeKey the identifier for an
      *        OrgOrgRelation Type
      * @param contextInfo information containing the principalId and locale
      *        information about the caller of service operation
      * @return a list of OrgOrgRelations of the specified OrgOrgRelationType for
      *         the given Org or an empty list if none found
-     * @throws InvalidParameterException contextInfo is notvalid
+     * @throws InvalidParameterException contextInfo is not valid
      * @throws MissingParameterException orgOrgRelationTypeKey, orgId, or
      *         contextInfo is missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgOrgRelationInfo> getOrgOrgRelationsByTypeAndOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
-
+    public List<OrgOrgRelationInfo> getOrgOrgRelationsByTypeAndRelatedOrg(@WebParam(name = "relatedOrgId") String relatedOrgId, 
+                                                                          @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, 
+                                                                          @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
+    
     //
-    // Search methods for OrgOrgRelation Symmetrical Relationship Pattern.
+    // Search methods for OrgOrgRelation Symmetrical Relationship
+    // Pattern.
     //
 
     /**
-     * Searches for OrgOrgRelations that meet the given search criteria.
+     * Searches for OrgOrgRelations that meet the given search
+     * criteria.
      * 
      * @param criteria the search criteria
-     * @param contextInfo information containing the principalId and locale
-     *        information about the caller of service operation
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
      * @return a list of OrgOrgRelation identifiers matching the criteria
      * @throws InvalidParameterException criteria or contextInfo is not valid
-     * @throws MissingParameterException criteria or contextInfo is missing or
-     *         null
+     * @throws MissingParameterException criteria or contextInfo is
+     *         missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> searchForOrgOrgRelationIds(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> searchForOrgOrgRelationIds(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Searches for OrgOrgRelations that meet the given search
@@ -628,15 +962,21 @@ public interface OrganizationService extends SearchService {
      *        information about the caller of service operation
      * @return a list of OrgOrgRelations matching the criteria
      * @throws InvalidParameterException contextInfo is invalid
-     * @throws MissingParameterException criteria or contextInfo is missing or
-     *         null
+     * @throws MissingParameterException criteria or contextInfo is
+     *         missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgOrgRelationInfo> searchForOrgOrgRelations(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgOrgRelationInfo> searchForOrgOrgRelations(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
-    // CRUD methods for OrgOrgRelation Symmetrical Relationship Pattern.
+    // CRUD methods for OrgOrgRelation Symmetrical Relationship
+    // Pattern.
     //
 
     /**
@@ -657,10 +997,10 @@ public interface OrganizationService extends SearchService {
      * @param orgPeerId a the identifier for the Org peer
      * @param orgOrgRelationTypeKey the identifier for the OrgOrgRelation Type
      * @param orgOrgRelationInfo the OrgOrgRelation to be validated
-     * @param contextInfo information containing the principalId and locale
-     *        information about the caller of service operation
-     * @return a list of validation results or an empty list if validation
-     *         succeeded
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
+     * @return a list of validation results or an empty list if
+     *         validation succeeded
      * @throws DoesNotExistException validationTypeKey, orgId,
      *         orgPeerId, or orgOrgRelationTypeKey is not found
      * @throws InvalidParameterException orgOrgRelationInfo or
@@ -671,7 +1011,17 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public List<ValidationResultInfo> validateOrgOrgRelation(@WebParam(name = "validationTypeKey") String validationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "orgPeerId") String orgPeerId, @WebParam(name = "orgOrgrelationTypeKey") String orgOrgRelationTypeKey, @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<ValidationResultInfo> validateOrgOrgRelation(@WebParam(name = "validationTypeKey") String validationTypeKey, 
+                                                             @WebParam(name = "orgId") String orgId, 
+                                                             @WebParam(name = "orgPeerId") String orgPeerId, 
+                                                             @WebParam(name = "orgOrgrelationTypeKey") String orgOrgRelationTypeKey, 
+                                                             @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, 
+                                                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Creates a new OrgOrgRelation. The OrgOrgRelation Id, Type, Org
@@ -679,7 +1029,8 @@ public interface OrganizationService extends SearchService {
      * 
      * @param orgId a peer of the relationship
      * @param orgPeerId a peer of the relationship
-     * @param orgOrgRelationTypeKey the identifier for the Type of OrgOrgRelation
+     * @param orgOrgRelationTypeKey the identifier for the Type of
+     *        OrgOrgRelation
      * @param orgOrgRelationInfo the relationship to be created
      * @param contextInfo information containing the principalId and locale
      *        information about the caller of service operation
@@ -697,16 +1048,28 @@ public interface OrganizationService extends SearchService {
      * @throws ReadOnlyException an attempt at supplying information
      *         designated as read only
      */
-    public OrgOrgRelationInfo createOrgOrgRelation(@WebParam(name = "orgId") String orgId, @WebParam(name = "orgPeerId") String orgPeerId, @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException;
+    public OrgOrgRelationInfo createOrgOrgRelation(@WebParam(name = "orgId") String orgId, 
+                                                   @WebParam(name = "orgPeerId") String orgPeerId, 
+                                                   @WebParam(name = "orgOrgRelationTypeKey") String orgOrgRelationTypeKey, 
+                                                   @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, 
+                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               DataValidationErrorException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException;
 
     /**
      * Updates an Org Milestone Relationship. The OrgOrgRelation Id,
      * Type, Org Ids, and Meta information may not be changed.
      * 
-     * @param orgOrgRelationId the identifier for the OrgOrgRelation updated
+     * @param orgOrgRelationId the identifier for the OrgOrgRelation
+     *        updated
      * @param orgOrgRelationInfo the new data for the OrgOrgRelation
-     * @param contextInfo information containing the principalId and locale
-     *        information about the caller of service operation
+     * @param contextInfo information containing the principalId and
+     *        locale information about the caller of service operation
      * @return the updated OrgOrgRelation
      * @throws DataValidationErrorException supplied data is invalid
      * @throws DoesNotExistException orgOrgRelationId is not found
@@ -718,10 +1081,20 @@ public interface OrganizationService extends SearchService {
      * @throws PermissionDeniedException an authorization failure occurred
      * @throws ReadOnlyException an attempt at supplying information
      *         designated as read-only
-     * @throws VersionMismatchException optimistic locking failure or the action
-     *         was attempted on an out of date version
+     * @throws VersionMismatchException optimistic locking failure or
+     *         the action was attempted on an out of date version
      */
-    public OrgOrgRelationInfo updateOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException;
+    public OrgOrgRelationInfo updateOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, 
+                                                   @WebParam(name = "orgOrgRelationInfo") OrgOrgRelationInfo orgOrgRelationInfo, 
+                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException, 
+               VersionMismatchException;
 
     /**
      * Deletes an existing OrgOrgRelation.
@@ -738,7 +1111,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public StatusInfo deleteOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteOrgOrgRelation(@WebParam(name = "orgOrgRelationId") String orgOrgRelationId, 
+                                           @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Existing setup methods for OrgPersonRelations
@@ -748,6 +1127,8 @@ public interface OrganizationService extends SearchService {
      * Retrieves all Types of OrgPersonRelations between an
      * organization and a person known by this service.
      *
+     * Deprecated: use type service directly
+     * 
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return a list of all OrgPersonRelation Types
@@ -757,12 +1138,19 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<TypeInfo> getOrgPersonRelationTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<TypeInfo> getOrgPersonRelationTypes(@WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /** 
      * Retrieves the OrgPersonRelationship Types between an
      * organization and a person that are allowed for a particular Org
      * Type.
+     * 
+     * Deprecated: use type service directly to get related types
      *
      * @param orgTypeKey an identifier for an Org Type
      * @param contextInfo information containing the principalId and
@@ -776,7 +1164,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<TypeInfo> getOrgPersonRelationTypesForOrgType(@WebParam(name = "orgTypeKey") String orgTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<TypeInfo> getOrgPersonRelationTypesForOrgType(@WebParam(name = "orgTypeKey") String orgTypeKey, 
+                                                              @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Test method for OrgPersonRelation.
@@ -786,6 +1180,9 @@ public interface OrganizationService extends SearchService {
      * Tests if a person has a current relationship with a specified
      * organization
      *
+     * Deprecated: use getOrgPersonRelationsByOrgAndPerson instead
+     * Note: Perhaps use case of this may be to handle privacy issues?
+     * 
      * @param orgId identifier of the organization
      * @param personId identifier of the person
      * @param orgPersonRelationTypeKey type of relationship between the 
@@ -801,7 +1198,15 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public Boolean hasOrgPersonRelation(@WebParam(name="orgId") String orgId, @WebParam(name="personId") String personId, @WebParam(name="orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public Boolean hasOrgPersonRelation(@WebParam(name="orgId") String orgId, 
+                                        @WebParam(name="personId") String personId, 
+                                        @WebParam(name="orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                        @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Lookup methods for OrgPersonRelation Asymmetrical Relationship
@@ -823,7 +1228,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public OrgPersonRelationInfo getOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgPersonRelationInfo getOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, 
+                                                      @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPersonRelations from a list of
@@ -843,12 +1254,20 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByIds(@WebParam(name = "orgPersonRelationIds") List<String> orgPersonRelationIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByIds(@WebParam(name = "orgPersonRelationIds") List<String> orgPersonRelationIds, 
+                                                                  @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
-     * Retrieves a list of OrgPersonRelation Ids by OrgPersonRelation Type.
+     * Retrieves a list of OrgPersonRelation Ids by OrgPersonRelation
+     * Type.
      * 
-     * @param orgPersonRelationTypeKey an identifier for an OrgPersonRelation Type
+     * @param orgPersonRelationTypeKey an identifier for an
+     *        OrgPersonRelation Type
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return a list of OrgPersonRelation identifiers matching
@@ -859,7 +1278,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgPersonRelationIdsByType(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgPersonRelationIdsByType(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                      @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves all OrgPersonRelations to the given Org.
@@ -875,7 +1299,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByOrg(@WebParam(name = "orgId") String orgId, 
+                                                                  @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPersonRelations of the specified
@@ -886,35 +1315,22 @@ public interface OrganizationService extends SearchService {
      * @param orgId the identifier for an Org
      * @param contextInfo information containing the principalId and locale
      *        information about the caller of service operation
-     * @return a list of OrgPersonRelations of the specified OrgPersonRelationType for
-     *         the given Org or an empty list if none found
+     * @return a list of OrgPersonRelations of the specified
+     *         OrgPersonRelationType for the given Org or an empty
+     *         list if none found
      * @throws InvalidParameterException contextInfo is not valid
      * @throws MissingParameterException orgPersonRelationTypeKey,
      *         orgId, or contextInfo is missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndOrg(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
-
-    /**
-     * Retrieves a list of OrgPersonRelations of the specified
-     * OrgPersonRelationType for an Org.
-     *
-     * @param orgPersonRelationTypeKey the identifier for an
-     *        OrgPersonRelationType
-     * @param orgId the identifier for an Org
-     * @param contextInfo information containing the principalId and locale
-     *        information about the caller of service operation
-     * @return a list of OrgPersonRelations of the specified OrgPersonRelationType for
-     *         the given Org or an empty list if none found
-     * @throws InvalidParameterException contextInfo is not valid
-     * @throws MissingParameterException orgPersonRelationTypeKey,
-     *         orgId, or contextInfo is missing or null
-     * @throws OperationFailedException unable to complete request
-     * @throws PermissionDeniedException an authorization failure occurred
-     */
-    @Deprecated
-    public OrgPersonRelationInfo getOrgPersonRelationByTypeAndOrg(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndOrg(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                         @WebParam(name = "orgId") String orgId, 
+                                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves all OrgPersonRelations to the given Person.
@@ -930,7 +1346,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByPerson(@WebParam(name = "personId") String personId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByPerson(@WebParam(name = "personId") String personId, 
+                                                                     @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPersonRelations of the specified
@@ -949,7 +1370,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndPerson(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "personId") String personId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndPerson(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                            @WebParam(name = "personId") String personId, 
+                                                                            @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves all OrgPersonRelations between the given Orn and
@@ -967,7 +1394,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByOrgAndPerson(@WebParam(name = "orgId") String orgId, @WebParam(name = "personId") String personId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByOrgAndPerson(@WebParam(name = "orgId") String orgId, 
+                                                                           @WebParam(name = "personId") String personId,
+                                                                           @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPersonRelations of the specified
@@ -988,7 +1421,14 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndOrgAndPerson(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "personId") String personId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> getOrgPersonRelationsByTypeAndOrgAndPerson(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                                  @WebParam(name = "orgId") String orgId, 
+                                                                                  @WebParam(name = "personId") String personId, 
+                                                                                  @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Search methods for OrgPersonRelation Asymmetrical Relationship
@@ -1009,7 +1449,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> searchForOrgPersonRelationIds(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> searchForOrgPersonRelationIds(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                      @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Searches for OrgPersonRelations that meet the given search
@@ -1025,7 +1470,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPersonRelationInfo> searchForOrgPersonRelations(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPersonRelationInfo> searchForOrgPersonRelations(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // CRUD methods for OrgPersonRelation Asymmetrical Relationship
@@ -1064,7 +1514,17 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public List<ValidationResultInfo> validateOrgPersonRelation(@WebParam(name = "validationTypeKey") String validationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "personId") String personId, @WebParam(name = "orgPersonrelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<ValidationResultInfo> validateOrgPersonRelation(@WebParam(name = "validationTypeKey") String validationTypeKey, 
+                                                                @WebParam(name = "orgId") String orgId, 
+                                                                @WebParam(name = "personId") String personId, 
+                                                                @WebParam(name = "orgPersonrelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, 
+                                                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Creates a new OrgPersonRelation. The OrgPersonRelation Id, Type, Org
@@ -1091,11 +1551,22 @@ public interface OrganizationService extends SearchService {
      * @throws ReadOnlyException an attempt at supplying information
      *         designated as read only
      */
-    public OrgPersonRelationInfo createOrgPersonRelation(@WebParam(name = "orgId") String orgId, @WebParam(name = "personId") String personId, @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException;
+    public OrgPersonRelationInfo createOrgPersonRelation(@WebParam(name = "orgId") String orgId, 
+                                                         @WebParam(name = "personId") String personId, 
+                                                         @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                         @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, 
+                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               DataValidationErrorException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException;
 
     /**
-     * Updates an Org Milestone Relationship. The OrgPersonRelation Id,
-     * Type, Org Ids, and Meta information may not be changed.
+     * Updates an Org Milestone Relationship. The OrgPersonRelation
+     * Id, Type, Org Ids, and Meta information may not be changed.
      * 
      * @param orgPersonRelationId the identifier for the
      *        OrgPersonRelation updated
@@ -1116,7 +1587,17 @@ public interface OrganizationService extends SearchService {
      * @throws VersionMismatchException optimistic locking failure or
      *         the action was attempted on an out of date version
      */
-    public OrgPersonRelationInfo updateOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException;
+    public OrgPersonRelationInfo updateOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, 
+                                                         @WebParam(name = "orgPersonRelationInfo") OrgPersonRelationInfo orgPersonRelationInfo, 
+                                                         @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException, 
+               VersionMismatchException;
 
     /**
      * Deletes an existing OrgPersonRelation.
@@ -1133,7 +1614,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public StatusInfo deleteOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteOrgPersonRelation(@WebParam(name = "orgPersonRelationId") String orgPersonRelationId, 
+                                              @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Lookup Methods for OrgPositionRestriction Dependent Id Entity
@@ -1156,7 +1643,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public OrgPositionRestrictionInfo getOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgPositionRestrictionInfo getOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, 
+                                                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPositionRestrictions from a list of
@@ -1177,11 +1670,17 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPositionRestrictionInfo> getOrgPositionRestrictionsByIds(@WebParam(name = "orgPositionRestrictionIds") List<String> orgPositionRestrictionIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPositionRestrictionInfo> getOrgPositionRestrictionsByIds(@WebParam(name = "orgPositionRestrictionIds") List<String> orgPositionRestrictionIds, 
+                                                                            @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPositionRestrictions by
-     * OrgPositionRestriction Type.
+     * OrgPersonRelation Type.
      * 
      * @param orgPersonRelationTypeKey an identifier for the OrgPositionRestriction
      *        type
@@ -1195,7 +1694,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgPositionRestrictionIdsByType(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgPositionRestrictionIdsByType(@WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Retrieves a list of OrgPositionRestrictions by Org.
@@ -1211,7 +1715,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> getOrgPositionRestrictionIdsByOrg(@WebParam(name = "orgId") String orgId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> getOrgPositionRestrictionIdsByOrg(@WebParam(name = "orgId") String orgId, 
+                                                          @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // Search methods for OrgPositionRestriction Dependent Id Entity
@@ -1233,7 +1743,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<String> searchForOrgPositionRestrictionIds(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<String> searchForOrgPositionRestrictionIds(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                           @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Searches for OrgPositionRestrictions that meet the given search
@@ -1250,7 +1765,12 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgPositionRestrictionInfo> searchForOrgPositionRestrictions(@WebParam(name = "criteria") QueryByCriteria criteria, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<OrgPositionRestrictionInfo> searchForOrgPositionRestrictions(@WebParam(name = "criteria") QueryByCriteria criteria, 
+                                                                             @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     //
     // CRUD methods for OrgPositionRestriction Dependent Id Entity
@@ -1291,7 +1811,16 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<ValidationResultInfo> validateOrgPositionRestriction(@WebParam(name = "validationTypeKey") String validationTypeKey, @WebParam(name = "orgId") String orgId, @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public List<ValidationResultInfo> validateOrgPositionRestriction(@WebParam(name = "validationTypeKey") String validationTypeKey, 
+                                                                     @WebParam(name = "orgId") String orgId, 
+                                                                     @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                     @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, 
+                                                                     @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Creates a new OrgPositionRestriction. The
@@ -1305,6 +1834,8 @@ public interface OrganizationService extends SearchService {
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
      * @return the new OrgPositionRestriction
+     * @throws AlreadyExistsException if there already is an org position restriction with the specified 
+     *         orgId and orgPersonRelationType key 
      * @throws DataValidationErrorException supplied data is invalid
      * @throws DoesNotExistException orgPersonRelationTypeKey does not exist or is
      *         not supported
@@ -1318,7 +1849,18 @@ public interface OrganizationService extends SearchService {
      * @throws ReadOnlyException an attempt at supplying information
      *         designated as read only
      */
-    public OrgPositionRestrictionInfo createOrgPositionRestriction(@WebParam(name = "orgId") String orgId, @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException;
+    public OrgPositionRestrictionInfo createOrgPositionRestriction(@WebParam(name = "orgId") String orgId, 
+                                                                   @WebParam(name = "orgPersonRelationTypeKey") String orgPersonRelationTypeKey, 
+                                                                   @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, 
+                                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws AlreadyExistsException, 
+               DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException;
 
     /**
      * Updates an existing OrgPositionRestriction. The
@@ -1345,7 +1887,17 @@ public interface OrganizationService extends SearchService {
      * @throws VersionMismatchException an optimistic locking failure
      *         or the action was attempted on an out of date version
      */
-    public OrgPositionRestrictionInfo updateOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException;
+    public OrgPositionRestrictionInfo updateOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, 
+                                                                   @WebParam(name = "orgPositionRestrictionInfo") OrgPositionRestrictionInfo orgPositionRestrictionInfo, 
+                                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DataValidationErrorException, 
+               DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException, 
+               ReadOnlyException, 
+               VersionMismatchException;
 
     /**
      * Deletes an existing OrgPositionRestriction.
@@ -1362,7 +1914,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public StatusInfo deleteOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteOrgPositionRestriction(@WebParam(name = "orgPositionRestrictionId") String orgPositionRestrictionId, 
+                                                   @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
                                                    
     //
     // Organization Hierarchy methods.
@@ -1388,7 +1946,14 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public Boolean isDescendant(@WebParam(name = "orgId") String orgId, @WebParam(name = "descendantOrgId") String descendantOrgId, @WebParam(name = "orgHierarchyId") String orgHierarchyId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public Boolean isDescendant(@WebParam(name = "orgId") String orgId, 
+                                @WebParam(name = "descendantOrgId") String descendantOrgId, 
+                                @WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /** 
      * Retrieves the list of identifiers for all "descendant"
@@ -1412,8 +1977,17 @@ public interface OrganizationService extends SearchService {
      *         contextInfo is missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
+     * @deprecated please use getOrgTree
      */
-    public List<String> getAllDescendants(@WebParam(name = "orgId") String orgId, @WebParam(name = "orgHierarchyId") String orgHierarchyId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<String> getAllDescendants(@WebParam(name = "orgId") String orgId, 
+                                          @WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                          @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /** 
      * Retrieves the list of identifiers for all "ancestor"
@@ -1437,20 +2011,31 @@ public interface OrganizationService extends SearchService {
      *         contextInfo is missing or null
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
+     * @deprecated please use getOrgTree
      */
-    public List<String> getAllAncestors(@WebParam(name="orgId") String orgId, @WebParam(name="orgHierarchyId") String orgHierarchyId, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    @Deprecated
+    public List<String> getAllAncestors(@WebParam(name="orgId") String orgId, 
+                                        @WebParam(name="orgHierarchyId") String orgHierarchyId, 
+                                        @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 
     /**
      * Finds a list of all orgs in the org hierarchy starting at the
-     * root org and going down maxLevels of the tree
+     * root org and going down/up maxLevels of the tree.
      *
-     * @param rootOrgId 
+     * @param startingOrgId
      * @param orgHierarchyId
      * @param maxLevels the max number of levels in the tree to
-     *        return. If set to 0 returns all nodes in the tree
+     *                  traverse. A positive value indicates downward
+     *                  traversal. A negative value indicates an upward traversal.
+     *                  Zero indicates an unlimited traversal in both directions.
      * @param contextInfo information containing the principalId and
      *        locale information about the caller of service operation
-     * @return List of OrgTreeInfo in
+     * @return List of OrgTreeViewInfo in
      * @throws DoesNotExistException rootOrgId or orgHierarchyId is
      *         not found, or rootOrgId is not part or orgHierarchyId
      * @throws InvalidParameterException contextInfo is not valid
@@ -1459,5 +2044,13 @@ public interface OrganizationService extends SearchService {
      * @throws OperationFailedException unable to complete request
      * @throws PermissionDeniedException an authorization failure occurred
      */
-    public List<OrgTreeInfo> getOrgTree(@WebParam(name = "rootOrgId") String rootOrgId, @WebParam(name = "orgHierarchyId") String orgHierarchyId, @WebParam(name = "maxLevels") int maxLevels, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public OrgTreeViewInfo getOrgTree(@WebParam(name = "startingOrgId") String startingOrgId,
+                                        @WebParam(name = "orgHierarchyId") String orgHierarchyId, 
+                                        @WebParam(name = "maxLevels") int maxLevels, 
+                                        @WebParam(name = "contextInfo") ContextInfo contextInfo) 
+        throws DoesNotExistException, 
+               InvalidParameterException, 
+               MissingParameterException, 
+               OperationFailedException, 
+               PermissionDeniedException;
 }

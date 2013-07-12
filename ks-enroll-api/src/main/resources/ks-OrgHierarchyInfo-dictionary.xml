@@ -82,6 +82,11 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
 	<!-- insert any overrides to the generated attribute definitions here -->
 	</bean>
 
+	<bean id="OrgHierarchyInfo.orgOrgRelationTypes" parent="OrgHierarchyInfo.orgOrgRelationTypes-parent"/>
+	<bean id="OrgHierarchyInfo.orgOrgRelationTypes-parent" abstract="true" parent="OrgHierarchyInfo.orgOrgRelationTypes-generated">
+	<!-- insert any overrides to the generated attribute definitions here -->
+	</bean>
+
 	<bean id="OrgHierarchyInfo.effectiveDate" parent="OrgHierarchyInfo.effectiveDate-parent"/>
 	<bean id="OrgHierarchyInfo.effectiveDate-parent" abstract="true" parent="OrgHierarchyInfo.effectiveDate-generated">
 	<!-- insert any overrides to the generated attribute definitions here -->

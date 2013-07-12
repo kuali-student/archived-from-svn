@@ -42,8 +42,18 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
 	<!-- insert any overrides to the generated object definitions here -->
 	</bean>
 
-	<bean id="OrgCodeInfo.key" parent="OrgCodeInfo.key-parent"/>
-	<bean id="OrgCodeInfo.key-parent" abstract="true" parent="OrgCodeInfo.key-generated">
+	<bean id="OrgCodeInfo.id" parent="OrgCodeInfo.id-parent"/>
+	<bean id="OrgCodeInfo.id-parent" abstract="true" parent="OrgCodeInfo.id-generated">
+	<!-- insert any overrides to the generated attribute definitions here -->
+	</bean>
+
+	<bean id="OrgCodeInfo.typeKey" parent="OrgCodeInfo.typeKey-parent"/>
+	<bean id="OrgCodeInfo.typeKey-parent" abstract="true" parent="OrgCodeInfo.typeKey-generated">
+	<!-- insert any overrides to the generated attribute definitions here -->
+	</bean>
+
+	<bean id="OrgCodeInfo.stateKey" parent="OrgCodeInfo.stateKey-parent"/>
+	<bean id="OrgCodeInfo.stateKey-parent" abstract="true" parent="OrgCodeInfo.stateKey-generated">
 	<!-- insert any overrides to the generated attribute definitions here -->
 	</bean>
 

@@ -15,18 +15,16 @@
  */
 package org.kuali.student.r2.core.organization.dto;
 
-import java.io.Serializable;
-import java.util.List;
+import org.kuali.student.r2.common.dto.IdNamelessEntityInfo;
+import org.kuali.student.r2.common.dto.RichTextInfo;
+import org.kuali.student.r2.core.organization.infc.OrgCode;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlType;
-
-import org.kuali.student.r2.common.dto.KeyNamelessEntityInfo;
-import org.kuali.student.r2.common.dto.RichTextInfo;
-import org.kuali.student.r2.core.organization.infc.OrgCode;
-//import org.w3c.dom.Element;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Detailed information about organization codes.
@@ -35,10 +33,10 @@ import org.kuali.student.r2.core.organization.infc.OrgCode;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OrgCodeInfo", propOrder = {
-    "key", "value", "descr",
+    "id", "typeKey", "stateKey", "value", "descr",
     "meta", "attributes", "_futureElements" }) 
 public class OrgCodeInfo
-        extends KeyNamelessEntityInfo
+        extends IdNamelessEntityInfo
         implements OrgCode, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,9 +61,25 @@ public class OrgCodeInfo
     public OrgCodeInfo(OrgCode orgCode) {
         super(orgCode);
         this.value = orgCode.getValue();
-        if (orgCode.getDescr() != null) {
-            this.descr = new RichTextInfo (orgCode.getDescr());
+        if (orgCode.getDescr() != null && orgCode.getDescr().getPlain() != null) {
+            RichTextInfo info = new RichTextInfo();
+            info.setFormatted(orgCode.getDescr().getFormatted());
+            info.setPlain(orgCode.getDescr().getPlain());
+            this.descr = info;
         }
+    }
+
+    @Override
+    public String getKey() {
+        return getTypeKey();
+    }
+
+    /**
+     * @deprecated Please use the typeKey instead.
+     */
+    @Deprecated
+    public void setKey(String key) {
+        setTypeKey(key);
     }
 
     @Override
@@ -73,6 +87,10 @@ public class OrgCodeInfo
         return descr;
     }
 
+    /**
+     * @deprecated Please use the type description instead.
+     */
+    @Deprecated
     public void setDescr(RichTextInfo descr) {
         this.descr = descr;
     }
@@ -85,7 +103,7 @@ public class OrgCodeInfo
     public void setValue(String value) {
         this.value = value;
     }
-    
-    
-    
+
+
+
 }

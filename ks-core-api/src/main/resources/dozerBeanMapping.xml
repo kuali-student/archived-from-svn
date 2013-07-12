@@ -140,32 +140,6 @@
 		</field>
 	</mapping>
 
-	<!-- ks-core-api: org.kuali.student.r*.core.organization.dto mappings -->
-	<mapping>
-		<class-a>org.kuali.student.r1.core.organization.dto.OrgCodeInfo
-		</class-a>
-		<class-b>org.kuali.student.r2.core.organization.dto.OrgCodeInfo
-		</class-b>
-		<field
-			custom-converter="org.kuali.student.common.conversion.util.converter.AttributeInfoConverter">
-			<a>attributes</a><!-- This is a Map<String, String> -->
-			<b>attributes</b><!-- This is a List<AttributeInfo> -->
-			<a-hint>java.util.HashMap</a-hint>
-			<b-hint>java.util.ArrayList</b-hint>
-		</field>
-		<field
-			custom-converter="org.kuali.student.common.conversion.util.converter.DescToRichTextConverter">
-			<a>desc</a><!-- This is a String -->
-			<b get-method="getDescr" set-method="setDescr">descr</b><!-- This is a RichTextInfo -->
-		</field>
-		<field>
-			<a>metaInfo</a>
-			<b get-method="getMeta" set-method="setMeta">meta</b>
-		</field>
-	</mapping>
-	
-	
-
 	<!-- ks-core-api: org.kuali.student.r*.core.proposal.dto mappings -->
 	<mapping>
 		<class-a>org.kuali.student.r1.core.proposal.dto.ProposalInfo</class-a>

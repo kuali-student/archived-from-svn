@@ -46,7 +46,7 @@ public interface OrgPositionRestriction
      * Organization to person relationship type the restriction
      * applies to.
      *
-     * @name Organization Person Relation Type Key
+     * @name Org Person Relation Type Key
      * @required
      * @readOnly
      */
@@ -91,12 +91,11 @@ public interface OrgPositionRestriction
 
     /**
      * Acts as an upper bound on the number of relationships of this type 
-     * expected for the organization. The values of this field are restricted 
-     * to integer values and the string "unbounded". If specified, 
-     * this should be greater than or equal to the value of minNumRelations, 
-     * with the value "unbounded" being automatically assumed to be greater.
+     * expected for the organization. If specified, this should be greater than
+     * or equal to the value of minNumRelations.
+     * The value null represents an unbounded number of relationships.
      *
      * @name Maximum Number of Relations
      */
-    public String getMaxNumRelations();
+    public Integer getMaxNumRelations();
 }
