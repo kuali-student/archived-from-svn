@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.pom</groupId>
         <artifactId>kuali-common</artifactId>
-        <version>3.0.17</version>
+        <version>3.2.2</version>
     </parent>
     <groupId>org.kuali.student</groupId>
     <artifactId>student</artifactId>
@@ -33,103 +33,6 @@
         <system>jenkins</system>
         <url>http://ci.rice.kuali.org</url>
     </ciManagement>
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>ks-deployments</module>
-                <module>ks-core</module>
-                <module>ks-lum</module>
-                <module>ks-enroll</module>
-                <module>ks-api</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-ui</id>
-            <modules>
-                <module>ks-core</module>
-                <module>ks-lum</module>
-                <module>ks-enroll</module>
-                <module>ks-api</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>skip-all-wars</id>
-            <modules>
-                <module>ks-core</module>
-                <module>ks-lum</module>
-                <module>ks-enroll</module>
-                <module>ks-api</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>impex-only</id>
-            <modules>
-                <module>ks-deployments</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>sql-only</id>
-            <modules>
-                <module>ks-core</module>
-                <module>ks-lum</module>
-                <module>ks-enroll</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>jdk7-with-jdk6-bytecode</id>
-            <modules>
-                <module>ks-deployments</module>
-                <module>ks-core</module>
-                <module>ks-lum</module>
-                <module>ks-enroll</module>
-                <module>ks-api</module>
-            </modules>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>enforce-rules-for-cross-compilation</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <phase>${ks.enforcer.phase}</phase>
-                                <configuration>
-                                    <rules>
-                                    <requireJavaVersion>
-                                    <version>1.7</version>
-                                    </requireJavaVersion>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <source>${project.java.version}</source>
-                            <target>${project.java.version}</target>
-                            <fork>true</fork>
-                            <compilerArguments>
-                                <bootclasspath>${jdk6.rt.jar}</bootclasspath>
-                                <extdirs/>
-                            </compilerArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/org-service</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/org-service</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/org-service</url>
-    </scm>
     <properties>
         <ks.api.version>2.0.0-ORG-M6-SNAPSHOT</ks.api.version>
         <ks.core.version>2.0.0-ORG-SNAPSHOT</ks.core.version>
@@ -255,7 +158,154 @@
         <metainf.output.constraints>${project.build.outputDirectory}/${metainf.resource.constraints}</metainf.output.constraints>
         <metainf.output.other>${project.build.outputDirectory}/${metainf.resource.other}</metainf.output.other>
         <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
+        <kuali-impex.version>${impex.version}</kuali-impex.version>
     </properties>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>ks-deployments</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>skip-ui</id>
+            <modules>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>skip-all-wars</id>
+            <modules>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>impex-only</id>
+            <modules>
+                <module>ks-deployments</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>sql-only</id>
+            <modules>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>jdk7-with-jdk6-bytecode</id>
+            <modules>
+                <module>ks-deployments</module>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-rules-for-cross-compilation</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <phase>${ks.enforcer.phase}</phase>
+                                <configuration>
+                                    <rules>
+                                    <requireJavaVersion>
+                                    <version>1.7</version>
+                                    </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>${project.java.version}</source>
+                            <target>${project.java.version}</target>
+                            <fork>true</fork>
+                            <compilerArguments>
+                                <bootclasspath>${jdk6.rt.jar}</bootclasspath>
+                                <extdirs/>
+                            </compilerArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sonar</id>
+            <properties>
+                <ks-db-validation.resource.path>ks-deployments/ks-dbs/ks-db-validation/src/main/resources/org/kuali/student/db/ks-db-validation</ks-db-validation.resource.path>
+                <ks-impex-app-db.artifactId>ks-impex-app-db</ks-impex-app-db.artifactId>
+                <ks-impex-app-db.resource.path>ks-deployments/ks-dbs/ks-impex/${ks-impex-app-db.artifactId}/src/main/resources/org/kuali/student/db/${ks-impex-app-db.artifactId}/</ks-impex-app-db.resource.path>
+                <!-- configuration for foreign key validation in ks-sonar plugin -->
+                <kuali.student.sonar.fkvalidation.driver>oracle.jdbc.driver.OracleDriver</kuali.student.sonar.fkvalidation.driver>
+                <kuali.student.sonar.fkvalidation.username>KSAPP_SONAR</kuali.student.sonar.fkvalidation.username>
+                <kuali.student.sonar.fkvalidation.password>KSAPP_SONAR</kuali.student.sonar.fkvalidation.password>
+                <kuali.student.sonar.fkvalidation.url>jdbc:oracle:thin:@oracle.ks.kuali.org:1521:ORACLE</kuali.student.sonar.fkvalidation.url>
+                <kuali.student.sonar.fkvalidation.query.path>${ks-db-validation.resource.path}/foreignKey/</kuali.student.sonar.fkvalidation.query.path>
+                <kuali.student.sonar.fkvalidation.query.filename>missing_foreign_key_query.sql</kuali.student.sonar.fkvalidation.query.filename>
+                <!-- configuration for schema comparison in ks-sonar plugin -->
+                <kuali.student.sonar.schemacompare.app.name>KSAPP</kuali.student.sonar.schemacompare.app.name>
+                <kuali.student.sonar.schemacompare.app.path>${ks-impex-app-db.resource.path}</kuali.student.sonar.schemacompare.app.path>
+                <kuali.student.sonar.schemacompare.app.schemafile>${ks-impex-app-db.artifactId}-schema.xml</kuali.student.sonar.schemacompare.app.schemafile>
+                <kuali.student.sonar.schemacompare.app.constraintsfile>${ks-impex-app-db.artifactId}-constraints-schema.xml</kuali.student.sonar.schemacompare.app.constraintsfile>
+                <kuali.student.sonar.schemacompare.ddl.name>DDL</kuali.student.sonar.schemacompare.ddl.name>
+                <kuali.student.sonar.schemacompare.ddl.path>${ks-db-validation.resource.path}/ddl/</kuali.student.sonar.schemacompare.ddl.path>
+                <kuali.student.sonar.schemacompare.ddl.schemafile>schema.xml</kuali.student.sonar.schemacompare.ddl.schemafile>
+                <kuali.student.sonar.schemacompare.ddl.constraintsfile>constraints.xml</kuali.student.sonar.schemacompare.ddl.constraintsfile>
+                <!-- properties to create the KSAPP_SONAR db -->
+                <properties.decrypt>true</properties.decrypt>
+                <oracle.dba.username>master</oracle.dba.username>
+                <oracle.dba.password>ENC(eEFVZmL4+y/5KlzDMCt6dGlBKQzXevFp)</oracle.dba.password>
+                <oracle.dba.url>jdbc:oracle:thin:@oracle.ks.kuali.org:1521:ORACLE</oracle.dba.url>
+            </properties>
+            <modules>
+                <module>ks-core</module>
+                <module>ks-lum</module>
+                <module>ks-enroll</module>
+                <module>ks-api</module>
+                <module>ks-deployments/ks-dbs/ks-db-validation</module>
+            </modules>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>sonar-maven-plugin</artifactId>
+                            <configuration>
+                                <sonarHostURL>${sonar.host.url}</sonarHostURL>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+    <scm>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/trunk</url>
+    </scm>
     <prerequisites>
         <maven>${maven.min.version}</maven>
     </prerequisites>
@@ -812,38 +862,6 @@
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>${commons.lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity-tools</artifactId>
-                <version>${velocity.tools.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-digester</groupId>
-                        <artifactId>commons-digester</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-beanutils</groupId>
-                        <artifactId>commons-beanutils</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.struts</groupId>
-                        <artifactId>struts-taglib</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.struts</groupId>
-                        <artifactId>struts-tiles</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.struts</groupId>
-                        <artifactId>struts-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>${velocity.version}</version>
             </dependency>
             <dependency>
                 <groupId>logkit</groupId>
