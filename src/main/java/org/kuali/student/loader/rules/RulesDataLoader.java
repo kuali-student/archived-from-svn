@@ -13,10 +13,12 @@ import org.kuali.rice.krms.api.repository.rule.RuleDefinition;
 import org.kuali.rice.krms.api.repository.term.TermDefinition;
 import org.kuali.rice.krms.api.repository.term.TermParameterDefinition;
 import org.kuali.rice.krms.api.repository.term.TermSpecificationDefinition;
-import org.kuali.student.krms.naturallanguage.util.KsKrmsConstants;
-import org.kuali.student.r1.core.statement.dto.*;
+import org.kuali.student.r1.core.statement.dto.ReqCompFieldInfo;
+import org.kuali.student.r1.core.statement.dto.ReqComponentInfo;
+import org.kuali.student.r1.core.statement.dto.StatementOperatorTypeKey;
+import org.kuali.student.r1.core.statement.dto.StatementTreeViewInfo;
+import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
-import sun.org.mozilla.javascript.internal.ScriptRuntime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +32,6 @@ import java.util.Map;
  * @info This class takes in rules data in the CM format, converts it to the KRMS format and persists it via the KRMSHelper
  */
 public class RulesDataLoader {
-    private static final Logger log = Logger
-            .getLogger(RulesDataLoader.class);
 
     private KRMSHelper krmsHelper;
     private StatementHelper statementHelper;
@@ -61,12 +61,11 @@ public class RulesDataLoader {
                 continue; //skip this statement
             }
             //Create new Agenda
-            String typeName = statementHelper.getStatementTypeNameFromTypeId(statementTreeRoot.getType());
             RuleDefinition.Builder ruleBuilder = null;
             if (statementTypeToruleTypeConversionMap.containsKey(statementTreeRoot.getType())) {
                 String krmsRuleType = statementTypeToruleTypeConversionMap.get(statementTreeRoot.getType());
                 String krmsAgendaType = ruleTypeToAgendaTypeRelationMap.get(krmsRuleType);// krms type type relation
-                String krmsAgendaTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, krmsAgendaType).getId();
+                String krmsAgendaTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, krmsAgendaType).getId();
 
 
                 AgendaDefinition agenda = AgendaDefinition.Builder.create(null, currentRelatedCourse.getId() + ":" + shortenTypeName(krmsAgendaType) + ":1", krmsAgendaTypeID, "10000").build();
@@ -74,14 +73,14 @@ public class RulesDataLoader {
                 currentAgenda = krmsHelper.createAgenda(agenda);
 
                 //create a link between this agenda and clu that was linked to this statement.
-                ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create("Agenda", currentAgenda.getId(), KsKrmsConstants.NAMESPACE_CODE, "kuali.lu.type.CreditCourse", currentRelatedCourse.getId());
+                ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create("Agenda", currentAgenda.getId(), KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.lu.type.CreditCourse", currentRelatedCourse.getId());
                 refBldr.setCollectionName("Course");
                 refBldr.setActive(true);
                 krmsHelper.createReferenceObjectBinding(refBldr.build()); //Also does a find to check if it exists so we dont create a duplicate relation.
 
                 //Create root rule
-                String krmsRuleTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, krmsRuleType).getId();
-                ruleBuilder = RuleDefinition.Builder.create(null, currentRelatedCourse.getId() + ":" + shortenTypeName(krmsRuleType) + ":1", KsKrmsConstants.NAMESPACE_CODE, krmsRuleTypeID, null);
+                String krmsRuleTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, krmsRuleType).getId();
+                ruleBuilder = RuleDefinition.Builder.create(null, currentRelatedCourse.getId() + ":" + shortenTypeName(krmsRuleType) + ":1", KSKRMSServiceConstants.NAMESPACE_CODE, krmsRuleTypeID, null);
                 //currentRule = krmsHelper.createRule(ruleBuilder.build());
             } else {
                 System.out.println("Error: There is no mapping to a rule type for this statement type: " + statementTreeRoot.getType());
@@ -148,11 +147,11 @@ public class RulesDataLoader {
             //create a compound prop on the rule
             String propositionTypeID = null;
             if (rootStatement.getOperator().equals(StatementOperatorTypeKey.AND)) {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
             } else {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.OR.getCode());
             }
@@ -173,17 +172,17 @@ public class RulesDataLoader {
                 propositionType = "kuali.krms.proposition.type.freeform.text";
                 unmappedReqCompText = "No mapping for: " + reqComponent.getType();
             }
-            propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+            propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
             TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
             if (template == null) {
                 System.out.println("Warning: Converting to free text. reqComponent: " + reqComponent.getType() + ". There is no term spec for this proposition type: " + propositionType);
-                propositionType = "kuali.krms.proposition.type.freeform.text";
                 unmappedReqCompText = "No term spec for proposition type: " + propositionType;
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                propositionType = "kuali.krms.proposition.type.freeform.text";
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                 template = propositionTypeTemplateInfoMap.get(propositionType);
             }
             //get termspec
-            TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KsKrmsConstants.NAMESPACE_CODE);
+            TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KSKRMSServiceConstants.NAMESPACE_CODE);
 
             //create term
             TermDefinition.Builder termBuilder = TermDefinition.Builder.create(null, TermSpecificationDefinition.Builder.create(termSpec), null);
@@ -202,7 +201,7 @@ public class RulesDataLoader {
                         continue; //this constant will be set as a parameter on the proposition
                     }
                     String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                    //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
+                    //String termParamTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,termParamType).getId();
 
                     //create term parameter
                     TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
@@ -238,11 +237,11 @@ public class RulesDataLoader {
             //create a compound prop on the rule
             String propositionTypeID = null;
             if (rootStatement.getOperator().equals(StatementOperatorTypeKey.AND)) {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
             } else {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.OR.getCode());
             }
@@ -256,17 +255,17 @@ public class RulesDataLoader {
                     propositionType = "kuali.krms.proposition.type.freeform.text";
                     unmappedReqCompText = "No mapping for: " + reqComponent.getType();
                 }
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                 TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
                 if (template == null) {
                     System.out.println("Warning: Converting to free text. reqComponent: " + reqComponent.getType() + ". There is no term spec for this proposition type: " + propositionType);
-                    propositionType = "kuali.krms.proposition.type.freeform.text";
                     unmappedReqCompText = "No term spec for proposition type: " + propositionType;
-                    propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                    propositionType = "kuali.krms.proposition.type.freeform.text";
+                    propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                     template = propositionTypeTemplateInfoMap.get(propositionType);
                 }
                 //get termspec
-                TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KsKrmsConstants.NAMESPACE_CODE);
+                TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KSKRMSServiceConstants.NAMESPACE_CODE);
 
                 //create term
                 TermDefinition.Builder termBuilder = TermDefinition.Builder.create(null, TermSpecificationDefinition.Builder.create(termSpec), null);
@@ -285,7 +284,7 @@ public class RulesDataLoader {
                             continue; //this constant will be set as a parameter on the proposition
                         }
                         String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                        //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
+                        //String termParamTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,termParamType).getId();
 
                         //create term parameter
                         TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
@@ -341,7 +340,7 @@ public class RulesDataLoader {
         RuleDefinition.Builder ruleBuilder = RuleDefinition.Builder.create(currentRule);
         if(currentRule.getTypeId().equals("10010") && currentRule.getProposition() != null ){
             // create a new compound AND proposition as the root on this rule
-            String propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+            String propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
             PropositionDefinition.Builder newRootPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
             newRootPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
 
@@ -373,11 +372,11 @@ public class RulesDataLoader {
             //create a compound prop on the rule
             String propositionTypeID = null;
             if (statement.getOperator().equals(StatementOperatorTypeKey.AND)) {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
             } else {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.OR.getCode());
             }
@@ -397,17 +396,17 @@ public class RulesDataLoader {
                 propositionType = "kuali.krms.proposition.type.freeform.text";
                 unmappedReqCompText = "No mapping for: " + reqComponent.getType();
             }
-            propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+            propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
             TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
             if (template == null) {
                 System.out.println("Warning: Converting to free text. reqComponent: " + reqComponent.getType() + ". There is no term spec for this proposition type: " + propositionType);
-                propositionType = "kuali.krms.proposition.type.freeform.text";
                 unmappedReqCompText = "No term spec for proposition type: " + propositionType;
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                propositionType = "kuali.krms.proposition.type.freeform.text";
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                 template = propositionTypeTemplateInfoMap.get(propositionType);
             }
             //get termspec
-            TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KsKrmsConstants.NAMESPACE_CODE);
+            TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KSKRMSServiceConstants.NAMESPACE_CODE);
 
             //create term
             TermDefinition.Builder termBuilder = TermDefinition.Builder.create(null, TermSpecificationDefinition.Builder.create(termSpec), null);
@@ -426,7 +425,7 @@ public class RulesDataLoader {
                         continue; //this constant will be set as a parameter on the proposition
                     }
                     String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                    //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
+                    //String termParamTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,termParamType).getId();
 
                     //create term parameter
                     TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
@@ -462,11 +461,11 @@ public class RulesDataLoader {
             //create a compound prop on the rule
             String propositionTypeID = null;
             if (statement.getOperator().equals(StatementOperatorTypeKey.AND)) {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.and").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.AND.getCode());
             } else {
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, "kuali.krms.proposition.type.compound.or").getId();
                 initPropBuilder = PropositionDefinition.Builder.create(null, PropositionType.COMPOUND.getCode(), currentRule.getId(), propositionTypeID, null);
                 initPropBuilder.setCompoundOpCode(LogicalOperator.OR.getCode());
             }
@@ -480,17 +479,17 @@ public class RulesDataLoader {
                     propositionType = "kuali.krms.proposition.type.freeform.text";
                     unmappedReqCompText = "No mapping for: " + reqComponent.getType();
                 }
-                propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                 TemplateInfo template = propositionTypeTemplateInfoMap.get(propositionType);
                 if (template == null) {
                     System.out.println("Warning: Converting to free text. reqComponent: " + reqComponent.getType() + ". There is no term spec for this proposition type: " + propositionType);
                     unmappedReqCompText = "No term spec for proposition type: " + propositionType;
                     propositionType = "kuali.krms.proposition.type.freeform.text";
-                    propositionTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE, propositionType).getId();
+                    propositionTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE, propositionType).getId();
                     template = propositionTypeTemplateInfoMap.get(propositionType);
                 }
                 //get termspec
-                TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KsKrmsConstants.NAMESPACE_CODE);
+                TermSpecificationDefinition termSpec = krmsHelper.getTermSpecificationByNameAndNamespace(template.getTermSpecName(), KSKRMSServiceConstants.NAMESPACE_CODE);
 
                 //create term
                 TermDefinition.Builder termBuilder = TermDefinition.Builder.create(null, TermSpecificationDefinition.Builder.create(termSpec), null);
@@ -509,7 +508,7 @@ public class RulesDataLoader {
                             continue; //this constant will be set as a parameter on the proposition
                         }
                         String termParamType = reqCompFieldTypeToTermParameterTypeConversionMap.get(reqCompField.getType());
-                        //String termParamTypeID = krmsHelper.getTypeByName(KsKrmsConstants.NAMESPACE_CODE,termParamType).getId();
+                        //String termParamTypeID = krmsHelper.getTypeByName(KSKRMSServiceConstants.NAMESPACE_CODE,termParamType).getId();
 
                         //create term parameter
                         TermParameterDefinition.Builder termParamBuilder = TermParameterDefinition.Builder.create(null, term.getId(), termParamType, reqCompField.getValue());
@@ -681,17 +680,11 @@ public class RulesDataLoader {
         reqCompFieldTypeToTermParameterTypeConversionMap.put("kuali.reqComponent.field.type.org.id", "kuali.term.parameter.type.org.id");
     }
 
-    public StatementHelper getStatementHelper() {
-        return statementHelper;
-    }
 
     public void setStatementHelper(StatementHelper statementHelper) {
         this.statementHelper = statementHelper;
     }
 
-    public KRMSHelper getKrmsHelper() {
-        return krmsHelper;
-    }
 
     public void setKrmsHelper(KRMSHelper krmsHelper) {
         this.krmsHelper = krmsHelper;

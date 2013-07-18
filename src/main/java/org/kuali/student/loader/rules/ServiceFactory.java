@@ -20,9 +20,9 @@ import org.kuali.rice.krms.api.repository.term.TermRepositoryService;
 import org.kuali.rice.krms.api.repository.type.KrmsTypeRepositoryService;
 import org.kuali.student.loader.course.CourseService_Service;
 import org.kuali.student.r1.core.statement.service.StatementService;
+import org.kuali.student.r2.lum.clu.service.CluService;
 import org.kuali.student.r2.lum.course.service.CourseService;
 
-import javax.xml.namespace.QName;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -36,7 +36,7 @@ public class ServiceFactory {
     private static final String RULE_MANAGEMENT_SERVICE_NAME = "ruleManagementService";
     private static final String TERM_REPOSITORY_SERVICE_NAME = "termRepositoryService";
     private static final String KRMS_TYPE_REPOSITORY_SERVICE_NAME = "krmsTypeRepositoryService";
-
+    private static final String CLU_SERVICE_NAME = "CluService";
     public static final String LOCAL_HOST_EMBEDDED_URL = "http://localhost:8081/ks-with-rice-bundled-dev";
 
     //default to this url
@@ -58,6 +58,19 @@ public class ServiceFactory {
     private String calcRiceWsdlUrl(String serviceName) {
         String url = getHostUrl() + "/services/soap/krms/v2_0/" + serviceName + "?wsdl";
         return url;
+    }
+
+    public CluService getCluService() {
+        URL wsdlURL;
+        try {
+            wsdlURL = new URL(calcWsdlUrl(CLU_SERVICE_NAME));
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+
+        CluService_Service oss = new CluService_Service(wsdlURL);
+        CluService port = oss.getServicePort();
+        return port;
     }
 
     public CourseService getCourseService() {

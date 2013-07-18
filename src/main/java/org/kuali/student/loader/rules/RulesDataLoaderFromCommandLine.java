@@ -16,17 +16,11 @@
 package org.kuali.student.loader.rules;
 
 import org.apache.log4j.Logger;
-import org.kuali.student.loader.atp.AtpServiceFactory;
-import org.kuali.student.loader.course.*;
-import org.kuali.student.loader.organization.OrganizationServiceFactory;
-import org.kuali.student.r1.core.statement.dto.StatementInfo;
-import org.kuali.student.r2.core.atp.service.AtpService;
-import org.kuali.student.r2.core.organization.service.OrganizationService;
+import org.kuali.student.loader.course.CreditCourseLoadResult;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author nwright
@@ -58,13 +52,30 @@ public class RulesDataLoaderFromCommandLine {
             String sourceHost = args[0];
             String destHost = args[0];
             //generate(sourceHost, destHost);
-            copy(sourceHost);
+            //copy(sourceHost);
+            cluSetFix(sourceHost);
         } else {
             String sourceHost = args[0];
             String destHost = args[1];
             //generate(sourceHost, destHost);
-            copy(sourceHost);
+            //copy(sourceHost);
+            cluSetFix(sourceHost);
         }
+    }
+
+    protected void cluSetFix(String sourceHostUrl){
+        RulesDataCOCopyCluSetFix cluSetFix = new RulesDataCOCopyCluSetFix();
+        ServiceFactory serviceFactory = new ServiceFactory();
+        serviceFactory.setHostUrl(sourceHostUrl);
+        System.out.println("Connecting to Clu Service...");
+        cluSetFix.setCluService(serviceFactory.getCluService());
+        System.out.println("Connecting to Term Repository Service...");
+        cluSetFix.setTermRepositoryService(serviceFactory.getTermRepositoryService());
+
+        System.out.println(new Date() + " starting cluSet fix... ");
+        cluSetFix.startClusetFix();
+
+        System.out.println(new Date() + " Done with cluSet fix... ");
     }
 
     protected void copy(String sourceHostUrl){
