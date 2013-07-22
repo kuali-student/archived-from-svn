@@ -1,3 +1,4 @@
+
 function removeSelfFromDropdowns(headerTextNameContainerId) {
     jQuery('select[name=clusterIdForAOMove]').each(function () {
         var dropdownId = jQuery(this).attr('id');
@@ -729,9 +730,35 @@ function updateContextBar(srcId, contextBarId){
 
     var contextBar = jQuery("#" + contextBarId);    // grab the placeholder
     if( contextBar ) {
+        contextBar.show();
         var src = jQuery("#" + srcId);                  // grab the new context bar
         jQuery(contextBar).append(jQuery(src));         // add it to the context bar placeholder
         jQuery(src).show();
+    }
+}
+
+function removeEmptyContextBar(){
+    var contextBar = jQuery("#KS-CourseOffering-View-ContextBar-PlaceHolder");
+
+    if (contextBar) {
+        contextBar.hide();
+        var headerDiv = jQuery(".uif-viewHeader-contentWrapper");
+
+        if (headerDiv) {
+            var headerOffsetTop = headerDiv.offset().top - 41;
+            headerDiv.attr("style", "position:fixed; left: 0; top: " + headerOffsetTop + "px;");
+            stickyContent = null;
+        }
+    }
+}
+
+function resetHeaderPosition(){
+    var headerDiv = jQuery(".uif-viewHeader-contentWrapper");
+
+    if (headerDiv) {
+        var headerOffsetTop = headerDiv.offset().top + 41;
+        headerDiv.attr("style", "position:fixed; left: 0; top: " + headerOffsetTop + "px;");
+        stickyContent = headerDiv;
     }
 }
 
@@ -1058,5 +1085,25 @@ function resetDirtyFields(returnFieldId){
         if(field.length==0) continue;
         var marker = jQuery('[name="'+field+'"]');
         marker.addClass('dirty');
+    }
+}
+
+/**
+ * Once we get the next rice release, have to remove this override
+ * @param tableId
+ * @param pageNumber
+ */
+function openDataTablePage(tableId, pageNumber) {
+    var oTable = getDataTableHandle(tableId);
+    if (oTable == null) {
+        oTable = getDataTableHandle(jQuery('#' + tableId).find('.dataTable').attr('id'));
+    }
+    if (oTable != null) {
+        if (pageNumber == "first" || pageNumber == "last") {
+            oTable.fnPageChange(pageNumber);
+        } else {
+            var numericPage = Number(pageNumber) - 1;
+            oTable.fnPageChange(numericPage);
+        }
     }
 }
