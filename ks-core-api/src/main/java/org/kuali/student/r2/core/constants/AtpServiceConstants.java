@@ -50,6 +50,8 @@ public class AtpServiceConstants {
     public static final String ATP_FY_TYPE_KEY = "kuali.atp.type.FY";
     // terms
     public static final String ATP_TERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term";
+    public static final String ATP_SUBTERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term.subterm";
+    public static final String ATP_PARENT_TERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term.parent";
     
     public static final String ATP_FALL_TYPE_KEY = "kuali.atp.type.Fall";
     public static final String ATP_HALF_FALL_1_TYPE_KEY = "kuali.atp.type.HalfFall1";
@@ -120,6 +122,9 @@ public class AtpServiceConstants {
     public static final String ATP_CE_TERM_2_TYPE_KEY = "kuali.atp.type.CETerm2";
     public static final String ATP_CE_TERM_3_TYPE_KEY = "kuali.atp.type.CETerm3";
     public static final String ATP_CE_TERM_4_TYPE_KEY = "kuali.atp.type.CETerm4";
+
+    // exam periods
+    public static final String ATP_EXAM_PERIOD_TYPE_KEY = "kuali.atp.type.ExamPeriod";
 
     /**
      * Milstone types
