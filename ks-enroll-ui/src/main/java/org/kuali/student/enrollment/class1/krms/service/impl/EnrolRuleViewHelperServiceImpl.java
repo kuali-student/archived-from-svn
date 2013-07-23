@@ -55,7 +55,7 @@ import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.DtoConstants;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.constants.KSKRMSServiceConstants;
-import org.kuali.student.r2.core.constants.OrganizationServiceConstants;
+import org.kuali.student.r2.core.organization.constants.OrganizationServiceConstants;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
 import org.kuali.student.r2.core.search.dto.SearchParamInfo;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;

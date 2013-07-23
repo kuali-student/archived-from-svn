@@ -76,7 +76,7 @@
 
     <!-- Organization Service -->
     <bean id="orgServiceImpl"
-          class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceMockImpl">
+          class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceMockImpl">
     </bean>
 
     <bean id="cluService" class="org.kuali.student.r2.lum.lu.service.impl.CluServiceMockImpl">
