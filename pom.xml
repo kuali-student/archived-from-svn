@@ -148,9 +148,9 @@
         <kuali-sql.version>2.1.0-SNAPSHOT</kuali-sql.version>
         <kuali-util.version>4.2.17-SNAPSHOT</kuali-util.version>
         <kuali-jdbc.version>3.1.8-SNAPSHOT</kuali-jdbc.version>
+        <kuali-deploy.version>2.2.14-SNAPSHOT</kuali-deploy.version>
         <impex.version>3.0.3-SNAPSHOT</impex.version>
         <plugin.spring.version>2.1.0-SNAPSHOT</plugin.spring.version>
-        <plugin.spring.version>2.2.14-SNAPSHOT</plugin.spring.version>
         <ks.enforcer.phase>none</ks.enforcer.phase>
     </properties>
     <profiles>
