@@ -145,7 +145,6 @@
         <kuali-impex.version>${impex.version}</kuali-impex.version>
         <!-- Remove before reintegration with /trunk -->
         <db.branch.qualifier>SANDBOX</db.branch.qualifier>
-        <ks.enforcer.phase>none</ks.enforcer.phase>
     </properties>
     <profiles>
         <profile>
