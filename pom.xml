@@ -145,7 +145,7 @@
         <kuali-impex.version>${impex.version}</kuali-impex.version>
         <!-- Remove before reintegration with /trunk -->
         <db.branch.qualifier>SANDBOX</db.branch.qualifier>
-        <kuali-sql.version>2.1.0-SNAPSHOT</kuali-sql.version>
+        <kuali-sql.version>2.1.0</kuali-sql.version>
         <kuali-util.version>4.3.2-SNAPSHOT</kuali-util.version>
         <kuali-jdbc.version>3.1.8-SNAPSHOT</kuali-jdbc.version>
         <kuali-deploy.version>2.2.14-SNAPSHOT</kuali-deploy.version>
