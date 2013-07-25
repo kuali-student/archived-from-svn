@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.pom</groupId>
         <artifactId>kuali-common</artifactId>
-        <version>3.2.10</version>
+        <version>3.3.1</version>
     </parent>
     <groupId>org.kuali.student</groupId>
     <artifactId>student</artifactId>
@@ -145,11 +145,6 @@
         <kuali-impex.version>${impex.version}</kuali-impex.version>
         <!-- Remove before reintegration with /trunk -->
         <db.branch.qualifier>SANDBOX</db.branch.qualifier>
-        <kuali-sql.version>2.1.0</kuali-sql.version>
-        <kuali-util.version>4.3.2-SNAPSHOT</kuali-util.version>
-        <kuali-jdbc.version>3.1.8-SNAPSHOT</kuali-jdbc.version>
-        <impex.version>3.0.3-SNAPSHOT</impex.version>
-        <kuali-deploy.version>2.2.14-SNAPSHOT</kuali-deploy.version>
         <ks.enforcer.phase>none</ks.enforcer.phase>
     </properties>
     <profiles>
