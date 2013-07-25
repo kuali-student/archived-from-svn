@@ -89,10 +89,6 @@
         <!-- Oracle values sync'd with the deploy environments -->
         <oracle.version>11.2.0.2</oracle.version>
         <oracle.artifactId>ojdbc6_g</oracle.artifactId>
-        <!-- Old Oracle values
-      <oracle.version>10.2.0.3.0</oracle.version>
-      <oracle.artifactId>ojdbc14</oracle.artifactId>
-    -->
         <plugin.enforcer.version>1.2</plugin.enforcer.version>
         <project.jdk.min.version>1.7.0-21</project.jdk.min.version>
         <selenium.version>2.7.0</selenium.version>
