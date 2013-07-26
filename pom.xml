@@ -139,8 +139,6 @@
         <metainf.sql.propertySource>org.kuali.student.deploy.spring.SqlMetaInfPropertySourceConfig</metainf.sql.propertySource>
         <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
         <kuali-impex.version>${impex.version}</kuali-impex.version>
-        <!-- Remove before reintegration with /trunk -->
-        <db.branch.qualifier>SANDBOX</db.branch.qualifier>
     </properties>
     <profiles>
         <profile>
