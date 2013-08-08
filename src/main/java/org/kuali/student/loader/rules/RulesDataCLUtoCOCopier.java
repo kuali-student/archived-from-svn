@@ -16,17 +16,11 @@ import org.kuali.rice.krms.api.repository.term.TermParameterDefinition;
 import org.kuali.rice.krms.api.repository.term.TermRepositoryService;
 import org.kuali.rice.krms.api.repository.term.TermSpecificationDefinition;
 import org.kuali.rice.krms.api.repository.type.KrmsTypeRepositoryService;
-import org.kuali.student.krms.naturallanguage.util.KsKrmsConstants;
-import org.kuali.student.loader.util.ContextInfoHelper;
-import org.kuali.student.r1.core.statement.service.StatementService;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.core.versionmanagement.dto.VersionDisplayInfo;
-import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.service.CourseService;
-import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
-import org.kuali.student.r2.lum.util.constants.CourseServiceConstants;
 
 import java.util.*;
+import org.kuali.rice.krms.api.KrmsConstants;
 
 /**
  * Created with IntelliJ IDEA.
@@ -87,7 +81,8 @@ public class RulesDataCLUtoCOCopier {
                 AgendaDefinition clonedAgenda = deepCloneAgenda(agendaTree, lui.getLuiID(), lui.getLuiCode(), lui.getAtpCode());
 
                 //create reference between lui and cloned agenda
-                ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create("Agenda", clonedAgenda.getId(), KsKrmsConstants.NAMESPACE_CODE, "kuali.lui.type.course.offering", lui.getLuiID());
+                ReferenceObjectBinding.Builder refBldr = ReferenceObjectBinding.Builder.create("Agenda", clonedAgenda.getId(),
+                        KrmsConstants.KRMS_NAMESPACE, "kuali.lui.type.course.offering", lui.getLuiID());
                 refBldr.setCollectionName("CourseOffering");
                 refBldr.setActive(true);
                 ReferenceObjectBinding refBinding = ruleManagementService.createReferenceObjectBinding(refBldr.build());

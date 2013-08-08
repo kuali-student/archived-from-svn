@@ -1,6 +1,5 @@
 package org.kuali.student.loader.rules;
 
-import org.apache.log4j.Logger;
 import org.kuali.rice.krms.api.repository.LogicalOperator;
 import org.kuali.rice.krms.api.repository.agenda.AgendaDefinition;
 import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
@@ -17,13 +16,13 @@ import org.kuali.student.r1.core.statement.dto.ReqCompFieldInfo;
 import org.kuali.student.r1.core.statement.dto.ReqComponentInfo;
 import org.kuali.student.r1.core.statement.dto.StatementOperatorTypeKey;
 import org.kuali.student.r1.core.statement.dto.StatementTreeViewInfo;
-import org.kuali.student.r2.common.util.constants.KSKRMSServiceConstants;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.kuali.student.r2.core.constants.KSKRMSServiceConstants;
 
 /**
  * Created with IntelliJ IDEA.
