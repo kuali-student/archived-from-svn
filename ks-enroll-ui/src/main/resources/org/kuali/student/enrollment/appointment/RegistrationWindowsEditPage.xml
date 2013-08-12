@@ -181,16 +181,16 @@
                             <map>
                                 <entry key="populationInfo.id" value="appointmentWindowInfo.assignedPopulationId"/>
                                 <entry key="populationInfo.name" value="assignedPopulationName"/>
-                                <!-- Hide the state option, and default it to Active -->
-                                <property name="readOnlySearchFields" value="populationInfo.stateKey" />
-                                <property name="quickfinderAction">
-                                    <bean parent="Uif-ActionLink" p:methodToCall="performLookup" p:id="lookup_searchPopulation">
-                                        <property name="actionImage">
-                                            <bean parent="Uif-QuickLookupImage"/>
-                                        </property>
-                                    </bean>
-                                </property>
                             </map>
+                        </property>
+                        <!-- Hide the state option, and default it to Active -->
+                        <property name="readOnlySearchFields" value="populationInfo.stateKey" />
+                        <property name="quickfinderAction">
+                            <bean parent="Uif-ActionLink" p:methodToCall="performLookup" p:id="lookup_searchPopulation">
+                                <property name="actionImage">
+                                    <bean parent="Uif-QuickLookupImage"/>
+                                </property>
+                            </bean>
                         </property>
                     </bean>
                 </property>
