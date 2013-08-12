@@ -711,7 +711,7 @@
                     <property name="control">
                         <bean parent="Uif-TextControl" p:size="16" p:ReadOnly="true" />
                     </property>
-                    <!--<property name="quickfinder.render" value="true"/>-->
+                    <!--<property name="enableAutoQuickfinder" value="true"/>-->
                     <property name="quickfinder.dataObjectClassName" value="org.kuali.student.r2.core.organization.dto.OrgInfo" />
 
                     <property name="quickfinder.fieldConversions">
