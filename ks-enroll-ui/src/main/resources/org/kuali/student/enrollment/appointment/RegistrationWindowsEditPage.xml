@@ -113,7 +113,7 @@
             p:layoutManager.generateAutoSequence="false"
             p:layoutManager.separateAddLine="false"
             p:layoutManager.richTable.disableTableSort="true"
-            p:addLineLabel.labelText=""
+            p:addLineLabel.messageText=""
             p:layoutManager.richTable.render="false"
             p:layoutManager.applyAlternatingRowStyles="false"
             p:id="addRegistrationWindowCollection"            >

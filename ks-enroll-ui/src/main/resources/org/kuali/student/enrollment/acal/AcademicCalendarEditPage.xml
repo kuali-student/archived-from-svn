@@ -315,7 +315,7 @@ limitations under the License.
 		<property name="layoutManager.generateAutoSequence" value="false" />
         <property name="layoutManager.separateAddLine" value="false" />
         <property name="layoutManager.richTable.disableTableSort" value="true" />
-        <property name="addLineLabel.labelText" value=""/>
+        <property name="addLineLabel.messageText" value=""/>
         <property name="layoutManager.richTable.render" value="false" />
         <property name="layoutManager.applyAlternatingRowStyles" value="false" />
         <property name="addLineActions">
@@ -416,7 +416,7 @@ limitations under the License.
         </property>
         <property name="onDocumentReadyScript" value="resetDirtyFields('AcalEdit-DirtyFields');"/>
 
-        <property name="addLineLabel.labelText" value=""/>
+        <property name="addLineLabel.messageText" value=""/>
         <property name="layoutManager.lineGroupPrototype.header.cssClasses">
           <list merge="true">
             <value>ks-borderBottom2</value>
