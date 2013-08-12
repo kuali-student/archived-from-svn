@@ -148,7 +148,7 @@
         </property>
         <property name="items">
             <list>
-                <bean parent="Uif-TableCollectionSubSection" p:collectionLookup.render="false" p:readOnly="true" p:layoutManager.renderSequenceField="false">
+                <bean parent="Uif-TableCollectionSubSection" p:readOnly="true" p:layoutManager.renderSequenceField="false">
                     <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.FormatOfferingWrapper" />
                     <property name="propertyName" value="dialogFormatOfferingWrapperList" />
                     <property name="layoutManager.applyAlternatingRowStyles" value="false" />
@@ -199,7 +199,7 @@
         </property>
     </bean>
 
-    <bean id="KS-Catalog-JointCourse-Section" parent="Uif-TableCollectionSubSection" p:collectionLookup.render="false" 
+    <bean id="KS-Catalog-JointCourse-Section" parent="Uif-TableCollectionSubSection"
           p:render="@{#dp.showJointOption}" p:renderAddLine="false" p:layoutManager.renderSequenceField="false">
         <property name="headerText" value="Jointly Defined Courses"/>
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.JointCourseWrapper" />
@@ -253,7 +253,7 @@
         </property>
     </bean>
 
-    <bean id="KS-Catalog-ExistingFormatOfferings" parent="Uif-TableCollectionSubSection" p:collectionLookup.render="false" p:renderAddLine="false"
+    <bean id="KS-Catalog-ExistingFormatOfferings" parent="Uif-TableCollectionSubSection" p:renderAddLine="false"
           p:layoutManager.renderSequenceField="false">
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.FormatOfferingWrapper" />
         <property name="propertyName" value="formatOfferingWrappers" />
@@ -280,7 +280,7 @@
         </property>
     </bean>
 
-    <bean id="KS-Catalog-CopyFormatOffering" parent="Uif-TableCollectionSubSection" p:collectionLookup.render="false" p:renderAddLine="false"
+    <bean id="KS-Catalog-CopyFormatOffering" parent="Uif-TableCollectionSubSection" p:renderAddLine="false"
               p:layoutManager.renderSequenceField="false" p:renderLineActions="false" p:render="@{#dp.showCopyFormatSection}">
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.FormatOfferingWrapper" />
         <property name="propertyName" value="copyFromFormats" />
@@ -352,7 +352,7 @@
     </bean>
 
     <!-- This is used to display a list of existing offerings in the current section. This will be displayed for Copy from Catalog action-->
-    <bean id="KS-Catalog-ExistingOfferingsSubSection" parent="Uif-TableCollectionSubSection" p:collectionLookup.render="false" p:readOnly="true">
+    <bean id="KS-Catalog-ExistingOfferingsSubSection" parent="Uif-TableCollectionSubSection" p:readOnly="true">
 		<property name="headerText" value="Existing Offerings for @{document.newMaintainableObject.dataObject.term?.name}" />
 		<property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper" />
 		<property name="propertyName" value="existingOfferingsInCurrentTerm" />
@@ -623,7 +623,7 @@
     </bean>
 
     <!-- Displays a list of COs from current and previous terms-->
-    <bean id="KS-ExistingOffering-ListCOs" parent="Uif-TableCollectionSection" p:collectionLookup.render="false" p:renderAddLine="false">
+    <bean id="KS-ExistingOffering-ListCOs" parent="Uif-TableCollectionSection" p:renderAddLine="false">
 		<property name="cssClasses">
             <list merge="true">
                 <value>co_copy_tables</value>
