@@ -452,25 +452,29 @@
                             <property name="evaluateDisabledOnKeyUp" value="true"/>
                         </bean>
                     </property>
-                    <property name="quickfinder.dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
-                    <property name="quickfinder.viewName" value="CourseInfoByTermLookupView"/>
-                    <property name="quickfinder.fieldConversions">
-                        <map>
-                            <entry key="code" value="catalogCourseCode"/>
-                        </map>
-                    </property>
-                    <property name="quickfinder.lookupParameters">
-                        <map>
-                            <entry key="targetTermCode" value="termId"/>
-                            <entry key="catalogCourseCode" value="code"/>
-                        </map>
-                    </property>
-                    <property name="quickfinder.quickfinderAction">
-                        <bean parent="Uif-ActionLink" p:actionLabel="Find a Course" p:style="display:block" p:methodToCall="performLookup" p:disabled="@{#dp.targetTermCode eq null}"
-                              p:evaluateDisabledOnKeyUp="true" />
-                    </property>
-                    <property name="quickfinder.lightBoxLookup">
-                        <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="false"/>
+                    <property name="quickfinder">
+                        <bean parent="Uif-QuickFinder">
+                            <property name="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
+                            <property name="viewName" value="CourseInfoByTermLookupView"/>
+                            <property name="fieldConversions">
+                                <map>
+                                    <entry key="code" value="catalogCourseCode"/>
+                                </map>
+                            </property>
+                            <property name="lookupParameters">
+                                <map>
+                                    <entry key="targetTermCode" value="termId"/>
+                                    <entry key="catalogCourseCode" value="code"/>
+                                </map>
+                            </property>
+                            <property name="quickfinderAction">
+                                <bean parent="Uif-ActionLink" p:actionLabel="Find a Course" p:style="display:block" p:methodToCall="performLookup" p:disabled="@{#dp.targetTermCode eq null}"
+                                      p:evaluateDisabledOnKeyUp="true" />
+                            </property>
+                            <property name="lightBoxLookup">
+                                <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="false"/>
+                            </property>
+                        </bean>
                     </property>
                     <property name="suggest">
                         <bean parent="Uif-Suggest" p:render="true" p:valuePropertyName="catalogCourseCode">
