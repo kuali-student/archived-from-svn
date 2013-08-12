@@ -253,7 +253,6 @@
                 <entry key="methodToCall" value="start"/>
                 <entry key="dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCreateWrapper"/>
                 <entry key="hideReturnLink" value="true"/>
-                <entry key="showMaintenanceLinks" value="true"/>
                 <entry key="viewName" value="Create Course Offering"/>
             </map>
         </property>
