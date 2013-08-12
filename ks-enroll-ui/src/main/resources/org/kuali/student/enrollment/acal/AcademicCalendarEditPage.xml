@@ -52,8 +52,6 @@ limitations under the License.
                     <property name="url.methodToCall" value="start"/>
                     <property name="url.requestParameters">
                         <map key-type="java.lang.String" merge="true">
-                            <entry key="showHome" value="false"/>
-                            <entry key="readOnlyView" value="true"/>
                             <entry key="id" value="@{academicCalendarInfo.id}"/>
                         </map>
                     </property>
