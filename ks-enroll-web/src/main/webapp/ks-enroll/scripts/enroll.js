@@ -194,8 +194,6 @@ function addActionColumn(isReadOnly, componentId) {
                 "methodToCall":"loadAOs_RGs_AOCs",
                 "actionParameters[selectedCollectionPath]":"courseOfferingResultList",
                 "actionParameters[selectedLineIndex]":index,
-                "showHistory":"false",
-                "showHome":"false",
                 "jumpToId":componentId
             });
 
@@ -429,7 +427,7 @@ function jsonShow(url) {
             row.append(checkboxColumn);
 
             var codeAnchor = jQuery("<a id='code_line" + rowNumber + "'"
-                + "href='" + url + "/kr-krad/inquiry?courseOfferingId=" + columns.courseOfferingId +"&amp;methodToCall=start&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper&amp;renderedInLightBox=true&amp;showHome=false&amp;showHistory=false&amp;history=" + historyParameterString
+                + "href='" + url + "/kr-krad/inquiry?courseOfferingId=" + columns.courseOfferingId +"&amp;methodToCall=start&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper&amp;renderedInLightBox=true&amp;history=" + historyParameterString
                 + "' target='_self' class='uif-link' title='Course Offering =courseOfferingId'>" + columns.courseOfferingCode + "</a>");
 
 //            <input type="hidden" data-role="script" value="
