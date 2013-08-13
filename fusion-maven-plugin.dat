@@ -1,10 +1,10 @@
 # module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M8-rice23upgrade/build-2 revision = 53816
-ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M8-rice23upgrade_build-2::4e20d750a36c7ca1f5a5c93be58fa52ab0ad5bc3
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M8-rice23upgrade_build-2::2de44f5e525ebc528aff4b0a18a21cea428d879f
 # module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M8-rice23upgrade/build-2 revision = 53816
-ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M8-rice23upgrade_build-2::03167fc0dcd6cd9edce8e9fea1fbf3a6d8ace108
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M8-rice23upgrade_build-2::07a3454a3d111acdd8a825fea95a531ef282fe0e
 # module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M8-rice23upgrade/build-2 revision = 53816
-ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M8-rice23upgrade_build-2::eb3eca242a360e5fc28ac3e57fe9055501e24f13
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M8-rice23upgrade_build-2::724066ea75617fcb96942737bc01a6458f46f7d0
 # module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M8-rice23upgrade/build-2 revision = 53816
-ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M8-rice23upgrade_build-2::fcd2f03a99aa9fc6538e37a86d96ba8bdd147fe7
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M8-rice23upgrade_build-2::a2b50b826d1f0a2b6ef88a8bb1a03cac15aa9a19
 # module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M8-rice23upgrade/build-2 revision = 53816
-ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M8-rice23upgrade_build-2::f1327bae7d69386581b2945e31b4cc1d75aa4f0b
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M8-rice23upgrade_build-2::320988e04cf706c7022620b9f0c5db72a131d4c0
