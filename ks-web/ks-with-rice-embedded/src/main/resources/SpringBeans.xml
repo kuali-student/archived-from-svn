@@ -72,7 +72,6 @@
 			<list>
                 <!-- rice and basic ks xmls -->
 				<value>classpath:org/kuali/rice/student/bo</value>
-                <value>${krad.js.scriptfiles}</value>
                 <value>classpath:UifKRADOverrideDefinitions.xml</value>
                 <value>classpath:UifKradExtensionDefinitions.xml</value>
 				<value>classpath:UifKSDefinitions.xml</value>

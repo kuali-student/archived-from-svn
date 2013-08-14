@@ -168,11 +168,8 @@
     <param name="ks.lum.gwt.cache.config.file">classpath:ks-lum-gwt-ehcache.xml</param>
     <param name="ks.lum.gwt.metadata.enable.caching">true</param>
 
-    <!-- change/override this to kradScriptFiles for a non minified javascript version -->
-    <param name="krad.js.scriptfiles">classpath:UifKRADJavascriptFiles.xml</param>
-    <!--
-    <param name="krad.js.scriptfiles">classpath:UifKRADJavascriptFilesMinified.xml</param>
-    -->
+    <!-- set to true for non-minified CSS/JS, false for minified -->
+    <param name="rice.krad.dev.mode">true</param>
 
     <!-- Config defaults and overrides -->
     <param name="config.location">${user.home}/kuali/main/${environment}/ks-config.xml</param>
