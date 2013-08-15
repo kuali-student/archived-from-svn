@@ -267,6 +267,17 @@
         <property name="em" ref="orgEntityManager" />
     </bean>
 
+    <bean id="orgSearchManager"
+        class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
+        <constructor-arg index="0" value="classpath:organization-search-config.xml" />
+    </bean>
+
+    <bean id="orgSearchServiceImpl"
+          class="org.kuali.student.r2.core.class1.search.OrganizationSearchServiceImpl">
+        <property name="searchManager" ref="orgSearchManager" />
+        <property name="typeService"  ref="typeServiceImpl" />
+    </bean>
+
     <bean id="orgOrgRelationDao"
           class="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao">
         <property name="em" ref="orgEntityManager" />
@@ -289,6 +300,8 @@
         <property name="orgOrgRelationDao" ref="orgOrgRelationDao"/>
         <property name="orgPersonRelationDao" ref="orgPersonRelationDao"/>
         <property name="orgPositionRestrictionDao" ref="orgPositionRestrictionDao"/>
+        <property name="searchService" ref="orgSearchServiceImpl" />
+        <property name="typeService" ref="typeServiceImpl" />
     </bean>
 
 	<!-- Atp Service Config -->

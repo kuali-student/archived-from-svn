@@ -252,6 +252,10 @@
     </bean>
 
     <!--  Organization Service Config -->
+    <bean id="coreDictionaryServiceDelegate" class="org.kuali.student.r1.common.dictionary.service.impl.DictionaryServiceImpl">
+        <constructor-arg index="0" value="classpath:ks-courseInfo-dictionary-context.xml" />
+    </bean>
+
     <bean id="orgDao"
           class="org.kuali.student.r2.core.organization.dao.OrgDao">
         <property name="em" ref="entityManager" />
@@ -265,6 +269,17 @@
     <bean id="orgOrgRelationDao"
           class="org.kuali.student.r2.core.organization.dao.OrgOrgRelationDao">
         <property name="em" ref="entityManager" />
+    </bean>
+
+    <bean id="orgSearchManager"
+        class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
+        <constructor-arg index="0" value="classpath:organization-search-config.xml" />
+    </bean>
+
+    <bean id="orgSearchServiceImpl"
+          class="org.kuali.student.r2.core.class1.search.OrganizationSearchServiceImpl">
+        <property name="searchManager" ref="orgSearchManager" />
+        <property name="typeService"  ref="typeServiceImpl" />
     </bean>
 
     <bean id="orgPersonRelationDao"
@@ -284,6 +299,8 @@
         <property name="orgOrgRelationDao" ref="orgOrgRelationDao"/>
         <property name="orgPersonRelationDao" ref="orgPersonRelationDao"/>
         <property name="orgPositionRestrictionDao" ref="orgPositionRestrictionDao"/>
+        <property name="searchService" ref="orgSearchServiceImpl" />
+        <property name="typeService" ref="typeServiceImpl" />
     </bean>
 
     <!-- Learning Result service config -->
