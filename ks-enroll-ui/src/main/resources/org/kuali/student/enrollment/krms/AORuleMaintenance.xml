@@ -41,7 +41,7 @@ limitations under the License.
     </bean>
 
     <bean id="EnrolRuleEditor" parent="RuleEditor-parentBean">
-        <property name="dataObjectClass" value="org.kuali.student.lum.lu.ui.krms.dto.LURuleEditor"/>
+        <property name="dataObjectClass" value="org.kuali.student.enrollment.class1.krms.dto.AORuleEditor"/>
     </bean>
 
     <bean id="KSAO-AgendaManagement-View" parent="KS-CourseOffering-MaintenanceViewWithTermContextBarPlaceholder">
@@ -49,7 +49,7 @@ limitations under the License.
         <property name="dataObjectClassName" value="org.kuali.student.enrollment.class1.krms.dto.AORuleManagementWrapper"/>
         <property name="viewHelperServiceClass"
                   value="org.kuali.student.enrollment.class1.krms.service.impl.AORuleViewHelperServiceImpl"/>
-        <property name="headerText" value="@{#dp.aoDescription}"/>
+        <property name="headerText" value="@{#dp.cluDescription} - @{#dp.aoDescription}"/>
         <property name="items">
             <list>
                 <bean id="KSAO-AgendaMaintenance-Page" parent="KSAO-AgendaMaintenance-Page-parent"/>
@@ -78,7 +78,7 @@ limitations under the License.
                 <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
                 <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
                 <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value="Manage Course Offerings"/>
+                    <property name="label" value="Course Offerings"/>
                     <property name="url.viewId" value="courseOfferingManagementView"/>
                     <property name="url.controllerMapping" value="courseOfferingManagement"/>
                 </bean>
@@ -133,7 +133,7 @@ limitations under the License.
         <property name="breadcrumbOptions.breadcrumbOverrides">
             <list>
                 <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value=" Manage Activity Offering Requisites"/>
+                    <property name="label" value=" Activity Offering Requisites"/>
                 </bean>
             </list>
         </property>
@@ -197,21 +197,51 @@ limitations under the License.
     </bean>
 
     <bean id="KSAO-AgendaManage-EditRule" parent="KRMS-AgendaManage-EditRule">
-    <property name="items">
-        <list>
-            <bean id="KSAO-RuleEdit-ActionLinks" parent="KSAO-RuleEdit-Links" p:align="right"/>
-            <!--<bean id="KSAO-RuleView-ActionLinks" parent="KSAO-RuleView-Links" p:align="right"/>-->
-            <bean parent="Uif-MessageField" p:messageText="@{#line.ruleTypeInfo.instruction}"/>
-            <bean id="KSAO-ViewTree-Group" parent="Uif-VerticalBoxGroup"
-                  p:cssClasses="viewModeNode">
-                <property name="items">
-                    <list>
-                        <ref bean="KSAO-ViewTree-Section"/>
-                    </list>
-                </property>
-            </bean>
-        </list>
-    </property>
+        <property name="items">
+            <list>
+                <bean id="KSAO-RuleEdit-ActionLinks" parent="KSAO-RuleEdit-Links" p:align="right"/>
+                <!--<bean id="KSAO-RuleView-ActionLinks" parent="KSAO-RuleView-Links" p:align="right"/>-->
+                <bean parent="Uif-MessageField" p:messageText="@{#line.ruleTypeInfo.instruction}"/>
+                <bean id="KSAO-ViewTree-Group" parent="Uif-VerticalBoxGroup"
+                    p:cssClasses="viewModeNode">
+                    <property name="items">
+                        <list>
+                            <ref bean="KSAO-ViewTree-Section"/>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="KSAO-RuleEdit-Links" parent="KRMS-RuleEdit-Links">
+        <property name="items">
+            <list>
+                <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare" p:methodToCall="compareRules"
+                      p:render="@{!#line.dummy}" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare">
+                    <property name="toolTip">
+                        <bean parent="Uif-Tooltip"
+                              p:tooltipContent="Compare Course Offering, Catalog and Activity Offering Rules"/>
+                    </property>
+                </bean>
+                <bean parent="KSAO-RuleView-Link" p:render="@{#line.dummy}"/>
+                <bean parent="KS-Uif-ActionLink" p:actionLabel="Edit Rule" p:methodToCall="goToRuleView"
+                      p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditRequisite">
+                    <property name="toolTip">
+                        <bean parent="Uif-Tooltip"
+                              p:tooltipContent="Modify Existing Rule to apply to this Activity Offering"/>
+                    </property>
+                </bean>
+                <bean parent="KS-Uif-ActionLink" p:actionLabel="Revert to Course Offering" p:methodToCall="deleteRule"
+                      p:componentSecurity.performActionAuthz="true" p:actionEvent="deleteRequisite">
+                    <property name="toolTip">
+                        <bean parent="Uif-Tooltip"
+                              p:tooltipContent="Delete this rule. Course Offering rule(if any) will be executed."/>
+                    </property>
+                </bean>
+                <bean parent="KSAO-SuppressRule-Link" p:render="@{!#line.dummy and #line.proposition != null}"/>
+            </list>
+        </property>
     </bean>
 
     <bean id="KSAO-AgendaManage-AddRule" parent="KRMS-AgendaManage-AddRule">
@@ -226,43 +256,42 @@ limitations under the License.
     <bean id="KSAO-RuleAdd-Links" parent="KRMS-RuleAdd-Links">
         <property name="items">
             <list>
-                <bean parent="KSAO-RuleView-Links" p:render="@{#line.dummy and #line.parent != null}"/>
-                <bean parent="KSAO-RuleCopyEdit-Links" p:render="@{#line.dummy and #line.parent != null}"/>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Add Rule" p:methodToCall="addRule"
-                      p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_ROUTE]}"/>
+                <bean parent="KSAO-RuleView-Link" p:render="@{#line.dummy and (#line.parent != null or #line.cluEditor != null)}"/>
+                <bean parent="KSAO-RuleCopyEdit-Link" p:render="@{#line.dummy and #line.parent != null and #line.parent.proposition != null}"/>
+                <bean parent="KSAO-ReplaceRule-Link" p:render="@{#line.dummy and #line.parent != null and #line.parent.proposition != null}"/>
+                <bean parent="KSAO-SuppressRule-Link" p:render="@{#line.dummy and #line.parent != null and #line.parent.proposition != null}"/>
+                <bean parent="KSAO-AddRule-Link" p:render="@{#line.dummy and (#line.parent eq null or #line.parent.proposition eq null)}"/>
             </list>
         </property>
     </bean>
 
-    <bean id="KSAO-RuleEdit-Links" parent="KRMS-RuleEdit-Links">
-        <property name="items">
-            <list>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare" p:methodToCall="compareRules">
-                    <property name="toolTip">
-                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Course Offering, Catalog and Activity Offering Rules"/>
-                    </property>
-                </bean>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="View Catalog and Course Offering Rule" p:methodToCall="viewCoAndCluRules"/>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Edit Rule" p:methodToCall="goToRuleView"/>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Delete Rule" p:methodToCall="deleteRuleStatements"/>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Revert to Course Offering" p:methodToCall="deleteRule"/>
-            </list>
+
+    <bean id="KSAO-RuleView-Link" parent="KS-Uif-ActionLink" p:actionLabel="View Catalog and Course Offering Rule"
+          p:methodToCall="viewCoAndCluRules" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare"/>
+
+    <bean id="KSAO-RuleCopyEdit-Link" parent="KS-Uif-ActionLink" p:actionLabel="Copy and  Edit Course Offering Rule"
+          p:methodToCall="copyEditCoRule" p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditRequisite">
+        <property name="toolTip">
+            <bean parent="Uif-Tooltip" p:tooltipContent="Modify Existing rule to apply to this Activity Offering"/>
         </property>
     </bean>
 
-    <bean id="KSAO-RuleView-Links" parent="KRMS-RuleView-Links">
-        <property name="items">
-            <list>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="View Catalog and Course Offering Rule" p:methodToCall="viewCoAndCluRules"/>
-            </list>
+    <bean id="KSAO-ReplaceRule-Link" parent="KS-Uif-ActionLink" p:actionLabel="Replace Rule" p:methodToCall="addRule"
+          p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditRequisite"
+          p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_ROUTE]}" >
+        <property name="toolTip">
+            <bean parent="Uif-Tooltip" p:tooltipContent="Add new rule to excecute in place of Course Offering rule"/>
         </property>
     </bean>
 
-    <bean id="KSAO-RuleCopyEdit-Links" parent="KRMS-RuleView-Links">
-        <property name="items">
-            <list>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Copy and  Edit Course Offering Rule" p:methodToCall="copyEditCoRule"/>
-            </list>
+    <bean id="KSAO-AddRule-Link" parent="KS-Uif-ActionLink" p:actionLabel="Add Rule" p:methodToCall="addRule"
+          p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditRequisite"
+          p:render="@{#actionFlags[#Constants.KUALI_ACTION_CAN_ROUTE]}" />
+
+    <bean id="KSAO-SuppressRule-Link" parent="KS-Uif-ActionLink" p:actionLabel="Suppress Rule" p:methodToCall="deleteRuleStatements"
+          p:componentSecurity.performActionAuthz="true" p:actionEvent="deleteRequisite">
+          <property name="toolTip">
+            <bean parent="Uif-Tooltip" p:tooltipContent="No Rule of this type will be executed. Will appear as a blank rule."/>
         </property>
     </bean>
 
@@ -376,7 +405,7 @@ limitations under the License.
         <property name="breadcrumbOptions.breadcrumbOverrides">
             <list>
                 <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value="Manage Activity Offering Requisites"/>
+                    <property name="label" value="Activity Offering Requisites"/>
                     <property name="url.controllerMapping" value="/activityOfferingRules"/>
                     <property name="url.viewType" value="MAINTENANCE"/>
                     <property name="url.methodToCall" value="maintenanceEdit"/>
@@ -442,9 +471,9 @@ limitations under the License.
     <bean id="KSAO-RulePreview-Links" parent="KRMS-RulePreview-Links">
         <property name="items">
             <list>
-                <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare" p:methodToCall="compareRules">
+                <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare" p:methodToCall="compareRules" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare">
                     <property name="toolTip">
-                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Course Offering, Catalog and Activity Offering Rules"/>
+                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare  Catalog, Course Offering,and Activity Offering Rules"/>
                     </property>
                 </bean>
             </list>
@@ -499,8 +528,8 @@ limitations under the License.
                 <bean parent="KS-HorizontalBoxGroup-WithRPadding">
                     <property name="items">
                         <list>
-                            <ref bean="KRMS-RuleEditorView-AddButton"/>
-                            <ref bean="KRMS-RuleEditorView-EditButton"/>
+                            <bean parent="KRMS-RuleEditorView-AddButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditGroupRule"/>
+                            <bean parent="KRMS-RuleEditorView-EditButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditGroupRule"/>
                         </list>
                     </property>
                 </bean>
@@ -508,9 +537,9 @@ limitations under the License.
                 <bean parent="KS-HorizontalBoxGroup-WithRPadding">
                     <property name="items">
                         <list>
-                            <ref bean="KRMS-RuleEditorView-GroupButton"/>
-                            <ref bean="KRMS-RuleEditorView-LeftButton"/>
-                            <ref bean="KRMS-RuleEditorView-RightButton"/>
+                            <bean parent="KRMS-RuleEditorView-GroupButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditGroupRule"/>
+                            <bean parent="KRMS-RuleEditorView-LeftButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="moveRule"/>
+                            <bean parent="KRMS-RuleEditorView-RightButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="moveRule"/>
                         </list>
                     </property>
                 </bean>
@@ -518,8 +547,8 @@ limitations under the License.
                 <bean parent="KS-HorizontalBoxGroup-WithRPadding">
                     <property name="items">
                         <list>
-                            <ref bean="KRMS-RuleEditorView-UpButton"/>
-                            <ref bean="KRMS-RuleEditorView-DownButton"/>
+                            <bean parent="KRMS-RuleEditorView-UpButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="moveRule"/>
+                            <bean parent="KRMS-RuleEditorView-DownButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="moveRule"/>
                         </list>
                     </property>
                 </bean>
@@ -527,10 +556,10 @@ limitations under the License.
                 <bean parent="KS-HorizontalBoxGroup-WithRPadding">
                     <property name="items">
                         <list>
-                            <ref bean="KRMS-RuleEditorView-CopyButton"/>
-                            <ref bean="KRMS-RuleEditorView-CutButton"/>
-                            <ref bean="KRMS-RuleEditorView-PasteButton"/>
-                            <ref bean="KRMS-RuleEditorView-DeleteButton"/>
+                            <bean parent="KRMS-RuleEditorView-CopyButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="copyCutRule"/>
+                            <bean parent="KRMS-RuleEditorView-CutButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="copyCutRule"/>
+                            <bean parent="KRMS-RuleEditorView-PasteButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="copyCutRule"/>
+                            <bean parent="KRMS-RuleEditorView-DeleteButton" p:componentSecurity.performActionAuthz="true" p:actionEvent="deleteRule"/>
                         </list>
                     </property>
                 </bean>
@@ -555,7 +584,7 @@ limitations under the License.
         </property>
     </bean>
 
-    <bean id="KSAO-EditWithLogic-TreeGroup" parent="KRMS-EditWithLogic-TreeGroup">
+    <bean id="KSAO-EditWithLogic-TreeGroup" parent="KRMS-EditWithLogic-TreeGroup" p:componentSecurity.editAuthz="true">
         <property name="items">
             <list>
                 <ref bean="KRMS-LogicArea-InputField"/>

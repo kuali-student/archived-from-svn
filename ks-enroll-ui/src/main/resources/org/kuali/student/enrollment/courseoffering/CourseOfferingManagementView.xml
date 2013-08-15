@@ -28,7 +28,6 @@
         <!-- This is a placeholder; it will be dynamically replaced by child-pages using JS-onDocumentReadyScript.
              This is a work-around at least until KRAD 2.3-m3 -->
         <property name="headerText" value="Course Offerings" />
-        <property name="header.style" value="width:60%"/>
 
         <property name="viewSourceFile" value="CourseOfferingManagementView.xml" /> <!-- Shows up in HTML so devs can find the code -->
 
@@ -80,6 +79,7 @@
                 <!--<ref bean="KS-CourseOfferingManagement-CopyCourseOfferingPage"/>-->
                 <ref bean="KS-CourseOfferingManagement-ManageTheCourseOfferingPage"/>
                 <ref bean="KS-CourseOfferingManagement-CoDeleteConfirmationPage"/>
+                <ref bean="KS-CourseOfferingManagement-SelectedAOCSRConfirmationPage"/>
                 <ref bean="KS-CourseOfferingManagement-SelectedAoDeleteConfirmationPage"/>
                 <ref bean="KS-CourseOfferingManagement-ClusterDeleteConfirmationPage"/>
             </list>

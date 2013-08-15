@@ -38,6 +38,7 @@ import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCrea
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.RegistrationGroupWrapper;
+import org.kuali.student.enrollment.class2.courseoffering.util.ActivityOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.RegistrationGroupConstants;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingClusterInfo;
@@ -90,16 +91,13 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
             form.setAdminOrg(inputValue);
         }
 
-        //clean up termCode, inputCode, and theCourseOffering value in the form to prevent the
-        //side effect of the authorization.
-        //form.setTermCode(null);
-        //form.setInputCode(null);
-
         //TODO: Workaround for KRMS return
         if(!(form.getMethodToCall().contains("edit") || form.getMethodToCall().contains("refresh"))) {
             form.setCurrentCourseOfferingWrapper(null);
         }
 
+        //Refresh AO list on KRMS return
+        ARGUtil.getViewHelperService(form).setupRuleIndicator(form.getActivityWrapperList());
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
@@ -283,8 +281,6 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
 
     @RequestMapping(params = "methodToCall=copyCourseOffering")
     public ModelAndView copyCourseOffering(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm) throws Exception {
-//        ARGCourseOfferingHandler.copyCourseOffering(theForm);
-//        return getUIFModelAndView(theForm, CourseOfferingConstants.COPY_CO_PAGE);
 
         Object selectedObject = ARGUtil.getSelectedObject(theForm, "Copy"); // Receives edit wrapper, "Copy" for error message.
         if (selectedObject instanceof CourseOfferingListSectionWrapper) {
@@ -302,13 +298,12 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
 
             Properties urlParameters = new Properties();
             urlParameters.put(KRADConstants.DISPATCH_REQUEST_PARAMETER, "start");
-//            urlParameters.put(KRADConstants.DISPATCH_REQUEST_PARAMETER, "continueFromCreate");
             urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, CourseOfferingCreateWrapper.class.getName());
             urlParameters.put("pageId", "courseOfferingCopyPage");
             urlParameters.put("targetTermCode",  theForm.getTermCode());
             urlParameters.put("catalogCourseCode", courseOfferingCode);
             urlParameters.put("courseOfferingId", courseOfferingInfo.getId());
-//            urlParameters.put("createFromCatalog", "false");
+
             return super.performRedirect(theForm, "courseOfferingCreate", urlParameters);
         }
         else {
@@ -373,6 +368,29 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=deleteSelectedAoList")
     public ModelAndView deleteSelectedAoList(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm) throws Exception {
         ARGActivityOfferingClusterHandler.deleteSelectedAoList(theForm);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
+    }
+
+    /*
+    * Method used to cancel a list of selected Activity Offerings (that can be in Draft or Approved or Suspended state)
+    */
+    @RequestMapping(params = "methodToCall=cancelSelectedAoList")
+    public ModelAndView cancelSelectedAoList(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm) throws Exception {
+        ARGActivityOfferingClusterHandler.cancelSelectedAoList(theForm);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
+    }
+
+    @RequestMapping(params = "methodToCall=suspendSelectedAoList")
+    public ModelAndView suspendSelectedAoList(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm) throws Exception {
+        theForm.setActionCSR(ActivityOfferingConstants.ACTIVITYOFFERING_ACTION_SUSPEND);
+        ARGActivityOfferingClusterHandler.suspendSelectedAoList(theForm);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
+    }
+
+    @RequestMapping(params = "methodToCall=reinstateSelectedAoList")
+    public ModelAndView reinstateSelectedAoList(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm) throws Exception {
+        theForm.setActionCSR(ActivityOfferingConstants.ACTIVITYOFFERING_ACTION_REINSTATE);
+        ARGActivityOfferingClusterHandler.reinstateSelectedAoList(theForm);
         return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
     }
 
@@ -593,61 +611,25 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=cancelAOs")
     public ModelAndView cancelAOs(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm, @SuppressWarnings("unused") BindingResult result,
                                   @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-        List<ActivityOfferingWrapper> aoList = theForm.getActivityWrapperList();
-        List<ActivityOfferingWrapper> selectedIndexList = theForm.getSelectedToCancelList();
-        CourseOfferingWrapper currentCoWrapper = theForm.getCurrentCourseOfferingWrapper();
-        currentCoWrapper.setColocatedAoToCancel(false);
-
-        boolean bNoDeletion = false;
-        int checked = 0;
-        int enabled = 0;
-
-        selectedIndexList.clear();
-        for(ActivityOfferingWrapper ao : aoList) {
-
-            if(ao.isEnableCancelButton() && ao.getIsCheckedByCluster()) {
-                ao.setActivityCode(ao.getAoInfo().getActivityCode());
-                selectedIndexList.add(ao);
-                if(ao.isColocatedAO())  {
-                    currentCoWrapper.setColocatedAoToCancel(true);
-                }
-                enabled++;
-            } else if (ao.getIsCheckedByCluster()){
-                checked++;
-                if (!bNoDeletion) {
-                    bNoDeletion = true;
-                }
-            }
-        }
-
-        if (selectedIndexList.isEmpty()) {
-            theForm.setSelectedIllegalAOInCancel(false);
-            if (bNoDeletion) {
-                theForm.setSelectedIllegalAOInCancel(true);
-            }
-        }
-
-        if(checked > enabled){
-            KSUifUtils.addGrowlMessageIcon(GrowlIcon.WARNING, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_CANCEL);
-        }
-
-        return getUIFModelAndView(theForm, CourseOfferingConstants.AO_CANCEL_CONFIRM_PAGE);
+        theForm.setActionCSR(ActivityOfferingConstants.ACTIVITYOFFERING_ACTION_CANCEL);
+        ARGCourseOfferingHandler.prepareCSRConfirmationView(theForm, ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_CANCEL, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_SUSPEND);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.AO_CSR_CONFIRM_PAGE);
     }
 
     @RequestMapping(params = "methodToCall=suspendAOs")
     public ModelAndView suspendAOs(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm, @SuppressWarnings("unused") BindingResult result,
                                    @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-
-        //TODO suspendAOs
-        return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
+        theForm.setActionCSR(ActivityOfferingConstants.ACTIVITYOFFERING_ACTION_SUSPEND);
+        ARGCourseOfferingHandler.prepareCSRConfirmationView(theForm, ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_SUSPEND, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_SUSPEND);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.AO_CSR_CONFIRM_PAGE);
     }
 
-   @RequestMapping(params = "methodToCall=reinstateAOs")
+    @RequestMapping(params = "methodToCall=reinstateAOs")
     public ModelAndView reinstateAOs(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm, @SuppressWarnings("unused") BindingResult result,
                                      @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-
-        //TODO: reinstateAOs
-        return getUIFModelAndView(theForm, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
+        theForm.setActionCSR(ActivityOfferingConstants.ACTIVITYOFFERING_ACTION_REINSTATE);
+        ARGCourseOfferingHandler.prepareCSRConfirmationView(theForm, ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_REINSTATE, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_REINSTATE);
+        return getUIFModelAndView(theForm, CourseOfferingConstants.AO_CSR_CONFIRM_PAGE);
     }
 
     @RequestMapping(params = "methodToCall=deleteAOs")
@@ -751,6 +733,9 @@ public class ARGCourseOfferingManagementController extends UifControllerBase {
     public ModelAndView deleteClusterCascaded(@ModelAttribute("KualiForm") ARGCourseOfferingManagementForm theForm, @SuppressWarnings("unused") BindingResult result,
                                                      @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         ARGActivityOfferingClusterHandler.deleteClusterCascaded(theForm);
+        // Because everything in this method is inside a transaction we need to separate the delete and the render. If we don't the render
+        // will not detect the delete and the user is shown the same screen. So for this case, delete the cluster then call
+        // show, which will clean up the form and render outside the transaction.
         return show(theForm);
     }
 

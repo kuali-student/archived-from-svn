@@ -30,7 +30,7 @@ public class EnrolKRMSConstants {
     // AO Bean references
     public static final String KSKRMS_RULE_AO_MAINTENANCE_PAGE_ID = "KSAO-RuleMaintenance-Page";
     public static final String KSKRMS_AGENDA_AO_MAINTENANCE_PAGE_ID = "KSAO-AgendaMaintenance-Page";
-    public static final String KSKRMS_RULE_AO_TABS_ID = "KSCO-TabsWidget";
+    public static final String KSKRMS_RULE_AO_TABS_ID = "KSAO-TabsWidget";
     public static final String KSKRMS_RULE_AO_EDITWITHOBJECT_ID = "KSAO-EditWithObject-EditSection";
     public static final String KSKRMS_RULE_AO_EDITWITHLOGIC_ID = "KSAO-EditWithLogic-EditSection";
 
@@ -39,6 +39,7 @@ public class EnrolKRMSConstants {
     public static final String KSKRMS_MSG_WARNING_CO_RULE_EMPTY = "warning.krms.agenda.rule.co.empty";
     public static final String KSKRMS_MSG_WARNING_AO_RULE_HASPARENT = "warning.krms.agenda.rule.ao.hasparent";
     public static final String KSKRMS_MSG_WARNING_AO_RULE_EMPTY = "warning.krms.agenda.rule.ao.empty";
+    public static final String KSKRMS_MSG_WARNING_AO_RULE_NOT_CHANGED = "warning.krms.agenda.rule.ao.not.changed";
 
     public static final String KSKRMS_MSG_INFO_CO_RULE_CHANGED = "info.krms.agenda.rule.co.changed";
     public static final String KSKRMS_MSG_INFO_AO_RULE_CHANGED = "info.krms.agenda.rule.ao.changed";

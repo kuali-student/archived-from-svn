@@ -14,7 +14,7 @@
  *
  * Created by venkat on 11/30/12
  */
-package org.kuali.student.enrollment.class2.courseoffering.helper.infc;
+package org.kuali.student.enrollment.class2.courseoffering.helper;
 
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.r2.common.dto.ContextInfo;

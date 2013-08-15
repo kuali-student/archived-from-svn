@@ -335,6 +335,7 @@
         <property name="acalService" ref="AcademicCalendarService" />
         <property name="registrationCodeGeneratorFactory" ref="regGroupCodeGeneratorFactory" />
         <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+        <property name="activityOfferingTransformer" ref="activityTransformer" />
         <property name="acalServiceFacade" ref="acalServiceFacade"/>
         <!--The coService property is looked up in the service bus to prevent a circular spring reference-->
     </bean>
@@ -359,6 +360,7 @@
         <property name="businessLogic" ref="coBusinessLogic" />
         <property name="offeringCodeGenerator" ref="offeringCodeGenerator" />
         <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+        <property name="activityOfferingTransformer" ref="activityTransformer" />
         <property name="seatPoolDefinitionDao" ref="seatPoolDefinitionDao" />
         <property name="activityOfferingClusterDao" ref="activityOfferingClusterDao" />
         <property name="registrationGroupTransformer" ref="registrationGroupTransformer" />
@@ -461,6 +463,7 @@
   <bean id="coMockService" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceImpl">
     <property name="courseService" ref="courseServiceImpl" />
     <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+    <property name="activityOfferingTransformer" ref="activityTransformer" />
     <property name="registrationGroupTransformer" ref="registrationGroupTransformer" />
   </bean>
 
@@ -504,6 +507,12 @@
         <property name="nextDecorator" ref="luiServiceImpl" />
         <property name="validator" ref="validator" />
         <property name="typeService" ref="typeServiceCacheDecorator" />
+    </bean>
+
+    <!-- I have taken this cache out of rotation because it was breaking most calls. -->
+    <bean id="luiServiceCache" class="org.kuali.student.enrollment.class1.lui.service.decorators.LuiServiceCacheDecorator">
+        <property name="cacheManager" ref="ksCacheManager"/>
+        <property name="nextDecorator" ref="luiServiceImpl"/>
     </bean>
 
   <bean id="luiServiceImpl" class="org.kuali.student.enrollment.class1.lui.service.impl.LuiServiceImpl">
@@ -777,7 +786,9 @@
     </property>
   </bean>
 
-  <bean id="activityTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.ActivityOfferingTransformer" />
+  <bean id="activityTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.ActivityOfferingTransformer" >
+    <property name="krmsRuleManagementCopyMethods" ref="krmsRuleManagementCopyMethods" />
+  </bean>
 
   <!-- Process Service -->
   <bean id="processService" class="org.kuali.student.r2.core.process.impl.ProcessServiceImpl">
@@ -932,6 +943,8 @@
     <bean id="csrServiceFacade" class="org.kuali.student.enrollment.class2.courseoffering.service.facade.CSRServiceFacadeImpl">
         <property name="coService" ref="CourseOfferingService"/>
         <property name="typeService" ref="typeService" />
+        <property name="socService" ref="CourseOfferingSetService" />
+        <property name="luiService" ref="LuiService" />
     </bean>
 
     <!-- Put facade on the bus KSENROLL-8609 -->
@@ -980,6 +993,7 @@
                  <ref bean="ActivityOfferingSearchServiceImpl"/>
                  <ref bean="CoreSearchServiceImpl"/> <!-- This bean lives in ks-core-no-tx-context.xml  -->
                  <ref bean="InstructorSearchServiceImpl"/>
+                 <ref bean="orgSearchServiceImpl" />
             </list>
         </property>                
     </bean>
@@ -1036,22 +1050,26 @@
  
 
     <!-- Org Service -->
-    <bean id="orgServiceImplNew" class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceImpl">
-        <property name="organizationDao" ref="orgDao" />
-        <property name="extendedOrgDao" ref="extendedOrgDao" />
-        <property name="searchManager" ref="orgSearchManager" />
-        <property name="dictionaryServiceDelegate" ref="dictionaryService"/>
-        <property name="criteriaLookupService" ref="defaultCriteriaLookupService"/>
-        <property name="searchOperations">
-            <map>
-                <entry key="org.search.orgQuickViewByRelationTypeOrgTypeRelatedOrgIds" value-ref="organizationHierarchySearch"/>
-            </map>
-        </property>
+    <bean id="orgServiceImpl"
+          class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceImpl">
+        <property name="orgDao" ref="orgDao" />
+        <property name="orgHierarchyDao" ref="orgHierarchyDao" />
+        <property name="orgOrgRelationDao" ref="orgOrgRelationDao"/>
+        <property name="orgPersonRelationDao" ref="orgPersonRelationDao"/>
+        <property name="orgPositionRestrictionDao" ref="orgPositionRestrictionDao"/>
+        <property name="orgCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="orgHierarchyCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="orgOrgRelationCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="orgPersonRelationCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="orgPositionRestrictionCriteriaLookupService" ref="defaultCriteriaLookupService"/>
+        <property name="searchService" ref="searchService" />
+        <property name="typeService" ref="typeService" />
     </bean>
 
     <bean id="organizationHierarchySearch"
           class="org.kuali.student.r1.core.organizationsearch.service.impl.OrganizationHierarchySearch">
-        <property name="organizationDao" ref="orgDao"/>
+        <property name="orgDao" ref="orgDao"/>
+        <property name="orgOrgRelationDao" ref="orgOrgRelationDao" />
     </bean>
 
     <bean id="orgSearchManager"
@@ -1060,11 +1078,21 @@
         <property name="dao" ref="enrollSearchableDao"/>
     </bean>
 
+    <bean id="orgSearchServiceImpl"
+          class="org.kuali.student.r2.core.class1.search.OrganizationSearchServiceImpl">
+        <property name="searchManager" ref="orgSearchManager" />
+        <property name="searchOperations">
+            <map>
+                <entry key="org.search.orgQuickViewByRelationTypeOrgTypeRelatedOrgIds" value-ref="organizationHierarchySearch"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="ks.exp.organizationService" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
         <property name="serviceDefinition">
             <bean class="org.kuali.rice.ksb.api.bus.support.SoapServiceDefinition">
                 <property name="jaxWsService" value="true" />
-                <property name="service" ref="orgServiceImplNew" />
+                <property name="service" ref="orgServiceImpl" />
                 <property name="serviceInterface" value="org.kuali.student.r2.core.organization.service.OrganizationService" />
                 <property name="localServiceName" value="OrganizationService" />
                 <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/organization" />

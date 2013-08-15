@@ -127,7 +127,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
      * I dont think we need a seperate list to handle that - courseOfferingCopyWrapper
      */
     private List<ActivityOfferingWrapper> selectedToDeleteList;
-    private List<ActivityOfferingWrapper> selectedToCancelList;
+    private List<ActivityOfferingWrapper> selectedToCSRList;
     private CourseOfferingCopyWrapper courseOfferingCopyWrapper;
 
     private boolean isCrossListedCO;
@@ -139,6 +139,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private boolean isJointDefinedCo;
     private boolean isJointDefinedCoOnly;
     private Integer numOfJointDefinedCosToDelete = 0;
+    private int numIneligibleAOsForCSR=0;
 
     //TODO: do we need this one?
     private boolean readOnly;
@@ -149,7 +150,8 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private String toBeScheduledCourseOfferingsUI;
     private int toBeScheduledCourseOfferingsCount;
     private boolean selectedIllegalAOInDeletion = false;
-    private boolean selectedIllegalAOInCancel = false;
+    private boolean selectedIllegalAOInCSR = false;
+    private String actionCSR = "";
 
     private boolean withinPortal = true;
 
@@ -176,6 +178,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private String clusterIdForAOMove;
     private String selectedFOIDForAOMove;
     private String selectedFONameForAOMove;
+    private String csrLabel;
             
     private ActivityOfferingClusterWrapper selectedCluster;
     private int aoCount=0;
@@ -201,7 +204,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     public ARGCourseOfferingManagementForm (){
         activityWrapperList = new ArrayList<ActivityOfferingWrapper>();
         selectedToDeleteList = new ArrayList<ActivityOfferingWrapper>();
-        selectedToCancelList = new ArrayList<ActivityOfferingWrapper>();
+        selectedToCSRList = new ArrayList<ActivityOfferingWrapper>();
         courseOfferingResultList = new ArrayList<CourseOfferingListSectionWrapper>();
         selectedCoToDeleteList = new ArrayList<CourseOfferingListSectionWrapper>();
         clusterResultList = new ArrayList<ActivityOfferingClusterWrapper>();
@@ -292,12 +295,12 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
         this.selectedToDeleteList = selectedToDeleteList;
     }
 
-    public List<ActivityOfferingWrapper> getSelectedToCancelList() {
-        return selectedToCancelList;
+    public List<ActivityOfferingWrapper> getSelectedToCSRList() {
+        return selectedToCSRList;
     }
 
-    public void setSelectedToCancelList(List<ActivityOfferingWrapper> selectedToCancelList) {
-        this.selectedToCancelList = selectedToCancelList;
+    public void setSelectedToCSRList(List<ActivityOfferingWrapper> selectedToCSRList) {
+        this.selectedToCSRList = selectedToCSRList;
     }
 
     public String getFormatIdForNewAO() {
@@ -376,12 +379,20 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
         this.selectedIllegalAOInDeletion = selectedIllegalAOInDeletion;
     }
 
-    public boolean isSelectedIllegalAOInCancel() {
-        return selectedIllegalAOInCancel;
+    public boolean isSelectedIllegalAOInCSR() {
+        return selectedIllegalAOInCSR;
     }
 
-    public void setSelectedIllegalAOInCancel(boolean selectedIllegalAOInCancel) {
-        this.selectedIllegalAOInCancel = selectedIllegalAOInCancel;
+    public void setSelectedIllegalAOInCSR(boolean selectedIllegalAOInCSR) {
+        this.selectedIllegalAOInCSR = selectedIllegalAOInCSR;
+    }
+
+    public String getActionCSR() {
+        return actionCSR;
+    }
+
+    public void setActionCSR(String actionCSR) {
+        this.actionCSR = actionCSR;
     }
 
     public boolean isWithinPortal() {
@@ -783,4 +794,24 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     public void setRequisiteLink(boolean requisiteLink) {
         this.requisiteLink = requisiteLink;
     }
+
+    public String getCsrLabel() {
+        return csrLabel;
+    }
+
+    public void setCsrLabel(String csrLabel) {
+        this.csrLabel = csrLabel;
+    }
+
+
+    public int getNumIneligibleAOsForCSR() {
+        return numIneligibleAOsForCSR;
+    }
+
+    public void setNumIneligibleAOsForCSR(int numIneligibleAOsForCSR) {
+        this.numIneligibleAOsForCSR = numIneligibleAOsForCSR;
+    }
+
+
+
 }

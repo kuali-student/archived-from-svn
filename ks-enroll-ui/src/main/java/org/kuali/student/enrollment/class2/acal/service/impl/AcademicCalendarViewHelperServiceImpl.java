@@ -38,6 +38,7 @@ import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.student.common.uif.service.impl.KSViewHelperServiceImpl;
 import org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.AcalEventWrapper;
+import org.kuali.student.enrollment.class2.acal.dto.ExamPeriodWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.KeyDateWrapper;
@@ -51,6 +52,7 @@ import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.AcalEventInfo;
+import org.kuali.student.r2.core.acal.dto.ExamPeriodInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayInfo;
 import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
@@ -226,7 +228,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
      * @param isCopy
      * @return
      */
-    public List<AcademicTermWrapper> populateTermWrappers(String acalId, boolean isCopy,boolean calculateInstrDays){
+    public List<AcademicTermWrapper> populateTermWrappers(String acalId, boolean isCopy, boolean calculateInstrDays){
         ContextInfo contextInfo = createContextInfo();
 
         if (LOG.isDebugEnabled()){
@@ -244,7 +246,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
                 if(!processedTerms.contains(termInfo)){
                     List<AtpAtpRelationInfo> atpRelations = getAtpService().getAtpAtpRelationsByTypeAndAtp(termInfo.getId(), AtpServiceConstants.ATP_ATP_RELATION_INCLUDES_TYPE_KEY, contextInfo);
                     if (atpRelations != null && atpRelations.size() > 0) { // if you're a parent term
-                        AcademicTermWrapper termWrapper = populateTermWrapper(termInfo, isCopy,calculateInstrDays); // create the term wrapper for the parent term
+                        AcademicTermWrapper termWrapper = populateTermWrapper(termInfo, isCopy, calculateInstrDays); // create the term wrapper for the parent term
                         //add the parent term into the term wrapper list
                         termWrappers.add(termWrapper);
                         processedTerms.add(termInfo);
@@ -255,7 +257,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
                             for(TermInfo tInfo : termInfos){
                                 // Find the subterms
                                 if(parentTermRelations.getRelatedAtpId().equals(tInfo.getId())){
-                                    AcademicTermWrapper subTermWrapper = populateTermWrapper(tInfo, isCopy,calculateInstrDays);
+                                    AcademicTermWrapper subTermWrapper = populateTermWrapper(tInfo, isCopy, calculateInstrDays);
                                     subTermWrapper.setParentTerm(termInfo.getTypeKey());   // the name here is ambigious
                                     subTermWrapper.setSubTerm(true);
                                     termWrapper.setHasSubterm(true);
@@ -285,14 +287,6 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
             //sort term wrappers by start date
             sortTermWrappers(termWrappers);
 
-            // If copying reset subterm parent info to null after sorting list.
-            if(isCopy){
-                for(int i = 0; i<termWrappers.size();i++){
-                    if(termWrappers.get(i).isSubTerm())termWrappers.get(i).setParentTermInfo(null);
-                }
-            }
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -300,7 +294,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         return termWrappers;
     }
 
-    public AcademicTermWrapper populateTermWrapper(TermInfo termInfo, boolean isCopy,boolean calculateInstrDays) throws Exception {
+    public AcademicTermWrapper populateTermWrapper(TermInfo termInfo, boolean isCopy, boolean calculateInstrDays) throws Exception {
 
         if (LOG.isDebugEnabled()){
             LOG.debug("Populating Term - " + termInfo.getId());
@@ -308,13 +302,22 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
 
         TypeInfo type = getAcalService().getTermType(termInfo.getTypeKey(),createContextInfo());
 
-        AcademicTermWrapper termWrapper = new AcademicTermWrapper(termInfo,isCopy);
+        AcademicTermWrapper termWrapper = new AcademicTermWrapper(termInfo, isCopy);
         termWrapper.setTypeInfo(type);
         termWrapper.setTermNameForUI(type.getName());
         if (isCopy){
             termWrapper.setName(type.getName());
         }
 
+        //Populate examdates
+        List<ExamPeriodInfo> examPeriodInfos = getAcalService().getExamPeriodsForTerm(termInfo.getId(),createContextInfo());
+        if (examPeriodInfos != null && examPeriodInfos.size() > 0) {  //only one or none
+            for (ExamPeriodInfo examPeriodInfo : examPeriodInfos) {
+                ExamPeriodWrapper examPeriodWrapper = new ExamPeriodWrapper(examPeriodInfo, isCopy);
+                termWrapper.getExamdates().add(examPeriodWrapper);
+            }
+        }
+        
         //Populate keydates
         List<KeyDateInfo> keydateList = getAcalService().getKeyDatesForTerm(termInfo.getId(),createContextInfo());
         List<TypeInfo> keyDateTypes = getTypeService().getAllowedTypesForType(termInfo.getTypeKey(),createContextInfo());

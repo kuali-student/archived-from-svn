@@ -32,6 +32,7 @@ import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrap
 import org.kuali.student.enrollment.class2.courseoffering.dto.ExistingCourseOffering;
 import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysService;
 import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysServiceImpl;
+import org.kuali.student.enrollment.class2.courseoffering.util.ActivityOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
@@ -158,10 +159,6 @@ public class ARGCourseOfferingHandler {
             theForm.getCurrentCourseOfferingWrapper().setCourseOfferingInfo(theCourseOffering);
         }
 
-        //venkat - dont think this happen
-        /*if (theCourseOffering == null) {
-            theCourseOffering = theForm.getTheCourseOffering();
-        }*/
         if (theCourseOffering == null) {
             throw new RuntimeException("No Course Offering selected!");
         }
@@ -177,8 +174,6 @@ public class ARGCourseOfferingHandler {
                     CourseOfferingConstants.COURSEOFFERING_INVALID_STATE_FOR_DELETE);
             return  CourseOfferingConstants.MANAGE_CO_PAGE;
         }
-
-//        theForm.setCourseOfferingCode(theCourseOffering.getCourseOfferingCode());
 
         // Load activity offerings
         try {
@@ -199,6 +194,82 @@ public class ARGCourseOfferingHandler {
         }
 
         return CourseOfferingConstants.CO_DELETE_CONFIRM_PAGE;
+    }
+
+    public static void prepareCSRConfirmationView(ARGCourseOfferingManagementForm theForm, String methodToCall, String warningMessage) throws Exception{
+
+        List<ActivityOfferingWrapper> aoList = theForm.getActivityWrapperList();
+        List<ActivityOfferingWrapper> selectedIndexList = theForm.getSelectedToCSRList();
+        CourseOfferingWrapper currentCoWrapper = theForm.getCurrentCourseOfferingWrapper();
+        currentCoWrapper.setColocatedAoToCSR(false);
+
+        boolean bNoDeletion = false;
+        int checked = 0;
+        int enabled = 0;
+
+        selectedIndexList.clear();
+        for(ActivityOfferingWrapper ao : aoList) {
+            boolean isEnabled = false;
+
+            if(ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_CANCEL.equals(methodToCall)){
+                if(ao.isEnableCancelButton() && ao.getIsCheckedByCluster()) {
+                    isEnabled = true;
+                }
+                theForm.setCsrLabel("Cancel");
+            }if(ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_SUSPEND.equals(methodToCall)){
+                if(ao.isEnableSuspendButton() && ao.getIsCheckedByCluster()) {
+                    isEnabled = true;
+                }
+                theForm.setCsrLabel("Suspend");
+            }if(ActivityOfferingConstants.ACTIVITYOFFERINGS_ACTION_REINSTATE.equals(methodToCall)){
+                if(ao.isEnableReinstateButton() && ao.getIsCheckedByCluster()) {
+                    isEnabled = true;
+                    if(ao.getStateName().equals("Canceled")){
+                        ao.setReinstateStateName("Draft");
+                    }
+                    if(ao.getStateName().equals("Suspended")){
+                        if(ao.getActualScheduleComponents().isEmpty()){
+                            ao.setReinstateStateName("Draft");
+                        } else {
+                            if(theForm.getSocState().equals("Published")){
+                               ao.setReinstateStateName("Offered");
+                            } else if(theForm.getSocState().equals("Final Edits") || theForm.getSocState().equals("Locked")){
+                                ao.setReinstateStateName("Approved");
+                            }
+                        }
+                    }
+
+                }
+                theForm.setCsrLabel("Reinstate");
+            }
+
+            if(isEnabled && ao.getIsCheckedByCluster()) {
+                ao.setActivityCode(ao.getAoInfo().getActivityCode());
+                selectedIndexList.add(ao);
+                if(ao.isColocatedAO())  {
+                    currentCoWrapper.setColocatedAoToCSR(true);
+                }
+                enabled++;
+            } else if (ao.getIsCheckedByCluster()){
+                checked++;
+                if (!bNoDeletion) {
+                    bNoDeletion = true;
+                }
+            }
+        }
+
+        if (selectedIndexList.isEmpty()) {
+            theForm.setSelectedIllegalAOInCSR(false);
+            if (bNoDeletion) {
+                theForm.setSelectedIllegalAOInCSR(true);
+            }
+        }
+
+        theForm.setNumIneligibleAOsForCSR(checked);
+
+        if(checked > enabled){
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.WARNING, warningMessage);
+        }
     }
 
     public static void deleteBulkCos(ARGCourseOfferingManagementForm theForm) throws Exception {

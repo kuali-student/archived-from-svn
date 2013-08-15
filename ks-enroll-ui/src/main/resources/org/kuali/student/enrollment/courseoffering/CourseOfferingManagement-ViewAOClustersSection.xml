@@ -69,7 +69,6 @@
                       p:onClickScript="jQuery('input.required[value=]').removeClass('required');writeHiddenToForm(&quot;actionParameters[selectedLineIndex]&quot;, &quot;@{#index}&quot;);"
                       p:actionLabel="Delete&#160;&#160;|&#160;&#160;"  p:style="float:right"
                       p:componentSecurity.performActionAuthz="true" p:actionEvent="deleteCluster"/>
-
             </list>
         </property>
 
@@ -129,7 +128,7 @@
                         <bean parent="Uif-CheckboxControl" p:disabled="false"/>
                     </property>
                 </bean>
-                <bean parent="Uif-HorizontalFieldGroup" p:fieldLabel.labelText="CODE">
+                <bean parent="Uif-HorizontalFieldGroup" p:fieldLabel.labelText="CODE" >
                     <property name="items">
                         <list>
                             <bean parent="Uif-DataField" p:propertyName="aoInfo.activityCode" p:fieldLabel.render="false">
@@ -137,12 +136,39 @@
                                     <bean parent="KS-Uif-Inquiry" p:dataObjectClassName="org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper" p:inquiryParameters="aoInfo.id" />
                                 </property>
                             </bean>
+                            <bean parent="Uif-ImageField" p:hidden="@{#lp.hasRule eq false}"
+                                  p:source="@{#ConfigProperties['ks.externalizable.images.url']}/ActivityRuleIcon6px.png">
+                                <property name="style" value="padding-left:3px padding-bottom:3px;"/>
+                                <property name="toolTip">
+                                    <bean parent="Uif-Tooltip" p:tooltipContent="This Activity has requisite(s) in addition to any for the Course Offering"/>
+                                </property>
+                                <property name="propertyReplacers">
+                                    <list>
+                                        <!-- Don't render the tooltip elements if they aren't needed -->
+                                        <bean parent="Uif-ConditionalBeanPropertyReplacer" p:propertyName="toolTip" p:condition="@{#lp.hasRule eq false}">
+                                            <property name="replacement">
+                                                <null/>
+                                            </property>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
                             <bean parent="Uif-ImageField" p:hidden="@{#lp.colocatedAoInfo.isEmpty()}"
                                   p:image.altText="@{#line.colocatedAoInfoUI}"
                                   p:source="@{#ConfigProperties['ks.externalizable.images.url']}/colocate_icon.png">
-                                <property name="style" value="padding-left:5px"/>
+                                <property name="style" value="padding-left:3px"/>
                                 <property name="toolTip">
                                     <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="@{#lp.colocatedAoInfoUI}"/>
+                                </property>
+                                <property name="propertyReplacers">
+                                    <list>
+                                        <!-- Don't render the tooltip elements if they aren't needed -->
+                                        <bean parent="Uif-ConditionalBeanPropertyReplacer" p:propertyName="toolTip" p:condition="@{#lp.colocatedAoInfo.isEmpty()}">
+                                            <property name="replacement">
+                                                <null/>
+                                            </property>
+                                        </bean>
+                                    </list>
                                 </property>
                             </bean>
                             <bean parent="Uif-ImageField" p:hidden="@{#lp.subTermName eq 'None'}"

@@ -23,7 +23,7 @@
     </bean>
     <bean id="typeService" class="org.kuali.student.r2.common.type.service.TypeServiceMockImpl">
     </bean>
-    <bean id="organizationService" class="org.kuali.student.r2.core.class1.organization.service.impl.OrganizationServiceMockImpl">
+    <bean id="organizationService" class="org.kuali.student.r2.core.organization.service.impl.OrganizationServiceMockImpl">
     </bean>
 
 </beans>

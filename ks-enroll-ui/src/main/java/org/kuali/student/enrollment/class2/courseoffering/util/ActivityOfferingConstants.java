@@ -42,4 +42,18 @@ public class ActivityOfferingConstants {
     public static final String MSG_ERROR_SEATPOOL_DUPLICATE = "error.enroll.ao.seatpool.duplicate";
     public static final String MSG_ERROR_INVALID_START_TIME = "error.enroll.ao.starttime.invalid";
     public static final String MSG_ERROR_ORGANIZATION_ID_REQUIRED = "error.enroll.ao.organization.id.required" ;
+
+    public static final String ACTIVITYOFFERING_ACTION_APPROVE = "approveAO";
+    public static final String ACTIVITYOFFERING_ACTION_ADD = "addAO";
+    public static final String ACTIVITYOFFERING_ACTION_SET_DRAFT = "setDraftAO";
+    public static final String ACTIVITYOFFERING_ACTION_DELETE = "deleteAO";
+    public static final String ACTIVITYOFFERING_ACTION_ADD_CLUSTER = "addCluster";
+    public static final String ACTIVITYOFFERING_ACTION_MOVE = "moveAO";
+    public static final String ACTIVITYOFFERING_ACTION_CANCEL = "cancelAO";
+    public static final String ACTIVITYOFFERING_ACTION_SUSPEND = "suspendAO";
+    public static final String ACTIVITYOFFERING_ACTION_REINSTATE = "reinstateAO";
+    public static final String ACTIVITYOFFERINGS_ACTION_CANCEL = "cancelAOs";
+    public static final String ACTIVITYOFFERINGS_ACTION_SUSPEND = "suspendAOs";
+    public static final String ACTIVITYOFFERINGS_ACTION_REINSTATE = "reinstateAOs";
+
 }
