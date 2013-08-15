@@ -17,6 +17,9 @@
 package org.kuali.student.r2.core.constants;
 
 import org.kuali.student.r2.common.constants.CommonServiceConstants;
+import org.kuali.student.r2.common.util.RichTextHelper;
+import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.dto.OrgCodeInfo;
 import org.kuali.student.r2.core.organization.dto.OrgHierarchyInfo;
@@ -74,4 +77,50 @@ public class OrganizationServiceConstants {
      * KSENROLL-5112
      */
     public static final String ORG_ORG_SUBJECT_CODE_TO_ORG_TYPE_KEY = "kuali.org.org.relation.type.subjectcode2org";
+
+
+    /*Search constants*/
+    public static final TypeInfo ORGANIZATION_SEARCH_ORG_TYPE_SEARCH_TYPE;
+    public static final TypeInfo ORGANIZATION_SEARCH_ORG_PERSON_RELATION_TYPE_SEARCH_TYPE;
+
+    public static final String ORGANIZATION_SEARCH_ORG_TYPE_SEARCH_KEY = "org.search.orgTypes";
+    public static final String ORGANIZATION_SEARCH_ORG_PERSON_RELATION_TYPE_SEARCH_KEY = "org.search.orgPersonRelationTypes";
+
+    public static final class OrganizationSearchParameters {
+        public static final String ORG_OPTIONAL_ID = "org.queryParam.orgOptionalId";
+    }
+
+    public static final class OrganizationSearchResultColumns {
+        public static final String ORG_PERSON_RELATION_TYPE_ID = "org.resultColumn.orgPersonRelationType";
+        public static final String ORG_PERSON_RELATION_TYPE_NAME = "org.resultColumn.orgPersonRelationTypeName";
+        public static final String ORG_TYPE_ID = "org.resultColumn.orgType";
+        public static final String ORG_TYPE_NAME = "org.resultColumn.orgTypeName";
+    }
+
+    static {
+        TypeInfo info = new TypeInfo();
+        info.setKey(ORGANIZATION_SEARCH_ORG_TYPE_SEARCH_KEY);
+        info.setName("Org Type Search");
+        info.setDescr(new RichTextHelper().fromPlain("Return search results for Org Types"));
+
+        try {
+            info.setEffectiveDate(DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.parse("01/01/2012"));
+        } catch ( IllegalArgumentException ex) {
+            throw new RuntimeException("failed to parse date", ex);
+        }
+
+        ORGANIZATION_SEARCH_ORG_TYPE_SEARCH_TYPE = info;
+
+        info = new TypeInfo();
+        info.setKey(ORGANIZATION_SEARCH_ORG_PERSON_RELATION_TYPE_SEARCH_KEY);
+        info.setName("Org Person Relation Type Search");
+        info.setDescr(new RichTextHelper().fromPlain("Return search results for Org Person Relation Types"));
+
+        try {
+            info.setEffectiveDate(DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.parse("01/01/2012"));
+        } catch ( IllegalArgumentException ex) {
+            throw new RuntimeException("failed to parse date", ex);
+        }
+        ORGANIZATION_SEARCH_ORG_PERSON_RELATION_TYPE_SEARCH_TYPE = info;
+    }
 }
