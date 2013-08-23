@@ -16,8 +16,8 @@
 # the external paths for the changes to take effect.
 #
 
-ks-api https://svn.kuali.org/repos/student/sandbox/ksenroll-8498/ks-api
-ks-core https://svn.kuali.org/repos/student/sandbox/ksenroll-8498/ks-core
-ks-lum https://svn.kuali.org/repos/student/sandbox/ksenroll-8498/ks-lum
-ks-enroll https://svn.kuali.org/repos/student/sandbox/ksenroll-8498/ks-enroll
-ks-deployments https://svn.kuali.org/repos/student/sandbox/ksenroll-8498/ks-deployments
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/2.0.0-m8-api-upgrade
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/2.0.0-m8-api-upgrade
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/2.0.0-m8-api-upgrade
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/2.0.0-m8-api-upgrade
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/2.0.0-m8-api-upgrade
