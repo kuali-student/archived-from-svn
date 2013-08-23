@@ -69,7 +69,8 @@
                 <value>classpath:ks-TermInfo-dictionary.xml</value>
                 <value>classpath:ks-HolidayInfo-dictionary.xml</value>
                 <value>classpath:ks-KeyDateInfo-dictionary.xml</value>
-                <value>classpath:ks-CourseInfo-dictionary.xml</value> <!-- KSCM-720 Curriculum Management Course Info -->
+                <value>classpath:ks-CourseInfo-dictionary.xml</value> <!-- KSCM-720  Curriculum Management Course Info -->
+                <value>classpath:ks-CourseProposalInfo-dictionary.xml</value> <!-- KSCM-1017 Curriculum Management Course Info -->
 
 
                 <!-- KIM Attributes -->
