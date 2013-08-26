@@ -17,6 +17,7 @@ package org.kuali.student.lum.lu.service.impl;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
@@ -76,7 +77,10 @@ import org.kuali.student.r2.lum.clu.dto.LuCodeInfo;
 import org.kuali.student.r2.lum.clu.dto.MembershipQueryInfo;
 import org.kuali.student.r2.lum.clu.dto.ResultOptionInfo;
 import org.kuali.student.r2.lum.clu.service.CluService;
+import org.kuali.student.r2.lum.lu.dao.LuDao;
 import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -96,16 +100,54 @@ import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 @Daos({@Dao(value = "org.kuali.student.r2.lum.lu.dao.impl.LuDaoImpl", testSqlFile = "classpath:ks-lu.sql")})
 @PersistenceFileLocation("classpath:META-INF/lu-persistence.xml")
 @FixMethodOrder(NAME_ASCENDING)
+@ContextConfiguration(locations = {"classpath:course-test-context.xml"})
 public class TestCluServiceImpl extends AbstractServiceTest {
+
+    @Autowired
+    LuDao luDao;
     @Client(value = "org.kuali.student.r2.lum.lu.service.impl.CluServiceImpl", additionalContextFile = "classpath:clu-additional-context.xml")
     public CluService client;
+
+    private  CluResultInfo dto;
+    private CluResultInfo createCluResult;
+    private ContextInfo contextInfo;
+
+    @Before
+    public void setUp(){
+        contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+        contextInfo.setPrincipalId("123");
+
+        dto = new CluResultInfo();
+        RichTextInfo desc1 = new RichTextInfo();
+        desc1.setPlain("Plain description");
+        dto.setDescr(desc1);
+        dto.setCluId("CLU-1");
+        dto.setStateKey("Suspended");
+        dto.setTypeKey("kuali.resultType.gradeCourseResult");
+        dto.setEffectiveDate(new Date());
+        dto.setExpirationDate(new Date());
+
+        List<ResultOptionInfo> resultOptions = new ArrayList<ResultOptionInfo>();
+        ResultOptionInfo option = new ResultOptionInfo();
+        RichTextInfo desc2 = new RichTextInfo();
+        desc2.setPlain("Plain description");
+        option.setDescr(desc2);
+        option.setEffectiveDate(new Date());
+        option.setExpirationDate(new Date());
+        option.setResultComponentId("kuali.resultComponent.grade.letter");
+        option.setStateKey("Suspended");
+        resultOptions.add(option);
+        dto.setResultOptions(resultOptions);
+    }
+
+
 
     @Test
     public void test00Clu() throws DoesNotExistException,
             InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException {
         // getClu
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         CluInfo clu = client.getClu("CLU-1", contextInfo);
         assertNotNull(clu);
         assertEquals(clu.getId(), "CLU-1");
@@ -199,7 +241,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException {
         // getCluSetInfo
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         CluSetInfo csi = client.getCluSet("CLUSET-2", contextInfo);
         assertNotNull(csi);
 
@@ -323,7 +364,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             PermissionDeniedException, DoesNotExistException, ParseException,
             VersionMismatchException, UnsupportedActionException,
             CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         CluSetInfo cluSetInfo = new CluSetInfo();
 
         RichTextInfo desc = new RichTextInfo();
@@ -399,7 +440,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test03RemoveCluFromCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluIds().add("CLU-1");
         createCluSet.getCluIds().add("CLU-2");
@@ -421,7 +461,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test04RemoveCluSetFromCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluSetIds().add("CLUSET-1");
         createCluSet.getCluSetIds().add("CLUSET-2");
@@ -443,7 +482,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test05DeleteCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         CluSetInfo createCluSet = createCluSetInfo();
 
         CluSetInfo createdCluSet1 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSet, contextInfo);
@@ -466,7 +504,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             MissingParameterException, OperationFailedException,
             PermissionDeniedException, VersionMismatchException,
             DependentObjectsExistException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         List<CluCluRelationInfo> ccrs = client.getCluCluRelationsByClu("CLU-1", contextInfo);
         assertNotNull(ccrs);
         assertEquals(2, ccrs.size());
@@ -491,7 +528,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             OperationFailedException, PermissionDeniedException,
             VersionMismatchException, DependentObjectsExistException, ReadOnlyException {
 
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         CluInfo clu = createCluInfo();
 
         clu.getOfficialIdentifier().setCode("offId-divisionoffId-suffixcode");
@@ -1078,8 +1114,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     @Test
     public void test08CluCluRelationCrud() throws Exception {
 
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         final CluCluRelationInfo cluCluRelationInfo = new CluCluRelationInfo();
 
         final Date effectiveDate = DateFormatters.YEAR_MONTH_DAY_CONCAT_DATE_FORMATTER.parse("20080101"),
@@ -1272,7 +1306,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test10GetLuisByIdList() throws DoesNotExistException,
              InvalidParameterException, MissingParameterException,
              OperationFailedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<LuiInfo> luiInfos;
          try {
              luiInfos = atpService.getLuisByIds(null, contextInfo);
@@ -1399,7 +1433,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test12GetLuiIdsByCluId() throws DoesNotExistException,
              InvalidParameterException, MissingParameterException,
              OperationFailedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<String> luiIds = null;
          try {
              luiIds = atpService.getLuiIdsByCluId(null, contextInfo);
@@ -1425,7 +1459,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test13GetLuiIdsInAtpByCluId() throws DoesNotExistException,
              InvalidParameterException, OperationFailedException,
              MissingParameterException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<String> luiIds = null;
          try {
              luiIds = atpService.getLuiIdsInAtpByCluId(null, "ATP-1", contextInfo);
@@ -1454,7 +1488,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     /* KSCM Unsupported in KSCM     @Test
      public void test14GetLuLuRelationTypeInfo() throws OperationFailedException,
              DoesNotExistException, MissingParameterException, InvalidParameterException, PermissionDeniedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          TypeInfo luLuRelTypeInfo;
 
          try {
@@ -1478,7 +1512,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     /* KSCM Unsupported in KSCM    @Test
      public void test15GetLuLuRelationTypeInfos() throws OperationFailedException,
              DoesNotExistException, MissingParameterException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<TypeInfo> luLuRelTypeInfos;
          luLuRelTypeInfos = atpService.getLuLuRelationTypes(contextInfo);
          Collections.sort(luLuRelTypeInfos,
@@ -1499,7 +1533,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
              OperationFailedException, PermissionDeniedException,
              ParseException, AlreadyExistsException, MissingParameterException,
              DependentObjectsExistException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          try {
              atpService.updateLuiState(null, "Suspended", contextInfo);
              fail("CluService.updateLuiState() did not throw MissingParameterException for null Lui ID");
@@ -1545,7 +1579,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test17GetLuisByRelation() throws DoesNotExistException,
              InvalidParameterException, MissingParameterException,
              OperationFailedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<LuiInfo> luis = atpService.getLuisByRelation("LUI-1", "luLuType.type1", contextInfo);
          assertTrue(luis == null || luis.size() == 0);
          luis = atpService.getLuisByRelation("LUI-2", "luLuType.type1", contextInfo);
@@ -1563,7 +1597,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test18GetLuiIdsByRelation() throws DoesNotExistException,
              InvalidParameterException, MissingParameterException,
              OperationFailedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          List<String> luis = atpService.getLuiIdsByRelation("LUI-1",	"luLuType.type1", contextInfo);
          assertTrue(luis == null || luis.size() == 0);
          luis = atpService.getLuiIdsByRelation("LUI-2", "luLuType.type1", contextInfo);
@@ -1579,7 +1613,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             PermissionDeniedException, DependentObjectsExistException,
             ParseException, DataValidationErrorException,
             VersionMismatchException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluLoRelationInfo reltnInfo = new CluLoRelationInfo();
         reltnInfo.setCluId("CLU-1");
@@ -1650,7 +1683,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
      public void test20ResultUsageType() throws DoesNotExistException,
              InvalidParameterException, MissingParameterException,
              OperationFailedException, PermissionDeniedException {
-         ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
          TypeInfo lrType = atpService.getResultUsageType("lrType.finalGrade", contextInfo);
          assertEquals("Final Grade", lrType.getName());
          List<TypeInfo> lrTypes = atpService.getResultUsageTypes(contextInfo);
@@ -1664,7 +1697,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException,
             ParseException, VersionMismatchException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
         List<CluInfo> clus = client
                 .getClusByRelatedCluAndRelationType("CLU-1", "luLuType.type1", contextInfo);
         assertNotNull(clus);
@@ -1805,8 +1837,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException,
             VersionMismatchException, DependentObjectsExistException {
-
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluInfo clu = new CluInfo();
 
@@ -2035,8 +2065,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test26AddCluToCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         StatusInfo status = client.addCluToCluSet("CLU-1", createdCluSet.getId(), contextInfo);
@@ -2049,8 +2077,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test27AddCluToCluSet_DuplicateCluId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         StatusInfo status = client.addCluToCluSet("CLU-1", createdCluSet.getId(), contextInfo);
@@ -2062,8 +2088,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test28AddClusToCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         // Somehow cannot add 2 CLUs in sequence (JTA rollback exception) but adding a single CLU works
@@ -2087,8 +2111,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test29AddClusToCluSet_InvalidCluId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         List<String> cluIdList = Arrays.asList(new String[]{"CLU-1", "CLU-2", "CLU-INVALID-ID", "CLU-4"});
@@ -2103,8 +2125,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test30AddClusToCluSet_DuplicateCluId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         List<String> cluIdList = Arrays.asList(new String[]{"CLU-1", "CLU-2", "CLU-2", "CLU-4"});
@@ -2115,8 +2135,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test31AddClusToCluSet_InvalidCluSetId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         List<String> cluIdList = Arrays.asList(new String[]{"CLU-1", "CLU-2", "CLU-3", "CLU-4"});
 
         try {
@@ -2129,8 +2147,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test32AddCluSetToCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         StatusInfo status = client.addCluSetToCluSet(createdCluSet.getId(), "CLUSET-1", contextInfo);
@@ -2143,8 +2159,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test33AddCluSetToCluSet_CircularRelationshipException() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
         try {
@@ -2157,8 +2171,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test34AddCluSetToCluSet_NestedCircularRelationshipException() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-
         CluSetInfo createdCluSet1 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
         CluSetInfo createdCluSet2 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
         CluSetInfo createdCluSet3 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
@@ -2176,7 +2188,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test35AddCluSetToCluSet_DuplicateCluSetId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
@@ -2193,7 +2204,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test36AddCluSetToCluSet_InvalidCluSetId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
@@ -2207,7 +2217,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test37AddCluSetsToCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
@@ -2226,7 +2235,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test38AddCluSetsToCluSet_InvalidCluSetId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
@@ -2242,7 +2250,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test39AddCluSetsToCluSet_DuplicateCluSetId() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
 
@@ -2258,7 +2265,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test40AddCluSetsToCluSet_CircularRelationshipException() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
         // Adding createdCluSet to itself
@@ -2274,7 +2280,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test41AddCluSetsToCluSet_NestedCircularRelationshipException() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createdCluSet1 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
         CluSetInfo createdCluSet2 = client.createCluSet("kuali.cluSet.type.CreditCourse", createCluSetInfo(), contextInfo);
@@ -2299,7 +2304,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test42CreateDynamicCluSet_Simple() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
 
@@ -2340,7 +2344,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     // KSCM-626 TODO SearchParamInfo mismatch between MembershipInfoQuery and SearchRequestInfo
     @Test
     public void test43CreateDynamicCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
 
@@ -2374,7 +2377,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test44CreateCluSet_InvalidCluSet1() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
         cluSet.getCluIds().add("CLU-1");
@@ -2395,7 +2397,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test45CreateCluSet_InvalidCluSet2() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
         cluSet.getCluSetIds().add("CLUSET-1");
@@ -2416,7 +2417,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test46CreateCluSet_InvalidCluSet3() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
         cluSet.getCluIds().add("CLU-1");
@@ -2434,7 +2434,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     // KSCM-626 TODO SearchParamInfo mismatch between MembershipInfoQuery and SearchRequestInfo
     @Test
     public void test47GetDynamicCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
 
@@ -2460,7 +2459,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test48GetDynamicCluSet_Simple() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
 
@@ -2480,7 +2478,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test49GetCluSetTreeView() throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetTreeViewInfo treeView = client.getCluSetTreeView("CLUSET-2", contextInfo);
         assertNotNull(treeView);
@@ -2498,7 +2495,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test50GetCluSetTreeView_dynamicCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, UnsupportedActionException, DoesNotExistException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet = createCluSetInfo();
 
@@ -2519,7 +2515,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     public void test51GetCluSetTreeView_invalidCluSet()
             throws InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         try {
             client.getCluSetTreeView("CLUSET-XX", contextInfo);
             assertTrue(false);
@@ -2532,7 +2528,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     public void test52GetCluSetTreeView_nullCluSet()
             throws DoesNotExistException, InvalidParameterException,
             OperationFailedException, PermissionDeniedException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         try {
             client.getCluSetTreeView(null, contextInfo);
             assertTrue(false);
@@ -2544,7 +2540,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     // KSCM-626 TODO SearchParamInfo mismatch between MembershipInfoQuery and SearchRequestInfo
     @Test
     public void test53UpdateDynamicCluSet() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, VersionMismatchException, UnsupportedActionException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo cluSet1 = createCluSetInfo();
 
@@ -2577,7 +2572,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test54UpdateCluSet_VersionMismatch() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
 
@@ -2598,7 +2592,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test55UpdateCluSet_ClearCluSets() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluSetIds().add("CLUSET-1");
@@ -2619,7 +2612,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test56UpdateCluSet_AddCluSets() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
 
@@ -2640,7 +2632,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test57UpdateCluSet_removeCluSets() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluSetIds().add("CLUSET-1");
@@ -2663,7 +2654,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test58UpdateCluSet_ClearClus() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluIds().add("CLU-1");
@@ -2695,7 +2685,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test59UpdateCluSet_AddClu() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluIds().add("CLU-1");
@@ -2726,7 +2715,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test60UpdateCluSet_RemoveClu() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, UnsupportedActionException, VersionMismatchException, CircularRelationshipException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluSetInfo createCluSet = createCluSetInfo();
         createCluSet.getCluIds().add("CLU-1");
@@ -2758,7 +2746,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test61CreateCluResult() throws AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         contextInfo.setPrincipalId("123");
 
         CluResultInfo dto = new CluResultInfo();
@@ -2787,7 +2775,7 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test62UpdateCluResult() throws AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, VersionMismatchException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
+
         contextInfo.setPrincipalId("123");
 
         CluResultInfo dto = new CluResultInfo();
@@ -2858,32 +2846,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test63UpdateCluResult_RemoveAllCluResultOptions() throws AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, VersionMismatchException, ReadOnlyException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
-        contextInfo.setPrincipalId("123");
-
-        CluResultInfo dto = new CluResultInfo();
-        RichTextInfo desc1 = new RichTextInfo();
-        desc1.setPlain("Plain description");
-        dto.setDescr(desc1);
-        dto.setCluId("CLU-1");
-        dto.setStateKey("Suspended");
-        dto.setTypeKey("kuali.resultType.gradeCourseResult");
-        dto.setEffectiveDate(new Date());
-        dto.setExpirationDate(new Date());
-
-        List<ResultOptionInfo> resultOptions = new ArrayList<ResultOptionInfo>();
-        ResultOptionInfo option = new ResultOptionInfo();
-        RichTextInfo desc2 = new RichTextInfo();
-        desc2.setPlain("Plain description");
-        option.setDescr(desc2);
-        option.setEffectiveDate(new Date());
-        option.setExpirationDate(new Date());
-        option.setResultComponentId("kuali.resultComponent.grade.letter");
-        //option.setResultUsageTypeKey("lrType.finalGrade");
-        option.setStateKey("Suspended");
-        resultOptions.add(option);
-
-        dto.setResultOptions(resultOptions);
 
         CluResultInfo createCluResult = client.createCluResult("CLU-1", "kuali.resultType.gradeCourseResult", dto, contextInfo);
         createCluResult = client.getCluResult(createCluResult.getId(), contextInfo);
@@ -2903,7 +2865,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
 
     @Test
     public void test64Versioning() throws ParseException, AlreadyExistsException, DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, VersionMismatchException, IllegalVersionSequencingException, ReadOnlyException, DependentObjectsExistException {
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         CluInfo clu = createCluInfo();
         clu.setTypeKey("luType.shell.course");
@@ -2916,6 +2877,8 @@ public class TestCluServiceImpl extends AbstractServiceTest {
             assertTrue(false);
         } catch (Exception e) {
         }
+
+
 
         CluInfo justMadeCurrentClu = client.getClu(cluV1.getId(), contextInfo);
         assertTrue(justMadeCurrentClu.getVersion().getCurrentVersionStart().compareTo(new Date()) < 1);
@@ -3513,7 +3476,6 @@ public class TestCluServiceImpl extends AbstractServiceTest {
     @Test
     public void test69CluPublicationCrud() throws ParseException, AlreadyExistsException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, VersionMismatchException, ReadOnlyException {
         //Setup
-        ContextInfo contextInfo = ContextInfoTestUtility.getEnglishContextInfo();
 
         FieldInfo variant;
 
@@ -3672,6 +3634,29 @@ public class TestCluServiceImpl extends AbstractServiceTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @Test
+    public void test70GetCluResultsByClus() throws VersionMismatchException,DataValidationErrorException,ReadOnlyException,MissingParameterException, InvalidParameterException, OperationFailedException, DoesNotExistException, PermissionDeniedException {
+        List<String> cluIds = new ArrayList<String>();
+        cluIds.add("CLU-1");
+        cluIds.add("CLU-2");
+        cluIds.add("CLU-5");
+
+        CluResultInfo createCluResult = client.createCluResult("CLU-1", "kuali.resultType.gradeCourseResult", dto, contextInfo);
+        createCluResult = client.getCluResult(createCluResult.getId(), contextInfo);
+
+        assertNotNull(createCluResult);
+
+        List<CluResultInfo> cluResultInfos = client.getCluResultsByClus(cluIds, ContextInfoTestUtility.getEnglishContextInfo());
+        assertNotNull(cluResultInfos);
+        boolean bool = false;
+        for(CluResultInfo cluResultInfo : cluResultInfos) {
+            if(cluResultInfo.getCluId().equals("CLU-1"))
+                bool = true;
+        }
+        assertTrue(bool);
     }
 
 }
