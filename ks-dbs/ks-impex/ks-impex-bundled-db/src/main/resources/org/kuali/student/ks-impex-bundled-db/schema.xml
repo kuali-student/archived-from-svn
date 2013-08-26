@@ -2083,13 +2083,13 @@
     <sequence name="KRSB_MSG_QUE_S" startValue="467"/>
     <sequence name="KRSB_SVC_DEF_S" startValue="10105"/>
     <sequence name="KRSB_SVC_DSCRPTR_S" startValue="10105"/>
-    <sequence name="KS_RICE_ID_S" startValue="55730"/>
+    <sequence name="KS_RICE_ID_S" startValue="55695"/>
     <table name="KRAD_MSG_T">
         <column name="CMPNT_CD" nullable="false" primaryKey="true" type="STRING">
             <size value="100"/>
         </column>
         <column name="LOC" nullable="false" primaryKey="true" type="STRING">
-            <size value="255"/>
+            <size value="80"/>
         </column>
         <column name="MSG_DESC" type="STRING">
             <size value="255"/>
@@ -2110,7 +2110,7 @@
             <defaultValue>1 </defaultValue>
             <size value="8"/>
         </column>
-        <uniqueConstraint name="KRAD_MSG_TC2">
+        <uniqueConstraint name="KRAD_MSG_TC0">
             <column>OBJ_ID</column>
         </uniqueConstraint>
     </table>
@@ -8830,6 +8830,7 @@
             <size value="40"/>
         </column>
         <column name="SESN_ID" nullable="false" type="STRING">
+            <defaultValue>'undefined' </defaultValue>
             <size value="40"/>
         </column>
         <column name="VER_NBR" nullable="false" type="FLOAT">
@@ -10951,6 +10952,9 @@
         <column name="EFF_DT" nullable="false" type="TIMESTAMP">
             <size scale="6" scaleSet="true" value="11"/>
         </column>
+        <column name="EXPIR_DT" type="TIMESTAMP">
+            <size scale="6" scaleSet="true" value="11"/>
+        </column>
         <column name="HOLD_STATE" nullable="false" type="STRING">
             <size value="255"/>
         </column>
@@ -10971,9 +10975,6 @@
         </column>
         <column name="PERS_ID" nullable="false" type="STRING">
             <size value="255"/>
-        </column>
-        <column name="RELEASED_DT" type="TIMESTAMP">
-            <size scale="6" scaleSet="true" value="11"/>
         </column>
         <column name="UPDATEID" type="STRING">
             <size value="255"/>
