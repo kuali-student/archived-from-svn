@@ -38,6 +38,7 @@ import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.student.common.uif.service.impl.KSViewHelperServiceImpl;
 import org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.AcalEventWrapper;
+import org.kuali.student.enrollment.class2.acal.dto.ExamPeriodWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.KeyDateWrapper;
@@ -51,6 +52,7 @@ import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.AcalEventInfo;
+import org.kuali.student.r2.core.acal.dto.ExamPeriodInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayInfo;
 import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
@@ -226,7 +228,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
      * @param isCopy
      * @return
      */
-    public List<AcademicTermWrapper> populateTermWrappers(String acalId, boolean isCopy,boolean calculateInstrDays){
+    public List<AcademicTermWrapper> populateTermWrappers(String acalId, boolean isCopy, boolean calculateInstrDays){
         ContextInfo contextInfo = createContextInfo();
 
         if (LOG.isDebugEnabled()){
@@ -244,7 +246,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
                 if(!processedTerms.contains(termInfo)){
                     List<AtpAtpRelationInfo> atpRelations = getAtpService().getAtpAtpRelationsByTypeAndAtp(termInfo.getId(), AtpServiceConstants.ATP_ATP_RELATION_INCLUDES_TYPE_KEY, contextInfo);
                     if (atpRelations != null && atpRelations.size() > 0) { // if you're a parent term
-                        AcademicTermWrapper termWrapper = populateTermWrapper(termInfo, isCopy,calculateInstrDays); // create the term wrapper for the parent term
+                        AcademicTermWrapper termWrapper = populateTermWrapper(termInfo, isCopy, calculateInstrDays); // create the term wrapper for the parent term
                         //add the parent term into the term wrapper list
                         termWrappers.add(termWrapper);
                         processedTerms.add(termInfo);
@@ -255,7 +257,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
                             for(TermInfo tInfo : termInfos){
                                 // Find the subterms
                                 if(parentTermRelations.getRelatedAtpId().equals(tInfo.getId())){
-                                    AcademicTermWrapper subTermWrapper = populateTermWrapper(tInfo, isCopy,calculateInstrDays);
+                                    AcademicTermWrapper subTermWrapper = populateTermWrapper(tInfo, isCopy, calculateInstrDays);
                                     subTermWrapper.setParentTerm(termInfo.getTypeKey());   // the name here is ambigious
                                     subTermWrapper.setSubTerm(true);
                                     termWrapper.setHasSubterm(true);
@@ -263,6 +265,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
 
                                     // Allow parent term info to be set to copied term for sorting.
                                     subTermWrapper.setParentTermInfo(termInfo);
+                                    subTermWrapper.setParentTermName(termInfo.getName());
 
                                     termWrappers.add(subTermWrapper);
                                     processedTerms.add(tInfo);  // this term has now been processed
@@ -285,14 +288,6 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
             //sort term wrappers by start date
             sortTermWrappers(termWrappers);
 
-            // If copying reset subterm parent info to null after sorting list.
-            if(isCopy){
-                for(int i = 0; i<termWrappers.size();i++){
-                    if(termWrappers.get(i).isSubTerm())termWrappers.get(i).setParentTermInfo(null);
-                }
-            }
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -300,7 +295,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         return termWrappers;
     }
 
-    public AcademicTermWrapper populateTermWrapper(TermInfo termInfo, boolean isCopy,boolean calculateInstrDays) throws Exception {
+    public AcademicTermWrapper populateTermWrapper(TermInfo termInfo, boolean isCopy, boolean calculateInstrDays) throws Exception {
 
         if (LOG.isDebugEnabled()){
             LOG.debug("Populating Term - " + termInfo.getId());
@@ -308,13 +303,22 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
 
         TypeInfo type = getAcalService().getTermType(termInfo.getTypeKey(),createContextInfo());
 
-        AcademicTermWrapper termWrapper = new AcademicTermWrapper(termInfo,isCopy);
+        AcademicTermWrapper termWrapper = new AcademicTermWrapper(termInfo, isCopy);
         termWrapper.setTypeInfo(type);
         termWrapper.setTermNameForUI(type.getName());
         if (isCopy){
             termWrapper.setName(type.getName());
         }
 
+        //Populate examdates
+        List<ExamPeriodInfo> examPeriodInfos = getAcalService().getExamPeriodsForTerm(termInfo.getId(),createContextInfo());
+        if (examPeriodInfos != null && examPeriodInfos.size() > 0) {  //only one or none
+            for (ExamPeriodInfo examPeriodInfo : examPeriodInfos) {
+                ExamPeriodWrapper examPeriodWrapper = new ExamPeriodWrapper(examPeriodInfo, isCopy);
+                termWrapper.getExamdates().add(examPeriodWrapper);
+            }
+        }
+        
         //Populate keydates
         List<KeyDateInfo> keydateList = getAcalService().getKeyDatesForTerm(termInfo.getId(),createContextInfo());
         List<TypeInfo> keyDateTypes = getTypeService().getAllowedTypesForType(termInfo.getTypeKey(),createContextInfo());
@@ -413,16 +417,16 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         }
     }
 
-    public void copyToCreateAcademicCalendar(AcademicCalendarForm form){
+    public void copyToCreateAcademicCalendar(AcademicCalendarForm form) {
 
-           AcademicCalendarInfo orgAcalInfo = form.getCopyFromAcal();
+        AcademicCalendarInfo orgAcalInfo = form.getCopyFromAcal();
 
-           if (orgAcalInfo == null || StringUtils.isBlank(orgAcalInfo.getId())){
-               throw new RuntimeException("ACal Info doesn't exists to copy.");
-           }
+        if (orgAcalInfo == null || StringUtils.isBlank(orgAcalInfo.getId())) {
+            throw new RuntimeException("ACal Info doesn't exists to copy.");
+        }
 
-           // 1. copy over events
-        List<AcalEventInfo> orgEventInfoList= null;
+        // 1. copy over events
+        List<AcalEventInfo> orgEventInfoList = null;
         try {
             orgEventInfoList = getAcalService().getAcalEventsForAcademicCalendar(orgAcalInfo.getId(), createContextInfo());
         } catch (Exception e) {
@@ -430,22 +434,28 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         }
 
         List<AcalEventWrapper> newEventList = new ArrayList<AcalEventWrapper>();
-           for (AcalEventInfo orgEventInfo : orgEventInfoList){
-               AcalEventWrapper newEvent= new AcalEventWrapper(orgEventInfo,true);
-               try {
-                   TypeInfo type = getTypeInfo(orgEventInfo.getTypeKey());
-                   newEvent.setEventTypeName(type.getName());
-               }catch (Exception e){
-                   throw convertServiceExceptionsToUI(e);
-               }
-               newEventList.add(newEvent);
-           }
-           form.setEvents(newEventList);
+        for (AcalEventInfo orgEventInfo : orgEventInfoList) {
+            AcalEventWrapper newEvent = new AcalEventWrapper(orgEventInfo, true);
+            try {
+                TypeInfo type = getTypeInfo(orgEventInfo.getTypeKey());
+                newEvent.setEventTypeName(type.getName());
+            } catch (Exception e) {
+                throw convertServiceExceptionsToUI(e);
+            }
+            newEventList.add(newEvent);
+        }
+        form.setEvents(newEventList);
 
-          // 2. copy over terms
-          List<AcademicTermWrapper> newTermList = populateTermWrappers(orgAcalInfo.getId(), true,false);
-          form.setTermWrapperList(newTermList);
-          form.setMeta(orgAcalInfo.getMeta());
+        // 2. copy over terms
+        List<AcademicTermWrapper> newTermList = populateTermWrappers(orgAcalInfo.getId(), true, false);
+        form.setTermWrapperList(newTermList);
+        form.setMeta(orgAcalInfo.getMeta());
+
+        //clear exam period list for each term since they are not supposed to be copied
+        for (AcademicTermWrapper newTerm : newTermList) {
+            newTerm.getExamdates().clear();
+        }
+
 
     }
 
@@ -699,7 +709,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         // will be pointint at the wrong term.
         sortTermWrappers(acalForm.getTermWrapperList());
 
-        //Validate Terms and keydates
+        //Validate Terms keydates and exam period
         for (int index=0; index < acalForm.getTermWrapperList().size(); index++) {
             validateTerm(acalForm.getTermWrapperList(),index,acal);
         }
@@ -863,6 +873,7 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
         String termSectionName="term_section_line"+termToValidateIndex;
         String keyDateGroupSectionName="acal-term-keydatesgroup_line"+termToValidateIndex;
 
+
         int index2 = 0;
         //Validate duplicate term name
         for (AcademicTermWrapper wrapper : termWrapper) {
@@ -919,6 +930,8 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
             }
         }
 
+        //Validate exam dates
+        validateExamPeriod(termWrapperToValidate, termToValidateIndex);
     }
 
     /**
@@ -1322,6 +1335,40 @@ public class AcademicCalendarViewHelperServiceImpl extends KSViewHelperServiceIm
                     return ret;
                 }
             });
+        }
+    }
+
+    /**
+     * Validates the term at the given index
+     *
+     * @param termWrapperToValidate a term in an academic calendar
+     * @param termToValidateIndex index of the term to be validated
+     */
+    public void validateExamPeriod (AcademicTermWrapper termWrapperToValidate, int termToValidateIndex) {
+        String finalExamSectionName="acal-term-examdates_line"+termToValidateIndex;
+        if (termWrapperToValidate.getExamdates() != null && termWrapperToValidate.getExamdates().size() > 0) {
+            for (ExamPeriodWrapper examWrapper : termWrapperToValidate.getExamdates()){
+                // startDate must be before endDate
+                if (!CommonUtils.isValidDateRange(examWrapper.getStartDate(),examWrapper.getEndDate())){
+                    GlobalVariables.getMessageMap().putErrorForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_INVALID_DATE_RANGE, examWrapper.getExamPeriodNameUI(),CommonUtils.formatDate(examWrapper.getStartDate()),CommonUtils.formatDate(examWrapper.getEndDate()));
+                }
+                // Start and End Dates of the exam period should be within the the term period.
+                if (!CommonUtils.isDateWithinRange(termWrapperToValidate.getStartDate(),termWrapperToValidate.getEndDate(),examWrapper.getStartDate()) ||
+                        !CommonUtils.isDateWithinRange(termWrapperToValidate.getStartDate(),termWrapperToValidate.getEndDate(),examWrapper.getEndDate())){
+                    GlobalVariables.getMessageMap().putErrorForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_TERM_NOT_IN_TERM_RANGE,examWrapper.getExamPeriodNameUI(),termWrapperToValidate.getName());
+                }
+                // Both or neither dates should be filled
+                if ( examWrapper.getStartDate()!= null && !examWrapper.getStartDate().equals("") && (examWrapper.getEndDate() == null || examWrapper.getEndDate().equals(""))) {
+                    GlobalVariables.getMessageMap().putErrorForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_KEY_DATE_END_DATE_REQUIRED, examWrapper.getExamPeriodNameUI());
+                }
+                if ( examWrapper.getEndDate()!= null && !examWrapper.getEndDate().equals("") && (examWrapper.getStartDate() == null || examWrapper.getStartDate().equals(""))) {
+                    GlobalVariables.getMessageMap().putErrorForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_KEY_DATE_START_DATE_REQUIRED, examWrapper.getExamPeriodNameUI());
+                }
+                // Warn if both dates are empty
+                if( (examWrapper.getStartDate()== null || examWrapper.getStartDate().equals("")) && (examWrapper.getEndDate()== null || examWrapper.getEndDate().equals(""))) {
+                    GlobalVariables.getMessageMap().putWarningForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_EMPTY_DATES, examWrapper.getExamPeriodNameUI());
+                }
+            }
         }
     }
 }

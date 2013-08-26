@@ -335,6 +335,7 @@
         <property name="acalService" ref="AcademicCalendarService" />
         <property name="registrationCodeGeneratorFactory" ref="regGroupCodeGeneratorFactory" />
         <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+        <property name="activityOfferingTransformer" ref="activityTransformer" />
         <property name="acalServiceFacade" ref="acalServiceFacade"/>
         <!--The coService property is looked up in the service bus to prevent a circular spring reference-->
     </bean>
@@ -359,6 +360,7 @@
         <property name="businessLogic" ref="coBusinessLogic" />
         <property name="offeringCodeGenerator" ref="offeringCodeGenerator" />
         <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+        <property name="activityOfferingTransformer" ref="activityTransformer" />
         <property name="seatPoolDefinitionDao" ref="seatPoolDefinitionDao" />
         <property name="activityOfferingClusterDao" ref="activityOfferingClusterDao" />
         <property name="registrationGroupTransformer" ref="registrationGroupTransformer" />
@@ -461,6 +463,7 @@
   <bean id="coMockService" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceImpl">
     <property name="courseService" ref="courseServiceImpl" />
     <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+    <property name="activityOfferingTransformer" ref="activityTransformer" />
     <property name="registrationGroupTransformer" ref="registrationGroupTransformer" />
   </bean>
 
@@ -504,6 +507,12 @@
         <property name="nextDecorator" ref="luiServiceImpl" />
         <property name="validator" ref="validator" />
         <property name="typeService" ref="typeServiceCacheDecorator" />
+    </bean>
+
+    <!-- I have taken this cache out of rotation because it was breaking most calls. -->
+    <bean id="luiServiceCache" class="org.kuali.student.enrollment.class1.lui.service.decorators.LuiServiceCacheDecorator">
+        <property name="cacheManager" ref="ksCacheManager"/>
+        <property name="nextDecorator" ref="luiServiceImpl"/>
     </bean>
 
   <bean id="luiServiceImpl" class="org.kuali.student.enrollment.class1.lui.service.impl.LuiServiceImpl">
@@ -777,7 +786,9 @@
     </property>
   </bean>
 
-  <bean id="activityTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.ActivityOfferingTransformer" />
+  <bean id="activityTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.ActivityOfferingTransformer" >
+    <property name="krmsRuleManagementCopyMethods" ref="krmsRuleManagementCopyMethods" />
+  </bean>
 
   <!-- Process Service -->
   <bean id="processService" class="org.kuali.student.r2.core.process.impl.ProcessServiceImpl">
@@ -923,6 +934,27 @@
                 <property name="serviceInterface" value="org.kuali.student.r2.core.acal.service.facade.AcademicCalendarServiceFacade" />
                 <property name="localServiceName" value="AcademicCalendarServiceFacade" />
                 <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/acalServiceFacade" />
+                <property name="busSecurity" value="${ks.lum.bus.security}" />
+            </bean>
+        </property>
+    </bean>
+
+    <!-- For now, acal KSENROLL-8609 -->
+    <bean id="csrServiceFacade" class="org.kuali.student.enrollment.class2.courseoffering.service.facade.CSRServiceFacadeImpl">
+        <property name="coService" ref="CourseOfferingService"/>
+        <property name="typeService" ref="typeService" />
+        <property name="socService" ref="CourseOfferingSetService" />
+        <property name="luiService" ref="LuiService" />
+    </bean>
+
+    <!-- Put facade on the bus KSENROLL-8609 -->
+    <bean id="ks.exp.csrServiceFacade" class="org.kuali.rice.ksb.api.bus.support.ServiceBusExporter">
+        <property name="serviceDefinition">
+            <bean class="org.kuali.rice.ksb.api.bus.support.JavaServiceDefinition">
+                <property name="service" ref="csrServiceFacade" /> <!-- Must match id in the bean -->
+                <property name="serviceInterface" value="org.kuali.student.enrollment.class2.courseoffering.service.facade.CSRServiceFacade" />
+                <property name="localServiceName" value="CSRServiceFacade" /> <!-- Part of the QName -->
+                <property name="serviceNameSpaceURI" value="http://student.kuali.org/wsdl/csrServiceFacade" />
                 <property name="busSecurity" value="${ks.lum.bus.security}" />
             </bean>
         </property>

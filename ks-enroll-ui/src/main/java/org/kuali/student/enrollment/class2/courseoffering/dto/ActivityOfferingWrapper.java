@@ -110,6 +110,7 @@ public class ActivityOfferingWrapper implements Serializable{
     private boolean isColocatedOnLoadAlready;
     private boolean isSendRDLsToSchedulerAfterMSE;
     private boolean isRemovedFromColoSet;
+    private String reinstateStateName;
 
     private CourseOfferingContextBar contextBar = CourseOfferingContextBar.NULL_SAFE_INSTANCE;
 
@@ -141,6 +142,9 @@ public class ActivityOfferingWrapper implements Serializable{
      displayed start/end when subterm is changed/choremoved
      */
     private String subTermDatesJsonString;
+
+    //use this boolean to check if AO has any rule attached to it
+    private boolean hasRule;
 
     public ActivityOfferingWrapper(){
         aoInfo = new ActivityOfferingInfo();
@@ -1146,4 +1150,23 @@ public class ActivityOfferingWrapper implements Serializable{
     public void setRemovedFromColoSet(boolean removedFromColoSet) {
         isRemovedFromColoSet = removedFromColoSet;
     }
+
+    public boolean isHasRule() {
+        return hasRule;
+    }
+
+    public void setHasRule(boolean hasRule) {
+        this.hasRule = hasRule;
+    }
+
+
+    public String getReinstateStateName() {
+        return reinstateStateName;
+    }
+
+    public void setReinstateStateName(String reinstateStateName) {
+        this.reinstateStateName = reinstateStateName;
+    }
+
+
 }

@@ -49,17 +49,19 @@
     <bean id="ActivityOfferingEdit-section1" parent="Uif-VerticalBoxSection" >
         <property name="items">
             <list>
-                <bean  parent="Uif-GridGroup"  p:layoutManager.numberOfColumns="4" p:additionalCssClasses="ks-gray-background,ks-no-margins">
+                <bean parent="Uif-GridGroup"  p:layoutManager.numberOfColumns="4" p:additionalCssClasses="ks-gray-background,ks-no-margins">
                     <property name="items">
                         <list>
                             <bean parent="Uif-DataField" p:colSpan="3" id="status" p:label="Status" p:fieldLabel.renderColon ="false" p:propertyName="stateName"/>
                             <bean parent="Uif-DataField" p:colSpan="3" id="term" p:label="Term" p:fieldLabel.renderColon="false" p:propertyName="termName" p:readOnly="true"/>
                             <bean parent="Uif-DataField" id="subterm_name" p:label="Sub Term" p:fieldLabel.renderColon="false" p:propertyName="subTermName"  p:readOnly="true"/>
                             <bean parent="Uif-HorizontalBoxSection" p:colSpan="2">
+                                <property name="header.render" value="false"/>
                                 <property name="items">
                                     <list>
                                         <bean parent="Uif-NavigationActionLink" id="change_link" p:actionLabel="Change" p:render="@{#dp.hasSubTerms and !#parent.readOnly}"
-                                              p:performDirtyValidation="false" p:actionScript="openPopupContent(e,'KS-ActivityOfferingEdit-SubtermsPopupForm');" p:componentSecurity.performActionAuthz="true" p:actionEvent="changeSubtermAO"/>
+                                              p:performDirtyValidation="false" p:actionScript="openPopupContent(e,'KS-ActivityOfferingEdit-SubtermsPopupForm');"
+                                              p:componentSecurity.performActionAuthz="true" p:actionEvent="changeSubtermAO"/>
                                     </list>
                                 </property>
                             </bean>
@@ -119,6 +121,7 @@
                       p:id="is_co_located" p:componentSecurity.viewAuthz="true">
                     <property name="control">
                         <bean parent="Uif-CheckboxControl">
+                            <property name="disabled" value="@{#dp.aoInfo.stateKey eq 'kuali.lui.activity.offering.state.canceled' or #dp.aoInfo.stateKey eq 'kuali.lui.activity.offering.state.suspended'}"/>
                             <!--<property name="onChangeScript" value="setupColoCheckBoxChange(this,true)"/>-->
                             <property name="onChangeScript" value="handleColocation();"/>
                         </bean>
@@ -135,7 +138,7 @@
     </bean>
 
     <bean id="ActivityOfferingEdit-CoLocation" parent="Uif-VerticalBoxSection"  p:componentSecurity.viewAuthz="true"
-          p:style="width:600px;border: 1px solid black;" p:layoutManager.style="margin-left:10px;margin-right:10px;">
+          p:style="width:600px;border: 1px solid black; margin-bottom: 20px; padding-bottom: 5px;" p:layoutManager.style="margin-left:10px;margin-right:10px;">
         <property name="items">
             <list>
                 <bean parent="Uif-Message" p:messageText="Select Activities for Colocation" p:style="font-size:15px;"/>
@@ -216,22 +219,26 @@
                     <property name="control">
                         <bean parent="Uif-TextControl" p:size="4" p:watermarkText="A"/>
                     </property>
-                    <property name="quickfinder.dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper"/>
-                    <property name="quickfinder.quickfinderAction">
-                        <bean parent="Uif-ActionLink" p:actionLabel="Advanced Select" p:style="display:block" p:methodToCall="performLookup"/>
-                    </property>
-                    <property name="quickfinder.autoSearch" value="true"/>
-                    <property name="quickfinder.fieldConversions">
-                        <map>
-                            <entry key="aoInfo.activityCode" value="activityOfferingCode"/>
-                            <entry key="aoInfo.id" value="aoId"/>
-                        </map>
-                    </property>
-                    <property name="quickfinder.lookupParameters">
-                        <map>
-                            <entry key="courseOfferingCode" value="courseOfferingCode"/>
-                            <entry key="editRenderHelper.termId" value="termId"/>
-                        </map>
+                    <property name="quickfinder">
+                        <bean parent="Uif-QuickFinder">
+                            <property name="dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper"/>
+                            <property name="quickfinderAction">
+                                <bean parent="Uif-ActionLink" p:actionLabel="Advanced Select" p:style="display:block" p:methodToCall="performLookup"/>
+                            </property>
+                            <property name="autoSearch" value="true"/>
+                            <property name="fieldConversions">
+                                <map>
+                                    <entry key="aoInfo.activityCode" value="activityOfferingCode"/>
+                                    <entry key="aoInfo.id" value="aoId"/>
+                                </map>
+                            </property>
+                            <property name="lookupParameters">
+                                <map>
+                                    <entry key="courseOfferingCode" value="courseOfferingCode"/>
+                                    <entry key="editRenderHelper.termId" value="termId"/>
+                                </map>
+                            </property>
+                        </bean>
                     </property>
                 </bean>
 
@@ -302,6 +309,7 @@
                     <property name="addBlankLineAction.actionLabel" value="Add Personnel"/>
                     <property name="addBlankLineAction.id" value="ao-personnelgroup-addline"/>
                     <property name="addBlankLineAction.style" value="margin-top:30px; display:block;"/>
+                    <property name="addBlankLineAction.onDocumentReadyScript" value="reDisplayPersonnelSection();"/>
                     <property name="layoutManager.richTable">
                         <!-- see http://datatables.net/ref for all options -->
                         <bean parent="Uif-PagedRichTable">
@@ -319,16 +327,20 @@
                         <list>
                             <bean parent="Uif-InputField" p:id="personnelPriority" p:propertyName="offeringInstructorInfo.personId"
                                    p:label="ID" p:required="false" p:cssClasses="col_5">
-                                <property name="quickfinder.dataObjectClassName" value="org.kuali.student.rice.kim.impl.KSPersonImpl"/>
-                                <property name="quickfinder.fieldConversions">
-                                    <map>
-                                        <entry key="name" value="offeringInstructorInfo.personName"/>
-                                        <entry key="principalId" value="offeringInstructorInfo.personId"/>
-                                    </map>
-                                </property>
-                                <property name="quickfinder.viewName" value="ks_simplePersonLookup" />
-                                <property name="quickfinder.lightBoxLookup">
-                                    <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="true"/>
+                                <property name="quickfinder">
+                                    <bean parent="Uif-QuickFinder">
+                                        <property name="dataObjectClassName" value="org.kuali.student.rice.kim.impl.KSPersonImpl"/>
+                                        <property name="fieldConversions">
+                                            <map>
+                                                <entry key="name" value="offeringInstructorInfo.personName"/>
+                                                <entry key="principalId" value="offeringInstructorInfo.personId"/>
+                                            </map>
+                                        </property>
+                                        <property name="viewName" value="ks_simplePersonLookup" />
+                                        <property name="lightBoxLookup">
+                                            <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="true"/>
+                                        </property>
+                                    </bean>
                                 </property>
                             </bean>
                             <bean parent="Uif-InputField" p:propertyName="offeringInstructorInfo.personName" p:label="Name" p:required="false"/>
@@ -365,7 +377,8 @@
                     <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.SeatPoolWrapper" />
                     <property name="propertyName" value="seatpools" />
                     <property name="addBlankLineAction.actionLabel" value="Add Seat Pool"/>
-                    <property name="addBlankLineAction.onDocumentReadyScript" value="showSPAddlinePriority();"/>
+                    <property name="addBlankLineAction.onDocumentReadyScript" value="showSPAddlinePriority(); reDisplaySeatPoolSection();"/>
+                    <property name="addBlankLineAction.id" value="ao-seatpoolgroupZ_add"/>
 
                     <property name="items">
                         <list>
@@ -393,12 +406,16 @@
                                 <property name="control">
                                     <bean parent="Uif-TextControl" p:size="40" p:onBlurScript="validatePopulationForSP(this,'@{document.newMaintainableObject.dataObject.populationsJSONString}');"/>
                                 </property>
-                                <property name="quickfinder.dataObjectClassName" value="org.kuali.student.enrollment.class2.population.dto.PopulationWrapper"/>
-                                <property name="quickfinder.fieldConversions">
-                                    <map>
-                                        <entry key="populationInfo.id" value="seatPoolPopulation.id"/>
-                                        <entry key="populationInfo.name" value="seatPoolPopulation.name"/>
-                                    </map>
+                                <property name="quickfinder">
+                                    <bean parent="Uif-QuickFinder">
+                                        <property name="dataObjectClassName" value="org.kuali.student.enrollment.class2.population.dto.PopulationWrapper"/>
+                                        <property name="fieldConversions">
+                                            <map>
+                                                <entry key="populationInfo.id" value="seatPoolPopulation.id"/>
+                                                <entry key="populationInfo.name" value="seatPoolPopulation.name"/>
+                                            </map>
+                                        </property>
+                                    </bean>
                                 </property>
                                 <property name="dependencyConstraints">
                                     <list>

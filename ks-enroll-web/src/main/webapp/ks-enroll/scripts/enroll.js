@@ -194,8 +194,6 @@ function addActionColumn(isReadOnly, componentId) {
                 "methodToCall":"loadAOs_RGs_AOCs",
                 "actionParameters[selectedCollectionPath]":"courseOfferingResultList",
                 "actionParameters[selectedLineIndex]":index,
-                "showHistory":"false",
-                "showHome":"false",
                 "jumpToId":componentId
             });
 
@@ -429,7 +427,7 @@ function jsonShow(url) {
             row.append(checkboxColumn);
 
             var codeAnchor = jQuery("<a id='code_line" + rowNumber + "'"
-                + "href='" + url + "/kr-krad/inquiry?courseOfferingId=" + columns.courseOfferingId +"&amp;methodToCall=start&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper&amp;renderedInLightBox=true&amp;showHome=false&amp;showHistory=false&amp;history=" + historyParameterString
+                + "href='" + url + "/kr-krad/inquiry?courseOfferingId=" + columns.courseOfferingId +"&amp;methodToCall=start&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEditWrapper&amp;renderedInLightBox=true&amp;history=" + historyParameterString
                 + "' target='_self' class='uif-link' title='Course Offering =courseOfferingId'>" + columns.courseOfferingCode + "</a>");
 
 //            <input type="hidden" data-role="script" value="
@@ -908,7 +906,7 @@ function findDirtyFields(returnFieldId){
  if you conduct a subject-search (say, WMST) they want the view-title to be "WMST: Women's Studies".
  */
 function updateViewHeaderText( value ) {
-    jQuery( 'div.uif-view h1.uif-headerText span.uif-headerText-span' ).html( value );
+    jQuery( 'div.uif-formView h1.uif-headerText span.uif-headerText-span' ).html( value );
 }
 
 function createDisclosure(groupId, headerId, widgetId, defaultOpen, collapseImgSrc, expandImgSrc, animationSpeed, renderImage) {
@@ -946,17 +944,17 @@ function createDisclosure(groupId, headerId, widgetId, defaultOpen, collapseImgS
         var disclosureContent = jQuery("#" + groupAccordionSpanId);
         // perform slide and switch image
         if (defaultOpen) {
-            disclosureContent.data("open", true);
+            disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, true);
             jQuery("#" + groupToggleLinkId).toggle(
                 function () {
                     jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
-                    disclosureContent.data("open", false);
+                    disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, false);
                     disclosureContent.slideUp(animationSpeed, animationFinishedCallback);
                     jQuery("#" + groupId + "_exp").replaceWith(collapseImage);
                     setComponentState(widgetId, 'open', false);
                 }, function () {
                     jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
-                    disclosureContent.data("open", true);
+                    disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, true);
                     disclosureContent.slideDown(animationSpeed, animationFinishedCallback);
                     jQuery("#" + groupId + "_col").replaceWith(expandImage);
                     setComponentState(widgetId, 'open', true);
@@ -964,18 +962,18 @@ function createDisclosure(groupId, headerId, widgetId, defaultOpen, collapseImgS
             );
         }
         else {
-            disclosureContent.data("open", false);
+            disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, false);
             jQuery("#" + groupToggleLinkId).toggle(
                 function () {
                     jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
-                    disclosureContent.data("open", true);
+                    disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, true);
                     disclosureContent.slideDown(animationSpeed, animationFinishedCallback);
                     jQuery("#" + groupId + "_col").replaceWith(expandImage);
                     setComponentState(widgetId, 'open', true);
 
                 }, function () {
                     jQuery("#" + kradVariables.APP_ID).attr("data-skipResize", true);
-                    disclosureContent.data("open", false);
+                    disclosureContent.attr(kradVariables.ATTRIBUTES.DATA_OPEN, false);
                     disclosureContent.slideUp(animationSpeed, animationFinishedCallback);
                     jQuery("#" + groupId + "_exp").replaceWith(collapseImage);
                     setComponentState(widgetId, 'open', false);
@@ -999,73 +997,6 @@ function removeNewItemHighlights(){
 
 }
 
-
-/**
- * KSENROLL-7852 Temp fix for KRAD bug KULRICE-9866
- * Runs client side validation on the entire form and returns the result (an alert is also given
- * if errors are encountered)
- *
- */
-function validateForm() {
-    clientErrorStorage = new Object();
-    var summaryTextExistence = new Object();
-    var validForm = true;
-
-    jQuery.watermark.hideAll();
-    pauseTooltipDisplay = true;
-
-    if (validateClient) {
-        // Turn on this flag to avoid prematurely writing out messages which will cause performance issues if MANY
-        // fields have validation errors simultaneously (first we are only checking for errors, not checking and
-        // writing simultaneously like normal)
-        clientErrorExistsCheck = true;
-
-        // Temporarily turn off this flag to avoid traversing unneeded logic (all messages will be shown at the end)
-        messageSummariesShown = false;
-
-        // Validate the whole form
-        validForm = jq("#kualiForm").valid();
-
-        // Handle field message bubbling manually, but do not write messages out yet
-        jQuery("div[data-role='InputField']").each(function () {
-            var id = jQuery(this).attr('id');
-            var field = jQuery("#" + id);
-            var data = field.data(kradVariables.VALIDATION_MESSAGES);
-            data.errors = [];
-            data.warnings = [];
-            data.info = [];
-            var parent = field.data("parent");
-            handleMessagesAtGroup(parent, id, data, true);
-        });
-
-        // Toggle the flag back to default
-        clientErrorExistsCheck = false;
-
-        // Message summaries are going to be shown
-        messageSummariesShown = true;
-
-        // Finally, write the result of the validation messages
-        writeMessagesForPage();
-    }
-
-    if (!validForm) {
-        validForm = false;
-
-        //ensure all non-visible controls are visible to the user
-        jQuery(".error:not(:visible)").each(function () {
-            cascadeOpen(jQuery(this));
-        });
-
-        jumpToTop();
-        showClientSideErrorNotification();
-        jQuery(".uif-pageValidationMessages li.uif-errorMessageItem:first > a").focus();
-    }
-
-    jq.watermark.showAll();
-    pauseTooltipDisplay = false;
-
-    return validForm;
-}
 
 /*
 Replaces the checkbox inputs with radio in a table.
@@ -1120,6 +1051,49 @@ function resetDirtyFields(returnFieldId){
 }
 
 /**
+ * hide the add exam period button based on if there is already an existing exam
+ * period attached to the given term after the add exam period button is clicked
+ * and then the exam period component is reloaded
+ *
+ * @param collectionGroupId: id of each collection group item
+ * @param lineIdPrefix: id prefix of exam period line
+ * @param addExamPeriodButtonIdPrefix: id prefix of add exam period button
+ */
+function hideAddExamPeriodButton(collectionGroupId, lineIdPrefix, addExamPeriodButtonIdPrefix) {
+    var termLineIndex = collectionGroupId.substring(collectionGroupId.lastIndexOf('line'));
+    var lineId = lineIdPrefix + '_' + termLineIndex + '_line0';
+    var addExamPeriodButtonId = addExamPeriodButtonIdPrefix + '_' + termLineIndex;
+
+    if (jQuery("#"+lineId).length > 0) {
+        jQuery("#"+addExamPeriodButtonId).hide();
+    }
+
+}
+
+/**
+ * display or hide the add exam period button based on if there is already an existing exam
+ * period attached to the given term when the term section is loaded
+ *
+ * @param examPeriodSectionId: id of exam period component
+ * @param lineIdPrefix: id prefix of exam period line
+ * @param addExamPeriodButtonIdPrefix: id prefix of add exam period button
+ */
+function initAddExamPeriodButtons(examPeriodSectionId, lineIdPrefix, addExamPeriodButtonIdPrefix) {
+    var examPeriodIdPrefix = examPeriodSectionId + '_line';
+    var examPeriodComponents = jQuery('div[id^="' + examPeriodIdPrefix + '"]');
+
+    jQuery.each(examPeriodComponents, function (index) {
+        var lineId = lineIdPrefix + '_line' + index + '_line0';
+        var addExamPeriodButtonId = addExamPeriodButtonIdPrefix + '_line' + index;
+
+        if (jQuery("#"+lineId).length > 0) {
+            jQuery("#"+addExamPeriodButtonId).hide();
+        }
+    });
+
+}
+
+/**
  * Once we get the next rice release, have to remove this override
  *
  * FIXME: Delete this method once KULRICE-9978 resolved
@@ -1141,342 +1115,22 @@ function openDataTablePage(tableId, pageNumber) {
     }
 }
 
-
-
-//*********************************************************************************************
-//START: Please REMOVE THIS CODE AFTER THE RICE 2.3-RC1 Upgrade!!!
-/**
- * Performs client side validation on the list of given controls and returns whether the controls
- * are valid
- *
- * @param controlsToValidate - list of controls (jQuery wrapping objects) that should be validated
- */
-function validateLineFields(controlsToValidate) {
-    profile(true,"addLine validate");
-    var valid = true;
-
-    // skip completely if client validation is off
-    if (!validateClient) {
-        return valid;
-    }
-
-    jQuery.watermark.hideAll();
-
-    // Turn on this flag to avoid prematurely writing out messages which will cause performance issues if MANY
-    // fields have validation errors simultaneously (first we are only checking for errors, not checking and
-    // writing simultaneously like normal)
-    clientErrorExistsCheck = true;
-
-    // Temporarily turn off this flag to avoid traversing unneeded logic (all messages will be shown at the end)
-    messageSummariesShown = false;
-
-    controlsToValidate.each(function () {
-        var control = jQuery(this);
-        var fieldId = jQuery(this).closest("div[data-role='InputField']").attr("id");
-        var field = jQuery("#" + fieldId);
-        var parent = field.data("parent");
-        var validValue = true;
-
-        // remove ignoreValid because there are issues with the plugin if it stays on
-        control.removeClass("ignoreValid");
-
-        haltValidationMessaging = true;
-
-        if (!control.prop("disabled") && !control.hasClass("uif-readOnlyContent")) {
-            control.valid();
-            if (control.hasClass("error")) {
-                validValue = false;
-            }
-        }
-
-        var data = field.data(kradVariables.VALIDATION_MESSAGES);
-        data.errors = [];
-        data.warnings = [];
-        data.info = [];
-        handleMessagesAtGroup(parent, fieldId, data, true);
-
-        haltValidationMessaging = false;
-
-        //details visibility check
-        if (control.not(":visible") && !validValue) {
-            cascadeOpen(control);
-        }
-
-        if (!validValue) {
-            valid = false;
-        }
-
-        control.addClass("ignoreValid");
-    });
-
-    // Toggle the flag back to default
-    clientErrorExistsCheck = false;
-
-    // Message summaries are going to be shown
-    messageSummariesShown = true;
-
-    // Finally, write the result of the validation messages
-    writeMessagesForPage();
-
-    jQuery.watermark.showAll();
-    profile(false,"addLine validate");
-    return valid;
-}
-
-function handleMessagesAtGroup(id, fieldId, fieldData, pageSetupPhase) {
-    var group = jQuery("#" + id);
-    var data = group.data(kradVariables.VALIDATION_MESSAGES);
-
-    var pageLevel = false;
-    var parent = group.data("parent");
-    if (data) {
-        var messageMap = data.messageMap;
-        pageLevel = data.pageLevel;
-
-        //init empty params
-        if (!data.errors) {
-            data.errors = [];
-        }
-        if (!data.warnings) {
-            data.warnings = [];
-        }
-        if (!data.info) {
-            data.info = [];
-        }
-        if (!messageMap) {
-            messageMap = {};
-            data.messageMap = messageMap;
-        }
-
-        //retrieve header for section
-        if (data.isSection == undefined) {
-            var sectionHeader = jQuery("[data-header_for='" + id + "']").find("> :header, > label");
-            data.isSection = sectionHeader.length;
-        }
-
-        //add fresh data to group's message data based on the new field info
-        messageMap[fieldId] = fieldData;
-
-        //write messages for this group
-        if (!pageSetupPhase) {
-            var forceWrite = jQuery("div[data-messages_for='" + id + "']").find("li[data-messageitemfor='" + fieldId + "']").length;
-            writeMessagesForGroup(id, data, forceWrite);
-            displayHeaderMessageCount(id, data);
-        }
-    }
-
-    if (!pageLevel && parent) {
-        handleMessagesAtGroup(parent, fieldId, fieldData, pageSetupPhase);
-    }
-}
-
-function writeMessagesForGroup(id, data, forceWrite) {
-    var parent = jQuery("#" + id).data("parent");
-
-    if (data) {
-        var messageMap = data.messageMap;
-        var pageLevel = data.pageLevel;
-        var order = data.order;
-        var sections = data.sections;
-
-        //retrieve header for section
-        if (data.isSection == undefined) {
-            var sectionHeader = jQuery("[data-header_for='" + id + "']").find("> :header, > label");
-            data.isSection = sectionHeader.length;
-        }
-
-        //show messages if data is received as force show or if this group is considered a section
-        var showMessages = data.isSection || data.forceShow;
-
-        //TabGroups rely on tab error indication to indicate messages - don't show messages here
-        var type = jQuery("#" + id).data("type");
-        if (type && type == kradVariables.TAB_GROUP_CLASS) {
-            showMessages = false;
-        }
-
-        //if this group is in a tab in a tab group show your messages because TabGroups will not
-        if (parent) {
-            var parentType = jQuery("#" + parent).data("type");
-            if (parentType && parentType == kradVariables.TAB_GROUP_CLASS) {
-                showMessages = true;
-            }
-        }
-
-        //init empty params
-        if (!data.errors) {
-            data.errors = [];
-        }
-        if (!data.warnings) {
-            data.warnings = [];
-        }
-        if (!data.info) {
-            data.info = [];
-        }
-
-        data = calculateMessageTotals(id, data);
-
-        if (showMessages) {
-
-            var newList = jQuery("<ul class='" + kradVariables.VALIDATION_MESSAGES_CLASS + "'></ul>");
-
-            if (data.messageTotal || jQuery("span.uif-correctedError").length || forceWrite) {
-
-                newList = generateSectionLevelMessages(id, data, newList);
-
-                if (data.summarize) {
-                    newList = generateSummaries(id, messageMap, sections, order, newList);
-                }
-                else {
-                    //if not generating summaries just output field links
-                    for (var key in messageMap) {
-                        var link = generateFieldLink(messageMap[key], key, data.collapseFieldMessages, data.displayLabel);
-                        newList = writeMessageItemToList(link, newList);
-                    }
-                }
-
-                var messageBlock = jQuery("[data-messages_for='" + id + "']");
-
-                //remove old block styling
-                messageBlock.removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_ERROR_CLASS);
-                messageBlock.removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_WARNING_CLASS);
-                messageBlock.removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_INFO_CLASS);
-
-                //give the block styling
-                if (data.errorTotal > 0) {
-                    messageBlock.addClass(kradVariables.PAGE_VALIDATION_MESSAGE_ERROR_CLASS);
-                }
-                else if (data.warningTotal > 0) {
-                    messageBlock.addClass(kradVariables.PAGE_VALIDATION_MESSAGE_WARNING_CLASS);
-                }
-                else if (data.infoTotal > 0) {
-                    messageBlock.addClass(kradVariables.PAGE_VALIDATION_MESSAGE_INFO_CLASS);
-                }
-
-                //clear and write the new list of summary items
-                clearMessages(id, false);
-                handleTabStyle(id, data.errorTotal, data.warningTotal, data.infoTotal);
-                writeMessages(id, newList);
-                //page level validation messsage header handling
-                if (pageLevel) {
-                    if (newList.children().length) {
-                        var messagesDiv = jQuery("[data-messages_for='" + id + "']");
-                        var countMessage = generateCountString(data.errorTotal, data.warningTotal,
-                            data.infoTotal);
-
-                        //set the window title
-                        addCountToDocumentTitle(countMessage);
-
-                        var single = isSingularMessage(newList);
-                        var pageValidationHeader;
-                        if (!single) {
-                            pageValidationHeader = jQuery("<h3 tabindex='0' class='" + kradVariables.VALIDATION_PAGE_HEADER_CLASS + "' "
-                                + "id='pageValidationHeader'>This page has " + countMessage + "</h3>");
-                        }
-                        else {
-                            pageValidationHeader = jQuery(newList).detach();
-                        }
-
-                        pageValidationHeader.find(".uif-validationImage").remove();
-                        var pageSummaryClass = "";
-                        var image = errorGreyImage;
-                        if (data.errorTotal) {
-                            pageSummaryClass = kradVariables.PAGE_VALIDATION_MESSAGE_ERROR_CLASS;
-                            image = errorImage;
-                        }
-                        else if (data.warningTotal) {
-                            pageSummaryClass = kradVariables.PAGE_VALIDATION_MESSAGE_WARNING_CLASS;
-                            image = warningImage;
-                        }
-                        else if (data.infoTotal) {
-                            pageSummaryClass = kradVariables.PAGE_VALIDATION_MESSAGE_INFO_CLASS;
-                            image = infoImage;
-                        }
-
-                        if (!single) {
-                            pageValidationHeader.prepend(image);
-                        }
-                        else {
-                            pageValidationHeader.find("li").prepend(image);
-                            pageValidationHeader.addClass("uif-pageValidationMessage-single")
-                        }
-
-                        messagesDiv.prepend(pageValidationHeader);
-
-                        //Handle special classes
-                        pageValidationHeader.parent().removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_ERROR_CLASS);
-                        pageValidationHeader.parent().removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_WARNING_CLASS);
-                        pageValidationHeader.parent().removeClass(kradVariables.PAGE_VALIDATION_MESSAGE_INFO_CLASS);
-                        pageValidationHeader.parent().addClass(pageSummaryClass);
-
-                        if (!data.showPageSummaryHeader && !single) {
-                            pageValidationHeader.hide();
-                        }
-
-                        messagesDiv.find(".uif-validationMessagesList").attr("id", "pageValidationList");
-                        messagesDiv.find(".uif-validationMessagesList").attr("aria-labelledby",
-                            "pageValidationHeader");
-                    }
-                }
-            }
-            else {
-                clearMessages(id, true);
-            }
-        }
-    }
-}
-
-function runHiddenScripts(id, isSelector, skipValidationBubbling) {
-
-    if (id) {
-
-        var selector = "#" + id;
-        if (isSelector) {
-            selector = id;
-        }
-
-        evaluateScripts(selector);
-
-        if(!isSelector){
-            runScriptsForId(id);
-        }
-
-        //Interpret new server message state for refreshed InputFields and write them out
-        profile(true,"hiddenscripts");
-        if (!skipValidationBubbling) {
-
-            //reinitialize BubblePopup
-            initBubblePopups();
-
-            jQuery(selector).find("div[data-role='InputField']").andSelf().filter("div[data-role='InputField']").each(function () {
-                var id = jQuery(this).attr('id');
-                var field = jQuery("#" + id);
-                var data = field.data(kradVariables.VALIDATION_MESSAGES);
-                data.errors = [];
-                data.warnings = [];
-                data.info = [];
-                var parent = field.data("parent");
-                writeMessagesAtField(id);
-                handleMessagesAtGroup(parent, id, data, true);
-            });
-
-            writeMessagesForPage();
-        }
-        profile(false,"hiddenscripts");
-    }
-    else {
-        evaluateScripts();
-
-        //reinitialize BubblePopup
-        initBubblePopups();
-    }
-
-}
-//END: Please REMOVE THIS CODE AFTER THE RICE 2.3-RC1 Upgrade!!!
-//*********************************************************************************************
-
 function toggleTextBoxes(textBox){
     jQuery(textBox).bind('input', function(event) {
         jQuery(textBox).keyup();
         console.log(event);
     });
 }
+
+function displayCalendarInformation(jqObject, fieldId){
+    var currentId = jqObject.attr('id');
+    if (currentId.indexOf("_control") == -1) {
+        currentId = currentId + "_control";
+    }
+    var element = jQuery('#' + currentId);
+    var value = element.val();
+
+    var field = jQuery('#' + fieldId + ' span[class=uif-readOnlyContent]');
+    field.text(value);
+}
+

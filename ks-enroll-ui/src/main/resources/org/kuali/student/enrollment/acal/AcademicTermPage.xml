@@ -45,7 +45,7 @@
         <property name="propertyName" value="termWrapperList" />
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper" />
         <property name="style" value="min-width:70em;"/>
-        <property name="onDocumentReadyScript" value="window.setTimeout(removeNewItemHighlights(),5000); resetDirtyFields('AcalEdit-DirtyFields');" />
+        <property name="onDocumentReadyScript" value="window.setTimeout(removeNewItemHighlights(),5000); resetDirtyFields('AcalEdit-DirtyFields'); initAddExamPeriodButtons('acal-term-examdates', 'exam_date_type', 'acal-term-examdates-add');" />
         <!--<property name="header.render" value="false" />-->
         <property name="headerText" value="Terms"/>
         <property name="validationMessages.displayMessages" value="false"/>
@@ -110,7 +110,7 @@
                 <!-- Empty to override defaults-->
             </list>
         </property>
-        <property name="addLineLabel.labelText" value="Add Terms"/>
+        <property name="addLineLabel.messageText" value="Add Terms"/>
 
         <property name="addLineItems">
             <list>
@@ -278,12 +278,13 @@
         <property name="subCollections">
             <list>
                 <ref bean="KS-KeyDatesGroup-EditSubSection" />
+                <ref bean="KS-ExamDates-EditSubSection" />
             </list>
         </property>
     </bean>
 
     <bean id="KS-KeyDatesGroup-EditSubSection" parent="KS-Uif-StackedCollectionSubSection-HorizontalSubCollectionFieldGroupWithDisclosure"
-          p:onDocumentReadyScript="highlightElements(@{validationJSONString}, @{addLineValid}, '@{#ConfigProperties['application.url']}');">
+          p:onDocumentReadyScript="highlightElements(@{validationJSONString == '' ? '{}' : validationJSONString}, @{addLineValid}, '@{#ConfigProperties['application.url']}');">
         <property name="id" value="acal-term-keydatesgroup"/>
         <property name="disclosure.render" value="false"/>
         <property name="readOnly" value="@{#view.readOnly}"/>
@@ -341,7 +342,7 @@
     </bean>
 
     <bean id="KS-KeyDates-EditSubSection" parent="Uif-Disclosure-TableSubCollection-WithinSubSection"
-          p:id="acal-term-keydates" p:readOnly="@{#view.readOnly}" p:onDocumentReadyScript="highlightElements(@{validationJSONString}, @{addLineValid}, '@{#ConfigProperties['application.url']}');">
+          p:id="acal-term-keydates" p:readOnly="@{#view.readOnly}" p:onDocumentReadyScript="highlightElements(@{validationJSONString == '' ? '{}' : validationJSONString}, @{addLineValid}, '@{#ConfigProperties['application.url']}');">
         <property name="propertyName" value="keydates" />                <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.acal.dto.KeyDateWrapper" />
         <property name="header.render" value="false"/>
         <!--<property name="layoutManager.numberOfColumns" value="@{#view.readOnly ? 3 : 9}"/>-->
@@ -451,5 +452,56 @@
             </list>
         </property>
     </bean>
-    <bean id="textAligns" class="org.kuali.rice.krad.uif.CssConstants.TextAligns"/>
+
+    <!--Final Exam Period section-->
+    <bean id="KS-ExamDates-EditSubSection" parent="KS-Uif-Disclosure-TableSubCollection-WithinSubSection-BottomAddLine-ExamPeriod"
+          p:id="acal-term-examdates" p:readOnly="@{#view.readOnly}" >
+        <property name="propertyName" value="examdates" />
+        <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.acal.dto.ExamPeriodWrapper" />
+        <property name="headerText" value="Final Exam Period" />
+        <property name="disclosure.render" value="false"/>
+        <property name="layoutManager.style" value="width:40%;"/>
+        <property name="layoutManager.addLineGroup.layoutManager.applyDefaultCellWidths" value="false"/>
+
+        <property name="addBlankLineAction.actionLabel" value="Add Final Exam Period"/>
+        <property name="addBlankLineAction.onDocumentReadyScript" value="hideAddExamPeriodButton('@{#collectionGroup.id}', 'exam_date_type', 'acal-term-examdates-add');"/>
+        <property name="addBlankLineAction.id" value="acal-term-examdates-add"/>
+
+        <property name="layoutManager.cssClasses">
+            <list merge="true">
+                <value>ks-tablecollection-table</value>
+            </list>
+        </property>
+
+        <property name="items">
+            <list>
+                <bean id="exam_date_type" parent="Uif-InputField" p:propertyName="examPeriodType" p:readOnly="true" p:readOnlyDisplayReplacementPropertyName="examPeriodNameUI" p:style="font-weight:bold;"/>
+                <bean id="exam_date_start_date" parent="Uif-InputField" p:propertyName="startDate" p:render="@{!#view.readOnly}" p:label="Start Date" >
+                    <property name="control">
+                        <bean parent="Uif-KS-Default-DateControl" p:size="9" p:watermarkText="mm/dd/yyyy"/>
+                    </property>
+                    <property name="validCharactersConstraint">
+                        <bean parent="BasicDatePatternConstraint" />
+                    </property>
+                </bean>
+                <bean parent="Uif-DataField" p:propertyName="startDateUI" p:render="@{#view.readOnly}" p:label="Start Date"/>
+
+                <bean id="exam_date_end_date" parent="Uif-InputField" p:propertyName="endDate" p:render="@{!#view.readOnly}" p:label="End Date">
+                    <property name="control">
+                        <bean parent="Uif-KS-Default-DateControl" p:size="9" p:watermarkText="mm/dd/yyyy"/>
+                    </property>
+                    <property name="validCharactersConstraint">
+                        <bean parent="BasicDatePatternConstraint" />
+                    </property>
+                </bean>
+                <bean parent="Uif-DataField" p:propertyName="endDateUI" p:render="@{#view.readOnly}" p:label="End Date"/>
+            </list>
+        </property>
+        <property name="lineActions">
+            <list>
+                <bean id="exam_period_delete_link" parent="Uif-ActionLink"  p:methodToCall="markExamPeriodtoDelete" p:actionLabel="delete" p:render="@{!#view.readOnly}"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>

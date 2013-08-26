@@ -66,6 +66,7 @@
         <property name="layoutManager.richTable.render" value="false" />
         <property name="disclosure.render" value="@{#dp.schedulingCompleted and !#dp.requestedScheduleComponents.isEmpty()}"/>
         <property name="disclosure.defaultOpen" value="false"/>
+        <property name="onDocumentReadyScript" value="reDisplayRDLSection();"/>
         <property name="items">
             <list>
                 <bean parent="Uif-DataField" p:label="TBA" p:propertyName="tbaUI"/>
@@ -86,7 +87,7 @@
               <list>
                   <!--<bean parent="Uif-ActionLink" p:methodToCall="editScheduleComponent" p:actionLabel="Edit" p:successCallback="retrieveComponent('ActivityOffering-DeliveryLogistic-New');" p:render="@{#dp.schedulingCompleted}"/>-->
                   <bean parent="Uif-NavigationActionLink" p:methodToCall="editScheduleComponent" p:actionLabel="Edit" p:preSubmitCall="return checkAOEditWIP();"/>
-                  <bean parent="Uif-DeleteLineAction" />
+                  <bean parent="Uif-DeleteLineAction" p:successCallback="reDisplayRDLSection();"/>
               </list>
         </property>
     </bean>
@@ -123,7 +124,11 @@
 
 
                 <!--<ref bean="ActivityOffering-DeliveryLogistic-New-Features-Section"/>-->
-                <bean id="add_rdl_button" parent="Uif-SecondaryActionButton-Small" p:disabled="@{#parent.readOnly}" p:actionLabel="@{!#dp.editRenderHelper.scheduleEditInProgress ? 'Add' : 'Update'}" p:preSubmitCall="return preSubmitNewRDL();" p:methodToCall="addScheduleComponent" p:ajaxReturnType="update-component" p:ajaxSubmit="true" p:refreshId="ActivityOffering-DeliveryLogistic-New" p:successCallback="retrieveComponent('ActivityOffering-DeliveryLogistic-Requested');"/>
+                <bean id="add_rdl_button" parent="Uif-SecondaryActionButton-Small" p:disabled="@{#parent.readOnly}"
+                      p:actionLabel="@{!#dp.editRenderHelper.scheduleEditInProgress ? 'Add' : 'Update'}"
+                      p:preSubmitCall="return preSubmitNewRDL();" p:methodToCall="addScheduleComponent"
+                      p:ajaxReturnType="update-component" p:ajaxSubmit="true" p:refreshId="ActivityOffering-DeliveryLogistic-New"
+                      p:successCallback="retrieveComponent('ActivityOffering-DeliveryLogistic-Requested'); reDisplayNewRDSection(); reDisplayRDLSection();"/>
             </list>
         </property>
     </bean>
@@ -200,16 +205,20 @@
                         <bean parent="Uif-DropdownControl" p:options-ref="AmPm-Options" p:cssClasses="new_rdl_components"/>
                     </property>
                 </bean>
-                <bean id="rdl_bldg" parent="Uif-InputField-LabelTop" p:label="Facility" p:propertyName="newScheduleRequest.buildingCode" p:uppercaseValue="true" p:required="true">
+                <bean id="rdl_bldg" parent="Uif-InputField-LabelTop" p:label="Facility" p:propertyName="newScheduleRequest.buildingCode" p:uppercaseValue="true">
                     <property name="fieldLabel.requiredMessage.messageText" value=""/>
                     <property name="control">
                         <bean parent="Uif-TextControl" p:size="20" p:cssClasses="new_rdl_components"/>
                     </property>
-                    <property name="quickfinder.dataObjectClassName" value="org.kuali.student.r2.core.room.dto.BuildingInfo"/>
-                        <property name="quickfinder.fieldConversions">
-                            <map>
-                                <entry key="buildingCode" value="newScheduleRequest.buildingCode"/>
-                            </map>
+                    <property name="quickfinder">
+                        <bean parent="Uif-QuickFinder">
+                            <property name="dataObjectClassName" value="org.kuali.student.r2.core.room.dto.BuildingInfo"/>
+                            <property name="fieldConversions">
+                                <map>
+                                    <entry key="buildingCode" value="newScheduleRequest.buildingCode"/>
+                                </map>
+                            </property>
+                        </bean>
                     </property>
                    <!-- <property name="attributeQuery">
                         <bean parent="Uif-AttributeQueryConfig" p:queryMethodToCall="retrieveBuildingInfo" p:queryMethodArgumentFieldList="newScheduleRequest.buildingCode" p:dataObjectClassName="org.kuali.student.r2.core.room.dto.BuildingInfo" p:queryFieldMapping="newScheduleRequest.buildingCode:buildingCode" p:returnFieldMapping="buildingCode:newScheduleRequest.buildingCode,name:newScheduleRequest.editRenderHelper.buildingName"/>
@@ -230,19 +239,23 @@
                 </bean>
                 <bean id="rdl_room" parent="Uif-InputField-LabelTop" p:label="Room" p:propertyName="newScheduleRequest.roomCode">
                     <property name="control">
-                        <bean parent="Uif-TextControl" p:size="20"/>
+                        <bean parent="Uif-TextControl" p:size="20" p:cssClasses="new_rdl_components"/>
                     </property>
-                     <property name="quickfinder.dataObjectClassName" value="org.kuali.student.r2.core.room.dto.RoomInfo"/>
-                    <property name="quickfinder.autoSearch" value="true"/>
-                    <property name="quickfinder.fieldConversions">
-                        <map>
-                            <entry key="roomCode" value="newScheduleRequest.roomCode"/>
-                        </map>
-                    </property>
-                    <property name="quickfinder.lookupParameters">
-                        <map>
-                            <entry key="newScheduleRequest.buildingCode" value="buildingCode"/>
-                        </map>
+                    <property name="quickfinder">
+                        <bean parent="Uif-QuickFinder">
+                            <property name="dataObjectClassName" value="org.kuali.student.r2.core.room.dto.RoomInfo"/>
+                            <property name="autoSearch" value="true"/>
+                            <property name="fieldConversions">
+                                <map>
+                                    <entry key="roomCode" value="newScheduleRequest.roomCode"/>
+                                </map>
+                            </property>
+                            <property name="lookupParameters">
+                                <map>
+                                    <entry key="newScheduleRequest.buildingCode" value="buildingCode"/>
+                                </map>
+                            </property>
+                        </bean>
                     </property>
                     <property name="dependencyConstraints">
                         <list>

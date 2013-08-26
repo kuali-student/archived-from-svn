@@ -49,7 +49,7 @@ limitations under the License.
         <property name="dataObjectClassName" value="org.kuali.student.enrollment.class1.krms.dto.CORuleManagementWrapper"/>
         <property name="viewHelperServiceClass"
                   value="org.kuali.student.enrollment.class1.krms.service.impl.CORuleViewHelperServiceImpl"/>
-        <property name="headerText" value="@{#dp.cluDescription}"/>
+        <property name="headerText" value="@{#dp.cluDescription} : @{#dp.courseOfferingTitle}"/>
         <property name="items">
             <list>
                 <bean id="KSCO-AgendaMaintenance-Page" parent="KSCO-AgendaMaintenance-Page-parent"/>
@@ -75,7 +75,7 @@ limitations under the License.
                 <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
                 <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
                 <bean parent="Uif-BreadcrumbItem">
-                    <property name="label" value="Manage Course Offerings"/>
+                    <property name="label" value="Course Offerings"/>
                     <property name="url.viewId" value="courseOfferingManagementView"/>
                     <property name="url.controllerMapping" value="courseOfferingManagement"/>
                 </bean>
@@ -220,7 +220,7 @@ limitations under the License.
             <list>
                 <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare to Catalog" p:methodToCall="compareRules" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare">
                     <property name="toolTip">
-                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering Rules"/>
+                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering rules"/>
                     </property>
                 </bean>
                 <bean parent="KS-Uif-ActionLink" p:actionLabel="Edit Rule" p:methodToCall="goToRuleView" p:componentSecurity.performActionAuthz="true" p:actionEvent="addEditRequisite"/>
@@ -234,7 +234,7 @@ limitations under the License.
             <list>
                 <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare to Catalog" p:methodToCall="compareRules" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare">
                     <property name="toolTip">
-                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering Rules"/>
+                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering rules"/>
                     </property>
                 </bean>
             </list>
@@ -329,11 +329,13 @@ limitations under the License.
     <bean id="KSCO-ListItems-SubGroup" parent="Uif-TableCollectionGroup" p:renderAddLine="false">
         <property name="collectionObjectClass" value="org.kuali.student.lum.lu.ui.krms.dto.CluCore" />
         <property name="propertyName" value="clus" />
-        <property name="collectionLookup.quickfinderAction.render" value="false" />
+        <property name="collectionLookup">
+            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
+        </property>
         <property name="layoutManager">
             <ref bean="KS-SimpleTableCollectionLayout"/>
         </property>
-
+        <property name="renderLineActions" value="false"/>
         <property name="lineActions">
             <list></list>
         </property>
@@ -419,7 +421,7 @@ limitations under the License.
             <list>
                 <bean parent="KS-Uif-ActionLink" p:actionLabel="Compare to Catalog" p:methodToCall="compareRules" p:componentSecurity.performActionAuthz="true" p:actionEvent="compare">
                     <property name="toolTip">
-                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering Rules"/>
+                        <bean parent="Uif-Tooltip" p:tooltipContent="Compare Catalog and Course Offering rules"/>
                     </property>
                 </bean>
             </list>
@@ -443,7 +445,7 @@ limitations under the License.
             <map>
                 <entry key="selected" value="0"/>
                 <entry key="select"
-                       value="function(event, ui) {ajaxCallOnTabSelect(event, ui, 'KRMS-RuleEditor-TreeGroup', 'KSCO-EditWithLogic-EditGroup');}"/>
+                       value="function(event, ui) {ajaxCallOnTabSelect(event, ui, 'KRMS-RuleEditor-TreeGroup', 'KSCO-EditWithLogic-EditGroup', 'refreshLogicArea', 'KRMS-LogicArea-InputField');}"/>
             </map>
         </property>
     </bean>

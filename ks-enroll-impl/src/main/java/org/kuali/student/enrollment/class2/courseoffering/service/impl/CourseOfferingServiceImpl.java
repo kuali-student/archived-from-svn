@@ -125,6 +125,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     private CourseOfferingServiceBusinessLogic businessLogic;
     private CourseOfferingCodeGenerator offeringCodeGenerator;
     private CourseOfferingTransformer courseOfferingTransformer;
+    private ActivityOfferingTransformer activityOfferingTransformer;
     private SeatPoolDefinitionDaoApi seatPoolDefinitionDao;
     private ActivityOfferingClusterDaoApi activityOfferingClusterDao;
     private RegistrationGroupTransformer registrationGroupTransformer;
@@ -1550,6 +1551,9 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
         }
         targetAO.setActivityCode(null);
         targetAO = createActivityOffering(sourceAO.getFormatOfferingId(), sourceAO.getActivityId(), sourceAO.getTypeKey(), targetAO, context);
+
+        // have to copy rules AFTER AO is created because the link is by the AO id
+        activityOfferingTransformer.copyRulesFromExistingActivityOffering(sourceAO, targetAO, new ArrayList<String>(), context);
 
         /**
          * Create ScheduleRequests on the target AO. Use ScheduleComponents (ADL) to create the RDLs if any exist.
@@ -3093,9 +3097,9 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     /**
      * This method allows you to search for Course Offering Ids by Criteria. In order to make this search more usable it has been backed
      * by the "CriteriaLookupService". This service allows us to join across entities. For example, you are able to pass in
-     * "courseOfferingCode" with a value of "CHEM199" even though the code does no live on the LuiEntity (which backs Course Offerings).
+     * "courseOfferingCode" with a value of "CHEM199" even though the code does not live on the LuiEntity (which backs Course Offerings).
      *
-     * The CourseOfferingCriteriaTransformer is coded to wire in the additional database joins needed to complete the search.
+     * The CourseOfferingCriteriaTransform is coded to wire in the additional database joins needed to complete the search.
      *
      * Please look in CourseOfferingCriteriaTransformer for a complete list of available mappings.
      *
@@ -3323,6 +3327,10 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
 
     public void setCourseOfferingTransformer(CourseOfferingTransformer courseOfferingTransformer) {
         this.courseOfferingTransformer = courseOfferingTransformer;
+    }
+
+    public void setActivityOfferingTransformer(ActivityOfferingTransformer activityOfferingTransformer) {
+        this.activityOfferingTransformer = activityOfferingTransformer;
     }
 
     public void setRegistrationGroupTransformer(RegistrationGroupTransformer registrationGroupTransformer) {

@@ -253,7 +253,6 @@
                 <entry key="methodToCall" value="start"/>
                 <entry key="dataObjectClassName" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCreateWrapper"/>
                 <entry key="hideReturnLink" value="true"/>
-                <entry key="showMaintenanceLinks" value="true"/>
                 <entry key="viewName" value="Create Course Offering"/>
             </map>
         </property>
@@ -293,7 +292,7 @@
             <list>
                 <bean parent="Uif-Message" p:messageText="&lt;hr&gt;"/>
 
-                <bean parent="Uif-VerticalBoxSubSection">
+                <bean parent="Uif-HorizontalBoxSubSection">
                     <property name="items">
                         <list>
                             <bean parent="Uif-Label" p:labelText="Course Title" p:renderColon="false" />
@@ -302,10 +301,10 @@
                     </property>
                 </bean>
 
-                <bean parent="Uif-HorizontalBoxSubSection">
+                <bean parent="Uif-VerticalBoxSubSection">
                     <property name="items">
                         <list>
-                            <bean parent="Uif-VerticalBoxSubSection">
+                            <bean parent="Uif-HorizontalBoxSubSection">
                                 <property name="items">
                                     <list>
                                         <bean parent="Uif-Label" p:labelText="Course Code" p:renderColon="false" />
@@ -313,7 +312,7 @@
                                     </list>
                                 </property>
                             </bean>
-                            <bean parent="Uif-VerticalBoxSubSection" p:style="margin-left: 10px;">
+                            <bean parent="Uif-HorizontalBoxSubSection">
                                 <property name="items">
                                     <list>
                                         <bean parent="Uif-Label" p:labelText="Suffix" p:renderColon="false" />
@@ -346,7 +345,7 @@
         </property>
     </bean>
 
-    <bean id="KS-GradingAndRegOptions" parent="Uif-HorizontalBoxSubSection">
+    <bean id="KS-GradingAndRegOptions" parent="Uif-VerticalBoxSubSection">
         <property name="items">
             <list>
                 <ref bean="KS-CourseOfferingEdit-GradingOptions" />
@@ -355,12 +354,12 @@
             </list>
         </property>
     </bean>
-    <bean id="KS-CourseOfferingEdit-GradingOptions" parent="Uif-VerticalBoxSection">
+    <bean id="KS-CourseOfferingEdit-GradingOptions" parent="Uif-HorizontalBoxSection">
         <property name="items">
             <list>
-                <bean parent="Uif-InputField" p:propertyName="courseOfferingInfo.gradingOptionId" p:id="gradingOptionId" p:label="Grading Options" p:fieldLabel.renderColon="false" p:labelPlacement="TOP" p:componentSecurity.editAuthz="true">
+                <bean parent="Uif-InputField" p:propertyName="courseOfferingInfo.gradingOptionId" p:id="gradingOptionId" p:label="Grading Options" p:fieldLabel.renderColon="false" p:componentSecurity.editAuthz="true">
                     <property name="control">
-                        <bean parent="Uif-VerticalRadioControl"/>
+                        <bean parent="Uif-HorizontalRadioControl"/>
                     </property>
                     <property name="optionsFinder">
                         <bean class="org.kuali.student.enrollment.class2.courseoffering.keyvalue.GradingOptionsKeyValues" p:addBlankOption="false" />
@@ -369,7 +368,7 @@
             </list>
         </property>
     </bean>
-    <bean id="KS-CourseOfferingEdit-StudentRegOptions" parent="Uif-VerticalBoxSection">
+    <bean id="KS-CourseOfferingEdit-StudentRegOptions" parent="Uif-HorizontalBoxSection">
         <property name="items">
             <list>
                 <!-- Commented out - List of checkboxes seem to break in KRAD 2.2M3 so had to replace with individual checkboxes -->
@@ -407,12 +406,11 @@
             </list>
         </property>
     </bean>
-    <bean id="KS-CourseOfferingEdit-CreditType" parent="Uif-VerticalBoxSection"
-          p:style="margin-left:15px;">
+    <bean id="KS-CourseOfferingEdit-CreditType" parent="Uif-VerticalBoxSection">
         <property name="items">
             <list>
                 <!-- Credit Option Type Selector -->
-                <bean parent="Uif-InputField-LabelTop" p:propertyName="creditOption.typeKey" p:label="Credit Type">
+                <bean parent="Uif-InputField" p:propertyName="creditOption.typeKey" p:label="Credit Type">
                     <property name="id" value="KS-CourseOfferingEdit-CreditType_OptionTypeSelector" />
                     <property name="control" >
                         <bean parent="Uif-HorizontalRadioControl" p:disabled="@{#dp.creditOptionFixed}" />
@@ -423,7 +421,7 @@
                 </bean>
                 <!-- Fixed Type for multiple -->
                 <bean parent="Uif-InputField" p:label="Credits" p:propertyName="creditOption.fixedCredit" p:fieldLabel.renderColon="false"
-                      p:style="margin-left: 1em;" p:progressiveRender="@{#dp.creditOption.typeKey eq 'kuali.result.values.group.type.fixed'}"
+                      p:progressiveRender="@{#dp.creditOption.typeKey eq 'kuali.result.values.group.type.fixed'}"
                       p:exclusiveMin="@{document.oldMaintainableObject.dataObject.creditOption.courseMinCredits}-0.0001"
                       p:inclusiveMax="@{document.oldMaintainableObject.dataObject.creditOption.courseMaxCredits}"  >
                     <property name="id" value="KS-CourseOfferingEdit-CreditType_OptionTypeFixed" />
@@ -529,6 +527,7 @@
     <bean id="KS-CourseOffering-FormatOfferingSubSection-parent" parent="KS-TableCollectionSubSection-BottomAddLine" abstract="true">
         <property name="addBlankLineAction.actionLabel" value="Add Format"/>
         <property name="addBlankLineAction.render" value="@{#dp.renderHelper.showFormatAddButton}"/>
+        <property name="addBlankLineAction.id" value="KS-CourseOffering-FormatOfferingSubSection_add"/>
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.FormatOfferingWrapper" />
         <property name="propertyName" value="formatOfferingList" />
         <property name="lineActions">
@@ -647,16 +646,20 @@
                         <list>
                             <bean parent="Uif-InputField" p:id="personnelPriority" p:propertyName="offeringInstructorInfo.personId"
                                   p:label="ID" p:required="false" p:cssClasses="col_5">
-                                <property name="quickfinder.dataObjectClassName" value="org.kuali.student.rice.kim.impl.KSPersonImpl"/>
-                                <property name="quickfinder.fieldConversions">
-                                    <map>
-                                        <entry key="name" value="offeringInstructorInfo.personName"/>
-                                        <entry key="principalId" value="offeringInstructorInfo.personId"/>
-                                    </map>
-                                </property>
-                                <property name="quickfinder.viewName" value="ks_simplePersonLookup" />
-                                <property name="quickfinder.lightBoxLookup">
-                                    <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="true"/>
+                                <property name="quickfinder">
+                                    <bean parent="Uif-QuickFinder">
+                                        <property name="dataObjectClassName" value="org.kuali.student.rice.kim.impl.KSPersonImpl"/>
+                                        <property name="fieldConversions">
+                                            <map>
+                                                <entry key="name" value="offeringInstructorInfo.personName"/>
+                                                <entry key="principalId" value="offeringInstructorInfo.personId"/>
+                                            </map>
+                                        </property>
+                                        <property name="viewName" value="ks_simplePersonLookup" />
+                                        <property name="lightBoxLookup">
+                                            <bean parent="Uif-LightBoxPost" p:lookupReturnByScript="true"/>
+                                        </property>
+                                    </bean>
                                 </property>
                             </bean>
                             <bean parent="Uif-InputField" p:propertyName="offeringInstructorInfo.personName" p:label="Name" />
@@ -705,6 +708,7 @@
           p:layoutManager.richTable.render="false"
           p:layoutManager.applyAlternatingRowStyles="false">
         <property name="addBlankLineAction.actionLabel" value="Add Administrating Organization"/>
+        <property name="addBlankLineAction.id" value="KS-CourseOfferingEdit-OrganizationSection_add"/>
 
         <property name="items">
             <list>
@@ -712,14 +716,17 @@
                     <property name="control">
                         <bean parent="Uif-TextControl" p:size="16" p:ReadOnly="true" />
                     </property>
-                    <!--<property name="quickfinder.render" value="true"/>-->
-                    <property name="quickfinder.dataObjectClassName" value="org.kuali.student.r2.core.organization.dto.OrgInfo" />
+                    <property name="quickfinder">
+                        <bean parent="Uif-QuickFinder">
+                            <property name="dataObjectClassName" value="org.kuali.student.r2.core.organization.dto.OrgInfo" />
 
-                    <property name="quickfinder.fieldConversions">
-                        <map>
-                            <entry key="id" value="id" />
-                            <entry key="longName" value="organizationName"/>
-                        </map>
+                            <property name="fieldConversions">
+                                <map>
+                                    <entry key="id" value="id" />
+                                    <entry key="longName" value="organizationName"/>
+                                </map>
+                            </property>
+                        </bean>
                     </property>
                 </bean>
                 <bean parent="Uif-DataField" p:propertyName="organizationName" p:label="Organization Name"/>

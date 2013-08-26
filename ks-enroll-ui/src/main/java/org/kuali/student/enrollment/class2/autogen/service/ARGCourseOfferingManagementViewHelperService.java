@@ -16,11 +16,11 @@
  */
 package org.kuali.student.enrollment.class2.autogen.service;
 
-import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
-import org.kuali.student.enrollment.class2.courseoffering.service.CO_AO_RG_ViewHelperService;
+import org.kuali.student.enrollment.class2.autogen.form.ARGCourseOfferingManagementForm;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper;
-import org.kuali.student.enrollment.class2.autogen.form.ARGCourseOfferingManagementForm;
+import org.kuali.student.enrollment.class2.courseoffering.service.CO_AO_RG_ViewHelperService;
+import org.kuali.student.enrollment.class2.scheduleofclasses.form.ActivityOfferingDisplayUI;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 
 import java.util.List;
@@ -40,8 +40,6 @@ public interface ARGCourseOfferingManagementViewHelperService extends CO_AO_RG_V
 
     public void createActivityOfferings(String formatOfferingId,String activityId,int noOfActivityOfferings, ARGCourseOfferingManagementForm form);
 
-//    public void changeActivityOfferingsState(List<ActivityOfferingWrapper> aoList, CourseOfferingInfo courseOfferingInfo, String selectedAction) throws Exception;
-
     public void markCourseOfferingsForScheduling(List<CourseOfferingListSectionWrapper> coWrappers, String viewId, String socStateKey, boolean checkedOnly) throws Exception;
 
     public void loadPreviousAndNextCourseOffering(ARGCourseOfferingManagementForm form);
@@ -53,5 +51,7 @@ public interface ARGCourseOfferingManagementViewHelperService extends CO_AO_RG_V
     public void approveActivityOfferings(ARGCourseOfferingManagementForm form) throws Exception;
     public void draftActivityOfferings(ARGCourseOfferingManagementForm form) throws Exception;
 
-    public void build_AOs_RGs_AOCs_Lists_For_TheCourseOffering (ARGCourseOfferingManagementForm form, CourseOfferingWrapper theCourseOffering) throws Exception;
+    public void build_AOs_RGs_AOCs_Lists_For_TheCourseOffering (ActivityOfferingDisplayUI form) throws Exception;
+
+    public void  setupRuleIndicator(List<ActivityOfferingWrapper> wrappers );
 }

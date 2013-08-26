@@ -24,6 +24,7 @@ import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingCopy
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.RegistrationGroupWrapper;
+import org.kuali.student.enrollment.class2.scheduleofclasses.form.ActivityOfferingDisplayUI;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.common.uif.form.KSUifForm;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
@@ -38,7 +39,7 @@ import java.util.Map;
  *
  * @author Kuali Student Team
  */
-public class ARGCourseOfferingManagementForm extends KSUifForm {
+public class ARGCourseOfferingManagementForm extends KSUifForm implements ActivityOfferingDisplayUI{
     //TODO: do we still need this for manage theCO page?
     //for authorization purpose
     private String adminOrg;
@@ -127,6 +128,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
      * I dont think we need a seperate list to handle that - courseOfferingCopyWrapper
      */
     private List<ActivityOfferingWrapper> selectedToDeleteList;
+    private List<ActivityOfferingWrapper> selectedToCSRList;
     private CourseOfferingCopyWrapper courseOfferingCopyWrapper;
 
     private boolean isCrossListedCO;
@@ -138,6 +140,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private boolean isJointDefinedCo;
     private boolean isJointDefinedCoOnly;
     private Integer numOfJointDefinedCosToDelete = 0;
+    private int numIneligibleAOsForCSR=0;
 
     //TODO: do we need this one?
     private boolean readOnly;
@@ -148,6 +151,8 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private String toBeScheduledCourseOfferingsUI;
     private int toBeScheduledCourseOfferingsCount;
     private boolean selectedIllegalAOInDeletion = false;
+    private boolean selectedIllegalAOInCSR = false;
+    private String actionCSR = "";
 
     private boolean withinPortal = true;
 
@@ -174,6 +179,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     private String clusterIdForAOMove;
     private String selectedFOIDForAOMove;
     private String selectedFONameForAOMove;
+    private String csrLabel;
             
     private ActivityOfferingClusterWrapper selectedCluster;
     private int aoCount=0;
@@ -199,6 +205,7 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     public ARGCourseOfferingManagementForm (){
         activityWrapperList = new ArrayList<ActivityOfferingWrapper>();
         selectedToDeleteList = new ArrayList<ActivityOfferingWrapper>();
+        selectedToCSRList = new ArrayList<ActivityOfferingWrapper>();
         courseOfferingResultList = new ArrayList<CourseOfferingListSectionWrapper>();
         selectedCoToDeleteList = new ArrayList<CourseOfferingListSectionWrapper>();
         clusterResultList = new ArrayList<ActivityOfferingClusterWrapper>();
@@ -273,6 +280,11 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
         this.noOfActivityOfferings = noOfActivityOfferings;
     }
 
+    @Override
+    public String getCourseOfferingId() {
+        return getCurrentCourseOfferingWrapper().getCourseOfferingId();
+    }
+
     public List<ActivityOfferingWrapper> getActivityWrapperList() {
         return activityWrapperList;
     }
@@ -287,6 +299,14 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
 
     public void setSelectedToDeleteList(List<ActivityOfferingWrapper> selectedToDeleteList) {
         this.selectedToDeleteList = selectedToDeleteList;
+    }
+
+    public List<ActivityOfferingWrapper> getSelectedToCSRList() {
+        return selectedToCSRList;
+    }
+
+    public void setSelectedToCSRList(List<ActivityOfferingWrapper> selectedToCSRList) {
+        this.selectedToCSRList = selectedToCSRList;
     }
 
     public String getFormatIdForNewAO() {
@@ -363,6 +383,22 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
 
     public void setSelectedIllegalAOInDeletion(boolean selectedIllegalAOInDeletion) {
         this.selectedIllegalAOInDeletion = selectedIllegalAOInDeletion;
+    }
+
+    public boolean isSelectedIllegalAOInCSR() {
+        return selectedIllegalAOInCSR;
+    }
+
+    public void setSelectedIllegalAOInCSR(boolean selectedIllegalAOInCSR) {
+        this.selectedIllegalAOInCSR = selectedIllegalAOInCSR;
+    }
+
+    public String getActionCSR() {
+        return actionCSR;
+    }
+
+    public void setActionCSR(String actionCSR) {
+        this.actionCSR = actionCSR;
     }
 
     public boolean isWithinPortal() {
@@ -764,4 +800,24 @@ public class ARGCourseOfferingManagementForm extends KSUifForm {
     public void setRequisiteLink(boolean requisiteLink) {
         this.requisiteLink = requisiteLink;
     }
+
+    public String getCsrLabel() {
+        return csrLabel;
+    }
+
+    public void setCsrLabel(String csrLabel) {
+        this.csrLabel = csrLabel;
+    }
+
+
+    public int getNumIneligibleAOsForCSR() {
+        return numIneligibleAOsForCSR;
+    }
+
+    public void setNumIneligibleAOsForCSR(int numIneligibleAOsForCSR) {
+        this.numIneligibleAOsForCSR = numIneligibleAOsForCSR;
+    }
+
+
+
 }

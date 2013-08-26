@@ -22,6 +22,7 @@ import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingList
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.RegistrationGroupWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.service.adapter.AutogenRegGroupServiceAdapter;
+import org.kuali.student.enrollment.class2.courseoffering.service.facade.CSRServiceFacade;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingClusterInfo;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingSetInfo;
@@ -61,6 +62,7 @@ public class ARGUtil {
     private static TypeService typeService;
     private static AcademicCalendarService academicCalendarService;
     private static AutogenRegGroupServiceAdapter argServiceAdapter;
+    private static CSRServiceFacade csrServiceFacade;
 
     public static CourseOfferingService getCourseOfferingService() {
         return CourseOfferingResourceLoader.loadCourseOfferingService();
@@ -122,6 +124,13 @@ public class ARGUtil {
         return argServiceAdapter;
     }
 
+    public static CSRServiceFacade getCsrServiceFacade() {
+        if (csrServiceFacade == null) {
+            csrServiceFacade = (CSRServiceFacade) GlobalResourceLoader.getService(new QName("http://student.kuali.org/wsdl/csrServiceFacade", "CSRServiceFacade"));
+        }
+        return csrServiceFacade;
+    }
+
     public static boolean checkEditViewAuthz(ARGCourseOfferingManagementForm theForm) {
         Person user = GlobalVariables.getUserSession().getPerson();
         return theForm.getView().getAuthorizer().canEditView(theForm.getView(), theForm, user);
@@ -177,7 +186,7 @@ public class ARGUtil {
 
         getViewHelperService(form).loadPreviousAndNextCourseOffering(form);
 
-        getViewHelperService(form).build_AOs_RGs_AOCs_Lists_For_TheCourseOffering(form, currentCOWrapper);
+        getViewHelperService(form).build_AOs_RGs_AOCs_Lists_For_TheCourseOffering(form);
 
         ARGToolbarUtil.processAoToolbarForUser(form.getActivityWrapperList(), form);
     }
@@ -219,7 +228,7 @@ public class ARGUtil {
         CourseOfferingInfo theCourseOffering = theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo();
 
         CourseOfferingWrapper coWrapper = new CourseOfferingWrapper(theCourseOffering);
-        getViewHelperService(theForm).build_AOs_RGs_AOCs_Lists_For_TheCourseOffering(theForm, coWrapper);
+        getViewHelperService(theForm).build_AOs_RGs_AOCs_Lists_For_TheCourseOffering(theForm);
 
         getViewHelperService(theForm).loadPreviousAndNextCourseOffering(theForm);
 
@@ -269,7 +278,11 @@ public class ARGUtil {
         props.put(KRADConstants.DISPATCH_REQUEST_PARAMETER, methodToCall);
         props.put("courseOfferingInfo.id", courseOfferingInfo.getId());
         props.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, CourseOfferingEditWrapper.class.getName());
-        props.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
+
+        // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+        // https://fisheye.kuali.org/changelog/rice?cs=39034
+        // TODO KSENROLL-8469
+        //props.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
         return props;
     }
 

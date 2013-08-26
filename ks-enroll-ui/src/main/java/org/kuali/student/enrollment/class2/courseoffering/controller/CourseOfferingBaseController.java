@@ -105,11 +105,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
                     ((CourseOfferingEditWrapper) selectedObject).setEditCrossListedCoAlias(true);
                 }
             }
-//            form.setEditAuthz(checkEditViewAuthz(form));
         }
-
-        //populate the previousFormsMap of the form. The map contains info about the previous view to generate customized breadcrumb
-//        KSUifUtils.populationPreviousFormsMap(request, (KSUifMaintenanceDocumentForm) form);
 
         return getUIFModelAndView(form);
     }
@@ -201,7 +197,6 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
             }
             else {
                 form.getViewRequestParameters().put(CourseOfferingManagementSearchImpl.SearchParameters.IS_EXACT_MATCH_CO_CODE_SEARCH, Boolean.FALSE.toString());
-                //urlToRedirectTo = returnLocationFromForm.replaceFirst("methodToCall=[a-zA-Z0-9]+","methodToCall=show");
             }
             urlToRedirectTo = returnLocationFromForm.replaceFirst("methodToCall=[a-zA-Z0-9]+","methodToCall=show");
         }
@@ -216,7 +211,10 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
             urlParameters.put( KRADConstants.DISPATCH_REQUEST_PARAMETER, KRADConstants.Maintenance.METHOD_TO_CALL_EDIT );
             urlParameters.put( "courseOfferingInfo.id", loadNewCO );
             urlParameters.put( KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, CourseOfferingEditWrapper.class.getName() );
-            urlParameters.put( UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false) );
+            // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+            // https://fisheye.kuali.org/changelog/rice?cs=39034
+            // TODO KSENROLL-8469
+            // urlParameters.put( UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false) );
 
             urlParameters.put( "returnLocation", urlToRedirectTo );
 
@@ -431,6 +429,8 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
             sRet = CourseOfferingConstants.COURSEOFFERING_FINAL_EXAM_TYPE_STANDARD;
         } else if("ALT".equals(courseFinalExamType)) {
             sRet = CourseOfferingConstants.COURSEOFFERING_FINAL_EXAM_TYPE_ALTERNATE;
+        } else {
+            sRet = CourseOfferingConstants.COURSEOFFERING_FINAL_EXAM_TYPE_NONE;
         }
         return sRet;
     }
@@ -469,7 +469,10 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
             urlParameters.put( KRADConstants.DISPATCH_REQUEST_PARAMETER, KRADConstants.Maintenance.METHOD_TO_CALL_EDIT );
             urlParameters.put( "courseOfferingInfo.id", loadNewCO );
             urlParameters.put( KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, CourseOfferingEditWrapper.class.getName() );
-            urlParameters.put( UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false) );
+            // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+            // https://fisheye.kuali.org/changelog/rice?cs=39034
+            // TODO KSENROLL-8469
+            //urlParameters.put( UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false) );
 
             urlParameters.put( "returnLocation", urlToRedirectTo );
 
@@ -515,7 +518,6 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
         }
 
     }
-
 
     protected CourseService getCourseService() {
         if(courseService == null) {

@@ -102,6 +102,99 @@ public class ARGActivityOfferingClusterHandler {
         }
     }
 
+    public static void cancelSelectedAoList(ARGCourseOfferingManagementForm theForm) throws Exception {
+
+        List<ActivityOfferingWrapper> selectedAolist = theForm.getSelectedToCSRList();
+
+        try {
+            for (ActivityOfferingWrapper ao : selectedAolist) {
+                // The adapter does not technically need an AOC ID, so I'm setting it to null
+                ARGUtil.getCsrServiceFacade().cancelActivityOffering(ao.getAoInfo().getId(), ContextBuilder.loadContextInfo());
+            }
+
+            // check for changes to states in CO and related FOs
+            CourseOfferingViewHelperUtil.updateCourseOfferingStateFromActivityOfferingStateChange(theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo(), ContextBuilder.loadContextInfo());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ARGUtil.reloadTheCourseOfferingWithAOs_RGs_Clusters(theForm);
+
+        if (selectedAolist.size() > 0 && theForm.isSelectedIllegalAOInDeletion()) {
+            GlobalVariables.getMessageMap().putWarningForSectionId("manageActivityOfferingsPage",
+                    CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_SELECTED_AO_TO_CANCEL);
+        }
+
+        if (selectedAolist.size() > 1) {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_CANCEL_N_SUCCESS);
+        } else {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_CANCEL_1_SUCCESS);
+        }
+    }
+
+    public static void suspendSelectedAoList(ARGCourseOfferingManagementForm theForm) throws Exception {
+
+        List<ActivityOfferingWrapper> selectedAolist = theForm.getSelectedToCSRList();
+
+        try {
+            for (ActivityOfferingWrapper ao : selectedAolist) {
+                // The adapter does not technically need an AOC ID, so I'm setting it to null
+                ARGUtil.getCsrServiceFacade().suspendActivityOffering(ao.getAoInfo().getId(), ContextBuilder.loadContextInfo());
+            }
+
+            // check for changes to states in CO and related FOs
+            CourseOfferingViewHelperUtil.updateCourseOfferingStateFromActivityOfferingStateChange(theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo(), ContextBuilder.loadContextInfo());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ARGUtil.reloadTheCourseOfferingWithAOs_RGs_Clusters(theForm);
+
+        if (selectedAolist.size() > 0 && theForm.isSelectedIllegalAOInDeletion()) {
+            GlobalVariables.getMessageMap().putWarningForSectionId("manageActivityOfferingsPage",
+                    CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_SELECTED_AO_TO_SUSPEND);
+        }
+
+        if (selectedAolist.size() > 1) {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_SUSPEND_N_SUCCESS);
+        } else {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_SUSPEND_1_SUCCESS);
+        }
+    }
+
+    public static void reinstateSelectedAoList(ARGCourseOfferingManagementForm theForm) throws Exception {
+
+        List<ActivityOfferingWrapper> selectedAolist = theForm.getSelectedToCSRList();
+
+        try {
+            for (ActivityOfferingWrapper ao : selectedAolist) {
+                // The adapter does not technically need an AOC ID, so I'm setting it to null
+                ARGUtil.getCsrServiceFacade().reinstateActivityOffering(ao.getAoInfo().getId(), ContextBuilder.loadContextInfo());
+            }
+
+            // check for changes to states in CO and related FOs
+            CourseOfferingViewHelperUtil.updateCourseOfferingStateFromActivityOfferingStateChange(theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo(), ContextBuilder.loadContextInfo());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ARGUtil.reloadTheCourseOfferingWithAOs_RGs_Clusters(theForm);
+
+        if (selectedAolist.size() > 0 && theForm.isSelectedIllegalAOInDeletion()) {
+            GlobalVariables.getMessageMap().putWarningForSectionId("manageActivityOfferingsPage",
+                    CourseOfferingConstants.COURSEOFFERING_MSG_ERROR_SELECTED_AO_TO_REINSTATE);
+        }
+
+        if (selectedAolist.size() > 1) {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_REINSTATE_N_SUCCESS);
+        } else {
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.ACTIVITYOFFERING_TOOLBAR_REINSTATE_1_SUCCESS);
+        }
+    }
+
     public static void deleteSelectedAoList(ARGCourseOfferingManagementForm theForm) throws Exception {
 
         List<ActivityOfferingWrapper> selectedAolist = theForm.getSelectedToDeleteList();
@@ -139,7 +232,10 @@ public class ARGActivityOfferingClusterHandler {
         urlParameters.put(ActivityOfferingConstants.ACTIVITY_OFFERING_WRAPPER_ID, aoId);
         urlParameters.put(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID, theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo().getId());
         urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, ActivityOfferingWrapper.class.getName());
-        urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
+        // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+        // https://fisheye.kuali.org/changelog/rice?cs=39034
+        // TODO KSENROLL-8469
+        //urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
 
         return urlParameters;
     }
@@ -417,7 +513,10 @@ public class ARGActivityOfferingClusterHandler {
         urlParameters.put(ActivityOfferingConstants.ACTIVITY_OFFERING_WRAPPER_ID, aoId);
         urlParameters.put(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID, theForm.getCurrentCourseOfferingWrapper().getCourseOfferingInfo().getId());
         urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, AORuleManagementWrapper.class.getName());
-        urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
+        // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+        // https://fisheye.kuali.org/changelog/rice?cs=39034
+        // TODO KSENROLL-8469
+        //urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
         urlParameters.put("viewName", "AOAgendaManagementView");
         urlParameters.put("refObjectId", aoId);
 
