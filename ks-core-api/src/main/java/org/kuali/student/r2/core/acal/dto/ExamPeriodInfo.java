@@ -130,6 +130,4 @@ public class ExamPeriodInfo extends IdEntityInfo implements ExamPeriod {
             }
         }
     }
-
-
 }

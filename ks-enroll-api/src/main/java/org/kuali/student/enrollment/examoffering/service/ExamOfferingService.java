@@ -12,11 +12,12 @@
  * or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  *
- * Created by Mezba Mahtab (mezba.mahtab@utoronto.ca) on 2/15/13
+ * Created by Mezba Mahtab (mezba.mahtab@utoronto.ca) on 7/14/13
  */
 package org.kuali.student.enrollment.examoffering.service;
 
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
+import org.kuali.student.enrollment.exam.dto.ExamInfo;
 import org.kuali.student.enrollment.examoffering.dto.ExamOfferingInfo;
 import org.kuali.student.enrollment.examoffering.dto.ExamOfferingRelationInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;

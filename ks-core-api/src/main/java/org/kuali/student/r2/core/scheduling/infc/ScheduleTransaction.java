@@ -25,7 +25,6 @@ import java.util.List;
  *
  * @author Mezba Mahtab
  * @author Sri komandur@uw.edu
- * @since Thu Aug 6 11:11:11 EDT 2012
  */
 public interface ScheduleTransaction extends IdEntity {
     /**

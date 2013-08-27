@@ -289,8 +289,6 @@ public interface CourseOffering
 
     /*
      * TODO: Skip this section for core slice development
-     * If keeping, These should be moved into FormatOffering and
-     * removed from CourseOffering.
      */
 
     /**
@@ -382,7 +380,7 @@ public interface CourseOffering
      * Indicates the type of final exam ('STANDARD', 'ALTERNATE',
      * 'NONE') to be given for this format Offering, if any
      *
-     * @name Final ExamOffering Type
+     * @name Final Exam Type
      */
     public String getFinalExamType();
 
