@@ -2557,16 +2557,19 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
                 AtpServiceConstants.ATP_ATP_RELATION_ASSOCIATED_TERM2EXAMPERIOD_TYPE_KEY,
                 contextInfo);
         List<ExamPeriodInfo> examPeriodInfos = new ArrayList<ExamPeriodInfo>(results.size());
+        List<String> examPeriodIds = new ArrayList<String>(results.size());
+
         for (AtpAtpRelationInfo atpRelation : results) {
-            if (atpRelation.getAtpId().equals(termId)) {
-                AtpInfo possibleExamPeriodAtp = atpService.getAtp(atpRelation.getRelatedAtpId(), contextInfo);
-                if (checkTypeForExamPeriodType(possibleExamPeriodAtp.getTypeKey(), contextInfo)) {
-                    ExamPeriodInfo examPeriodInfo = new ExamPeriodInfo();
-                    examPeriodTransformer.atp2ExamPeriod(possibleExamPeriodAtp, examPeriodInfo);
-                    examPeriodInfos.add(examPeriodInfo);
-                }
+            examPeriodIds.add(atpRelation.getRelatedAtpId());
+        }
+
+        if (examPeriodIds!=null && !examPeriodIds.isEmpty()) {
+            List<AtpInfo> atpInfos = atpService.getAtpsByIds(examPeriodIds, contextInfo);
+            for (AtpInfo atpInfo : atpInfos) {
+                examPeriodInfos.add(examPeriodTransformer.atp2ExamPeriod(atpInfo));
             }
         }
+
         return examPeriodInfos;
     }
 
@@ -2612,15 +2615,15 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
     @Override
     public ExamPeriodInfo getExamPeriod(String examPeriodId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         AtpInfo atp = atpService.getAtp(examPeriodId, contextInfo);
-        ExamPeriodInfo examPeriodInfo = new ExamPeriodInfo();
 
-        if (atp != null && checkTypeForExamPeriodType(atp.getTypeKey(), contextInfo)) {
-            examPeriodTransformer.atp2ExamPeriod(atp, examPeriodInfo);
-        } else {
-            throw new DoesNotExistException("This is either not valid Atp or not valid ExamPeriod. " + examPeriodId);
+        if (atp == null) {
+            throw new DoesNotExistException("ATP does not exist. Exam Period id: " + examPeriodId);
+        }
+        if (!checkTypeForExamPeriodType(atp.getTypeKey(), contextInfo)) {
+            throw new OperationFailedException("ATP type is not valid. Exam Period id: " + examPeriodId + " Type: " + atp.getTypeKey());
         }
 
-        return examPeriodInfo;
+        return examPeriodTransformer.atp2ExamPeriod(atp);
     }
 
     @Override
@@ -2656,22 +2659,17 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
     @Override
     @Transactional(readOnly = false, noRollbackFor = {DoesNotExistException.class}, rollbackFor = {Throwable.class})
     public ExamPeriodInfo createExamPeriod(String examPeriodTypeKey, ExamPeriodInfo examPeriodInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
-        AtpInfo atp = new AtpInfo();
-
-        examPeriodTransformer.ExamPeriod2Atp(examPeriodInfo, atp);
+        AtpInfo atp = examPeriodTransformer.ExamPeriod2Atp(examPeriodInfo);
         AtpInfo newAtp = atpService.createAtp(atp.getTypeKey(), atp, contextInfo);
-        examPeriodTransformer.atp2ExamPeriod(newAtp, examPeriodInfo);
 
-        return examPeriodInfo;
+        return examPeriodTransformer.atp2ExamPeriod(newAtp);
     }
 
     @Override
     @Transactional(readOnly = false, noRollbackFor = {DoesNotExistException.class}, rollbackFor = {Throwable.class})
     public ExamPeriodInfo updateExamPeriod(String examPeriodId, ExamPeriodInfo examPeriodInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         AtpInfo existingAtp = atpService.getAtp(examPeriodId, contextInfo);
-        AtpInfo toUpdateAtp = new AtpInfo();
-
-        examPeriodTransformer.ExamPeriod2Atp(examPeriodInfo, toUpdateAtp);
+        AtpInfo toUpdateAtp = examPeriodTransformer.ExamPeriod2Atp(examPeriodInfo);
 
         if (!StringUtils.equals(existingAtp.getStateKey(), examPeriodInfo.getStateKey())) {
             throw new OperationFailedException("State cant be updated with this call. Please use changeExamPeriodState() instead.");
@@ -2679,11 +2677,7 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
 
         AtpInfo updatedAtp = atpService.updateAtp(examPeriodId, toUpdateAtp, contextInfo);
 
-        ExamPeriodInfo updatedExamPeriod = new ExamPeriodInfo();
-        examPeriodTransformer.atp2ExamPeriod(updatedAtp, updatedExamPeriod);
-
-
-        return updatedExamPeriod;
+        return examPeriodTransformer.atp2ExamPeriod(updatedAtp);
     }
 
     @Override
@@ -2727,8 +2721,7 @@ public class AcademicCalendarServiceImpl implements AcademicCalendarService {
         try {
             createAtpAtpRelation(termId, examPeriodInfo.getId(), AtpServiceConstants.ATP_ATP_RELATION_ASSOCIATED_TERM2EXAMPERIOD_TYPE_KEY, contextInfo);
         } catch (DataValidationErrorException e) {
-            resultStatus.setSuccess(false);
-            resultStatus.setMessage("Creation of AtpAtpRelation failed due to DataValidationErrorExecption: " + e.getMessage());
+            throw new OperationFailedException ("Creation of AtpAtpRelation failed due to DataValidationError Execption: ", e);
         }
 
         return resultStatus;

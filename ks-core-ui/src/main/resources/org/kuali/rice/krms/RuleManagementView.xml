@@ -133,7 +133,7 @@ limitations under the License.
     </bean>
     <bean id="KRMS-Tree" parent="KRMS-Tree-parent"/>
 
-    <bean id="KRMS-Tree-Section-parent" parent="Uif-TreeSection">
+    <bean id="KRMS-Tree-Section-parent" parent="Uif-TreeSection" class="org.kuali.rice.krms.util.ViewTreeGroup">
         <property name="template" value="/ks-enroll/WEB-INF/ftl/ruleTreeGroup.ftl"/>
         <property name="templateName" value="uif_ruleTreeGroup"/>
         <property name="tree">
@@ -142,7 +142,7 @@ limitations under the License.
     </bean>
     <bean id="KRMS-Tree-Section" parent="KRMS-Tree-Section-parent"/>
 
-    <bean id="KRMS-ViewTree-Section-parent" parent="KRMS-Tree-Section" class="org.kuali.rice.krms.util.ViewTreeGroup">
+    <bean id="KRMS-ViewTree-Section-parent" parent="KRMS-Tree-Section">
         <property name="defaultNodePrototype">
             <bean class="org.kuali.rice.krad.uif.container.NodePrototype">
                 <property name="labelPrototype">
@@ -164,7 +164,7 @@ limitations under the License.
     </bean>
     <bean id="KRMS-ViewTree-Section" parent="KRMS-ViewTree-Section-parent"/>
 
-    <bean id="KRMS-ListItems-DataGroup-parent" parent="Uif-StackedCollectionGroup" p:style="width: 400px; padding: 0;">
+    <bean id="KRMS-ListItems-DataGroup-parent" parent="Uif-StackedCollectionGroup" p:style="width: 600px; padding: 0;">
         <property name="layoutManager">
             <bean parent="Uif-StackedCollectionLayout-WithBoxItems">
                 <property name="lineGroupPrototype">
@@ -220,9 +220,9 @@ limitations under the License.
                         <property name="items">
                             <list>
                                 <bean parent="Uif-MessageField" p:messageText="@{#np.firstElement}"
-                                      p:style="display: table-cell; width: 350px; margin: 1px;"/>
+                                      p:style="display: table-cell; width: @{#np.width}px;"/>
                                 <bean parent="Uif-MessageField" p:messageText="@{#np.secondElement}"
-                                      p:style="display: table-cell; width: 350px; margin: 1px;"/>
+                                      p:style="display: table-cell; width: @{#np.width}px; margin-left: @{350-#np.width}px;"/>
                             </list>
                         </property>
                     </bean>
@@ -295,7 +295,7 @@ limitations under the License.
             <list>
                 <bean parent="Uif-MessageField" p:messageText="@{#np.data}"/>
                 <bean parent="Uif-SpaceField"/>
-                <bean parent="Uif-ActionLink" p:actionLabel="edit" p:align="right" p:methodToCall="getSelectedKey">
+                <bean parent="KS-Uif-ActionLink" p:actionLabel="edit" p:align="right" p:methodToCall="getSelectedKey">
                     <property name="additionalSubmitData" value="selectedKey:@{#np.key != null ? #np.key : -1}"/>
                     <property name="toolTip">
                         <bean parent="Uif-TooltipFocus" p:onMouseHover="true"

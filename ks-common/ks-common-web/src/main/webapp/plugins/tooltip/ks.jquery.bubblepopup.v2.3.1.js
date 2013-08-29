@@ -614,7 +614,7 @@
             var H = m(x);
             switch (K) {
                 case "left":
-                    I.top = t - M - z + l(w);
+                    I.top = t - M - z + l(w) - 20;
                     I.left = y + A;
                     break;
                 case "center":
@@ -989,17 +989,15 @@
                     }
                     d(this, H);
                     b(H);
-                    /* KF- existing code removed
-                    if (a("#" + H.privateVars.id).length > 0) {
-                        a("#" + H.privateVars.id).remove()
-                    }
-                    var y = {};
-                    var B = p(H);
-                    y = a(B);
-                    y.appendTo("body");
-                    y = a("#" + H.privateVars.id);
-                    */
-                    //KF- new code begins  (3-20-13 change)
+                    /* kuali customization */
+                    /*                    if (a("#" + H.privateVars.id).length > 0) {
+                     a("#" + H.privateVars.id).remove()
+                     }
+                     var y = {};
+                     var B = p(H);
+                     y = a(B);
+                     y.appendTo("body");
+                     y = a("#" + H.privateVars.id);*/
                     var y = a("#" + H.privateVars.id);
                     if (y.length == 0) {
                         var B = p(H);
