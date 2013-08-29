@@ -229,25 +229,4 @@ public class CourseServiceR1MockImpl implements CourseService, MockService {
         }
         return list;
     }
-
-	@Override
-	public CourseInfo createCourse_KRAD(CourseInfo courseInfo,
-			ContextInfo contextInfo) throws DataValidationErrorException,
-			InvalidParameterException, MissingParameterException,
-			OperationFailedException, PermissionDeniedException,
-			VersionMismatchException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public CourseInfo updateCourse_KRAD(String courseId, CourseInfo courseInfo,
-			ContextInfo contextInfo) throws DataValidationErrorException,
-			DoesNotExistException, InvalidParameterException,
-			MissingParameterException, VersionMismatchException,
-			OperationFailedException, PermissionDeniedException,
-			UnsupportedActionException, DependentObjectsExistException,
-			AlreadyExistsException, CircularRelationshipException,
-			CircularReferenceException, ReadOnlyException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
 }
