@@ -72,7 +72,7 @@
                 <value>classpath:ks-CourseInfo-dictionary.xml</value> <!-- KSCM-720  Curriculum Management Course Info -->
                 <value>classpath:ks-ProposalInfo-dictionary.xml</value>
                 <!-- <value>classpath:org/kuali/student/cm/dictionary/ks-CourseProposalInfo-dictionary.xml</value>-->
-
+                <value>classpath:org/kuali/student/cm/UifKsCmDefinitions.xml</value>
 
                 <!-- KIM Attributes -->
                 <value>classpath:org/kuali/rice/student/bo/KualiStudentKimAttributes.xml</value>
