@@ -28,7 +28,7 @@ import org.kuali.student.r2.core.constants.KSKRMSServiceConstants;
  * Created with IntelliJ IDEA.
  * User: christoff
  *
- * @info This class takes in rules data in the CM format, converts it to the KRMS format and persists it via the KRMSHelper
+ * @info This class takes in rules data in the CM(Statement) format, converts it to the KRMS format and persists it via the KRMSHelper
  */
 public class RulesDataLoader {
 
@@ -622,7 +622,6 @@ public class RulesDataLoader {
         propositionTypeTemplateInfoMap.put("kuali.krms.proposition.type.test.score", new TemplateInfo("ScoreOnTest", "&gt;=", "score"));
         propositionTypeTemplateInfoMap.put("kuali.krms.proposition.type.admitted.to.program", new TemplateInfo("AdmittedToProgram", "=", "true"));
         propositionTypeTemplateInfoMap.put("kuali.krms.proposition.type.admitted.to.program.org", new TemplateInfo("AdmittedToProgram", "=", "true"));
-        //propositionTypeTemplateInfoMap.put("",new TemplateInfo("termspecname","operator","value"));
 
 
         ruleTypeToAgendaTypeRelationMap = new HashMap<String, String>();
@@ -667,10 +666,8 @@ public class RulesDataLoader {
         reqCompTypeToPropositionTypeConversionMap.put("kuali.reqComponent.type.course.standing", "kuali.krms.proposition.type.greater.than.class.standing");
         reqCompTypeToPropositionTypeConversionMap.put("kuali.reqComponent.type.major.org", "kuali.krms.proposition.type.admitted.to.program.org");
         reqCompTypeToPropositionTypeConversionMap.put("kuali.reqComponent.type.program.cumulative.gpa.min", "kuali.krms.proposition.type.cumulative.gpa.min");
-        //reqCompTypeToPropositionTypeConversionMap.put("","");
 
         reqCompFieldTypeToTermParameterTypeConversionMap = new HashMap<String, String>();
-        //reqCompFieldTypeToTermParameterTypeConversionMap.put("kuali.reqComponent.field.type.value.positive.integer","");
         reqCompFieldTypeToTermParameterTypeConversionMap.put("kuali.reqComponent.field.type.value.freeform.text", "kuali.term.parameter.type.free.text");
         reqCompFieldTypeToTermParameterTypeConversionMap.put("kuali.reqComponent.field.type.course.cluSet.id", "kuali.term.parameter.type.course.cluSet.id");
         reqCompFieldTypeToTermParameterTypeConversionMap.put("kuali.reqComponent.field.type.program.cluSet.id", "kuali.term.parameter.type.program.cluSet.id");

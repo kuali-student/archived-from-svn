@@ -16,11 +16,8 @@
 package org.kuali.student.loader.rules;
 
 import org.apache.log4j.Logger;
-import org.kuali.student.loader.course.CreditCourseLoadResult;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author nwright
@@ -51,15 +48,15 @@ public class RulesDataLoaderFromCommandLine {
             //Assume source and destination are the same
             String sourceHost = args[0];
             String destHost = args[0];
-            //generate(sourceHost, destHost);
+            convertRuleData(sourceHost, destHost);
             //copy(sourceHost);
-            cluSetFix(sourceHost);
+            //cluSetFix(sourceHost);
         } else {
             String sourceHost = args[0];
             String destHost = args[1];
-            //generate(sourceHost, destHost);
+            convertRuleData(sourceHost, destHost);
             //copy(sourceHost);
-            cluSetFix(sourceHost);
+            //cluSetFix(sourceHost);
         }
     }
 
@@ -97,7 +94,7 @@ public class RulesDataLoaderFromCommandLine {
         System.out.println(new Date() + " Done with copy... ");
     }
 
-    protected void generate(String sourceHostUrl, String destHostUrl) {
+    protected void convertRuleData(String sourceHostUrl, String destHostUrl) {
         RulesDataLoader rulesLoader = new RulesDataLoader();
         KRMSHelper krmsHelper = new KRMSHelper();
         StatementHelper statementHelper = new StatementHelper();
@@ -116,54 +113,11 @@ public class RulesDataLoaderFromCommandLine {
         System.out.println("Connecting to Term Repository Service...");
         krmsHelper.setTermRepositoryService(serviceFactory.getTermRepositoryService());
 
-        System.out.println(new Date() + " starting conversion... ");
+        System.out.println(new Date() + " Starting conversion... ");
         rulesLoader.setKrmsHelper(krmsHelper);
         rulesLoader.setStatementHelper(statementHelper);
         rulesLoader.startConversion();
+        System.out.println(new Date() + " Conversion finished... ");
 
-
-        //TODO have the loader populate a load result list
-        List<CreditCourseLoadResult> results = new ArrayList<CreditCourseLoadResult>();
-
-        // output good results
-        for (CreditCourseLoadResult result : results) {
-            switch (result.getStatus()) {
-                case CREATED:
-                case COURSE_VARIATION_PROCESSED_WITH_MAIN_COURSE:
-                    System.out.println(result.getCourseInfo().getCode()
-                            + " " + result.getStatus() + " id = "
-                            + result.getCourseInfo().getId());
-            }
-        }
-
-        // output summary
-        for (CreditCourseLoadResult result : results) {
-            result.getStatus().increment();
-        }
-        //System.out.println (list.size () + " credit courses");
-        for (CreditCourseLoadResult.Status status :
-                CreditCourseLoadResult.Status.values()) {
-            System.out.println("Total with status of " + status + " = "
-                    + status.getCount());
-        }
-
-        // output errors
-        for (CreditCourseLoadResult result : results) {
-            switch (result.getStatus()) {
-                case CREATED:
-                case COURSE_VARIATION_PROCESSED_WITH_MAIN_COURSE:
-                    break;
-                default:
-                    System.out.println(result);
-            }
-        }
-        if (CreditCourseLoadResult.Status.VALIDATION_ERROR.getCount() > 0) {
-            throw new RuntimeException(CreditCourseLoadResult.Status.VALIDATION_ERROR.getCount()
-                    + " records failed to load");
-        }
-        if (CreditCourseLoadResult.Status.EXCEPTION.getCount() > 0) {
-            throw new RuntimeException(CreditCourseLoadResult.Status.EXCEPTION.getCount()
-                    + " records failed to load");
-        }
     }
 }
