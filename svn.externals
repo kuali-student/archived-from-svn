@@ -20,4 +20,5 @@ ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/KSAP
 ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/KSAP
 ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/KSAP
 ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/KSAP
-ks-ap https://svn.kuali.org/repos/student/enrollment/ks-ap/trunk 
+ks-ap https://svn.kuali.org/repos/student/enrollment/ks-ap/branches/ks-ap-0.6-iu-dev
+
