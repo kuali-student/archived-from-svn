@@ -286,6 +286,7 @@
                 <value>classpath:org/kuali/student/cm/lookup/OrganizationInfoWrapperLookupView.xml</value>
                 <value>classpath:org/kuali/student/cm/lookup/CollaboratorWrapperLookupView.xml</value>
                 <value>classpath:org/kuali/student/cm/lookup/LoCategoryInfoWrapperView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/LoDisplayInfoWrapperLookupView.xml</value>
             </list>
         </property>
         <property name="packagePrefixes">
