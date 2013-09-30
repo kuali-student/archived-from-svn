@@ -214,7 +214,7 @@
             <version>${ks.api.version}</version>
             <type>test-jar</type>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-impl</artifactId>
             <version>${ks.enroll.version}</version>
@@ -223,7 +223,7 @@
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-ui</artifactId>
             <version>${ks.enroll.version}</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.kuali.student.core</groupId>
             <artifactId>ks-common-ksink</artifactId>
@@ -236,7 +236,7 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-web</artifactId>
             <version>${ks.enroll.version}</version>
@@ -247,7 +247,7 @@
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-rice</artifactId>
             <version>${ks.enroll.version}</version>
-        </dependency>
+        </dependency> -->
         <!-- Sources for GWT Compile -->
         <dependency>
             <groupId>org.kuali.student.core</groupId>

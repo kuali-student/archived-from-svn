@@ -52,11 +52,11 @@
                             <artifactId>ks-lum-sql</artifactId>
                             <version>${ks.lum.version}</version>
                         </dependency>
-                        <dependency>
+                        <!-- <dependency>
                             <groupId>org.kuali.student.enroll</groupId>
                             <artifactId>ks-enroll-sql</artifactId>
                             <version>${ks.enroll.version}</version>
-                        </dependency>
+                        </dependency> -->
                         <dependency>
                             <groupId>org.kuali.common</groupId>
                             <artifactId>kuali-deploy</artifactId>

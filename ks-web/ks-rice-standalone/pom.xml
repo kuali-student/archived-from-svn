@@ -138,10 +138,10 @@
             <artifactId>ks-enroll-api</artifactId>
             <version>${ks.api.version}</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.kuali.student.enroll</groupId>
             <artifactId>ks-enroll-rice</artifactId>
             <version>${ks.enroll.version}</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 </project>
