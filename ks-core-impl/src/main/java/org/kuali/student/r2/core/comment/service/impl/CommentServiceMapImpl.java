@@ -279,6 +279,25 @@ public class CommentServiceMapImpl implements MockService, CommentService
 	     meta.setVersionInd((Integer.parseInt(meta.getVersionInd()) + 1) + "");
 	     return meta;
 	}
+
+
+    @Override
+    public CommentInfo createComment_KRAD(String referenceId, String referenceTypeKey, String commentTypeKey,
+            CommentInfo commentInfo, ContextInfo contextInfo) throws DataValidationErrorException,
+            DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException,
+            PermissionDeniedException, ReadOnlyException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public List<ValidationResultInfo> validateComment_KRAD(String validationTypeKey, CommentInfo commentInfo,
+            ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException,
+            MissingParameterException, OperationFailedException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 	
 }
 
