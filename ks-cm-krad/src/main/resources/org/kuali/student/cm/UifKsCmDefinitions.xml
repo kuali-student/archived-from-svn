@@ -19,10 +19,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
        >
+<!--
     <bean id="Uif-GlobalApplicationHeader" parent="Uif-GlobalApplicationHeader-parentBean"/>
     <bean id="Uif-GlobalApplicationHeader-parentBean" abstract="true" parent="Uif-HeaderBase"
           p:render="false"/>
-<!--
     <bean id="Uif-ViewHeader" parent="Uif-ViewHeader-parentBean"/>
     <bean id="Uif-ViewHeader-parentBean" abstract="true" parent="Uif-HeaderOne"
           class="org.kuali.student.uif.element.KsViewHeader">
