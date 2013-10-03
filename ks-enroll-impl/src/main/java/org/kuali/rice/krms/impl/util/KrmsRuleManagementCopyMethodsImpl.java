@@ -64,6 +64,7 @@ public class KrmsRuleManagementCopyMethodsImpl implements KrmsRuleManagementCopy
         List<ReferenceObjectBinding> refsToCopy = this.getRuleManagementService().findReferenceObjectBindingsByReferenceObject(fromReferenceDiscriminatorType, fromReferenceObjectId);
         for (ReferenceObjectBinding reference : refsToCopy) {
             ReferenceObjectBinding.Builder refBldr = null;
+            //At the moment we only support agendas.
             if (reference.getKrmsDiscriminatorType().equals(KSKRMSServiceConstants.KRMS_DISCRIMINATOR_TYPE_AGENDA)) {
                 AgendaTreeDefinition agendaTree = getRuleManagementService().getAgendaTree(reference.getKrmsObjectId());
 
@@ -75,8 +76,8 @@ public class KrmsRuleManagementCopyMethodsImpl implements KrmsRuleManagementCopy
                 refBldr.setReferenceDiscriminatorType(toReferenceDiscriminatorType);
                 refBldr.setKrmsObjectId(copiedAgenda.getId());
             } else {
-                //TODO no support for copying any other krms types yet
-                continue;
+                //no support for copying any other krms types yet
+                throw new RiceIllegalStateException("unknown/unhandled KRMS discriminator type " + reference.getKrmsDiscriminatorType());
             }
             ReferenceObjectBinding refBinding = getRuleManagementService().createReferenceObjectBinding(refBldr.build());
             copiedRefList.add(refBinding);
@@ -166,32 +167,7 @@ public class KrmsRuleManagementCopyMethodsImpl implements KrmsRuleManagementCopy
                     termParmBldr.setId(null);
                     termParmBldr.setTermId(null);
                     if (TermParameterTypes.COURSE_CLUSET_KEY.getId().equals(termParmBldr.getName()) || TermParameterTypes.PROGRAM_CLUSET_KEY.getId().equals(termParmBldr.getName()) || TermParameterTypes.CLUSET_KEY.getId().equals(termParmBldr.getName())) {
-                        try {
-                            //get the set to check if its an ad-hoc set
-                            CluSetInfo cluSet = getCluService().getCluSet(termParmBldr.getValue(), ContextUtils.createDefaultContextInfo());
-
-                            //if not reusable, create a copy of the set and use that id in the term parameter value.
-                            if(!cluSet.getIsReusable()){
-                                cluSet.setId(null);
-                                //Clear clu ids if membership info exists, they will be re-added based on membership info
-                                if (cluSet.getMembershipQuery() != null) {
-                                    cluSet.getCluIds().clear();
-                                    cluSet.getCluSetIds().clear();
-                                }
-
-                                cluSet = getCluService().createCluSet(cluSet.getTypeKey(), cluSet, ContextUtils.createDefaultContextInfo());
-                                termParmBldr.setValue(cluSet.getId());
-                            }
-                        } catch (DoesNotExistException e) {
-                            throw new OperationFailedException(e.getMessage());
-                        } catch (UnsupportedActionException e) {
-                            throw new OperationFailedException(e.getMessage());
-                        } catch (DataValidationErrorException e) {
-                            throw new OperationFailedException(e.getMessage());
-                        } catch (ReadOnlyException e) {
-                            throw new OperationFailedException(e.getMessage());
-                        }
-
+                        termParmBldr.setValue(createAdhocCluSet(termParmBldr.getValue()));
                     }
                 }
                 propParmBldr.setTermValue(termBldr.build());
@@ -202,6 +178,41 @@ public class KrmsRuleManagementCopyMethodsImpl implements KrmsRuleManagementCopy
                 deepUpdateForProposition(subPropBldr);
             }
         }
+    }
+
+    private String createAdhocCluSet(String cluSetId) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        try {
+            //get the set to check if its an ad-hoc set
+            CluSetInfo cluSet = getCluService().getCluSet(cluSetId, ContextUtils.createDefaultContextInfo());
+
+            //if not reusable, create a copy of the set and use that id in the term parameter value.
+            if(!cluSet.getIsReusable()){
+                cluSet.setId(null);
+                //Clear clu ids if membership info exists, they will be re-added based on membership info
+                if (cluSet.getMembershipQuery() != null) {
+                    cluSet.getCluIds().clear();
+                    cluSet.getCluSetIds().clear();
+                } else {
+                    List<String> subCluSetIds = new ArrayList<String>();
+                    for(String subCluSetid : cluSet.getCluSetIds()){
+                        subCluSetIds.add(createAdhocCluSet(subCluSetid));
+                    }
+                    cluSet.setCluSetIds(subCluSetIds);
+                }
+
+                cluSet = getCluService().createCluSet(cluSet.getTypeKey(), cluSet, ContextUtils.createDefaultContextInfo());
+                return cluSet.getId();
+            }
+        } catch (DoesNotExistException e) {
+            throw new OperationFailedException(e.getMessage());
+        } catch (UnsupportedActionException e) {
+            throw new OperationFailedException(e.getMessage());
+        } catch (DataValidationErrorException e) {
+            throw new OperationFailedException(e.getMessage());
+        } catch (ReadOnlyException e) {
+            throw new OperationFailedException(e.getMessage());
+        }
+        return cluSetId;
     }
 
     @Override

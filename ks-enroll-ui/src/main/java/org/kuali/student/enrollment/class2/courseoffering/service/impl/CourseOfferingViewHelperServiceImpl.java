@@ -48,7 +48,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This class //TODO ...
+ * This class provides helper logic for Course Offering related ui
  *
  * @author Kuali Student Team
  */
@@ -160,7 +160,8 @@ public class CourseOfferingViewHelperServiceImpl extends ViewHelperServiceImpl i
                 form.setStatusField("Too many SOCS in source term: " + socIds.size());
                 return null;
             } else {
-                String sourceSocId = socIds.get(0);
+                int firstValue = 0;
+                String sourceSocId = socIds.get(firstValue);
                 List<String> resultIds = socService.getSocRolloverResultIdsBySourceSoc(sourceSocId, new ContextInfo());
                 if (resultIds == null || resultIds.isEmpty()) {
                     form.setStatusField("No rollover results for source term");
@@ -169,7 +170,7 @@ public class CourseOfferingViewHelperServiceImpl extends ViewHelperServiceImpl i
                     form.setStatusField("Too many rollover results for source term: " + resultIds.size());
                     return null;
                 } else {
-                    String socResultId = resultIds.get(0);
+                    String socResultId = resultIds.get(firstValue);
                     List<String> options = new ArrayList<String>();
                     SocRolloverResultInfo info = socService.reverseRollover(socResultId, options, new ContextInfo());
                     return info;
@@ -279,12 +280,4 @@ public class CourseOfferingViewHelperServiceImpl extends ViewHelperServiceImpl i
         return socService;
     }
 
-    private CourseService _getCourseService() {
-        if (courseService == null) {
-            Object o = GlobalResourceLoader.getService(new QName(CommonServiceConstants.REF_OBJECT_URI_GLOBAL_PREFIX + "course",
-                    "CourseService"));
-            courseService = (CourseService) o;
-        }
-        return courseService;
-    }
 }

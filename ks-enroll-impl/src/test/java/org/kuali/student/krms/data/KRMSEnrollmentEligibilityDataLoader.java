@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import org.joda.time.DateTime;
 import org.kuali.student.common.test.mock.data.AbstractMockServicesAwareDataLoader;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
+import org.kuali.student.enrollment.academicrecord.dto.StudentProgramRecordInfo;
 import org.kuali.student.enrollment.class2.academicrecord.service.impl.AcademicRecordServiceClass2MockImpl;
 import org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceTestDataUtils;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
@@ -166,7 +167,8 @@ public class KRMSEnrollmentEligibilityDataLoader extends AbstractMockServicesAwa
      * @throws OperationFailedException
      * @throws PermissionDeniedException
      */
-    public StudentCourseRecordInfo createStudentCourseRecord(String studentId, String termId, String courseCode, String courseTitle) throws DoesNotExistException, OperationFailedException {
+    public StudentCourseRecordInfo createStudentCourseRecord(String studentId, String termId, String courseCode, String courseTitle,
+                                                             String gradeValue, String gradeScaleKey) throws DoesNotExistException, OperationFailedException {
         
         StudentCourseRecordInfo courseRecord = new StudentCourseRecordInfo();
         
@@ -188,18 +190,43 @@ public class KRMSEnrollmentEligibilityDataLoader extends AbstractMockServicesAwa
         courseRecord.setCourseBeginDate(term.getStartDate());
         courseRecord.setCourseEndDate(term.getEndDate());
         
-        courseRecord.setAssignedGradeValue("3.0");
-        courseRecord.setAssignedGradeScaleKey("1");
-        courseRecord.setAdministrativeGradeValue("3.0");
-        courseRecord.setAdministrativeGradeScaleKey("1");
+        courseRecord.setAssignedGradeValue(gradeValue);
+        courseRecord.setAssignedGradeScaleKey(gradeScaleKey);
+        courseRecord.setAdministrativeGradeValue(gradeValue);
+        courseRecord.setAdministrativeGradeScaleKey(gradeScaleKey);
         courseRecord.setCalculatedGradeValue("3.0");
         courseRecord.setCalculatedGradeScaleKey("1");
-
+        courseRecord.setCreditsForGPA("3");
         courseRecord.setCreditsEarned("3");
         
         return courseRecord;
         
     }
+
+    /**
+     * Helper to create a new StudentProgramRecordInfo object built using the provided details.
+     *
+     * @param studentId the student that completed the program
+     * @param program the program
+     * @return the non-saved new course record built using the provided details
+     * @throws DoesNotExistException the term does not exist
+     * @throws InvalidParameterException the
+     * @throws MissingParameterException
+     * @throws OperationFailedException
+     * @throws PermissionDeniedException
+     */
+    public StudentProgramRecordInfo createStudentProgramRecord(String studentId, CluInfo program) throws DoesNotExistException, OperationFailedException {
+
+        StudentProgramRecordInfo programRecord = new StudentProgramRecordInfo();
+
+        programRecord.setProgramId(program.getId());
+        programRecord.setProgramCode(program.getOfficialIdentifier().getCode());
+        programRecord.setProgramTitle(program.getOfficialIdentifier().getLongName());
+
+        return programRecord;
+
+    }
+
     /**
      * Store a new CourseRecord for the student in the term given.
      * @param studentId
@@ -223,6 +250,18 @@ public class KRMSEnrollmentEligibilityDataLoader extends AbstractMockServicesAwa
         }
         
         recordService.storeStudentCourseRecord(studentId, termId, courseId, courseRecord);
+    }
+
+    /**
+     * Store a new ProgramRecord for the student in the term given.
+     * @param studentId
+     * @param programId
+     * @param programRecord
+     * @throws DoesNotExistException if the term does not exist.
+     * @throws OperationFailedException  if an exception occurs that prevents the execution of the method.
+     */
+    public void storeStudentProgramRecord (String studentId, String programId, StudentProgramRecordInfo programRecord) throws DoesNotExistException, OperationFailedException {
+        recordService.storeStudentProgramRecord(studentId, programId, programRecord);
     }
 
     private AtpInfo createTerm(String atpSpringTypeKey, Date startDate, Date endDate, String name) {
@@ -298,6 +337,7 @@ public class KRMSEnrollmentEligibilityDataLoader extends AbstractMockServicesAwa
             courseOffering.setId(coId);
             courseOffering = courseOfferingService.createCourseOffering(course.getId(), termId, LuiServiceConstants.COURSE_OFFERING_TYPE_KEY,
                     courseOffering, new ArrayList<String>(), contextInfo);
+            courseOffering.getUnitsContentOwnerOrgIds().add("ORG1");
             RegistrationGroupInfo regGroup = new RegistrationGroupInfo();
             regGroup.setCourseOfferingId(courseOffering.getId());
             regGroup.setTypeKey("atype");
@@ -323,6 +363,10 @@ public class KRMSEnrollmentEligibilityDataLoader extends AbstractMockServicesAwa
 
             return courseService.createCourse(course, contextInfo);
         }
+    }
+
+    public CluInfo getProgram(String programId) throws Exception {
+        return cluService.getClu(programId, contextInfo);
     }
 
     public RegistrationGroupInfo getRegistrationGroup(String courseId, String termId) throws Exception {

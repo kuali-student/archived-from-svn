@@ -251,7 +251,7 @@ public class CourseOfferingServiceMockImpl implements CourseOfferingService,
 
         for (ActivityOfferingInfo activityOfferingInfo : aos) {
 
-            deleteActivityOfferingCascaded(activityOfferingInfo.getId(), context);
+            deleteActivityOfferingCascaded(activityOfferingInfo.getId(), formatOfferingId, context);
         }
 
 
@@ -379,6 +379,7 @@ public class CourseOfferingServiceMockImpl implements CourseOfferingService,
         CourseInfo courseInfo = new R1CourseServiceHelper(courseService, acalService).getCourse(courseId);
         courseOfferingTransformer.copyFromCanonical(courseInfo, copy, optionKeys, context);
         copy.setMeta(newMeta(context));
+        copy.setHasWaitlist(true);
         courseOfferingMap.put(copy.getId(), copy);
         log.info("CourseOfferingMockImpl: created course offering: " + copy.getId() + "term=" + copy.getTermId() + " for course =" + copy.getCourseId());
         
@@ -891,7 +892,7 @@ public class CourseOfferingServiceMockImpl implements CourseOfferingService,
 
 
     @Override
-    public StatusInfo deleteActivityOfferingCascaded(String activityOfferingId,
+    public StatusInfo deleteActivityOfferingCascaded(String activityOfferingId, String formatOfferingId,
                                                      ContextInfo context) throws DoesNotExistException,
             InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException {

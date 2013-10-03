@@ -1,6 +1,5 @@
 package org.kuali.student.enrollment.class2.courseoffering.controller;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
@@ -15,13 +14,13 @@ import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.form.DocumentFormBase;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.common.uif.form.KSUifMaintenanceDocumentForm;
+import org.kuali.student.common.uif.util.KSControllerHelper;
+import org.kuali.student.common.uif.util.KSUifUtils;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ScheduleWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.service.ActivityOfferingMaintainable;
 import org.kuali.student.enrollment.class2.courseoffering.util.ActivityOfferingConstants;
-import org.kuali.student.common.uif.form.KSUifMaintenanceDocumentForm;
-import org.kuali.student.common.uif.util.KSControllerHelper;
-import org.kuali.student.common.uif.util.KSUifUtils;
 import org.kuali.student.enrollment.common.util.EnrollConstants;
 import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.util.date.KSDateTimeFormatter;
@@ -116,10 +115,6 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
      * This method is called by a helper service to perform the super.route method. It's indirect, but we need a new
      * transaction boundary around this call to support handling errors without causing a rollback exception in the UI
      *
-     * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return model and view
      */
     public ModelAndView routeSuper(DocumentFormBase form, BindingResult result,
@@ -175,7 +170,10 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
             urlParameters.put(ActivityOfferingConstants.ACTIVITY_OFFERING_WRAPPER_ID, loadNewAO);
             urlParameters.put(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID, activityOfferingWrapper.getAoInfo().getCourseOfferingId());
             urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, ActivityOfferingWrapper.class.getName());
-            urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
+            // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+            // https://fisheye.kuali.org/changelog/rice?cs=39034
+            // TODO KSENROLL-8469
+            //urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
             urlParameters.put(EnrollConstants.GROWL_MESSAGE, ActivityOfferingConstants.MSG_INFO_AO_MODIFIED);
             urlParameters.put("returnLocation", url);
 
@@ -196,8 +194,6 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
     /**
      * Fish out the original cause.
-     * @param e
-     * @return
      */
     private Throwable unwrapException(Throwable e) {
         if (e.getCause() != null) {
@@ -235,7 +231,10 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
             urlParameters.put(ActivityOfferingConstants.ACTIVITY_OFFERING_WRAPPER_ID, loadNewAO);
             urlParameters.put(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID, activityOfferingWrapper.getAoInfo().getCourseOfferingId());
             urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, ActivityOfferingWrapper.class.getName());
-            urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
+            // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
+            // https://fisheye.kuali.org/changelog/rice?cs=39034
+            // TODO KSENROLL-8469
+            //urlParameters.put(UifConstants.UrlParams.SHOW_HOME, BooleanUtils.toStringTrueFalse(false));
             urlParameters.put("returnLocation", url);
 
             GlobalVariables.getUifFormManager().removeSessionForm(form);
@@ -247,8 +246,8 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
     }
 
     @RequestMapping(params = "methodToCall=breakColo")
-    public ModelAndView breakColo(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView breakColo(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
+                                  @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
 
         ActivityOfferingWrapper activityOfferingWrapper = (ActivityOfferingWrapper)form.getDocument().getNewMaintainableObject().getDataObject();
 

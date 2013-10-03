@@ -18,6 +18,7 @@ package org.kuali.student.enrollment.class2.acal.service.impl;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
@@ -34,14 +35,15 @@ import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
 import org.kuali.student.enrollment.class2.acal.service.HolidayCalendarViewHelperService;
+import org.kuali.student.enrollment.class2.acal.util.AcalCommonUtils;
 import org.kuali.student.r2.common.dto.StatusInfo;
+import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.HolidayCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.enrollment.class2.acal.dto.TimeSetWrapper;
 import org.kuali.student.enrollment.class2.acal.form.HolidayCalendarForm;
 import org.kuali.student.enrollment.class2.acal.util.CalendarConstants;
-import org.kuali.student.enrollment.class2.acal.util.CommonUtils;
 import org.kuali.student.common.uif.service.impl.KSViewHelperServiceImpl;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -78,7 +80,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
             hcInfo.setStateKey(AtpServiceConstants.ATP_DRAFT_STATE_KEY);
         }
         hcInfo.setTypeKey(AcademicCalendarServiceConstants.HOLIDAY_CALENDAR_TYPE_KEY);
-        hcInfo.setDescr(CommonUtils.buildDesc("no description"));
+        hcInfo.setDescr(AcalCommonUtils.buildDesc("no description"));
 
         if (StringUtils.isBlank(hcInfo.getId())){
             HolidayCalendarInfo createdHCal = getAcalService().createHolidayCalendar(AcademicCalendarServiceConstants.HOLIDAY_CALENDAR_TYPE_KEY, hcInfo, contextInfo);
@@ -98,7 +100,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
 
             holidayInfo = holidayWrapper.getHolidayInfo();
             holidayWrapper.setTypeName(getHolidayTypeName(holidayWrapper.getTypeKey()));
-            holidayInfo.setDescr(CommonUtils.buildDesc("no description"));
+            holidayInfo.setDescr(AcalCommonUtils.buildDesc("no description"));
             holidayInfo.setIsAllDay(holidayWrapper.isAllDay());
             holidayInfo.setIsInstructionalDay(holidayWrapper.isInstructional());
             holidayInfo.setStartDate(holidayWrapper.getStartDate());
@@ -217,7 +219,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
         HolidayWrapper holiday = new HolidayWrapper(holidayInfo);
 //        holiday.setHolidayInfo(holidayInfo);
         holiday.setTypeName(getHolidayTypeName(holidayInfo.getTypeKey()));
-//        CommonUtils.assembleTimeSet(holiday, holidayInfo.getStartDate(), holidayInfo.getEndDate());
+//        AcalCommonUtils.assembleTimeSet(holiday, holidayInfo.getStartDate(), holidayInfo.getEndDate());
 
         return holiday;
     }
@@ -304,12 +306,12 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
                 if (isSaveAction && StringUtils.startsWith(startTime,"12:") && StringUtils.equalsIgnoreCase(startTimeApPm,"am")){
                     startTime = StringUtils.replace(startTime,"12:","00:");
                 }
-                return CommonUtils.getDateWithTime(timeSetWrapper.getStartDate(),startTime,startTimeApPm);
+                return AcalCommonUtils.getDateWithTime(timeSetWrapper.getStartDate(), startTime, startTimeApPm);
             }else{
                 timeSetWrapper.setStartTime("12:00");
                 timeSetWrapper.setStartTimeAmPm("AM");
-                return CommonUtils.getDateWithTime(timeSetWrapper.getStartDate(),
-                        timeSetWrapper.getStartTime(),timeSetWrapper.getStartTimeAmPm());
+                return AcalCommonUtils.getDateWithTime(timeSetWrapper.getStartDate(),
+                        timeSetWrapper.getStartTime(), timeSetWrapper.getStartTimeAmPm());
             }
         }else{
             return timeSetWrapper.getStartDate();
@@ -329,7 +331,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
         if (timeSetWrapper.isAllDay()) {
             if (timeSetWrapper.isDateRange()) {
                 //just clearing out any time already set in end date
-                endDateToInfo = CommonUtils.getDateWithTime(timeSetWrapper.getEndDate(), CalendarConstants.DEFAULT_END_TIME, "PM");
+                endDateToInfo = AcalCommonUtils.getDateWithTime(timeSetWrapper.getEndDate(), CalendarConstants.DEFAULT_END_TIME, "PM");
             }
             else {
                 endDateToInfo = null;
@@ -355,7 +357,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
                 timeSetWrapper.setEndTime(endTime);
                 timeSetWrapper.setEndTimeAmPm(endTimeAmPm);
 
-                endDateToInfo = CommonUtils.getDateWithTime(endDate, endTime, endTimeAmPm);
+                endDateToInfo = AcalCommonUtils.getDateWithTime(endDate, endTime, endTimeAmPm);
             } else {
                 timeSetWrapper.setEndDate(null);
                 timeSetWrapper.setEndTime(null);
@@ -382,10 +384,10 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
             GlobalVariables.getMessageMap().putError("holidayCalendarInfo.name", "error.enroll.calendar.duplicateName");
         }
 
-        if (!CommonUtils.isValidDateRange(hcInfo.getStartDate(),hcInfo.getEndDate())){
+        if (!AcalCommonUtils.isValidDateRange(hcInfo.getStartDate(), hcInfo.getEndDate())){
             GlobalVariables.getMessageMap().putErrorForSectionId("KS-HolidayCalendar-MetaSection",
                     "error.enroll.daterange.invalid", "Calendar",
-                    CommonUtils.formatDate(hcInfo.getStartDate()), CommonUtils.formatDate(hcInfo.getEndDate()));
+                    AcalCommonUtils.formatDate(hcInfo.getStartDate()), AcalCommonUtils.formatDate(hcInfo.getEndDate()));
         }
 
         //Validate Events
@@ -393,8 +395,8 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
         for (HolidayWrapper holiday : hcForm.getHolidays()) {
             ++index;
 
-            if (!CommonUtils.isDateWithinRange(hcInfo.getStartDate(),hcInfo.getEndDate(),holiday.getStartDate()) ||
-                    !CommonUtils.isDateWithinRange(hcInfo.getStartDate(),hcInfo.getEndDate(),holiday.getEndDate())){
+            if (!AcalCommonUtils.isDateWithinRange(hcInfo.getStartDate(), hcInfo.getEndDate(), holiday.getStartDate()) ||
+                    !AcalCommonUtils.isDateWithinRange(hcInfo.getStartDate(), hcInfo.getEndDate(), holiday.getEndDate())){
                 GlobalVariables.getMessageMap().putWarningForSectionId("KS-HolidayCalendar-HolidaySection",
                         "error.enroll.holiday.dateNotInHcal", holiday.getTypeName());
             }
@@ -473,7 +475,7 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
                 if (!StringUtils.isEmpty(holidayCalendarId)) {
                     HolidayCalendarInfo hcInfo = getAcalService().getHolidayCalendar(inputLine.getId(), contextInfo);
                     inputLine.setHolidayCalendarInfo(hcInfo);
-                    inputLine.setAdminOrgName(CommonUtils.getAdminOrgNameById(hcInfo.getAdminOrgId()));
+                    inputLine.setAdminOrgName(AcalCommonUtils.getAdminOrgNameById(hcInfo.getAdminOrgId()));
                     StateInfo hcState = getAcalService().getHolidayCalendarState(hcInfo.getStateKey(), contextInfo);
                     inputLine.setStateName(hcState.getName());
                     List<HolidayInfo> holidayInfoList = getAcalService().getHolidaysForHolidayCalendar(hcInfo.getId(), contextInfo);
@@ -496,8 +498,8 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            if (!CommonUtils.isValidDateRange(holiday.getStartDate(),holiday.getEndDate())){
-                GlobalVariables.getMessageMap().putWarningForSectionId("KS-HolidayCalendar-HolidaySection", "error.enroll.daterange.invalid",holiday.getTypeName(),CommonUtils.formatDate(holiday.getStartDate()),CommonUtils.formatDate(holiday.getEndDate()));
+            if (!AcalCommonUtils.isValidDateRange(holiday.getStartDate(), holiday.getEndDate())){
+                GlobalVariables.getMessageMap().putWarningForSectionId("KS-HolidayCalendar-HolidaySection", "error.enroll.daterange.invalid",holiday.getTypeName(), AcalCommonUtils.formatDate(holiday.getStartDate()), AcalCommonUtils.formatDate(holiday.getEndDate()));
             }
         } else {
             super.processBeforeAddLine(view, collectionGroup, model, addLine);
@@ -604,12 +606,14 @@ public class HolidayCalendarViewHelperServiceImpl extends KSViewHelperServiceImp
                     (wrapper.getEndTime()!=null && !StringUtils.isBlank(wrapper.getEndTime()))) {
                 Date startDate = getStartDateWithUpdatedTime(wrapper, false);
                 Date endDate =  timeSetWrapperEndDate(wrapper);
-                if (!CommonUtils.isValidDateRange(startDate, endDate)) {
-                    GlobalVariables.getMessageMap().putWarningForSectionId(collectionGroupId, CalendarConstants.MessageKeys.ERROR_INVALID_DATE_RANGE, wrapperName, CommonUtils.formatDate(wrapper.getStartDate()), CommonUtils.formatDate(wrapper.getEndDate()));
+                if (!AcalCommonUtils.isValidDateRange(startDate, endDate)) {
+                    GlobalVariables.getMessageMap().putErrorForSectionId(collectionGroupId, CalendarConstants.MessageKeys.ERROR_INVALID_DATE_RANGE, wrapperName, DateFormatUtils.format(startDate, DateFormatters.MONTH_DAY_YEAR_TIME_DATE_FORMAT), DateFormatUtils.format(endDate, DateFormatters.MONTH_DAY_YEAR_TIME_DATE_FORMAT));
+                    return false;
                 }
             } else {
-                if (!CommonUtils.isValidDateRange(wrapper.getStartDate(), wrapper.getEndDate())) {
-                    GlobalVariables.getMessageMap().putWarningForSectionId(collectionGroupId, CalendarConstants.MessageKeys.ERROR_INVALID_DATE_RANGE, wrapperName, CommonUtils.formatDate(wrapper.getStartDate()), CommonUtils.formatDate(wrapper.getEndDate()));
+                if (!AcalCommonUtils.isValidDateRange(wrapper.getStartDate(), wrapper.getEndDate())) {
+                    GlobalVariables.getMessageMap().putErrorForSectionId(collectionGroupId, CalendarConstants.MessageKeys.ERROR_INVALID_DATE_RANGE, wrapperName, AcalCommonUtils.formatDate(wrapper.getStartDate()), AcalCommonUtils.formatDate(wrapper.getEndDate()));
+                    return false;
                 }
             }
         }

@@ -5,10 +5,12 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
+import org.kuali.student.enrollment.class2.scheduleofclasses.sort.ComparatorModel;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.OfferingInstructorInfo;
 import org.kuali.student.enrollment.courseofferingset.dto.SocInfo;
+import org.kuali.student.enrollment.coursewaitlist.dto.CourseWaitListInfo;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
@@ -28,11 +30,13 @@ import java.util.List;
  * @see ColocatedActivity
  *
  */
-public class ActivityOfferingWrapper implements Serializable{
+public class ActivityOfferingWrapper implements Serializable, ComparatorModel{
+
+    private String waitListType;
+    private String waitListTypeUI;
 
     private String aoClusterName;
     private String aoClusterID;
-
     private ActivityOfferingInfo aoInfo;
     private FormatOfferingInfo formatOffering;
     private List<OfferingInstructorWrapper> instructors;
@@ -52,10 +56,6 @@ public class ActivityOfferingWrapper implements Serializable{
     private String formatOfferingName;
 
     private Date termRegStartDate;
-
-    private String waitListLevelTypeKey;
-    private String waitListTypeKey;
-    private boolean hasWaitList;
     private String waitListText = "";
     private String toolTipText = "";
 
@@ -77,9 +77,15 @@ public class ActivityOfferingWrapper implements Serializable{
     private String endTimeDisplay = "";
     private String daysDisplayName = "";
     private String buildingName = "";
+    private String buildingCode = "";
+    private String bldgCodeSimple = "";
     private String roomName = "";
     private String tbaDisplayName = "";
     private String colocatedAoInfo = "";
+
+    private List<String> startTime;
+    private List<String> endTime;
+    private List<String> weekDays;
 
     private boolean schedulesModified;
 
@@ -96,14 +102,12 @@ public class ActivityOfferingWrapper implements Serializable{
     private boolean enableCopyAOActionLink = false;
     private boolean enableEditAOActionLink = false;
 
-    //Permission flag for Manage AO Requisite link
-    private boolean requisiteLink = false;
-
     private boolean colocatedAO;
     private List<ColocatedActivity> colocatedActivities;
     private boolean maxEnrollmentShared;
     private boolean hiddenMaxEnrollmentShared;
     private int sharedMaxEnrollment;
+    private boolean hasSeatpools;
 
     private ScheduleRequestSetInfo scheduleRequestSetInfo;
 
@@ -112,6 +116,7 @@ public class ActivityOfferingWrapper implements Serializable{
     private boolean isColocatedOnLoadAlready;
     private boolean isSendRDLsToSchedulerAfterMSE;
     private boolean isRemovedFromColoSet;
+    private String reinstateStateName;
 
     private CourseOfferingContextBar contextBar = CourseOfferingContextBar.NULL_SAFE_INSTANCE;
 
@@ -144,6 +149,19 @@ public class ActivityOfferingWrapper implements Serializable{
      */
     private String subTermDatesJsonString;
 
+    //use this boolean to check if AO has any rule attached to it
+    private boolean hasRule;
+
+    private SchOfClassesRenderHelper schOfClassesRenderHelper;
+
+    private CourseWaitListInfo courseWaitListInfo;
+    //indicate at AO level, the state of the waitlist
+    private boolean hasWaitlist;
+    //indicate if wailtlist has been enabled in CO level
+    private boolean hasWaitlistCO;
+    //hold the checkbox value for Limit Waitlist Size
+    private boolean limitWaitlistSize;
+
     public ActivityOfferingWrapper(){
         aoInfo = new ActivityOfferingInfo();
         instructors = new ArrayList<OfferingInstructorWrapper>();
@@ -165,6 +183,13 @@ public class ActivityOfferingWrapper implements Serializable{
         maxEnrollmentShared = true;
         editRenderHelper = new EditRenderHelper();
         deletedScheduleComponents = new ArrayList<ScheduleWrapper>();
+        courseWaitListInfo = new CourseWaitListInfo();
+        hasWaitlist = false;
+        hasWaitlistCO = false;
+        limitWaitlistSize = false;
+        startTime = new ArrayList<String>();
+        endTime = new ArrayList<String>();
+        weekDays = new ArrayList<String>();
     }
 
     public ActivityOfferingWrapper(ActivityOfferingInfo info){
@@ -185,6 +210,9 @@ public class ActivityOfferingWrapper implements Serializable{
         }
         seatpools = new ArrayList<SeatPoolWrapper>();
         populationsForSPValidation = new ArrayList<PopulationInfo>();
+        startTime = new ArrayList<String>();
+        endTime = new ArrayList<String>();
+        weekDays = new ArrayList<String>();
     }
 
     public String getAoClusterName() {
@@ -363,12 +391,6 @@ public class ActivityOfferingWrapper implements Serializable{
         this.waitListText = waitListText;
     }
 
-
-
-    public boolean getHasWaitList() {
-        return hasWaitList;
-    }
-
     public String getTbaDisplayName() {
         return tbaDisplayName;
     }
@@ -382,23 +404,6 @@ public class ActivityOfferingWrapper implements Serializable{
                 tbaDisplayName =  "TBA";
             }
         }
-    }
-
-    public void setHasWaitList(boolean hasWaitList) {
-        this.hasWaitList = hasWaitList;
-    }
-
-    public String getWaitListLevelTypeKey() {
-        return waitListLevelTypeKey;
-    }
-    public void setWaitListLevelTypeKey(String waitListLevelTypeKey) {
-        this.waitListLevelTypeKey = waitListLevelTypeKey;
-    }
-    public String getWaitListTypeKey() {
-        return waitListTypeKey;
-    }
-    public void setWaitListTypeKey(String waitListTypeKey) {
-        this.waitListTypeKey = waitListTypeKey;
     }
 
     public FormatOfferingInfo getFormatOffering() {
@@ -705,6 +710,30 @@ public class ActivityOfferingWrapper implements Serializable{
         }
     }
 
+    public List<String> getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(List<String> startTime) {
+        this.startTime = startTime;
+    }
+
+    public List<String> getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(List<String> endTime) {
+        this.endTime = endTime;
+    }
+
+    public List<String> getWeekDays() {
+        return weekDays;
+    }
+
+    public void setWeekDays(List<String> weekDays) {
+        this.weekDays = weekDays;
+    }
+
     public String getBuildingName() {
         return buildingName;
     }
@@ -728,6 +757,42 @@ public class ActivityOfferingWrapper implements Serializable{
             this.buildingName = this.buildingName + "<br><span " + cssClass + " >" + buildingName + "</span>";
         }else{
             this.buildingName = "<span " + cssClass + " >" + buildingName + "</span>";
+        }
+    }
+
+    public String getBldgCodeSimple() {
+        return bldgCodeSimple;
+    }
+
+    public void setBldgCodeSimple(String bldgCodeSimple) {
+        this.bldgCodeSimple = bldgCodeSimple;
+    }
+
+    public String getBuildingCode() {
+        return buildingCode;
+    }
+
+    public void setBuildingCode(String buildingCode, boolean appendForDisplay) {
+        String cssClass = "style=\"border-bottom: 1px dotted;\"";
+        if (appendForDisplay){
+            this.buildingCode = this.buildingCode + "<br><span " + cssClass + " >" + StringUtils.defaultString(buildingCode) + "</span>";
+        }else{
+            this.buildingCode = "<span " + cssClass + " >" + StringUtils.defaultString(buildingCode) + "</span>";
+        }
+    }
+
+    public void setBuildingCode(String buildingCode, boolean appendForDisplay, String dlTypeClass) {
+        String cssClass = "";
+        if(!StringUtils.isEmpty(dlTypeClass)){
+            cssClass = "style=\"border-bottom: 1px dotted;\"";
+        }
+        if(StringUtils.isEmpty(this.buildingCode)){
+            appendForDisplay = false;
+        }
+        if (appendForDisplay){
+            this.buildingCode = this.buildingCode + "<br><span " + cssClass + " >" + buildingCode + "</span>";
+        }else{
+            this.buildingCode = "<span " + cssClass + " >" + buildingCode + "</span>";
         }
     }
 
@@ -897,6 +962,14 @@ public class ActivityOfferingWrapper implements Serializable{
         this.sharedMaxEnrollment = sharedMaxEnrollment;
     }
 
+    public boolean getHasSeatpools() {
+        return hasSeatpools;
+    }
+
+    public void setHasSeatpools(boolean hasSeatpools) {
+        this.hasSeatpools = hasSeatpools;
+    }
+
     public ScheduleRequestSetInfo getScheduleRequestSetInfo() {
         return scheduleRequestSetInfo;
     }
@@ -913,11 +986,12 @@ public class ActivityOfferingWrapper implements Serializable{
      */
     @SuppressWarnings("unused")
     public String getColocatedAoInfoUI(){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("This activity is colocated with:<br>");
-        buffer.append(colocatedAoInfo + "<br>");
+        //JIRA FIX : KSENROLL-8731 - Replaced StringBuffer with StringBuilder
+        StringBuilder sb = new StringBuilder();
+        sb.append("This activity is colocated with:<br>");
+        sb.append(colocatedAoInfo + "<br>");
 
-        return StringUtils.removeEnd(buffer.toString(),"<br>");
+        return StringUtils.removeEnd(sb.toString(),"<br>");
     }
 
     public boolean isPartOfColoSetOnLoadAlready() {
@@ -960,6 +1034,14 @@ public class ActivityOfferingWrapper implements Serializable{
      */
     public EditRenderHelper getEditRenderHelper() {
         return editRenderHelper;
+    }
+
+    public SchOfClassesRenderHelper getSchOfClassesRenderHelper() {
+        return schOfClassesRenderHelper;
+    }
+
+    public void setSchOfClassesRenderHelper(SchOfClassesRenderHelper schOfClassesRenderHelper) {
+        this.schOfClassesRenderHelper = schOfClassesRenderHelper;
     }
 
     /**
@@ -1017,11 +1099,12 @@ public class ActivityOfferingWrapper implements Serializable{
         }
 
         public String getColocatedActivitiesAsString(){
-            StringBuffer s = new StringBuffer();
+            //JIRA FIX : KSENROLL-8731 - Replaced StringBuffer with StringBuilder
+            StringBuilder sb = new StringBuilder();
             for (ColocatedActivity colo : getColocatedActivities()){
-                s.append(colo.getEditRenderHelper().getCode() + ", ");
+                sb.append(colo.getEditRenderHelper().getCode() + ", ");
             }
-            return StringUtils.stripEnd(s.toString(),", ");
+            return StringUtils.stripEnd(sb.toString(),", ");
         }
 
         public boolean isScheduleEditInProgress() {
@@ -1083,6 +1166,26 @@ public class ActivityOfferingWrapper implements Serializable{
 
     }
 
+    /**
+     * Model to handle all the ui elements needed at schedule of classes view
+     */
+    public class SchOfClassesRenderHelper implements Serializable {
+
+        private String information;
+
+        public SchOfClassesRenderHelper(){
+
+        }
+
+        public String getInformation() {
+            return information;
+        }
+
+        public void setInformation(String information) {
+            this.information = information;
+        }
+    }
+
     // subterms
     public String getSubTermName() {
         return subTermName;
@@ -1124,14 +1227,6 @@ public class ActivityOfferingWrapper implements Serializable{
         this.subTermDatesJsonString = subTermDatesJsonString;
     }
 
-    public boolean isRequisiteLink() {
-        return requisiteLink;
-    }
-
-    public void setRequisiteLink(boolean requisiteLink) {
-        this.requisiteLink = requisiteLink;
-    }
-
     /**
      * @see #setRemovedFromColoSet(boolean)
      * @return true if the user breaks the colo set
@@ -1147,5 +1242,99 @@ public class ActivityOfferingWrapper implements Serializable{
      */
     public void setRemovedFromColoSet(boolean removedFromColoSet) {
         isRemovedFromColoSet = removedFromColoSet;
+    }
+
+    public boolean isHasRule() {
+        return hasRule;
+    }
+
+    public void setHasRule(boolean hasRule) {
+        this.hasRule = hasRule;
+    }
+
+    public CourseWaitListInfo getCourseWaitListInfo() {
+        return courseWaitListInfo;
+    }
+
+    public void setCourseWaitListInfo(CourseWaitListInfo courseWaitListInfo) {
+        this.courseWaitListInfo = courseWaitListInfo;
+    }
+
+    public boolean isHasWaitlist() {
+        return hasWaitlist;
+    }
+
+    public void setHasWaitlist(boolean hasWaitlist) {
+        this.hasWaitlist = hasWaitlist;
+    }
+
+    public boolean isHasWaitlistCO() {
+        return hasWaitlistCO;
+    }
+
+    public void setHasWaitlistCO(boolean hasWaitlistCO) {
+        this.hasWaitlistCO = hasWaitlistCO;
+    }
+
+    public String getReinstateStateName() {
+        return reinstateStateName;
+    }
+
+    public void setReinstateStateName(String reinstateStateName) {
+        this.reinstateStateName = reinstateStateName;
+    }
+
+    public boolean isLimitWaitlistSize() {
+        return limitWaitlistSize;
+    }
+
+    public void setLimitWaitlistSize(boolean limitWaitlistSize) {
+        this.limitWaitlistSize = limitWaitlistSize;
+    }
+
+    public String getWaitListType() {
+        return waitListType;
+    }
+
+    public void setWaitListType(String waitListType) {
+        this.waitListType = waitListType;
+    }
+
+    public String getWaitListTypeUI() {
+        return waitListTypeUI;
+    }
+
+    public void setWaitListTypeUI(String waitListTypeUI) {
+        this.waitListTypeUI = waitListTypeUI;
+    }
+
+    /**
+     *   This method will update waitListType depending on automaticallyProcessed and confirmationRequired boolean
+     *
+     *   automatic -> automaticallyProcessed = true, confirmationRequired = false
+     *   Confirmation (semi-automatic) -> automaticallyProcessed = true, confirmationRequired = true
+     *   manual -> automaticallyProcessed = false, confirmationRequired = false
+     *
+     */
+    public void updateWaitListType(){
+
+        Boolean automaticallyProcessed = courseWaitListInfo.getAutomaticallyProcessed();
+        Boolean confirmationRequired   = courseWaitListInfo.getConfirmationRequired();
+        //default value is automatic
+        if((null == automaticallyProcessed) || (null == confirmationRequired)) {
+               waitListType = LuiServiceConstants.AUTOMATIC_WAITLIST_TYPE_KEY ;
+               waitListTypeUI = "Automatic";
+        }
+
+        if(automaticallyProcessed && !(confirmationRequired)){
+            waitListType = LuiServiceConstants.AUTOMATIC_WAITLIST_TYPE_KEY ;
+            waitListTypeUI = "Automatic";
+        } else if(automaticallyProcessed && confirmationRequired ) {
+            waitListType = LuiServiceConstants.CONFIRMATION_WAITLIST_TYPE_KEY;
+            waitListTypeUI = "Confirmation";
+        } else if(!(automaticallyProcessed) &&  !(confirmationRequired)) {
+            waitListType = LuiServiceConstants.MANUAL_WAITLIST_TYPE_KEY;
+            waitListTypeUI = "Manual";
+        }
     }
 }

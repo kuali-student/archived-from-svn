@@ -4,6 +4,7 @@ import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.kim.api.identity.PersonService;
 import org.kuali.rice.kim.api.services.KimApiServiceLocator;
 import org.kuali.rice.kim.impl.KIMPropertyConstants;
+import org.kuali.rice.krms.impl.util.KrmsRuleManagementCopyMethods;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.OfferingInstructorInfo;
 import org.kuali.student.enrollment.lpr.dto.LprInfo;
@@ -31,10 +32,8 @@ import org.kuali.student.r2.lum.clu.dto.LuCodeInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * The structure of this class should be re-evaluated after partial-colocation redesign is completed.  Compare design to
@@ -43,6 +42,8 @@ import java.util.Set;
  */
 public class ActivityOfferingTransformer {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ActivityOfferingTransformer.class);
+    private KrmsRuleManagementCopyMethods krmsRuleManagementCopyMethods;
+
     /**
      * Transform a list of LuiInfos into Activity Offerings. It is the bulk version of lui2Activity transformer
      *
@@ -415,9 +416,7 @@ public class ActivityOfferingTransformer {
 
         if(luiIds != null && !luiIds.isEmpty()){
             for(String luiId: luiIds){
-                List<ScheduleRequestSetInfo> scheduleRequestSets = schedulingService.getScheduleRequestSetsByRefObject(CourseOfferingServiceConstants.REF_OBJECT_URI_ACTIVITY_OFFERING, luiId, context);
-                for(ScheduleRequestSetInfo srs : scheduleRequestSets){
-                    List<ScheduleRequestInfo> scheduleRequestInfos = schedulingService.getScheduleRequestsByScheduleRequestSet(srs.getId(), context);
+                List<ScheduleRequestInfo> scheduleRequestInfos = schedulingService.getScheduleRequestsByRefObject(CourseOfferingServiceConstants.REF_OBJECT_URI_ACTIVITY_OFFERING, luiId, context);
                     if(scheduleRequestInfos != null && !scheduleRequestInfos.isEmpty()){
                         List<ScheduleRequestInfo> scheduleRequestInfoList = luiToScheduleRequestsMap.get(luiId);
                         if (scheduleRequestInfoList == null) {
@@ -426,11 +425,36 @@ public class ActivityOfferingTransformer {
                         }
                         scheduleRequestInfoList.addAll(scheduleRequestInfos);
                     }
-                }
+
             }
         }
 
         return luiToScheduleRequestsMap;
     }
 
+    public void copyRulesFromExistingActivityOffering(ActivityOfferingInfo sourceAo,
+                                                    ActivityOfferingInfo targetAo,
+                                                    List<String> optionKeys, ContextInfo context)
+            throws InvalidParameterException,
+            MissingParameterException,
+            PermissionDeniedException,
+            OperationFailedException {
+        if (targetAo.getId() == null) {
+            throw new InvalidParameterException("Target ActivityOffering should already have it's id assigned");
+        }
+        getKrmsRuleManagementCopyMethods().deepCopyReferenceObjectBindingsFromTo(
+                CourseOfferingServiceConstants.REF_OBJECT_URI_ACTIVITY_OFFERING,
+                sourceAo.getId(),
+                CourseOfferingServiceConstants.REF_OBJECT_URI_ACTIVITY_OFFERING,
+                targetAo.getId(),
+                optionKeys);
+    }
+
+    public KrmsRuleManagementCopyMethods getKrmsRuleManagementCopyMethods() {
+        return krmsRuleManagementCopyMethods;
+    }
+
+    public void setKrmsRuleManagementCopyMethods(KrmsRuleManagementCopyMethods krmsRuleManagementCopyMethods) {
+        this.krmsRuleManagementCopyMethods = krmsRuleManagementCopyMethods;
+    }
 }

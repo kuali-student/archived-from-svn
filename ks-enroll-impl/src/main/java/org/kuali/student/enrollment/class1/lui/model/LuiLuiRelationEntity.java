@@ -35,7 +35,9 @@ import java.util.Set;
     @NamedQuery(name="LuiLuiRelationENR.getRelatedLuisByLuiId", query="select rel.relatedLui.id from LuiLuiRelationEntity rel where rel.lui.id=:luiId and rel.luiLuiRelationType=:luLuRelationTypeKey"),
     @NamedQuery(name="LuiLuiRelationENR.getLuiLuiRelationsByRelatedLuiAndLuiId", query="Select rel from LuiLuiRelationEntity rel where rel.lui.id=:luiId AND rel.relatedLui.id=:relatedLuiId"),
     @NamedQuery(name="LuiLuiRelationENR.getRelatedLuisByLuiIdAndRelationType", query="Select rel.relatedLui from LuiLuiRelationEntity rel where rel.lui.id=:luiId AND rel.luiLuiRelationType=:luiLuiRelationTypeKey"),
-    @NamedQuery(name="LuiLuiRelationENR.getRelatedLuiIdsByLuiIdAndRelationType", query="Select rel.relatedLui.id from LuiLuiRelationEntity rel where rel.lui.id=:luiId AND rel.luiLuiRelationType=:luiLuiRelationTypeKey")
+    @NamedQuery(name="LuiLuiRelationENR.getRelatedLuiIdsByLuiIdAndRelationType", query="Select rel.relatedLui.id from LuiLuiRelationEntity rel where rel.lui.id=:luiId AND rel.luiLuiRelationType=:luiLuiRelationTypeKey"),
+    @NamedQuery(name="LuiLuiRelationENR.getLuiLuiRelationIdsByType", query="select rel.id from LuiLuiRelationEntity rel where rel.luiLuiRelationType=:luiLuiRelationTypeKey"),
+    @NamedQuery(name="LuiLuiRelationENR.getLuiLuiRelationsByIds", query="Select rel from LuiLuiRelationEntity rel where rel.id in (:ids)")
 })
 public class LuiLuiRelationEntity extends MetaEntity implements AttributeOwner<LuiLuiRelationAttributeEntity> {
 

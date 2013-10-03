@@ -103,12 +103,14 @@ public class ActivityOfferingRule extends KsMaintenanceDocumentRuleBase {
         String errorMsgDupPop = "";
         Set<String> populationIds = new HashSet<String>();
         boolean validFlag = true;
+        int firstPopulationInfo = 0;
 
         for (SeatPoolWrapper seatPool : seatPoolWrappers) {
             QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
+            String seatPoolPopulationName = seatPool.getSeatPoolPopulation().getName()==null?"":seatPool.getSeatPoolPopulation().getName();
             qbcBuilder.setPredicates(PredicateFactory.and(
                     PredicateFactory.equal("populationState", PopulationServiceConstants.POPULATION_ACTIVE_STATE_KEY),
-                    PredicateFactory.equalIgnoreCase("name", seatPool.getSeatPoolPopulation().getName())));
+                    PredicateFactory.equalIgnoreCase("name", seatPoolPopulationName)));
             QueryByCriteria criteria = qbcBuilder.build();
 
             try {
@@ -117,20 +119,20 @@ public class ActivityOfferingRule extends KsMaintenanceDocumentRuleBase {
                 //check if the population is valid
                 if (populationInfoList == null || populationInfoList.isEmpty()){
                     if (errorMsgInvalidPop.isEmpty()) {
-                        errorMsgInvalidPop = seatPool.getSeatPoolPopulation().getName();
+                        errorMsgInvalidPop = seatPoolPopulationName;
                     } else {
-                        errorMsgInvalidPop += ", " + seatPool.getSeatPoolPopulation().getName();
+                        errorMsgInvalidPop += ", " + seatPoolPopulationName;
                     }
                 } else {
-                    seatPool.getSeatPoolPopulation().setName(populationInfoList.get(0).getName());
-                    seatPool.getSeatPoolPopulation().setId(populationInfoList.get(0).getId());
+                    seatPool.getSeatPoolPopulation().setName(populationInfoList.get(firstPopulationInfo).getName());
+                    seatPool.getSeatPoolPopulation().setId(populationInfoList.get(firstPopulationInfo).getId());
 
                     //check if the population is duplicated. If the id can't be added into the populationIds, it means it is duplicated
-                    if (!populationIds.add(populationInfoList.get(0).getId())) {
+                    if (!populationIds.add(populationInfoList.get(firstPopulationInfo).getId())) {
                         if (errorMsgDupPop.isEmpty()) {
-                            errorMsgDupPop = seatPool.getSeatPoolPopulation().getName();
+                            errorMsgDupPop = seatPoolPopulationName;
                         } else {
-                            errorMsgDupPop += ", " + seatPool.getSeatPoolPopulation().getName();
+                            errorMsgDupPop += ", " + seatPoolPopulationName;
                         }
                     }
                 }
@@ -185,7 +187,8 @@ public class ActivityOfferingRule extends KsMaintenanceDocumentRuleBase {
                                     CourseOfferingConstants.COURSEOFFERING_ERROR_INVALID_PERSONNEL_ID, info.getPersonId());
                             noError &= false;
                         } else {
-                            String instructorName = personList.get(0).getName().trim();
+                            int firstPerson = 0;
+                            String instructorName = personList.get(firstPerson).getName().trim();
                             if(instructorName != null && !instructorName.isEmpty()) {
                                 if(!instructorName.equals(info.getPersonName())) {
                                     GlobalVariables.getMessageMap().putErrorForSectionId(

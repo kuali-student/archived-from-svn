@@ -26,7 +26,7 @@ import org.kuali.rice.krad.uif.service.impl.ViewHelperServiceImpl;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.student.enrollment.class2.acal.util.CommonUtils;
+import org.kuali.student.enrollment.class2.acal.util.AcalCommonUtils;
 import org.kuali.student.enrollment.class2.appointment.dto.AppointmentWindowWrapper;
 import org.kuali.student.enrollment.class2.appointment.form.RegistrationWindowsManagementForm;
 import org.kuali.student.enrollment.class2.appointment.service.AppointmentViewHelperService;
@@ -68,7 +68,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * This class //TODO ...
+ * This class provides the KS default implementation of the AppointmentViewHelper Service
  *
  * @author Kuali Student Team
  */
@@ -111,7 +111,9 @@ public class AppointmentViewHelperServiceImpl extends ViewHelperServiceImpl impl
             LOG.error("Too many terms!");
         }
 
-        TermInfo term = terms.get(0);
+        int firstTermInfo = 0;
+
+        TermInfo term = terms.get(firstTermInfo);
 
         //Populate the result form
         form.setTermInfo(term);
@@ -295,8 +297,9 @@ public class AppointmentViewHelperServiceImpl extends ViewHelperServiceImpl impl
                 GlobalVariables.getMessageMap().putErrorForSectionId("addRegistrationWindowCollection", PopulationConstants.POPULATION_MSG_ERROR_POPULATION_NOT_FOUND, apptWindow.getAssignedPopulationName());
                 isValid = false;
             } else {
-                apptWindow.setAssignedPopulationName(populationInfoList.get(0).getName());
-                apptWindow.getAppointmentWindowInfo().setAssignedPopulationId(populationInfoList.get(0).getId());
+                int firstPopulationInfo = 0;
+                apptWindow.setAssignedPopulationName(populationInfoList.get(firstPopulationInfo).getName());
+                apptWindow.getAppointmentWindowInfo().setAssignedPopulationId(populationInfoList.get(firstPopulationInfo).getId());
             }
 
         } catch (Exception e) {
@@ -403,8 +406,9 @@ public class AppointmentViewHelperServiceImpl extends ViewHelperServiceImpl impl
                 GlobalVariables.getMessageMap().putErrorForSectionId("addRegistrationWindowCollection", PopulationConstants.POPULATION_MSG_ERROR_POPULATION_NOT_FOUND, apptWindow.getAssignedPopulationName());
                 isValid = false;
             } else {
-                apptWindow.setAssignedPopulationName(populationInfoList.get(0).getName());
-                apptWindow.getAppointmentWindowInfo().setAssignedPopulationId(populationInfoList.get(0).getId());
+                int firstPopulationInfo = 0;
+                apptWindow.setAssignedPopulationName(populationInfoList.get(firstPopulationInfo).getName());
+                apptWindow.getAppointmentWindowInfo().setAssignedPopulationId(populationInfoList.get(firstPopulationInfo).getId());
             }
 
         } catch (Exception e) {
@@ -450,8 +454,8 @@ public class AppointmentViewHelperServiceImpl extends ViewHelperServiceImpl impl
         AppointmentWindowInfo appointmentWindowInfo = appointmentWindowWrapper.getAppointmentWindowInfo();
         appointmentWindowInfo.setTypeKey(appointmentWindowWrapper.getWindowTypeKey());
         appointmentWindowInfo.setPeriodMilestoneId(appointmentWindowWrapper.getPeriodKey());
-        appointmentWindowInfo.setStartDate(CommonUtils.getDateWithTime(appointmentWindowWrapper.getStartDate(), appointmentWindowWrapper.getStartTime(), appointmentWindowWrapper.getStartTimeAmPm()));
-        appointmentWindowInfo.setEndDate(CommonUtils.getDateWithTime(appointmentWindowWrapper.getEndDate(), appointmentWindowWrapper.getEndTime(), appointmentWindowWrapper.getEndTimeAmPm()));
+        appointmentWindowInfo.setStartDate(AcalCommonUtils.getDateWithTime(appointmentWindowWrapper.getStartDate(), appointmentWindowWrapper.getStartTime(), appointmentWindowWrapper.getStartTimeAmPm()));
+        appointmentWindowInfo.setEndDate(AcalCommonUtils.getDateWithTime(appointmentWindowWrapper.getEndDate(), appointmentWindowWrapper.getEndTime(), appointmentWindowWrapper.getEndTimeAmPm()));
 
         //TODO Default to some value if nothing is entered(Service team needs to make up some real types or make not nullable)
         if (appointmentWindowInfo.getAssignedOrderTypeKey() == null || appointmentWindowInfo.getAssignedOrderTypeKey().isEmpty()) {

@@ -12,21 +12,6 @@
 	<!--  Copied from the co-test-with-class2-mock-context.xml  -->
 	<context:annotation-config/>
 
-	 <import resource="classpath:META-INF/default-property-config-context-test.xml"/>
-    <import resource="classpath:ks-test-system-property-configurer.xml" />
-    <import resource="classpath:ks-enroll-api-data-dictionary-services-configuration.xml"/>
-    <import resource="classpath:ks-enroll-api-data-dictionary-validator-configuration.xml"/>
-
-    <bean id="configContext" class="org.kuali.student.common.test.KSTestConfigContextLoader">
-        <constructor-arg index="0">
-                <list>
-                    <value>classpath:META-INF/course-offering-test-config.xml</value>
-                </list>
-        </constructor-arg>
-    </bean>
-
-    <bean id="kualiConfigurationService" class="org.kuali.rice.core.impl.services.ConfigurationServiceImpl" depends-on="configContext" />
-
 	<bean id="atpService"
 		class="org.kuali.student.r2.core.class1.atp.service.impl.AtpServiceMockImpl">
 	</bean>
@@ -39,7 +24,7 @@
 		class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseServiceR1MockImpl">
 	</bean>
 
-   <bean id="coServiceImpl" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceMockImpl" autowire="default" />
+   <bean id="coService" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceMockImpl" autowire="default" />
 
     <bean id="krmsRuleManagementCopyMethods" class="org.kuali.rice.krms.impl.util.KrmsRuleManagementCopyMethodsMockImpl">
     </bean>
@@ -57,23 +42,30 @@
     <bean id="rolloverAssist" class="org.kuali.student.enrollment.class2.courseofferingset.service.facade.RolloverAssistImpl">
     </bean>
 
+    <bean id="courseWaitListServiceFacade" class="org.kuali.student.enrollment.class2.coursewaitlist.service.facade.CourseWaitListServiceFacadeImpl"/>
+
     <bean id="coBusinessLogic" class="org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseOfferingServiceBusinessLogicImpl">
         <property name="courseService" ref="courseService" />
         <property name="acalService" ref="acalService" />
         <property name="coService" ref="CourseOfferingServiceAuthorizationDecorator" />
         <property name="courseOfferingTransformer" ref="courseOfferingTransformer" />
+        <property name="activityOfferingTransformer" ref="activityTransformer" />
         <property name="acalServiceFacade" ref="acalServiceFacade" />
         <property name="rolloverAssist" ref="rolloverAssist"/>
+        <property name="courseWaitListService" ref="courseWaitListService"/>
+        <property name="courseWaitListServiceFacade" ref="courseWaitListServiceFacade"/>
     </bean>
 
-    <bean id="coService" class=" org.kuali.student.enrollment.class2.courseoffering.service.decorators.CourseOfferingServiceValidationDecorator">
-        <property name="nextDecorator" ref="coServiceImpl"/>
-        <property name="validator" ref="validator" />
-        <property name="socService" ref="socService" />
+    <bean id="examOfferingServiceFacade" class="org.kuali.student.enrollment.class2.examoffering.service.facade.ExamOfferingServiceFacadeImpl">
+        <property name="acalService" ref="acalService" />
+        <property name="courseOfferingService" ref="CourseOfferingServiceAuthorizationDecorator"/>
     </bean>
 
-    <bean id="socService" class="org.kuali.student.enrollment.class2.courseofferingset.service.impl.CourseOfferingSetServiceMockImpl"/>
-    
+    <bean id="courseWaitListService" class="org.kuali.student.enrollment.class2.coursewaitlist.service.impl.CourseWaitListServiceMapImpl" />
+
+    <bean id="activityTransformer" class="org.kuali.student.enrollment.class2.courseoffering.service.transformer.ActivityOfferingTransformer" >
+        <property name="krmsRuleManagementCopyMethods" ref="krmsRuleManagementCopyMethods" />
+    </bean>
     <bean id="typeService" class="org.kuali.student.r2.common.type.service.TypeServiceMockImpl"/>
     
     <bean id="stateService" class="org.kuali.student.r2.core.class1.state.service.impl.StateServiceMockDataImpl" />
@@ -101,7 +93,7 @@
 
 	<!-- Configure the authorization decorator -->
 	<bean id="CourseOfferingServiceAuthorizationDecorator" class="org.kuali.student.enrollment.class2.courseoffering.service.decorators.CourseOfferingServiceAuthorizationDecorator">
-		<property name="nextDecorator" ref="coServiceImpl"/>
+		<property name="nextDecorator" ref="coService"/>
 		<property name="courseService" ref="courseService"/>
 		<property name="permissionService" ref="roleAndPermissionService"/>
 		

@@ -535,7 +535,7 @@ public class CourseOfferingServiceValidationDecorator
     }
 
     @Override
-    public StatusInfo deleteCourseOfferingCascaded(String courseOfferingId, ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+    public StatusInfo deleteCourseOfferingCascaded(String courseOfferingId, ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DataValidationErrorException, VersionMismatchException, ReadOnlyException {
 
         verifySocStatePermitsCrud(_getTermIdByOfferingId(courseOfferingId, context), context);
 
@@ -757,7 +757,7 @@ public class CourseOfferingServiceValidationDecorator
     }
 
     private void denyAccessOnSocState( String socStateKeyToDenyAccess, String socStateKey, String denialErrorMessage ) throws OperationFailedException {
-        denialErrorMessage = StringUtils.defaultIfEmpty( denialErrorMessage, "Access to course offerings is not permitted while this term's SocState : " + socStateKey );
+        denialErrorMessage = StringUtils.defaultIfEmpty( denialErrorMessage, "Access to course offerings is not permitted while this term's Set of Course (SOC) is in state (SocState) : " + socStateKey );
 
         if( StringUtils.equalsIgnoreCase( socStateKeyToDenyAccess, socStateKey ) ) {
             throw new OperationFailedException( denialErrorMessage );

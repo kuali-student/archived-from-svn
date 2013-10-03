@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class //TODO ...
+ * This class provides logic for saving a Course Offering maintenance document in the Edit ui
  *
  * @author Kuali Student Team
  */
@@ -70,12 +70,11 @@ public class CourseOfferingEditRule extends KsMaintenanceDocumentRuleBase {
             } else { // for Edit CO page
                 String newSuffix = newCOWrapper.getCourseOfferingInfo().getCourseNumberSuffix();
                 String oldSuffix = oldCOWrapper.getCourseOfferingInfo().getCourseNumberSuffix();
-                if ((oldSuffix == null || oldSuffix.isEmpty()) &&
-                    (newSuffix == null || newSuffix.isEmpty())) {
-                    // no change to valid
-                }
-                else if ((newSuffix != null) && !newSuffix.equals(oldSuffix) ) {
-                    valid &= validateDuplicateSuffix(newCOWrapper);
+                if (!((oldSuffix == null || oldSuffix.isEmpty()) &&
+                    (newSuffix == null || newSuffix.isEmpty()))) {
+                   if ((newSuffix != null) && !newSuffix.equals(oldSuffix) ) {
+                        valid &= validateDuplicateSuffix(newCOWrapper);
+                   }
                 }
 
                 // if no duplicate suffix then we validate the personnel ID
@@ -129,7 +128,8 @@ public class CourseOfferingEditRule extends KsMaintenanceDocumentRuleBase {
                                     CourseOfferingConstants.COURSEOFFERING_ERROR_INVALID_PERSONNEL_ID, info.getPersonId());
                             noError &= false;
                         } else {
-                            String instructorName = personList.get(0).getName().trim();
+                            int firstPerson = 0;
+                            String instructorName = personList.get(firstPerson).getName().trim();
                             if(instructorName != null && !instructorName.isEmpty()) {
                                 if(!instructorName.equals(info.getPersonName())) {
                                     GlobalVariables.getMessageMap().putErrorForSectionId(

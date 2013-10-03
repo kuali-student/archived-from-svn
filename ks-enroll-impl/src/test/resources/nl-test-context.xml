@@ -29,9 +29,11 @@
         <property name="typeService" ref="typeServiceImpl"/-->
     </bean>
 
+
+
     <bean id="propositionTemplater" class="org.kuali.rice.krms.impl.repository.language.PropositionNaturalLanguageTemplater">
         <property name="krmsTypeRepositoryService" ref="krmsTypeRepositoryMockService"/>
-        <property name="contextRegistry" ref="contextRegistry" />
+        <property name="translationContextRegistry" ref="translationContextRegistry" />
     </bean>
 
     <bean id="termBoMockService" class="org.kuali.student.krms.naturallanguage.service.impl.TermBoMockService">
@@ -49,8 +51,8 @@
           class="org.kuali.student.krms.naturallanguage.service.impl.KrmsTypeRepositoryMockService">
     </bean>
 
-    <bean id="contextRegistry"
-          class="org.kuali.rice.krms.impl.repository.language.ContextRegistry">
+    <bean id="translationContextRegistry"
+          class="org.kuali.rice.krms.impl.repository.language.TranslationContextRegistry">
         <constructor-arg>
             <map>
                 <entry key="kuali.krms.proposition.type.course.courseset.completed.none">
