@@ -20,6 +20,12 @@
     -->
 
     <!-- This allows switching of minified and pretty KRAD javascript for debugging -->
-    <bean id="Uif-BaseTheme" abstract="true" parent="Uif-KbootTheme" />
+    <bean id="Uif-BaseTheme" abstract="true" parent="Uif-BaseTheme-parentBean">
+        <property name="scriptFiles">
+            <list>
+                <value>krad/min/scripts/krad_@{#ConfigProperties['rice.version']}.min.js</value>
+            </list>
+        </property>
+    </bean>
 
 </beans>
