@@ -154,9 +154,6 @@
                 <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
-		<!--
-                <module>ks-enroll</module>
-		-->
                 <module>ks-api</module>
             </modules>
         </profile>
@@ -172,7 +169,6 @@
                 <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
-                <module>ks-enroll</module>
             </modules>
         </profile>
         <profile>
@@ -181,7 +177,6 @@
                 <module>ks-deployments</module>
                 <module>ks-core</module>
                 <module>ks-lum</module>
-                <module>ks-enroll</module>
                 <module>ks-api</module>
             </modules>
             <build>
@@ -252,7 +247,6 @@
             <modules>
                 <module>ks-core</module>
                 <module>ks-lum</module>
-                <module>ks-enroll</module>
                 <module>ks-api</module>
                 <module>ks-deployments/ks-dbs/ks-db-validation</module>
             </modules>
@@ -321,10 +315,6 @@
                             <mapping>
                                 <module>ks-core</module>
                                 <versionProperty>ks.core.version</versionProperty>
-                            </mapping>
-                            <mapping>
-                                <module>ks-enroll</module>
-                                <versionProperty>ks.enroll.version</versionProperty>
                             </mapping>
                             <mapping>
                                 <module>ks-lum</module>
