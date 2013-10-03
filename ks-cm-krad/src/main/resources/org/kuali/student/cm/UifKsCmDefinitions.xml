@@ -19,6 +19,38 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
        >
+    <bean id="KS-HomewardPathBreadcrumbs-Home" parent="Uif-BreadcrumbItem">
+        <property name="label" value="Home"/>
+        <property name="url.href" value="@{#ConfigProperties['application.url']}/portal.do"/>
+    </bean>
+    <bean id="KS-HomewardPathBreadcrumbs-Curriculum" parent="Uif-BreadcrumbItem">
+        <property name="label" value="Curriculum Management"/>
+        <property name="url.baseUrl" value="launch"/>
+        <property name="url.viewId" value="curriculumHomeView"/>
+    </bean>
+
+    <util:list id="KS-Enrollment-HomewardPathBreadcrumbs">
+        <ref bean="KS-HomewardPathBreadcrumbs-Home"/>
+        <ref bean="KS-HomewardPathBreadcrumbs-Enrollment"/>
+    </util:list>
+
+<!-- START: CONTEXT-BAR BEANS
+        Because the 'topGroup' is static after the initial view is loaded, a 'placeholder' gets added to the view's
+        'topGroup' and then the actual 'contextbar' gets added to dynamic part of the page in question.  Javascript on
+        the 'contextbar' will then be called on page-ready to move it into the 'placeholder'; additionally, the JS
+        configures the 'seasonal color' widget.
+
+        To implement:
+            1) inherit your view with one of the appropriately overridden ones below (these include the 'placeholder')
+            2) add the 'contextbar'-bean as one of the 'items' in your view
+            3) ensure your model includes a reference to org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBarringContextBar
+-->
+
+<!-- END: CONTEXT-BAR BEANS -->
+
+    <bean id="KS-View-Header-RightGroup-PlaceHolder" parent="KS-Unified-Header-Right-Group" />
+    <bean id="KS-View-HeaderText-SourceHolder" parent="Uif-Message" p:style="visibility:hidden;"/>
+
 <!--
     <bean id="Uif-GlobalApplicationHeader" parent="Uif-GlobalApplicationHeader-parentBean"/>
     <bean id="Uif-GlobalApplicationHeader-parentBean" abstract="true" parent="Uif-HeaderBase"
