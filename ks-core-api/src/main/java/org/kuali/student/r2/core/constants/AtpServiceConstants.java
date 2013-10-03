@@ -252,7 +252,6 @@ public class AtpServiceConstants {
     public static final String DURATION_TBD_TYPE_KEY = "kuali.atp.duration.TBD";
     public static final String DURATION_DAY_TYPE_KEY = "kuali.atp.duration.Day";
     public static final String DURATION_QUARTER_TYPE_KEY = "kuali.atp.duration.Quarter";
-    
 
 
     /**
