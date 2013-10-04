@@ -82,15 +82,27 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public Tree<RuleEditorTreeNode, String> getEditTree() {
-        return this.getRuleEditor().getEditTree();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getEditTree();
+        } else {
+            return null;
+        }
     }
 
     public Tree<TreeNode, String> getPreviewTree() {
-        return this.getRuleEditor().getPreviewTree();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getPreviewTree();
+        } else {
+            return null;
+        }
     }
 
     public Tree<TreeNode, String> getViewTree() {
-       return this.getRuleEditor().getViewTree();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getViewTree();
+        } else {
+            return null;
+        }
     }
 
     public void setActiveSelections(List<String> activeSelections) {
@@ -98,11 +110,19 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public List<String> getActiveSelections(){
-        return this.getRuleEditor().getActiveSelections();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getActiveSelections();
+        } else {
+            return null;
+        }
     }
 
     public String getSelectedKey() {
-        return this.getRuleEditor().getSelectedKey();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getSelectedKey();
+        } else {
+            return null;
+        }
     }
 
     public void setSelectedKey(String selectedKey) {
@@ -110,7 +130,11 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getCutKey() {
-        return this.getRuleEditor().getCutKey();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getCutKey();
+        } else {
+            return null;
+        }
     }
 
     public void setCutKey(String cutKey) {
@@ -118,7 +142,11 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getCopyKey() {
-        return this.getRuleEditor().getCopyKey();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getCopyKey();
+        } else {
+            return null;
+        }
     }
 
     public void setCopyKey(String copyKey) {
@@ -126,7 +154,11 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getLogicArea() {
-        return this.getRuleEditor().getLogicArea();
+        if(this.getRuleEditor()!=null){
+            return this.getRuleEditor().getLogicArea();
+        } else {
+            return null;
+        }
     }
 
     public void setLogicArea(String logicArea) {
