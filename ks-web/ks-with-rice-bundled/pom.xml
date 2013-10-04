@@ -256,13 +256,11 @@
             <artifactId>ks-lum-ui</artifactId>
             <version>${ks.lum.version}</version>
         </dependency>
-<!--
         <dependency>
             <groupId>org.kuali.student.lum</groupId>
             <artifactId>ks-cm-krad</artifactId>
             <version>${ks.lum.version}</version>
         </dependency>
--->
         <dependency>
             <groupId>org.kuali.student.core</groupId>
             <artifactId>ks-core-impl</artifactId>
@@ -278,6 +276,12 @@
             <artifactId>ks-sts</artifactId>
             <version>${ks.core.version}</version>
         </dependency>
+        <!-- add ks-enroll here -->
+        <dependency>
+            <groupId>org.kuali.student.api</groupId>
+            <artifactId>ks-enroll-api</artifactId>
+            <version>${ks.api.version}</version>
+        </dependency>
         <!-- TODO: Remove this once mock impls have been moved to a regular jar or replaced with real impls -->
         <dependency>
             <groupId>org.kuali.student.core</groupId>
@@ -291,7 +295,6 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
-<!--
         <dependency>
             <groupId>org.kuali.student.lum</groupId>
             <artifactId>ks-cm-web</artifactId>
@@ -299,7 +302,6 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
--->
         <!-- Sources for GWT Compile -->
         <dependency>
             <groupId>org.kuali.student.core</groupId>
