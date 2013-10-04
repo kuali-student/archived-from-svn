@@ -31,7 +31,6 @@
     <!-- BEGIN KUALI STUDENT SETTINGS -->
     <param name="config.location">classpath:META-INF/ks-core-config.xml</param>
     <param name="config.location">classpath:META-INF/ks-lum-config.xml</param>
-    <param name="config.location">classpath:META-INF/ks-enroll-config.xml</param>
     <param name="config.location">classpath:ks-security-config.xml</param>
 
     <param name="db.vendor">oracle</param>
@@ -90,7 +89,7 @@
 	<param name="transaction.timeout">3600</param>  
 
     <!-- Login Filter Configuration - Dummy Login Filter (CAS later?) -->
-    <!--    <param name="filter.login.class">org.kuali.rice.kew.web.DummyLoginFilter</param>-->
+    <!--    <param name="filter.login.class">org.kuali.rice.krad.web.filter.DummyLoginFilter</param>-->
     <!--    <param name="filtermapping.login.1">/*</param>-->
 
 
@@ -118,7 +117,6 @@
 	-->
 	
 	<param name="rice.kim.additionalSpringFiles">classpath:ks-kim-context.xml</param>
-    <param name="rice.krms.additionalSpringFiles">classpath:org/kuali/student/enrollment/krms/ks-krms-context.xml</param>
 
     <param name="ks.rice.label">RICE</param>
     <param name="ks.rice.url">${application.url}</param>

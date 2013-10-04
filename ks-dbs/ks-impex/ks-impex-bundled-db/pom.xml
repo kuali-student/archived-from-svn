@@ -4,17 +4,11 @@
     <parent>
         <groupId>org.kuali.student.db</groupId>
         <artifactId>ks-impex</artifactId>
-        <version>2.0.1-cm-krad-SNAPSHOT</version>
+        <version>2.0.2-cm-krad-SNAPSHOT</version>
     </parent>
     <artifactId>ks-impex-bundled-db</artifactId>
     <name>KS Impex Bundled DB</name>
     <description>Kuali Student Impex Bundled Database</description>
-    <properties>
-        <jdbc.username>KSBUNDLED${db.branch.qualifier}</jdbc.username>
-        <impex.import.rice.list>META-INF/ks-impex-app-db-data.resources</impex.import.rice.list>
-        <impex.import.app.list>META-INF/ks-impex-rice-db-data.resources</impex.import.app.list>
-        <sql.data.concurrent>impex.import.rice.list,impex.import.app.list</sql.data.concurrent>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.kuali.student.db</groupId>

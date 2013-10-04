@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.student.deployments</groupId>
         <artifactId>ks-deployments</artifactId>
-        <version>2.0.1-cm-krad-SNAPSHOT</version>
+        <version>2.0.2-cm-krad-SNAPSHOT</version>
     </parent>
     <artifactId>ks-deployment-resources</artifactId>
     <name>KS Deployment Resources</name>
@@ -12,41 +12,29 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>3.1.0.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kuali.common</groupId>
-            <artifactId>torque-executor</artifactId>
-            <version>${impex.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-beanutils</groupId>
-                    <artifactId>commons-beanutils</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>kuali-impex-export</artifactId>
+            <version>${kuali-impex.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kuali.common</groupId>
-            <artifactId>torque-generator</artifactId>
-            <version>${impex.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-beanutils</groupId>
-                    <artifactId>commons-beanutils</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>kuali-impex-producer</artifactId>
+            <version>${kuali-impex.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kuali.commons</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.8.3-kuali-4</version>
+            <groupId>org.kuali.common</groupId>
+            <artifactId>kuali-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kuali.common</groupId>
+            <artifactId>kuali-deploy</artifactId>
         </dependency>
     </dependencies>
 </project>

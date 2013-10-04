@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.kuali.student.web</groupId>
         <artifactId>ks-web</artifactId>
-        <version>2.0.1-cm-krad-SNAPSHOT</version>
+        <version>2.0.2-cm-krad-SNAPSHOT</version>
     </parent>
     <properties>
         <ks.gwt.module.org>org.kuali.student.core.organization.ui.OrgEntry</ks.gwt.module.org>
@@ -37,13 +37,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -131,7 +124,7 @@
                 </executions>
                 <configuration>
                     <webappDirectory>${project.build.directory}/${project.artifactId}-webapp</webappDirectory>
-                    <dependentWarExcludes>**/web.xml,WEB-INF/lib/**,WEB-INF/krad-servlet.xml,**/sampleTravelApplication.tag</dependentWarExcludes>
+                    <dependentWarExcludes>**/web.xml,WEB-INF/lib/**,WEB-INF/krad-servlet.xml,**/sampleTravelApplication.tag,META-INF/**</dependentWarExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -241,14 +234,8 @@
         </dependency>
         <dependency>
             <groupId>org.kuali.rice</groupId>
-            <artifactId>rice-development-tools</artifactId>
+            <artifactId>rice-krad-development-tools</artifactId>
         </dependency>
-        <!-- TODO: RICE-M7 UPGRADE -fix ks-admin
-      <dependency>
-      <groupId>org.kuali.student.admin</groupId>
-      <artifactId>ks-admin</artifactId>
-      <version>${project.version}</version>
-      </dependency -->
         <dependency>
             <groupId>org.kuali.student.lum</groupId>
             <artifactId>ks-lum-rice</artifactId>
@@ -269,11 +256,13 @@
             <artifactId>ks-lum-ui</artifactId>
             <version>${ks.lum.version}</version>
         </dependency>
+<!--
         <dependency>
             <groupId>org.kuali.student.lum</groupId>
             <artifactId>ks-cm-krad</artifactId>
             <version>${ks.lum.version}</version>
         </dependency>
+-->
         <dependency>
             <groupId>org.kuali.student.core</groupId>
             <artifactId>ks-core-impl</artifactId>
@@ -289,41 +278,20 @@
             <artifactId>ks-sts</artifactId>
             <version>${ks.core.version}</version>
         </dependency>
-        <!-- add ks-enroll here -->
-        <dependency>
-            <groupId>org.kuali.student.api</groupId>
-            <artifactId>ks-enroll-api</artifactId>
-            <version>${ks.api.version}</version>
-        </dependency>
         <!-- TODO: Remove this once mock impls have been moved to a regular jar or replaced with real impls -->
         <dependency>
-            <groupId>org.kuali.student.api</groupId>
-            <artifactId>ks-enroll-api</artifactId>
-            <version>${ks.api.version}</version>
-            <type>test-jar</type>
+            <groupId>org.kuali.student.core</groupId>
+            <artifactId>ks-common-ksink</artifactId>
+            <version>${ks.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-impl</artifactId>
-            <version>${ks.enroll.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-ui</artifactId>
-            <version>${ks.enroll.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-ksink</artifactId>
-            <version>${ks.enroll.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-web</artifactId>
-            <version>${ks.enroll.version}</version>
+            <groupId>org.kuali.student.core</groupId>
+            <artifactId>ks-common-web</artifactId>
+            <version>${ks.core.version}</version>
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
+<!--
         <dependency>
             <groupId>org.kuali.student.lum</groupId>
             <artifactId>ks-cm-web</artifactId>
@@ -331,11 +299,7 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-rice</artifactId>
-            <version>${ks.enroll.version}</version>
-        </dependency>
+-->
         <!-- Sources for GWT Compile -->
         <dependency>
             <groupId>org.kuali.student.core</groupId>

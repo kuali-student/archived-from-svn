@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.kuali.student.web</groupId>
         <artifactId>ks-web</artifactId>
-        <version>2.0.1-cm-krad-SNAPSHOT</version>
+        <version>2.0.2-cm-krad-SNAPSHOT</version>
     </parent>
     <!-- testing sandbox merge -->
     <build>
@@ -29,13 +29,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -64,7 +57,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <webappDirectory>${project.build.directory}/${project.artifactId}-webapp</webappDirectory>
-                    <dependentWarExcludes>WEB-INF/lib/**</dependentWarExcludes>
+                    <dependentWarExcludes>WEB-INF/lib/**,META-INF/**</dependentWarExcludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -94,12 +87,6 @@
             <artifactId>rice-web</artifactId>
             <type>pom</type>
         </dependency>
-        <!-- TODO: fix ks-admin -->
-        <!--dependency>
-            <groupId>org.kuali.student.admin</groupId>
-            <artifactId>ks-admin</artifactId>
-            <version>${project.version}</version>
-        </dependency-->
         <dependency>
             <groupId>org.kuali.rice</groupId>
             <artifactId>rice-impl</artifactId>
@@ -150,11 +137,6 @@
             <groupId>org.kuali.student.api</groupId>
             <artifactId>ks-enroll-api</artifactId>
             <version>${ks.api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.enroll</groupId>
-            <artifactId>ks-enroll-rice</artifactId>
-            <version>${ks.enroll.version}</version>
         </dependency>
     </dependencies>
 </project>

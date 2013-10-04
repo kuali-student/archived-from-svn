@@ -39,6 +39,8 @@
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-LookupQuickView-View&methodToCall=start" /></li>
         <li><portal:portalLink displayTitle="true" title="Suggest (Auto-Complete)"
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-LookupSuggest-View&methodToCall=start" /></li>
+        <li><portal:portalLink displayTitle="true" title="Suggest Combobox"
+                               url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-LookupCombobox-View&methodToCall=start" /></li>
     </ul>
 
     <strong>Collections</strong>
@@ -59,6 +61,8 @@
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-CollectionRowSelectionHighlight-View&methodToCall=collection" /></li>
         <li><portal:portalLink displayTitle="true" title="Collection table options"
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-CollectionOptions-View&methodToCall=collection" /></li>
+        <li><portal:portalLink displayTitle="true" title="Collection table pagination options"
+                               url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-CollectionPaginationOptions-View&methodToCall=collection" /></li>
         <li><portal:portalLink displayTitle="true" title="Collection Group Table Layout"
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-CollectionsTL-View&methodToCall=start" /></li>
         <%-- replaced by CollectionStacked.xml
@@ -77,6 +81,12 @@
     <ul class="chan">
         <li><portal:portalLink displayTitle="true" title="Buttons"
                                url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-Buttons-View&methodToCall=start" /></li>
+    </ul>
+
+    <strong>Toolbar</strong>
+    <ul class="chan">
+        <li><portal:portalLink displayTitle="true" title="Toolbar"
+                               url="${ConfigProperties.application.url}/kr-krad/kitchensink?viewId=KS-KitchenSink-Toolbar-View-Base&methodToCall=start" /></li>
     </ul>
 </div>
 <channel:portalChannelBottom />

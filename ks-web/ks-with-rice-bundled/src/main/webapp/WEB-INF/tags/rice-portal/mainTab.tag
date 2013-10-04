@@ -25,6 +25,7 @@
 </td>
 <td class="content" valign="top">
     <mainChannel:ksMaintenance />
+    <mainChannel:aftApplications />
 </td>
 <td class="content" valign="top">
 	<mainChannel:workflow />
