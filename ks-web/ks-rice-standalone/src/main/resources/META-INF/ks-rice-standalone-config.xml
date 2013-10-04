@@ -93,7 +93,6 @@
     <param name="filtermapping.login.1">/*</param>
 -->
     <!-- additional config files -->
-    <param name="rice.kim.additionalSpringFiles">classpath:ks-kim-context.xml</param>
     <param name="ks.authentication.context">classpath:ks-spring-security.xml</param>
     <param name="rice.additionalSpringFiles">${ks.authentication.context},ks-spring-security-saml.xml,classpath:StudentStandaloneSpringBeans.xml,classpath:ks-rice-standalone-admin-context.xml</param>
     
