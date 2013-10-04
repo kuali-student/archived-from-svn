@@ -1,5 +1,6 @@
 package org.kuali.student.enrollment.class1.timeslot.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.student.common.uif.service.impl.KSViewHelperServiceImpl;
 import org.kuali.student.enrollment.class1.timeslot.dto.TimeSlotWrapper;
 import org.kuali.student.enrollment.class1.timeslot.form.TimeSlotForm;
@@ -86,6 +87,22 @@ public class TimeSlotViewHelperServiceImpl
         return timeSlotWrappers;
     }
 
+    public boolean isUniqueTimeSlot(TimeSlotForm form) throws Exception {
+
+        List<Integer> days = WeekDaysDtoAndUIConversions.buildDaysForDTO(form.getAddOrEditDays());
+        long startTime = DateFormatters.HOUR_MINUTE_AM_PM_TIME_FORMATTER.parse(form.getAddOrEditStartTime() + " " + form.getAddOrEditStartTimeAmPm()).getTime();
+        TimeOfDayInfo startTimeOfDayInfo = new TimeOfDayInfo();
+        startTimeOfDayInfo.setMilliSeconds(startTime);
+
+        long endTime = DateFormatters.HOUR_MINUTE_AM_PM_TIME_FORMATTER.parse(form.getAddOrEditEndTime() + " " + form.getAddOrEditEndTimeAmPm()).getTime();
+        TimeOfDayInfo endTimeOfDayInfo = new TimeOfDayInfo();
+        endTimeOfDayInfo.setMilliSeconds(endTime);
+
+        List<TimeSlotInfo> ts = getSchedulingService().getTimeSlotsByDaysAndStartTimeAndEndTime(form.getAddOrEditTermKey(),days,startTimeOfDayInfo,endTimeOfDayInfo,createContextInfo());
+
+        return ts.isEmpty();
+    }
+
     public void createTimeSlot(TimeSlotForm form) throws Exception {
 
         TimeSlotWrapper newTSWrapper = new TimeSlotWrapper();
@@ -108,13 +125,13 @@ public class TimeSlotViewHelperServiceImpl
 
         TimeSlotInfo createdTimeSlot = getSchedulingService().createTimeSlot(form.getAddOrEditTermKey(),newTSInfo, createContextInfo());
         newTSWrapper.setTimeSlotInfo(createdTimeSlot);
-        newTSWrapper.setDaysDisplayName(form.getAddOrEditDays());
+        newTSWrapper.setDaysDisplayName(StringUtils.upperCase(form.getAddOrEditDays()));
         newTSWrapper.setEnableDeleteButton(true);
         newTSWrapper.setStartTimeDisplay(form.getAddOrEditStartTime() + " " + form.getAddOrEditStartTimeAmPm());
         newTSWrapper.setEndTimeDisplay(form.getAddOrEditEndTime() + " " + form.getAddOrEditEndTimeAmPm());
         TypeInfo type = getTypeInfo(form.getAddOrEditTermKey());
         newTSWrapper.setTypeName(type.getName());
-        form.getTimeSlotResults().add(0, newTSWrapper);
+        form.getTimeSlotResults().add(newTSWrapper);
 
         form.setAddOrEditDays("");
         form.setAddOrEditEndTime("");
