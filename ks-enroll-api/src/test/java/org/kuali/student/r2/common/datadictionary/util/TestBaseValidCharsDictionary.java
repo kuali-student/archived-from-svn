@@ -15,9 +15,13 @@
  */
 package org.kuali.student.r2.common.datadictionary.util;
 
+import java.util.Map;
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.CoreConstants;
 import org.kuali.rice.core.api.config.property.Config;
 import org.kuali.rice.core.api.config.property.ConfigContext;
@@ -35,17 +39,13 @@ import org.kuali.rice.krad.datadictionary.validation.processor.ValidCharactersCo
 import org.kuali.rice.krad.datadictionary.validation.result.ConstraintValidationResult;
 import org.kuali.rice.krad.datadictionary.validation.result.DictionaryValidationResult;
 import org.kuali.rice.krad.datadictionary.validation.result.ProcessorResult;
-import org.kuali.rice.krad.service.KRADServiceLocator;
+import org.kuali.rice.krad.messages.MessageService;
+import org.kuali.rice.krad.messages.MessageServiceImpl;
 import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.service.KualiModuleService;
 import org.kuali.rice.krad.service.impl.KualiModuleServiceImpl;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -89,10 +89,11 @@ public class TestBaseValidCharsDictionary {
 
         System.out.println("testing base dictionary");
         String contextFile = "ks-base-dictionary-validchars.xml";
-        ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:"
+        ConfigurableApplicationContext ac = new ClassPathXmlApplicationContext("classpath:"
                 + contextFile);
         Map<String, ValidCharactersConstraint> vccs = (Map<String, ValidCharactersConstraint>) ac.getBeansOfType(
                 ValidCharactersConstraint.class);
+        ac.close();
         for (String id : vccs.keySet()) {
             ValidCharactersConstraint vcc = vccs.get(id);
             System.out.println("valid chars constraint: " + id + " "
@@ -432,7 +433,7 @@ public class TestBaseValidCharsDictionary {
  * ks-core-test, just copied this class from there to make it simple. Also, in ks-enroll-api, this is the only class
  * uses the resource loader.
  */
-class SimpleSpringResourceLoader implements ApplicationContextAware, ServiceLocator {
+class SimpleSpringResourceLoader implements ServiceLocator {
 
     private static ConfigurationService configurationService = new ConfigurationService() {
         @Override public String getPropertyValueAsString(String key) { return "{0} message"; }
@@ -441,8 +442,10 @@ class SimpleSpringResourceLoader implements ApplicationContextAware, ServiceLoca
     };
 
     private static KualiModuleService kualiModuleService = new KualiModuleServiceImpl();
-
-    private ApplicationContext applicationContext;
+    private static MessageService messageService = new MessageServiceImpl() {
+        @Override protected String getDefaultLocaleCode() { return "en-US"; }
+        @Override public String getMessageText(String key) { return key; }
+    };
 
     public Object getService(QName qname) {
         if (qname == null || StringUtils.isEmpty(qname.toString())) {
@@ -451,18 +454,15 @@ class SimpleSpringResourceLoader implements ApplicationContextAware, ServiceLoca
 
         String localServiceName = qname.toString();
 
-        if (KRADServiceLocator.KUALI_CONFIGURATION_SERVICE.equals(localServiceName)) {
+        if (CoreApiServiceLocator.KUALI_CONFIGURATION_SERVICE.equals(localServiceName)) {
             return configurationService;
         } else if (KRADServiceLocatorWeb.KUALI_MODULE_SERVICE.equals(localServiceName)) {
             return kualiModuleService;
+        } else if (KRADServiceLocatorWeb.MESSAGE_SERVICE.equals(localServiceName)) {
+            return messageService;
         } else {
-            return applicationContext.getBean(localServiceName);
+            return null;
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
     @Override
