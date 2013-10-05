@@ -1,10 +1,10 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/M6 revision = 41764
-ks-api::enrollment_ks-api_branches_M6::136303aca4d4a8daa8fb95f070d158c8ab429fa4
-# module = ks-core branch Path = enrollment/ks-core/trunk revision = 41764
-ks-core::enrollment_ks-core_trunk::042710d694c5ab7b29c7ce188b37b86ee040a8c3
-# module = ks-lum branch Path = enrollment/ks-lum/trunk revision = 41764
-ks-lum::enrollment_ks-lum_trunk::17fae92dafa6fbd47d28012b75af948609ffc741
-# module = ks-enroll branch Path = enrollment/ks-enroll/trunk revision = 41764
-ks-enroll::enrollment_ks-enroll_trunk::d790b957d3e129655cc6117f43f90881e067bd97
-# module = ks-deployments branch Path = enrollment/ks-deployments/trunk revision = 41764
-ks-deployments::enrollment_ks-deployments_trunk::1aebf5a83be1bab6a94bc3cf78cd7cd3c796d557
+# module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.0/2.0.0-M8-rice232upgrade/build-8 revision = 57359
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.0_2.0.0-M8-rice232upgrade_build-8::6c06ddf1b2a18120e28c27d6c039636f6f8dc90d
+# module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.0/2.0.0-M8-rice232upgrade/build-8 revision = 57359
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.0_2.0.0-M8-rice232upgrade_build-8::9776228aaebddf028c95b7d25b5144281fe78d50
+# module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.0/2.0.0-M8-rice232upgrade/build-8 revision = 57359
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.0_2.0.0-M8-rice232upgrade_build-8::ec2188fc2c9907d17adaa1ef2c4968fb5049cb5c
+# module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-1.0/1.0.0-M8-rice232upgrade/build-8 revision = 57359
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-1.0_1.0.0-M8-rice232upgrade_build-8::ad3e05f4fc55c5edf6bf44690623966cb9bcf233
+# module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.0/2.0.0-M8-rice232upgrade/build-8 revision = 57359
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.0_2.0.0-M8-rice232upgrade_build-8::a2e17a53c34485ef666ae363739cf770570383a9
