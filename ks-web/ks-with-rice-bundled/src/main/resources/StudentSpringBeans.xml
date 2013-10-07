@@ -71,13 +71,15 @@
                 <value>classpath:ks-TermInfo-dictionary.xml</value>
                 <value>classpath:ks-HolidayInfo-dictionary.xml</value>
                 <value>classpath:ks-KeyDateInfo-dictionary.xml</value>
+<!--                 <value>classpath:ks-CourseInfo-dictionary.xml</value> KSCM-720  Curriculum Management Course Info -->
+<!--                 <value>classpath:ks-ProposalInfo-dictionary.xml</value> -->
                 <!--
                 <value>classpath:org/kuali/student/cm/UifKsCmDefinitions.xml</value>
                 -->
 
                 <!-- Home Views -->
                 <value>classpath:org/kuali/student/cm/main/CurriculumHomeView.xml</value>
-
+                
                 <!-- KIM Attributes -->
                 <value>classpath:org/kuali/rice/student/bo/KualiStudentKimAttributes.xml</value>
 
@@ -143,6 +145,26 @@
                 <value>classpath:org/kuali/student/common/kitchensink/UnifiedPageHeader.xml</value>
                 <value>classpath:org/kuali/student/common/kitchensink/UnifiedPageHeader_M7.xml</value>
                 <value>classpath:org/kuali/student/common/kitchensink/ContextBar.xml</value>
+                
+                <!-- Curriculum Management Course Info -->
+                <value>classpath:org/kuali/student/cm/main/CourseMaintenanceView.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewCourseInfo.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewGovernance.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewCourseLogistics.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewLearningObjectives.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewCourseRequisites.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewActiveDates.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewFinancials.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewSupportingDocuments.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewReviewProposal.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CourseViewAuthorsAndCollaborators.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/CluInstructorInfoWrapperLookupView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/CourseJointInfoWrapperLookupView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/OrganizationInfoWrapperLookupView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/CollaboratorWrapperLookupView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/LoCategoryInfoWrapperView.xml</value>
+                <value>classpath:org/kuali/student/cm/lookup/LoDisplayInfoWrapperLookupView.xml</value>
+                
             </list>
         </property>
         <property name="packagePrefixes">
