@@ -532,6 +532,70 @@ cursor:auto;
 
 
 
+/************************************** LOZENGES **********************
+   This is designed to work with the Uif-DataField. We will need to make it more default later */
+.text-lozenge-orange > span:first-child {
+  color: @stateText;
+  background-color: @suspendedStateBackground;
+  font-size: 11px;
+  padding: 2px 8px;
+  .border-radius(6px);
+  margin-left: 1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.text-lozenge-grey > span:first-child {
+  color: @stateText;
+  background-color: @draftStateBackground;
+  font-size: 11px;
+  padding: 2px 8px;
+  .border-radius(6px);
+  margin-left: 1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+/* Uif-Message */
+.text-lozenge-grey-msg {
+  color: @stateText;
+  background-color: @draftStateBackground;
+  font-size: 11px;
+  padding: 2px 8px;
+  .border-radius(6px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.text-lozenge-green-msg {
+  color: @stateText;
+  background-color: @completedStateBackground;
+  font-size: 11px;
+  padding: 2px 8px;
+  .border-radius(6px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.text-lozenge-orange-msg {
+  color: @stateText;
+  background-color: @suspendedStateBackground;
+  font-size: 11px;
+  padding: 2px 8px;
+  .border-radius(6px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: bold;
+}
+/************************************** END LOZENGES **********************/
+
+
+
+
 /************************************** CONTEXT BAR ***********************/
 /* Attributes of the Context Bar */
 .ks-topGroup {
@@ -759,70 +823,6 @@ textarea,
 
 
 
-/************************************** LOZENGES **********************
-   This is designed to work with the Uif-DataField. We will need to make it more default later */
-.text-lozenge-orange > span:first-child {
-  color: white;
-  background-color: #F89406;
-  font-size: 11px;
-  padding: 2px 8px;
-  .border-radius(6px);
-  margin-left: 1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-.text-lozenge-grey > span:first-child {
-  color: white;
-  background-color: #999999;
-  font-size: 11px;
-  padding: 2px 8px;
-  .border-radius(6px);
-  margin-left: 1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-/* Uif-Message */
-.text-lozenge-grey-msg {
-  color: white;
-  background-color: #999999;
-  font-size: 11px;
-  padding: 2px 8px;
-  .border-radius(6px);
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-.text-lozenge-green-msg {
-  color: white;
-  background-color: #468847;
-  font-size: 11px;
-  padding: 2px 8px;
-  .border-radius(6px);
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-.text-lozenge-orange-msg {
-  color: white;
-  background-color: #F89406;
-  font-size: 11px;
-  padding: 2px 8px;
-  .border-radius(6px);
-  text-transform: uppercase;
-  white-space: nowrap;
-  font-weight: bold;
-}
-/************************************** END LOZENGES **********************/
-
-
-
-
 /************************************** STICKY FOOTER **********************
    Alignment of action buttons.
  */
@@ -949,18 +949,6 @@ div#Uif-ApplicationHeader-Wrapper{
 }
 
 /*
-    Fade out of Highlighting
-*/
-.highlight_fadeout{
-  -webkit-transition: background 3s linear;
-  -moz-transition: background 3s linear;
-  -o-transition: background 3s linear;
-  -ms-transition: background 3s linear;
-  transition: background 3s linear;
-  background-color: #ffffcc; background-color: #ffffff;
-}
-
-/*
     Instructional text for radio button
 */
 .it_radiobutton {
@@ -1044,5 +1032,52 @@ div.jGrowl div.WARNING div.jGrowl-message {
 }
 
 /************************************** END Schedule of Classes ******************/
+
+/*
+Styles for highlighting selected rows in a data table
+*/
+.dataTable td {
+  background-color: @bodyBackground;
+}
+.dataTable .selected-row td, .dataTable .selected-row:hover td {
+  background-color: @tableSelectedBackground;
+}
+
+/*
+  Override krad new/delete item highlighting in data tables
+*/
+
+table.dataTable tr.uif-newCollectionItem {
+  background-color: @addedStateBackground;
+}
+table.dataTable tr.uif-newCollectionItem td.sorting_1 {
+  background-color: @addedStateBackground;
+}
+
+/*
+    Fade out of Highlighting
+*/
+.highlight_fadeout{
+  -webkit-transition: background 3s linear;
+  -moz-transition: background 3s linear;
+  -o-transition: background 3s linear;
+  -ms-transition: background 3s linear;
+  transition: background 3s linear;
+  background-color: @addedStateBackground; background-color: @bodyBackground;
+}
+
+/*
+  jQuery UI Tab Overrides
+*/
+.ui-tabs .ui-tabs-nav {
+  background:none;
+}
+.ui-tabs .ui-tabs-nav .ui-state-default .ui-tabs-anchor {
+  background-color: @inactiveTabBackground;
+  .border-radius-individual(5px, 5px, 0, 0);
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-active .ui-tabs-anchor {
+  background-color: @bodyBackground;
+}
 
 @import "pagination";
