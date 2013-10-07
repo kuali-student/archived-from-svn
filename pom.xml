@@ -293,9 +293,9 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/student-2.0.0-M7</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/tags/student-2.0.0-M7</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/tags/student-2.0.0-M7</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/KSAP</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/KSAP</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/KSAP</url>
     </scm>
     <prerequisites>
         <maven>${maven.min.version}</maven>
