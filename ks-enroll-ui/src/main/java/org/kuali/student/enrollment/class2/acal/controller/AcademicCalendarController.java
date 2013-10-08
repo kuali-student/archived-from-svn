@@ -19,8 +19,13 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
 import org.kuali.rice.krad.uif.UifParameters;
+import org.kuali.rice.krad.uif.component.Component;
+import org.kuali.rice.krad.uif.control.SelectControl;
+import org.kuali.rice.krad.uif.util.ComponentFactory;
+import org.kuali.rice.krad.uif.util.UifKeyValue;
 import org.kuali.rice.krad.uif.view.DialogManager;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
@@ -31,6 +36,7 @@ import org.kuali.student.enrollment.class2.acal.dto.AcademicTermWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.AcalEventWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.ExamPeriodWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
+import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.KeyDateWrapper;
 import org.kuali.student.enrollment.class2.acal.dto.KeyDatesGroupWrapper;
 import org.kuali.student.enrollment.class2.acal.form.AcademicCalendarForm;
@@ -46,6 +52,7 @@ import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.AcalEventInfo;
 import org.kuali.student.r2.core.acal.dto.ExamPeriodInfo;
+import org.kuali.student.r2.core.acal.dto.HolidayInfo;
 import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
@@ -1349,7 +1356,7 @@ public class AcademicCalendarController extends UifControllerBase {
         for(int i=0; i<term.getExamdates().size(); i++ ) {
             ExamPeriodWrapper examPeriodWrapper = term.getExamdates().get(i);
 
-            ExamPeriodWrapper newExamPeriodWrapper = saveExamPeriod(examPeriodWrapper, term, helperService);
+            ExamPeriodWrapper newExamPeriodWrapper = saveExamPeriod(form, examPeriodWrapper, term, termIndex, helperService);
             form.getTermWrapperList().get(termIndex).getExamdates().set(i,newExamPeriodWrapper);
         }
 
@@ -1375,7 +1382,7 @@ public class AcademicCalendarController extends UifControllerBase {
      * @param helperService - View helper service
      * @return The updated keydate with information filled in from the save/create
      */
-    private ExamPeriodWrapper saveExamPeriod(ExamPeriodWrapper examPeriodWrapper, AcademicTermWrapper term, AcademicCalendarViewHelperService helperService){
+    private ExamPeriodWrapper saveExamPeriod(AcademicCalendarForm form, ExamPeriodWrapper examPeriodWrapper, AcademicTermWrapper term, int termIndex, AcademicCalendarViewHelperService helperService){
         // Create exam period info base
         ExamPeriodInfo examPeriodInfo = examPeriodWrapper.getExamPeriodInfo();
         String examPeriodName = examPeriodWrapper.getExamPeriodNameUI() + " " + term.getName();
@@ -1406,6 +1413,25 @@ public class AcademicCalendarController extends UifControllerBase {
                 // Update the exam period in the datebase and update wrapper information.
                 ExamPeriodInfo updatedExamPeriodInfo = getAcalService().updateExamPeriod(examPeriodInfo.getId(), examPeriodInfo, helperService.createContextInfo());
                 examPeriodWrapper.setExamPeriodInfo(updatedExamPeriodInfo);
+            }
+
+            //get all the holidays for the academic calendar
+            List<HolidayInfo> holidayInfos = new ArrayList<HolidayInfo>();
+            for (HolidayCalendarWrapper holidayCalendarWrapper : form.getHolidayCalendarList()) {
+                for (HolidayWrapper holidayWrapper : holidayCalendarWrapper.getHolidays()) {
+                    holidayInfos.add(holidayWrapper.getHolidayInfo());
+                }
+            }
+            //calculate the valid days of exam period, if
+            String finalExamSectionName="acal-term-examdates_line"+termIndex;
+            SelectControl select = (SelectControl) ComponentFactory.getNewComponentInstance("KSFE-FinalExam-ExamDaysDropdown");
+            int maxday = 0;
+            for(KeyValue value : select.getOptions()){
+                maxday = Math.max(Integer.valueOf(value.getKey()), maxday);
+            }
+            if (getAcademicCalendarServiceFacade().getDaysForExamPeriod(examPeriodWrapper.getExamPeriodInfo().getId(), holidayInfos, helperService.createContextInfo()) < maxday) {
+                GlobalVariables.getMessageMap().putWarningForSectionId(finalExamSectionName, CalendarConstants.MessageKeys.ERROR_EXAM_PERIOD_DAYS_VALIDATION,
+                        String.valueOf(maxday), term.getTermCode());
             }
         } catch (OperationFailedException oe){
             LOG.error("Save exam period has failed",oe);

@@ -24,6 +24,7 @@ import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.rice.krms.util.KRMSConstants;
 import org.kuali.student.common.uif.util.GrowlIcon;
 import org.kuali.student.common.uif.util.KSUifUtils;
 import org.kuali.student.enrollment.class2.courseoffering.dto.SocRolloverResultItemWrapper;
@@ -46,6 +47,7 @@ import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.acal.dto.ExamPeriodInfo;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.r2.core.class1.state.dto.StateInfo;
@@ -391,6 +393,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     public ModelAndView performRollover(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
                                         @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         if (!validateSourceTargetTerms(form)) {
+            form.getDialogManager().removeDialog(CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG);
             return getUIFModelAndView(form);
         }
 
@@ -403,6 +406,21 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         form.setStatusField("");
         String sourceTermId = form.getSourceTerm().getId();
         String targetTermId = form.getTargetTerm().getId();
+
+        if (!helper.termHasExamPeriod(targetTermId)) {
+            if (!hasDialogBeenAnswered(CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG, form)) {
+                //display dialog
+                form.setLightboxScript("openLightboxOnLoad('" + CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG + "');");
+                form.getDialogManager().addDialog(CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG, form.getMethodToCall());
+                return getUIFModelAndView(form);
+            } else {
+                boolean continueWithoutExams = getBooleanDialogResponse(CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG, form, request, response);
+                form.getDialogManager().removeDialog(CourseOfferingSetServiceConstants.NO_EXAM_PERIOD_WARNING_DIALOG);
+                if (!continueWithoutExams) {
+                    return getUIFModelAndView(form);
+                }
+            }
+        }
 
         boolean success = helper.performRollover(sourceTermId, targetTermId, form);
         if (success) {

@@ -40,6 +40,7 @@ import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.exceptions.ReadOnlyException;
 import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
+import org.kuali.student.r2.common.util.constants.ExamOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.LuServiceConstants;
 import org.kuali.student.r2.lum.course.service.CourseService;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
@@ -116,7 +117,7 @@ public class TestExamOfferingServiceFacadeImpl {
 
         List<String> optionKeys = new ArrayList<String>();
         String ePID = this.getExamOfferingBusinessLogic().getExamPeriodId(co.getTermId(),contextInfo);
-        this.getExamOfferingBusinessLogic().generateFinalExamOffering(coId, ePID, optionKeys, contextInfo);
+        this.getExamOfferingBusinessLogic().generateFinalExamOffering(coId, co.getTermId(), ePID, optionKeys, contextInfo);
 
         List<ExamOfferingRelationInfo> eoRelations = this.getExamOfferingService().getExamOfferingRelationsByFormatOffering(
                 CourseOfferingServiceTestDataLoader.CHEM123_LEC_AND_LAB_FORMAT_OFFERING_ID, contextInfo);
@@ -128,15 +129,21 @@ public class TestExamOfferingServiceFacadeImpl {
         co.getAttributes().get(0).setValue(LuServiceConstants.LU_EXAM_DRIVER_CO_KEY);
         this.getCourseOfferingService().updateCourseOffering(co.getId(), co, contextInfo);
 
-        this.getExamOfferingBusinessLogic().generateFinalExamOffering(coId, ePID, optionKeys, contextInfo);
+        this.getExamOfferingBusinessLogic().generateFinalExamOffering(coId, co.getTermId(), ePID, optionKeys, contextInfo);
 
         eoRelations = this.getExamOfferingService().getExamOfferingRelationsByFormatOffering(
                 CourseOfferingServiceTestDataLoader.CHEM123_LEC_AND_LAB_FORMAT_OFFERING_ID, contextInfo);
-        assertEquals(1, eoRelations.size());
+        assertEquals(6, eoRelations.size());
+        int counter = 0;
         for(ExamOfferingRelationInfo eoRelation : eoRelations){
-            assertEquals(5, eoRelation.getActivityOfferingIds().size());
+            ExamOffering eo = this.getExamOfferingService().getExamOffering(eoRelation.getExamOfferingId(), contextInfo);
+            if(!ExamOfferingServiceConstants.EXAM_OFFERING_CANCELED_STATE_KEY.equals(eo.getStateKey())){
+                assertEquals(5, eoRelation.getActivityOfferingIds().size());
+            } else {
+                counter++;
+            }
         }
-
+        assertEquals(5, counter);
     }
 
     @Test
@@ -145,7 +152,7 @@ public class TestExamOfferingServiceFacadeImpl {
 
         List<String> optionKeys = new ArrayList<String>();
         this.getExamOfferingBusinessLogic().generateFinalExamOfferingsPerFO(CourseOfferingServiceTestDataLoader.CHEM123_COURSE_OFFERING_ID,
-                ExamOfferingServiceTestDataLoader.PERIOD_ONE_ID, optionKeys, contextInfo);
+                ExamOfferingServiceTestDataLoader.TERM_ONE_ID, ExamOfferingServiceTestDataLoader.PERIOD_ONE_ID, optionKeys, contextInfo);
 
         List<ExamOfferingRelationInfo> eoRelations = this.getExamOfferingService().getExamOfferingRelationsByFormatOffering(
                 CourseOfferingServiceTestDataLoader.CHEM123_LEC_AND_LAB_FORMAT_OFFERING_ID, contextInfo);
@@ -183,7 +190,7 @@ public class TestExamOfferingServiceFacadeImpl {
 
         List<String> optionKeys = new ArrayList<String>();
         this.getExamOfferingBusinessLogic().generateFinalExamOfferingsPerAO(CourseOfferingServiceTestDataLoader.CHEM123_COURSE_OFFERING_ID,
-                ExamOfferingServiceTestDataLoader.PERIOD_ONE_ID, optionKeys, contextInfo);
+                ExamOfferingServiceTestDataLoader.TERM_ONE_ID, ExamOfferingServiceTestDataLoader.PERIOD_ONE_ID, optionKeys, contextInfo);
 
         List<ExamOfferingRelationInfo> eoRelations = this.getExamOfferingService().getExamOfferingRelationsByFormatOffering(
                 CourseOfferingServiceTestDataLoader.CHEM123_LEC_AND_LAB_FORMAT_OFFERING_ID, contextInfo);

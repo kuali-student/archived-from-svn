@@ -344,7 +344,7 @@ public class CourseOfferingServiceFacadeImpl implements CourseOfferingServiceFac
         try {
             examPeriodID = this.getExamOfferingServiceFacade().getExamPeriodId(aoInfo.getTermId(), context);
         } catch (DoesNotExistException e) {
-
+            LOGGER.warn("The Term " + aoInfo.getTermId() + " doesn't have an exam period to create exam offerings.");
         }
         if (examPeriodID != null) {
             //create if Final Exam Driver has been selected for the FO
@@ -352,7 +352,7 @@ public class CourseOfferingServiceFacadeImpl implements CourseOfferingServiceFac
             FormatOfferingInfo fo = getCoService().getFormatOffering(aoInfo.getFormatOfferingId(), context);
             TypeInfo typeFEO = getTypeService().getType(fo.getFinalExamLevelTypeKey(), context);
             if (typeAO.getName().equals(typeFEO.getName())){
-                this.getExamOfferingServiceFacade().generateFinalExamOfferingForAO(created, examPeriodID, new ArrayList<String>(), context);
+                this.getExamOfferingServiceFacade().generateFinalExamOfferingForAO(created, aoInfo.getTermId(), examPeriodID, new ArrayList<String>(), context);
             }
         }else{
             aoResult.getExamOfferingsGenerated().setSuccess(Boolean.FALSE);
@@ -429,7 +429,29 @@ public class CourseOfferingServiceFacadeImpl implements CourseOfferingServiceFac
         if (!cluster.getFormatOfferingId().equals(copyAoInfo.getFormatOfferingId())) {
             throw new DataValidationErrorException("Format Offering Ids do not match");
         }
-        return _addActivityOfferingToClusterCommon(copyAoInfo, cluster, context);
+
+        ActivityOfferingResult aoResult = _addActivityOfferingToClusterCommon(copyAoInfo, cluster, context);
+
+        //generate final exam offerings if the exam period exists
+        String examPeriodID = null;
+        try {
+            examPeriodID = this.getExamOfferingServiceFacade().getExamPeriodId(copyAoInfo.getTermId(), context);
+        } catch (DoesNotExistException e) {
+            LOGGER.warn("The Term " + copyAoInfo.getTermId() + " doesn't have an exam period to create exam offerings.");
+        }
+        if (examPeriodID != null) {
+            //create if Final Exam Driver has been selected for the FO
+            TypeInfo typeAO = getTypeService().getType(copyAoInfo.getTypeKey(), context);
+            FormatOfferingInfo fo = getCoService().getFormatOffering(copyAoInfo.getFormatOfferingId(), context);
+            TypeInfo typeFEO = getTypeService().getType(fo.getFinalExamLevelTypeKey(), context);
+            if (typeAO.getName().equals(typeFEO.getName())){
+                this.getExamOfferingServiceFacade().generateFinalExamOfferingForAO(copyAoInfo, copyAoInfo.getTermId(), examPeriodID, new ArrayList<String>(), context);
+            }
+        }else{
+            aoResult.getExamOfferingsGenerated().setSuccess(Boolean.FALSE);
+        }
+
+        return aoResult;
     }
 
     private CourseWaitListInfo copyToCreateWL(ActivityOfferingInfo newAOInfo, String origAoId, ContextInfo context)
