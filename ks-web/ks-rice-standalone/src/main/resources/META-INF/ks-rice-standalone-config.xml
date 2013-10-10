@@ -85,7 +85,7 @@
 -->
     <!-- additional config files -->
     <param name="ks.authentication.context">classpath:ks-spring-security.xml</param>
-    <param name="rice.additionalSpringFiles">${ks.authentication.context},ks-spring-security-saml.xml,classpath:StudentStandaloneSpringBeans.xml,classpath:ks-rice-standalone-admin-context.xml</param>
+    <param name="rice.additionalSpringFiles">${ks.authentication.context},ks-spring-security-saml.xml,classpath:StudentStandaloneSpringBeans.xml</param>
     
     <!-- Bus security -->
     <param name="ks.core.bus.security">false</param>
