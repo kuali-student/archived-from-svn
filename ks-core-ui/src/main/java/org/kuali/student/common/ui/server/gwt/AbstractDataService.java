@@ -225,7 +225,7 @@ public abstract class AbstractDataService implements DataService{
                             addAdditionalAttributes(attributes,proposalInfo,docDetail);
                         }
                     } catch (Exception e){
-                        LOG.error("Could not retrieve proposal to determine permission qualifiers:" + e.toString());
+                        LOG.error("Could not retrieve proposal to determine permission qualifiers:" + e.toString(), e);
                     }
                 }
                 
@@ -277,7 +277,7 @@ public abstract class AbstractDataService implements DataService{
 			return new DataSaveResult(dvee.getValidationResults(), null);
 		} catch (Exception e) {
 			LOG.error("Unable to save", e);
-			throw new OperationFailedException("Unable to save");
+			throw new OperationFailedException("Unable to save", e);
 		}		
 	}
 	
