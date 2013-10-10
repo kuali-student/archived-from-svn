@@ -209,12 +209,13 @@ public abstract class AbstractDataService implements DataService{
                             proposalInfo = proposalService.getProposalByWorkflowId(attributes.get(IdAttributes.IdType.DOCUMENT_ID.toString()), ContextUtils.getContextInfo());
                         }
                         
-                        //Check if the route status is in the list of allowed statuses
-                        DocumentDetail docDetail = getWorkflowDocumentService().getDocumentDetail(proposalInfo.getWorkflowId());
-                        String docStatusCode = getWorkflowDocumentService().getDocumentStatus(proposalInfo.getWorkflowId()).getCode();
-
                         //Populate attributes with additional attributes required for permission check
                         if (proposalInfo != null){
+                            
+                            //Check if the route status is in the list of allowed statuses
+                            DocumentDetail docDetail = getWorkflowDocumentService().getDocumentDetail(proposalInfo.getWorkflowId());
+                            String docStatusCode = getWorkflowDocumentService().getDocumentStatus(proposalInfo.getWorkflowId()).getCode();
+                            
                             attributes.put(IdAttributes.IdType.KS_KEW_OBJECT_ID.toString(), proposalInfo.getId());
                             attributes.put(StudentIdentityConstants.QUALIFICATION_DATA_ID, proposalInfo.getId()); // this is what most of the permissions/roles check
                             attributes.put(IdAttributes.IdType.DOCUMENT_ID.toString(), proposalInfo.getWorkflowId());
