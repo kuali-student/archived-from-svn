@@ -51,7 +51,6 @@ public class PlanItemInfo extends TypeStateEntityInfo implements PlanItem {
 	@XmlElement
 	private BigDecimal credit;
 
-	@SuppressWarnings("unused")
 	@XmlAnyElement
 	private List<Element> _futureElements;
 
