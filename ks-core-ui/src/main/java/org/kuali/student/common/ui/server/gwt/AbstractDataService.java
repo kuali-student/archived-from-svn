@@ -5,10 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import java.net.URLDecoder;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.kuali.rice.kew.api.KewApiServiceLocator;
 import org.kuali.rice.kew.api.document.DocumentDetail;
 import org.kuali.rice.kew.api.document.WorkflowDocumentService;
 import org.kuali.rice.kim.api.permission.PermissionService;
@@ -312,7 +313,14 @@ public abstract class AbstractDataService implements DataService{
 		this.proposalService = proposalService;
 	}
 	
-	public WorkflowDocumentService getWorkflowDocumentService() {
+	public WorkflowDocumentService getWorkflowDocumentService() throws OperationFailedException {
+	    
+	    if (workflowDocumentService == null) {
+	        workflowDocumentService = KewApiServiceLocator.getWorkflowDocumentService();
+	        
+	        if (workflowDocumentService == null)
+	            throw new OperationFailedException("Failed to find Workflow Document Service");
+	    }
         return workflowDocumentService;
     }
 
