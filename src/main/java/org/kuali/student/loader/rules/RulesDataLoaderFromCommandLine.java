@@ -107,11 +107,15 @@ public class RulesDataLoaderFromCommandLine {
         System.out.println("Connecting to Statement Service...");
         statementHelper.setStatementService(serviceFactory.getStatementService());
         System.out.println("Connecting to RuleManagement Service...");
-        krmsHelper.setRuleManagementService(serviceFactory.getRuleManagementService());
+        
+        ServiceFactory destServiceFactory = new ServiceFactory();
+        destServiceFactory.setHostUrl(destHostUrl);
+        
+        krmsHelper.setRuleManagementService(destServiceFactory.getRuleManagementService());
         System.out.println("Connecting to KRMS Type Repository Service...");
-        krmsHelper.setKrmsTypeRepositoryService(serviceFactory.getKrmsTypeRepositoryService());
+        krmsHelper.setKrmsTypeRepositoryService(destServiceFactory.getKrmsTypeRepositoryService());
         System.out.println("Connecting to Term Repository Service...");
-        krmsHelper.setTermRepositoryService(serviceFactory.getTermRepositoryService());
+        krmsHelper.setTermRepositoryService(destServiceFactory.getTermRepositoryService());
 
         System.out.println(new Date() + " Starting conversion... ");
         rulesLoader.setKrmsHelper(krmsHelper);
