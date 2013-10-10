@@ -120,7 +120,7 @@
     <param name="keystore.password">r1c3pw</param>
 
     <!-- run modes -->
-    <param name="ksb.mode">THIN</param>
+    <param name="ksb.mode">REMOTE</param>
     
 	<param name="kim.mode">EMBEDDED</param>
 	<param name="kew.mode">EMBEDDED</param>
