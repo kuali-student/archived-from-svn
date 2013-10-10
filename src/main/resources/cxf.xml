@@ -1,0 +1,13 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+    <!-- This file used by CXF to configure http clients. used by all data loaders by simply existing in the class path -->
+    <http-conf:conduit name="*.http-conduit">
+        <http-conf:client ReceiveTimeout="3600000"/> <!-- milliseconds -->
+    </http-conf:conduit>
+
+</beans>
