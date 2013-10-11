@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.student.api</groupId>
         <artifactId>ks-api</artifactId>
-        <version>2.0.0-M8-SNAPSHOT</version>
+        <version>2.0.0-M8-build-540</version>
     </parent>
     <artifactId>ks-enroll-api</artifactId>
     <name>KS Enroll API</name>
@@ -125,8 +125,10 @@
                             <goal>ksdictionarydoc</goal>
                         </goals>
                         <configuration>
-                        	<supportFiles>
-+                           	<!-- needed to validate the dictionary files -->
+                            <supportFiles>
++                           	
+                                
+                                <!-- needed to validate the dictionary files -->
 +                            	<supportFile>classpath:ks-base-dictionary.xml</supportFile>
 +                            </supportFiles>
                             <!-- generate only on the kuali student api -->
