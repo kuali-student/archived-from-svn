@@ -17,7 +17,7 @@
 package org.kuali.student.r2.core.scheduling.service.impl;
 
 /**
- * This class provides unit test methods for parts of the SchedulingService
+ * This class //TODO ...
  *
  * @author Kuali Student Team
  */

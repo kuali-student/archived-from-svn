@@ -193,6 +193,8 @@ public class RoomServiceImpl implements RoomService {
      *                    principalId and locale information about the caller of
      *                    service operation
      * @return a list of Room Ids
+     * @throws org.kuali.student.r2.common.exceptions.DoesNotExistException
+     *          roomTypeKey not found
      * @throws org.kuali.student.r2.common.exceptions.InvalidParameterException
      *          invalid contextInfo
      * @throws org.kuali.student.r2.common.exceptions.MissingParameterException
@@ -1062,6 +1064,8 @@ public class RoomServiceImpl implements RoomService {
      * @throws org.kuali.student.r2.common.exceptions.DataValidationErrorException
      *          one or more values invalid
      *          for this operation
+     * @throws org.kuali.student.r2.common.exceptions.DoesNotExistException
+     *          roomId or orgId not found
      * @throws org.kuali.student.r2.common.exceptions.InvalidParameterException
      *          invalid roomResponsibleOrgInfo or contextInfo
      * @throws org.kuali.student.r2.common.exceptions.MissingParameterException
@@ -1332,6 +1336,18 @@ public class RoomServiceImpl implements RoomService {
 
     public void setCriteriaLookupService(CriteriaLookupService criteriaLookupService) {
         this.criteriaLookupService = criteriaLookupService;
+    }
+
+    public RoomServiceDao getRoomServiceDao() {
+        return roomServiceDao;
+    }
+
+    public BuildingServiceDao getBuildingServiceDao() {
+        return buildingServiceDao;
+    }
+
+    public RoomResponsibleOrgDao getRoomResponsibleOrgDao() {
+        return roomResponsibleOrgDao;
     }
 
     public void setRoomServiceDao(RoomServiceDao roomServiceDao) {

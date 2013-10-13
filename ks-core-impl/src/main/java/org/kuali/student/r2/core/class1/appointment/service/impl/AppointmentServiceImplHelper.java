@@ -39,7 +39,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This class provides helper methods for AppointmentServiceImpl
+ * This class //TODO ...
  *
  * @author Kuali Student Team
  */
@@ -299,7 +299,7 @@ public class AppointmentServiceImplHelper {
         }
         List<Calendar> slotTimes = new ArrayList<Calendar>();
         if (weekdays.isEmpty()) {
-            Object[] result = {slotTimes, Integer.valueOf(0), new Integer(totalStudents)};
+            Object[] result = {slotTimes, new Integer(0), new Integer(totalStudents)};
             return result;
         }
         Calendar date = _makeCopy(startDate);
@@ -355,7 +355,7 @@ public class AppointmentServiceImplHelper {
                                                          List<Integer> weekdays) {
         List<Calendar> slotTimes = new ArrayList<Calendar>();
         if (weekdays.isEmpty()) {
-            Object[] result = {slotTimes, Integer.valueOf(0), new Integer(totalStudents)};
+            Object[] result = {slotTimes, new Integer(0), new Integer(totalStudents)};
             return result;
         }
         Calendar date = _makeCopy(startDate);
@@ -556,9 +556,7 @@ public class AppointmentServiceImplHelper {
                                                   StatusInfo statusInfo, ContextInfo contextInfo)
             throws InvalidParameterException, MissingParameterException, DoesNotExistException,
                    PermissionDeniedException, OperationFailedException, DataValidationErrorException, ReadOnlyException {
-        //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
-        int firstAppointmentSlotInfo = 0;
-        String slotId = slotInfoList.get(firstAppointmentSlotInfo).getId();  // Only one slot in the one slot case
+        String slotId = slotInfoList.get(0).getId();  // Only one slot in the one slot case
         for (String studentId: studentIds) {
             AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
             createAppointmentNoTransact(studentId, slotId, apptInfo.getTypeKey(), apptInfo, contextInfo);

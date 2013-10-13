@@ -71,6 +71,7 @@ public class RegistrationHoldsTermResolver implements TermResolver<List<AppliedH
 
     @Override
     public int getCost() {
+        // TODO Analyze
         return 0;
     }
 

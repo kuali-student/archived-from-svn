@@ -235,7 +235,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgInfo createOrg(String orgTypeKey, OrgInfo orgInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
         // Check Missing params
         checkForMissingParameter(orgTypeKey, "orgTypeKey");
@@ -278,7 +277,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgInfo updateOrg(String orgId, OrgInfo orgInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         // Check Missing params
         checkForMissingParameter(orgId, "orgId");
@@ -301,7 +299,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatusInfo deleteOrg(String orgId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         checkForMissingParameter(orgId, "orgId");
 
@@ -342,10 +339,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public TypeInfo getOrgOrgRelationTypeForOrgType(String orgTypeKey, ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         checkForMissingParameter(orgTypeKey, "orgTypeKey");
         List<TypeInfo> infos = getOrgOrgRelationTypesForOrgType(orgTypeKey,contextInfo );
-        //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
-        int firstTypeInfo = 0;
 
-        return (infos.size() >0 ? infos.get(firstTypeInfo) : new TypeInfo());
+        return (infos.size() >0 ? infos.get(0) : new TypeInfo());
     }
 
     @Override
@@ -466,7 +461,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgOrgRelationInfo createOrgOrgRelation(String orgId, String orgPeerId, String orgOrgRelationTypeKey, OrgOrgRelationInfo orgOrgRelationInfo, ContextInfo contextInfo) throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
         // Check Missing params
         checkForMissingParameter(orgId, "orgId");
@@ -495,7 +489,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgOrgRelationInfo updateOrgOrgRelation(String orgOrgRelationId, OrgOrgRelationInfo orgOrgRelationInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         // Check Missing params
         checkForMissingParameter(orgOrgRelationId, "orgOrgRelationId");
@@ -518,7 +511,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatusInfo deleteOrgOrgRelation(String orgOrgRelationId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         checkForMissingParameter(orgOrgRelationId, "orgOrgRelationId");
 
@@ -610,9 +602,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Deprecated
     public OrgPersonRelationInfo getOrgPersonRelationByTypeAndOrg(String orgPersonRelationTypeKey, String orgId, ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         List<OrgPersonRelationInfo> infos = getOrgPersonRelationsByTypeAndOrg(orgPersonRelationTypeKey, orgId, contextInfo);
-        //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
-        int firstOrgPersonRelationInfo = 0;
-        return (infos.size() >0 ? infos.get(firstOrgPersonRelationInfo) : new OrgPersonRelationInfo());
+        return (infos.size() >0 ? infos.get(0) : new OrgPersonRelationInfo());
     }
 
     @Override
@@ -690,7 +680,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgPersonRelationInfo createOrgPersonRelation(String orgId, String personId, String orgPersonRelationTypeKey, OrgPersonRelationInfo orgPersonRelationInfo, ContextInfo contextInfo) throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
         // Check Missing params
         checkForMissingParameter(orgId, "orgId");
@@ -724,7 +713,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgPersonRelationInfo updateOrgPersonRelation(String orgPersonRelationId, OrgPersonRelationInfo orgPersonRelationInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         // Check Missing params
         checkForMissingParameter(orgPersonRelationId, "orgPersonRelationId");
@@ -752,7 +740,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatusInfo deleteOrgPersonRelation(String orgPersonRelationId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         checkForMissingParameter(orgPersonRelationId, "orgPersonRelationId");
 
@@ -850,7 +837,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgPositionRestrictionInfo createOrgPositionRestriction(String orgId, String orgPositionRestrictionTypeKey, OrgPositionRestrictionInfo orgPositionRestrictionInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
         // Check Missing params
         checkForMissingParameter(orgId, "orgId");
@@ -877,7 +863,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public OrgPositionRestrictionInfo updateOrgPositionRestriction(String orgPositionRestrictionId, OrgPositionRestrictionInfo orgPositionRestrictionInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         // Check Missing params
         checkForMissingParameter(orgPositionRestrictionId, "orgPositionRestrictionId");
@@ -903,7 +888,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatusInfo deleteOrgPositionRestriction(String orgPositionRestrictionId, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         checkForMissingParameter(orgPositionRestrictionId, "orgPositionRestrictionId");
 
@@ -1028,6 +1012,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     public List<String> searchForOrgHierarchyIds(QueryByCriteria criteria, ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-
+    
+    
 }

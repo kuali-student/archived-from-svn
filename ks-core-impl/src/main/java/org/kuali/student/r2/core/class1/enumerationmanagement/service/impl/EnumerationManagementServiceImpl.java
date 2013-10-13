@@ -184,7 +184,6 @@ public class EnumerationManagementServiceImpl implements EnumerationManagementSe
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatusInfo deleteEnumeratedValue(String enumerationKey, String code, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         StatusInfo status = new StatusInfo();
         status.setSuccess(Boolean.TRUE);

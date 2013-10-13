@@ -73,6 +73,7 @@ public class SummerOnlyStudentTermResolver implements TermResolver<Boolean> {
 
     @Override
     public int getCost() {
+        // TODO Analyze
         return 0;
     }
 

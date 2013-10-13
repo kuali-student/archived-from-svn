@@ -68,6 +68,7 @@ public class StudentDeceasedTermResolver implements TermResolver<Boolean> {
 
     @Override
     public int getCost() {
+        // TODO analyze
         return 0;
     }
 

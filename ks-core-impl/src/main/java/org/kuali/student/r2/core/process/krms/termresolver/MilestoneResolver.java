@@ -58,6 +58,7 @@ public class MilestoneResolver implements TermResolver<MilestoneInfo> {
 
     @Override
     public int getCost() {
+        // TODO Analyze
         return 0;
     }
 

@@ -2,6 +2,7 @@ package org.kuali.student.r2.core.class1.state.decorators;
 
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.ObjectExistsException;
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -13,7 +14,9 @@ import org.kuali.student.r2.core.class1.state.dto.LifecycleInfo;
 import org.kuali.student.r2.core.class1.state.dto.StateInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Decorator for TypeService to add caching to select type service methods.
@@ -26,24 +29,40 @@ public class StateServiceCacheDecorator extends StateServiceDecorator {
 
 
     protected static final String STATE_SERVICE_CACHE = "StateServiceCache";
-    protected static final String GET_LIFECYCLE_BY_KEY = "getLifecycleByLifecycleKey";
-    protected static final String GET_STATE_BY_KEY    = "getStateByStateKey";
+
+    protected Map<String, LifecycleInfo> lifecycleInfoMap;
+    protected Map<String, StateInfo> stateInfoMap;
+
+
+    public StateServiceCacheDecorator(){
+
+        try {
+
+
+            //Add LifecycleInfo Map to cache
+            lifecycleInfoMap = new HashMap<String, LifecycleInfo>();
+
+            //Add StateInfo Map to cache
+            stateInfoMap = new HashMap<String, StateInfo>();
+
+
+        } catch (ObjectExistsException e) {
+        }
+    }
+
 
     @Override
     public LifecycleInfo getLifecycle(String lifecycleKey, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-        MultiKey cacheKey = new MultiKey(GET_LIFECYCLE_BY_KEY, lifecycleKey);
+        //LifecycleInfo is stored in cache using a map of lifecycle keys to LifeCycleInfo
+        //This will attempt to retrieve from cached map, otherwise will call call the service.
 
-        Element cachedResult = cacheManager.getCache(STATE_SERVICE_CACHE).get(cacheKey);
-        Object result;
-        if (cachedResult == null) {
-            result = getNextDecorator().getLifecycleKeysByRefObjectUri(lifecycleKey, contextInfo);
-            cacheManager.getCache(STATE_SERVICE_CACHE).put(new Element(cacheKey, result));
-        } else {
-            result = cachedResult.getValue();
+        LifecycleInfo result = lifecycleInfoMap.get(lifecycleKey);
+        if (result == null){
+            result = getNextDecorator().getLifecycle(lifecycleKey, contextInfo);
+            lifecycleInfoMap.put(lifecycleKey, result);
         }
 
-        return (LifecycleInfo)result;
-
+        return result;
     }
 
     @Override
@@ -54,25 +73,24 @@ public class StateServiceCacheDecorator extends StateServiceDecorator {
 
         //Attempt to build results from cache
         List<LifecycleInfo> results = new ArrayList<LifecycleInfo>();
-        List<String> notInCacheList = new ArrayList<String>();        // add any ids not in the cache to this list
         for (String lifeCycleKey:lifecycleKeys){
-            MultiKey cacheKey = new MultiKey(GET_LIFECYCLE_BY_KEY, lifeCycleKey);
-            Element cachedResult = cacheManager.getCache(STATE_SERVICE_CACHE).get(cacheKey);
-            if (cachedResult != null){
-                results.add((LifecycleInfo)cachedResult.getValue());
+            LifecycleInfo lifecycleInfo = lifecycleInfoMap.get(lifeCycleKey);
+            if (lifecycleInfo != null){
+                results.add(lifecycleInfo);
             } else {
-                notInCacheList.add(lifeCycleKey);
+                //List could not be built from cache, need to retreive from service
+                results.clear();
+                break;
             }
         }
 
-        // at this point we've gotten everything from the cache and have a list of stuff we didn't find.
-        // call the service to get the list of missing items. add them to the cache and the result list.
-        if(!notInCacheList.isEmpty()){
-            List<LifecycleInfo> newList =  getNextDecorator().getLifecyclesByKeys(notInCacheList, contextInfo);
-            for(LifecycleInfo info : newList){
-                MultiKey cacheKey = new MultiKey(GET_LIFECYCLE_BY_KEY, info.getKey());
-                cacheManager.getCache(STATE_SERVICE_CACHE).put(new Element(cacheKey, info));
-                results.add(info);
+        //All results could not be retrieved from cache, retrieve from service and add missing items to cache.
+        if (results.isEmpty()){
+            results.addAll(getNextDecorator().getLifecyclesByKeys(lifecycleKeys, contextInfo));
+            for (LifecycleInfo lifcycleInfo:results){
+                if (!lifecycleInfoMap.containsKey(lifcycleInfo.getKey())){
+                    lifecycleInfoMap.put(lifcycleInfo.getKey(),lifcycleInfo);
+                }
             }
         }
 
@@ -146,18 +164,13 @@ public class StateServiceCacheDecorator extends StateServiceDecorator {
         //StateInfo is stored in cache using a map of state keys to StateInfo
         //This will attempt to retrieve from cached map, otherwise will call call the service.
 
-        MultiKey cacheKey = new MultiKey(GET_STATE_BY_KEY, stateKey);
-
-        Element cachedResult = cacheManager.getCache(STATE_SERVICE_CACHE).get(cacheKey);
-        Object result;
-        if (cachedResult == null) {
+        StateInfo result = stateInfoMap.get(stateKey);
+        if (result == null){
             result = getNextDecorator().getState(stateKey, contextInfo);
-            cacheManager.getCache(STATE_SERVICE_CACHE).put(new Element(cacheKey, result));
-        } else {
-            result = cachedResult.getValue();
+            stateInfoMap.put(stateKey, result);
         }
 
-        return (StateInfo)result;
+        return result;
     }
 
     @Override
@@ -168,25 +181,24 @@ public class StateServiceCacheDecorator extends StateServiceDecorator {
 
         //Attempt to build results from cache
         List<StateInfo> results = new ArrayList<StateInfo>();
-        List<String> notInCacheList = new ArrayList<String>();        // add any ids not in the cache to this list
         for (String stateKey:stateKeys){
-            MultiKey cacheKey = new MultiKey(GET_STATE_BY_KEY, stateKey);
-            Element cachedResult = cacheManager.getCache(STATE_SERVICE_CACHE).get(cacheKey);
-            if (cachedResult != null){
-                results.add((StateInfo)cachedResult.getValue());
+            StateInfo stateInfo = stateInfoMap.get(stateKey);
+            if (stateInfo != null){
+                results.add(stateInfo);
             } else {
-                notInCacheList.add(stateKey);
+                //List could not be built from cache, need to retreive from service
+                results.clear();
+                break;
             }
         }
 
-        // at this point we've gotten everything from the cache and have a list of stuff we didn't find.
-        // call the service to get the list of missing items. add them to the cache and the result list.
-        if(!notInCacheList.isEmpty()){
-            List<StateInfo> newList =  getNextDecorator().getStatesByKeys(notInCacheList, contextInfo);
-            for(StateInfo info : newList){
-                MultiKey cacheKey = new MultiKey(GET_STATE_BY_KEY, info.getKey());
-                cacheManager.getCache(STATE_SERVICE_CACHE).put(new Element(cacheKey, info));
-                results.add(info);
+        //All results could not be retrieved from cache, retrieve from service and add missing items to cache.
+        if (results.isEmpty()){
+            results.addAll(getNextDecorator().getStatesByKeys(stateKeys, contextInfo));
+            for (StateInfo stateInfo:results){
+                if (!stateInfoMap.containsKey(stateInfo.getKey())){
+                    stateInfoMap.put(stateInfo.getKey(),stateInfo);
+                }
             }
         }
 

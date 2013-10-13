@@ -1007,14 +1007,12 @@ public class RoleAndPermissionServiceMockImpl implements RoleService, Permission
             return true;
         }
         // if both have the same qualifier type then those types have to match
-        //Code Changed for JIRA-8997 - SONAR Critical issues - Performance - Inefficient use of keySet iterator instead of entrySet iterator
-        for(Map.Entry<String, String> entry: qual2.entrySet()) {
-            String key1 = entry.getKey();
+        for (String key1 : qual2.keySet()) {
             String val1 = qual1.get(key1);
             if (val1 == null) {
                 continue;
             }
-            String val2 = entry.getValue();
+            String val2 = qual2.get(key1);
             if (!val1.equals(val2)) {
                 return false;
             }
