@@ -15,7 +15,6 @@
 
 package org.kuali.student.r2.core.scheduling.dao;
 
-import org.apache.commons.lang.StringUtils;
 import org.kuali.student.r2.common.dao.GenericEntityDao;
 import org.kuali.student.r2.core.scheduling.model.TimeSlotEntity;
 
@@ -52,14 +51,4 @@ public class TimeSlotDao extends GenericEntityDao<TimeSlotEntity> {
 
         return query.getResultList();
     }
-
-    public String getCurrentMaxTimeSlotCode(String timeSlotType){
-        Query query = em.createNamedQuery("TimeSlotEntity.getCurrentMaxTimeSlotCode");
-        query.setParameter("timeSlotType", timeSlotType);
-
-        String maxCode = (String) query.getSingleResult();
-
-        return StringUtils.defaultString(maxCode);
-    }
-
 }

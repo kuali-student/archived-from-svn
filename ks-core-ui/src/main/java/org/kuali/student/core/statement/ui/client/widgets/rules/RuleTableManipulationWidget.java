@@ -393,9 +393,8 @@ public class RuleTableManipulationWidget extends FlowPanel {
     //check whether user selected only 1 operator of opossite type
     private boolean isMatchingOperandSelected(int type) {
         List<StatementVO> selectedStmts = rule.getSelectedStatementVOs();
-        int firstStmt = 0;
         if (((rule.getSelectedReqComponentVOs() == null) || (rule.getSelectedReqComponentVOs().isEmpty())) && (selectedStmts.size() == 1)
-                && (((StatementVO)selectedStmts.get(firstStmt)).getType() != type)) {
+                && (((StatementVO)selectedStmts.get(0)).getType() != type)) {
             return true;
         }
         return false;

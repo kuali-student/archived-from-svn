@@ -20,8 +20,6 @@ import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.util.Arrays;
-
 /**
  * This is a generic table for assembling non-sortable tables with sections
  *
@@ -39,13 +37,9 @@ public class SectionTable extends FlexTable {
     private Object[][] rowData = null;
 
 
-    public SectionTable(Object[][] newRowData) {
+    public SectionTable(Object[][] rowData) {
         this();
-        if(newRowData == null) {
-            this.rowData = null;
-        } else {
-            this.rowData = Arrays.copyOf(newRowData, newRowData.length);
-        }
+        this.rowData = rowData;
         createRows(DATA_INDEX_ZERO);
 
     }

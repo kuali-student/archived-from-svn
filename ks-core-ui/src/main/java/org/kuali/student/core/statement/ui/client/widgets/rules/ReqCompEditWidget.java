@@ -135,9 +135,8 @@ public class ReqCompEditWidget extends FlowPanel {
                  newReqCompSelectedCallback.exec(null);
                  setEnableAddRuleButtons(true);
 
-                 int firstId = 0;
                  List<String> ids = ((KSSelectItemWidgetAbstract)event.getWidget()).getSelectedItems();
-                 selectedReqCompType = reqCompTypeInfoList.get(Integer.valueOf(ids.get(firstId)));
+                 selectedReqCompType = reqCompTypeInfoList.get(Integer.valueOf(ids.get(0)));
 
                  if (addingNewReqComp) {
                      createReqComp(selectedReqCompType);

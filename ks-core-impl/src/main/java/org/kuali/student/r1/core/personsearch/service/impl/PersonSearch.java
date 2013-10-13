@@ -194,11 +194,10 @@ public class PersonSearch {
         newCriteria.putAll( baseLookupCriteria );
 
         newCriteria.put( "entityTypeContactInfos.entityTypeCode", personEntityTypeLookupCriteria );
-        //Code Changed for JIRA-8997 - SONAR Critical issues - Performance - Inefficient use of keySet iterator instead of entrySet iterator
+
         if ( criteria != null ) {
-            for ( Map.Entry<String, String> entry: criteria.entrySet() ) {
+            for ( String key : criteria.keySet() ) {
                 //check active radio button
-                String key = entry.getKey();
                 if(key.equals(KIMPropertyConstants.Person.ACTIVE)) {
                     newCriteria.put(KIMPropertyConstants.Person.ACTIVE, criteria.get(KIMPropertyConstants.Person.ACTIVE));
                 } else {
@@ -209,7 +208,7 @@ public class PersonSearch {
                 }
                 
                 // if no value was passed, skip the entry in the Map
-                if ( StringUtils.isEmpty( entry.getValue() ) ) {
+                if ( StringUtils.isEmpty( criteria.get(key) ) ) {
                     continue;
                 }
                 // check if the value needs to be encrypted

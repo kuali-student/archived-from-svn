@@ -77,9 +77,8 @@ public class RuleExpressionParser {
             return true;
         }
 
-        int firstToken = 0;
-        if ((tokens.get(firstToken).type == Token.StartParenthesis
-                || tokens.get(firstToken).type == Token.Condition) == false) {
+        if ((tokens.get(0).type == Token.StartParenthesis 
+                || tokens.get(0).type == Token.Condition) == false) {
             errorMessages.add("must start with ( or condition");
             return false;
         }

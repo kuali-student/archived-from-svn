@@ -177,16 +177,15 @@ public class SecurityTokenServiceImpl implements SecurityTokenService {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            //JIRA FIX : KSENROLL-8731 - Replaced StringBuffer with StringBuilder
             String line;
-            StringBuilder stringBuilder = new StringBuilder(255);
+            StringBuffer stringBuffer = new StringBuffer(255);
             String response;
 
             while ((line = in.readLine()) != null) {
-                stringBuilder.append(line);
+                stringBuffer.append(line);
             }
             
-            response = stringBuilder.toString();
+            response = stringBuffer.toString();
             String error = XmlUtils.getTextForElement(response, "authenticationFailure");
 
             if (CommonUtils.isNotEmpty(error)) {

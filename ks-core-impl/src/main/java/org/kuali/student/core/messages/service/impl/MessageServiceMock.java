@@ -179,15 +179,14 @@ public class MessageServiceMock implements MessageService {
 
         Map<String, String> groupMessages = ((LocaleMessages) messages.get(localeInfo.getLocaleLanguage())).getMessages(messageGroupKey);
         List<MessageInfo> messageArrayList = new ArrayList<MessageInfo>();
-        //Code Changed for JIRA-8997 - SONAR Critical issues - Performance - Inefficient use of keySet iterator instead of entrySet iterator
-        Iterator<Map.Entry<String,String>> i = groupMessages.entrySet().iterator();
+
+        Iterator<String> i = groupMessages.keySet().iterator();
         while (i.hasNext()) {
-            Map.Entry<String,String> entry = i.next();
-            String id = entry.getKey();
+            String id = i.next();
             MessageInfo m = new MessageInfo();
             m.setGroupName(messageGroupKey);
             m.setMessageKey(id);
-            m.setValue(entry.getValue());
+            m.setValue(groupMessages.get(id));
             LocaleInfo locale = new LocaleInfo();
             locale.setLocaleLanguage(localeInfo.getLocaleLanguage());
             m.setLocale(locale);
@@ -237,7 +236,8 @@ public class MessageServiceMock implements MessageService {
 
     @Override
     public StatusInfo deleteMessage(LocaleInfo localeInfo, String messageGroupKey, String messageKey, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
-    	  throw new UnsupportedOperationException ("not implemented");
+        // TODO pctsw - THIS METHOD NEEDS JAVADOCS
+        return null;
     }
     
     @Override
@@ -254,13 +254,12 @@ public class MessageServiceMock implements MessageService {
         return status;
     }
 
-	@Override
-	public List<ValidationResultInfo> validateMessage(String validationTypeKey,
-			MessageInfo messageInfo, ContextInfo contextInfo)
-			throws DoesNotExistException, InvalidParameterException,
-			MissingParameterException, OperationFailedException {
-		  throw new UnsupportedOperationException ("not implemented");
-	}
+    @Override
+    public List<ValidationResultInfo> validateProposal(String validationTypeKey, MessageInfo messageInfo, ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException {
+        throw new OperationFailedException ("Not supported yet.");
+    }
+    
+    
     
     
 

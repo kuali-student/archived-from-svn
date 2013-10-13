@@ -47,13 +47,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * This class provides the default implementation of the AppointmentService
+ * This class //TODO ...
  *
  * @author Kuali Student Team
  */
@@ -565,38 +564,4 @@ public class AppointmentServiceImpl implements AppointmentService {
         // TODO sambit - THIS METHOD NEEDS JAVADOCS
         throw new UnsupportedOperationException();
     }
-
-	@Override
-	public StatusInfo changeAppointmentState(String appointmentId,
-			String nextStateKey, ContextInfo contextInfo)
-			throws DoesNotExistException, InvalidParameterException,
-			MissingParameterException, OperationFailedException,
-			PermissionDeniedException {
-		// TODO KSENROLL-8703
-		throw new UnsupportedOperationException("not implemented");
-	}
-
-	@Override
-	public StatusInfo changeAppointmentWindowState(String appointmentWindowId,
-			String nextStateKey, ContextInfo contextInfo)
-			throws DoesNotExistException, InvalidParameterException,
-			MissingParameterException, OperationFailedException,
-			PermissionDeniedException {
-		// TODO KSENROLL-8703
-		throw new UnsupportedOperationException("not implemented");
-	}
-
-	@Override
-	public StatusInfo changeAppointmentSlotState(String appointmentSlotId,
-			String nextStateKey, ContextInfo contextInfo)
-			throws DoesNotExistException, InvalidParameterException,
-			MissingParameterException, OperationFailedException,
-			PermissionDeniedException {
-		// TODO KSENROLL-8703
-		throw new UnsupportedOperationException("not implemented");
-	}
-    
-    
-    
-    
 }

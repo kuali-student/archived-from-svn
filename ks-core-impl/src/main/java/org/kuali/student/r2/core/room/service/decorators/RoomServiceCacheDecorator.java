@@ -82,6 +82,17 @@ public class RoomServiceCacheDecorator extends RoomServiceDecorator {
     }
 
     @Override
+    public List<RoomInfo> getRoomsByIds(@WebParam(name = "roomIds") List<String> roomIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        List<RoomInfo> result = new ArrayList<RoomInfo>(roomIds.size());
+
+        for (String id : roomIds) {
+            result.add( this.getRoom(id, contextInfo));
+        }
+
+        return result;
+    }
+
+    @Override
     public RoomInfo createRoom(@WebParam(name = "buildingId") String buildingId, @WebParam(name = "roomTypeKey") String roomTypeKey, @WebParam(name = "roomInfo") RoomInfo roomInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws AlreadyExistsException, DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
         RoomInfo room = getNextDecorator().createRoom(buildingId, roomTypeKey, roomInfo, contextInfo);
 
@@ -130,6 +141,17 @@ public class RoomServiceCacheDecorator extends RoomServiceDecorator {
         }
 
         return (BuildingInfo)result;
+    }
+
+    @Override
+    public List<BuildingInfo> getBuildingsByIds(@WebParam(name = "buildingIds") List<String> buildingIds, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+        List<BuildingInfo> result = new ArrayList<BuildingInfo>(buildingIds.size());
+
+        for (String id : buildingIds) {
+            result.add( this.getBuilding(id, contextInfo) );
+        }
+
+        return result;
     }
 
     @Override

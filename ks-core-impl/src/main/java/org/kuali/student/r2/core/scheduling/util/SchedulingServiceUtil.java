@@ -30,12 +30,10 @@ import org.kuali.student.r2.core.scheduling.dto.ScheduleComponentInfo;
 import org.kuali.student.r2.core.scheduling.dto.ScheduleInfo;
 import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestComponentInfo;
 import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestInfo;
-import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestSetInfo;
 import org.kuali.student.r2.core.scheduling.dto.TimeSlotInfo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,9 +43,6 @@ import java.util.List;
  * @author Mezba Mahtab
  */
 public class SchedulingServiceUtil {
-
-    //  Since this is a utility class (all static methods) hide the constructor.
-    private SchedulingServiceUtil() {}
 
     /**
      * Converts a list of Calendar constants (i.e. Calendar.MONDAY, Calendar.FRIDAY) into a string of characters representing those days
@@ -134,9 +129,7 @@ public class SchedulingServiceUtil {
                 break;
             }
         }
-        if (!hasCommonWeekday) {
-            return false;
-        }
+        if (!hasCommonWeekday) return false;
 
         if (timeSlotInfo1.getStartTime().getMilliSeconds() == null ||
                 timeSlotInfo1.getEndTime().getMilliSeconds() == null ||
@@ -159,69 +152,29 @@ public class SchedulingServiceUtil {
 
     /**
      * Convenience method for the short-cut process of translating a ScheduleRequest directly into a Schedule
-     * Assumes that the room to be used for the actual schedule is the first room in the list from the request.
-     * <p/>
-     * If the request isn't TBA then fill in a value for room id as if the scheduler had looked for and found a
-     * room.
+     * Assumes that the room to be used for the actual schedule is the first room in the list from the request
      *
-     * @param request The schedule request and components to process.
-     * @param result The schedule for the newly created schedule components.
-     * @param callContext The context.
-     * @param roomService A RoomService implementation.
+     * @param request
      * @return
      */
-    public static ScheduleInfo requestToSchedule(ScheduleRequestInfo request, ScheduleInfo result, RoomService roomService, ContextInfo callContext) {
+    public static ScheduleInfo requestToSchedule(ScheduleRequestInfo request,ScheduleInfo result) {
         result.setStateKey(SchedulingServiceConstants.SCHEDULE_STATE_ACTIVE);
         result.setTypeKey(SchedulingServiceConstants.SCHEDULE_TYPE_SCHEDULE);
         result.setScheduleComponents(new ArrayList<ScheduleComponentInfo>(request.getScheduleRequestComponents().size()));
 
         for (ScheduleRequestComponentInfo reqComp : request.getScheduleRequestComponents()) {
-            boolean isTBA =  reqComp.getIsTBA();
-            boolean hasBuildingIds = ! reqComp.getBuildingIds().isEmpty();
-            boolean hasRoomIds =  ! reqComp.getRoomIds().isEmpty();
-
             ScheduleComponentInfo compInfo = new ScheduleComponentInfo();
-            compInfo.setIsTBA(isTBA);
+            compInfo.setIsTBA(reqComp.getIsTBA());
 
-            if (! isTBA) {
-                String defaultRoomId = "d08416cf-c7e5-48c4-b6f9-8e0c9d3dddd1";
-                //  No building, no room ... Just use the default room id for the schedule component.
-                if ( ! hasBuildingIds && ! hasRoomIds) {
-                     compInfo.setRoomId(defaultRoomId);
-                } else {
-                    //  Has a building but no room, look for a room in the building.
-                    if (hasBuildingIds && ! hasRoomIds) {
-                        String buildingId = reqComp.getBuildingIds().get(0);
-                        List<String> rooms = Collections.emptyList();
-                        try {
-                            rooms = roomService.getRoomIdsByBuilding(buildingId, callContext);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Query to room service failed.", e);
-                        }
-                        //  Grab the first room.
-                        if ( ! rooms.isEmpty()) {
-                            compInfo.setRoomId(rooms.get(0));
-                        } else {
-                            // If no rooms are defined then just use the default.
-                            compInfo.setRoomId(defaultRoomId);
-                        }
-                    } else {
-                        //  No building Ids, but room Ids exist. For RDLs that were created within the app this shouldn't
-                        //  happen, but some ref data RDLs only provide a room id. Strictly speaking the data isn't correct,
-                        //  but since it is sufficient to create the ADL just continue.
-                        compInfo.setRoomId(reqComp.getRoomIds().get(0));
-                    }
-                }
-            } else {
-                //  If this is a TBA request then just copy the RDL params to the ADL.
-                if (hasRoomIds) {
-                    compInfo.setRoomId(reqComp.getRoomIds().get(0));
-                }
+            // grabbing the first room in the list
+            if(!reqComp.getRoomIds().isEmpty()){
+                compInfo.setRoomId(reqComp.getRoomIds().get(0));
             }
-            //  Timeslot is currently required so assume present.
             compInfo.setTimeSlotIds(reqComp.getTimeSlotIds());
+
             result.getScheduleComponents().add(compInfo);
         }
+
         return result;
     }
 
@@ -252,7 +205,7 @@ public class SchedulingServiceUtil {
             requestComponentInfo.getRoomIds().add(schedComp.getRoomId());
 
             // retrieve the room to find the building id
-            if (schedComp.getRoomId() != null) {
+            if(schedComp.getRoomId() != null) {
                 RoomInfo room = roomService.getRoom(schedComp.getRoomId(), callContext);
                 requestComponentInfo.getBuildingIds().add(room.getBuildingId());
 
@@ -274,22 +227,42 @@ public class SchedulingServiceUtil {
     }
 
     /**
-     * Copies the original request into a new one, but nulls out IDs, and replaces the SRS id with the
-     * one passed in
-     * @param origRequest The request to be copied
-     * @param srsId The new srs ID to set this to
-     * @return A copy of the SRI minus the IDs
+     * Convenience method to translate an request Schedule into a ScheduleReqeust
+     * Used during CO/AO copy to make requests in the target that are copies from the request schedule of the source
+     *
+     * @param sourceRequest
+     * @param callContext
+     * @return
      */
-    public static ScheduleRequestInfo copyScheduleRequest(ScheduleRequestInfo origRequest, String srsId) {
-        ScheduleRequestInfo copy = new ScheduleRequestInfo(origRequest);
-        copy.setStateKey(SchedulingServiceConstants.SCHEDULE_REQUEST_STATE_CREATED); // Reset the state
-        copy.setScheduleRequestSetId(srsId);
-        copy.setId(null); // Null out the IDs
-        if (copy.getScheduleRequestComponents() != null) {
-            for (ScheduleRequestComponentInfo comp: copy.getScheduleRequestComponents()) {
-                comp.setId(null); // Null these out too
+    public static ScheduleRequestInfo scheduleRequestToScheduleRequest(ScheduleRequestInfo sourceRequest, ContextInfo callContext)  {
+        ScheduleRequestInfo result = new ScheduleRequestInfo();
+        result.setStateKey(SchedulingServiceConstants.SCHEDULE_REQUEST_STATE_CREATED);
+        result.setTypeKey(SchedulingServiceConstants.SCHEDULE_REQUEST_TYPE_SCHEDULE_REQUEST);
+
+        for (ScheduleRequestComponentInfo  sourceSchedComp : sourceRequest.getScheduleRequestComponents()) {
+            ScheduleRequestComponentInfo requestComponentInfo = new ScheduleRequestComponentInfo();
+            requestComponentInfo.setIsTBA(sourceSchedComp.getIsTBA());
+            requestComponentInfo.setTimeSlotIds(sourceSchedComp.getTimeSlotIds());
+
+            for(String id : sourceSchedComp.getRoomIds()) {
+                requestComponentInfo.getRoomIds().add(id);
             }
+            // retrieve the room to find the building id
+            for(String id : sourceSchedComp.getBuildingIds()) {
+                requestComponentInfo.getBuildingIds().add(id);
+            }
+
+            for(String id : sourceSchedComp.getCampusIds()) {
+                requestComponentInfo.getCampusIds().add(id);
+            }
+
+            for(String id : sourceSchedComp.getOrgIds()) {
+                requestComponentInfo.getOrgIds().add(id);
+            }
+
+            result.getScheduleRequestComponents().add(requestComponentInfo);
         }
-        return copy;
+
+        return result;
     }
 }
