@@ -369,19 +369,19 @@ public class SchedulingServiceValidationDecorator extends SchedulingServiceDecor
      */
     protected void validateAOTimeSlotCreateAndUpdate(TimeSlotInfo timeSlotInfo) throws DataValidationErrorException{
 
-        if (StringUtils.startsWith(timeSlotInfo.getTypeKey(),SchedulingServiceConstants.TIME_SLOT_TYPE_ACTIVITY_OFFERING_STANDARD) ||
+        if (SchedulingServiceConstants.TIME_SLOT_ACTIVITY_OFFERING_STANDARD_TYPES.contains(timeSlotInfo.getTypeKey()) ||
             StringUtils.equals(timeSlotInfo.getTypeKey(), SchedulingServiceConstants.TIME_SLOT_TYPE_ACTIVITY_OFFERING_ADHOC)){
 
             if (timeSlotInfo.getStartTime() == null || timeSlotInfo.getStartTime().getMilliSeconds() == null){
-                throw new DataValidationErrorException("Start Time should not be empty for standard and Adhoc timeslots");
+                throw new DataValidationErrorException("Start Time should not be empty for standard and ad hoc time slots");
             }
 
             if (timeSlotInfo.getEndTime() == null || timeSlotInfo.getEndTime().getMilliSeconds() == null){
-                throw new DataValidationErrorException("End Time should not be empty for standard timeslots");
+                throw new DataValidationErrorException("End Time should not be empty for standard time slots");
             }
 
             if (timeSlotInfo.getEndTime() == null || timeSlotInfo.getEndTime().getMilliSeconds() == null){
-                throw new DataValidationErrorException("End Time should not be empty for standard timeslots");
+                throw new DataValidationErrorException("End Time should not be empty for standard time slots");
             }
 
             if (timeSlotInfo.getStartTime().getMilliSeconds() > timeSlotInfo.getEndTime().getMilliSeconds()){
@@ -389,7 +389,7 @@ public class SchedulingServiceValidationDecorator extends SchedulingServiceDecor
             }
 
             if (timeSlotInfo.getWeekdays() == null || timeSlotInfo.getWeekdays().isEmpty()){
-                throw new DataValidationErrorException("Days should not be empty for standard and Adhoc timeslots");
+                throw new DataValidationErrorException("Days should not be empty for standard and ad hoc time slots");
             }
         } else if (StringUtils.equals(timeSlotInfo.getTypeKey(), SchedulingServiceConstants.TIME_SLOT_TYPE_ACTIVITY_OFFERING_TBA)){
             /**
@@ -398,7 +398,7 @@ public class SchedulingServiceValidationDecorator extends SchedulingServiceDecor
             if (timeSlotInfo.getStartTime() != null && timeSlotInfo.getStartTime().getMilliSeconds() != null &&
                 timeSlotInfo.getEndTime() != null && timeSlotInfo.getEndTime().getMilliSeconds() != null &&
                 timeSlotInfo.getWeekdays() != null && !timeSlotInfo.getWeekdays().isEmpty()){
-                throw new DataValidationErrorException("For TBA timeslot, all the fields are not required.");
+                throw new DataValidationErrorException("For the TBA Time slot, at least one of the required fields is left unspecified.");
             }
         }
     }
