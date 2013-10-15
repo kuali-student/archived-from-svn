@@ -35,6 +35,7 @@ import org.kuali.rice.krms.api.repository.reference.ReferenceObjectBinding;
 import org.kuali.student.common.uif.util.GrowlIcon;
 import org.kuali.student.common.uif.util.KSUifUtils;
 import org.kuali.student.common.util.KSCollectionUtils;
+import org.kuali.student.enrollment.class2.courseoffering.dto.ExamOfferingClusterWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingClusterWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
 import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingContextBar;
@@ -2294,30 +2295,50 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
             DoesNotExistException {
 
         FormatOfferingInfo fo = theForm.getFoId2aoTypeMap().get(eoRelation.getFormatOfferingId());
-        if(fo.getFinalExamLevelTypeKey() == null){
-            return;
+        if (fo.getFinalExamLevelTypeKey() != null) {
+            TypeInfo type = CourseOfferingManagementUtil.getTypeService().getType(fo.getFinalExamLevelTypeKey(), ContextUtils.createDefaultContextInfo());
+            examOfferingWrapper.setTypeName(type.getName());
         }
-        TypeInfo type = CourseOfferingManagementUtil.getTypeService().getType(fo.getFinalExamLevelTypeKey(), ContextUtils.createDefaultContextInfo());
-        examOfferingWrapper.setTypeName(type.getName());
 
         for (ActivityOfferingClusterWrapper aoClusterWrapper : theForm.getClusterResultList()) {
             for (ActivityOfferingWrapper wrapper : aoClusterWrapper.getAoWrapperList()) {
-                if(eoRelation.getActivityOfferingIds().contains(wrapper.getId())){
+                if (eoRelation.getActivityOfferingIds().contains(wrapper.getId())) {
+
+                    ExamOfferingClusterWrapper eoClusterWrapper = null;
+                    if (ExamOfferingServiceConstants.EXAM_OFFERING_CANCELED_STATE_KEY.equals(examOfferingWrapper.getEoInfo().getStateKey())) {
+                        eoClusterWrapper = getExamOfferingClusterWrapper(aoClusterWrapper, theForm.getEoCancelClusterList());
+                    } else {
+                        eoClusterWrapper = getExamOfferingClusterWrapper(aoClusterWrapper, theForm.getEoClusterResultList());
+                    }
 
                     examOfferingWrapper.setAoInfo(wrapper.getAoInfo());
                     examOfferingWrapper.setActivityCode(wrapper.getActivityCode());
-
-                    if (ExamOfferingServiceConstants.EXAM_OFFERING_CANCELED_STATE_KEY.equals(examOfferingWrapper.getEoInfo().getStateKey())) {
-                        aoClusterWrapper.getEoCancelledList().add(examOfferingWrapper);
-                    } else {
-                        aoClusterWrapper.getEoWrapperList().add(examOfferingWrapper);
-                    }
+                    eoClusterWrapper.getEoWrapperList().add(examOfferingWrapper);
 
                     return;
                 }
             }
+
         }
     }
+
+    private ExamOfferingClusterWrapper getExamOfferingClusterWrapper(ActivityOfferingClusterWrapper aoClusterWrapper, List<ExamOfferingClusterWrapper> wrapperList) {
+
+        for (ExamOfferingClusterWrapper eoClusterWrap : wrapperList) {
+            if (eoClusterWrap.getActivityOfferingClusterId().equals(aoClusterWrapper.getActivityOfferingClusterId())) {
+                return eoClusterWrap;
+            }
+        }
+
+        ExamOfferingClusterWrapper eoClusterWrapper = new ExamOfferingClusterWrapper();
+        eoClusterWrapper.setActivityOfferingClusterId(aoClusterWrapper.getActivityOfferingClusterId());
+        eoClusterWrapper.setFormatNameForDisplay(aoClusterWrapper.getFormatNameForDisplay());
+        eoClusterWrapper.setClusterNameForDisplay(aoClusterWrapper.getClusterNameForDisplay());
+        wrapperList.add(eoClusterWrapper);
+
+        return eoClusterWrapper;
+    }
+
 
     private ExamOfferingWrapper createWrapperFromExamOffering(ExamOfferingInfo examOfferingInfo) throws Exception {
         ExamOfferingWrapper eoWrapper = new ExamOfferingWrapper();

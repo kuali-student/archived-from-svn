@@ -21,17 +21,15 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.krad.maintenance.MaintenanceDocument;
 import org.kuali.rice.krms.api.repository.agenda.AgendaDefinition;
 import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
-import org.kuali.rice.krms.api.repository.context.ContextDefinition;
 import org.kuali.rice.krms.api.repository.reference.ReferenceObjectBinding;
 import org.kuali.rice.krms.api.repository.rule.RuleDefinition;
 import org.kuali.rice.krms.dto.ActionEditor;
 import org.kuali.rice.krms.dto.AgendaEditor;
 import org.kuali.rice.krms.dto.AgendaTypeInfo;
 import org.kuali.rice.krms.dto.RuleEditor;
-import org.kuali.rice.krms.dto.RuleManagementWrapper;
 import org.kuali.rice.krms.dto.RuleTypeInfo;
 import org.kuali.rice.krms.service.impl.RuleEditorMaintainableImpl;
-import org.kuali.student.common.util.KSCollectionUtils;
+import org.kuali.rice.krms.util.AlphaIterator;
 import org.kuali.student.enrollment.class1.krms.dto.FEAgendaEditor;
 import org.kuali.student.enrollment.class1.krms.dto.FERuleEditor;
 import org.kuali.student.enrollment.class1.krms.dto.FERuleManagementWrapper;
@@ -66,6 +64,8 @@ public class FERuleEditorMaintainableImpl extends RuleEditorMaintainableImpl {
 
     private String usageId;
     private String rdlActionTypeId;
+
+    private AlphaIterator alphaIterator = new AlphaIterator(StringUtils.EMPTY);
 
     @Override
     public Object retrieveObjectForEditOrCopy(MaintenanceDocument document, Map<String, String> dataObjectKeys) {
@@ -176,9 +176,10 @@ public class FERuleEditorMaintainableImpl extends RuleEditorMaintainableImpl {
                     if (feAgenda.getRules() != null) {
                         for (RuleEditor rule : feAgenda.getRules()) {
                            if (rule.getTypeId().equals(ruleType.getId())){
-                            ruleEditor = rule;
-                            ruleEditor.setRuleTypeInfo(ruleType);
-                            rules.add(ruleEditor);
+                                ruleEditor = rule;
+                                ruleEditor.setRuleTypeInfo(ruleType);
+                                ruleEditor.setKey((String) alphaIterator.next());
+                                rules.add(ruleEditor);
                            }
                         }
                         feAgenda.setRules(rules);
@@ -264,7 +265,7 @@ public class FERuleEditorMaintainableImpl extends RuleEditorMaintainableImpl {
     @Override
     public void saveDataObject() {
         FERuleManagementWrapper ruleWrapper = (FERuleManagementWrapper) getDataObject();
-        if(ruleWrapper.getTermToUse()==null){
+        if(ruleWrapper.getTermToUse().equals("na")){
             super.saveDataObject();
         } else {
             // delete current agenda associated with this type.
@@ -325,27 +326,14 @@ public class FERuleEditorMaintainableImpl extends RuleEditorMaintainableImpl {
         }
 
         // Clear the first item and update.
-        AgendaItemDefinition firstItem = this.getRuleManagementService().getAgendaItem(agenda.getFirstItemId());
-        AgendaItemDefinition.Builder firstItemBuilder = AgendaItemDefinition.Builder.create(agenda.getFirstItemId(), agenda.getId());
-        firstItemBuilder.setRule(null);
-        firstItemBuilder.setRuleId(null);
-        firstItemBuilder.setWhenFalse(null);
-        firstItemBuilder.setWhenFalseId(null);
-        firstItemBuilder.setVersionNumber(firstItem.getVersionNumber());
-        this.getRuleManagementService().updateAgendaItem(firstItemBuilder.build());
-
-        //Delete current agenda items to rebuild the tree.
-        if (firstItem.getWhenFalse() != null) {
-            this.deleteAgendaItems(firstItem.getWhenFalse());
-        }
+        AgendaItemDefinition firstItem = manageFirstItem(agenda);
 
         //Delete rules
         for (RuleEditor deletedRule : agenda.getDeletedRules()) {
             this.getRuleManagementService().deleteRule(deletedRule.getId());
         }
 
-        AgendaItemDefinition rootItem = this.getRuleManagementService().getAgendaItem(agenda.getFirstItemId());
-        AgendaItemDefinition.Builder rootItemBuilder = AgendaItemDefinition.Builder.create(rootItem);
+        AgendaItemDefinition.Builder rootItemBuilder = AgendaItemDefinition.Builder.create(firstItem);
         AgendaItemDefinition.Builder itemBuilder = rootItemBuilder;
         while (rules.peek()!=null) {
             itemBuilder.setRule(this.finRule(rules.poll(), namePrefix, nameSpace));
@@ -427,6 +415,10 @@ public class FERuleEditorMaintainableImpl extends RuleEditorMaintainableImpl {
         }
         actionEditor.setAttributes(attributes);
 
+    }
+
+    public String getNextRuleKey(){
+        return (String) alphaIterator.next();
     }
 
     /**

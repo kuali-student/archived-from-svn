@@ -22,6 +22,8 @@ import org.kuali.student.enrollment.class2.courseoffering.service.CourseOffering
 import org.kuali.student.enrollment.class2.courseoffering.service.facade.CourseOfferingServiceFacade;
 import org.kuali.student.enrollment.class2.courseoffering.service.facade.CSRServiceFacade;
 import org.kuali.student.enrollment.class2.courseoffering.service.impl.CourseInfoByTermLookupableImpl;
+import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysService;
+import org.kuali.student.enrollment.class2.courseoffering.service.impl.DefaultOptionKeysServiceImpl;
 import org.kuali.student.enrollment.class2.coursewaitlist.service.facade.CourseWaitListServiceFacade;
 import org.kuali.student.enrollment.class2.coursewaitlist.service.facade.CourseWaitListServiceFacadeConstants;
 import org.kuali.student.enrollment.class2.examoffering.service.facade.ExamOfferingServiceFacade;
@@ -38,6 +40,7 @@ import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.DtoConstants;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
@@ -109,6 +112,7 @@ public class CourseOfferingManagementUtil {
     private static SchedulingService schedulingService;
     private static PopulationService populationService;
     private static CourseWaitListService courseWaitListService;
+    private static DefaultOptionKeysService defaultOptionKeysService;
 
     public static CourseOfferingManagementViewHelperService getViewHelperService(CourseOfferingManagementForm theForm) {
 
@@ -265,6 +269,13 @@ public class CourseOfferingManagementUtil {
         return courseWaitListService;
     }
 
+    public static DefaultOptionKeysService getDefaultOptionKeysService() {
+        if (defaultOptionKeysService == null) {
+            defaultOptionKeysService = new DefaultOptionKeysServiceImpl();
+        }
+        return defaultOptionKeysService;
+    }
+
     public static boolean checkEditViewAuthz(CourseOfferingManagementForm theForm) {
         Person user = GlobalVariables.getUserSession().getPerson();
         return theForm.getView().getAuthorizer().canEditView(theForm.getView(), theForm, user);
@@ -273,6 +284,11 @@ public class CourseOfferingManagementUtil {
     public static void prepareManageAOsModelAndView(CourseOfferingManagementForm form, CourseOfferingListSectionWrapper selectedCO) throws Exception {
 
         CourseOfferingWrapper currentCOWrapper = new CourseOfferingWrapper(selectedCO.isCrossListed(),selectedCO.getCourseOfferingCode(),selectedCO.getCourseOfferingDesc(),selectedCO.getAlternateCOCodes(),selectedCO.getCourseOfferingId());
+        try{
+            currentCOWrapper.setExamPeriodId(getExamOfferingServiceFacade().getExamPeriodId(form.getTermInfo().getId(), ContextUtils.createDefaultContextInfo()));
+        }catch (DoesNotExistException e){
+
+        }
         form.setSubjectCode(selectedCO.getSubjectArea());
         prepare_AOs_RGs_AOCs_Lists(form, currentCOWrapper);
     }

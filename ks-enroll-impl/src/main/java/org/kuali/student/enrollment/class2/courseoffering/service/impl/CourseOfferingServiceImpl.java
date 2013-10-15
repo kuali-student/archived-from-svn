@@ -1193,7 +1193,18 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
 
         if (luiIds != null && !luiIds.isEmpty()) {
             List<LuiInfo> luiInfos = getLuiService().getLuisByIds(luiIds, contextInfo);
-            results = ActivityOfferingTransformer.luis2AOs(luiInfos, lprService, schedulingService, searchService, contextInfo);
+            for (LuiInfo lui : luiInfos) {
+
+                ActivityOfferingInfo ao = new ActivityOfferingInfo();
+                ActivityOfferingTransformer.lui2Activity(ao, lui, lprService, schedulingService, searchService, contextInfo);
+
+                LuiInfo foLui = this.findFormatOfferingLui(lui.getId(), contextInfo);
+                LuiInfo coLui = this.findCourseOfferingLui(foLui.getId(), contextInfo);
+
+                populateActivityOfferingRelationships(ao, coLui, foLui, contextInfo);
+
+                results.add(ao);
+            }
         }
 
         return results;
@@ -1318,6 +1329,10 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
         // Get Time Slot types which are related to the ATP put them in an array. In most cases there should only be one.
         List<TypeTypeRelationInfo> ttRelations =
             typeService.getTypeTypeRelationsByOwnerAndType(atpTypeKey, TypeServiceConstants.TYPE_TYPE_RELATION_ATP2TIMESLOT_TYPE_KEY, contextInfo);
+
+        if (ttRelations.isEmpty()) {
+            throw new OperationFailedException(String.format("Unable to find time slots because no time slot types are associated with ATP type %s.", atpTypeKey));
+        }
 
         String[] timeSlotTypeKeys = new String[ttRelations.size()];
         short i = 0;
@@ -1549,18 +1564,18 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
 
             for (SearchResultRowInfo row: rows) {
                 List<SearchResultCellInfo> cells = row.getCells();
-                String key = null;
-                String code = null;
+                String aoId = null;
+                String aoCode = null;
                 for (SearchResultCellInfo cell: cells) {
                     if (cell.getKey().equals(ActivityOfferingSearchServiceImpl.SearchResultColumns.AO_ID)) {
-                        key = cell.getValue();
+                        aoId = cell.getValue();
                     } else if (cell.getKey().equals(ActivityOfferingSearchServiceImpl.SearchResultColumns.AO_CODE)) {
-                        code = cell.getValue();
+                        aoCode = cell.getValue();
                     } else {
-                        throw new OperationFailedException("Query for AO id and code was missing a column.");
+                        throw new OperationFailedException("Query for AO id and code returned too many columns.");
                     }
                 }
-                activityCodes.put(key, code);
+                activityCodes.put(aoId, aoCode);
             }
         }
         return  activityCodes;

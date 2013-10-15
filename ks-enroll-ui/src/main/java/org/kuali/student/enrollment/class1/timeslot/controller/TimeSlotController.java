@@ -13,9 +13,11 @@ import org.kuali.student.enrollment.class1.timeslot.dto.TimeSlotWrapper;
 import org.kuali.student.enrollment.class1.timeslot.form.TimeSlotForm;
 import org.kuali.student.enrollment.class1.timeslot.service.TimeSlotViewHelperService;
 import org.kuali.student.enrollment.class1.timeslot.util.TimeSlotConstants;
+import org.kuali.student.enrollment.class1.util.WeekDaysDtoAndUIConversions;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -109,6 +111,13 @@ public class TimeSlotController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=createTimeSlot")
     public ModelAndView createTimeSlot(@ModelAttribute(MODEL_ATTRIBUTE_FORM) TimeSlotForm form) throws Exception{
 
+        form.setEditInProcess(false);
+
+        validateTimeSlot(form);
+        if (GlobalVariables.getMessageMap().hasErrors()){
+            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        }
+
         boolean isUnique = getViewHelperService(form).isUniqueTimeSlot(form);
 
         if (!isUnique){
@@ -121,7 +130,9 @@ public class TimeSlotController extends UifControllerBase {
 
         getViewHelperService(form).createTimeSlot(form);
 
-        KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS,TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_ADD_SUCCESS);
+        if (!GlobalVariables.getMessageMap().hasErrors()){
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS,TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_ADD_SUCCESS);
+        }
 
         return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
@@ -129,8 +140,15 @@ public class TimeSlotController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=editTimeSlot")
     public ModelAndView editTimeSlot(@ModelAttribute(MODEL_ATTRIBUTE_FORM) TimeSlotForm form) throws Exception{
 
+        form.setEditInProcess(true);
+
         String selectedPathIndex = form.getActionParamaterValue(UifParameters.SELECTED_LINE_INDEX);
         TimeSlotWrapper tsWrapper = form.getTimeSlotResults().get(NumberUtils.toInt(selectedPathIndex));
+
+        validateTimeSlot(form);
+        if (GlobalVariables.getMessageMap().hasErrors()){
+            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        }
 
         boolean isUnique = getViewHelperService(form).isUniqueTimeSlot(form,tsWrapper.getTimeSlotInfo());
 
@@ -145,16 +163,44 @@ public class TimeSlotController extends UifControllerBase {
         boolean isInUse = getViewHelperService(form).isTimeSlotInUse(tsWrapper.getTimeSlotInfo());
 
         if (isInUse){
-            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM,
-                    "Time slot " + tsWrapper.getTimeSlotInfo().getName() + " is already associated with delivery logistics, so cannot be changed.");
+            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_IN_USE, tsWrapper.getTimeSlotInfo().getName());
             return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         getViewHelperService(form).updateTimeSlot(form,tsWrapper);
 
-        KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS,TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_EDIT_SUCCESS);
+        if (!GlobalVariables.getMessageMap().hasErrors()){
+            KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS,TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_EDIT_SUCCESS);
+        }
 
+        form.setEditInProcess(false);
         return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+    }
+
+    private void validateTimeSlot(TimeSlotForm form){
+
+        if (!WeekDaysDtoAndUIConversions.isValidDays(form.getAddOrEditDays())){
+            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Invalid days");
+        }
+
+        long startTime = 0;
+        try{
+            startTime = DateFormatters.HOUR_MINUTE_AM_PM_TIME_FORMATTER.parse(form.getAddOrEditStartTime() + " " + form.getAddOrEditStartTimeAmPm()).getTime();
+        } catch (Exception e) {
+            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Invalid Start time");
+        }
+
+        long endTime = 0;
+        try{
+            endTime = DateFormatters.HOUR_MINUTE_AM_PM_TIME_FORMATTER.parse(form.getAddOrEditEndTime() + " " + form.getAddOrEditEndTimeAmPm()).getTime();
+        } catch (Exception e) {
+            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Invalid End time");
+        }
+
+        if ((startTime != 0 && endTime != 0) && startTime > endTime){
+            GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "Start time should be less than end time");
+        }
+
     }
 
     private TimeSlotViewHelperService getViewHelperService(UifFormBase form) {
@@ -169,23 +215,10 @@ public class TimeSlotController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=deleteTimeSlots")
-    public ModelAndView deleteTimeSlots(@ModelAttribute(MODEL_ATTRIBUTE_FORM) TimeSlotForm form, @SuppressWarnings("unused") BindingResult result,
-                                        @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
-        String dialogName = TimeSlotConstants.ConfirmDialogs.DELETE_TIMESLOTS;
+    public ModelAndView deleteTimeSlots(@ModelAttribute(MODEL_ATTRIBUTE_FORM) TimeSlotForm form) throws Exception {
 
-        if (!hasDialogBeenAnswered(dialogName, form)) {
-            return showDialog(dialogName, form, request, response);
-        }
+        getViewHelperService(form).deleteTimeSlots(form);
 
-        boolean dialogAnswer = getBooleanDialogResponse(dialogName, form, request, response);
-        form.getDialogManager().resetDialogStatus(dialogName);
-
-        if (dialogAnswer) {
-
-            // delete the timeslots
-            getViewHelperService(form).deleteTimeSlots(form);
-
-        }
         return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
 }
