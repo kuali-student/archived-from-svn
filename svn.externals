@@ -16,7 +16,7 @@
 # the external paths for the changes to take effect.
 #
 
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/CM-KRAD-rice-2.3.0-2
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/CM-KRAD-rice-2.3.0-2
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/CM-KRAD-rice-2.3.0-2
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/CM-KRAD-rice-2.3.0-2
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/CM-KRAD-rice-2.3.0
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/CM-KRAD-rice-2.3.0
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/CM-KRAD-rice-2.3.0
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/CM-KRAD-rice-2.3.0
