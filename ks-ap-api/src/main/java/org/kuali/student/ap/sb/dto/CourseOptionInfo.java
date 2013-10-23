@@ -43,6 +43,7 @@ public class CourseOptionInfo extends ScheduleBuildOptionInfo implements CourseO
 	}
 
 	public CourseOptionInfo(CourseOption courseOption) {
+		super(courseOption);
 		this.courseId = courseOption.getCourseId();
 		this.courseCode = courseOption.getCourseCode();
 		this.courseTitle = courseOption.getCourseTitle();
@@ -112,7 +113,7 @@ public class CourseOptionInfo extends ScheduleBuildOptionInfo implements CourseO
 		int c = 0;
 		if (activityOptions != null)
 			for (ActivityOption ao : activityOptions)
-				if (!ao.isClosed())
+				if (ao.isLockedIn() || !ao.isClosed())
 					c++;
 		return c;
 	}
@@ -122,7 +123,7 @@ public class CourseOptionInfo extends ScheduleBuildOptionInfo implements CourseO
 		int c = 0;
 		if (activityOptions != null)
 			for (ActivityOption ao : activityOptions)
-				if ((includeClosed || !ao.isClosed()) && ao.isSelected())
+				if ((includeClosed || !ao.isClosed() || ao.isLockedIn()) && ao.isSelected())
 					c++;
 		return c;
 	}

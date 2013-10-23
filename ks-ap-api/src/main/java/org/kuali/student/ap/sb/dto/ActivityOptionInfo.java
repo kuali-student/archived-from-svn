@@ -15,11 +15,14 @@ import org.kuali.student.ap.sb.infc.ClassMeetingTime;
 import org.kuali.student.ap.sb.infc.SecondaryActivityOptions;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ActivityOptionInfo", propOrder = { "parentUniqueId", "courseIndex", "parentIndex",
-		"activityOfferingId", "activityTypeDescription", "courseOfferingCode", "registrationCode",
-		"academicSessionDescr", "activityName", "closed", "openSeats", "totalSeats", "requiresPermission",
-		"primary", "minCredits", "maxCredits", "secondaryOptions", "classMeetingTimes" })
-public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements ActivityOption {
+@XmlType(name = "ActivityOptionInfo", propOrder = { "parentUniqueId",
+		"courseIndex", "parentIndex", "courseId", "activityOfferingId",
+		"activityTypeDescription", "courseOfferingCode", "registrationCode",
+		"academicSessionDescr", "activityName", "courseLockedIn", "closed",
+		"openSeats", "totalSeats", "requiresPermission", "primary",
+		"minCredits", "maxCredits", "secondaryOptions", "classMeetingTimes" })
+public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
+		ActivityOption {
 
 	private static final long serialVersionUID = 2200048680553005339L;
 
@@ -31,6 +34,9 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 
 	@XmlAttribute
 	private int parentIndex;
+
+	@XmlAttribute
+	private String courseId;
 
 	@XmlAttribute
 	private String activityOfferingId;
@@ -49,6 +55,9 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 
 	@XmlAttribute
 	private String activityName;
+
+	@XmlAttribute
+	private boolean courseLockedIn;
 
 	@XmlAttribute
 	private boolean closed;
@@ -85,6 +94,7 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 		parentUniqueId = copy.getParentUniqueId();
 		courseIndex = copy.getCourseIndex();
 		parentIndex = copy.getParentIndex();
+		courseId = copy.getCourseId();
 		activityOfferingId = copy.getActivityOfferingId();
 		activityTypeDescription = copy.getActivityTypeDescription();
 		activityName = copy.getActivityName();
@@ -130,12 +140,30 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 	}
 
 	@Override
+	public String getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
+
+	@Override
 	public String getActivityOfferingId() {
 		return activityOfferingId;
 	}
 
 	public void setActivityOfferingId(String activityOfferingId) {
 		this.activityOfferingId = activityOfferingId;
+	}
+
+	@Override
+	public boolean isCourseLockedIn() {
+		return courseLockedIn;
+	}
+
+	public void setCourseLockedIn(boolean courseLockedIn) {
+		this.courseLockedIn = courseLockedIn;
 	}
 
 	@Override
@@ -248,7 +276,8 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 
 	@Override
 	public List<ClassMeetingTime> getClassMeetingTimes() {
-		return classMeetingTimes == null ? Collections.<ClassMeetingTime> emptyList() : Collections
+		return classMeetingTimes == null ? Collections
+				.<ClassMeetingTime> emptyList() : Collections
 				.<ClassMeetingTime> unmodifiableList(classMeetingTimes);
 	}
 
@@ -277,16 +306,19 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 
 	@Override
 	public List<SecondaryActivityOptions> getSecondaryOptions() {
-		return secondaryOptions == null ? Collections.<SecondaryActivityOptions> emptyList() : Collections
+		return secondaryOptions == null ? Collections
+				.<SecondaryActivityOptions> emptyList() : Collections
 				.<SecondaryActivityOptions> unmodifiableList(secondaryOptions);
 	}
 
-	public void setSecondaryOptions(List<SecondaryActivityOptions> secondaryOptions) {
+	public void setSecondaryOptions(
+			List<SecondaryActivityOptions> secondaryOptions) {
 		if (secondaryOptions != null) {
 			List<SecondaryActivityOptionsInfo> secondaryOpts = new java.util.ArrayList<SecondaryActivityOptionsInfo>(
 					secondaryOptions.size());
 			for (SecondaryActivityOptions secondaryOption : secondaryOptions) {
-				secondaryOpts.add(new SecondaryActivityOptionsInfo(secondaryOption));
+				secondaryOpts.add(new SecondaryActivityOptionsInfo(
+						secondaryOption));
 			}
 			this.secondaryOptions = secondaryOpts;
 		} else {
@@ -296,11 +328,15 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 
 	@Override
 	public String toString() {
-		return "ActivityOptionInfo [activityOfferingId=" + activityOfferingId + ", activityTypeDescription="
-				+ activityTypeDescription + ", closed=" + closed + ", openSeats=" + openSeats + ", totalSeats="
-				+ totalSeats + ", requiresPermission=" + requiresPermission + ", primary=" + primary
-				+ ", secondaryOptions=" + secondaryOptions + ", classMeetingTimes=" + classMeetingTimes
-				+ ", getUniqueId()=" + getUniqueId() + ", isSelected()=" + isSelected() + "]";
+		return "ActivityOptionInfo [activityOfferingId=" + activityOfferingId
+				+ ", activityTypeDescription=" + activityTypeDescription
+				+ ", closed=" + closed + ", openSeats=" + openSeats
+				+ ", totalSeats=" + totalSeats + ", requiresPermission="
+				+ requiresPermission + ", primary=" + primary
+				+ ", secondaryOptions=" + secondaryOptions
+				+ ", classMeetingTimes=" + classMeetingTimes
+				+ ", getUniqueId()=" + getUniqueId() + ", isSelected()="
+				+ isSelected() + "]";
 	}
 
 	@Override
@@ -350,7 +386,10 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements Activ
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((activityOfferingId == null) ? 0 : activityOfferingId.hashCode());
+		result = prime
+				* result
+				+ ((activityOfferingId == null) ? 0 : activityOfferingId
+						.hashCode());
 		return result;
 	}
 

@@ -45,6 +45,13 @@ public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Compar
 	int getParentIndex();
 
 	/**
+	 * Get the course ID.
+	 * 
+	 * @return The course ID.
+	 */
+	String getCourseId();
+
+	/**
 	 * Get the activity offering ID.
 	 * 
 	 * @return The activity offering ID.
@@ -86,6 +93,13 @@ public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Compar
 	 */
 	String getAcademicSessionDescr();
 
+	/**
+	 * Determine if the course is locked in.
+	 * 
+	 * @return True if the course is locked in.
+	 */
+	boolean isCourseLockedIn();
+	
 	/**
 	 * Determine if this option represents a primary activity offering.
 	 * 

@@ -85,7 +85,7 @@ public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 		int c = 0;
 		if (activityOptions != null)
 			for (ActivityOption ao : activityOptions)
-				if (!ao.isClosed())
+				if (ao.isLockedIn() || includeClosed || !ao.isClosed())
 					c++;
 		return c;
 	}
@@ -95,7 +95,7 @@ public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 		int c = 0;
 		if (activityOptions != null)
 			for (ActivityOption ao : activityOptions)
-				if ((includeClosed || !ao.isClosed()) && ao.isSelected())
+				if (ao.isLockedIn() || ((includeClosed || !ao.isClosed()) && ao.isSelected()))
 					c++;
 		return c;
 	}
