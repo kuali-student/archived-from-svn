@@ -28,8 +28,13 @@ public class PossibleScheduleOptionInfo extends ScheduleBuildOptionInfo
 
 	@XmlAttribute
 	private String id;
+
+	@XmlAttribute
+	private String termId;
+
 	@XmlElement
 	private RichTextInfo description;
+
 	@XmlElement
 	private List<ActivityOptionInfo> activityOptions;
 
@@ -52,6 +57,15 @@ public class PossibleScheduleOptionInfo extends ScheduleBuildOptionInfo
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public String getTermId() {
+		return termId;
+	}
+
+	public void setTermId(String termId) {
+		this.termId = termId;
 	}
 
 	@Override
@@ -94,15 +108,17 @@ public class PossibleScheduleOptionInfo extends ScheduleBuildOptionInfo
 						.getCourseOfferingCode()));
 				StringBuilder descr = new StringBuilder();
 				descr.append(ao.getRegistrationCode());
-				BigDecimal minCredits = ao.getMinCredits();
-				if (minCredits != null) {
-					descr.append(" (");
-					descr.append(ao.getMinCredits());
-					if (ao.getMinCredits().compareTo(ao.getMaxCredits()) != 0) {
-						descr.append("-");
-						descr.append(ao.getMaxCredits());
+				if (ao.isPrimary()) {
+					BigDecimal minCredits = ao.getMinCredits();
+					if (minCredits != null) {
+						descr.append(" (");
+						descr.append(ao.getMinCredits());
+						if (ao.getMinCredits().compareTo(ao.getMaxCredits()) != 0) {
+							descr.append("-");
+							descr.append(ao.getMaxCredits());
+						}
+						descr.append(")");
 					}
-					descr.append(")");
 				}
 				Element dd = dl.addElement("dd");
 				dd.addAttribute("class", "ksap-sb-schedule-activity-subtitle");

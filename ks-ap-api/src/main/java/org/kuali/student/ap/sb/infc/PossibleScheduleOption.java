@@ -14,6 +14,12 @@ import org.kuali.student.r2.common.infc.RichText;
 public interface PossibleScheduleOption extends HasId, ScheduleBuildOption {
 	
 	/**
+	 * Get the ID of the term this is a possible schedule option for.
+	 * @return The id of the term 
+	 */
+	String getTermId();
+	
+	/**
 	 * Describe this possible schedule option as HTML.
 	 * 
 	 * <p>

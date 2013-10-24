@@ -18,8 +18,8 @@ import org.kuali.student.ap.sb.infc.SecondaryActivityOptions;
 @XmlType(name = "ActivityOptionInfo", propOrder = { "parentUniqueId",
 		"courseIndex", "parentIndex", "courseId", "activityOfferingId",
 		"activityTypeDescription", "courseOfferingCode", "registrationCode",
-		"academicSessionDescr", "activityName", "courseLockedIn", "closed",
-		"openSeats", "totalSeats", "requiresPermission", "primary",
+		"academicSessionDescr", "activityName", "courseLockedIn", "enrollmentGroup",
+		"closed", "openSeats", "totalSeats", "requiresPermission", "primary",
 		"minCredits", "maxCredits", "secondaryOptions", "classMeetingTimes" })
 public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		ActivityOption {
@@ -58,6 +58,9 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 
 	@XmlAttribute
 	private boolean courseLockedIn;
+
+	@XmlAttribute
+	private boolean enrollmentGroup;
 
 	@XmlAttribute
 	private boolean closed;
@@ -101,6 +104,8 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		courseOfferingCode = copy.getCourseOfferingCode();
 		registrationCode = copy.getRegistrationCode();
 		academicSessionDescr = copy.getAcademicSessionDescr();
+		courseLockedIn = copy.isCourseLockedIn();
+		enrollmentGroup = copy.isEnrollmentGroup();
 		closed = copy.isClosed();
 		openSeats = copy.getOpenSeats();
 		totalSeats = copy.getTotalSeats();
@@ -296,12 +301,11 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 
 	@Override
 	public boolean isEnrollmentGroup() {
-		boolean rv = false;
-		if (secondaryOptions != null)
-			for (SecondaryActivityOptions sao : secondaryOptions)
-				if (!rv && sao.isEnrollmentGroup())
-					rv = true;
-		return rv;
+		return enrollmentGroup;
+	}
+	
+	public void setEnrollmentGroup(boolean enrollmentGroup) {
+		this.enrollmentGroup = enrollmentGroup;
 	}
 
 	@Override
