@@ -3,7 +3,7 @@ ks-api::enrollment_ks-api_branches_CM-KRAD::b729233152816b95abafa0b3a87b59515d56
 # module = ks-core branch Path = enrollment/ks-core/branches/CM-KRAD revision = 47116
 ks-core::enrollment_ks-core_branches_CM-KRAD::f394934c4847dc72f0498ad313dd08484fa49244
 # module = ks-lum branch Path = enrollment/ks-lum/branches/CM-KRAD revision = 47116
-ks-lum::enrollment_ks-lum_branches_CM-KRAD::fba47c2bdbf8525ee0d9dba88ffcfb04bb176a8b
+ks-lum::enrollment_ks-lum_branches_CM-KRAD::0c1eedb98d878d4e10303c5f1557f9a0e3d3d9c9
 # module = ks-deployments branch Path = enrollment/ks-deployments/branches/CM-KRAD revision = 47116
 ks-deployments::enrollment_ks-deployments_branches_CM-KRAD::15172d2af76354aa22d894850c7d15903db57026
 # module = ks-enroll branch Path = enrollment/ks-enroll/branches/CM-2.0 revision = 47116
