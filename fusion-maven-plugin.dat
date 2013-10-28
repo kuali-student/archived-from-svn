@@ -1,8 +1,8 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/CM-KRAD-rice-2.3.0 revision = 58926
+# module = ks-api branch Path = enrollment/ks-api/branches/CM-KRAD-rice-2.3.0 revision = 58943
 ks-api::enrollment_ks-api_branches_CM-KRAD-rice-2.3.0::8f811af4bf82bb66046cd02e488f5ca257e328a1
-# module = ks-core branch Path = enrollment/ks-core/branches/CM-KRAD-rice-2.3.0 revision = 58926
+# module = ks-core branch Path = enrollment/ks-core/branches/CM-KRAD-rice-2.3.0 revision = 58943
 ks-core::enrollment_ks-core_branches_CM-KRAD-rice-2.3.0::c1a14ed1c84f23b2ec1319888758f80d483f3984
-# module = ks-lum branch Path = enrollment/ks-lum/branches/CM-KRAD-rice-2.3.0 revision = 58926
-ks-lum::enrollment_ks-lum_branches_CM-KRAD-rice-2.3.0::c85af7961aca812e1d26d6eb38bf0b06568f19f2
-# module = ks-deployments branch Path = enrollment/ks-deployments/branches/CM-KRAD-rice-2.3.0 revision = 58926
+# module = ks-lum branch Path = enrollment/ks-lum/branches/CM-KRAD-rice-2.3.0 revision = 58943
+ks-lum::enrollment_ks-lum_branches_CM-KRAD-rice-2.3.0::4a13eb2d4b0e946eea477066706ff8e67eacebfd
+# module = ks-deployments branch Path = enrollment/ks-deployments/branches/CM-KRAD-rice-2.3.0 revision = 58943
 ks-deployments::enrollment_ks-deployments_branches_CM-KRAD-rice-2.3.0::078ed5f56de61e865e3fc0471c30d2424e10cd28
