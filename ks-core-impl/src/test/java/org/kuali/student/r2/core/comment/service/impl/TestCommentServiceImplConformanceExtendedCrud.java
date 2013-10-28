@@ -22,7 +22,10 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kuali.student.common.test.util.RichTextTester;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -31,13 +34,20 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.util.RichTextHelper;
 import org.kuali.student.r2.core.comment.dto.CommentInfo;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
-@Transactional
-public abstract class TestCommentServiceImplConformanceExtendedCrud extends TestCommentServiceImplConformanceBaseCrud {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:comment-test-with-map-context.xml"})
+public class TestCommentServiceImplConformanceExtendedCrud extends TestCommentServiceImplConformanceBaseCrud {
 
 
     @Resource
