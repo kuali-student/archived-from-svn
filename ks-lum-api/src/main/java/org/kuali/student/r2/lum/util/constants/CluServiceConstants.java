@@ -42,6 +42,11 @@ public class CluServiceConstants {
     public static final String COURSE_ACTIVITY_WEBDISCUSS_TYPE_KEY = "kuali.lu.type.activity.WebDiscussion";
     public static final String COURSE_ACTIVITY_DIRECTED_TYPE_KEY = "kuali.lu.type.activity.Directed";
     
+    
+    public static final String COURSE_ACTIVITY_EXP_LEARNING_OTHER_TYPE_KEY = "kuali.lu.type.activity.ExperientialLearningOROther";
+    public static final String COURSE_ACTIVITY_HOMEWORK_TYPE_KEY = "kuali.lu.type.activity.Homework";
+    public static final String COURSE_ACTIVITY_SEMINAR_TYPE_KEY =  "kuali.lu.type.activity.Seminar";
+    
     public static final String CLUSET_TYPE_CREDIT_COURSE = "kuali.cluSet.type.CreditCourse";
     public static final String CLUSET_TYPE_PROGRAM = "kuali.cluSet.type.Program";
     public static final String CLUSET_TYPE_TEST = "kuali.cluSet.type.Test";

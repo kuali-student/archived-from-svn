@@ -44,7 +44,6 @@ import org.kuali.student.r2.common.exceptions.ReadOnlyException;
 import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
-import org.kuali.student.r2.core.scheduling.dto.TimeSlotInfo;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -757,7 +756,7 @@ public interface CourseOfferingService
      * @throws OperationFailedException  unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public StatusInfo deleteCourseOfferingCascaded(@WebParam(name = "courseOfferingId") String courseOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteCourseOfferingCascaded(@WebParam(name = "courseOfferingId") String courseOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException, DataValidationErrorException;
 
     /**
      * Validates / Compares a course offering against it's canonical course.
@@ -947,7 +946,7 @@ public interface CourseOfferingService
      * @throws PermissionDeniedException authorization failure
      */
 
-    public StatusInfo deleteFormatOfferingCascaded(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteFormatOfferingCascaded(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException, DataValidationErrorException;
 
 
     /**
@@ -1253,85 +1252,9 @@ public interface CourseOfferingService
      */
     public List<ActivityOfferingInfo> getActivityOfferingsByFormatOfferingWithoutRegGroup(@WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
 
-
-    /**
-     * Retrieves a list of allowed time slots Ids for an activity offering
-     *
-     * @param activityOfferingId identifier for an activity offering
-     * @param contextInfo     Context information containing the principalId and
-     *                        locale information about the caller of service
-     *                        operation
-     * @return a list of TimeSlots allowed for activityOfferingId or an
-     *         empty list if none found
-     * @throws DoesNotExistException     activityOfferingId does not exist
-     * @throws InvalidParameterException invalid contextInfo
-     * @throws MissingParameterException activityOfferingId or contextInfo is
-     *                                   missing or null
-     * @throws OperationFailedException  unable to complete request
-     * @throws PermissionDeniedException an authorization failure occurred
-     */
-    public List<String> getAllowedTimeSlotIdsForActivityOffering(@WebParam(name = "activityOfferingId") String activityOfferingId,
-                                                               @WebParam(name = "contextInfo") ContextInfo contextInfo)
-            throws DoesNotExistException,
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException;
-
-
-    /**
-     * Retrieves a list of allowed time slots for an activity offering
-     *
-     * @param activityOfferingId identifier for an activity offering
-     * @param contextInfo     Context information containing the principalId and
-     *                        locale information about the caller of service
-     *                        operation
-     * @return a list of TimeSlots allowed for activityOfferingId or an
-     *         empty list if none found
-     * @throws DoesNotExistException     activityOfferingId does not exist
-     * @throws InvalidParameterException invalid contextInfo
-     * @throws MissingParameterException activityOfferingId or contextInfo is
-     *                                   missing or null
-     * @throws OperationFailedException  unable to complete request
-     * @throws PermissionDeniedException an authorization failure occurred
-     */
-    public List<TimeSlotInfo> getAllowedTimeSlotsForActivityOffering(@WebParam(name = "activityOfferingId") String activityOfferingId,
-                                                               @WebParam(name = "contextInfo") ContextInfo contextInfo)
-            throws DoesNotExistException,
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException;
-
-    /**
-     * Retrieves a list of allowed time slots for given days, startTime
-     * and for an activity offering
-     *
-     * @param activityOfferingId identifier for an activity offering
-     * @param daysOfWeek      days of the week of interest
-     * @param startTime       start time of interest
-     * @param contextInfo     Context information containing the principalId and
-     *                        locale information about the caller of service
-     *                        operation
-     * @return a list of TimeSlots allowed for activityOfferingId, days,
-     *                        startTime or an empty list if none found
-     * @throws DoesNotExistException     activityOfferingId does not exist
-     * @throws InvalidParameterException invalid daysOfWeek, startTime or contextInfo
-     * @throws MissingParameterException activityOfferingId, daysOfWeek, startTime or contextInfo is
-     *                                   missing or null
-     * @throws OperationFailedException  unable to complete request
-     * @throws PermissionDeniedException an authorization failure occurred
-     */
-    public List<TimeSlotInfo> getAllowedTimeSlotsByDaysAndStartTimeForActivityOffering(@WebParam(name = "activityOfferingId") String activityOfferingId,
-                                                                                       @WebParam(name = "daysOfWeek") List<Integer> daysOfWeek,
-                                                                                       @WebParam(name = "startTime") TimeOfDayInfo startTime,
-                                                                     @WebParam(name = "contextInfo") ContextInfo contextInfo)
-            throws DoesNotExistException,
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException;
-
+    
+    
+    
     /**
      * Searches for ActivityOfferings that meet the given search criteria.
      *
@@ -1518,6 +1441,7 @@ public interface CourseOfferingService
      * seat pools associated with it.
      *
      * @param activityOfferingId the Id of the ActivityOffering to be deleted
+     * @param formatOfferingId
      * @param context            Context information containing the principalId
      *                           and locale information about the caller of
      *                           service operation
@@ -1529,7 +1453,7 @@ public interface CourseOfferingService
      * @throws OperationFailedException  unable to complete request
      * @throws PermissionDeniedException authorization failure
      */
-    public StatusInfo deleteActivityOfferingCascaded(@WebParam(name = "activityOfferingId") String activityOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException;
+    public StatusInfo deleteActivityOfferingCascaded(@WebParam(name = "activityOfferingId") String activityOfferingId, @WebParam(name = "formatOfferingId") String formatOfferingId, @WebParam(name = "context") ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException, DataValidationErrorException;
 
     /**
      * Attempt to schedule a single Activity Offering using the Scheduling
