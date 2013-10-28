@@ -262,6 +262,11 @@
             <version>${ks.lum.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.kuali.student.deployments</groupId>
+            <artifactId>ks-deployment-resources</artifactId>
+            <version>${ks.deployments.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.kuali.student.core</groupId>
             <artifactId>ks-core-impl</artifactId>
             <version>${ks.core.version}</version>
