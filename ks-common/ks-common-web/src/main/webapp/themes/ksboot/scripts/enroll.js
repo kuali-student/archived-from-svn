@@ -196,7 +196,7 @@ function createErrorDiv(message, url, controlId) {
     var div = jQuery('<div id="' + controlId + '_messageDiv" class="uif-clientMessageItems uif-clientErrorDiv" style="display: none;"/>');
     var ul = jQuery("<ul/>");
     var li = jQuery("<li class='uif-errorMessageItem-field'/>");
-    var image = jQuery("<img class='uif-validationImage' src='" + url + "/krad/images/validation/error.png' alt='Error'/>");
+    var image = jQuery("<img class='uif-validationImage' src='" + url + "/themes/ksboot/images/validation/error.png' alt='Error'/>");
     jQuery(image).text(message);
     jQuery(li).append(image);
     jQuery(ul).append(li);
@@ -690,3 +690,10 @@ function resetCheckboxes(containerId) {
 jQuery(document).on("click", ".dataTable input[type=checkbox]", function() {
     jQuery(this).closest('tr').toggleClass('selected-row');
 });
+
+/*
+Skip dirty check
+*/
+ function skipDirtyChecks() {
+ dirtyFormState.skipDirtyChecks=true;
+ }

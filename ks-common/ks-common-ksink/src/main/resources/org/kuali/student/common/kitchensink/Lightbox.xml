@@ -61,25 +61,17 @@
     </bean>
 
 
-    <bean id="KS-KitchenSink-Lightbox-DialogButtonConfirm" parent="Uif-VerticalBoxSection">
+    <bean id="KS-KitchenSink-Lightbox-DialogButtonConfirm"
+          parent="Uif-VerticalBoxSection"
+          p:additionalCssClasses="ks-uif-lightbox-form">
         <property name="hidden" value="true"/>
         <property name="header.render" value="false"/>
         <property name="style" value="width:300px;"/>
-        <property name="cssClasses">
-            <list merge="true">
-                <value>ks-uif-lightbox-form</value>
-            </list>
-        </property>
         <property name="items">
             <list>
                 <!-- header - horizontal box subsection? -->
-                <bean parent="Uif-HorizontalBoxGroup">
-                    <property name="cssClasses">
-                        <list merge="true">
-                            <value>clearfix</value>
-                            <value>ks-uif-lightbox-form-header</value>
-                        </list>
-                    </property>
+                <bean parent="Uif-HorizontalBoxGroup"
+                      p:additionalCssClasses="ks-uif-lightbox-form-header,clearfix">
                     <property name="items">
                         <list>
                             <bean parent="Uif-HeaderThree" p:headerText="Header"/>
@@ -87,12 +79,8 @@
                     </property>
                 </bean>
                 <!-- middle scrollpane -->
-                <bean parent="Uif-VerticalBoxGroup">
-                    <property name="cssClasses">
-                        <list merge="true">
-                            <value>ks-uif-lightbox-form-content</value>
-                        </list>
-                    </property>
+                <bean parent="Uif-VerticalBoxGroup"
+                      p:additionalCssClasses="ks-uif-lightbox-form-content">
                     <property name="scrollpane">
                         <bean parent="Uif-Scrollpane">
                             <property name="height" value="150px"/>
@@ -108,13 +96,8 @@
                     </property>
                 </bean>
                 <!-- footer - horizontal box subsection? -->
-                <bean parent="Uif-HorizontalBoxGroup">
-                    <property name="cssClasses">
-                        <list merge="true">
-                            <value>clearfix</value>
-                            <value>ks-uif-lightbox-form-footer</value>
-                        </list>
-                    </property>
+                <bean parent="Uif-HorizontalBoxGroup"
+                      p:additionalCssClasses="ks-uif-lightbox-form-footer,clearfix">
                     <property name="items">
                         <list>
                             <bean parent="Uif-PrimaryActionButton-Small">
@@ -274,7 +257,7 @@
                                 <property name="footerLinks">
                                     <map>
                                         <entry key="UifGroupDefinitions.xml (Uif-DialogGroup)"
-                                               value="http://svn.kuali.org/repos/rice/tags/rice-2.3.0/rice-framework/krad-web-framework/src/main/resources/org/kuali/rice/krad/uif/UifGroupDefinitions.xml"/>
+                                               value="http://svn.kuali.org/repos/rice/tags/rice-2.3.2/rice-framework/krad-web-framework/src/main/resources/org/kuali/rice/krad/uif/UifGroupDefinitions.xml"/>
                                     </map>
                                 </property>
                             </bean>
@@ -282,7 +265,7 @@
                                 <property name="footerLinks">
                                     <map>
                                         <entry key="DialogGroup.java"
-                                               value="http://svn.kuali.org/repos/rice/tags/rice-2.3.0/rice-framework/krad-web-framework/src/main/java/org/kuali/rice/krad/uif/container/DialogGroup.java"/>
+                                               value="http://svn.kuali.org/repos/rice/tags/rice-2.3.2/rice-framework/krad-web-framework/src/main/java/org/kuali/rice/krad/uif/container/DialogGroup.java"/>
                                     </map>
                                 </property>
                             </bean>
@@ -290,7 +273,7 @@
                                 <property name="footerLinks">
                                     <map>
                                         <entry key="DialogGroup.html"
-                                               value="http://site.origin.kuali.org/rice/2.3.0/apidocs/org/kuali/rice/krad/uif/container/DialogGroup.html"/>
+                                               value="http://site.origin.kuali.org/rice/2.3.2/apidocs/org/kuali/rice/krad/uif/container/DialogGroup.html"/>
                                     </map>
                                 </property>
                             </bean>
@@ -298,7 +281,7 @@
                                 <property name="footerLinks">
                                     <map>
                                         <entry key="Dialogs"
-                                               value="http://site.kuali.org/rice/2.3.0/reference/html/KRAD_Guide.html#d9198e13040"/>
+                                               value="http://site.kuali.org/rice/2.3.2/reference/html/KRAD_Guide.html#d8791e13526"/>
                                     </map>
                                 </property>
                             </bean>

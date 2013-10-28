@@ -282,6 +282,8 @@ public class RuleEditorMaintainableImpl extends KSMaintainableImpl implements Ru
         for (TypeTypeRelation agendaRelationship : agendaRelationships) {
             AgendaTypeInfo agendaTypeInfo = new AgendaTypeInfo();
             agendaTypeInfo.setId(agendaRelationship.getToTypeId());
+            KrmsTypeDefinition agendaType = this.getKrmsTypeRepositoryService().getTypeById(agendaTypeInfo.getId());
+            agendaTypeInfo.setType(agendaType.getName());
             agendaTypeInfo.setDescription(this.getDescriptionForTypeAndUsage(agendaRelationship.getToTypeId(), descriptionUsageId));
 
             // Get all rule types for each agenda type
@@ -617,7 +619,7 @@ public class RuleEditorMaintainableImpl extends KSMaintainableImpl implements Ru
 
     private TemplateRegistry getTemplateRegistry() {
         if (templateRegistry == null) {
-            templateRegistry = (TemplateRegistry) GlobalResourceLoader.getService(QName.valueOf("templateResolverMockService"));
+            templateRegistry = (TemplateRegistry) GlobalResourceLoader.getService(new QName("http://student.kuali.org/wsdl/templateResolverService", "templateResolverService"));
         }
         return templateRegistry;
     }
