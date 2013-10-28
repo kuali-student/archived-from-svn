@@ -50,6 +50,29 @@
                         <artifactId>${oracle.artifactId}</artifactId>
                         <version>${oracle.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derby</artifactId>
+                        <version>${derby.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <webApp>${project.build.directory}/${project.artifactId}-webapp</webApp>
+                    <webAppConfig>
+                        <contextPath>/ks-rice-standalone-dev</contextPath>
+                        <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+                    </webAppConfig>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>${oracle.artifactId}</artifactId>
+                        <version>${oracle.version}</version>
+                    </dependency>
                 </dependencies>
             </plugin>
             <plugin>
@@ -101,31 +124,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.kuali.student.api</groupId>
-            <artifactId>ks-lum-api</artifactId>
-            <version>${ks.api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.lum</groupId>
-            <artifactId>ks-lum-rice</artifactId>
-            <version>${ks.lum.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.core</groupId>
-            <artifactId>ks-standard-sec</artifactId>
-            <version>${ks.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kuali.student.core</groupId>
-            <artifactId>ks-common-util</artifactId>
-            <version>${ks.core.version}</version>
-        </dependency>
-        <dependency>
             <artifactId>servlet-api</artifactId>
             <groupId>javax.servlet</groupId>
         </dependency>
@@ -137,6 +135,16 @@
             <groupId>org.kuali.student.api</groupId>
             <artifactId>ks-enroll-api</artifactId>
             <version>${ks.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kuali.student.enroll</groupId>
+            <artifactId>ks-enroll-rice</artifactId>
+            <version>${ks.enroll.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kuali.student.core</groupId>
+            <artifactId>ks-standard-sec</artifactId>
+            <version>${ks.core.version}</version>
         </dependency>
     </dependencies>
 </project>
