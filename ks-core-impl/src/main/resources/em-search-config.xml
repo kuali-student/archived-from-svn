@@ -35,6 +35,11 @@
 			<ref bean="enumeration.criteria.context" />
 		</search:searchCriteriaTypeInfo>
 	</search:searchType>
+
+	<search:searchType id="rsmart.enumeration.management.search" parent="enumeration.management.search-parent"/>
+	<search:searchType id="rsmart.enumeration.management.search-parent" abstract="true" parent="enumeration.management.search">
+		<search:name>Get rSmart enumerations</search:name>
+	</search:searchType>
 	
 	<search:searchResultTypeInfo id="enumeration.result.all" parent="enumeration.result.all-parent"/>
 	<search:searchResultTypeInfo id="enumeration.result.all-parent" abstract="true">
