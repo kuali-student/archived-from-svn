@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 The Kuali Foundation 
+ * Copyright 2013 The Kuali Foundation 
  *
  * Licensed under the Educational Community License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the
@@ -49,6 +49,7 @@ public class AtpServiceConstants {
     public static final String ATP_AY_TYPE_KEY = "kuali.atp.type.AY";
     public static final String ATP_FY_TYPE_KEY = "kuali.atp.type.FY";
     // terms
+    public static final String ATP_TERM_ALL_TYPE_KEY = "kuali.atp.season.Any";
     public static final String ATP_TERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term";
     public static final String ATP_SUBTERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term.subterm";
     public static final String ATP_PARENT_TERM_GROUPING_TYPE_KEY = "kuali.atp.type.group.term.parent";
@@ -249,6 +250,9 @@ public class AtpServiceConstants {
     public static final String DURATION_HOURS_TYPE_KEY = "kuali.atp.duration.Hours";
     public static final String DURATION_MINUTES_TYPE_KEY = "kuali.atp.duration.Minutes";
     public static final String DURATION_TBD_TYPE_KEY = "kuali.atp.duration.TBD";
+    public static final String DURATION_DAY_TYPE_KEY = "kuali.atp.duration.Day";
+    public static final String DURATION_QUARTER_TYPE_KEY = "kuali.atp.duration.Quarter";
+    
 
 
     /**

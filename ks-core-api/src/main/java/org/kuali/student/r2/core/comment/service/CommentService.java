@@ -209,6 +209,15 @@ public interface CommentService {
             PermissionDeniedException,
             ReadOnlyException;
 
+    CommentInfo createComment_KRAD(String referenceId, String referenceTypeKey, String commentTypeKey, CommentInfo commentInfo, ContextInfo contextInfo)
+        throws DataValidationErrorException,
+        DoesNotExistException,
+        InvalidParameterException,
+        MissingParameterException,
+        OperationFailedException,
+        PermissionDeniedException,
+        ReadOnlyException;
+
     /**
      * Updates a comment for a reference.
      *
@@ -315,4 +324,12 @@ public interface CommentService {
             InvalidParameterException,
             MissingParameterException,
             OperationFailedException;
+
+    List<ValidationResultInfo> validateComment_KRAD(String validationType,
+                                                    CommentInfo commentInfo,
+                                                    ContextInfo contextInfo)
+        throws DoesNotExistException,
+        InvalidParameterException,
+        MissingParameterException,
+        OperationFailedException;
 }
