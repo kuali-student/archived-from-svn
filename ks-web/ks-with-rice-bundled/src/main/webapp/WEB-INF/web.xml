@@ -3,6 +3,12 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Kuali Student Embedded</display-name>
 
+ <!-- HTML escape for XSS prevention -->
+    <context-param>
+        <param-name>defaultHtmlEscape</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
     <context-param>
       <param-name>environment</param-name>
       <param-value>dev</param-value>
