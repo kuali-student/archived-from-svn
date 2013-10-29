@@ -1,2 +1,2 @@
-<% response.sendRedirect("kr-krad/launch?methodToCall=start&viewId=ksFunctionalHomeView"); %>
+<% response.sendRedirect("kr-krad/launch?viewId=ksFunctionalHomeView&methodToCall=start"); %>
 

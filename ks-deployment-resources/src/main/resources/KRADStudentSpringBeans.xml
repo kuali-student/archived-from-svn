@@ -43,7 +43,7 @@
                 <value>classpath:UifKRADOverrideDefinitions.xml</value>
                 <value>classpath:UifKradExtensionDefinitions.xml</value>
                 <value>classpath:org/kuali/student/rice/kim/KSPersonnelLookupView.xml</value>
-		<value>classpath:UifKSDefinitions.xml</value>
+                <value>classpath:UifKSDefinitions.xml</value>
                 <value>classpath:UifUtils.xml</value>
                 <value>classpath:ks-base-dictionary.xml</value>
                 <value>classpath:ks-ActivityOfferingInfo-dictionary.xml</value>
@@ -80,6 +80,7 @@
                 <value>classpath:org/kuali/rice/student/bo/KualiStudentKimAttributes.xml</value>
 
                 <!-- Home Views -->
+                <value>classpath:org/kuali/student/common/main/KSFunctionalHomeView.xml</value>
                 <value>classpath:org/kuali/student/cm/main/CurriculumHomeView.xml</value> <!-- KSCM-727 Curriculum Management Course -->
 
                 <!-- Krms -->
