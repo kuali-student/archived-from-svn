@@ -7,7 +7,7 @@
 
     <bean id="KS-FunctionalHome-View" parent="KS-Uif-FormView" p:additionalCssClasses="ks-home">
         <property name="id" value="ksFunctionalHomeView"/>
-        <property name="formClass" value="org.kuali.student.enrollment.main.form.LaunchForm"/>
+        <property name="formClass" value="org.kuali.student.cm.main.form.LaunchForm"/>
         <property name="onLoadScript" value="jQuery('#Uif-BreadcrumbWrapper').remove(); jQuery('.ks-unified-header').hide();"/>
 
         <property name="items">
@@ -40,6 +40,7 @@
                         </list>
                     </property>
                 </bean>
+
                 <bean id="KS-StudentHome-CurriculumManagement" parent="KS-Uif-Student-Home-Area" p:onClickScript="window.location.href='@{#ConfigProperties['ks.lum.MainEntryPoint']}';">
                     <property name="items">
                         <list>
@@ -51,6 +52,19 @@
                         </list>
                     </property>
                 </bean>
+
+                <bean id="KS-StudentHome-CurriculumManagementKrad" parent="KS-Uif-Student-Home-Area" p:onClickScript="window.location.href='@{#ConfigProperties['application.url']}/kr-krad/launch?methodToCall=start&amp;viewId=curriculumHomeView';">
+                    <property name="items">
+                        <list>
+                            <bean parent="KS-Uif-Student-Home-Area-Image">
+                                <property name="source" value="@{#ConfigProperties['ks.externalizable.images.url']}/homepage/cm.png"/>
+                            </bean>
+                            <bean parent="KS-Uif-Student-Home-Area-App-Name" p:headerText="Curriculum Management KRAD" />
+                            <bean parent="Uif-Label" p:labelText="Create and Manage Catalog Courses and Programs" p:renderColon="false" />
+                        </list>
+                    </property>
+                </bean>
+
                 <bean id="KS-StudentHome-KSMaintenance" parent="KS-Uif-Student-Home-Area" p:onClickScript="window.location.href='@{#ConfigProperties['application.url']}/portal.do';">
                     <property name="items">
                         <list>
