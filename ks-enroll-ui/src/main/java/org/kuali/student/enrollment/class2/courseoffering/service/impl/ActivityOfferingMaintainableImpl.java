@@ -58,6 +58,7 @@ import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.constants.TypeServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
+import org.kuali.student.r2.core.room.dto.BuildingInfo;
 import org.kuali.student.r2.core.scheduling.constants.SchedulingServiceConstants;
 import org.kuali.student.r2.core.scheduling.dto.ScheduleRequestSetInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
@@ -155,7 +156,7 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
                     activityOfferingWrapper.setCourseWaitListInfo(courseWaitListInfo);
                 } else {
                     HashMap<String, String> aoIdfoIdMap = new HashMap<String, String>();
-                    //  Clean up the delivery logistics newly colocated AOs
+                    //  Clean up the Scheduling Informations newly colocated AOs
                     for (ColocatedActivity activity : activityOfferingWrapper.getColocatedActivities()){
                         //If an activity is newly added in this session for colo, delete it's RDLs and ADLs if exists
                         activity.getActivityOfferingInfo().setIsColocated(activityOfferingWrapper.isColocatedAO());
@@ -1089,5 +1090,12 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
         String endDate = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.format(term.getEndDate());
         formatter.format("%s - %s", startDate, endDate);
         return stringBuilder.toString();
+    }
+
+    /**
+     * A pass-thru to the building info search in the schedule helper.
+     */
+    public List<BuildingInfo> retrieveBuildingInfoByCode(String buildingCode) throws Exception {
+        return getScheduleHelper().retrieveBuildingInfoByCode(buildingCode, false);
     }
 }

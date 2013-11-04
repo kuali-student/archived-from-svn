@@ -99,7 +99,6 @@ import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConsta
 import org.kuali.student.r2.common.util.constants.ExamOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.LprServiceConstants;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
-import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
@@ -137,12 +136,10 @@ import org.kuali.student.r2.lum.course.service.CourseService;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -967,9 +964,9 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                 rgWrapper.setEndTime(aoWrapper.getEndTime());
                 rgWrapper.setWeekDays(aoWrapper.getWeekDays());
 
-                socRGWrapper.setStartTime(aoWrapper.getStartTime());
-                socRGWrapper.setEndTime(aoWrapper.getEndTime());
-                socRGWrapper.setWeekDays(aoWrapper.getWeekDays());
+                socRGWrapper.setStartTime((aoList.get(aoList.size()-1)).getStartTime());
+                socRGWrapper.setEndTime((aoList.get(aoList.size()-1)).getEndTime());
+                socRGWrapper.setWeekDays((aoList.get(aoList.size()-1)).getWeekDays());
 
                 //if there are more than one instructors re-arrange the rows
                 StringBuilder lineBreaksInstructorsSB = new StringBuilder();
@@ -986,11 +983,11 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                 }
                 String lineBreaksInstructors = lineBreaksInstructorsSB.toString();
 
-                //if there are more than one delivery logistics re-arrange the rows
+                //if there are more than one Scheduling Information re-arrange the rows
                 StringBuilder lineBreaksDeliveriesSB = new StringBuilder();
-                if (aoWrapper.getDaysDisplayName() != null && StringUtils.contains(aoWrapper.getDaysDisplayName(), "<br>")) {   //more than one delivery logistics
+                if (aoWrapper.getDaysDisplayName() != null && StringUtils.contains(aoWrapper.getDaysDisplayName(), "<br>")) {   //more than one Scheduling Information
                     String s = aoWrapper.getDaysDisplayName();
-                    for (int k = 0; k < s.length(); k++) {    //add lines according to number of delivery logistics
+                    for (int k = 0; k < s.length(); k++) {    //add lines according to number of Scheduling Information
                         if (s.contains("<br>")) {
                             lineBreaksDeliveriesSB.append("<br/>");
                             s = s.substring(s.indexOf("<br>") + 4);
@@ -1002,7 +999,7 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                 String lineBreaksDeliveries = lineBreaksDeliveriesSB.toString();
 
                 String lineBreaks;
-                //Set different line breaks according to number of instructors and number of delivery logistics (can it be simpler?)
+                //Set different line breaks according to number of instructors and number of Scheduling Information (can it be simpler?)
                 if (lineBreaksInstructors.length() < lineBreaksDeliveries.length()) {
                     lineBreaks = lineBreaksDeliveries;
                     lineBreaksDeliveries = lineBreaksDeliveries.substring(0, lineBreaksDeliveries.length() - lineBreaksInstructors.length());
@@ -1243,7 +1240,7 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                     aoMap.put(aoWrapper.getAoInfo().getId(), aoWrapper);
 
                     // Check if there is a schedule id, if not add it to the list to get RDLs
-                    // Note that since AOs can have multiple delivery logistics and it is possible to have a scheduleId
+                    // Note that since AOs can have multiple Scheduling Information and it is possible to have a scheduleId
                     // in the collection while at the same time having an unprocessed request. However, the POs currently
                     // only want to see requests if there are no schedules.
                     if (aoWrapper.getAoInfo().getScheduleIds() == null || aoWrapper.getAoInfo().getScheduleIds().isEmpty()) {
