@@ -15,8 +15,11 @@
  */
 package org.kuali.rice.krms.dto;
 
+import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.util.tree.Tree;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.rice.krms.dto.AgendaEditor;
+import org.kuali.rice.krms.dto.RuleEditor;
 import org.kuali.rice.krms.tree.node.CompareTreeNode;
 import org.kuali.rice.krms.tree.node.RuleEditorTreeNode;
 import org.kuali.rice.krms.tree.node.TreeNode;
@@ -105,6 +108,9 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getSelectedKey() {
+        if(this.getRuleEditor() == null) {
+            return StringUtils.EMPTY;
+        }
         return this.getRuleEditor().getSelectedKey();
     }
 
@@ -113,6 +119,9 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getCutKey() {
+        if(this.getRuleEditor() == null) {
+            return StringUtils.EMPTY;
+        }
         return this.getRuleEditor().getCutKey();
     }
 
@@ -121,6 +130,9 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getCopyKey() {
+        if(this.getRuleEditor() == null) {
+            return StringUtils.EMPTY;
+        }
         return this.getRuleEditor().getCopyKey();
     }
 
@@ -129,6 +141,9 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public String getLogicArea() {
+        if(this.getRuleEditor() == null) {
+            return StringUtils.EMPTY;
+        }
         return this.getRuleEditor().getLogicArea();
     }
 
