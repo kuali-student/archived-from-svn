@@ -15,9 +15,8 @@
 # You must rerun the svn propset command (shown above) and commit after editing any of
 # the external paths for the changes to take effect.
 #
-
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/2.0.0-Mx
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/trunk
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/trunk
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/trunk
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/trunk
+ks-api  https://svn.kuali.org/repos/student/enrollment/ks-api/branches/optimistic-locking-fix
+ks-core  https://svn.kuali.org/repos/student/enrollment/ks-core/branches/optimistic-locking-fix
+ks-lum  https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/optimistic-locking-fix
+ks-enroll  https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/optimistic-locking-fix
+ks-deployments  https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/optimistic-locking-fix
