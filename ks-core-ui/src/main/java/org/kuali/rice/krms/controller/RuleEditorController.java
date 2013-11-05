@@ -74,7 +74,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //Clear the client state on new edit rule.
         form.getClientStateForSyncing().clear();
 
-        RuleEditor ruleEditor = AgendaUtilities.retrieveSelectedRuleEditor((MaintenanceDocumentForm) form);
+        RuleEditor ruleEditor = this.retrieveSelectedRuleEditor((MaintenanceDocumentForm) form);
         this.getViewHelper(form).refreshInitTrees(ruleEditor);
 
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
@@ -133,7 +133,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //Clear the client state on new edit rule.
         form.getClientStateForSyncing().clear();
 
-        RuleEditor ruleEditor = AgendaUtilities.retrieveSelectedRuleEditor((MaintenanceDocumentForm) form);
+        RuleEditor ruleEditor = this.retrieveSelectedRuleEditor((MaintenanceDocumentForm) form);
 
         this.getViewHelper(form).refreshInitTrees(ruleEditor);
 
@@ -1237,6 +1237,10 @@ public class RuleEditorController extends MaintenanceDocumentController {
         }
 
         return super.getUIFModelAndView(form);
+    }
+
+    protected RuleEditor retrieveSelectedRuleEditor(MaintenanceDocumentForm document){
+        return AgendaUtilities.retrieveSelectedRuleEditor(document);
     }
 
 }
