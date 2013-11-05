@@ -16,7 +16,7 @@ import org.kuali.student.ap.sb.infc.SecondaryActivityOptions;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecondaryActivityOptionsInfo", propOrder = { "index",
-		"uniqueId", "activityTypeDescription", "enrollmentGroup",
+		"uniqueId", "activityUniqueId", "activityTypeDescription", "enrollmentGroup",
 		"activityOptions", "_futureElements" })
 public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 		Serializable {
@@ -28,6 +28,9 @@ public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 
 	@XmlAttribute
 	private String uniqueId;
+
+	@XmlAttribute
+	private String activityUniqueId;
 
 	@XmlAttribute
 	private String activityTypeDescription;
@@ -46,6 +49,7 @@ public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 
 	public SecondaryActivityOptionsInfo(SecondaryActivityOptions copy) {
 		uniqueId = copy.getUniqueId();
+		activityUniqueId = copy.getActivityUniqueId();
 		activityTypeDescription = copy.getActivityTypeDescription();
 		enrollmentGroup = copy.isEnrollmentGroup();
 		setActivityOptions(copy.getActivityOptions());
@@ -67,6 +71,15 @@ public class SecondaryActivityOptionsInfo implements SecondaryActivityOptions,
 
 	public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
+	}
+
+	@Override
+	public String getActivityUniqueId() {
+		return activityUniqueId;
+	}
+
+	public void setActivityUniqueId(String activityUniqueId) {
+		this.activityUniqueId = activityUniqueId;
 	}
 
 	@Override

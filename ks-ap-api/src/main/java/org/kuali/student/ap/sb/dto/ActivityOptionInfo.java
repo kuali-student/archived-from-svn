@@ -1,6 +1,7 @@
 package org.kuali.student.ap.sb.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import org.kuali.student.ap.sb.infc.SecondaryActivityOptions;
 		"activityTypeDescription", "courseOfferingCode", "registrationCode",
 		"academicSessionDescr", "activityName", "courseLockedIn", "enrollmentGroup",
 		"closed", "openSeats", "totalSeats", "requiresPermission", "primary",
-		"minCredits", "maxCredits", "secondaryOptions", "classMeetingTimes" })
+		"minCredits", "maxCredits", "notes", "secondaryOptions", "classMeetingTimes" })
 public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		ActivityOption {
 
@@ -82,6 +83,9 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 
 	@XmlAttribute
 	private BigDecimal maxCredits;
+	
+	@XmlElement
+	private List<String> notes;
 
 	@XmlElement
 	public List<SecondaryActivityOptionsInfo> secondaryOptions;
@@ -113,6 +117,8 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		primary = copy.isPrimary();
 		minCredits = copy.getMinCredits();
 		maxCredits = copy.getMaxCredits();
+		List<String> copyNotes = copy.getNotes();
+		notes = copyNotes == null ? null : new ArrayList<String>(copyNotes);
 		setSecondaryOptions(copy.getSecondaryOptions());
 		setClassMeetingTimes(copy.getClassMeetingTimes());
 	}
@@ -277,6 +283,15 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 
 	public void setMaxCredits(BigDecimal maxCredits) {
 		this.maxCredits = maxCredits;
+	}
+
+	@Override
+	public List<String> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<String> notes) {
+		this.notes = notes;
 	}
 
 	@Override

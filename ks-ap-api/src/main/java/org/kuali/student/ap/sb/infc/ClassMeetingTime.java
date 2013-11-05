@@ -19,6 +19,14 @@ public interface ClassMeetingTime extends ScheduleBuildEvent, HasId, HasUniqueId
 	String getInstructorName();
 
 	/**
+	 * Determine if the class meeting should appear in the TBA row.
+	 * 
+	 * @return True if the class meeting should appear in the TBA row, false if
+	 *         meeting times should be followed.
+	 */
+	boolean isTba();
+
+	/**
 	 * Determine if the class meeting has an arranged location.
 	 * 
 	 * @return True if the class meeting has an arranged location, false if the

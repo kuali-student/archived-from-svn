@@ -21,6 +21,15 @@ public interface SecondaryActivityOptions extends HasUniqueId, Serializable {
 	int getIndex();
 
 	/**
+	 * Get the unique ID of the primary activity option above this secondary
+	 * options group.
+	 * 
+	 * @return The unique ID of the primary activity option above this secondary
+	 *         options group.
+	 */
+	String getActivityUniqueId();
+
+	/**
 	 * Get the activity offering type description.
 	 * 
 	 * @return The activity offering type description.

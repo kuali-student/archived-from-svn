@@ -30,6 +30,9 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 	@XmlAttribute
 	private boolean arranged;
 
+	@XmlAttribute
+	private boolean tba;
+
 	public ClassMeetingTimeInfo() {
 	}
 
@@ -40,6 +43,7 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 		instructorName = copy.getInstructorName();
 		location = copy.getLocation();
 		arranged = copy.isArranged();
+		tba = copy.isTba();
 	}
 
 	@Override
@@ -78,12 +82,22 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 		this.location = location;
 	}
 
+	@Override
 	public boolean isArranged() {
 		return arranged;
 	}
 
 	public void setArranged(boolean arranged) {
 		this.arranged = arranged;
+	}
+
+	@Override
+	public boolean isTba() {
+		return tba;
+	}
+
+	public void setTba(boolean tba) {
+		this.tba = tba;
 	}
 
 	@Override

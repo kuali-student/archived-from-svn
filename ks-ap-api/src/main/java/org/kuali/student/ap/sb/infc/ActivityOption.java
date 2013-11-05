@@ -151,6 +151,13 @@ public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Compar
 	 * @return True if permission is required for the class.
 	 */
 	boolean isRequiresPermission();
+	
+	/**
+	 * Get additional notes related to this activity option.
+	 * 
+	 * @return Additional notes related to this activity option.
+	 */
+	List<String> getNotes();
 
 	/**
 	 * Get the class meeting times for the activity offering.
