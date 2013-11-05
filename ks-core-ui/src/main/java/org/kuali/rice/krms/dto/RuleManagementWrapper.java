@@ -50,6 +50,9 @@ public class RuleManagementWrapper extends UifFormBase {
     }
 
     public List<AgendaEditor> getAgendas() {
+        if(agendas==null){
+            agendas = new ArrayList<AgendaEditor>();
+        }
         return agendas;
     }
 
