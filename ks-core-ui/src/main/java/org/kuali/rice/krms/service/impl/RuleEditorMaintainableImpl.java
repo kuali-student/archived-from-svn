@@ -105,7 +105,7 @@ public class RuleEditorMaintainableImpl extends KSMaintainableImpl implements Ru
         return dataObject;
     }
 
-    protected List<AgendaEditor> getAgendasForRef(String discriminatorType, String refObjectId) {
+    public List<AgendaEditor> getAgendasForRef(String discriminatorType, String refObjectId) {
         // Initialize new array lists.
         List<AgendaEditor> agendas = new ArrayList<AgendaEditor>();
         List<AgendaEditor> sortedAgendas = new ArrayList<AgendaEditor>();
