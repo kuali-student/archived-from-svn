@@ -24,6 +24,7 @@ import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.appointment.dto.AppointmentInfo;
 import org.kuali.student.r2.core.appointment.dto.AppointmentSlotInfo;
 import org.kuali.student.r2.core.appointment.dto.AppointmentWindowInfo;
+import org.kuali.student.r2.core.appointment.infc.Appointment;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentDao;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentSlotDao;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentWindowDao;
@@ -37,6 +38,7 @@ import javax.jws.WebParam;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -62,8 +64,18 @@ public class AppointmentServiceImplHelper {
     * This is pulled out so other methods can call this without the transactional behavior.
     */
     public AppointmentInfo createAppointmentNoTransact(String personId, String appointmentSlotId, String appointmentTypeKey, AppointmentInfo appointmentInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
+        AppointmentEntity  appointmentEntity = createAppointmentEntityNoTransact(appointmentInfo, appointmentSlotId, contextInfo);
+
+        appointmentDao.persist(appointmentEntity);
+        
+        appointmentDao.getEm().flush();
+        
+        return appointmentEntity.toDto();
+    }
+    
+    public AppointmentEntity createAppointmentEntityNoTransact(Appointment appointmentInfo, String appointmentSlotId, ContextInfo contextInfo) throws DoesNotExistException {
         AppointmentEntity  appointmentEntity = new AppointmentEntity(appointmentInfo);
-      
+        
         appointmentEntity.setEntityCreated(contextInfo);
         
         // TODO: Determine if there should be a check between apptType/slotId and apptInfo counterparts
@@ -74,11 +86,7 @@ public class AppointmentServiceImplHelper {
         }
         appointmentEntity.setSlotEntity(slotEntity); // This completes the initialization of appointmentSlotEntity
 
-        appointmentDao.persist(appointmentEntity);
-        
-        appointmentDao.getEm().flush();
-        
-        return appointmentEntity.toDto();
+        return appointmentEntity;
     }
 
     // ------------------------------ Slot creation ------------------------
@@ -579,10 +587,22 @@ public class AppointmentServiceImplHelper {
         //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
         int firstAppointmentSlotInfo = 0;
         String slotId = slotInfoList.get(firstAppointmentSlotInfo).getId();  // Only one slot in the one slot case
+
         for (String studentId: studentIds) {
             AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
-            createAppointmentNoTransact(studentId, slotId, apptInfo.getTypeKey(), apptInfo, contextInfo);
+            
+            AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
+            
+            apptEntities.add(apptEntity);
         }
+        
+        for (AppointmentEntity appointmentEntity : apptEntities) {
+            
+            appointmentDao.persist(appointmentEntity);
+        }
+        
+        appointmentDao.getEm().flush();
+        
         // Set number of students allocated
         statusInfo.setMessage("" + studentIds.size());
     }
@@ -618,12 +638,24 @@ public class AppointmentServiceImplHelper {
             sublist = studentIds.subList(count * studentsPerSlot, endIndex);
 
             count++;
+            
+            List<AppointmentEntity>apptEntities = new LinkedList<AppointmentEntity>();
+            
             // Make the assignments
             for (String studentId: sublist) {
                 String slotId = slotInfo.getId();
                 AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
-                createAppointmentNoTransact(studentId, slotId, apptInfo.getTypeKey(), apptInfo, contextInfo);
+                AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
+                apptEntities.add(apptEntity);
             }
+            
+            for (AppointmentEntity appointmentEntity : apptEntities) {
+                
+                appointmentDao.persist(appointmentEntity);
+            }
+            
+            appointmentDao.getEm().flush();
+            
             if (done) {
                 break; // Some slots may be unassigned in the max allocation
             }
