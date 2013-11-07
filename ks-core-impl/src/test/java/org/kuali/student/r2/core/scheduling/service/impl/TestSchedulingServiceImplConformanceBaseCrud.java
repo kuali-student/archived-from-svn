@@ -230,7 +230,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleIds = testService.getScheduleIdsByType ("typeKey_Updated", contextInfo);
+			scheduleIds = testService.getScheduleIdsByType ("typeKey01", contextInfo);
 			
 			assertEquals(1, scheduleIds.size());
 			assertEquals(alphaDTO.getId(), scheduleIds.get(0));
@@ -652,7 +652,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleRequestIds = testService.getScheduleRequestIdsByType ("typeKey_Updated", contextInfo);
+			scheduleRequestIds = testService.getScheduleRequestIdsByType ("typeKey01", contextInfo);
 			
 			assertEquals(1, scheduleRequestIds.size());
 			assertEquals(alphaDTO.getId(), scheduleRequestIds.get(0));
@@ -865,7 +865,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			timeSlotIds = testService.getTimeSlotIdsByType ("typeKey_Updated", contextInfo);
+			timeSlotIds = testService.getTimeSlotIdsByType("typeKey01", contextInfo);
 			
 			assertEquals(1, timeSlotIds.size());
 			assertEquals(alphaDTO.getId(), timeSlotIds.get(0));
