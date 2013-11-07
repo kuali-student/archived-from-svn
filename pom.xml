@@ -138,6 +138,7 @@
     <impex.version>3.1.0-SNAPSHOT</impex.version>
     <kuali-util.version>4.4.7-SNAPSHOT</kuali-util.version>
     <kuali-jdbc.version>3.1.11-SNAPSHOT</kuali-jdbc.version>
+    <db.branch.qualifier>SANDBOX</db.branch.qualifier>
   </properties>
   <profiles>
     <profile>
