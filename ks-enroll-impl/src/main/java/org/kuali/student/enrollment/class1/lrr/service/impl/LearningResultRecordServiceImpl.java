@@ -104,7 +104,11 @@ public class LearningResultRecordServiceImpl implements LearningResultRecordServ
             }
             newLrr.setResultSourceList(resultSourceEntities);
 
-            newLrr = lrrDao.merge(newLrr);
+            try {
+                newLrr = lrrDao.merge(newLrr);
+            } catch (VersionMismatchException e) {
+                throw new OperationFailedException("version mismatch exception", e);
+            }
             
             lrrDao.getEm().flush();
             
@@ -160,7 +164,11 @@ public class LearningResultRecordServiceImpl implements LearningResultRecordServ
 
         lrr.setLrrState(LrrServiceConstants.RESULT_RECORD_DELETED_STATE_KEY);
        
-        lrr = lrrDao.merge(lrr);
+        try {
+            lrr = lrrDao.merge(lrr);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("version mismatch exception", e);
+        }
         
         lrrDao.getEm().flush();
 

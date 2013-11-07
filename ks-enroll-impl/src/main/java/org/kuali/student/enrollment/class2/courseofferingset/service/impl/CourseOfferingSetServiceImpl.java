@@ -811,7 +811,11 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
                 LOG.warn(String.format("Updated SOC [%s] state to [%s].", socId, CourseOfferingSetServiceConstants.PUBLISHED_SOC_STATE_KEY));
 
                 entity.setEntityUpdated(contextInfo);
-                entity = socDao.merge(entity);
+                try {
+                    entity = socDao.merge(entity);
+                } catch (VersionMismatchException e) {
+                    throw new OperationFailedException("version mismatch exception, socDao.id=" + entity.getId(), e);
+                }
                 socDao.getEm().flush(); 
             }
             else{

@@ -36,6 +36,7 @@ import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.exceptions.ReadOnlyException;
+import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.common.util.constants.LprServiceConstants;
 import org.kuali.student.r2.core.class1.util.ValidationUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -342,7 +343,13 @@ public class LprServiceImpl implements LprService {
 
             lprEntity.setEntityUpdated(contextInfo);
 
-            lprEntity = lprDao.merge(lprEntity);
+            try {
+                lprEntity = lprDao.merge(lprEntity);
+            } catch (VersionMismatchException e) {
+                // TODO KSENROLL-9296 remove this exception translation once 
+                // version mismatch exception is added to the updateLpr method 
+               throw new OperationFailedException("Version Mismatch", e);
+            }
             
             lprDao.getEm().flush();
 
@@ -664,7 +671,13 @@ public class LprServiceImpl implements LprService {
 
             lprTrans.setEntityUpdated(context);
 
-            lprTrans = lprTransactionDao.merge(lprTrans);
+            try {
+                lprTrans = lprTransactionDao.merge(lprTrans);
+            } catch (VersionMismatchException e) {
+                // TODO KSENROLL-9296 remove this exception translation once 
+                // version mismatch exception is added to the updateLprTransaction method 
+               throw new OperationFailedException("Version Mismatch", e);
+            }
             
             lprTransactionDao.getEm().flush();
 
@@ -675,7 +688,7 @@ public class LprServiceImpl implements LprService {
         }
     }
 
-    private List<LprTransactionItemEntity> processLprTransactionItemsModification(LprTransactionInfo modifiedTransactionInfo, LprTransactionEntity originalLprTransEntity, ContextInfo context) {
+    private List<LprTransactionItemEntity> processLprTransactionItemsModification(LprTransactionInfo modifiedTransactionInfo, LprTransactionEntity originalLprTransEntity, ContextInfo context) throws VersionMismatchException {
         List<LprTransactionItemEntity> modifiedLprTransItemEntities = new ArrayList<LprTransactionItemEntity>();
         LprTransactionInfo originalLprTransInfo = originalLprTransEntity.toDto();
         List<String> deletedItems = new ArrayList<String>();
@@ -712,7 +725,7 @@ public class LprServiceImpl implements LprService {
 
     }
 
-    private LprTransactionItemEntity updateLprTransactionItem(LprTransactionItemInfo modifiedTransactionItemInfo, ContextInfo context) {
+    private LprTransactionItemEntity updateLprTransactionItem(LprTransactionItemInfo modifiedTransactionItemInfo, ContextInfo context) throws VersionMismatchException {
         LprTransactionItemEntity modifiedLprItemEntity = new LprTransactionItemEntity(modifiedTransactionItemInfo);
         if (null != modifiedTransactionItemInfo.getStateKey()) {
             modifiedLprItemEntity.setLprTransactionItemState(modifiedTransactionItemInfo.getStateKey());
