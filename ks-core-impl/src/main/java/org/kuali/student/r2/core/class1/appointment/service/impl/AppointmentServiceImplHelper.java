@@ -16,6 +16,7 @@
  */
 package org.kuali.student.r2.core.class1.appointment.service.impl;
 
+import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.exceptions.*;
@@ -584,21 +585,20 @@ public class AppointmentServiceImplHelper {
                                                   StatusInfo statusInfo, ContextInfo contextInfo)
             throws InvalidParameterException, MissingParameterException, DoesNotExistException,
                    PermissionDeniedException, OperationFailedException, DataValidationErrorException, ReadOnlyException {
-        //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
-        int firstAppointmentSlotInfo = 0;
-        String slotId = slotInfoList.get(firstAppointmentSlotInfo).getId();  // Only one slot in the one slot case
+    	
+    	List<AppointmentEntity> apptEntities = new ArrayList<AppointmentEntity>();
+    	
+        AppointmentSlotInfo slotInfo = KSCollectionUtils.getRequiredZeroElement(slotInfoList);  // Only one slot in the one slot case
 
+        String slotId = slotInfo.getId();
+        
         for (String studentId: studentIds) {
+        	
             AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
             
             AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
             
-            apptEntities.add(apptEntity);
-        }
-        
-        for (AppointmentEntity appointmentEntity : apptEntities) {
-            
-            appointmentDao.persist(appointmentEntity);
+            appointmentDao.persist(apptEntity);
         }
         
         appointmentDao.getEm().flush();
@@ -639,27 +639,23 @@ public class AppointmentServiceImplHelper {
 
             count++;
             
-            List<AppointmentEntity>apptEntities = new LinkedList<AppointmentEntity>();
-            
             // Make the assignments
             for (String studentId: sublist) {
                 String slotId = slotInfo.getId();
                 AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
                 AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
-                apptEntities.add(apptEntity);
-            }
-            
-            for (AppointmentEntity appointmentEntity : apptEntities) {
                 
-                appointmentDao.persist(appointmentEntity);
+                appointmentDao.persist(apptEntity);
+                
             }
-            
-            appointmentDao.getEm().flush();
-            
+                
             if (done) {
                 break; // Some slots may be unassigned in the max allocation
             }
         }
+        
+        appointmentDao.getEm().flush();
+        
     }
     /*
      * Precondition: At least one slot in the slotInfoList
