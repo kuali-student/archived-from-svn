@@ -484,12 +484,14 @@ public class RoomServiceImpl implements RoomService {
     public RoomInfo updateRoom(String roomId, RoomInfo roomInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         checkValid(roomInfo, contextInfo);
 
-        RoomEntity roomEntity = new RoomEntity(roomInfo);
-        roomEntity.setEntityUpdated(contextInfo);
+        RoomEntity roomEntity = roomServiceDao.find(roomId);
         
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (roomInfo.getMeta() != null)
-            roomEntity.setVersionNumber(new Long (roomInfo.getMeta().getVersionInd()));
+        if (roomEntity == null)
+            throw new DoesNotExistException("no room for id = " + roomId);
+        
+        roomEntity.fromDto(roomInfo);
+        
+        roomEntity.setEntityUpdated(contextInfo);
         
         roomEntity = roomServiceDao.merge(roomEntity);
 
@@ -798,12 +800,14 @@ public class RoomServiceImpl implements RoomService {
     public BuildingInfo updateBuilding(String buildingId, BuildingInfo buildingInfo, ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         checkValid(buildingInfo, contextInfo);
 
-        RoomBuildingEntity buildingEntity = new RoomBuildingEntity(buildingInfo);
-        buildingEntity.setEntityUpdated(contextInfo);
+        RoomBuildingEntity buildingEntity = buildingServiceDao.find(buildingId);
         
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (buildingInfo.getMeta() != null)
-            buildingEntity.setVersionNumber(new Long (buildingInfo.getMeta().getVersionInd()));
+        if (buildingEntity == null)
+            throw new DoesNotExistException("no building for id = " + buildingId);
+        
+        buildingEntity.fromDto(buildingInfo);
+        
+        buildingEntity.setEntityUpdated(contextInfo);
         
         buildingEntity = buildingServiceDao.merge(buildingEntity);
 
@@ -1155,23 +1159,21 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(readOnly = false, noRollbackFor = {DoesNotExistException.class, InvalidParameterException.class, MissingParameterException.class}, rollbackFor = {Throwable.class})
     public RoomResponsibleOrgInfo updateRoomResponsibleOrg(String roomResponsibleOrgId, RoomResponsibleOrgInfo roomResponsibleOrgInfo,  ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
         checkValid(roomResponsibleOrgInfo, contextInfo);
-        RoomResponsibleOrgEntity e = new RoomResponsibleOrgEntity(roomResponsibleOrgInfo);
-
-        if (roomResponsibleOrgId != null && !roomResponsibleOrgId.isEmpty()) {
-            e.setId( roomResponsibleOrgId );
-        }
-
-        e.setEntityUpdated(contextInfo);
         
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (roomResponsibleOrgInfo.getMeta() != null)
-            e.setVersionNumber(new Long (roomResponsibleOrgInfo.getMeta().getVersionInd()));
-
-        e = roomResponsibleOrgDao.merge(e);
+        RoomResponsibleOrgEntity entity = roomResponsibleOrgDao.find(roomResponsibleOrgId);
+        
+        if (entity == null)
+            throw new DoesNotExistException("no room responsible org for id = " + roomResponsibleOrgId);
+        
+        entity.fromDto(roomResponsibleOrgInfo);
+        
+        entity.setEntityUpdated(contextInfo);
+        
+        entity = roomResponsibleOrgDao.merge(entity);
         
         roomResponsibleOrgDao.getEm().flush();
 
-        return e.toDto();
+        return entity.toDto();
     }
 
     /**
