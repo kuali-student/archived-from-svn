@@ -443,6 +443,8 @@ public class RoomServiceImpl implements RoomService {
         }
 
         roomServiceDao.persist(roomEntity);
+        
+        roomServiceDao.getEm().flush();
 
         return roomEntity.toDto();
     }
@@ -484,8 +486,15 @@ public class RoomServiceImpl implements RoomService {
 
         RoomEntity roomEntity = new RoomEntity(roomInfo);
         roomEntity.setEntityUpdated(contextInfo);
-        roomServiceDao.update(roomEntity);
+        
+        // this line can be removed once KSENROLL-4605 is resolved
+        if (roomInfo.getMeta() != null)
+            roomEntity.setVersionNumber(new Long (roomInfo.getMeta().getVersionInd()));
+        
+        roomEntity = roomServiceDao.merge(roomEntity);
 
+        roomServiceDao.getEm().flush();
+        
         return roomEntity.toDto();
     }
 
@@ -748,6 +757,8 @@ public class RoomServiceImpl implements RoomService {
         buildingEntity.setEntityCreated(contextInfo);
 
         buildingServiceDao.persist(buildingEntity);
+        
+        buildingServiceDao.getEm().flush();
 
         return buildingEntity.toDto();
     }
@@ -789,8 +800,15 @@ public class RoomServiceImpl implements RoomService {
 
         RoomBuildingEntity buildingEntity = new RoomBuildingEntity(buildingInfo);
         buildingEntity.setEntityUpdated(contextInfo);
-        buildingServiceDao.update(buildingEntity);
+        
+        // this line can be removed once KSENROLL-4605 is resolved
+        if (buildingInfo.getMeta() != null)
+            buildingEntity.setVersionNumber(new Long (buildingInfo.getMeta().getVersionInd()));
+        
+        buildingEntity = buildingServiceDao.merge(buildingEntity);
 
+        buildingServiceDao.getEm().flush();
+        
         return buildingEntity.toDto();
     }
 
@@ -1097,6 +1115,8 @@ public class RoomServiceImpl implements RoomService {
         e.setEntityCreated( contextInfo );
 
         roomResponsibleOrgDao.persist(e);
+        
+        roomResponsibleOrgDao.getEm().flush();
 
         return e.toDto();
     }
@@ -1142,8 +1162,14 @@ public class RoomServiceImpl implements RoomService {
         }
 
         e.setEntityUpdated(contextInfo);
+        
+        // this line can be removed once KSENROLL-4605 is resolved
+        if (roomResponsibleOrgInfo.getMeta() != null)
+            e.setVersionNumber(new Long (roomResponsibleOrgInfo.getMeta().getVersionInd()));
 
-        roomResponsibleOrgDao.update(e);
+        e = roomResponsibleOrgDao.merge(e);
+        
+        roomResponsibleOrgDao.getEm().flush();
 
         return e.toDto();
     }

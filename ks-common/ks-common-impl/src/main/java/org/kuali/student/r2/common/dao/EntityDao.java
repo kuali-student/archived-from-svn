@@ -53,16 +53,11 @@ public interface EntityDao<K extends Serializable, T extends PersistableEntity<K
      */
     void persist(T entity);
 
-    /**
-     * Update detached object.
-     *
-     * @param entity Entity to update
-     */
-    void update(T entity);
-
 
     /**
      * Merge detached object.
+     * 
+     * Note: If optimistic locking is used the entity returned will be different from the parameter value and should be used in any future operations.
      *
      * @param entity Entity to save
      * @return Merged entity.

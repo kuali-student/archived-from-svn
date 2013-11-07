@@ -220,7 +220,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             appointmentEntity.setEntityUpdated(contextInfo);
 
-            appointmentDao.merge(appointmentEntity);
+            appointmentEntity = appointmentDao.merge(appointmentEntity);
+            appointmentDao.getEm().flush();
             return appointmentEntity.toDto();
         } else {
             throw new DoesNotExistException(appointmentId);
@@ -347,6 +348,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         apptWin.setEntityCreated(contextInfo);
 
         appointmentWindowDao.persist(apptWin);
+        appointmentWindowDao.getEm().flush();
+        
         return apptWin.toDto();
     }
 
@@ -359,7 +362,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             appointmentWindowEntity.setEntityUpdated(contextInfo);
 
-            appointmentWindowDao.merge(appointmentWindowEntity);
+            appointmentWindowEntity = appointmentWindowDao.merge(appointmentWindowEntity);
+            
+            appointmentWindowDao.getEm().flush();
+            
             return appointmentWindowEntity.toDto();
         } else {
             throw new DoesNotExistException(appointmentWindowId);
@@ -443,6 +449,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         appointmentSlotEntity.setApptWinEntity(windowEntity); // This completes the initialization of appointmentSlotEntity
         appointmentSlotDao.persist(appointmentSlotEntity);
+        appointmentSlotDao.getEm().flush();
         return appointmentSlotEntity.toDto();
     }
 
@@ -518,7 +525,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             appointmentSlotEntity.setEntityUpdated(contextInfo);
 
-            appointmentSlotDao.merge(appointmentSlotEntity);
+            appointmentSlotEntity = appointmentSlotDao.merge(appointmentSlotEntity);
+            
+            appointmentSlotDao.getEm().flush();
+            
             return appointmentSlotEntity.toDto();
         } else {
             throw new DoesNotExistException(appointmentSlotId);

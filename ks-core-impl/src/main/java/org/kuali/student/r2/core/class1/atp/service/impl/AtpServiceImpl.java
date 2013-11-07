@@ -498,6 +498,7 @@ public class AtpServiceImpl implements AtpService {
         }
         
         atpEntity.fromDTO(atpInfo);
+        
         atpEntity.setUpdateId(context.getPrincipalId());
         atpEntity.setUpdateTime(context.getCurrentDate());
         
@@ -626,7 +627,7 @@ public class AtpServiceImpl implements AtpService {
         entity.fromDto(milestoneInfo);
         entity.setUpdateId(context.getPrincipalId());
         entity.setUpdateTime(context.getCurrentDate());
-        milestoneDao.merge(entity);
+        entity = milestoneDao.merge(entity);
         milestoneDao.getEm().flush();
         return entity.toDto();
     }
@@ -920,7 +921,7 @@ public class AtpServiceImpl implements AtpService {
         entity.fromDTO(atpAtpRelationInfo);
         entity.setUpdateId(context.getPrincipalId());
         entity.setUpdateTime(context.getCurrentDate());
-        atpRelDao.merge(entity);
+        entity = atpRelDao.merge(entity);
         
         atpRelDao.getEm().flush();
         return entity.toDto();

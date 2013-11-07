@@ -118,7 +118,7 @@ public class TestAtpDao {
         assertNotNull(atp);
         AtpAttributeEntity attr = new AtpAttributeEntity(new AttributeInfo("foo", "bar"), atp);
         atp.getAttributes().add(attr);
-        dao.update(atp);
+        atp = dao.merge(atp);
 
         AtpEntity atp2 = dao.find("testAtpId2");
         assertNotNull(atp2);

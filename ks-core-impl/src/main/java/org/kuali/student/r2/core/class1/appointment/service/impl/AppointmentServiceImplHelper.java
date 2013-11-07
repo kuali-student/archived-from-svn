@@ -74,6 +74,9 @@ public class AppointmentServiceImplHelper {
         appointmentEntity.setSlotEntity(slotEntity); // This completes the initialization of appointmentSlotEntity
 
         appointmentDao.persist(appointmentEntity);
+        
+        appointmentDao.getEm().flush();
+        
         return appointmentEntity.toDto();
     }
 
@@ -143,7 +146,11 @@ public class AppointmentServiceImplHelper {
      */
     public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) {
         windowEntity.setApptWindowState(stateKey);
-        appointmentWindowDao.update(windowEntity);
+        AppointmentWindowEntity e = appointmentWindowDao.merge(windowEntity);
+        
+        // TODO KSENROLL-9052
+        // just in case the windowEntity is used again this will allow it to be saved without an optimistic locking exception
+        windowEntity.setVersionNumber(e.getVersionNumber());
     }
 
     /**
@@ -228,6 +235,7 @@ public class AppointmentServiceImplHelper {
         }
         appointmentSlotEntity.setApptWinEntity(windowEntity); // This completes the initialization of appointmentSlotEntity
         appointmentSlotDao.persist(appointmentSlotEntity);
+        appointmentDao.getEm().flush();
         return appointmentSlotEntity.toDto();
     }
 

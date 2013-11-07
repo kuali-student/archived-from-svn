@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import junit.framework.Assert;
+
 //import static junit.framework.Assert.assertEquals;
 //import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
@@ -335,6 +337,8 @@ public class TestRoomServiceImpl {
             fail(t.toString());
         }
 
+        assertEquals("0", buildingInfo.getMeta().getVersionInd());
+        
         BuildingInfo originalBuildingInfo = null;
         try {
             originalBuildingInfo = roomService.getBuilding(buildingInfo.getId(), contextInfo);
@@ -342,6 +346,8 @@ public class TestRoomServiceImpl {
             fail(t.toString());
         }
 
+        assertEquals("0", buildingInfo.getMeta().getVersionInd());
+        
         //test missing ContextInfo
         try {
             roomService.updateBuilding(buildingInfo.getId(), buildingInfo, null);
@@ -405,6 +411,9 @@ public class TestRoomServiceImpl {
         } catch (Throwable t) {
             fail(t.toString());
         }
+        
+        assertEquals("1", newBuildingInfo.getMeta().getVersionInd());
+        
         assertEquals(originalBuildingInfo.getId(), newBuildingInfo.getId());
 
         MetaInfo metaInfo = originalBuildingInfo.getMeta();
@@ -435,6 +444,9 @@ public class TestRoomServiceImpl {
         } catch (Throwable t) {
             fail(t.toString());
         }
+        
+        assertEquals("2", newNewBuildingInfo.getMeta().getVersionInd());
+        
         assertFalse(newNewBuildingInfo.getMeta().getUpdateTime().equals(newBuildingInfo.getMeta().getUpdateTime()));
 
         //test ok if Id is blank

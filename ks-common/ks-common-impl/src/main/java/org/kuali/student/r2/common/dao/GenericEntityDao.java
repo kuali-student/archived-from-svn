@@ -202,11 +202,6 @@ public class GenericEntityDao<T extends PersistableEntity<String>> implements En
     }
 
     @Override
-    public void update(T entity) {
-        em.merge(entity);
-    }
-
-    @Override
     public void remove(T entity) {
         em.remove(entity);
     }
