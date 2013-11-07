@@ -321,4 +321,9 @@ public class AtpServiceConstants {
     public static final String CAMPUS_LOCATION = "CampusLocation";
     
     public static final String MILESTONE_KEYDATE_GROUP = "kuali.milestone.type.group.keydate";
+    
+    /**
+     * OpenCollab/rSmart KRAD CM Conversion Alliance!
+     */
+    public static final String COURSE_SCHEDULING_TERM_ENUM_KEY = "atp.queryParam.atpSeasonType";
 }
