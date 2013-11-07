@@ -502,10 +502,6 @@ public class AtpServiceImpl implements AtpService {
         atpEntity.setUpdateId(context.getPrincipalId());
         atpEntity.setUpdateTime(context.getCurrentDate());
         
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (atpInfo.getMeta() != null)
-            atpEntity.setVersionNumber(new Long (atpInfo.getMeta().getVersionInd()));
-        
         try {
             atpEntity = atpDao.merge(atpEntity);
         } catch (OptimisticLockException e) {
@@ -685,12 +681,11 @@ public class AtpServiceImpl implements AtpService {
         }
 
         AtpMilestoneRelationEntity entity = new AtpMilestoneRelationEntity();
+        
         entity.setAtpId(atpId);
         entity.setMilestoneId(milestoneId);
-        entity.setCreateId(contextInfo.getPrincipalId());
-        entity.setCreateTime(contextInfo.getCurrentDate());
-        entity.setUpdateId(contextInfo.getPrincipalId());
-        entity.setUpdateTime(contextInfo.getCurrentDate());
+        
+        entity.setEntityCreated(contextInfo);
 
         atpMilestoneRelationDao.persist(entity);
         StatusInfo info = new StatusInfo();
