@@ -782,9 +782,6 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
             MissingParameterException, OperationFailedException,
             PermissionDeniedException {
 
-        org.springframework.transaction.PlatformTransactionManager mgr;
-        socDao.getEm().flush(); // need to flush to get the version ind to update
-
         SocEntity entity = socDao.find(socId);
         if (entity == null) {
             throw new DoesNotExistException(socId);
@@ -814,8 +811,8 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
                 LOG.warn(String.format("Updated SOC [%s] state to [%s].", socId, CourseOfferingSetServiceConstants.PUBLISHED_SOC_STATE_KEY));
 
                 entity.setEntityUpdated(contextInfo);
-                socDao.merge(entity);
-                //socDao.getEm().flush(); // need to flush to get the version ind to update
+                entity = socDao.merge(entity);
+                socDao.getEm().flush(); 
             }
             else{
                 throw new OperationFailedException(scStatus.getMessage());

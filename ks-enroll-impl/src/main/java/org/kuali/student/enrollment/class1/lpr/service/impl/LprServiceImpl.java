@@ -308,6 +308,8 @@ public class LprServiceImpl implements LprService {
         lpr.setEntityCreated(context);
 
         lprDao.persist(lpr);
+        
+        lprDao.getEm().flush();
 
         return lpr.toDto();
     }
@@ -340,9 +342,11 @@ public class LprServiceImpl implements LprService {
 
             lprEntity.setEntityUpdated(contextInfo);
 
-            lprDao.merge(lprEntity);
+            lprEntity = lprDao.merge(lprEntity);
+            
+            lprDao.getEm().flush();
 
-            return lprDao.find(lprId).toDto();
+            return lprEntity.toDto();
         } else {
             throw new DoesNotExistException(lprId);
         }
@@ -461,14 +465,9 @@ public class LprServiceImpl implements LprService {
 
         lprTransactionDao.persist(lprTransactionEntity);
 
-        LprTransactionEntity retrived = lprTransactionDao.find(lprTransactionEntity.getId());
+        lprTransactionDao.getEm().flush();
 
-        LprTransactionInfo info = null;
-        if (retrived != null) {
-            info = retrived.toDto();
-        }
-
-        return info;
+        return lprTransactionEntity.toDto();
 
     }
 
@@ -503,18 +502,14 @@ public class LprServiceImpl implements LprService {
             newLprTransactionEntity.setLprTransType(existingLprTransactionEntity.getLprTransType());
             newLprTransactionEntity.setRequestingPersonId(existingLprTransactionEntity.getRequestingPersonId());
             lprTransactionDao.persist(newLprTransactionEntity);
+            
+            lprTransactionDao.getEm().flush();
+            
+            return newLprTransactionEntity.toDto();
 
         } else {
             throw new DoesNotExistException("Could not find any LPR Transaction for id : " + lprTransactionId);
         }
-        LprTransactionEntity retrived = lprTransactionDao.find(newLprTransactionEntity.getId());
-        LprTransactionInfo info = null;
-        if (retrived != null) {
-            info = retrived.toDto();
-        } else {
-            throw new OperationFailedException("");
-        }
-        return info;
     }
 
     @Override
@@ -669,9 +664,11 @@ public class LprServiceImpl implements LprService {
 
             lprTrans.setEntityUpdated(context);
 
-            lprTransactionDao.merge(lprTrans);
+            lprTrans = lprTransactionDao.merge(lprTrans);
+            
+            lprTransactionDao.getEm().flush();
 
-            return lprTransactionDao.find(lprTransactionId).toDto();
+            return lprTrans.toDto();
 
         } else {
             throw new DoesNotExistException(lprTransactionId);
@@ -758,8 +755,10 @@ public class LprServiceImpl implements LprService {
 
 
         lprTransactionItemDao.persist(lprTransItemEntity);
+        
+        lprTransactionItemDao.getEm().flush();
 
-        return lprTransactionItemDao.find(lprTransItemEntity.getId());
+        return lprTransItemEntity;
     }
 
     @Override
