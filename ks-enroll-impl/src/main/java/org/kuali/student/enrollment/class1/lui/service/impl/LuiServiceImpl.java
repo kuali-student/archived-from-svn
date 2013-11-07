@@ -282,24 +282,21 @@ public class LuiServiceImpl
         
         if(entity.getIdentifiers() != null){
             for(LuiIdentifierEntity ident:entity.getIdentifiers()){
-                ident.setCreateId(context.getPrincipalId());
-                ident.setCreateTime(context.getCurrentDate());
-                ident.setUpdateId(context.getPrincipalId());
-                ident.setUpdateTime(context.getCurrentDate());
+                ident.setEntityCreated(context);
             }
         }
         if(entity.getLuiCodes() != null){
             for(LuCodeEntity code : entity.getLuiCodes()){
-                code.setCreateId(context.getPrincipalId());
-                code.setCreateTime(context.getCurrentDate());
-                code.setUpdateId(context.getPrincipalId());
-                code.setUpdateTime(context.getCurrentDate());
+                
+                code.setEntityCreated(context);
             }
         }
 
 
         luiDao.persist(entity);
 
+        luiDao.getEm().flush();
+        
         return entity.toDto();
     }
 
@@ -360,6 +357,8 @@ public class LuiServiceImpl
 
         //Perform the merge
         entity = luiDao.merge(entity);
+        
+        luiDao.getEm().flush();
 
         return entity.toDto();
     }
@@ -637,6 +636,8 @@ public class LuiServiceImpl
         
         luiLuiRelationDao.persist(entity);
 
+        luiLuiRelationDao.getEm().flush();
+        
         return entity.toDto();
     }
 
@@ -667,13 +668,15 @@ public class LuiServiceImpl
         entity.setEntityUpdated(context);
         
 
-        luiLuiRelationDao.merge(entity);
+        entity = luiLuiRelationDao.merge(entity);
 
         //Delete any orphaned children
         for(Object orphan : orphans){
             luiLuiRelationDao.getEm().remove(orphan);
         }
 
+        luiLuiRelationDao.getEm().flush();
+        
         return entity.toDto();
     }
 
@@ -857,7 +860,7 @@ public class LuiServiceImpl
         LuiSetEntity entity = new LuiSetEntity(luiSetInfo);
         entity.setEntityCreated(contextInfo);
         luiSetDao.persist(entity);
-
+        luiSetDao.getEm().flush();
         return entity.toDto();
     }
 
@@ -880,10 +883,10 @@ public class LuiServiceImpl
         try {
             luiSetEntity = luiSetDao.merge(luiSetEntity);
         } catch (OptimisticLockException e) {
-            throw new VersionMismatchException();
+            throw new VersionMismatchException("OptimisticLockException " + e.getMessage());
         }
 
-//        luiSetDao.getEm().flush();
+        luiSetDao.getEm().flush();
         return luiSetEntity.toDto();
     }
 
