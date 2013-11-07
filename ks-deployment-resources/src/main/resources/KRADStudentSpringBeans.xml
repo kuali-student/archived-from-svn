@@ -88,8 +88,8 @@
                 <value>classpath:org/kuali/rice/krms/RuleEditMaintenance.xml</value>
                 <value>classpath:org/kuali/rice/krms/RuleManagementView.xml</value>
                 <value>classpath:org/kuali/rice/krms/AgendaManagementView.xml</value>
-                <value>classpath:org/kuali/student/core/krms/KSKRMSRuleMaintenance.xml</value>
                 <value>classpath:org/kuali/student/core/krms/KSKRMSCustomComponents.xml</value>
+                <value>classpath:org/kuali/student/core/krms/KSKRMSRuleMaintenance.xml</value>
                 <value>classpath:org/kuali/student/lum/lu/ui/krms/LUCustomComponents.xml</value>
                 <value>classpath:org/kuali/student/cm/main/CourseRuleMaintenance.xml</value>
                 
