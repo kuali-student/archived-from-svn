@@ -167,6 +167,7 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
         entity.setEntityCreated(context);
 
         socRorDao.persist(entity);
+        socRorDao.getEm().flush();
         return entity.toDto();
     }
 
@@ -186,6 +187,7 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
         entity.setEntityCreated(context);
 
         socRorItemDao.persist(entity);
+        socRorItemDao.getEm().flush();
         return entity.toDto();
     }
 
@@ -211,6 +213,8 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
             entity.setEntityCreated(context);
 
             socRorItemDao.persist(entity);
+            
+            socRorItemDao.getEm().flush();
         }
         return Integer.valueOf(count);
     }
@@ -620,7 +624,11 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
 
         entity.setEntityUpdated(context);
 
-        return socDao.merge(entity).toDto();
+        entity = socDao.merge(entity);
+        
+        socDao.getEm().flush();
+        
+        return entity.toDto();
     }
 
     @Override
@@ -644,7 +652,12 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
                 attr.setValue(TransformUtility.dateTimeToDynamicAttributeString(new Date()));
             }
         }
-        return socRorDao.merge(entity).toDto();
+        
+        entity = socRorDao.merge(entity);
+        
+        socRorDao.getEm().flush();
+        
+        return entity.toDto();
     }
 
     @Override
@@ -674,7 +687,11 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
 
         entity.setEntityUpdated(context);
 
-        return socRorDao.merge(entity).toDto();
+        entity = socRorDao.merge(entity);
+        
+        socRorDao.getEm().flush();
+        
+        return entity.toDto();
     }
 
     @Override
@@ -691,7 +708,11 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
 
         entity.setEntityUpdated(context);
 
-        return socRorItemDao.merge(entity).toDto();
+        entity = socRorItemDao.merge(entity);
+        
+        socRorItemDao.getEm().flush();
+        
+        return entity.toDto();
     }
 
     @Override
