@@ -16,11 +16,16 @@
 package org.kuali.student.r2.core.scheduling.service.impl;
 
 
-import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kuali.student.common.mock.MockService;
 import org.kuali.student.common.test.util.AttributeTester;
 import org.kuali.student.common.test.util.IdEntityTester;
 import org.kuali.student.common.test.util.MetaTester;
@@ -49,11 +54,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public abstract class TestSchedulingServiceImplConformanceBaseCrud {
@@ -62,10 +62,13 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	// SETUP
 	// ====================
 	
-	@Resource(name = "schedulingServiceImpl")
-	private SchedulingService testService;
-	private ContextInfo contextInfo = null;
-	private static String principalId = "123";
+	@Resource(name="schedulingServiceImpl")
+	public SchedulingService testService;
+	public SchedulingService getSchedulingService() { return testService; }
+	public void setSchedulingService(SchedulingService service) { testService = service; }
+	
+	public ContextInfo contextInfo = null;
+	public static String principalId = "123";
 	
 	@Before
 	public void setUp()
@@ -74,49 +77,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 		contextInfo = new ContextInfo();
 		contextInfo.setPrincipalId(principalId);
 	}
-
-    @After
-    public void after() {
-        if(getSchedulingService() instanceof MockService) {
-            MockService service = (MockService)getSchedulingService();
-            service.clear();
-        }
-    }
-
-    public SchedulingService getSchedulingService() {
-        return testService;
-    }
-
-    public void setSchedulingService(SchedulingService service) {
-        testService = service;
-    }
-
-
-    public SchedulingService getTestService() {
-        return testService;
-    }
-
-    public void setTestService(SchedulingService testService) {
-        this.testService = testService;
-    }
-
-    public ContextInfo getContextInfo() {
-        return contextInfo;
-    }
-
-    public void setContextInfo(ContextInfo contextInfo) {
-        this.contextInfo = contextInfo;
-    }
-
-    public static String getPrincipalId() {
-        return principalId;
-    }
-
-    public static void setPrincipalId(String principalId) {
-        TestSchedulingServiceImplConformanceBaseCrud.principalId = principalId;
-    }
-
-    // ====================
+	
+	// ====================
 	// TESTING
 	// ====================
 	
@@ -174,7 +136,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			ScheduleInfo original = new ScheduleInfo (actual);
+			expected = new ScheduleInfo (actual);
 			
 			expected.setStateKey(expected.getState() + "_Updated");
 			
@@ -194,6 +157,16 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
 			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+			try {
+   			testService.updateSchedule ( original.getId(), original, contextInfo);
+			}
+			catch (VersionMismatchException e) { 
+   			exception = true;			}
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
+			
 			// -------------------------------------
 			// test read after update
 			// -------------------------------------
@@ -209,7 +182,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			testCrudSchedule_testDTOFieldsForTestReadAfterUpdate (expected, actual);
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
-			//new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
+			new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
 			
 			ScheduleInfo alphaDTO = actual;
 			
@@ -257,7 +230,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleIds = testService.getScheduleIdsByType ("typeKey01", contextInfo);
+			scheduleIds = testService.getScheduleIdsByType ("typeKey_Updated", contextInfo);
 			
 			assertEquals(1, scheduleIds.size());
 			assertEquals(alphaDTO.getId(), scheduleIds.get(0));
@@ -323,8 +296,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	// ****************************************************
 	//           ScheduleBatchInfo
 	// ****************************************************
-	/*
-    @Test
+	@Test
+	@Ignore
 	public void testCrudScheduleBatch() 
 		throws DataValidationErrorException,
 			DoesNotExistException,
@@ -375,7 +348,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			ScheduleBatchInfo original = new ScheduleBatchInfo (actual);
+			expected = new ScheduleBatchInfo (actual);
 			
 			expected.setStateKey(expected.getState() + "_Updated");
 			
@@ -394,6 +368,16 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
+			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+			try {
+   			testService.updateScheduleBatch ( original.getId(), original, contextInfo);
+			}
+			catch (VersionMismatchException e) { 
+   			exception = true;			}
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
 			
 			// -------------------------------------
 			// test read after update
@@ -458,7 +442,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleBatchIds = testService.getScheduleBatchIdsByType ("typeKey01", contextInfo);
+			scheduleBatchIds = testService.getScheduleBatchIdsByType ("typeKey_Updated", contextInfo);
 			
 			assertEquals(1, scheduleBatchIds.size());
 			assertEquals(alphaDTO.getId(), scheduleBatchIds.get(0));
@@ -489,8 +473,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			}
 			
 	}
-	*/
-
+	
 	/*
 		A method to set the fields for a ScheduleBatch in a 'test create' section prior to calling the 'create' operation.
 	*/
@@ -520,7 +503,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 		This dto is another (second) dto object being created for other tests.
 	*/
 	public abstract void testCrudScheduleBatch_setDTOFieldsForTestReadAfterUpdate(ScheduleBatchInfo expected);
-
+	
+	
 	// ****************************************************
 	//           ScheduleRequestInfo
 	// ****************************************************
@@ -536,9 +520,6 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			VersionMismatchException,
 			DependentObjectsExistException
 	{
-            //first load a scheduleRequestSet
-            createScheduleRequestSetsForTest();
-
 			// -------------------------------------
 			// test create
 			// -------------------------------------
@@ -578,16 +559,17 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			ScheduleRequestInfo original = new ScheduleRequestInfo (actual);
+			expected = new ScheduleRequestInfo (actual);
 			
-			expected.setStateKey(expected.getStateKey() + "_Updated");
+			expected.setStateKey(expected.getState() + "_Updated");
 			
 			// METHOD TO INSERT CODE TO UPDATE DTO FIELDS HERE
 			testCrudScheduleRequest_setDTOFieldsForTestUpdate (expected);
 			
 			new AttributeTester().delete1Update1Add1ForUpdate(expected.getAttributes());
 			// code to update
-			actual = testService.updateScheduleRequest(expected.getId(), expected, contextInfo);
+			actual = testService.updateScheduleRequest ( expected.getId(), expected, contextInfo);
 			
 			assertEquals(expected.getId(), actual.getId());
 			new IdEntityTester().check(expected, actual);
@@ -597,6 +579,15 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
+			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+			try {
+   			testService.updateScheduleRequest ( original.getId(), original, contextInfo);
+			} catch (VersionMismatchException e) { 
+   			exception = true;			}
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
 			
 			// -------------------------------------
 			// test read after update
@@ -613,6 +604,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			testCrudScheduleRequest_testDTOFieldsForTestReadAfterUpdate (expected, actual);
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
+			new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
 			
 			ScheduleRequestInfo alphaDTO = actual;
 			
@@ -660,7 +652,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleRequestIds = testService.getScheduleRequestIdsByType ("typeKey01", contextInfo);
+			scheduleRequestIds = testService.getScheduleRequestIdsByType ("typeKey_Updated", contextInfo);
 			
 			assertEquals(1, scheduleRequestIds.size());
 			assertEquals(alphaDTO.getId(), scheduleRequestIds.get(0));
@@ -780,14 +772,17 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			TimeSlotInfo original = new TimeSlotInfo (actual);
+			expected = new TimeSlotInfo (actual);
+			
+			expected.setStateKey(expected.getState() + "_Updated");
 			
 			// METHOD TO INSERT CODE TO UPDATE DTO FIELDS HERE
 			testCrudTimeSlot_setDTOFieldsForTestUpdate (expected);
 			
 			new AttributeTester().delete1Update1Add1ForUpdate(expected.getAttributes());
 			// code to update
-			actual = testService.updateTimeSlot(expected.getId(), expected, contextInfo);
+			actual = testService.updateTimeSlot ( expected.getId(), expected, contextInfo);
 			
 			assertEquals(expected.getId(), actual.getId());
 			new IdEntityTester().check(expected, actual);
@@ -798,6 +793,15 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
 			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+			try {
+   			testService.updateTimeSlot ( original.getId(), original, contextInfo);
+			} catch (VersionMismatchException e) { 
+   			exception = true;			}
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
+			
 			// -------------------------------------
 			// test read after update
 			// -------------------------------------
@@ -807,13 +811,13 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			actual = testService.getTimeSlot ( actual.getId(), contextInfo);
 			
 			assertEquals(expected.getId(), actual.getId());
-			//new IdEntityTester().check(expected, actual);
+			new IdEntityTester().check(expected, actual);
 			
 			// INSERT METHOD CODE FOR TESTING DTO FIELDS HERE
 			testCrudTimeSlot_testDTOFieldsForTestReadAfterUpdate (expected, actual);
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
-			//new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
+			new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
 			
 			TimeSlotInfo alphaDTO = actual;
 			
@@ -861,7 +865,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			timeSlotIds = testService.getTimeSlotIdsByType ("typeKey01", contextInfo);
+			timeSlotIds = testService.getTimeSlotIdsByType ("typeKey_Updated", contextInfo);
 			
 			assertEquals(1, timeSlotIds.size());
 			assertEquals(alphaDTO.getId(), timeSlotIds.get(0));
@@ -927,8 +931,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	// ****************************************************
 	//           ScheduleTransactionInfo
 	// ****************************************************
-	/* TODO
 	@Test
+	@Ignore
 	public void testCrudScheduleTransaction() 
 		throws DataValidationErrorException,
 			DoesNotExistException,
@@ -979,7 +983,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			ScheduleTransactionInfo original = new ScheduleTransactionInfo (actual);
+			expected = new ScheduleTransactionInfo (actual);
 			
 			expected.setStateKey(expected.getState() + "_Updated");
 			
@@ -998,6 +1003,15 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
+			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+			try {
+   			testService.updateScheduleTransaction ( original.getId(), original, contextInfo);
+			} catch (VersionMismatchException e) { 
+   			exception = true;			}
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
 			
 			// -------------------------------------
 			// test read after update
@@ -1062,7 +1076,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleTransactionIds = testService.getScheduleTransactionIdsByType ("typeKey01", contextInfo);
+			scheduleTransactionIds = testService.getScheduleTransactionIdsByType ("typeKey_Updated", contextInfo);
 			
 			assertEquals(1, scheduleTransactionIds.size());
 			assertEquals(alphaDTO.getId(), scheduleTransactionIds.get(0));
@@ -1093,7 +1107,6 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			}
 			
 	}
-	 */
 	
 	/*
 		A method to set the fields for a ScheduleTransaction in a 'test create' section prior to calling the 'create' operation.
@@ -1152,7 +1165,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			new AttributeTester().add2ForCreate(expected.getAttributes());
 			
 			// code to create actual
-			ScheduleRequestSetInfo actual = testService.createScheduleRequestSet(expected.getTypeKey(), expected.getRefObjectTypeKey(), expected, contextInfo);
+			ScheduleRequestSetInfo actual = testService.createScheduleRequestSet ( expected.getTypeKey(), expected.getRefObjectTypeKey(), expected, contextInfo);
 			
 			assertNotNull(actual.getId());
 			new IdEntityTester().check(expected, actual);
@@ -1180,9 +1193,10 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// -------------------------------------
 			// test update
 			// -------------------------------------
-			expected = actual;
+			ScheduleRequestSetInfo original = new ScheduleRequestSetInfo (actual);
+			expected = new ScheduleRequestSetInfo (actual);
 			
-			expected.setStateKey(expected.getStateKey() + "_Updated");
+			expected.setStateKey(expected.getState() + "_Updated");
 			
 			// METHOD TO INSERT CODE TO UPDATE DTO FIELDS HERE
 			testCrudScheduleRequestSet_setDTOFieldsForTestUpdate (expected);
@@ -1200,6 +1214,17 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
 			new MetaTester().checkAfterUpdate(expected.getMeta(), actual.getMeta());
 			
+			// Test that VersionMissmatchException's are being detected
+			boolean exception = false;
+            try {
+                testService.updateScheduleRequestSet(original.getId(), original,
+                        contextInfo);
+            } catch (VersionMismatchException e) {
+                exception = true;
+            }
+			
+			Assert.assertTrue("VersionMissmatchException was not detected!", exception);
+			
 			// -------------------------------------
 			// test read after update
 			// -------------------------------------
@@ -1215,7 +1240,7 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			testCrudScheduleRequestSet_testDTOFieldsForTestReadAfterUpdate (expected, actual);
 			
 			new AttributeTester().check(expected.getAttributes(), actual.getAttributes());
-			//new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
+			new MetaTester().checkAfterGet(expected.getMeta(), actual.getMeta());
 			
 			ScheduleRequestSetInfo alphaDTO = actual;
 			
@@ -1223,11 +1248,11 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			ScheduleRequestSetInfo betaDTO = new ScheduleRequestSetInfo ();
 			
 			// METHOD TO INSERT CODE TO SET MORE DTO FIELDS HERE
-			testCrudScheduleRequestSet_setDTOFieldsForTestReadAfterUpdate(betaDTO);
+			testCrudScheduleRequestSet_setDTOFieldsForTestReadAfterUpdate (betaDTO);
 			
 			betaDTO.setTypeKey("typeKeyBeta");
 			betaDTO.setStateKey("stateKeyBeta");
-			betaDTO = testService.createScheduleRequestSet (betaDTO.getTypeKey(), betaDTO.getRefObjectTypeKey(), betaDTO, contextInfo);
+			betaDTO = testService.createScheduleRequestSet ( betaDTO.getTypeKey(), betaDTO.getRefObjectTypeKey(), betaDTO, contextInfo);
 			
 			// -------------------------------------
 			// test bulk get with no ids supplied
@@ -1263,10 +1288,10 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			// test get by type
 			// -------------------------------------
 			// code to get by specific type "typeKey01" 
-			scheduleRequestSetIds = testService.getScheduleRequestSetIdsByType ("typeKey01", contextInfo);
+			scheduleRequestSetIds = testService.getScheduleRequestSetIdsByRefObjType("refObjectTypeKey_Updated", contextInfo);
 			
 			assertEquals(1, scheduleRequestSetIds.size());
-			assertEquals(alphaDTO.getId(), scheduleRequestSetIds.get(0));
+			assertEquals(betaDTO.getId(), scheduleRequestSetIds.get(0));
 			
 			// test get by other type
 			// code to get by specific type "typeKeyBeta" 
@@ -1294,8 +1319,6 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 			}
 			
 	}
-
-    public abstract void createScheduleRequestSetsForTest() throws DoesNotExistException, PermissionDeniedException, OperationFailedException, InvalidParameterException, ReadOnlyException, MissingParameterException, DataValidationErrorException;
 	
 	/*
 		A method to set the fields for a ScheduleRequestSet in a 'test create' section prior to calling the 'create' operation.
@@ -1425,6 +1448,11 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	public abstract void test_getScheduleRequestsByRefObjects() 
 	throws 	InvalidParameterException	,MissingParameterException	,OperationFailedException	,PermissionDeniedException	;
 	
+	/* Method Name: getScheduleRequestsByScheduleRequestSet */
+	@Test
+	public abstract void test_getScheduleRequestsByScheduleRequestSet() 
+	throws 	InvalidParameterException	,MissingParameterException	,OperationFailedException	,PermissionDeniedException	;
+	
 	/* Method Name: searchForScheduleRequestIds */
 	@Test
 	public abstract void test_searchForScheduleRequestIds() 
@@ -1532,8 +1560,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	
 	/* Method Name: getScheduleRequestSetIdsByRefObjType */
 	@Test
-	public abstract void test_getScheduleRequestSetIdsByRefObjType()
-            throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, DataValidationErrorException, ReadOnlyException;
+	public abstract void test_getScheduleRequestSetIdsByRefObjType() 
+	throws 	InvalidParameterException	,MissingParameterException	,OperationFailedException	,PermissionDeniedException, DoesNotExistException, DataValidationErrorException, ReadOnlyException	;
 	
 	/* Method Name: searchForScheduleRequestSetIds */
 	@Test
@@ -1552,8 +1580,8 @@ public abstract class TestSchedulingServiceImplConformanceBaseCrud {
 	
 	/* Method Name: getScheduleRequestSetsByRefObject */
 	@Test
-	public abstract void test_getScheduleRequestSetsByRefObject()
-            throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, DoesNotExistException, DataValidationErrorException, ReadOnlyException;
+	public abstract void test_getScheduleRequestSetsByRefObject() 
+	throws 	InvalidParameterException	,MissingParameterException	,OperationFailedException	,PermissionDeniedException, DoesNotExistException, DataValidationErrorException, ReadOnlyException	;
 	
 }
 

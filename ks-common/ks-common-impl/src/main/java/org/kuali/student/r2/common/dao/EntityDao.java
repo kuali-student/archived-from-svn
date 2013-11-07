@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.kuali.student.r2.common.entity.PersistableEntity;
+import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 
 import javax.persistence.EntityManager;
 
@@ -53,7 +54,6 @@ public interface EntityDao<K extends Serializable, T extends PersistableEntity<K
      */
     void persist(T entity);
 
-
     /**
      * Merge detached object.
      * 
@@ -61,8 +61,9 @@ public interface EntityDao<K extends Serializable, T extends PersistableEntity<K
      *
      * @param entity Entity to save
      * @return Merged entity.
+     * @throws VersionMismatchException if there is an optimistic locking failure detected during the merge.
      */
-    T merge(T entity);
+    T merge(T entity) throws VersionMismatchException;
 
     /**
      * Remove entity from the persistent store.

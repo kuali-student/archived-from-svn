@@ -23,12 +23,14 @@ import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -207,12 +209,21 @@ public class GenericEntityDao<T extends PersistableEntity<String>> implements En
     }
 
     @Override
-    public T merge(T entity) {
+    public T merge(T entity) throws VersionMismatchException {
         
         if (em.contains(entity))
             em.detach(entity);
         
-        return em.merge(entity);
+        T mergedEntity = null;
+        
+        try {
+            mergedEntity = em.merge(entity);
+        } catch (OptimisticLockException e) {
+            throw new VersionMismatchException("Failed for entity.id = " + entity.getId());
+        }
+        
+        return mergedEntity;
+        
     }
 
     @SuppressWarnings("unchecked")

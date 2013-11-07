@@ -205,7 +205,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         helper.generateAppointments(appointmentWindowId, appointmentTypeKey, entity.getMaxAppointmentsPerSlot(), studentIds, slotInfoList, contextInfo, statusInfo);
 
         // Change state from draft to assigned
-        helper.changeApptWinState(entity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_ASSIGNED_KEY);
+        try {
+            helper.changeApptWinState(entity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_ASSIGNED_KEY);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("failed to change AppointmentWindowState for id=" + entity.getId() , e);
+        }
 
         return statusInfo;  //To change body of implemented methods use File | Settings | File Templates.
     }

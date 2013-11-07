@@ -319,7 +319,12 @@ public class PopulationServiceImpl implements PopulationService {
         // Strictly not needed, but is a good check to make sure the populationRule is valid (exception thrown if not valid)
         PopulationRuleEntity popRuleEntity = populationRuleDao.find(populationRuleId);
         popEntity.setPopulationRuleId(populationRuleId);
-        popEntity = populationDao.merge(popEntity);
+        try {
+            popEntity = populationDao.merge(popEntity);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("failed to apply population rule(id="+populationRuleId+") to population (id=" + populationId + ")" , e);
+
+        }
         
         populationDao.getEm().flush();
         
@@ -337,7 +342,11 @@ public class PopulationServiceImpl implements PopulationService {
             throw new InvalidParameterException("Passed population rule ID, " + populationRuleId + ", does not match population's pop rule ID: " + popRuleId);
         }
         popEntity.setPopulationRuleId(null); // Presumably, setting to null does the trick.
-        popEntity = populationDao.merge(popEntity);
+        try {
+            popEntity = populationDao.merge(popEntity);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("failed to remove population rule(id="+populationRuleId+") from population (id=" + populationId + ")" , e);
+        }
         
         populationDao.getEm().flush();
         

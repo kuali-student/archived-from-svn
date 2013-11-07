@@ -67,7 +67,9 @@ import org.kuali.student.r2.core.scheduling.util.TimeSlotCodeGenerator;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.WebParam;
+import javax.persistence.OptimisticLockException;
 import javax.xml.namespace.QName;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -243,11 +245,6 @@ public class SchedulingServiceImpl implements SchedulingService {
 
             scheduleEntity.setEntityUpdated(contextInfo);
             
-            // this line can be removed once KSENROLL-4605 is resolved
-            if (scheduleInfo.getMeta() != null)
-                scheduleEntity.setVersionNumber(new Long (scheduleInfo.getMeta().getVersionInd()));
-            
-
             scheduleEntity = scheduleDao.merge(scheduleEntity);
             
             scheduleDao.getEm().flush();
@@ -443,10 +440,6 @@ public class SchedulingServiceImpl implements SchedulingService {
         //Update any Meta information
         scheduleRequestEntity.setEntityUpdated(contextInfo);
         
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (scheduleRequestInfo.getMeta() != null)
-            scheduleRequestEntity.setVersionNumber(new Long (scheduleRequestInfo.getMeta().getVersionInd()));
-
         scheduleRequestEntity = scheduleRequestDao.merge(scheduleRequestEntity);
         
         scheduleRequestDao.getEm().flush();

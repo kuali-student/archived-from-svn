@@ -472,16 +472,15 @@ public class AtpServiceImpl implements AtpService {
         AtpEntity entity = new AtpEntity(atpInfo);
         entity.setId(atpInfo.getId());
         entity.setAtpType(atpTypeKey);
-        entity.setCreateId(contextInfo.getPrincipalId());
-        entity.setCreateTime(contextInfo.getCurrentDate());
-        entity.setUpdateId(contextInfo.getPrincipalId());
-        entity.setUpdateTime(contextInfo.getCurrentDate());
+        entity.setEntityCreated(contextInfo);
+        
 //        System.out.println ("AtpEntity: before persist ATP " + entity.getId());
         atpDao.persist(entity);
 //        System.out.println ("AtpEntity: after persist ATP " + entity.getId());
 //        System.out.println ("AtpEntity: flushmode=" + atpDao.getEm().getFlushMode());
         atpDao.getEm().flush ();
 //        System.out.println ("AtpEntity: after flush ATP " + entity.getId());
+        
         return entity.toDto();
     }
 
@@ -499,17 +498,12 @@ public class AtpServiceImpl implements AtpService {
         
         atpEntity.fromDTO(atpInfo);
         
-        atpEntity.setUpdateId(context.getPrincipalId());
-        atpEntity.setUpdateTime(context.getCurrentDate());
-        
-        try {
-            atpEntity = atpDao.merge(atpEntity);
-        } catch (OptimisticLockException e) {
-            // this catch can be removed once KSENROLL-4253 is resolved
-            throw new VersionMismatchException();
-        }
+        atpEntity.setEntityUpdated(context);
+            
+        atpEntity = atpDao.merge(atpEntity);
         
         atpDao.getEm().flush();
+
         return atpEntity.toDto();
     }
 
@@ -587,7 +581,7 @@ public class AtpServiceImpl implements AtpService {
                                                         ContextInfo context) throws DoesNotExistException, InvalidParameterException, MissingParameterException,
             OperationFailedException {
 
-        return null;
+        return new ArrayList<ValidationResultInfo>();
     }
 
     @Override

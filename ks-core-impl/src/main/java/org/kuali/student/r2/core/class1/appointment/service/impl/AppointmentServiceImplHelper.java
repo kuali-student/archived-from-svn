@@ -33,6 +33,7 @@ import org.kuali.student.r2.core.class1.appointment.model.AppointmentWindowEntit
 import org.kuali.student.r2.core.population.service.PopulationService;
 
 import javax.jws.WebParam;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -100,8 +101,9 @@ public class AppointmentServiceImplHelper {
      * Helper that is used both by deleteAppointmentWindow and deleteAppointmentSlotsByWindow
      * @param windowEntity An appointment window entity
      * @param shouldDeleteSlots true, if you want slots to also be deleted
+     * @throws OperationFailedException 
      */
-    public void deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) {
+    public void deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) throws OperationFailedException {
         List<AppointmentSlotEntity> slotList = _fetchSlotEntitiesByWindows(windowEntity.getId());
         if (slotList != null) {
             // Delete appointments, if any
@@ -109,18 +111,24 @@ public class AppointmentServiceImplHelper {
             // Delete slots, if any
             _deleteAppointmentSlots(slotList);
         }
-        changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
+        try {
+            changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("failed to change AppointmentWindowState for id=" + windowEntity.getId() , e);
+
+        }
     }
 
-    public void deleteAppointmentSlotsByWindowCascading(AppointmentWindowEntity windowEntity) {
+    public void deleteAppointmentSlotsByWindowCascading(AppointmentWindowEntity windowEntity) throws OperationFailedException {
         deleteAppointmentsByWindow(windowEntity, true); // also, delete slots
     }
 
     /**
      * Deletes appointment windows, slots, and appointments.
      * @param windowEntity The window (and its dependent parts) to be deleted.
+     * @throws OperationFailedException 
      */
-    public void deleteAppointmentWindowCascading(AppointmentWindowEntity windowEntity) {
+    public void deleteAppointmentWindowCascading(AppointmentWindowEntity windowEntity) throws OperationFailedException {
         deleteAppointmentSlotsByWindowCascading(windowEntity);
         appointmentWindowDao.remove(windowEntity);
         // No need to update the state since the window is gone
@@ -143,10 +151,14 @@ public class AppointmentServiceImplHelper {
      * @param windowEntity The appointment window ID in the DB
      * @param stateKey Either AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY or
      *                 AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_ASSIGNED_KEY
+     * @throws VersionMismatchException 
      */
-    public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) {
+    public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) throws VersionMismatchException {
         windowEntity.setApptWindowState(stateKey);
+        
         AppointmentWindowEntity e = appointmentWindowDao.merge(windowEntity);
+        
+        appointmentWindowDao.getEm().flush();
         
         // TODO KSENROLL-9052
         // just in case the windowEntity is used again this will allow it to be saved without an optimistic locking exception
