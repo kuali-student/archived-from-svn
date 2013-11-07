@@ -458,6 +458,8 @@ public class LprServiceImpl implements LprService {
         }
 
         Set<LprTransactionItemEntity> lprTransItemEntities = new HashSet<LprTransactionItemEntity>();
+        
+        
 
         for (LprTransactionItemInfo lprTransItemInfo : lprTransactionInfo.getLprTransactionItems()) {
 
@@ -467,7 +469,7 @@ public class LprServiceImpl implements LprService {
         }
 
         lprTransactionEntity.setLprTransactionItems(lprTransItemEntities);
-
+        
         lprTransactionEntity.setEntityCreated(context);
 
         lprTransactionDao.persist(lprTransactionEntity);
@@ -765,11 +767,6 @@ public class LprServiceImpl implements LprService {
         lprTransItemEntity.setEntityCreated(context);
 
         lprTransItemEntity.setOwner(owner);
-
-
-        lprTransactionItemDao.persist(lprTransItemEntity);
-        
-        lprTransactionItemDao.getEm().flush();
 
         return lprTransItemEntity;
     }
