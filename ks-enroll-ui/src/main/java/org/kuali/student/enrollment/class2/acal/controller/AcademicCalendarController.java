@@ -864,7 +864,7 @@ public class AcademicCalendarController extends UifControllerBase {
      */
     private ModelAndView redirectToSearch(AcademicCalendarForm academicCalendarForm,HttpServletRequest request, Properties urlParameters){
         urlParameters.put("viewId", CalendarConstants.CALENDAR_SEARCH_VIEW);
-        urlParameters.put("methodToCall", KRADConstants.START_METHOD);
+        urlParameters.put("methodToCall", KRADConstants.SEARCH_METHOD);
         // UrlParams.SHOW_HISTORY and SHOW_HOME no longer exist
         // https://fisheye.kuali.org/changelog/rice?cs=39034
         // TODO KSENROLL-8469
@@ -965,6 +965,8 @@ public class AcademicCalendarController extends UifControllerBase {
 
         if (GlobalVariables.getMessageMap().getErrorCount() > 0){
             // If there are errors in the validation return current calendar without saving
+            // sort the term wrappers so that error/warning messages can be displayed in the correct sections
+            viewHelperService.sortTermWrappers(academicCalendarForm.getTermWrapperList());
             return academicCalendarForm;
         }
 

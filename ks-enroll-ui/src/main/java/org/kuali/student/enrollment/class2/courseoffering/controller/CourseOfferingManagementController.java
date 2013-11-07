@@ -93,7 +93,10 @@ public class CourseOfferingManagementController extends UifControllerBase {
         }
 
         //TODO: Workaround for KRMS return
-        if(!(form.getMethodToCall().contains("edit") || form.getMethodToCall().contains("refresh"))) {
+        if(!( form.getMethodToCall().contains("edit")
+                || form.getMethodToCall().contains("refresh")
+                || form.getMethodToCall().contains("manageCORequisites") ))
+        {
             form.setCurrentCourseOfferingWrapper(null);
         }
 
@@ -179,7 +182,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
             return getUIFModelAndView(form, CourseOfferingConstants.SEARCH_PAGE);
         }
 
-        CourseOfferingManagementUtil.getViewHelperService(form).loadCourseOfferingsByTermAndCourseCode(form.getTermInfo().getId(), form.getInputCode(), form);
+        CourseOfferingManagementUtil.getViewHelperService(form).loadCourseOfferingsByTermAndCourseCode(form.getTermInfo(), form.getInputCode(), form);
 
         //turn on authz
         form.setEditAuthz(CourseOfferingManagementUtil.checkEditViewAuthz(form));
