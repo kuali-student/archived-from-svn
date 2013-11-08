@@ -59,8 +59,11 @@ class BasePage < PageFactory
       action(:adding_line_wait) {|b| b.adding_line.wait_while_present }
       action(:saving_wait) { |b| b.saving.wait_while_present }
 
+      action(:save_and_continue) { |b| b.button(id: 'usave').click; b.saving_wait }
+
       # For Auto Lookup drop down that appears in KRAD
       action(:auto_lookup) { |lookup_results, b| b.link(text: lookup_results).when_present.click}
+
     end
 
     def links(*links_text)

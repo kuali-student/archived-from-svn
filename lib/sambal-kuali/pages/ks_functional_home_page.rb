@@ -17,7 +17,8 @@ class KSFunctionalHome < BasePage
 
   element(:logout_button) { |b| b.button(value: "Logout") }
   element(:logout_link) { |b| b.link(text: 'Logout') }
-  action(:user_dropdown) { |b| b.link(text: @BasePage.logged_in_user.downcase).click }
+  action(:user_dropdown) { |username, b| b.link(text: "#{username}".downcase).click }
+  #action(:user_dropdown) { |b| b.link(text: BasePage.logged_in_user.downcase).click }
 
   def logout
     logout_button.click unless logout_link.exists?
@@ -25,7 +26,7 @@ class KSFunctionalHome < BasePage
      if logout_link.visible?
        logout_link.click
      else
-       user_dropdown
+       user_dropdown(logged_in_user)
        logout_link.when_present.click
      end
   end
