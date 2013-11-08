@@ -4,9 +4,6 @@ module Workflows
 
   # Site Navigation helpers...
 
-
-
-
   def log_in(user, pwd)
     current_user = ""
 
