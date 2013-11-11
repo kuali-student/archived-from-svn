@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.kuali.student.enroll</groupId>
         <artifactId>ks-enroll</artifactId>
-        <version>1.0.0-M9-build-571</version>
+        <version>1.0.0-KD13-DEMO-SNAPSHOT</version>
     </parent>
     <groupId>org.kuali.student.enroll</groupId>
     <artifactId>ks-enroll-deployment-resources</artifactId>
