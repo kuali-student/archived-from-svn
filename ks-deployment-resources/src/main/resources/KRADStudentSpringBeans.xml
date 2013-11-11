@@ -92,6 +92,11 @@
                 <value>classpath:org/kuali/student/core/krms/KSKRMSRuleMaintenance.xml</value>
                 <value>classpath:org/kuali/student/lum/lu/ui/krms/LUCustomComponents.xml</value>
                 <value>classpath:org/kuali/student/cm/main/CourseRuleMaintenance.xml</value>
+                <value>classpath:org/kuali/student/lum/lu/ui/krms/KRMSCourseLookupView.xml</value>
+                <value>classpath:org/kuali/student/lum/lu/ui/krms/CourseSetsLookupView.xml</value>
+                <value>classpath:org/kuali/student/lum/lu/ui/krms/KRMSProgramLookupView.xml</value>
+                <value>classpath:org/kuali/student/core/krms/DepartmentLookupView.xml</value>
+                <value>classpath:org/kuali/student/cm/main/CMLUCustomComponents.xml</value>
                 
                 <!-- Curriculum Management Course Info -->
                 <value>classpath:org/kuali/student/cm/main/CourseMaintenanceView.xml</value>
