@@ -16,6 +16,7 @@
  */
 package org.kuali.student.r2.core.class1.appointment.service.impl;
 
+import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.exceptions.*;
@@ -24,6 +25,7 @@ import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.appointment.dto.AppointmentInfo;
 import org.kuali.student.r2.core.appointment.dto.AppointmentSlotInfo;
 import org.kuali.student.r2.core.appointment.dto.AppointmentWindowInfo;
+import org.kuali.student.r2.core.appointment.infc.Appointment;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentDao;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentSlotDao;
 import org.kuali.student.r2.core.class1.appointment.dao.AppointmentWindowDao;
@@ -33,9 +35,11 @@ import org.kuali.student.r2.core.class1.appointment.model.AppointmentWindowEntit
 import org.kuali.student.r2.core.population.service.PopulationService;
 
 import javax.jws.WebParam;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -61,8 +65,18 @@ public class AppointmentServiceImplHelper {
     * This is pulled out so other methods can call this without the transactional behavior.
     */
     public AppointmentInfo createAppointmentNoTransact(String personId, String appointmentSlotId, String appointmentTypeKey, AppointmentInfo appointmentInfo, @WebParam(name = "contextInfo") ContextInfo contextInfo) throws DataValidationErrorException, DoesNotExistException, InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException, ReadOnlyException {
+        AppointmentEntity  appointmentEntity = createAppointmentEntityNoTransact(appointmentInfo, appointmentSlotId, contextInfo);
+
+        appointmentDao.persist(appointmentEntity);
+        
+        appointmentDao.getEm().flush();
+        
+        return appointmentEntity.toDto();
+    }
+    
+    public AppointmentEntity createAppointmentEntityNoTransact(Appointment appointmentInfo, String appointmentSlotId, ContextInfo contextInfo) throws DoesNotExistException {
         AppointmentEntity  appointmentEntity = new AppointmentEntity(appointmentInfo);
-      
+        
         appointmentEntity.setEntityCreated(contextInfo);
         
         // TODO: Determine if there should be a check between apptType/slotId and apptInfo counterparts
@@ -73,8 +87,7 @@ public class AppointmentServiceImplHelper {
         }
         appointmentEntity.setSlotEntity(slotEntity); // This completes the initialization of appointmentSlotEntity
 
-        appointmentDao.persist(appointmentEntity);
-        return appointmentEntity.toDto();
+        return appointmentEntity;
     }
 
     // ------------------------------ Slot creation ------------------------
@@ -97,8 +110,9 @@ public class AppointmentServiceImplHelper {
      * Helper that is used both by deleteAppointmentWindow and deleteAppointmentSlotsByWindow
      * @param windowEntity An appointment window entity
      * @param shouldDeleteSlots true, if you want slots to also be deleted
+     * @throws OperationFailedException 
      */
-    public void deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) {
+    public void deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) throws OperationFailedException {
         List<AppointmentSlotEntity> slotList = _fetchSlotEntitiesByWindows(windowEntity.getId());
         if (slotList != null) {
             // Delete appointments, if any
@@ -106,18 +120,24 @@ public class AppointmentServiceImplHelper {
             // Delete slots, if any
             _deleteAppointmentSlots(slotList);
         }
-        changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
+        try {
+            changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
+        } catch (VersionMismatchException e) {
+            throw new OperationFailedException("failed to change AppointmentWindowState for id=" + windowEntity.getId() , e);
+
+        }
     }
 
-    public void deleteAppointmentSlotsByWindowCascading(AppointmentWindowEntity windowEntity) {
+    public void deleteAppointmentSlotsByWindowCascading(AppointmentWindowEntity windowEntity) throws OperationFailedException {
         deleteAppointmentsByWindow(windowEntity, true); // also, delete slots
     }
 
     /**
      * Deletes appointment windows, slots, and appointments.
      * @param windowEntity The window (and its dependent parts) to be deleted.
+     * @throws OperationFailedException 
      */
-    public void deleteAppointmentWindowCascading(AppointmentWindowEntity windowEntity) {
+    public void deleteAppointmentWindowCascading(AppointmentWindowEntity windowEntity) throws OperationFailedException {
         deleteAppointmentSlotsByWindowCascading(windowEntity);
         appointmentWindowDao.remove(windowEntity);
         // No need to update the state since the window is gone
@@ -140,10 +160,18 @@ public class AppointmentServiceImplHelper {
      * @param windowEntity The appointment window ID in the DB
      * @param stateKey Either AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY or
      *                 AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_ASSIGNED_KEY
+     * @throws VersionMismatchException 
      */
-    public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) {
+    public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) throws VersionMismatchException {
         windowEntity.setApptWindowState(stateKey);
-        appointmentWindowDao.update(windowEntity);
+        
+        AppointmentWindowEntity e = appointmentWindowDao.merge(windowEntity);
+        
+        appointmentWindowDao.getEm().flush();
+        
+        // TODO KSENROLL-9052
+        // just in case the windowEntity is used again this will allow it to be saved without an optimistic locking exception
+        windowEntity.setVersionNumber(e.getVersionNumber());
     }
 
     /**
@@ -228,6 +256,7 @@ public class AppointmentServiceImplHelper {
         }
         appointmentSlotEntity.setApptWinEntity(windowEntity); // This completes the initialization of appointmentSlotEntity
         appointmentSlotDao.persist(appointmentSlotEntity);
+        appointmentDao.getEm().flush();
         return appointmentSlotEntity.toDto();
     }
 
@@ -556,13 +585,24 @@ public class AppointmentServiceImplHelper {
                                                   StatusInfo statusInfo, ContextInfo contextInfo)
             throws InvalidParameterException, MissingParameterException, DoesNotExistException,
                    PermissionDeniedException, OperationFailedException, DataValidationErrorException, ReadOnlyException {
-        //Code Changed for JIRA-9075 - SONAR Critical issues - Use get(0) with caution - 5
-        int firstAppointmentSlotInfo = 0;
-        String slotId = slotInfoList.get(firstAppointmentSlotInfo).getId();  // Only one slot in the one slot case
+    	
+    	List<AppointmentEntity> apptEntities = new ArrayList<AppointmentEntity>();
+    	
+        AppointmentSlotInfo slotInfo = KSCollectionUtils.getRequiredZeroElement(slotInfoList);  // Only one slot in the one slot case
+
+        String slotId = slotInfo.getId();
+        
         for (String studentId: studentIds) {
+        	
             AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
-            createAppointmentNoTransact(studentId, slotId, apptInfo.getTypeKey(), apptInfo, contextInfo);
+            
+            AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
+            
+            appointmentDao.persist(apptEntity);
         }
+        
+        appointmentDao.getEm().flush();
+        
         // Set number of students allocated
         statusInfo.setMessage("" + studentIds.size());
     }
@@ -598,16 +638,24 @@ public class AppointmentServiceImplHelper {
             sublist = studentIds.subList(count * studentsPerSlot, endIndex);
 
             count++;
+            
             // Make the assignments
             for (String studentId: sublist) {
                 String slotId = slotInfo.getId();
                 AppointmentInfo apptInfo = _createAppointmentInfo(studentId, slotId);
-                createAppointmentNoTransact(studentId, slotId, apptInfo.getTypeKey(), apptInfo, contextInfo);
+                AppointmentEntity apptEntity = createAppointmentEntityNoTransact(apptInfo, slotId, contextInfo);
+                
+                appointmentDao.persist(apptEntity);
+                
             }
+                
             if (done) {
                 break; // Some slots may be unassigned in the max allocation
             }
         }
+        
+        appointmentDao.getEm().flush();
+        
     }
     /*
      * Precondition: At least one slot in the slotInfoList
