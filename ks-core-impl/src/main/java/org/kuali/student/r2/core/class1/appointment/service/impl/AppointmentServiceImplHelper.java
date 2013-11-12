@@ -110,9 +110,10 @@ public class AppointmentServiceImplHelper {
      * Helper that is used both by deleteAppointmentWindow and deleteAppointmentSlotsByWindow
      * @param windowEntity An appointment window entity
      * @param shouldDeleteSlots true, if you want slots to also be deleted
+     * @return 
      * @throws OperationFailedException 
      */
-    public void deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) throws OperationFailedException {
+    public AppointmentWindowEntity deleteAppointmentsByWindow(AppointmentWindowEntity windowEntity, boolean shouldDeleteSlots) throws OperationFailedException {
         List<AppointmentSlotEntity> slotList = _fetchSlotEntitiesByWindows(windowEntity.getId());
         if (slotList != null) {
             // Delete appointments, if any
@@ -121,7 +122,7 @@ public class AppointmentServiceImplHelper {
             _deleteAppointmentSlots(slotList);
         }
         try {
-            changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
+            return changeApptWinState(windowEntity, AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_DRAFT_KEY);
         } catch (VersionMismatchException e) {
             throw new OperationFailedException("failed to change AppointmentWindowState for id=" + windowEntity.getId() , e);
 
@@ -138,8 +139,8 @@ public class AppointmentServiceImplHelper {
      * @throws OperationFailedException 
      */
     public void deleteAppointmentWindowCascading(AppointmentWindowEntity windowEntity) throws OperationFailedException {
-        deleteAppointmentSlotsByWindowCascading(windowEntity);
-        appointmentWindowDao.remove(windowEntity);
+        AppointmentWindowEntity e = deleteAppointmentsByWindow(windowEntity, true);
+        appointmentWindowDao.remove(e);
         // No need to update the state since the window is gone
     }
 
