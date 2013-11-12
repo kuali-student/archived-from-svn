@@ -162,16 +162,14 @@ public class AppointmentServiceImplHelper {
      *                 AppointmentServiceConstants.APPOINTMENT_WINDOW_STATE_ASSIGNED_KEY
      * @throws VersionMismatchException 
      */
-    public void changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) throws VersionMismatchException {
+    public AppointmentWindowEntity changeApptWinState(AppointmentWindowEntity windowEntity, String stateKey) throws VersionMismatchException {
         windowEntity.setApptWindowState(stateKey);
         
         AppointmentWindowEntity e = appointmentWindowDao.merge(windowEntity);
         
         appointmentWindowDao.getEm().flush();
         
-        // TODO KSENROLL-9052
-        // just in case the windowEntity is used again this will allow it to be saved without an optimistic locking exception
-        windowEntity.setVersionNumber(e.getVersionNumber());
+        return e;
     }
 
     /**
