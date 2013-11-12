@@ -49,6 +49,7 @@ import org.kuali.student.r2.common.util.constants.CourseWaitListServiceConstants
 import org.kuali.student.r2.common.util.constants.LprServiceConstants;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.class1.search.ActivityOfferingSearchServiceImpl;
 import org.kuali.student.r2.core.class1.search.CourseOfferingManagementSearchImpl;
@@ -330,13 +331,8 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             wrapper.setSubTermName("None");
             wrapper.setSubTermId("");
             TermInfo termTemp = CourseOfferingManagementUtil.getAcademicCalendarService().getTerm(info.getTermId(), contextInfo);
-            QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
-            qbcBuilder.setPredicates(PredicateFactory.and(
-                    PredicateFactory.equal("relatedTypeId", termTemp.getTypeKey()),
-                    PredicateFactory.in("type", TypeServiceConstants.TYPE_TYPE_RELATION_CONTAINS_TYPE_KEY)));
-            QueryByCriteria criteria = qbcBuilder.build();
-            List<String> termIDs = CourseOfferingManagementUtil.getTypeService().searchForTypeTypeRelationIds(criteria, contextInfo);
-            if (termIDs == null || termIDs.isEmpty()) {
+            List<TypeTypeRelationInfo> terms = CourseOfferingManagementUtil.getTypeService().getTypeTypeRelationsByRelatedTypeAndType(termTemp.getTypeKey(), TypeServiceConstants.TYPE_TYPE_RELATION_CONTAINS_TYPE_KEY, contextInfo);
+            if (terms == null || terms.isEmpty()) {
                 term = new TermInfo(termTemp);
             } else {
                 //Handle Subterms
@@ -372,6 +368,21 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             ObjectMapper mapper = new ObjectMapper();
             wrapper.setSubTermDatesJsonString(mapper.writeValueAsString(subTermDates));
             // end subterms
+
+            //Find the earliest registration period and set the term registration start to that date
+            List<TypeInfo> regPeriods = CourseOfferingManagementUtil.getTypeService().getTypesForGroupType(AtpServiceConstants.MILESTONE_REGISTRATION_PERIOD_GROUP_TYPE_KEY, contextInfo);
+            List<KeyDateInfo> keyDateInfoList = CourseOfferingManagementUtil.getAcademicCalendarService().getKeyDatesForTerm(info.getTermId(), contextInfo);
+            Date termRegStartDate = null;
+            for (KeyDateInfo keyDateInfo : keyDateInfoList) {
+                for (TypeInfo regPeriod : regPeriods) {
+                    if (keyDateInfo.getTypeKey().equalsIgnoreCase(regPeriod.getKey()) && keyDateInfo.getStartDate() != null) {
+                        if (termRegStartDate == null || keyDateInfo.getStartDate().before(termRegStartDate)) {
+                            termRegStartDate = keyDateInfo.getStartDate();
+                        }
+                    }
+                }
+            }
+            wrapper.setTermRegStartDate(termRegStartDate);
 
             wrapper.setCourseOfferingCode(info.getCourseOfferingCode());
             wrapper.setCourseOfferingTitle(info.getCourseOfferingTitle());
@@ -414,9 +425,9 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
                     CourseOfferingManagementUtil.getStateService(), CourseOfferingManagementUtil.getAcademicCalendarService(), contextInfo));
 
             //retrieve all the populations for seat pool section client side validation
-            qbcBuilder = QueryByCriteria.Builder.create();
+            QueryByCriteria.Builder qbcBuilder = QueryByCriteria.Builder.create();
             qbcBuilder.setPredicates(PredicateFactory.equal("populationState", PopulationServiceConstants.POPULATION_ACTIVE_STATE_KEY));
-            criteria = qbcBuilder.build();
+            QueryByCriteria criteria = qbcBuilder.build();
 
             try {
                 List<PopulationInfo> populationInfoList = CourseOfferingManagementUtil.getPopulationService().searchForPopulations(criteria, createContextInfo());
@@ -663,42 +674,7 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
     }
 
     protected void loadNavigationDetails(ActivityOfferingWrapper wrapper) throws Exception {
-        List<ActivityOfferingInfo> aos = new ArrayList<ActivityOfferingInfo>();
-
-        // search for id, code, type of all AOs in CO
-        SearchRequestInfo request = new SearchRequestInfo(ActivityOfferingSearchServiceImpl.AO_CODES_TYPES_BY_CO_ID_SEARCH_KEY);
-        request.addParam(ActivityOfferingSearchServiceImpl.SearchParameters.CO_ID, wrapper.getAoInfo().getCourseOfferingId());
-        SearchResultInfo result = null;
-        result = CourseOfferingManagementUtil.getSearchService().search(request, createContextInfo());
-        List<SearchResultRowInfo> rows = result.getRows();
-        if (!rows.isEmpty()) {
-            for (SearchResultRowInfo row: rows) {
-                List<SearchResultCellInfo> cells = row.getCells();
-                String aoId = null;
-                String aoCode = null;
-                String aoType = null;
-                for (SearchResultCellInfo cell: cells) {
-                    if (cell.getKey().equals(ActivityOfferingSearchServiceImpl.SearchResultColumns.AO_ID)) {
-                        aoId = cell.getValue();
-                    } else if (cell.getKey().equals(ActivityOfferingSearchServiceImpl.SearchResultColumns.AO_CODE)) {
-                        aoCode = cell.getValue();
-                    } else if (cell.getKey().equals(ActivityOfferingSearchServiceImpl.SearchResultColumns.AO_TYPE)) {
-                        aoType = cell.getValue();
-                    } else {
-                        throw new OperationFailedException("Query for AO id, code, and type returned too many columns.");
-                    }
-                }
-                ActivityOfferingInfo aoLimitedInfo = new ActivityOfferingInfo();
-                aoLimitedInfo.setActivityCode(aoCode);
-                aoLimitedInfo.setId(aoId);
-                aoLimitedInfo.setTypeKey(aoType);
-                aos.add(aoLimitedInfo);
-            }
-        }
-
-        if(aos.size() > 1) {
-            Collections.sort(aos, new ActivityOfferingComparator());
-        }
+        List<ActivityOfferingInfo> aos = searchForRelatedAOs(wrapper);
 
         // Fill previous/next AOs for navigation
         wrapper.getEditRenderHelper().getAoCodes().clear();
@@ -733,6 +709,18 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
             keyValue.setValue(typeInfo.getName() + " " + ao.getActivityCode());
             wrapper.getEditRenderHelper().getAoCodes().add(keyValue);
         }
+    }
+
+    private List<ActivityOfferingInfo> searchForRelatedAOs(ActivityOfferingWrapper wrapper) throws Exception {
+        List<ActivityOfferingInfo> result = new ArrayList<ActivityOfferingInfo>();
+
+        // search for id, code, type of all AOs in CO
+        SearchRequestInfo searchRequest = new SearchRequestInfo(ActivityOfferingSearchServiceImpl.AO_CODES_TYPES_BY_CO_ID_SEARCH_KEY);
+        searchRequest.addParam(ActivityOfferingSearchServiceImpl.SearchParameters.CO_ID, wrapper.getAoInfo().getCourseOfferingId());
+        List<ActivityOfferingInfo> aos = CourseOfferingViewHelperUtil.loadActivityOfferings(searchRequest);
+        if (aos != null) result.addAll(aos);
+
+        return result;
     }
 
     @Override
@@ -1093,17 +1081,6 @@ public class ActivityOfferingMaintainableImpl extends KSMaintainableImpl impleme
         public int compare(TypeTypeRelationInfo o1, TypeTypeRelationInfo o2) {
             String value1 = o1.getId();
             String value2 = o2.getId();
-
-            int result = value1.compareToIgnoreCase(value2);
-            return result;
-        }
-    }
-
-    private static class ActivityOfferingComparator implements Comparator<ActivityOfferingInfo>, Serializable {
-        @Override
-        public int compare(ActivityOfferingInfo o1, ActivityOfferingInfo o2) {
-            String value1 = o1.getActivityCode();
-            String value2 = o2.getActivityCode();
 
             int result = value1.compareToIgnoreCase(value2);
             return result;

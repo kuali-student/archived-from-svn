@@ -16,6 +16,7 @@
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
 import org.apache.commons.lang.BooleanUtils;
+import org.kuali.student.r2.core.scheduling.infc.TimeSlot;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
@@ -1412,7 +1413,7 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
             aoClusterWrapper.setRgMessageStyle(ActivityOfferingClusterWrapper.RG_MESSAGE_ALL);
             aoClusterWrapper.setHasAllRegGroups(true);
             // perform max enrollment validation
-            _performMaxEnrollmentValidation(aoMap, aoClusterWrapper.getAoCluster(), clusterIndex);
+            _performMaxEnrollmentValidation(aoMap, aoClusterWrapper,  clusterIndex);
             //validate AO time conflict in RG
             _performRGTimeConflictValidation(aoClusterWrapper.getAoCluster(), rgInfos, clusterIndex, ao2sch, ao2schReq);
         }
@@ -1467,19 +1468,25 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
         return isMatched;
     }
 
+    /**
+     * Checks if all the AOs in a cluster add up to the same max enrollment (e.g. that there are not more seats in labs then lectures)
+     * @param aoMap map of aoIds to ao wrappers
+     * @param aoClusterWrapper AO cluster wrapper
+     * @param clusterIndex index of the cluster
+     * @throws InvalidParameterException
+     * @throws MissingParameterException
+     * @throws DoesNotExistException
+     * @throws PermissionDeniedException
+     * @throws OperationFailedException
+     */
+    private void _performMaxEnrollmentValidation(Map<String, ActivityOfferingWrapper> aoMap, ActivityOfferingClusterWrapper aoClusterWrapper, int clusterIndex) throws InvalidParameterException, MissingParameterException, DoesNotExistException, PermissionDeniedException, OperationFailedException {
+        int previousMaxEnrollments = -1;
+        String previousAOSetTypeKey = "";
 
-    private void _performMaxEnrollmentValidation(Map<String, ActivityOfferingWrapper> aoMap, ActivityOfferingClusterInfo aoCluster, int clusterIndex) throws Exception {
+        for (ActivityOfferingSetInfo aos : aoClusterWrapper.getAoCluster().getActivityOfferingSets()) {
+            int aoSetMaxEnrollNumber = 0;
 
-        int aoSetMaxEnrollNumber = 0;
-        int currentAoSetMaxEnrollNumber = 0;
-        int listIndex = 0;
-        ValidationResultInfo validationResultInfo = new ValidationResultInfo();
-
-        //The max enrollment numbers of all the aoSets in the given AOC are the same. The validation passes.
-        validationResultInfo.setLevel(ValidationResult.ErrorLevel.OK);
-        validationResultInfo.setMessage("Sum of enrollment for each AO type is equal");
-
-        for (ActivityOfferingSetInfo aos : aoCluster.getActivityOfferingSets()) {
+            //Sum the enrollment for each AO in a given set
             for (String aoId : aos.getActivityOfferingIds()) {
                 ActivityOfferingWrapper aoWrapper = aoMap.get(aoId);
                 ActivityOfferingInfo aoInfo;
@@ -1487,24 +1494,24 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                     aoSetMaxEnrollNumber += aoInfo.getMaximumEnrollment();
                 }
             }
-
-            if (listIndex == 0) {
-                currentAoSetMaxEnrollNumber = aoSetMaxEnrollNumber;
-            } else {
-                if (aoSetMaxEnrollNumber != currentAoSetMaxEnrollNumber) {
-
-                    validationResultInfo.setLevel(ValidationResult.ErrorLevel.WARN);
-                    validationResultInfo.setMessage("Sum of enrollment for each AO type is not equal");
-                    break;
+            //If this is not the first cluster looked at and the max enrollment differs then set a warning
+            if (previousMaxEnrollments >= 0 && previousMaxEnrollments != aoSetMaxEnrollNumber){
+                String biggerAOTypeName, smallerAOTypeName;
+                if(previousMaxEnrollments > aoSetMaxEnrollNumber){
+                    biggerAOTypeName = CourseOfferingManagementUtil.getTypeService().getType(previousAOSetTypeKey, ContextUtils.createDefaultContextInfo()).getName();
+                    smallerAOTypeName = CourseOfferingManagementUtil.getTypeService().getType(aos.getActivityOfferingType(), ContextUtils.createDefaultContextInfo()).getName();
+                }else{
+                    biggerAOTypeName = CourseOfferingManagementUtil.getTypeService().getType(aos.getActivityOfferingType(), ContextUtils.createDefaultContextInfo()).getName();
+                    smallerAOTypeName = CourseOfferingManagementUtil.getTypeService().getType(previousAOSetTypeKey, ContextUtils.createDefaultContextInfo()).getName();
                 }
+                GlobalVariables.getMessageMap().putWarningForSectionId("activityOfferingsPerCluster_line" + clusterIndex, RegistrationGroupConstants.MSG_WARNING_MAX_ENROLLMENT, aoClusterWrapper.getClusterNameForDisplay(), biggerAOTypeName, smallerAOTypeName);
+                break;
             }
-            aoSetMaxEnrollNumber = 0;
-            listIndex++;
+
+            previousAOSetTypeKey = aos.getActivityOfferingType();
+            previousMaxEnrollments = aoSetMaxEnrollNumber;
         }
 
-        if (validationResultInfo.isWarn()) {
-            GlobalVariables.getMessageMap().putWarningForSectionId("activityOfferingsPerCluster_line" + clusterIndex, RegistrationGroupConstants.MSG_WARNING_MAX_ENROLLMENT, aoCluster.getPrivateName());
-        }
     }
 
     private List<Integer> _performRGTimeConflictValidation(ActivityOfferingClusterInfo aoCluster, List<RegistrationGroupInfo> registrationGroupInfos, int clusterIndex, Map<String, List<ScheduleCalcContainer>> ao2sch, Map<String, List<ScheduleRequestCalcContainer>> ao2schReq) throws Exception {
@@ -1957,9 +1964,9 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
             KSUifUtils.addGrowlMessageIcon(GrowlIcon.WARNING, CourseOfferingConstants.COURSEOFFERING_TOOLBAR_APPROVED);
         } else {
             if (enabled == 1) {
-                KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.COURSEOFFERING_TOOLBAR_APPROVED_1_SUCCESS);
+                KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, CourseOfferingConstants.COURSEOFFERING_TOOLBAR_APPROVED_1_SUCCESS);
             } else {
-                KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, CourseOfferingConstants.COURSEOFFERING_TOOLBAR_APPROVED_N_SUCCESS);
+                KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, CourseOfferingConstants.COURSEOFFERING_TOOLBAR_APPROVED_N_SUCCESS);
             }
         }
     }
@@ -2021,13 +2028,14 @@ public class CourseOfferingManagementViewHelperServiceImpl extends CO_AO_RG_View
                                     aoDisplayWrapper.setRoomName(scheduleComponentDisplay.getRoom().getRoomCode(), true);
                                 }
                                 if (!scheduleComponentDisplay.getTimeSlots().isEmpty()) {
-                                    if (scheduleComponentDisplay.getTimeSlots().get(0).getStartTime() != null && (scheduleComponentDisplay.getTimeSlots().get(0).getStartTime().getMilliSeconds() !=null)) {
-                                        aoDisplayWrapper.setStartTimeDisplay(millisToTime(scheduleComponentDisplay.getTimeSlots().get(0).getStartTime().getMilliSeconds()), true);
+                                    TimeSlot timeSlot = KSCollectionUtils.getRequiredZeroElement(scheduleComponentDisplay.getTimeSlots());
+                                    if (timeSlot.getStartTime() != null && (timeSlot.getStartTime().getMilliSeconds() !=null)) {
+                                        aoDisplayWrapper.setStartTimeDisplay(millisToTime(timeSlot.getStartTime().getMilliSeconds()), true);
                                     }
-                                    if (scheduleComponentDisplay.getTimeSlots().get(0).getEndTime() != null && (scheduleComponentDisplay.getTimeSlots().get(0).getEndTime().getMilliSeconds() != null) ) {
-                                        aoDisplayWrapper.setEndTimeDisplay(millisToTime(scheduleComponentDisplay.getTimeSlots().get(0).getEndTime().getMilliSeconds()), true);
+                                    if (timeSlot.getEndTime() != null && (timeSlot.getEndTime().getMilliSeconds() != null) ) {
+                                        aoDisplayWrapper.setEndTimeDisplay(millisToTime(timeSlot.getEndTime().getMilliSeconds()), true);
                                     }
-                                    aoDisplayWrapper.setDaysDisplayName(getDays(scheduleComponentDisplay.getTimeSlots().get(0).getWeekdays()), true);
+                                    aoDisplayWrapper.setDaysDisplayName(getDays(timeSlot.getWeekdays()), true);
                                 }
                             }
                         }

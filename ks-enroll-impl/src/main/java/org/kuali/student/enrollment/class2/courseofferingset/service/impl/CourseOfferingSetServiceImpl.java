@@ -807,6 +807,7 @@ public class CourseOfferingSetServiceImpl implements CourseOfferingSetService {
                 }
 
                 // Log the state change
+                contextInfo.setCurrentDate(new Date());
                 logStateChange(entity, nextStateKey, contextInfo);
                 LOG.warn(String.format("Updated SOC [%s] state to [%s].", socId, nextStateKey));
 

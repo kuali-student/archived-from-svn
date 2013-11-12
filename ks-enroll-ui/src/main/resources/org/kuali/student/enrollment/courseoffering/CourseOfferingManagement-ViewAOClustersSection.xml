@@ -145,7 +145,7 @@
                                   p:source="@{#ConfigProperties['ks.externalizable.images.url']}/ActivityRuleIcon6px.png">
                                 <property name="style" value="padding-left:3px padding-bottom:3px;"/>
                                 <property name="toolTip">
-                                    <bean parent="Uif-Tooltip" p:tooltipContent="This Activity has requisite(s) in addition to any for the Course Offering"/>
+                                    <bean parent="Uif-KS-Tooltip" p:tooltipContent="This Activity has requisite(s) in addition to any for the Course Offering"/>
                                 </property>
                                 <property name="propertyReplacers">
                                     <list>
@@ -163,7 +163,7 @@
                                   p:source="@{#ConfigProperties['ks.externalizable.images.url']}/colocate_icon.png">
                                 <property name="style" value="padding-left:3px"/>
                                 <property name="toolTip">
-                                    <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="@{#lp.colocatedAoInfoUI}"/>
+                                    <bean parent="Uif-KS-TooltipFocus" p:onMouseHover="true" p:tooltipContent="@{#lp.colocatedAoInfoUI}"/>
                                 </property>
                                 <property name="propertyReplacers">
                                     <list>
@@ -192,9 +192,9 @@
                 <bean parent="Uif-DataField"
                       p:label="MAX ENR"
                       p:propertyName="aoInfo.maximumEnrollment"/>
-                <bean parent="Uif-MessageField"
+               <!-- Revisit after KD13 <bean parent="Uif-MessageField"
                       p:label="SCHEDULING"
-                      p:messageText="@{#line.scheduledState}" />
+                      p:messageText="@{#line.scheduledState}" />    -->
                 <bean parent="Uif-MessageField"
                       p:label="DAYS"
                       p:messageText="@{#line.daysDisplayName}" />
@@ -204,9 +204,19 @@
                 <bean parent="Uif-MessageField"
                       p:label="END TIME"
                       p:messageText="@{#line.endTimeDisplay}" />
-                <bean parent="Uif-MessageField"
-                      p:label="BUILDING"
-                      p:messageText="@{#line.buildingName}" />
+                <bean parent="Uif-MessageField">
+                    <property name="label" value="BUILDING"/>
+                    <property name="messageText" value="@{#line.buildingCode}"/>
+                    <property name="toolTip">
+                        <bean parent="Uif-TooltipFocus" p:onMouseHover="true" p:tooltipContent="@{#line.buildingName}">
+                            <property name="templateOptions">
+                                <map merge="true">
+                                    <entry key="position" value="right"/>
+                                </map>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
                 <bean parent="Uif-MessageField"
                       p:label="ROOM"
                       p:messageText="@{#line.roomName}" />
@@ -250,7 +260,7 @@
                 <bean parent="Uif-NavigationActionLink" p:methodToCall="edit" p:actionLabel="Edit"
                       p:render="@{#line.isEnableEditAOActionLink()}" p:actionEvent="editAOonManageAOsPage">
                 </bean>
-                <bean parent="Uif-NavigationActionLink" p:methodToCall="manageAORules" p:actionLabel="Activity Offering Requisites"/>
+                <bean parent="Uif-NavigationActionLink" p:methodToCall="manageAORules" p:actionLabel="Requisites"/>
                 <!--</list>-->
                     <!--</property>-->
                 <!--</bean>-->
@@ -324,7 +334,7 @@
                 </bean>
                 <bean parent="Uif-MessageField"
                       p:label="BLDG"
-                      p:messageText="@{#line.buildingName}">
+                      p:messageText="@{#line.buildingCode}">
                 </bean>
                 <bean parent="Uif-MessageField"
                       p:label="ROOM"
