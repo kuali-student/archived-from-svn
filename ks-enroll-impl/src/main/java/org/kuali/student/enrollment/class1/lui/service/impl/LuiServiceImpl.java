@@ -876,17 +876,10 @@ public class LuiServiceImpl
         luiSetEntity.setUpdateId(contextInfo.getPrincipalId());
         luiSetEntity.setUpdateTime(contextInfo.getCurrentDate());
 
-        // this line can be removed once KSENROLL-4605 is resolved
-        if (luiSetInfo.getMeta() != null)
-            luiSetEntity.setVersionNumber(new Long (luiSetInfo.getMeta().getVersionInd()));
-
-        try {
-            luiSetEntity = luiSetDao.merge(luiSetEntity);
-        } catch (OptimisticLockException e) {
-            throw new VersionMismatchException("OptimisticLockException " + e.getMessage());
-        }
+        luiSetEntity = luiSetDao.merge(luiSetEntity);
 
         luiSetDao.getEm().flush();
+        
         return luiSetEntity.toDto();
     }
 
