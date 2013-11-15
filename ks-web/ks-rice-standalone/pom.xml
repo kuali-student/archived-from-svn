@@ -132,6 +132,11 @@
             <artifactId>jta</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.kuali.student.api</groupId>
+            <artifactId>ks-enroll-api</artifactId>
+            <version>${ks.api.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.kuali.student.core</groupId>
             <artifactId>ks-standard-sec</artifactId>
             <version>${ks.core.version}</version>
