@@ -31,13 +31,6 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.sprin
 		because the generator is not perfect) please update the corresponding 
 		ks-XXXX-dictionary.xml instead of this one.
 	************************************************************* -->
-	<!-- ********************************************************************************************************** -->
-	<!-- The following file is required for this file to load:
- ks-base-dictionary.xml
-plus any of its dependencies -->
-	<!-- ********************************************************************************************************** -->
-	<import resource="classpath:ks-base-dictionary.xml"/>
-
 	<!-- ActivityOfferingInfo-->
 	<bean id="ActivityOfferingInfo-generated" abstract="true" parent="DataObjectEntry">
 		<property name="name" value="activityOfferingInfo"/>
@@ -583,14 +576,14 @@ Course Offering code the activity is being offered in.
 		<property name="shortLabel" value="Is Colocated"/>
 		<property name="summary">
 			<value>
-Indicates that the activity offering has one or more shared delivery logistics.
+Indicates that the activity offering has one or more shared Scheduling Information.
 
 			</value>
 		</property>
 		<property name="label" value="Is Colocated"/>
 		<property name="description">
 			<value>
-Indicates that the activity offering has one or more shared delivery logistics.
+Indicates that the activity offering has one or more shared Scheduling Information.
 This is a derived flag, managed without persistence
 			</value>
 		</property>

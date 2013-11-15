@@ -209,6 +209,15 @@ public interface CommentService {
             PermissionDeniedException,
             ReadOnlyException;
 
+    CommentInfo createComment_KRAD(String referenceId, String referenceTypeKey, String commentTypeKey, CommentInfo commentInfo, ContextInfo contextInfo)
+        throws DataValidationErrorException,
+        DoesNotExistException,
+        InvalidParameterException,
+        MissingParameterException,
+        OperationFailedException,
+        PermissionDeniedException,
+        ReadOnlyException;
+
     /**
      * Updates a comment for a reference.
      *
@@ -292,6 +301,8 @@ public interface CommentService {
      * performed by setting the validationType to the current object.
      *
      * @param validationTypeKey identifier of the extent of validation
+     * @param referenceId      identifier of reference
+     * @param referenceTypeKey reference type
      * @param commentTypeKey    the identifier for the Comment
      *                          Type to be validated
      * @param commentInfo       comment information to be tested
@@ -304,6 +315,8 @@ public interface CommentService {
      * @throws OperationFailedException  unable to complete request
      */
     public List<ValidationResultInfo> validateComment(@WebParam(name = "validationTypeKey") String validationTypeKey,
+                                                      @WebParam(name = "referenceId") String referenceId,
+                                                      @WebParam(name = "referenceTypeKey") String referenceTypeKey,
                                                       @WebParam(name = "commentTypeKey") String commentTypeKey,
                                                       @WebParam(name = "commentInfo") CommentInfo commentInfo,
                                                       @WebParam(name = "contextInfo") ContextInfo contextInfo)
@@ -311,4 +324,12 @@ public interface CommentService {
             InvalidParameterException,
             MissingParameterException,
             OperationFailedException;
+
+    List<ValidationResultInfo> validateComment_KRAD(String validationType,
+                                                    CommentInfo commentInfo,
+                                                    ContextInfo contextInfo)
+        throws DoesNotExistException,
+        InvalidParameterException,
+        MissingParameterException,
+        OperationFailedException;
 }
