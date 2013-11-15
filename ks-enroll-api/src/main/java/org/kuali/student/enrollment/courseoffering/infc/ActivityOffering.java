@@ -161,7 +161,7 @@ public interface ActivityOffering extends IdEntity {
      */
     public String getCourseOfferingTitle();
 
-    /********************* Delivery Logistics **********************/
+    /********************* Scheduling Information **********************/
     /**
      * When/for how long does the offering meet in class.  Calculated
      * by system based on meeting times; may be validated against
@@ -228,12 +228,19 @@ public interface ActivityOffering extends IdEntity {
     public String getActivityOfferingURL();
 
     /**
-     * Indicates that the activity offering has one or more shared delivery logistics.
+     * Indicates that the activity offering has one or more shared scheduling information.
      * This is a derived flag, managed without persistence
      *
      * @name Is Colocated
      * @readOnly
      */
     public Boolean getIsColocated();
+
+    /**
+     * Indicates that the activity offering has been approved for non-standard time-slots.
+     *
+     * @name Is Approved For Non Standard TimeSlots flag
+     */
+    public Boolean getIsApprovedForNonStandardTimeSlots();
 
 }
