@@ -5,8 +5,6 @@ class KradAuthorsCollaborators < BasePage
 
   element(:author_name) { |b| b.text_field(name: /displayName$/) }
 
-  action(:advanced_search) { |b| b.link(text: 'Advanced Search') }
-
   element(:author_permission) { |b| b.select_list(name: /permission$/) }
   element(:action_request) { |b| b.select_list(name: /action$/) }
   element(:author_notation) { |b| b.checkbox(name: /author$/) }

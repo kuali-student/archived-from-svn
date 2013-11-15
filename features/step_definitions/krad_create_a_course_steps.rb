@@ -94,15 +94,16 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.transcript_title.value.should == @course_proposal.transcript_title
 
     #page.subject_code.value.should == @course_proposal.subject_code
-    @course_proposal.verify_text_field(page, 'course_listing_subject', 'course_listing_number', 'joint_offering_number')
-    #page.course_listing_subject.value.should == @course_proposal.course_listing_subject
-    #page.course_listing_number.value.should == @course_proposal.course_listing_number
-    #page.joint_offering_number.value.should == @course_proposal.joint_offering_number
+    #@course_proposal.verify_text_field(page, 'course_listing_subject', 'course_listing_number', 'joint_offering_number')
+    page.course_listing_subject.value.should == @course_proposal.course_listing_subject
+    page.course_listing_number.value.should == @course_proposal.course_listing_number
+    page.joint_offering_number.value.should == @course_proposal.joint_offering_number
     page.added_instructor_name.value.should == @course_proposal.instructor_display_name
   end
 
   on(KradCurriculum).governance
   on KradGovernance do |page|
+    #@course_proposal.verify_text_field(page, 'added_administering_organization' )
     page.added_administering_organization.value.should == @course_proposal.administering_organization unless @course_proposal.administering_organization.nil?
     page.location_north.should be_checked if @course_proposal.location_north == 'set'
     page.location_south.should be_checked if @course_proposal.location_south == 'set'
@@ -122,6 +123,8 @@ Then /^I should see data in all non required fields for the course proposal$/ do
 
     page.audit.should be_checked
     page.pass_fail_transcript_grade.should be_checked
+
+    #@course_proposal.verify_text_field(page, 'activity_contacted_hours', 'activity_duration_count', 'activity_class_size' )
 
     page.activity_contacted_hours.value.should == @course_proposal.activity_contacted_hours
     page.activity_duration_count.value.should == @course_proposal.activity_duration_count

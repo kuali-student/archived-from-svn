@@ -14,11 +14,17 @@ class KradCourseProposalObject
         :joint_offering_number, :version_code_code, :version_code_title,
         :instructor, :instructor_first_name, :instructor_last_name, :instructor_username, :instructor_display_name,
         :description_rationale, :proposal_rationale,
+
+        :instructor_adding_method, :joint_offering_adding_data,
+        :joint_offering_name, :joint_offering_description, :joint_offering_course_code,
         # Governance Page
         :camp_local,
         :campus_location, :curriculum_oversight, :administering_organization,
         :location_north, :location_south, :location_extended, :location_all,
-        # Course Logistics
+        :administering_organization, :adv_admin_org_identifier,
+        :adv_admin_org_name, :adv_admin_org_abbreviation, :adv_admin_org_name,
+
+  # Course Logistics
         :term_any, :term_fall, :term_spring, :term_summer,
         :assessment_scale, :final_exam_rationale,
         :exam_standard, :exam_alternate, :exam_none,
@@ -83,9 +89,25 @@ class KradCourseProposalObject
           instructor_first_name: 'DAVID',
           instructor_last_name: 'SMITH',
           instructor_username: 's.davidb',
-        #GOVERNANCE
+
+
+          instructor_adding_method: ['auto_lookup_instructor_name', 'adv_username', 'adv_name'].sample,
+          joint_offering_adding_data: ['adv_given_name', 'adv_course_code', 'adv_plain_text', 'auto_lookup'].sample,
+
+          joint_offering_name: 'Interpreting American History: From 1865 to the Present',
+          joint_offering_description: 'The United States from the end of the Civil War to the present.',
+          joint_offering_course_code: 'HIST201',
+
+    #GOVERNANCE
           administering_organization:  'Biological Sciences',
           campus_location: [:location_all, :location_extended, :location_north, :location_south],
+
+          #BUG FOR IDENTIFIER
+          # adv_admin_org_identifier: 'ORGID-BISI',
+
+          adv_admin_org_name: 'Biological Sciences',
+          adv_admin_org_abbreviation: 'BISI',
+
         #COURSE LOGISTICS
           duration_type: ['Day', 'Four Years', 'Half Semester', 'Hours', 'Mini-mester', 'Minutes', 'Month', 'Period', 'Quarter', 'Semester', 'Session', 'TBD', 'Term', 'Two Years', 'Week', 'Year'].sample,
           duration_count: rand(1..9).to_s,
@@ -126,19 +148,25 @@ class KradCourseProposalObject
       page.subject_code.fit @subject_code
       page.auto_lookup @subject_code unless @subject_code.nil?
 
-      fill_out page, :description_rationale, :proposal_rationale, :course_number, :version_code_code, :version_code_title
+      fill_out page, :version_code_code, :version_code_title
+      #fill_out page, :description_rationale, :proposal_rationale, :course_number
 
       page.save_and_continue
     end
-  end
+
+    on(KradCurriculum).authors_collaborators
+    on KradAuthorsCollaborators do |page|
+      page.advanced_search
+    end
+
+
+end  #create
+
 
   def KradCourseProposalRequired
     on(KradCurriculum).course_information
     on KradCourseInformation do |page|
       page.expand_course_listing_section
-
-      #page.add_a_version_code unless @version_code_code.nil? and @version_code_title.nil?
-
       fill_out page, :description_rationale, :proposal_rationale, :course_number, :version_code_code, :version_code_title
       page.save_and_continue
     end
@@ -151,11 +179,10 @@ class KradCourseProposalObject
 
     on KradCourseLogistics do |page|
       page.add_outcome unless @outcome_type.nil?
-
+      # outcome_type needs to be done first because of page loading
+      fill_out page, :outcome_type
       fill_out page, :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail,
-               :assessment_percentage, :assessment_satisfactory, :outcome_type
-      # Need a special method to wait for field depending on value of @outcome_type
-      sleep 1
+               :assessment_percentage, :assessment_satisfactory
       set_outcome_type
       page.add_additional_format
       page.add_activity
@@ -176,15 +203,12 @@ class KradCourseProposalObject
       page.pilot_course.fit @pilot_course
       page.loading_wait
       # SPECIAL:: Need this second start_term because end_term not immediately selectable after checkbox is selected
-      page.start_term.select @start_term unless @start_term.nil?
       #page.start_term.fit @start_term
       sleep 1
-
       page.end_term.fit @end_term
-      #fill_out page, :end_term
       page.save_and_continue
     end
-  end
+  end # required
 
   def KradCourseProposalNonrequired
     on(KradCurriculum).course_information
@@ -192,39 +216,74 @@ class KradCourseProposalObject
       page.loading_wait
       page.expand_course_listing_section
       page.add_another_course_listing unless @course_listing_subject.nil? and @course_listing_number.nil?
-      page.add_another_course unless @joint_offering_number.nil?
+      #page.add_another_course unless @joint_offering_number.nil?
 
       fill_out page, :course_listing_number, :transcript_title
 
       page.course_listing_subject.fit @course_listing_subject
       page.auto_lookup @course_listing_subject unless @course_listing_subject.nil?
 
-      page.joint_offering_number.fit @joint_offering_number
-      page.auto_lookup @joint_offering_number unless @joint_offering_number.nil?
+      if @joint_offering_adding_data == 'auto_lookup'
+        page.add_another_course
+        page.joint_offering_number.fit @joint_offering_number
+        page.auto_lookup @joint_offering_number unless @joint_offering_number.nil?
+      end
 
-      page.instructor_name.fit @instructor_last_name
-      #page.auto_lookup(/^#{@instructor_last_name}/)
+      if @joint_offering_adding_data == 'adv_given_name' or @joint_offering_adding_data == 'adv_course_code' or @joint_offering_adding_data == 'adv_plain_text'
+        page.add_another_course
+        page.joint_offering_advanced_search
+        page.adv_given_name.wait_until_present
+        page.adv_course_code.fit @joint_offering_course_code if @joint_offering_adding_data == 'adv_course_code'
+        page.adv_given_name.fit @joint_offering_name if @joint_offering_adding_data == 'adv_given_name'
+        page.adv_plain_text_description.fit @joint_offering_description if @joint_offering_adding_data == 'adv_plain_text'
+        page.adv_search
+        page.adv_return_value @joint_offering_course_code
+      end
 
-      page.auto_lookup @instructor_display_name unless @instructor_display_name.nil?
-      #page.auto_lookup(/^@instructor_last_name/) unless @instructor_last_name.nil?
+      if instructor_adding_method == 'adv_name' or instructor_adding_method == 'adv_username'
+        page.instructor_advanced_search
+        page.adv_name.fit @instructor_last_name if instructor_adding_method == 'adv_name'
+        page.adv_username.fit @instructor_username if instructor_adding_method == 'adv_username'
+        page.adv_search
+        page.adv_return_value_instructor @instructor_display_name
+      end
+
+      if instructor_adding_method == 'auto_lookup_instructor_name'
+        page.instructor_name.fit @instructor_last_name
+        page.auto_lookup @instructor_display_name unless @instructor_display_name.nil?
+      end
+
       page.instructor_add unless @instructor_last_name.nil?
 
 
       page.save_and_continue
     end
-    #on(KradCourseInformation).save_and_continue
 
     on KradGovernance do |page|
       fill_out page, :location_all, :location_extended, :location_north, :location_south
 
-      page.administering_organization.fit @administering_organization
-      #TODO: uncomment this when bug 1204 is fixed for auto lookup on administering org text field
-      #page.auto_lookup @administering_organization unless @administering_organization.nil?
-      page.organization_add unless @administering_organization.nil?
+      admin_org_adding_method = ['advanced', 'auto_lookup'].sample
+      if admin_org_adding_method == 'auto_lookup'
+        page.administering_organization.fit @administering_organization
+        #TODO: uncomment this when bug KSCM-1204 is fixed for auto lookup on administering org text field
+        #page.auto_lookup @administering_organization unless @administering_organization.nil?
+        page.organization_add unless @administering_organization.nil?
+      end
+
+      if admin_org_adding_method == 'advanced'
+        page.adv_search_admin_org
+
+        page.adv_identifier.fit @adv_admin_org_identifier
+        page.adv_org_name.fit @adv_admin_org_name
+        page.adv_abbreviation.fit @adv_admin_org_abbreviation
+
+        page.adv_search
+        page.adv_admin_org_return_value(@adv_admin_org_name, @adv_admin_org_abbreviation)
+        page.organization_add unless @administering_organization.nil?
+      end
 
       page.save_and_continue
     end
-    #on(KradCourseInformation).save_and_continue
 
     on KradCourseLogistics do |page|
       #page.scheduling_term(@scheduling_term).set unless @scheduling_term.nil?
@@ -233,24 +292,21 @@ class KradCourseProposalObject
                :duration_type, :duration_count,
                :activity_contacted_hours, :activity_class_size,
                :activity_duration_count, :activity_frequency, :activity_duration_type
-
       page.save_and_continue
     end
-    #on(KradCourseInformation).save_and_continue
 
     on(KradCurriculum).authors_collaborators
     on KradAuthorsCollaborators do |page|
-      #Need to use auto lookup because typeing in ( gets removed from textfield
+      # Need to use auto lookup because type in removes parentheses from text field
       page.author_name.fit @author_name_search
       page.auto_lookup @author_name
 
       fill_out page, :author_permission, :action_request, :author_notation
       page.add_author
-
       page.save_and_continue
     end
-    #on(KradCourseInformation).save_and_continue
-  end
+
+  end # non-required
 
 
     def verify_text_field(page, *fields)

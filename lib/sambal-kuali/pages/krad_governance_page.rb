@@ -21,4 +21,13 @@ class KradGovernance < BasePage
   # 0 is default for the first ADDED organization
   action(:added_administering_organization) {|org_added='0', b| b.text_field(name: /#{org_added}\]\.organizationName$/) }
 
+  action(:adv_search_admin_org) {|b| b.link(text: 'Advanced Search').click; b.adv_search_button.wait_until_present }
+
+
+
+
+
+  #element(:adv_return_value_admin_org) { |org_name_and_abbr, b | b.frame().link(title: "return value Name=Biology Abbreviation=BIOL") }
+
+
 end
