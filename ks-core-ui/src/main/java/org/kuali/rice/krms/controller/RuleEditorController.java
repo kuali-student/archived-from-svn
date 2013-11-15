@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.util.tree.Node;
 import org.kuali.rice.krad.uif.UifParameters;
 import org.kuali.rice.krad.util.GlobalVariables;
-import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
@@ -80,6 +79,10 @@ public class RuleEditorController extends MaintenanceDocumentController {
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_RULE_MAINTENANCE_PAGE_ID);
         }
+
+        //Compare rule with parent rule.
+        compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
+
         return super.navigate(form, result, request, response);
     }
 
@@ -1016,7 +1019,8 @@ public class RuleEditorController extends MaintenanceDocumentController {
 
         //validate the expression
         List<String> errorMessages = new ArrayList<String>();
-        boolean validExpression = ruleLogicExpressionParser.validateExpression(errorMessages);
+        List<String> keyList = getPropositionKeys(new ArrayList<String>(), ruleEditor.getPropositionEditor());
+        boolean validExpression = ruleLogicExpressionParser.validateExpression(errorMessages, keyList);
 
         //show errors and don't change anything else
         if (!validExpression) {

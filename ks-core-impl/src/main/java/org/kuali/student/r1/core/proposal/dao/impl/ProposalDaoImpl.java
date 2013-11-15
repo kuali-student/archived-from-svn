@@ -89,6 +89,9 @@ public class ProposalDaoImpl extends AbstractCrudDaoImpl implements ProposalDao 
         Query query = em.createNamedQuery("Proposal.getProposalByWorkflowId");
         query.setParameter("workflowId", workflowId);
 
+        System.out.println("Looking workflowId: " + workflowId);
+        System.out.println("Trying to get entity with query: " + query);
+
         Proposal proposal = (Proposal)query.getSingleResult();
 		return proposal;
 	}

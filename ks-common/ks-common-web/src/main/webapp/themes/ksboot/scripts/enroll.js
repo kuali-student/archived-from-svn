@@ -306,6 +306,30 @@ function updateContextBar(srcId, contextBarId, dayOfYear, baseUrl) {
             if (jQuery(contextBarContent).length) {
                 jQuery(contextBarContent).appendTo(topGroupUpdatePlaceHolder);
                 jQuery(contextBarContent).show();
+
+                contextBarHeight = topGroupUpdate.outerHeight(true);
+                var applicationHeaderWrapper = jQuery("#Uif-ApplicationHeader-Wrapper");
+                var applicationHeaderWrapperHeight = 0;
+                if(applicationHeaderWrapper.length){
+                    applicationHeaderWrapperHeight = applicationHeaderWrapper.outerHeight(true);
+                }
+                var bcHeight = 0;
+                if(jQuery(bc).length){
+                    bcHeight = bc.outerHeight(true);
+                }
+                var vhOffset = applicationHeaderWrapperHeight + bcHeight + contextBarHeight;
+                if(jQuery(vh).length){
+                    vh.offset({top: vhOffset});
+                    vh.data("offset", vh.offset());
+                }
+
+                var cw = jQuery("#Uif-ViewContentWrapper");
+                if(jQuery(cw).length){
+                    var cwOffset = vhOffset + contextBarHeight;
+                    cw.offset({top: cwOffset});
+                    cw.data("offset", cw.offset());
+                }
+
             } else if (jQuery(topGroupWrapperContent).length) {
                 jQuery.extend(topGroupUpdatePlaceHolder, topGroupWrapperContent);
             }
@@ -320,43 +344,34 @@ function updateContextBar(srcId, contextBarId, dayOfYear, baseUrl) {
                     jQuery("#Uif-TopGroupWrapper > div").replaceWith(topGroupUpdate);
                 }
                 jQuery(contextBarContent).show();
+                contextBarHeight = contextBarContent.outerHeight(true);
+                if (jQuery(vh).length) {
+//                    var cbHalfHeight = (contextBarHeight / 2);
+                    if (console) {
+                        console.log("vh top before = " + vh.offset().top);
+                    }
+                    var vhTop = vh.offset().top + contextBarHeight;
+                    vh.offset({top: vhTop});
+                    vh.data("offset", vh.offset());
+                    if (console) {
+                        console.log("vh top After = " + vh.offset().top);
+                    }
+                    var cw = jQuery("#Uif-ViewContentWrapper");
+                    if (console) {
+                        console.log("cw top before = " + cw.offset().top);
+                    }
+                    var cwTop = cw.offset().top + contextBarHeight;
+                    cw.offset({top: cwTop});
+                    cw.data("offset", cw.offset());
+                    if (console) {
+                        console.log("cw top after = " + cw.offset().top);
+                    }
+                }
             }
         }
         contextBarHeight = contextBarContent.outerHeight(true);
     }
-    if (jQuery(vh).length && jQuery(bc.length) && contextBarHeight > 0) {
-        var vhBottom = bc.offset().top + bc.outerHeight(true) + vh.outerHeight(true);
-        var cw = jQuery("#Uif-ViewContentWrapper");
-        var cwTop = cw.offset().top;
-        var vhTop = vhBottom - vh.outerHeight(true);
-        if (bc.offset().top < topGroupWrapper.offset().top + contextBarHeight) {
-            var bcDiff = topGroupWrapper.offset().top + contextBarHeight - bc.offset().top;
-            if(console){
-                console.log("The Bread Crumb is off by : " + bcDiff);
-            }
-            vhTop = vhTop + bcDiff;
-            vhBottom = vhBottom + bcDiff;
-        }
-        if (vhBottom > cwTop) {
-            var diff = vhBottom - cw.offset().top;
-//                vhTop = vhTop - diff;
-            cwTop = cwTop + diff + 15;
-        }
-        vh.offset({top: vhTop});
-        vh.data("offset", vh.offset());
-        cw.offset({top: cwTop});
-        cw.data("offset", cw.offset());
-        if (console) {
-            console.log("comp | TOP | HEIGHT");
-            console.log("tg   | " + topGroupWrapper.offset().top + "  |  " + contextBarHeight);
-            console.log("bc   | " + bc.offset().top + "  |  " + bc.outerHeight(true));
-            console.log("vh   | " + vh.offset().top + "  |  " + vh.outerHeight(true));
-            console.log("content Wrapper TOP : " + cwTop);
-            console.log("vhBottom = bc.offset().top + bc.outerHeight(true) + vh.outerHeight(true) =>" + vhBottom);
-            console.log("Sticky Header TOP : " + vhTop);
-            console.log("View TOP : " + cwTop);
-        }
-    }
+
     setSeasonalColor(srcId, dayOfYear, baseUrl);
 }
 
@@ -726,8 +741,8 @@ jQuery(document).on("click", ".dataTable input[type=checkbox]", function() {
  */
 
 /* Set custom font icons for calendar datepickers */
-jQuery('.uif-inputField:has(input.uif-dateControl)').on('DOMNodeInserted', 'button.ui-datepicker-trigger', function() {
-    jQuery('button.ui-datepicker-trigger').empty().addClass('icon halflings calendar').attr('alt', 'Date picker').attr('value', 'Date picker');
+jQuery(document).on('DOMNodeInserted', 'button.ui-datepicker-trigger', function() {
+    jQuery(this).empty().addClass('icon halflings calendar').attr('alt', 'Date picker').attr('value', 'Date picker');
 });
 
 /*
@@ -736,3 +751,31 @@ Skip dirty check
  function skipDirtyChecks() {
  dirtyFormState.skipDirtyChecks=true;
  }
+
+function retrieveFinalExamMatrix (id, methodToCall, dropdownId) {
+    var dropDownElement = jQuery('#' + dropdownId + '_control');
+    if (dropDownElement.val() != 'na') {
+        retrieveComponent(id, methodToCall);
+    }
+}
+
+function toggleShowButton() {
+    var termCodeVal = jQuery("#termCodeField_control").val();
+    var inputCodeVal = jQuery("#inputCode_control").val();
+    if (termCodeVal != '' && inputCodeVal != '') {
+        jQuery("#show_button").removeAttr("disabled");
+    } else {
+        jQuery("#show_button").attr("disabled", "disabled");
+    }
+}
+
+/*
+ * Setup a blur on the given element once the window loads. This idea here is to make the client-side validation happen
+ * after the page is completely loaded, so that any server-side messages will be merged with the client side messages.
+ */
+function triggerFieldValidationAfterPageLoads(id) {
+    var element = jQuery(id);
+    if (element.val()) {
+        jQuery(window).load(function() { element.trigger('blur'); });
+    }
+}

@@ -38,7 +38,7 @@ limitations under the License.
                             <property name="actionScript" value="updateProposition('updateProposition', 'KRMS-RuleEditor-TreeGroup');"/>
                         </bean>
                         <bean id="KS-CancelProp-Button" parent="KS-Uif-ActionLink"
-                              p:style="margin-left: 0.5em;margin-top: 0.3em;color: #3F7826;">
+                              p:style="margin-left: 0.5em;margin-top: 0.3em;">
                             <property name="actionLabel" value="Cancel"/>
                             <property name="actionScript" value="updateProposition('cancelEditProposition', 'KRMS-RuleEditor-TreeGroup');"/>
                         </bean>
@@ -61,7 +61,7 @@ limitations under the License.
                       p:showLabel="true" p:label="Rule Statement Option" p:maxLength="40" p:required="true">
                     <property name="control">
                         <bean parent="Uif-DropdownControl" p:cssClasses="categorySelect"
-                              p:onChangeScript="ajaxCallPropositionTree('updatePropositionType', 'KRMS-PropositionEdit-DetailSection');"/>
+                              p:onChangeScript="ajaxCallPropositionTypeUpdate(jQuery(this), 'updatePropositionType', 'KRMS-PropositionEdit-DetailSection');"/>
                     </property>
                     <property name="optionsFinder">
                         <bean class="org.kuali.student.core.krms.keyvalues.KSPropositionTypeValuesFinder"/>

@@ -4,20 +4,54 @@
  */
 function handleColocation(){
 
-    if(jQuery("#is_co_located_control").is(":checked")) {
-        setupColoCheckBoxChange(jQuery("#is_co_located_control"));
-    }else {
-        var overrideOptions = { autoDimensions:false, width:500 };
+    isColoCheckboxSet = jQuery("#is_co_located_control").is(":checked");
+    isColoPersistedOnInfo = ( jQuery('#infoColoStatus_control').attr('value') == 'true' )
+
+    /* warn the user they are going to break colocation if they are both un-setting the
+     * checkbox and the colo had previously been persisted at the database
+     */
+    if( !isColoCheckboxSet && isColoPersistedOnInfo ) {
+        var overrideOptions = { autoDimensions:false, width:500, afterClose:breakColoWarningHasClosed };
         showLightboxComponent('ActivityOfferingEdit-BreakColocateConfirmation', overrideOptions);
+    }
+    // failing that, just hide the colo-box
+    else {
+        setupColoCheckBoxChange(jQuery("#is_co_located_control"));
     }
 
 }
 
-function closeColocationLightbox(){
-    jQuery("#is_co_located_control").attr('checked', 'checked');
+/**
+ * FancyBox provides an "X"-button in it's upper-right corner which fires the 'close'-event, but there is no way
+ * to distinguish how the dialog was closed because closing the box via any other method fires the exact same event
+ * (ie: using either the "Break Colocation"- or "Close"-buttons are indistinguishable from the "X"-button)
+ *
+ * And the "X"-button does not provide it's own handler to enable us to apply special logic when it's pressed.  It can
+ * only be hidden, but the project uses this button throughout similar dialogs.
+ *
+ * Functionally, the "X"-button should behave exactly as if the user had used the "Close"-button.  That is, the
+ * colo-checkbox should be re-set.
+ *
+ * Thus, we introduce the didConfirmBreakColo-variable to determine whether or not the dialog is closing due to the
+ * user clicking the confirm-button.
+ *
+ * See KSENROLL-10868
+ */
+var didConfirmBreakColo = false;
+function confirmBreakColo() {   // this method gets called only when the user clicks on the confirm-button
+    didConfirmBreakColo = true;
     closeLightbox();
+    return true;
 }
+var breakColoWarningHasClosed = function() {  // this method executes whenever the dialog is closing
 
+    if( !didConfirmBreakColo ) { // user canceled
+        jQuery("#is_co_located_control").attr('checked', 'checked');
+    }
+    else { // user confirmed
+        didConfirmBreakColo = false;
+    }
+};
 
 function breakColoCallBack(){
     setupColoCheckBoxChange(jQuery("#is_co_located_control"));
@@ -635,44 +669,41 @@ function handleAOSelection(component){
 /*
   This is the method which handles AO navigation.
  */
-function handleAONavigation(component, aoId){
+function handleAONavigation(component, aoId) {
 
-    var isValidForm = validateForm();
-
-//    if (!isValidForm){
-
-        var saveAndContinue = jQuery("#edit_ao_save_and_continue").attr("data-submit_data");
-        var cancelSaveAndLoad = jQuery("#edit_ao_cancel").attr("data-submit_data");
-        var submit_data_array = saveAndContinue.split(',');
-        var i = 0;
-        for (; i<submit_data_array.length; ){
-            var data = submit_data_array[i].split(':');
-            if (data[0] == '"actionParameters[aoId]"'){
-                data[1] = '"' + aoId + '"';
-                submit_data_array[i] = data[0] + ":" + data[1];
-                break;
-            }
-            i++;
+    var saveAndContinue = jQuery("#edit_ao_save_and_continue").attr("data-submit_data");
+    var cancelSaveAndLoad = jQuery("#edit_ao_cancel").attr("data-submit_data");
+    var submit_data_array = saveAndContinue.split(',');
+    var i = 0;
+    for (; i < submit_data_array.length;) {
+        var data = submit_data_array[i].split(':');
+        if (data[0] == '"actionParameters[aoId]"') {
+            data[1] = '"' + aoId + '"';
+            submit_data_array[i] = data[0] + ":" + data[1];
+            break;
         }
-        jQuery("#edit_ao_save_and_continue").attr("data-submit_data",submit_data_array.join());
+        i++;
+    }
+    jQuery("#edit_ao_save_and_continue").attr("data-submit_data", submit_data_array.join());
 
-        var cancel_data_array = cancelSaveAndLoad.split(',');
-        i = 0;
-        for (; i<cancel_data_array.length; ){
-            var data = cancel_data_array[i].split(':');
-            if (data[0] == '"actionParameters[aoId]"'){
-                data[1] = '"' + aoId + '"';
-                cancel_data_array[i] = data[0] + ":" + data[1];
-                break;
-            }
-            i++;
+    var cancel_data_array = cancelSaveAndLoad.split(',');
+    i = 0;
+    for (; i < cancel_data_array.length;) {
+        var data = cancel_data_array[i].split(':');
+        if (data[0] == '"actionParameters[aoId]"') {
+            data[1] = '"' + aoId + '"';
+            cancel_data_array[i] = data[0] + ":" + data[1];
+            break;
         }
-        jQuery("#edit_ao_cancel").attr("data-submit_data",cancel_data_array.join());
+        i++;
+    }
+    jQuery("#edit_ao_cancel").attr("data-submit_data", cancel_data_array.join());
+    if (jQuery('#dirtyForm').val() == "false") {
+        jQuery("#edit_ao_cancel").click();
+        return;
+    }
 
-        showLightboxComponent('ActivityOfferingEdit-NavigationConfirmation');
-//    } else {
-//        actionInvokeHandler(component);
-//    }
+    showLightboxComponent('ActivityOfferingEdit-NavigationConfirmation');
 }
 
 
@@ -723,6 +754,7 @@ function rdlStartTimeOnBlur(){
    }
 
     retrieveComponent('rdl_endtime','loadTSEndTimes',function () {
+        jQuery("#rdl_endtime").show();
         jQuery("#rdl_endtime_control").focus();
     });
 }
@@ -734,7 +766,7 @@ function rdlStartTimeOnBlur(){
 function rdlDaysOnBlur(){
 
     retrieveComponent('rdl_endtime','resetNewRDLTime',function () {
-        jQuery("#rdl_starttime_control").val('');
+        jQuery("#rdl_endtime").show();
         jQuery("#rdl_starttime_control").focus();
     });
 }

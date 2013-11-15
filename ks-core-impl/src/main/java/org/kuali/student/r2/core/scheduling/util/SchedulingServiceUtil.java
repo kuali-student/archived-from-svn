@@ -49,7 +49,7 @@ import java.util.List;
  * @author andrewlubbers
  * @author Mezba Mahtab
  */
-public class SchedulingServiceUtil {
+public final class SchedulingServiceUtil {
 
     //  Since this is a utility class (all static methods) hide the constructor.
     private SchedulingServiceUtil() {}
@@ -254,10 +254,10 @@ public class SchedulingServiceUtil {
             ScheduleRequestComponentInfo requestComponentInfo = new ScheduleRequestComponentInfo();
             requestComponentInfo.setIsTBA(schedComp.getIsTBA());
             requestComponentInfo.setTimeSlotIds(schedComp.getTimeSlotIds());
-            requestComponentInfo.getRoomIds().add(schedComp.getRoomId());
 
             // retrieve the room to find the building id
             if (schedComp.getRoomId() != null) {
+                requestComponentInfo.getRoomIds().add(schedComp.getRoomId());
                 RoomInfo room = roomService.getRoom(schedComp.getRoomId(), callContext);
                 requestComponentInfo.getBuildingIds().add(room.getBuildingId());
 
@@ -326,22 +326,28 @@ public class SchedulingServiceUtil {
      * @return  A new TimeOfDayInfo.
      */
     public static TimeOfDayInfo makeTimeOfDayInfoFromTimeString(String time) {
-        time = standardTimeStringToStandardTimeString(time);
-        return makeTimeOfDayFromMilitaryTimeString(time);
+        return makeTimeOfDayFromMilitaryTimeString(standardTimeStringToMilitaryTimeString(time));
     }
 
-    private static String standardTimeStringToStandardTimeString(String time) {
+    /**
+     * Takes a time string in the format (HH:MM AM|PM or H:MM AM/PM) and converts it to
+     * 24 hour / military format (HH:MM).
+     * @param time A standard time string.
+     * @return A 24 hour / military time string.
+     */
+    public static String standardTimeStringToMilitaryTimeString(String time) {
         boolean isPM = true;
         if (time.endsWith("AM")) {
             isPM = false;
         }
 
-        int hour = Integer.valueOf(time.substring(0, 2));
-        int min = Integer.valueOf(time.substring(3, 5));
+        String t[] = time.split(":");
+        int hour = Integer.valueOf(t[0]);
+        int min = Integer.valueOf(t[1].substring(0, 2));
 
         if (isPM) {
             //  For PM times just add 12
-            hour = hour + 12;
+            hour = (hour % 12) + 12;
         } else {
             // For AM times if the hour is 12 then it becomes zero. Otherwise, noop.
             if (hour == 12) {
@@ -393,7 +399,7 @@ public class SchedulingServiceUtil {
     /**
      * Creates a time string in hh:mm aa format. Does not suffer from DST issues.
      *
-     * @param offsetFromMidnight Number of milliseconds from midnight.
+     * @param offsetFromMidnight Number of milliseconds since midnight.
      * @return  A time string.
      */
     public static String makeFormattedTimeFromMillis(Long offsetFromMidnight) {

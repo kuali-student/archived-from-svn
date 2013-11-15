@@ -36,8 +36,38 @@
         <property name="datePicker.templateOptions">
             <map merge="true">
                 <entry key="showOn" value="button"/>
-                <entry key="buttonImageOnly" value="true"/>
+                <entry key="buttonImageOnly" value="false"/>
                 <entry key="constrainInput" value="false"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- customize Uif-TooltipFocus and Uif-Tooltip for the enrollment-wide tooltip customization -->
+    <bean id="Uif-KS-TooltipFocus"  parent="Uif-TooltipFocus">
+        <property name="templateOptions">
+            <map merge="true">
+                <entry key="position" value="top"/>
+                <entry key="themeName" value="all-black"/>
+                <entry key="openingSpeed" value="250"/>
+                <entry key="mouseOut" value="hide"/>
+                <entry key="divStyle" value="{ margin:'0px 0px 0px -5px'}"/>
+                <entry key="tableStyle" value="{ margin:'0px 0px 5px 0px'}"/>
+                <entry key="closingDelay" value="0"/>
+                <entry key="distance" value="0px"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="Uif-KS-Tooltip" parent="Uif-Tooltip">
+        <property name="templateOptions">
+            <map merge="true">
+                <entry key="position" value="top"/>
+                <entry key="themeName" value="all-black"/>
+                <entry key="openingSpeed" value="250"/>
+                <entry key="mouseOut" value="hide"/>
+                <entry key="divStyle" value="{ margin:'0px 0px 0px -5px'}"/>
+                <entry key="tableStyle" value="{ margin:'0px 0px 5px 0px'}"/>
+                <entry key="closingDelay" value="0"/>
+                <entry key="distance" value="0px"/>
             </map>
         </property>
     </bean>
