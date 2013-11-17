@@ -131,6 +131,7 @@
         <!-- Spring config that creates META-INF files describing SQL resources -->
         <metainf.sql.context>org.kuali.common.util.metainf.spring.SqlConfig</metainf.sql.context>
         <metainf.sql.propertySource>org.kuali.student.deploy.spring.SqlPropertySourceConfig</metainf.sql.propertySource>
+        <project.java.version>1.7</project.java.version>
         <jdk6.rt.jar>/var/lib/jenkins/tools/jdk6/jre/lib/rt.jar</jdk6.rt.jar>
         <kuali-impex.version>${impex.version}</kuali-impex.version>
     </properties>
@@ -1261,3 +1262,4 @@
         </dependencies>
     </dependencyManagement>
 </project>
+
