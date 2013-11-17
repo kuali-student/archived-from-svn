@@ -94,7 +94,7 @@
                 <value>classpath:org/kuali/student/cm/main/CourseRuleMaintenance.xml</value>
                 <value>classpath:org/kuali/student/lum/lu/ui/krms/CourseLookupView.xml</value>
                 <value>classpath:org/kuali/student/lum/lu/ui/krms/CourseSetsLookupView.xml</value>
-                <value>classpath:org/kuali/student/lum/lu/ui/krms/KRMSProgramLookupView.xml</value>
+                <value>classpath:org/kuali/student/lum/lu/ui/krms/ProgramLookupView.xml</value>
                 <value>classpath:org/kuali/student/core/krms/DepartmentLookupView.xml</value>
                 <value>classpath:org/kuali/student/cm/main/CMLUCustomComponents.xml</value>
                 
