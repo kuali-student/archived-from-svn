@@ -53,7 +53,7 @@
                     </property>
                 </bean>
 
-                <bean id="KS-StudentHome-CurriculumManagementKrad" parent="KS-Uif-Student-Home-Area" p:onClickScript="window.location.href='@{#ConfigProperties['application.url']}/kr-krad/launch?methodToCall=start&amp;viewId=curriculumHomeView';">
+                <bean id="KS-StudentHome-CurriculumManagementKrad" parent="KS-Uif-Student-Home-Area" p:onClickScript="window.location.href='@{#ConfigProperties['application.url']}/kr-krad/cmHome?methodToCall=start&amp;viewId=curriculumHomeView';">
                     <property name="items">
                         <list>
                             <bean parent="KS-Uif-Student-Home-Area-Image">
