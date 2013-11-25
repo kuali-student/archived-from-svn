@@ -262,9 +262,9 @@
         </profile>
     </profiles>
     <scm>
-        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/2.0.0-rice-2.4-mx-upgrade</connection>
-        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/2.0.0-rice-2.4-mx-upgrade</developerConnection>
-        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/2.0.0-rice-2.4-mx-upgrade</url>
+        <connection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.4-mx-upgrade</connection>
+        <developerConnection>scm:svn:https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.4-mx-upgrade</developerConnection>
+        <url>https://svn.kuali.org/repos/student/enrollment/aggregate/branches/rice-2.4-mx-upgrade</url>
     </scm>
     <prerequisites>
         <maven>${maven.min.version}</maven>
