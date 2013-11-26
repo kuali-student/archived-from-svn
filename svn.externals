@@ -15,9 +15,8 @@
 # You must rerun the svn propset command (shown above) and commit after editing any of
 # the external paths for the changes to take effect.
 #
-
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/2.0.0-m8-api-upgrade
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/2.0.0-m8-api-upgrade
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/2.0.0-m8-api-upgrade
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/2.0.0-m8-api-upgrade
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/2.0.0-m8-api-upgrade
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/inactive/2.0.0-m8-api-upgrade
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/inactive/2.0.0-m8-api-upgrade
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/inactive/2.0.0-m8-api-upgrade
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/inactive/2.0.0-m8-api-upgrade
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/inactive/2.0.0-m8-api-upgrade
