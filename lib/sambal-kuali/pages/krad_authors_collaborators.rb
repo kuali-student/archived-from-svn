@@ -13,6 +13,13 @@ class KradAuthorsCollaborators < BasePage
   action(:delete_author) { |b| b.button(text: 'delete').click }
 
   action(:added_author_information) { |text_present, b| b.span(text: text_present) }
-
   # view, comment, edit, fyi, false, true, <complete_username>
+
+  # ADVANCED SEARCH
+  # text fields on base page
+  #adv_name
+  #adv_username
+
+  #adv_search
+
 end

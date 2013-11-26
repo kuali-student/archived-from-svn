@@ -3,8 +3,12 @@ class KradCourseInformation < BasePage
   wrapper_elements
   krad_elements
 
-  element(:proposal_title) { |b| b.text_field(name: /proposal\.name$/) }
-  element(:course_title) { |b| b.text_field(name: /course\.courseTitle$/) }
+  element(:proposal_title) { |b| b.text_field(name: 'document.newMaintainableObject.proposal.name') }
+  element(:proposal_title_error_state) { |b| b.text_field(name: 'document.newMaintainableObject.proposal.name', class: 'uif-textControl required error') }
+
+  element(:course_title) { |b| b.text_field(name: 'document.newMaintainableObject.course.courseTitle') }
+  element(:course_title_error_state) { |b| b.text_field(name: 'document.newMaintainableObject.course.courseTitle', class: 'uif-textControl required validChar-document.newMaintainableObject.course.courseTitle0 error' ) }
+
   element(:transcript_title) {|b| b.text_field(name: /transcriptTitle$/) }
   element(:subject_code) { |b| b.text_field(name: /subjectArea$/) }
   element(:course_number) { |b| b.text_field(name: /courseNumberSuffix$/) }
@@ -45,43 +49,45 @@ class KradCourseInformation < BasePage
   element(:proposal_rationale) { |b| b.text_field(name: /proposal.rationale.plain$/) }
 
 # ADVANCED SEARCH
-#  element(:adv_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[displayName]') }
-#  element(:adv_username) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personId]') }
-#
-#  action(:adv_return_value_instructor) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{title_return_value}").click; b.loading_wait }
-#  action(:adv_return_value) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value ='+"#{title_return_value}").click; b.loading_wait }
-
-
-
-   # Joint offering uses Course Code
-  # Instructor uses display_name
-  #element(:adv_return_value_link) { |instructor_display_name, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{instructor_display_name}") }
-
-
-  #
-  #element(:adv_search_button) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_search') }
-  #action(:adv_search) { |b| b.adv_search_button.click; b.loading_wait }
-  #action(:adv_clear_values) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_clearValues').click }
-  #action(:adv_close) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_close').click }
-  #
-  #action(:adv_x) { |b| b.div(class: 'fancybox-item fancybox-close').click }
-
-
-
 
   action(:joint_offering_advanced_search) { |b| b.div(id: 'KS-JointlyOffered-Section').link(text: 'Advanced Search').click }
 
-  #element(:adv_search_by) { |b| b.frame(class: 'fancybox-iframe').select_list(name: 'lookupCriteria[searchBy]') }
-  #element(:adv_given_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseTitle]') }
-  #element(:adv_course_code) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseCode]') }
-  #element(:adv_plain_text_description) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
-  #
 
 
 
-# action(:save_and_continue) { |b| b.button(id: 'usave').click; b.saving_wait }
   element(:error_popup) { |b| b.div(text: 'The form contains errors. Please correct these errors and try again.') }
   action(:error_message) { |error_number='2', b| b.h3(text: "This page has #{error_number} errors") }
 
 
-end
+  # table results
+  # b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table.row.cells[1].text
+
+
+
+  #$b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table.rows.each do |row|
+  #puts "#{row.cells[3].text} is the row"
+  #end
+  #
+
+  element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
+
+    def return_search_result(display_name_username, row_number=3)
+      search_results_table.rows.each do |row|
+        if row.cells[row_number].text == display_name_username
+          row.cells[0].link(text: 'return value').click
+          break
+        end
+      end
+    end
+
+
+
+      # rice page
+
+      element(:doc_search_results) { |the_course_title_looking_for, b| b.frame(id: /^easyXDM_default/).frame(id: 'iframeportlet').table.td(text: the_course_title_looking_for) }
+  #
+  #$b.frame(id: /^easyXDM_default/).frame(id: 'iframeportlet').table.img(alt: 'Route Log for Document')
+  #
+
+
+end #class

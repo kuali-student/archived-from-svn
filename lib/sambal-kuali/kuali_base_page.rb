@@ -78,8 +78,10 @@ class BasePage < PageFactory
       #Course Information: Instructor
       element(:adv_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[displayName]') }
       element(:adv_username) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personId]') }
+      element(:adv_username_capD){ |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personID]') }
 
       action(:adv_return_value_instructor) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{title_return_value}").click; b.loading_wait }
+      action(:adv_return_value_name) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{title_return_value}").click; b.loading_wait }
 
       #Governance: Administering Org
       element(:adv_identifier) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[id]') }

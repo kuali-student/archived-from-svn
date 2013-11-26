@@ -22,7 +22,6 @@ class KSFunctionalHome < BasePage
 
   def logout
     logout_button.click unless logout_link.exists?
-
      if logout_link.visible?
        logout_link.click
      else

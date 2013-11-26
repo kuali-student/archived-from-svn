@@ -144,6 +144,36 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.added_author_information('false').should be_present if @course_proposal.author_notation.nil?
     page.added_author_information('true').should be_present unless @course_proposal.author_notation.nil?
 
-    page.added_author_information(@course_proposal.author_name).should be_present unless @course_proposal.author_name.nil?
+    page.added_author_information(@course_proposal.author_display_name).should be_present
   end
 end
+
+
+#-----
+# S4
+#-----
+When /^I complete all fields on the course proposal with advanced search$/ do
+  @course_proposal  = make KradCourseProposalObject, joint_offering_adding_data: ['adv_given_name', 'adv_course_code', 'adv_plain_text'].sample,
+                           instructor_adding_method: ['adv_username', 'adv_name'].sample,
+                           admin_org_adding_method: 'advanced',
+                           author_name_method: ['advanced_name', 'advanced_username'].sample
+
+  @course_proposal.KradCourseProposalRequired
+  @course_proposal.KradCourseProposalNonrequired
+end
+
+
+#-----
+# S5
+#-----
+
+When /^I complete all fields on the course proposal with auto\-lookup$/ do
+  @course_proposal  = make KradCourseProposalObject, instructor_adding_method: 'auto_lookup',
+                           joint_offering_adding_data: 'auto_lookup',
+                           admin_org_adding_method: 'auto_lookup',
+                           author_name_method: 'auto_lookup'
+
+  @course_proposal.KradCourseProposalRequired
+  @course_proposal.KradCourseProposalNonrequired
+end
+
