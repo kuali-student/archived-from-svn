@@ -1016,6 +1016,12 @@ public class RuleEditorController extends MaintenanceDocumentController {
     private void parseRuleExpression(RuleEditor ruleEditor, RuleViewHelperService viewHelper) {
         RuleLogicExpressionParser ruleLogicExpressionParser = new RuleLogicExpressionParser();
         ruleLogicExpressionParser.setExpression(ruleEditor.getLogicArea());
+        
+        if (ruleEditor.getPropositionEditor() == null) {
+            GlobalVariables.getMessageMap().putError("document.newMaintainableObject.dataObject.logicArea",
+                    KRMSConstants.KSKRMS_MSG_INFO_LOGIC_NO_STATEMENTS);
+            return;
+        }
 
         //validate the expression
         List<String> errorMessages = new ArrayList<String>();
