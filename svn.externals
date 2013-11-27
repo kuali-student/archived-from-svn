@@ -15,9 +15,8 @@
 # You must rerun the svn propset command (shown above) and commit after editing any of
 # the external paths for the changes to take effect.
 #
-
-ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/sched-service
-ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/sched-service
-ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/sched-service
-ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/sched-service
-ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/sched-service
+ks-api https://svn.kuali.org/repos/student/enrollment/ks-api/branches/inactive/sched-service
+ks-core https://svn.kuali.org/repos/student/enrollment/ks-core/branches/inactive/sched-service
+ks-lum https://svn.kuali.org/repos/student/enrollment/ks-lum/branches/inactive/sched-service
+ks-enroll https://svn.kuali.org/repos/student/enrollment/ks-enroll/branches/inactive/sched-service
+ks-deployments https://svn.kuali.org/repos/student/enrollment/ks-deployments/branches/inactive/sched-service
