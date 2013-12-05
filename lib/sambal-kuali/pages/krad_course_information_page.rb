@@ -15,7 +15,7 @@ class KradCourseInformation < BasePage
 
 #CROSS LIST SECTION
   element(:course_listing_section_collapsed) { |b| b.img(id: /^KS-CrossListingEtcDisclosure-Section/, alt: 'collapse') }
-  action(:expand_course_listing_section) { |b| b.img(id: 'KS-CrossListingEtcDisclosure-Section_toggle_col').click unless b.img(id: 'KS-CrossListingEtcDisclosure-Section_toggle_exp').visible?; b.add_a_version_code_button.wait_until_present }
+  action(:expand_course_listing_section) { |b| b.img(id: 'KS-CrossListingEtcDisclosure-Section_toggle_col').click; b.add_a_version_code_button.wait_until_present }
 
   element(:add_another_course_listing_button) { |b| b.button(id: 'KS-CrossListed-Section_add') }
   element(:add_another_course_button) { |b| b.button(id: 'KS-JointlyOffered-Section_add') }
@@ -31,10 +31,6 @@ class KradCourseInformation < BasePage
 
   #action(:joint_offering_number) { |joint_offering_course_number='0', b| b.text_field(name: /#{joint_offering_course_number}\].courseCode$/) }
   action(:joint_offering_number) { |joint_offering_course_number='0', b| b.text_field(name: "document\.newMaintainableObject\.courseJointWrappers\[#{joint_offering_course_number}\]\.courseCode") }
-
-
-
-
   action(:version_code_code) { |version_version_code='0', b| b.text_field(name: /#{version_version_code}\]\.variationCode$/) }
   action(:version_code_title) { |version_course_title='0', b| b.text_field(name: /#{version_course_title}\]\.variationTitle$/) }
 
@@ -49,15 +45,10 @@ class KradCourseInformation < BasePage
   element(:proposal_rationale) { |b| b.text_field(name: /proposal.rationale.plain$/) }
 
 # ADVANCED SEARCH
-
   action(:joint_offering_advanced_search) { |b| b.div(id: 'KS-JointlyOffered-Section').link(text: 'Advanced Search').click }
-
-
-
 
   element(:error_popup) { |b| b.div(text: 'The form contains errors. Please correct these errors and try again.') }
   action(:error_message) { |error_number='2', b| b.h3(text: "This page has #{error_number} errors") }
-
 
   # table results
   # b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table.row.cells[1].text
@@ -71,14 +62,14 @@ class KradCourseInformation < BasePage
 
   element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
 
-    def return_search_result(display_name_username, row_number=3)
-      search_results_table.rows.each do |row|
-        if row.cells[row_number].text == display_name_username
-          row.cells[0].link(text: 'return value').click
-          break
-        end
-      end
-    end
+    #def return_search_result(display_name_username, row_number=3)
+    #  search_results_table.rows.each do |row|
+    #    if row.cells[row_number].text == display_name_username
+    #      row.cells[0].link(text: 'return value').click
+    #      break
+    #    end
+    #  end
+    #end
 
 
 

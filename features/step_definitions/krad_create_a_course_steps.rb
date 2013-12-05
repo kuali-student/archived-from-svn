@@ -140,7 +140,6 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.added_author_information('view').should be_present if @course_proposal.author_permission == 'View'
 
     page.added_author_information('fyi').should be_present if @course_proposal.action_request == 'FYI'
-
     page.added_author_information('false').should be_present if @course_proposal.author_notation.nil?
     page.added_author_information('true').should be_present unless @course_proposal.author_notation.nil?
 

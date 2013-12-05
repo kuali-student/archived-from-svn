@@ -7,6 +7,7 @@ Feature: Course Proposal should message the user for incorrect or missing inform
 
   Scenario: Verify course proposal for krad cannot be saved if required fields are empty
     Given I set the proposal title and course title to blank
+    When I save the course proposal
     Then I should see the error message for proposal title
     And I should see the error message for course title
 
@@ -14,6 +15,10 @@ Feature: Course Proposal should message the user for incorrect or missing inform
     Given I have a course proposal with a missing required field
     When I submit the course proposal on the review proposal page
     Then I should see an error on the review proposal page
+
+   Scenario: Character limits should display errors
+     When
+     Then
 
 
 

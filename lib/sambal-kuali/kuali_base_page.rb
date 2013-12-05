@@ -2,6 +2,10 @@ class BasePage < PageFactory
 
   class << self
 
+    # COMMENTED CODE OUT, I WAS NOT SURE IF NEEDED FOR NORMAL CM SO KEPT, BUT NOT NEEDED FOR KRAD
+    # COMMENTED CODE OUT, I WAS NOT SURE IF NEEDED FOR NORMAL CM SO KEPT, BUT NOT NEEDED FOR KRAD
+    # COMMENTED CODE OUT, I WAS NOT SURE IF NEEDED FOR NORMAL CM SO KEPT, BUT NOT NEEDED FOR KRAD
+
     def wrapper_elements
       #element(:logout_el) { |b| b.link(text: "Logout") }
       #action(:logout) { |b| b.logged_in_link.click; b.logout_el.click }
@@ -19,7 +23,6 @@ class BasePage < PageFactory
       #element(:growl_div) { |b| b.frm.div(id: "jGrowl") }
       #element(:growl_message_div) { |b| b.growl_div.div(class: "jGrowl-message") }
       #value(:growl_text) { |b| b.growl_message_div.wait_until_present; b.growl_message_div.text }
-
 
     end
 
@@ -52,6 +55,13 @@ class BasePage < PageFactory
     #end
 
     def krad_elements
+
+      links('Course Information', 'Governance', 'Course Logistics',
+             'Learning Objectives', 'Course Requisites', 'Active Dates', 'Financials', 'Supporting Documents', 'Review Proposal')
+      action(:authors_collaborators) { |b| b.link(text: 'Authors & Collaborators').click }
+
+      action(:current_page) {|link_text, b| b.li(class: 'uif-navigationItem uif-navigationItem-current').link(text: "#{link_text}")}
+
       element(:adding_line) { |b| b.image(alt: "Adding Line...") }
       element(:saving) { |b| b.image(alt: "Saving...") }
 
@@ -74,7 +84,6 @@ class BasePage < PageFactory
 
       action(:adv_return_value) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value ='+"#{title_return_value}").click; b.loading_wait }
 
-
       #Course Information: Instructor
       element(:adv_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[displayName]') }
       element(:adv_username) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personId]') }
@@ -90,15 +99,12 @@ class BasePage < PageFactory
 
       action(:adv_admin_org_return_value) { |org_name, org_abbr, b | b.frame(class: 'fancybox-iframe').link(title: 'return value Name=' + "#{org_name}" + ' Abbreviation=' + "#{org_abbr}").click; b.loading_wait }
 
-
       element(:adv_search_button) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_search') }
       action(:adv_search) { |b| b.adv_search_button.click; b.loading_wait }
       action(:adv_clear_values) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_clearValues').click }
       action(:adv_close) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_close').click }
 
       action(:adv_x) { |b| b.div(class: 'fancybox-item fancybox-close').click }
-
-
     end
 
     def links(*links_text)
@@ -116,7 +122,6 @@ class BasePage < PageFactory
       element(el_name) { |b| b.send(type, identifiers[type]=>text) }
       action(act_name) { |b| b.send(type, identifiers[type]=>text).click }
     end
-
 
   end #class self end
 end
