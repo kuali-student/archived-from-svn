@@ -15,24 +15,25 @@
  */
 package org.kuali.student.lum.lu.ui.krms.service.impl;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.lum.lu.ui.krms.util.CluInformationHelper;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.search.dto.SearchParamInfo;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultInfo;
 import org.kuali.student.r2.lum.clu.service.CluService;
-import org.kuali.student.r2.lum.course.service.CourseService;
 import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * Lookupable Implementation for Courses
@@ -68,7 +69,8 @@ public class CourseInfoLookupableImpl extends LookupableImpl {
     }
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
 
         String courseId;
         List<SearchParamInfo> searchParams = new ArrayList<SearchParamInfo>();
@@ -78,7 +80,7 @@ public class CourseInfoLookupableImpl extends LookupableImpl {
         searchParams.add(qpv1);
         searchParams.add(CluInformationHelper.getApprovedStateSearchParam());
         for (QueryParamEnum qpEnum : QueryParamEnum.values()) {
-            String fieldValue = fieldValues.get(qpEnum.getFieldValue());
+            String fieldValue = searchCriteria.get(qpEnum.getFieldValue());
             if ( ! isEmpty(fieldValue) ) {
                 SearchParamInfo qpv = new SearchParamInfo();
                 qpv.setKey(qpEnum.getQueryKey());

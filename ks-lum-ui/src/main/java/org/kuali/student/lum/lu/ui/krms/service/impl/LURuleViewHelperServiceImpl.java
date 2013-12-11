@@ -81,6 +81,7 @@ import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
 
 import javax.xml.namespace.QName;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -109,9 +110,8 @@ public class LURuleViewHelperServiceImpl extends RuleViewHelperServiceImpl {
     }
 
     @Override
-    public void applyAuthorizationAndPresentationLogic(View view, Component component, ViewModel model) {
-        super.applyAuthorizationAndPresentationLogic(view, component, model);
-
+	public void performCustomApplyModel(Component component, Object model) {
+		super.performCustomApplyModel(component, model);
         if(component instanceof Group) {
             Group group = (Group) component;
 
@@ -119,7 +119,7 @@ public class LURuleViewHelperServiceImpl extends RuleViewHelperServiceImpl {
                 processGroupItems(group);
             }
         }
-    }
+	}
 
     protected void processGroupItems(Group group) {
         List<Field> fields = ComponentUtils.getComponentsOfType(group.getItems(), Field.class);
@@ -329,7 +329,8 @@ public class LURuleViewHelperServiceImpl extends RuleViewHelperServiceImpl {
         return true;
     }
 
-    protected void processAfterAddLine(View view, CollectionGroup collectionGroup, Object model, Object addLine,
+    @Override
+    public void processAfterAddLine(View view, CollectionGroup collectionGroup, Object model, Object addLine,
                                        boolean isValidLine) {
 
         if(LUKRMSConstants.KSKRMS_PROPERTY_NAME_CLUS.equals(collectionGroup.getPropertyName())){

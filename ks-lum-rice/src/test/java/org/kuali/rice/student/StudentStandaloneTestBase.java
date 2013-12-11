@@ -110,6 +110,10 @@ public class StudentStandaloneTestBase extends BaselineTestCase {
     protected String getKIMSqlFileBaseLocation() {
         return "file:" + getBaseDir() + "/src/test/config/data";
     }
+
+    protected String getBaseDir() {
+    	return System.getProperty("basedir");
+    }
     
     /**
      * maven will set this property and find resources from the config based on it. This makes eclipse testing work because
