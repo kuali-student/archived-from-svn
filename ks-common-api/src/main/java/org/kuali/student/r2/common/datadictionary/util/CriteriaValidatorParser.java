@@ -15,7 +15,12 @@
  */
 package org.kuali.student.r2.common.datadictionary.util;
 
-import org.kuali.rice.core.api.uif.DataType;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.kuali.rice.core.api.data.DataType;
 import org.kuali.student.r2.common.datadictionary.infc.AttributeDefinitionInfc;
 import org.kuali.student.r2.common.datadictionary.infc.DictionaryEntry;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -23,11 +28,6 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.infc.Comparison;
 import org.kuali.student.r2.common.infc.Criteria;
 import org.kuali.student.r2.common.util.date.DateFormatters;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
  /**
  * A class that validates the criteria against the dictionary
