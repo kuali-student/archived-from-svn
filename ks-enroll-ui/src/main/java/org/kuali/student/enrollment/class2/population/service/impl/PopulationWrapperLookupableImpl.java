@@ -16,12 +16,19 @@
  */
 package org.kuali.student.enrollment.class2.population.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.class2.population.dto.PopulationWrapper;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.ContextUtils;
@@ -29,11 +36,6 @@ import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.dto.PopulationRuleInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class performs lookups on Populations.
@@ -44,14 +46,16 @@ public class PopulationWrapperLookupableImpl extends LookupableImpl {
     private static final long serialVersionUID = 1L;
     private transient PopulationService populationService;
 
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+    @Override
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<PopulationWrapper> populationWrappers = new ArrayList<PopulationWrapper>();
 
         ContextInfo context = ContextUtils.createDefaultContextInfo();
 
         try {
             //perform the lookup using the service
-            QueryByCriteria qbc = buildQueryByCriteria(fieldValues);
+            QueryByCriteria qbc = buildQueryByCriteria(searchCriteria);
             List<PopulationInfo> populationInfoList = getPopulationService().searchForPopulations(qbc, context);
 
             //Transform each PopulationInfo to the wrapper class

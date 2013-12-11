@@ -15,24 +15,25 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
+import org.kuali.student.common.util.ContextBuilder;
 import org.kuali.student.enrollment.class2.courseoffering.util.ActivityOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.class2.courseoffering.util.FormatOfferingConstants;
-import org.kuali.student.common.util.ContextBuilder;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.ContextUtils;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class provides a Lookupable implementation for Format Offerings
@@ -46,14 +47,15 @@ public class FormatOfferingInfoLookupableImpl extends LookupableImpl {
     private transient CourseOfferingService courseOfferingService;
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<FormatOfferingInfo> formatOfferingInfos = null;
 
-        String typeKey = fieldValues.get(FormatOfferingConstants.FORMAT_OFFERING_TYPE_KEY);
-        String courseOfferingId = fieldValues.get(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID);
+        String typeKey = searchCriteria.get(FormatOfferingConstants.FORMAT_OFFERING_TYPE_KEY);
+        String courseOfferingId = searchCriteria.get(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_ID);
         try {
             if (StringUtils.isNotBlank(courseOfferingId)) {
-                formatOfferingInfos = getCourseOfferingService().getFormatOfferingsByCourseOffering(fieldValues.get(COURSE_OFFER_ID), ContextUtils.createDefaultContextInfo());
+                formatOfferingInfos = getCourseOfferingService().getFormatOfferingsByCourseOffering(searchCriteria.get(COURSE_OFFER_ID), ContextUtils.createDefaultContextInfo());
             }  else if (StringUtils.isNotBlank(typeKey)) {
                 formatOfferingInfos = getSearchResultsByType (typeKey);
             }

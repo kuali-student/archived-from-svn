@@ -15,10 +15,17 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
 import org.kuali.student.r2.common.dto.ContextInfo;
@@ -26,11 +33,6 @@ import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.constants.FeeServiceConstants;
 import org.kuali.student.r2.core.fee.dto.EnrollmentFeeInfo;
 import org.kuali.student.r2.core.fee.service.FeeService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class provides a Lookupable implementation for Enrollment Fees
@@ -44,13 +46,14 @@ public class EnrollmentFeeInfoLookupableImpl extends LookupableImpl {
     private FeeService feeService;
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<EnrollmentFeeInfo> enrollmentFeeInfos = new ArrayList<EnrollmentFeeInfo>();
 
         try {
-            String id = fieldValues.get("id");
-            String refObjectURI = fieldValues.get("refObjectURI");
-            String refObjectId = fieldValues.get("refObjectId");
+            String id = searchCriteria.get("id");
+            String refObjectURI = searchCriteria.get("refObjectURI");
+            String refObjectId = searchCriteria.get("refObjectId");
             ContextInfo contextInfo = ContextUtils.createDefaultContextInfo();
             // perform this search first so we don't have to search through the list for duplicates later
             if(refObjectId != null && !"".equals(refObjectId) && refObjectURI != null && !"".equals(refObjectURI) ){

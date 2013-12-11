@@ -16,17 +16,19 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.courseofferingset.dto.SocRolloverResultItemInfo;
 import org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
-
-import javax.xml.namespace.QName;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class provides a Lookupable implementation for SocRolloverResultItems
@@ -39,9 +41,10 @@ public class SocRolloverResultItemInfoLookupableImpl extends LookupableImpl {
     public final static String SOC_ROLLOVER_RESULT_ID = "socRolloverResultId";
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<SocRolloverResultItemInfo> socRolloverResultItemInfos;
-        String resultId = fieldValues.get(SOC_ROLLOVER_RESULT_ID);
+        String resultId = searchCriteria.get(SOC_ROLLOVER_RESULT_ID);
 
         try {
             socRolloverResultItemInfos = getCourseOfferingSetService().getSocRolloverResultItemsByResultId(resultId, ContextUtils.createDefaultContextInfo());

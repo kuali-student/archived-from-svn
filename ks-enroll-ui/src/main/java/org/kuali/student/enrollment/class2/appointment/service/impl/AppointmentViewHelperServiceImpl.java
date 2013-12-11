@@ -499,7 +499,7 @@ public class AppointmentViewHelperServiceImpl extends ViewHelperServiceImpl impl
         return allWindowsSaved;
     }
 
-    protected void processBeforeAddLine(View view, CollectionGroup collectionGroup, Object model, Object addLine) {
+    public void processBeforeAddLine(View view, CollectionGroup collectionGroup, Object model, Object addLine) {
         if (addLine instanceof AppointmentWindowWrapper) {
             RegistrationWindowsManagementForm form = (RegistrationWindowsManagementForm) model;
             List<KeyDateInfo> periodMilestones = form.getPeriodMilestones();

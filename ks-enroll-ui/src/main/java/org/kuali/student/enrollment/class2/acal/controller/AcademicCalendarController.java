@@ -113,7 +113,7 @@ public class AcademicCalendarController extends UifControllerBase {
      */
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
                               HttpServletRequest request, HttpServletResponse response) {
         AcademicCalendarForm acalForm = (AcademicCalendarForm) form;
 
@@ -163,7 +163,7 @@ public class AcademicCalendarController extends UifControllerBase {
      * It fills in the original Acal for the form with the latest calendar found, by default
      */
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=startNew")
-    public ModelAndView startNew( @ModelAttribute("KualiForm") AcademicCalendarForm acalForm, BindingResult result,
+    public ModelAndView startNew( @ModelAttribute("KualiForm") AcademicCalendarForm acalForm,
                                   HttpServletRequest request, HttpServletResponse response) {
 
         try {
@@ -174,7 +174,7 @@ public class AcademicCalendarController extends UifControllerBase {
             throw getAcalViewHelperService(acalForm).convertServiceExceptionsToUI(e);
         }
 
-        return super.start(acalForm, result, request, response);
+        return super.start(acalForm, request, response);
     }
 
     /**

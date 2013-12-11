@@ -1,33 +1,35 @@
 package org.kuali.student.enrollment.class2.appointment.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
+import org.kuali.student.enrollment.class2.appointment.dto.AppointmentWindowWrapper;
+import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.acal.dto.KeyDateInfo;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
-import org.kuali.student.enrollment.class2.appointment.dto.AppointmentWindowWrapper;
-import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
-import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.core.appointment.constants.AppointmentServiceConstants;
 import org.kuali.student.r2.core.appointment.dto.AppointmentWindowInfo;
 import org.kuali.student.r2.core.appointment.service.AppointmentService;
 import org.kuali.student.r2.core.class1.type.dto.TypeTypeRelationInfo;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
+import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.constants.TypeServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 
 public class AppointmentWindowWrapperLookupableImpl extends LookupableImpl {
@@ -43,11 +45,11 @@ public class AppointmentWindowWrapperLookupableImpl extends LookupableImpl {
     public final static String TERM_YEAR_KEY = "termYear";
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
-
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<AppointmentWindowWrapper> windowWrapperList;
-        String termTypeKey = fieldValues.get(TERM_TYPE_KEY);
-        String termYear = fieldValues.get(TERM_YEAR_KEY);
+        String termTypeKey = searchCriteria.get(TERM_TYPE_KEY);
+        String termYear = searchCriteria.get(TERM_YEAR_KEY);
         try {
             List<KeyDateInfo> periods = _searchPeriods(termTypeKey, termYear);
             if (periods == null || periods.isEmpty()) {

@@ -16,23 +16,26 @@
  */
 package org.kuali.student.enrollment.class2.acal.service.impl;
 
+import static org.kuali.rice.core.api.criteria.PredicateFactory.and;
+import static org.kuali.rice.core.api.criteria.PredicateFactory.like;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.common.util.ContextBuilder;
+import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.core.acal.dto.AcalEventInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
-import org.kuali.student.r2.common.dto.ContextInfo;
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.kuali.rice.core.api.criteria.PredicateFactory.and;
-import static org.kuali.rice.core.api.criteria.PredicateFactory.like;
 
 
 /**
@@ -45,13 +48,14 @@ public class AcalEventInfoLookupableImpl extends LookupableImpl {
     ContextInfo contextInfo = new ContextInfo();
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<AcalEventInfo> results = new ArrayList<AcalEventInfo>();
         QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
         List<Predicate> pList = new ArrayList<Predicate>();
         Predicate p;
 
-        String name = fieldValues.get("name");
+        String name = searchCriteria.get("name");
 
         qBuilder.setPredicates();
         if (StringUtils.isNotBlank(name)){

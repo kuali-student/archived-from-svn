@@ -16,11 +16,14 @@
 package org.kuali.student.enrollment.class1.krms.util;
 
 import com.google.common.collect.Maps;
+
+import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.component.BindingInfo;
 import org.kuali.rice.krad.uif.component.Component;
 import org.kuali.rice.krad.uif.container.CollectionGroup;
 import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.container.NodePrototype;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleRestriction;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.uif.view.View;
@@ -57,9 +60,9 @@ public class FinalExamAgendaSection extends AgendaSection {
         this.agendaPrototypeMap = agendaPrototypeMap;
     }
 
-    @Override
-    public List<Component> getComponentPrototypes() {
-        List<Component> components = super.getComponentPrototypes();
+    @ViewLifecycleRestriction(UifConstants.ViewPhases.INITIALIZE)
+    public List<Component> getAgendaPrototypes() {
+        List<Component> components = new ArrayList<Component>();
         for (Map.Entry<String, Group> agendaPrototypeMapEntry : this.getAgendaPrototypeMap().entrySet()) {
             components.add(agendaPrototypeMapEntry.getValue());
         }

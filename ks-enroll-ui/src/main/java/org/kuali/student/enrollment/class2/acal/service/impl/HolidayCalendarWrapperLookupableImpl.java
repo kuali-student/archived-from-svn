@@ -1,27 +1,33 @@
 package org.kuali.student.enrollment.class2.acal.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
+import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
+import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
 import org.kuali.student.enrollment.class2.acal.util.AcalCommonUtils;
+import org.kuali.student.enrollment.class2.courseoffering.service.impl.ManageSOCViewHelperServiceImpl;
+import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.core.acal.dto.HolidayCalendarInfo;
 import org.kuali.student.r2.core.acal.dto.HolidayInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
-import org.kuali.student.enrollment.class2.acal.dto.HolidayCalendarWrapper;
-import org.kuali.student.enrollment.class2.acal.dto.HolidayWrapper;
-import org.kuali.student.enrollment.class2.courseoffering.service.impl.ManageSOCViewHelperServiceImpl;
-import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.common.exceptions.*;
-import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
+import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class HolidayCalendarWrapperLookupableImpl extends LookupableImpl {
@@ -35,13 +41,13 @@ public class HolidayCalendarWrapperLookupableImpl extends LookupableImpl {
 
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
-
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<HolidayCalendarWrapper> holidayCalendarWrapperList = new ArrayList<HolidayCalendarWrapper>();
         List<HolidayCalendarInfo> holidayCalendarInfoList = new ArrayList<HolidayCalendarInfo>();
         List<HolidayWrapper> holidays = new ArrayList<HolidayWrapper>();
 
-        Integer theStartYear = new Integer(fieldValues.get(ACADEMIC_CALENDAR_START_YEAR_KEY));
+        Integer theStartYear = new Integer(searchCriteria.get(ACADEMIC_CALENDAR_START_YEAR_KEY));
         ContextInfo context = new ContextInfo();
         try{
             holidayCalendarInfoList = getAcademicCalendarService().getHolidayCalendarsByStartYear(theStartYear, context);

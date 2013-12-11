@@ -1,13 +1,24 @@
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
 import org.kuali.rice.krad.uif.element.Action;
+import org.kuali.rice.krad.uif.element.Link;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.DtoConstants;
@@ -24,14 +35,6 @@ import org.kuali.student.r2.core.search.dto.SearchResultRowInfo;
 import org.kuali.student.r2.lum.clu.service.CluService;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * This class is a take-off of CourseInfoLookupableImpl, but adds support
@@ -92,7 +95,7 @@ public class CourseInfoByTermLookupableImpl extends LookupableImpl {
     }
 
     @Override
-    public void getReturnUrlForResults(Action returnLink, Object model) {
+	public void buildReturnUrlForResult(Link returnLink, Object model) {
 
         /**
          * This is a custom hack of a KRAD lookup to return a criteria field value
@@ -103,8 +106,8 @@ public class CourseInfoByTermLookupableImpl extends LookupableImpl {
          *
          * note: This code is specifically for view: CourseOfferingCreateMaintenanceView.xml
          */
-        super.getReturnUrlForResults(returnLink, model);    //To change body of overridden methods use File | Settings | File Templates.
-        String actionScript = returnLink.getActionScript();
+        super.buildReturnUrlForResult(returnLink, model);    //To change body of overridden methods use File | Settings | File Templates.
+        String href = returnLink.getHref();
         String returnField="document.newMaintainableObject.dataObject.targetTermCode";
 
         LookupForm lookupForm = (LookupForm) model;
@@ -115,28 +118,29 @@ public class CourseInfoByTermLookupableImpl extends LookupableImpl {
         //for either 'returnLookupResultByScript' (i.e. when it is true) or
         //for 'returnLookupResultReload' (when it is false), and construct the new actionscript
         //accordingly
-        if (StringUtils.isEmpty(value) && actionScript.indexOf("returnLookupResultByScript") >0) {
+        if (StringUtils.isEmpty(value) && href.indexOf("returnLookupResultByScript") >0) {
             String closeFunction = "closeLightbox();";
-            int closeIdx = actionScript.indexOf(closeFunction);
-            StringBuilder newActionScript = new StringBuilder(actionScript.substring(0,closeIdx));
+            int closeIdx = href.indexOf(closeFunction);
+            StringBuilder newActionScript = new StringBuilder(href.substring(0,closeIdx));
 
             newActionScript = newActionScript.append(
                     "returnLookupResultByScript(\"" + returnField + "\", '" + value + "');"
                             + closeFunction);
-            returnLink.setActionScript(newActionScript.toString());
-        } else if (actionScript.indexOf("returnLookupResultReload") >0) {
+            returnLink.setHref(newActionScript.toString());
+        } else if (href.indexOf("returnLookupResultReload") >0) {
             String parent = "\", '_parent');";
-            int closeIdx = actionScript.indexOf(parent);
-            StringBuilder newActionScript = new StringBuilder(actionScript.substring(0,closeIdx));
+            int closeIdx = href.indexOf(parent);
+            StringBuilder newActionScript = new StringBuilder(href.substring(0,closeIdx));
 
             newActionScript = newActionScript.append(
                     "&" + returnField + "=" + value + parent);
-            returnLink.setActionScript(newActionScript.toString());
+            returnLink.setHref(newActionScript.toString());
         }
     }
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         ContextInfo context = ContextUtils.createDefaultContextInfo();
 
         List <CourseInfo> courseInfoList = new ArrayList<CourseInfo>();
@@ -157,7 +161,7 @@ public class CourseInfoByTermLookupableImpl extends LookupableImpl {
         searchParams.add(qpv1);
 
         for (QueryParamEnum qpEnum : QueryParamEnum.values()) {
-            String fieldValue = fieldValues.get(qpEnum.getFieldValue());
+            String fieldValue = searchCriteria.get(qpEnum.getFieldValue());
             if ( ! isEmpty(fieldValue) ) {
                 SearchParamInfo qpv = new SearchParamInfo();
                 switch (qpEnum) {

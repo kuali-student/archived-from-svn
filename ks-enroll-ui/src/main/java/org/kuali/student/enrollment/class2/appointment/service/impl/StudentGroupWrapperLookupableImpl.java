@@ -16,25 +16,26 @@
  */
 package org.kuali.student.enrollment.class2.appointment.service.impl;
 
+import static org.kuali.rice.core.api.criteria.PredicateFactory.and;
+import static org.kuali.rice.core.api.criteria.PredicateFactory.like;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.enrollment.class2.appointment.dto.StudentGroupWrapper;
-import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.kuali.rice.core.api.criteria.PredicateFactory.and;
-import static org.kuali.rice.core.api.criteria.PredicateFactory.like;
 
 /**
  * This class provides a Lookupable implementation for StudentGroupWrapper objects
@@ -45,7 +46,8 @@ public class StudentGroupWrapperLookupableImpl extends LookupableImpl {
     private transient PopulationService populationService;
     private static final long serialVersionUID = 1L;
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<StudentGroupWrapper> results = new ArrayList<StudentGroupWrapper>();
         ContextInfo context = new ContextInfo();
 
@@ -54,7 +56,7 @@ public class StudentGroupWrapperLookupableImpl extends LookupableImpl {
         qBuilder.setPredicates();
         // create predicates for search parameters
         //Code Changed for JIRA-8997 - SONAR Critical issues - Performance - Inefficient use of keySet iterator instead of entrySet iterator
-        for(Map.Entry<String,String> entry:fieldValues.entrySet()){
+        for(Map.Entry<String,String> entry:searchCriteria.entrySet()){
             Predicate words = like(entry.getKey(),entry.getValue());
             pList.add(words);
         }

@@ -79,7 +79,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
      *
      */
     @Override
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
                               HttpServletRequest request, HttpServletResponse response) {
         MaintenanceDocumentForm maintenanceForm = (MaintenanceDocumentForm) form;
         setupMaintenance(maintenanceForm, request, KRADConstants.MAINTENANCE_NEW_ACTION);

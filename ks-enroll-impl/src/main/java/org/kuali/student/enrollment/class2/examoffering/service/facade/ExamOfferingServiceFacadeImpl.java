@@ -1,5 +1,12 @@
 package org.kuali.student.enrollment.class2.examoffering.service.facade;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.kuali.rice.krms.api.KrmsApiServiceLocator;
@@ -8,7 +15,6 @@ import org.kuali.rice.krms.api.engine.ExecutionFlag;
 import org.kuali.rice.krms.api.engine.ExecutionOptions;
 import org.kuali.rice.krms.api.engine.SelectionCriteria;
 import org.kuali.student.enrollment.class2.courseoffering.service.decorators.PermissionServiceConstants;
-import org.hsqldb.lib.StringUtil;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FinalExam;
@@ -43,13 +49,7 @@ import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.constants.AtpServiceConstants;
 import org.kuali.student.r2.core.constants.KSKRMSServiceConstants;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.springframework.util.StringUtils;
 
 /**
  * Implementation of the Application Service Layer to provide the functionally specified functionality
@@ -76,7 +76,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                 ContextInfo context)
             throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException, ReadOnlyException {
-        if (StringUtil.isEmpty(examPeriodId)) {
+        if (StringUtils.isEmpty(examPeriodId)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -91,7 +91,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                 ContextInfo context)
             throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException, ReadOnlyException {
-        if (StringUtil.isEmpty(examPeriodId)) {
+        if (StringUtils.isEmpty(examPeriodId)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -119,7 +119,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
     public StatusInfo generateFinalExamOfferingForAO(ActivityOfferingInfo activityOfferingInfo, String termId, String examPeriodID, List<String> optionKeys, ContextInfo context)
             throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
-        if (StringUtil.isEmpty(examPeriodID)) {
+        if (StringUtils.isEmpty(examPeriodID)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -133,7 +133,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                      String termId, String examPeriodID, String finalExamLevelTypeKey, List<String> optionKeys, ContextInfo context)
             throws DoesNotExistException, DataValidationErrorException, InvalidParameterException, MissingParameterException,
             OperationFailedException, PermissionDeniedException, ReadOnlyException, VersionMismatchException {
-        if (StringUtil.isEmpty(examPeriodID)) {
+        if (StringUtils.isEmpty(examPeriodID)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -212,7 +212,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                 ContextInfo context)
             throws PermissionDeniedException, MissingParameterException, InvalidParameterException,
             OperationFailedException, DoesNotExistException, ReadOnlyException, DataValidationErrorException {
-        if (StringUtil.isEmpty(examPeriodId)) {
+        if (StringUtils.isEmpty(examPeriodId)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -262,7 +262,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                 ContextInfo context)
             throws PermissionDeniedException, MissingParameterException, InvalidParameterException,
             OperationFailedException, DoesNotExistException, ReadOnlyException, DataValidationErrorException {
-        if (StringUtil.isEmpty(examPeriodId)) {
+        if (StringUtils.isEmpty(examPeriodId)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 
@@ -312,7 +312,7 @@ public class ExamOfferingServiceFacadeImpl implements ExamOfferingServiceFacade 
                                                 ContextInfo context)
             throws PermissionDeniedException, MissingParameterException, InvalidParameterException,
             OperationFailedException, DoesNotExistException, ReadOnlyException, DataValidationErrorException {
-        if (StringUtil.isEmpty(examPeriodId)) {
+        if (StringUtils.isEmpty(examPeriodId)) {
             throw new MissingParameterException("Exam Period id is not provided.");
         }
 

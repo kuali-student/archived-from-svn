@@ -16,21 +16,23 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -42,25 +44,26 @@ public class OrganizationInfoLookupableImpl extends LookupableImpl {
     private OrganizationService organizationService;
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<OrgInfo> results = new ArrayList<OrgInfo>();
 
 
-        String shortName = fieldValues.get("shortName");
-        String longName = fieldValues.get("longName");
+        String shortName = searchCriteria.get("shortName");
+        String longName = searchCriteria.get("longName");
 
         QueryByCriteria.Builder qBuilder = QueryByCriteria.Builder.create();
         if (StringUtils.isNotBlank(longName) && !longName.isEmpty()) {
             if (StringUtils.isNotBlank(shortName) && !shortName.isEmpty()){
                 qBuilder.setPredicates(PredicateFactory.or(
-                        PredicateFactory.like("longName","*"+ fieldValues.get("longName")+ "*"),
-                        PredicateFactory.like("shortName","*" + fieldValues.get("shortName") + "*")));
+                        PredicateFactory.like("longName","*"+ searchCriteria.get("longName")+ "*"),
+                        PredicateFactory.like("shortName","*" + searchCriteria.get("shortName") + "*")));
             }
             else {
-                qBuilder.setPredicates(PredicateFactory.like("longName","*"+ fieldValues.get("longName")+ "*"));
+                qBuilder.setPredicates(PredicateFactory.like("longName","*"+ searchCriteria.get("longName")+ "*"));
             }
         }else if (StringUtils.isNotBlank(shortName) && !shortName.isEmpty()){
-            qBuilder.setPredicates(PredicateFactory.like("shortName","*" + fieldValues.get("shortName") + "*"));
+            qBuilder.setPredicates(PredicateFactory.like("shortName","*" + searchCriteria.get("shortName") + "*"));
         }
         try {
             QueryByCriteria query = qBuilder.build();

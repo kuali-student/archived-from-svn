@@ -1,14 +1,19 @@
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
-import org.kuali.student.r2.core.acal.dto.TermInfo;
-import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.enrollment.class2.courseoffering.util.ActivityOfferingConstants;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingResourceLoader;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
@@ -16,25 +21,23 @@ import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.ContextUtils;
+import org.kuali.student.r2.core.acal.dto.TermInfo;
+import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.r2.core.constants.AcademicCalendarServiceConstants;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class AdvanceActivityOfferingLookupableImpl extends LookupableImpl {
 
     private static final Logger LOG = Logger.getLogger(AdvanceActivityOfferingLookupableImpl.class);
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         List<ActivityOfferingInfo> activityOfferingInfos;
         List<CourseOfferingInfo> courseOfferingList = new ArrayList<CourseOfferingInfo>();
         String termId = null;
         String courseOfferingId;
-        String termCode = fieldValues.get(ActivityOfferingConstants.ACTIVITYOFFERING_TERM_CODE);
-        String courseOfferingCode = fieldValues.get(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_CODE);
+        String termCode = searchCriteria.get(ActivityOfferingConstants.ACTIVITYOFFERING_TERM_CODE);
+        String courseOfferingCode = searchCriteria.get(ActivityOfferingConstants.ACTIVITYOFFERING_COURSE_OFFERING_CODE);
 
         try {
             //1. get termId based on termCode

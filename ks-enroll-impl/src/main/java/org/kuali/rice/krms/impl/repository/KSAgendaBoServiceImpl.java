@@ -15,6 +15,8 @@
  */
 package org.kuali.rice.krms.impl.repository;
 
+import static org.kuali.rice.core.api.criteria.PredicateFactory.in;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +28,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.criteria.CriteriaLookupService;
 import org.kuali.rice.core.api.criteria.GenericQueryResults;
 import org.kuali.rice.core.api.criteria.Predicate;
@@ -34,9 +35,7 @@ import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.exception.RiceIllegalArgumentException;
 import org.kuali.rice.core.api.exception.RiceIllegalStateException;
 import org.kuali.rice.core.api.mo.ModelObjectUtils;
-import org.kuali.rice.core.impl.services.CoreImplServiceLocator;
-import org.kuali.rice.coreservice.api.CoreServiceApiServiceLocator;
-import org.kuali.rice.coreservice.framework.CoreFrameworkServiceLocator;
+import org.kuali.rice.kns.service.KNSServiceLocator;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.KRADServiceLocator;
 import org.kuali.rice.krad.service.SequenceAccessorService;
@@ -45,8 +44,6 @@ import org.kuali.rice.krms.api.repository.agenda.AgendaItemDefinition;
 import org.kuali.rice.krms.api.repository.type.KrmsAttributeDefinition;
 import org.kuali.rice.krms.impl.util.KrmsImplConstants.PropertyNames;
 import org.springframework.util.CollectionUtils;
-
-import static org.kuali.rice.core.api.criteria.PredicateFactory.in;
 
 /**
  * Implementation of the interface for accessing KRMS repository Agenda related
@@ -463,7 +460,7 @@ public final class KSAgendaBoServiceImpl implements AgendaBoService {
 
     protected BusinessObjectService getBusinessObjectService() {
         if ( businessObjectService == null ) {
-            businessObjectService = KRADServiceLocator.getBusinessObjectService();
+            businessObjectService = KNSServiceLocator.getBusinessObjectService();
         }
         return businessObjectService;
     }
@@ -479,7 +476,7 @@ public final class KSAgendaBoServiceImpl implements AgendaBoService {
 
     protected SequenceAccessorService getSequenceAccessorService() {
         if ( sequenceAccessorService == null ) {
-            sequenceAccessorService = KRADServiceLocator.getSequenceAccessorService();
+            sequenceAccessorService = KNSServiceLocator.getSequenceAccessorService();
         }
         return sequenceAccessorService;
     }
