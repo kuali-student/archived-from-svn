@@ -1,5 +1,6 @@
 package org.kuali.student.ap.comment.service;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -9,24 +10,36 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.rice.krad.web.form.LookupForm;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.rice.krad.lookup.LookupForm;
+import org.kuali.rice.krad.lookup.LookupableImpl;
 import org.kuali.student.ap.comment.dataobject.MessageDataObject;
-import org.kuali.student.myplan.main.service.MyPlanLookupableImpl;
-import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.r2.core.comment.service.CommentService;
 import org.kuali.student.r2.core.constants.CommentServiceConstants;
 
-public class MessagesLookupableHelperImpl extends MyPlanLookupableImpl {
+public class MessagesLookupableHelperImpl extends LookupableImpl {
 
 	private static final long serialVersionUID = 0xa00b01c00l;
 
 	private transient CommentService commentService;
 	private transient CommentQueryHelper commentQueryHelper;
 
+	/**
+	 * Override and ignore criteria validation
+	 * 
+	 * @param form
+	 * @param searchCriteria
+	 * @return
+	 */
 	@Override
-	protected List<MessageDataObject> getSearchResults(LookupForm lookupForm,
-			Map<String, String> fieldValues, boolean unbounded) {
+	public boolean validateSearchParameters(LookupForm form,
+			Map<String, String> searchCriteria) {
+		return true;
+	}
+
+	@Override
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
 		String studentId = KsapFrameworkServiceLocator.getUserSessionHelper().getStudentId();
 		List<MessageDataObject> messages = CommentQueryHelper.getMessages(studentId);
 

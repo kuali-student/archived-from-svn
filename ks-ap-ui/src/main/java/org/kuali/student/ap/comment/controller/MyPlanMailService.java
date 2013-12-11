@@ -1,4 +1,4 @@
-package org.kuali.student.myplan.service;
+package org.kuali.student.ap.comment.controller;
 
 import org.kuali.rice.core.api.mail.MailMessage;
 import org.kuali.rice.krad.exception.InvalidAddressException;

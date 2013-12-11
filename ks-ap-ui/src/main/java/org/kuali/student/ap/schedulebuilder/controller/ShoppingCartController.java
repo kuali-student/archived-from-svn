@@ -59,9 +59,8 @@ public class ShoppingCartController extends UifControllerBase {
 
 	private ModelAndView startPlannerDialog(
 			@ModelAttribute("KualiForm") ShoppingCartForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		super.start((UifFormBase) form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		super.start((UifFormBase) form, request, response);
 
 		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form,
 				request, response);
@@ -160,7 +159,7 @@ public class ShoppingCartController extends UifControllerBase {
 		// This will set courseOption.selected, and subsequently
 		// shoppingCartRequest.addToCart, to true.
 		form.setExpectedPlanItemCategory(AcademicPlanServiceConstants.ItemCategory.PLANNED);
-		return startPlannerDialog(form, result, request, response);
+		return startPlannerDialog(form, request, response);
 	}
 
 	@RequestMapping(params = "pageId="
@@ -173,7 +172,7 @@ public class ShoppingCartController extends UifControllerBase {
 		// This will set courseOption.selected, and subsequently
 		// shoppingCartRequest.addToCart, to false.
 		form.setExpectedPlanItemCategory(AcademicPlanServiceConstants.ItemCategory.CART);
-		return startPlannerDialog(form, result, request, response);
+		return startPlannerDialog(form, request, response);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

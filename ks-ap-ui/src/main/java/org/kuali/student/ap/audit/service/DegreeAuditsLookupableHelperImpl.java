@@ -1,6 +1,7 @@
 package org.kuali.student.ap.audit.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -11,16 +12,16 @@ import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.rice.krad.web.form.LookupForm;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.rice.krad.lookup.LookupForm;
+import org.kuali.rice.krad.lookup.LookupableImpl;
 import org.kuali.student.ap.audit.dataobject.DegreeAuditItem;
 import org.kuali.student.ap.audit.dto.AuditReportInfo;
 import org.kuali.student.ap.audit.util.DegreeAuditDataObjectHelper;
 import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
-import org.kuali.student.myplan.main.service.MyPlanLookupableImpl;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.springframework.dao.DataRetrievalFailureException;
 
-public class DegreeAuditsLookupableHelperImpl extends MyPlanLookupableImpl {
+public class DegreeAuditsLookupableHelperImpl extends LookupableImpl {
 
 	private static final long serialVersionUID = 5470488652754576047L;
 
@@ -29,7 +30,8 @@ public class DegreeAuditsLookupableHelperImpl extends MyPlanLookupableImpl {
     private transient DegreeAuditService degreeAuditService;
 
     @Override
-    protected List<DegreeAuditItem> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         String studentId = null;
         try {
             studentId = KsapFrameworkServiceLocator.getUserSessionHelper().getAuditSystemKey();

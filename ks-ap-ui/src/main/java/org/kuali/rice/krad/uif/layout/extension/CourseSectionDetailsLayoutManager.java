@@ -3,11 +3,11 @@ package org.kuali.rice.krad.uif.layout.extension;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.kuali.rice.krad.uif.component.Component;
 import org.kuali.rice.krad.uif.container.CollectionGroup;
-import org.kuali.rice.krad.uif.element.Action;
 import org.kuali.rice.krad.uif.field.Field;
 import org.kuali.rice.krad.uif.field.FieldGroup;
-import org.kuali.rice.krad.uif.layout.TableLayoutManager;
+import org.kuali.rice.krad.uif.layout.TableLayoutManagerBase;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingItem;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
@@ -15,7 +15,7 @@ import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 /**
  * Layout manager for controlling and optimizing section details presentation.
  */
-public class CourseSectionDetailsLayoutManager extends TableLayoutManager {
+public class CourseSectionDetailsLayoutManager extends TableLayoutManagerBase {
 
 	private static final long serialVersionUID = 3056313875988089648L;
 
@@ -23,12 +23,12 @@ public class CourseSectionDetailsLayoutManager extends TableLayoutManager {
 			.getLogger(CourseSectionDetailsLayoutManager.class);
 
 	@Override
-	public void buildLine(View view, Object model,
+	public void buildLine(Object model,
 			CollectionGroup collectionGroup, List<Field> lineFields,
 			List<FieldGroup> subCollectionFields, String bindingPath,
-			List<Action> actions, String idSuffix, Object currentLine,
+			List<? extends Component> actions, String idSuffix, Object currentLine,
 			int lineIndex) {
-		super.buildLine(view, model, collectionGroup, lineFields,
+		super.buildLine(model, collectionGroup, lineFields,
 				subCollectionFields, bindingPath, actions, idSuffix,
 				currentLine, lineIndex);
 

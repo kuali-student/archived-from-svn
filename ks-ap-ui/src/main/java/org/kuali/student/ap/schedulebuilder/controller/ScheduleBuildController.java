@@ -62,9 +62,8 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		super.start((UifFormBase) form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		super.start((UifFormBase) form, request, response);
 
 		ScheduleBuildForm sbform = (ScheduleBuildForm) form;
 		try {
