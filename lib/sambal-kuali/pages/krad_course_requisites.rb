@@ -63,12 +63,14 @@ class KradCourseRequisites < BasePage
   action(:update_rule) { |b| b.button(id: 'KS-UpdateRule-Button').click; b.loading_wait }
   action(:cancel_rule) { |b| b.link(id: 'KS-CancelRule-Button').click; b.loading_wait }
 
-  repeatable_for_credit_rule: ['May be repeated for a maximum of <n> credits', 'Free Form Text']
+  #repeatable_for_credit_rule: ['May be repeated for a maximum of <n> credits', 'Free Form Text']
 
-  course_that_restricts_credits_rule: ['Must not have successfully completed <course>', 'Must not have successfully completed any courses from <courses>', 'Free Form Text']
+  #course_that_restricts_credits_rule: ['Must not have successfully completed <course>', 'Must not have successfully completed any courses from <courses>', 'Free Form Text']
 
   element(:rule_course_field) {|b| b.text_field(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.courseInfo.code').when_present }
   element(:free_form_text) {|b| b.text_field(name: /^document\.newMaintainableObject\.editTree\.rootElement\.children/) }
+  element(:rule_credit) { |b| b.text_field(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.parameters[1].value') }
+
 
   action(:added_rule_restricts_credits_text) {|rule_text='you forgot to pass text', b| b.div(id: 'KS-ViewTree-Group_ruleF').span(text: /#{rule_text}/) }
 

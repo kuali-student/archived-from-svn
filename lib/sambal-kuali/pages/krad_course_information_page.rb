@@ -16,6 +16,7 @@ class KradCourseInformation < BasePage
 #CROSS LIST SECTION
   element(:course_listing_section_collapsed) { |b| b.img(id: /^KS-CrossListingEtcDisclosure-Section/, alt: 'collapse') }
   action(:expand_course_listing_section) { |b| b.img(id: 'KS-CrossListingEtcDisclosure-Section_toggle_col').click; b.add_a_version_code_button.wait_until_present }
+  element(:collapse_course_listing_section) { |b| b.img(id: 'KS-CrossListingEtcDisclosure-Section_toggle_exp') }
 
   element(:add_another_course_listing_button) { |b| b.button(id: 'KS-CrossListed-Section_add') }
   element(:add_another_course_button) { |b| b.button(id: 'KS-JointlyOffered-Section_add') }
@@ -36,8 +37,8 @@ class KradCourseInformation < BasePage
 
 #INSTRUCTORS
   element(:instructor_name) { |b| b.text_field(name: /instructorWrappers\'\]\.displayName$/) }
-  action(:instructor_add) {|b| b.button(text: 'Add').click; b.adding_line.wait_while_present }
-  action(:added_instructor_name) { |instructor_level='0', b| b.text_field(name: /instructorWrappers\[#{instructor_level}\]\.displayName$/)}
+  action(:instructor_add) {|b| b.button(id: 'KS-Instructors-Section_add').click; b.adding_line.wait_while_present }
+  action(:added_instructor_name) { |instructor_level='0', b| b.text_field(name: "document.newMaintainableObject.instructorWrappers[#{instructor_level}].displayName") } #/instructorWrappers\[{instructor_level}\]\.displayName$/)}
   action(:instructor_advanced_search) { |b| b.div(id: 'KS-Instructor-displayName_add').link(text: 'Advanced Search' ).click; b.adv_search_button.wait_until_present }
 
 #DESCRIPTION AND RATIONALE
@@ -60,16 +61,7 @@ class KradCourseInformation < BasePage
   #end
   #
 
-  element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
 
-    #def return_search_result(display_name_username, row_number=3)
-    #  search_results_table.rows.each do |row|
-    #    if row.cells[row_number].text == display_name_username
-    #      row.cells[0].link(text: 'return value').click
-    #      break
-    #    end
-    #  end
-    #end
 
 
 

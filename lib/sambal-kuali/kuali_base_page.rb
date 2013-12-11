@@ -82,6 +82,10 @@ class BasePage < PageFactory
       element(:adv_course_code) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseCode]') }
       element(:adv_plain_text_description) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
 
+      element(:adv_course_title) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[title]') }
+      element(:adv_course_code_rule) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[code]') }
+      element(:adv_plain_text_description_rule) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[description]') }
+
       action(:adv_return_value) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value ='+"#{title_return_value}").click; b.loading_wait }
 
       #Course Information: Instructor
@@ -105,6 +109,14 @@ class BasePage < PageFactory
       action(:adv_close) { |b| b.frame(class: 'fancybox-iframe').button(id: 'button_close').click }
 
       action(:adv_x) { |b| b.div(class: 'fancybox-item fancybox-close').click }
+
+
+
+      element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
+
+
+
+
     end
 
     def links(*links_text)
