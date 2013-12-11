@@ -15,28 +15,24 @@
  */
 package org.kuali.rice.krms.util;
 
-import org.kuali.rice.krad.uif.component.BindingInfo;
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.container.CollectionFilter;
-import org.kuali.rice.krad.uif.container.Group;
-import org.kuali.rice.krad.uif.container.TreeGroup;
-import org.kuali.rice.krad.uif.element.Action;
-import org.kuali.rice.krad.uif.element.Message;
-import org.kuali.rice.krad.uif.field.DataField;
-import org.kuali.rice.krad.uif.util.ComponentUtils;
-import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
-import org.kuali.rice.krad.uif.view.View;
-import org.kuali.rice.krad.uif.widget.QuickFinder;
-import org.kuali.rice.krms.dto.AgendaEditor;
-import org.kuali.rice.krms.service.RuleViewHelperService;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kuali.rice.krad.uif.UifConstants;
+import org.kuali.rice.krad.uif.component.BindingInfo;
+import org.kuali.rice.krad.uif.component.Component;
+import org.kuali.rice.krad.uif.container.Group;
+import org.kuali.rice.krad.uif.container.GroupBase;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycle;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleRestriction;
+import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
+import org.kuali.rice.krms.dto.AgendaEditor;
+import org.kuali.rice.krms.service.RuleViewHelperService;
 
 /**
  * @author Kuali Student Team
  */
-public class AgendaSection extends Group {
+public class AgendaSection extends GroupBase {
 
     private String propertyName;
     private BindingInfo bindingInfo;
@@ -51,25 +47,25 @@ public class AgendaSection extends Group {
     }
 
     @Override
-    public void performInitialization(View view, Object model) {
+    public void performInitialization(Object model) {
         setFieldBindingObjectPath(getBindingInfo().getBindingObjectPath());
 
-        super.performInitialization(view, model);
+        super.performInitialization(model);
 
         if (bindingInfo != null) {
-            bindingInfo.setDefaults(view, getPropertyName());
+            bindingInfo.setDefaults(ViewLifecycle.getView(), getPropertyName());
         }
 
     }
 
     @Override
-    public void performApplyModel(View view, Object model, Component parent) {
+    public void performApplyModel(Object model, Component parent) {
         // get the collection for this group from the model
         List<Object> modelCollection = ObjectPropertyUtils.getPropertyValue(model,
                 this.getBindingInfo().getBindingPath());
 
         //Set the ruleviewhelperservice on the agendabuilder.
-        this.getAgendaBuilder().setViewHelperService((RuleViewHelperService) view.getViewHelperService());
+        this.getAgendaBuilder().setViewHelperService((RuleViewHelperService) ViewLifecycle.getHelper());
 
         // create agenda sections for each agenda
         List<Component> items = new ArrayList<Component>();
@@ -79,21 +75,7 @@ public class AgendaSection extends Group {
         }
         this.setItems(items);
 
-        super.performApplyModel(view, model, parent);
-    }
-
-    @Override
-    public List<Component> getComponentsForLifecycle() {
-        return super.getComponentsForLifecycle();
-    }
-
-    @Override
-    public List<Component> getComponentPrototypes() {
-        List<Component> components = super.getComponentPrototypes();
-        components.add(this.getAgendaPrototype());
-        components.add(this.getRulePrototype());
-
-        return components;
+        super.performApplyModel(model, parent);
     }
 
     /**
@@ -139,6 +121,7 @@ public class AgendaSection extends Group {
         this.bindingInfo = bindingInfo;
     }
 
+    @ViewLifecycleRestriction(UifConstants.ViewPhases.INITIALIZE)
     public Group getAgendaPrototype() {
         return agendaPrototype;
     }
@@ -147,6 +130,7 @@ public class AgendaSection extends Group {
         this.agendaPrototype = agendaPrototype;
     }
 
+    @ViewLifecycleRestriction(UifConstants.ViewPhases.INITIALIZE)
     public Group getRulePrototype() {
         return rulePrototype;
     }

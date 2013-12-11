@@ -15,7 +15,7 @@
  */
 package org.kuali.student.common.uif.view;
 
-import org.kuali.rice.krad.uif.view.LookupView;
+import org.kuali.rice.krad.lookup.LookupView;
 
 /**
  * <p>

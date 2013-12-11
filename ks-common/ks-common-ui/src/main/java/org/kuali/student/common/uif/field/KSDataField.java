@@ -16,13 +16,9 @@
  */
 package org.kuali.student.common.uif.field;
 
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.field.DataField;
+import org.kuali.rice.krad.uif.field.DataFieldBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class KSDataField extends DataField{
+public class KSDataField extends DataFieldBase{
 
     /*@Override
     public List<Component> getComponentsForLifecycle() {

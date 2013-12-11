@@ -15,10 +15,18 @@
  */
 package org.kuali.student.common.uif.controller;
 
+import java.util.List;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.exception.RiceRuntimeException;
 import org.kuali.rice.krad.datadictionary.DataObjectEntry;
+import org.kuali.rice.krad.lookup.LookupController;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.service.ModuleService;
 import org.kuali.rice.krad.uif.UifConstants;
@@ -27,20 +35,12 @@ import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.util.KRADUtils;
-import org.kuali.rice.krad.web.controller.LookupController;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.common.uif.view.KSLookupView;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * This is the base class for the KS Lookup controller which extends from KRAD controller class. This class is intended to
@@ -56,7 +56,7 @@ public class KSLookupController extends LookupController {
 
     @RequestMapping(params = "methodToCall=start")
     @Override
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
             HttpServletRequest request, HttpServletResponse response) {
 
         LookupForm lookupForm = (LookupForm) form;
@@ -85,17 +85,16 @@ public class KSLookupController extends LookupController {
             }
         }
 
-        return super.start(lookupForm, result, request, response);
+        return super.start(lookupForm, request, response);
     }
 
     /**
      * Overrides the KRAD search functionality to perform redirect on single search result.
      */
     @RequestMapping(params = "methodToCall=search")
-    public ModelAndView search(@ModelAttribute("KualiForm") LookupForm lookupForm, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView search(@ModelAttribute("KualiForm") LookupForm lookupForm) {
 
-        ModelAndView modelAndView = super.search(lookupForm,result,request,response);
+        ModelAndView modelAndView = super.search(lookupForm);
 
         if(lookupForm.getPostedView() instanceof KSLookupView){
             KSLookupView ksLookupView = (KSLookupView)lookupForm.getPostedView();

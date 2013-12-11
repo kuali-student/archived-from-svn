@@ -7,10 +7,10 @@
 /*-- Custom border-radius convenience overrides --*/
 
 .border-radius-individual(@top-left, @top-right, @bottom-right, @bottom-left) {
-  .border-top-left-radius(@top-left);
-  .border-top-right-radius(@top-right);
-  .border-bottom-right-radius(@bottom-right);
-  .border-bottom-left-radius(@bottom-left);
+  border-top-right-radius: @top-left;
+  border-top-left-radius: @top-right;
+  border-bottom-right-radius: @bottom-right;
+  border-bottom-left-radius: @bottom-left;
 }
 
 /*-- Border Style mixins --*/
@@ -30,7 +30,8 @@
   text-transform: uppercase;
   white-space: nowrap;
   font-weight:bold;
-  .border-radius(6px);
+  .border-top-radius(6px);
+  .border-bottom-radius(6px);
 }
 .state-lozenge-draft() {
   .state-lozenge-base();

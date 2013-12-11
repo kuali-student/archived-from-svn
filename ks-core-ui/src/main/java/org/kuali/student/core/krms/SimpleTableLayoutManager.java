@@ -15,43 +15,27 @@
  */
 package org.kuali.student.core.krms;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.kuali.rice.krad.datadictionary.parse.BeanTagAttribute;
 import org.kuali.rice.krad.uif.CssConstants;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.UifPropertyPaths;
 import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.component.DataBinding;
 import org.kuali.rice.krad.uif.container.CollectionGroup;
 import org.kuali.rice.krad.uif.container.Container;
-import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.element.Action;
-import org.kuali.rice.krad.uif.element.Label;
-import org.kuali.rice.krad.uif.element.Message;
-import org.kuali.rice.krad.uif.field.DataField;
 import org.kuali.rice.krad.uif.field.Field;
 import org.kuali.rice.krad.uif.field.FieldGroup;
-import org.kuali.rice.krad.uif.field.InputField;
-import org.kuali.rice.krad.uif.field.MessageField;
-import org.kuali.rice.krad.uif.layout.CollectionLayoutManager;
 import org.kuali.rice.krad.uif.layout.CollectionLayoutUtils;
-import org.kuali.rice.krad.uif.layout.GridLayoutManager;
-import org.kuali.rice.krad.uif.layout.TableLayoutManager;
-import org.kuali.rice.krad.uif.util.ColumnCalculationInfo;
-import org.kuali.rice.krad.uif.util.ComponentFactory;
+import org.kuali.rice.krad.uif.layout.TableLayoutManagerBase;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycle;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.view.ExpressionEvaluator;
 import org.kuali.rice.krad.uif.view.View;
-import org.kuali.rice.krad.uif.widget.RichTable;
-import org.kuali.rice.krad.util.KRADUtils;
+import org.kuali.rice.krad.uif.view.ViewTheme;
 import org.kuali.rice.krad.web.form.UifFormBase;
 
 /**
@@ -59,7 +43,7 @@ import org.kuali.rice.krad.web.form.UifFormBase;
  *
  * @author Kuali Student Team
  */
-public class SimpleTableLayoutManager extends TableLayoutManager {
+public class SimpleTableLayoutManager extends TableLayoutManagerBase {
 
     /**
      * Setup the column calculations functionality and components
@@ -70,9 +54,9 @@ public class SimpleTableLayoutManager extends TableLayoutManager {
      * @param totalColumns total number of columns in the table
      */
     @Override
-    protected void setupColumnCalculations(View view, Object model, Container container, int totalColumns) {
+    protected void setupColumnCalculations(Object model, Container container, int totalColumns) {
         if(this.getColumnCalculations().size()>0){
-            super.setupColumnCalculations(view, model, container, totalColumns);
+            super.setupColumnCalculations(model, container, totalColumns);
         }
     }
 
@@ -94,10 +78,23 @@ public class SimpleTableLayoutManager extends TableLayoutManager {
 
         // since expressions are not evaluated on child components yet, we need to evaluate any properties
         // we are going to read for building the table
-        ExpressionEvaluator expressionEvaluator = view.getViewHelperService().getExpressionEvaluator();
+        ExpressionEvaluator expressionEvaluator = ViewLifecycle.getProcessor().getExpressionEvaluator();
         for (Field lineField : lineFields) {
             lineField.pushObjectToContext(UifConstants.ContextVariableNames.PARENT, collectionGroup);
-            lineField.pushAllToContext(view.getViewHelperService().getCommonContext(view, lineField));
+            
+            Map<String, Object> commonContext = new HashMap<String, Object>();
+            Map<String, Object> viewContext = view.getContext();
+            if (viewContext != null) {
+                commonContext.putAll(view.getContext());
+            }
+
+            ViewTheme theme = view.getTheme();
+            if (theme != null) {
+                commonContext.put(UifConstants.ContextVariableNames.THEME_IMAGES, view.getTheme().getImageDirectory());
+            }
+            
+            commonContext.put(UifConstants.ContextVariableNames.COMPONENT, lineField);
+            lineField.pushAllToContext(commonContext);
 
             expressionEvaluator.evaluatePropertyExpression(view, lineField.getContext(), lineField,
                     UifPropertyPaths.ROW_SPAN, true);

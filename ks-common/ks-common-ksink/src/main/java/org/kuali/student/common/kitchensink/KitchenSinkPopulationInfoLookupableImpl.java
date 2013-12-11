@@ -16,21 +16,23 @@
  */
 package org.kuali.student.common.kitchensink;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.PredicateFactory;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.constants.PopulationServiceConstants;
 import org.kuali.student.r2.core.population.dto.PopulationInfo;
 import org.kuali.student.r2.core.population.service.PopulationService;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class performs a search on the name & description properties in Populations
@@ -41,9 +43,11 @@ public class KitchenSinkPopulationInfoLookupableImpl extends LookupableImpl {
 
     private transient PopulationService populationService;
 
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+    @Override
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         // build query criteria
-        String keyword = fieldValues.get("keyword");
+        String keyword = searchCriteria.get("keyword");
         keyword = keyword.isEmpty() ? "*" : keyword; //search for all if empty
         List<Predicate> predicates = new ArrayList<Predicate>();
         predicates.add(PredicateFactory.or(PredicateFactory.like("name", "%" + keyword + "%"),

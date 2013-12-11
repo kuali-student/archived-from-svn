@@ -1,11 +1,12 @@
 package org.kuali.student.common.uif.container;
 
-import org.kuali.rice.krad.uif.container.CollectionGroup;
-import org.kuali.rice.krad.uif.element.Action;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.kuali.rice.krad.uif.component.Component;
+import org.kuali.rice.krad.uif.container.CollectionGroupBase;
+import org.kuali.rice.krad.uif.element.Action;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +15,7 @@ import java.util.List;
  * Time: 3:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class KSTableCollectionWithLineActionLinkSeperator extends CollectionGroup {
+public class KSTableCollectionWithLineActionLinkSeperator extends CollectionGroupBase {
 
     private String lineActionSeparator = "";
 
@@ -26,13 +27,13 @@ public class KSTableCollectionWithLineActionLinkSeperator extends CollectionGrou
         this.lineActionSeparator = lineActionSeparator;
     }
 
-    public List<Action> getLineActions(){
-        List<Action> actions = super.getLineActions();
-        List<Action> returnedActions = null;
+    public List<? extends Component> getLineActions(){
+        List<? extends Component> actions = super.getLineActions();
+        List<Component> returnedActions = null;
         if(actions != null && super.isRenderLineActions()){
-            returnedActions = new ArrayList<Action>();
+            returnedActions = new ArrayList<Component>();
             int index = 0;
-            for(Action action: actions){
+            for(Component action: actions){
                 index++;
                 returnedActions.add(action);
                 if(index < actions.size()) {

@@ -15,34 +15,33 @@
  */
 package org.kuali.student.core.krms;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.component.Component;
 import org.kuali.rice.krad.uif.component.DataBinding;
 import org.kuali.rice.krad.uif.container.CollectionGroup;
-import org.kuali.rice.krad.uif.container.Container;
 import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.element.Action;
 import org.kuali.rice.krad.uif.field.Field;
 import org.kuali.rice.krad.uif.field.FieldGroup;
-import org.kuali.rice.krad.uif.layout.StackedLayoutManager;
+import org.kuali.rice.krad.uif.layout.StackedLayoutManagerBase;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.rice.krad.web.form.UifFormBase;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Kuali Student Team
  */
-public class HorizontalActionsStackedLayoutManager extends StackedLayoutManager {
+public class HorizontalActionsStackedLayoutManager extends StackedLayoutManagerBase {
 
     @Override
-    public void buildLine(View view, Object model, CollectionGroup collectionGroup, List<Field> lineFields,
-                          List<FieldGroup> subCollectionFields, String bindingPath, List<Action> actions, String idSuffix,
+    public void buildLine(Object model, CollectionGroup collectionGroup, List<Field> lineFields,
+                          List<FieldGroup> subCollectionFields, String bindingPath, List<? extends Component> actions, String idSuffix,
                           Object currentLine, int lineIndex) {
 
         boolean isAddLine = lineIndex == -1;
@@ -86,7 +85,7 @@ public class HorizontalActionsStackedLayoutManager extends StackedLayoutManager 
             List<Object> modelCollection = ObjectPropertyUtils.getPropertyValue(model,
                     ((DataBinding) collectionGroup).getBindingInfo().getBindingPath());
 
-            headerText = buildLineHeaderText(view, modelCollection.get(lineIndex), lineGroup);
+            headerText = buildLineHeaderText(modelCollection.get(lineIndex), lineGroup);
         }
 
         // don't set header if text is blank (could already be set by other means)

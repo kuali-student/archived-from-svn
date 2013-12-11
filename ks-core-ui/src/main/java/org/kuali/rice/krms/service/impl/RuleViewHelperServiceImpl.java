@@ -21,6 +21,7 @@ import org.kuali.rice.core.api.util.tree.Tree;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.component.Component;
 import org.kuali.rice.krad.uif.container.Container;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycle;
 import org.kuali.rice.krad.uif.util.ComponentFactory;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.view.View;
@@ -59,6 +60,7 @@ import org.kuali.student.r2.core.constants.KSKRMSServiceConstants;
 import org.springframework.beans.BeanUtils;
 
 import javax.xml.namespace.QName;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,9 +107,9 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
     }
 
     @Override
-    protected void addCustomContainerComponents(View view, Object model, Container container) {
+	public void addCustomContainerComponents(Object model, Container container) {
         if (KRMSConstants.KRMS_PROPOSITION_DETAILSECTION_ID.equals(container.getId())) {
-            customizePropositionEditSection(view, model, container);
+            customizePropositionEditSection(ViewLifecycle.getView(), model, container);
         }
     }
 
@@ -126,7 +128,7 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
 
             if (template != null && template.getComponentId() != null) {
                 Component component = ComponentFactory.getNewComponentInstance(template.getComponentId());
-                view.assignComponentIds(component);
+                ViewLifecycle.spawnSubLifecyle(model, component, container);
                 if(container.getId().equals(maintenanceDocumentForm.getUpdateComponentId())){
                     String nodePath = view.getDefaultBindingObjectPath() + "." + propEditor.getBindingPath();
                     ComponentUtils.pushObjectToContext(component, UifConstants.ContextVariableNames.NODE_PATH, nodePath);
@@ -139,7 +141,7 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
 
             if (template != null && template.getConstantComponentId() != null) {
                 Component component = ComponentFactory.getNewComponentInstance(template.getConstantComponentId());
-                view.assignComponentIds(component);
+                ViewLifecycle.spawnSubLifecyle(model, component, container);
 
                 //Add Proposition Type FieldGroup to Tree Node
                 components.add(component);

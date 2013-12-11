@@ -15,10 +15,17 @@
  */
 package org.kuali.student.core.krms.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.util.ContextUtils;
 import org.kuali.student.r2.core.constants.OrganizationServiceConstants;
@@ -29,11 +36,6 @@ import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultCellInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultRowInfo;
-
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class performs lookups on organizations of type kuali.org.Department
@@ -49,10 +51,11 @@ public class DepartmentLookupableImpl extends LookupableImpl {
     private OrganizationService organizationService;
 
     @Override
-    protected List<?> getSearchResults(LookupForm lookupForm, Map<String, String> fieldValues, boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
 
-        String shortName = fieldValues.get("shortName");
-        String longName = fieldValues.get("longName");
+        String shortName = searchCriteria.get("shortName");
+        String longName = searchCriteria.get("longName");
 
         List<OrgInfo> displays = new ArrayList<OrgInfo>();
         List<SearchParamInfo> queryParamValueList = new ArrayList<SearchParamInfo>();

@@ -49,7 +49,7 @@
 /************************************** ERROR MESSAGES **************************************/
 li.uif-errorMessageItem:before
 {
-    color: @black;
+    color: #000;
 }
  .uif-validationMessages ul
  {
@@ -368,7 +368,8 @@ border-bottom-color: #b3b3b3;
 -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  .border-radius(0);
+  .border-top-radius(0);
+  .border-bottom-radius(0);
 min-width: 98px;
 height: 48px;
 padding-left: 0;
@@ -1077,7 +1078,7 @@ div.jGrowl div.WARNING div.jGrowl-message {
 Styles for highlighting selected rows in a data table
 */
 .dataTable td {
-  background-color: @bodyBackground;
+  background-color: @body-bg;
 }
 .dataTable .selected-row td, .dataTable .selected-row:hover td {
   background-color: @tableSelectedBackground;
@@ -1103,7 +1104,7 @@ table.dataTable tr.uif-newCollectionItem td.sorting_1 {
   -o-transition: background 3s linear;
   -ms-transition: background 3s linear;
   transition: background 3s linear;
-  background-color: @addedStateBackground; background-color: @bodyBackground;
+  background-color: @addedStateBackground; background-color: @body-bg;
 }
 
 /*
@@ -1117,7 +1118,7 @@ table.dataTable tr.uif-newCollectionItem td.sorting_1 {
   .border-radius-individual(5px, 5px, 0, 0);
 }
 .ui-tabs .ui-tabs-nav .ui-tabs-active .ui-tabs-anchor {
-  background-color: @bodyBackground;
+  background-color: @body-bg;
 }
 
 //home page start
