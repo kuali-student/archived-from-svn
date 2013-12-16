@@ -10,6 +10,7 @@ import org.kuali.rice.krad.uif.element.Action;
 import org.kuali.rice.krad.uif.field.Field;
 import org.kuali.rice.krad.uif.field.FieldGroup;
 import org.kuali.rice.krad.uif.layout.TableLayoutManagerBase;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleRestriction;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper;
@@ -137,14 +138,7 @@ public class ScheduleOfClassesTableLayoutManager extends TableLayoutManagerBase 
         return spanSize;
     }
 
-    @Override
-    public List<Component> getComponentPrototypes() {
-        List<Component> components = super.getComponentPrototypes();
-        components.add(this.getRequisitesField());
-        components.add(this.getCommonRequisiteField());
-        return components;
-    }
-
+    @ViewLifecycleRestriction(UifConstants.ViewPhases.INITIALIZE)
     public Field getRequisitesField() {
         return requisitesField;
     }
@@ -153,6 +147,7 @@ public class ScheduleOfClassesTableLayoutManager extends TableLayoutManagerBase 
         this.requisitesField = requisitesField;
     }
 
+    @ViewLifecycleRestriction(UifConstants.ViewPhases.INITIALIZE)
     public Field getCommonRequisiteField() {
         return commonRequisiteField;
     }
