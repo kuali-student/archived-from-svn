@@ -15,28 +15,27 @@
  */
 package org.kuali.student.lum.lu.ui.krms.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.rice.kim.api.identity.Person;
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.component.DataBinding;
 import org.kuali.rice.krad.uif.container.CollectionGroup;
 import org.kuali.rice.krad.uif.container.Group;
-import org.kuali.rice.krad.uif.container.TreeGroup;
 import org.kuali.rice.krad.uif.element.Action;
-import org.kuali.rice.krad.uif.field.ActionField;
-import org.kuali.rice.krad.uif.field.DataField;
 import org.kuali.rice.krad.uif.field.Field;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleUtils;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
+import org.kuali.rice.krad.uif.util.LifecycleElement;
 import org.kuali.rice.krad.uif.view.View;
-import org.kuali.rice.krad.uif.view.ViewAuthorizer;
-import org.kuali.rice.krad.uif.view.ViewModel;
-import org.kuali.rice.krad.uif.view.ViewPresentationController;
-import org.kuali.rice.krad.uif.widget.Widget;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.ObjectUtils;
 import org.kuali.rice.krms.api.repository.LogicalOperator;
-import org.kuali.rice.krms.api.repository.type.KrmsTypeDefinition;
 import org.kuali.rice.krms.api.repository.proposition.PropositionType;
+import org.kuali.rice.krms.api.repository.type.KrmsTypeDefinition;
 import org.kuali.rice.krms.dto.PropositionEditor;
 import org.kuali.rice.krms.dto.RuleEditor;
 import org.kuali.rice.krms.dto.TermEditor;
@@ -51,14 +50,12 @@ import org.kuali.student.core.krms.dto.KSPropositionEditor;
 import org.kuali.student.core.krms.tree.KSRuleEditTreeBuilder;
 import org.kuali.student.core.krms.tree.KSRulePreviewTreeBuilder;
 import org.kuali.student.core.krms.tree.KSRuleViewTreeBuilder;
-import org.kuali.student.lum.lu.ui.krms.builder.MultiCourseComponentBuilder;
-import org.kuali.student.lum.lu.ui.krms.builder.ProgramComponentBuilder;
-import org.kuali.student.lum.lu.ui.krms.dto.LUPropositionEditor;
-import org.kuali.student.lum.lu.ui.krms.dto.KrmsSuggestDisplay;
-import org.kuali.student.lum.lu.ui.krms.tree.LURulePreviewTreeBuilder;
-import org.kuali.student.lum.lu.ui.krms.tree.LURuleViewTreeBuilder;
 import org.kuali.student.lum.lu.ui.krms.dto.CluInformation;
 import org.kuali.student.lum.lu.ui.krms.dto.CluSetInformation;
+import org.kuali.student.lum.lu.ui.krms.dto.KrmsSuggestDisplay;
+import org.kuali.student.lum.lu.ui.krms.dto.LUPropositionEditor;
+import org.kuali.student.lum.lu.ui.krms.tree.LURulePreviewTreeBuilder;
+import org.kuali.student.lum.lu.ui.krms.tree.LURuleViewTreeBuilder;
 import org.kuali.student.lum.lu.ui.krms.util.CluInformationHelper;
 import org.kuali.student.lum.lu.ui.krms.util.LUKRMSConstants;
 import org.kuali.student.r1.common.rice.StudentIdentityConstants;
@@ -79,13 +76,6 @@ import org.kuali.student.r2.lum.clu.service.CluService;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.util.constants.CluServiceConstants;
 import org.kuali.student.r2.lum.util.constants.LrcServiceConstants;
-
-import javax.xml.namespace.QName;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Helpers Service with enrolment specific functions for the Rule Pages.
@@ -110,7 +100,7 @@ public class LURuleViewHelperServiceImpl extends RuleViewHelperServiceImpl {
     }
 
     @Override
-	public void performCustomApplyModel(Component component, Object model) {
+	public void performCustomApplyModel(LifecycleElement component, Object model) {
 		super.performCustomApplyModel(component, model);
         if(component instanceof Group) {
             Group group = (Group) component;
@@ -127,7 +117,7 @@ public class LURuleViewHelperServiceImpl extends RuleViewHelperServiceImpl {
             field.setReadOnly(true);
         }
 
-        List<Action> actions = ComponentUtils.getComponentsOfTypeDeep(group.getItems(), Action.class);
+        List<Action> actions = ViewLifecycleUtils.getElementsOfTypeDeep(group.getItems(), Action.class);
         for(Action action : actions) {
             action.setRender(false);
         }
