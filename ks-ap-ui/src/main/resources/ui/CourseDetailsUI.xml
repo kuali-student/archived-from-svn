@@ -23,7 +23,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
      limitations under the License.
     -->
     <bean id="CourseDetails-InquiryView" parent="CourseDetails-InquiryView-parent" />
-    <bean id="CourseDetails-InquiryView-parent" abstract="true" parent="MyPlanInquiryView">
+    <bean id="CourseDetails-InquiryView-parent" abstract="true" parent="KSAPInquiryView">
         <property name="headerText" value="Course Details"/>
         <property name="dataObjectClassName" value="org.kuali.student.ap.coursesearch.dataobject.CourseDetails"/>
         <property name="viewHelperServiceClass"
@@ -34,7 +34,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         <property name="singlePageView" value="true"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-view</value>
+                <value>ksap-view</value>
             </list>
         </property>
         <property name="header">
@@ -54,7 +54,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="items">
 			<list>
 				<ref bean="course_details_section" />
-				<ref bean="myplan_section" />
+				<ref bean="ksap_section" />
 			</list>
 		</property>
         <property name="stickyFooter" value="false"/>
@@ -93,10 +93,10 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 					</property>
 					<property name="items">
 						<list>
-							<bean parent="MyPlanMessagingIcon" />
+							<bean parent="KSAPMessagingIcon" />
 							<bean parent="Uif-DataField" p:propertyName="details"
 								p:labelPlacement="LEFT" p:escapeHtmlInPropertyValue="false">
-								<property name="fieldLabel.cssClasses" value="fl-text-gray myplan-text-normal" />
+								<property name="fieldLabel.cssClasses" value="fl-text-gray ksap-text-normal" />
 								<property name="propertyEditor" ref="crud_message_matrix_formatter" />
 								<property name="cssClasses">
 									<list merge="true">
@@ -249,7 +249,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
             <bean parent="Uif-HeaderThree">
                 <property name="cssClasses">
                     <list merge="true">
-                        <value>myplan-underline-header</value>
+                        <value>ksap-underline-header</value>
                     </list>
                 </property>
             </bean>
@@ -269,7 +269,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                 <list merge="true">
                                     <value>ksap-data-list</value>
                                     <value>fl-text-gray</value>
-                                    <value>myplan-text-normal</value>
+                                    <value>ksap-text-normal</value>
                                 </list>
                             </property>
                         </bean>
@@ -288,7 +288,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                   value="@{dataObject.courseSummaryDetails.abbrGenEdRequirements.size() gt 0 ? true : false}"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-details</value>
+                <value>ksap-course-details</value>
             </list>
         </property>
         <property name="layoutManager.numberOfColumns" value="2"/>
@@ -301,7 +301,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                     </property>
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>myplan-course-details</value>
+                            <value>ksap-course-details</value>
                         </list>
                     </property>
                     <property name="items">
@@ -320,7 +320,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-label</value>
+                                                    <value>ksap-course-detail-label</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -336,7 +336,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-field</value>
+                                                    <value>ksap-course-detail-field</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -376,7 +376,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-label</value>
+                                                    <value>ksap-course-detail-label</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -393,7 +393,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-field</value>
+                                                    <value>ksap-course-detail-field</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -445,7 +445,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-label</value>
+                                                    <value>ksap-course-detail-label</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -462,7 +462,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-field</value>
+                                                    <value>ksap-course-detail-field</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -478,7 +478,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                                                       p:escapeHtmlInPropertyValue="false"
                                                                       p:render="@{dataObject.courseSummaryDetails.scheduledTerms.size() gt 0}">
                                                                     <property name="fieldLabel.cssClasses"
-                                                                              value="fl-text-gray myplan-text-normal"/>
+                                                                              value="fl-text-gray ksap-text-normal"/>
                                                                     <property name="propertyEditor"
                                                                               ref="scheduled_terms_list_formatter"/>
                                                                     <property name="cssClasses">
@@ -515,7 +515,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                                                       p:label="Last Offered"
                                                                       p:render="@{dataObject.courseSummaryDetails.lastOffered ne null ? true : false}">
                                                                     <property name="fieldLabel.cssClasses"
-                                                                              value="fl-text-gray myplan-text-normal"/>
+                                                                              value="fl-text-gray ksap-text-normal"/>
                                                                 </bean>
                                                             </list>
                                                         </property>
@@ -532,7 +532,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                                                       p:escapeHtmlInPropertyValue="false"
                                                                       p:render="@{dataObject.courseSummaryDetails.termsOffered.size() gt 0}">
                                                                     <property name="fieldLabel.cssClasses"
-                                                                              value="fl-text-gray myplan-text-normal"/>
+                                                                              value="fl-text-gray ksap-text-normal"/>
                                                                     <property name="cssClasses">
                                                                         <list merge="true">
                                                                             <value>ksap-data-list</value>
@@ -543,7 +543,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                                                       p:label="#{T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getTextHelper().getText('DETAILS_TERMSOFFERED_LABEL')}"
                                                                       p:render="@{dataObject.courseSummaryDetails.termsOffered.size() eq 0}">
                                                                     <property name="fieldLabel.cssClasses"
-                                                                              value="fl-text-gray myplan-text-normal"/>
+                                                                              value="fl-text-gray ksap-text-normal"/>
                                                                     <property name="message">
                                                                         <bean parent="Uif-Message"
                                                                               p:messageText="Check with the department or your adviser for more information about this course."/>
@@ -582,7 +582,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-label</value>
+                                                    <value>ksap-course-detail-label</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -599,7 +599,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                                             </property>
                                             <property name="cssClasses">
                                                 <list merge="true">
-                                                    <value>myplan-course-detail-field</value>
+                                                    <value>ksap-course-detail-field</value>
                                                 </list>
                                             </property>
                                             <property name="items">
@@ -643,7 +643,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 						                    </property>
 						                    <property name="cssClasses">
 						                        <list merge="true">
-						                            <value>myplan-course-detail-label</value>
+						                            <value>ksap-course-detail-label</value>
 						                        </list>
 						                    </property>
 						                    <property name="items">
@@ -671,7 +671,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         </property>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-detail-field</value>
+                <value>ksap-course-detail-field</value>
             </list>
         </property>
         <property name="items">
@@ -720,14 +720,14 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
             <bean parent="Uif-HeaderThree" >
                 <property name="cssClasses">
                     <list merge="true">
-                        <value>myplan-underline-header</value>
+                        <value>ksap-underline-header</value>
                     </list>
                 </property>
             </bean>
         </property>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-details-sections</value>
+                <value>ksap-course-details-sections</value>
             </list>
         </property>
         <property name="headerText" value="@{dataObject.courseSummaryDetails.code} Course Sections"/>
@@ -758,7 +758,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         <property name="render" value="@{dataObject.courseOfferingInstitutionList.size() eq 1}"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-detail</value>
+                <value>ksap-course-detail</value>
             </list>
         </property>
         <property name="layoutManager">
@@ -817,7 +817,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         </property>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-detail</value>
+                <value>ksap-course-detail</value>
             </list>
         </property>
         <property name="header">
@@ -846,7 +846,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         <property name="propertyName" value="courseOfferingTermList"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-course-sections</value>
+                <value>ksap-course-sections</value>
             </list>
         </property>
         <property name="layoutManager">
@@ -1105,7 +1105,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
                       parent="KSAP-SimpleDataField" p:propertyName="code" p:label="Section">
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>@{!#line.primary ? 'myplan-associated-section' : 'myplan-primary-section'}</value>
+                            <value>@{!#line.primary ? 'ksap-associated-section' : 'ksap-primary-section'}</value>
                         </list>
                     </property>
                 </bean>
@@ -1484,7 +1484,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         </property>
     </bean>
 
-    <bean id="CourseDetailsSections-InquiryView" parent="MyPlanBaseInquiryView">
+    <bean id="CourseDetailsSections-InquiryView" parent="KSAPBaseInquiryView">
         <property name="dataObjectClassName" value="org.kuali.student.ap.coursesearch.dataobject.CourseDetails"/>
         <property name="viewHelperServiceClass"
                   value="org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl"/>
@@ -1494,7 +1494,7 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
         <property name="singlePageView" value="true"/>
         <property name="viewName" value="CourseDetailsSections-InquiryView"/>
         <property name="theme">
-            <bean parent="MyPlanRetrievedTheme"/>
+            <bean parent="KSAPRetrievedTheme"/>
         </property>
         <property name="onLoadScript" value=""/>
         <property name="page">

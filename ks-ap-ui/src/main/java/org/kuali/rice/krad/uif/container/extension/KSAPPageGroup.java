@@ -48,17 +48,7 @@ public class KSAPPageGroup extends PageGroupBase {
 
         KSAPPageGroup pageGroupCopy = (KSAPPageGroup) component;
 
-        pageGroupCopy.setAutoFocus(this.isAutoFocus());
-        pageGroupCopy.setStickyFooter(this.isStickyFooter());
         pageGroupCopy.setInnerViewWrapperId(this.getInnerViewWrapperId());
-
-        if (this.getBreadcrumbOptions() != null) {
-            pageGroupCopy.setBreadcrumbOptions((PageBreadcrumbOptions) this.getBreadcrumbOptions().copy());
-        }
-
-        if (this.getBreadcrumbItem() != null) {
-            pageGroupCopy.setBreadcrumbItem((BreadcrumbItem) this.getBreadcrumbItem().copy());
-        }
     }
 
 

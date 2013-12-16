@@ -14,7 +14,7 @@
          and limitations under the License. -->
 
     <!-- Not used to view audit reports. -->
-    <bean id="DegreeAudit-FormView" parent="MyPlanFormView">
+    <bean id="DegreeAudit-FormView" parent="KSAPFormView">
         <property name="headerText" value="Audit Degree"/>
 
         <!-- To Support progressive disclosure of campus select -->
@@ -24,7 +24,7 @@
         <property name="entryPageId" value="degree_audit"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-view</value>
+                <value>ksap-view</value>
             </list>
         </property>
         <property name="header">
@@ -88,7 +88,7 @@
                                 </property>
                                 <property name="items">
                                     <list>
-                                        <bean parent="myplan_section">
+                                        <bean parent="ksap_section">
                                             <property name="cssClasses">
                                                 <list merge="true">
                                                     <value>no-primary</value>
@@ -173,7 +173,7 @@
                                 </property>
                                 <property name="items">
                                     <list>
-                                        <bean parent="myplan_section">
+                                        <bean parent="ksap_section">
                                             <property name="items">
                                                 <list>
 
@@ -240,7 +240,7 @@
     <bean id="run_degree_audits" parent="Uif-VerticalBoxGroup">
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-run-audit-panel</value>
+                <value>ksap-run-audit-panel</value>
             </list>
         </property>
         <property name="header">
@@ -287,8 +287,8 @@
         <property name="cssClasses">
             <list merge="true">
                 <value>fl-container-600</value>
-                <value>myplan-audit-info-panel</value>
-                <value>myplan-audit-message-info</value>
+                <value>ksap-audit-info-panel</value>
+                <value>ksap-audit-message-info</value>
             </list>
         </property>
         <property name="items">
@@ -307,7 +307,7 @@
         <property name="cssClasses">
             <list merge="true">
                 <value>fl-container-300</value>
-                <value>myplan-audit-info-panel</value>
+                <value>ksap-audit-info-panel</value>
             </list>
         </property>
         <property name="items">
@@ -334,7 +334,7 @@
         <property name="cssClasses">
             <list merge="true">
                 <value>fl-container-300</value>
-                <value>myplan-audit-info-panel</value>
+                <value>ksap-audit-info-panel</value>
                 <value>ksap-carousel-list</value>
             </list>
         </property>
@@ -359,7 +359,7 @@
     </bean>
 
 
-    <bean id="select_instruction" parent="Uif-Message" p:cssClasses="myplan-text-normal">
+    <bean id="select_instruction" parent="Uif-Message" p:cssClasses="ksap-text-normal">
         <property name="messageText"
                   value="#{T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getTextHelper().getText('DEGREE_AUDIT_SELECT_CAMPUS')}"/>
     </bean>

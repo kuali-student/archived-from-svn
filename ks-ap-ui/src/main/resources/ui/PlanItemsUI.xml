@@ -24,11 +24,11 @@
 
     <!--Mock Plan View-->
     <bean id="PlannedCourses-FormView" parent="PlannedCourses-FormView-parent" />
-    <bean abstract="true" id="PlannedCourses-FormView-parent" parent="MyPlanFormView">
+    <bean abstract="true" id="PlannedCourses-FormView-parent" parent="KSAPFormView">
         <property name="id" value="PlannedCourses-FormView"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-view</value>
+                <value>ksap-view</value>
                 <value>ks-plan-View</value>
             </list>
         </property>
@@ -51,7 +51,7 @@
                     <property name="items">
                         <list>
                             <ref bean="planned_mock_detail"/>
-                            <ref bean="plannedCourses_myplan_section"/>
+                            <ref bean="plannedCourses_ksap_section"/>
                             <ref bean="planned_menu_items"/>
                             <ref bean="backup_menu_items"/>
                             <ref bean="completed_menu_items"/>
@@ -71,8 +71,8 @@
         <property name="onDocumentReadyScript" value="registerClosePopups();"/>
     </bean>
     
-    <bean id="plannedCourses_myplan_section" parent="plannedCourses_myplan_section-parent" />
-    <bean id="plannedCourses_myplan_section-parent" abstract="true" parent="myplan_section">
+    <bean id="plannedCourses_ksap_section" parent="plannedCourses_ksap_section-parent" />
+    <bean id="plannedCourses_ksap_section-parent" abstract="true" parent="ksap_section">
         <property name="cssClasses">
             <list merge="true">
                 <value>ks-plan-Widgets</value>
@@ -89,7 +89,7 @@
     <bean id="planned_mock_detail" parent="Uif-VerticalBoxSubSection">
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-plan-loader</value>
+                <value>ksap-plan-loader</value>
                 <value>ks-plan-Loader</value>
             </list>
         </property>
@@ -301,7 +301,7 @@
       This lookup provides the term by term view of Planned Courses.
     -->
     <bean id="PlannedCourses-LookupView" parent="PlannedCourses-LookupView-parent"/>
-    <bean id="PlannedCourses-LookupView-parent" abstract="true" parent="MyPlanBaseLookupView">
+    <bean id="PlannedCourses-LookupView-parent" abstract="true" parent="KSAPBaseLookupView">
         <property name="headerText" value="Plan"/>
         <property name="header.render" value="false"/>
         <property name="viewName" value="PlannedCourses-LookupView"/>
@@ -312,7 +312,7 @@
         <property name="page.header.render" value="false"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-view</value>
+                <value>ksap-view</value>
             </list>
         </property>
         <property name="additionalScriptFiles">
@@ -413,7 +413,7 @@
                     <property name="validationMessages.render" value="false"/>
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>myplan-plan-heading</value>
+                            <value>ksap-plan-heading</value>
                             <value>ks-plan-Header</value>
                         </list>
                     </property>
@@ -586,7 +586,7 @@
         <property name="cssClasses">
             <list merge="true">
                 <value>ksap-carousel-list</value>
-                <value>myplan-remove-margin</value>
+                <value>ksap-remove-margin</value>
                 <value>ks-plan-TermsList</value>
             </list>
         </property>
@@ -671,7 +671,7 @@
                 <property name="validationMessages.render" value="false"/>
                 <property name="items">
                     <list>
-                        <ref bean="MyPlanRegistrationStatusIcon"/>
+                        <ref bean="KSAPRegistrationStatusIcon"/>
                     </list>
                 </property>
             </bean>
@@ -762,7 +762,7 @@
                     <property name="group.validationMessages.render" value="false"/>
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>myplan-course-invalid</value>
+                            <value>ksap-course-invalid</value>
                             <value>ks-plan-Bucket-item</value>
                             <value>ks-plan-Bucket-item--invalid</value>
                         </list>
@@ -838,7 +838,7 @@
                 <property name="validationMessages.render" value="false"/>
                 <property name="items">
                     <list>
-                        <ref bean="MyPlanRegistrationStatusIcon"/>
+                        <ref bean="KSAPRegistrationStatusIcon"/>
                     </list>
                 </property>
             </bean>
@@ -922,7 +922,7 @@
                     <property name="group.validationMessages.render" value="false"/>
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>myplan-course-invalid</value>
+                            <value>ksap-course-invalid</value>
                         </list>
                     </property>
                     <property name="items">
@@ -1633,7 +1633,7 @@
                     <property name="cssClasses">
                         <list merge="true">
                             <value>fl-text-gray</value>
-                            <value>myplan-text-italic</value>
+                            <value>ksap-text-italic</value>
                             <value>ks-plan-Bucket-emptyLabel</value>
                         </list>
                     </property>
@@ -1698,7 +1698,7 @@
         <property name="cssClasses">
             <list merge="true">
                 <value>ksap-quarter-detail</value>
-                <value>myplan-remove-margin</value>
+                <value>ksap-remove-margin</value>
             </list>
         </property>
         <property name="header.render" value="false"/>

@@ -22,7 +22,7 @@
     <!-- ################# Tabular view of full academic plan ############################# -->
 
     <!--Bean for the Full Academic Plan View  -->
-    <bean id="FullPlannedCourses-LookupView" parent="MyPlanBaseLookupView">
+    <bean id="FullPlannedCourses-LookupView" parent="KSAPBaseLookupView">
         <property name="viewName" value="FullPlannedCourses-LookupView"/>
         <property name="dataObjectClassName" value="org.kuali.student.myplan.plan.dataobject.PlannedTerm"/>
         <property name="viewHelperServiceClass"
@@ -31,7 +31,7 @@
         <property name="page.header.render" value="false"/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-view</value>
+                <value>ksap-view</value>
             </list>
         </property>
         <property name="style" value="width:682px;"/>
@@ -79,7 +79,7 @@
         <property name="items">
             <list>
                 <bean parent="Uif-HeaderOne" p:style="border-bottom:solid 1px #ddd; padding:10px; margin:0;">
-                    <property name="headerText" value="Student Academic Plan (MyPlan)"/>
+                    <property name="headerText" value="Student Academic Plan (KSAP)"/>
                 </bean>
                 <bean parent="Uif-VerticalBoxGroup" p:style="border-bottom:solid 1px #ddd; padding:10px; margin:0;">
                     <property name="validationMessages.render" value="false"/>
@@ -89,7 +89,7 @@
                                   p:messageText="@{T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getUserSessionHelper().getStudentName()} (@{T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getUserSessionHelper().getStudentNumber() ne null ? T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getUserSessionHelper().getStudentNumber() : 'No student number'})">
                                 <property name="fieldLabel.cssClasses">
                                     <list merge="true">
-                                        <value>myplan-text-normal</value>
+                                        <value>ksap-text-normal</value>
                                     </list>
                                 </property>
                                 <property name="cssClasses">
@@ -104,7 +104,7 @@
                                 <property name="style" value="margin:0;"/>
                                 <property name="fieldLabel.cssClasses">
                                     <list merge="true">
-                                        <value>myplan-text-normal</value>
+                                        <value>ksap-text-normal</value>
                                     </list>
                                 </property>
                                 <property name="cssClasses">
@@ -138,7 +138,7 @@
                     <property name="style" value="padding:10px; margin:0;"/>
                     <property name="fieldLabel.cssClasses">
                         <list merge="true">
-                            <value>myplan-text-normal</value>
+                            <value>ksap-text-normal</value>
                         </list>
                     </property>
                 </bean>
@@ -152,17 +152,17 @@
             jQuery('th, td').removeAttr('width');
             jQuery('div.uif-subCollection').each(function() {
                 var maxHeight = 0;
-                jQuery(this).find('.myplan-term > .uif-horizontalBoxLayout').each(function() {
+                jQuery(this).find('.ksap-term > .uif-horizontalBoxLayout').each(function() {
                     if (jQuery(this).height() > maxHeight) maxHeight = jQuery(this).height();
                 });
-                jQuery(this).find('.myplan-term > .uif-horizontalBoxLayout').each(function() {
+                jQuery(this).find('.ksap-term > .uif-horizontalBoxLayout').each(function() {
                     jQuery(this).height(maxHeight);
                 });
             });
         "/>
         <property name="cssClasses">
             <list merge="true">
-                <value>myplan-full-plan-detail</value>
+                <value>ksap-full-plan-detail</value>
             </list>
         </property>
         <property name="header">
@@ -250,7 +250,7 @@
                     <property name="fieldLabel.render" value="false"/>
                     <property name="cssClasses">
                         <list merge="true">
-                            <value>@{#line.currentYear ? 'myplan-current-year':''}</value>
+                            <value>@{#line.currentYear ? 'ksap-current-year':''}</value>
                         </list>
                     </property>
                 </bean>
@@ -263,9 +263,9 @@
         </property>
     </bean>
 
-    <bean id="termsCollection" parent="UifMyPlan-HorizontalStackedSubCollection-WithinSection">
+    <bean id="termsCollection" parent="UifKSAP-HorizontalStackedSubCollection-WithinSection">
         <property name="validationMessages.render" value="false"/>
-        <property name="cssClasses" value="myplan-remove-margin"/>
+        <property name="cssClasses" value="ksap-remove-margin"/>
         <property name="collectionObjectClass"
                   value="org.kuali.student.myplan.plan.dataobject.PlannedTerm"/>
         <property name="propertyName" value="terms"/>
@@ -276,13 +276,13 @@
         <property name="layoutManager.lineGroupPrototype.header.render" value="false"/>
         <property name="layoutManager.lineGroupPrototype.validationMessages.render" value="false"/>
         <property name="layoutManager">
-            <bean parent="UifMyPlan-HorizontalStackedCollectionLayout">
+            <bean parent="UifKSAP-HorizontalStackedCollectionLayout">
                 <property name="lineGroupPrototype">
                     <bean parent="Uif-CollectionHorizontalBoxItem">
                         <property name="cssClasses">
                             <list merge="true">
-                                <value>myplan-term</value>
-                                <value>@{#line.currentTermForView ? 'myplan-current-term':''}</value>
+                                <value>ksap-term</value>
+                                <value>@{#line.currentTermForView ? 'ksap-current-term':''}</value>
                             </list>
                         </property>
                         <property name="style" value="width:@{535/T(org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator).getTermHelper().getNumberOfTermsInAcademicYear()}px;"/>
@@ -305,7 +305,7 @@
                             <property name="fieldLabel.style" value="color:#999;"/>
                             <property name="fieldLabel.cssClasses">
                                 <list merge="true">
-                                    <value>myplan-text-normal</value>
+                                    <value>ksap-text-normal</value>
                                 </list>
                             </property>
                             <property name="cssClasses">
