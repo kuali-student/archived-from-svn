@@ -15,18 +15,19 @@
  */
 package org.kuali.rice.krms.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kuali.rice.krad.uif.component.Component;
 import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.container.TreeGroup;
 import org.kuali.rice.krad.uif.element.Action;
 import org.kuali.rice.krad.uif.field.DataField;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleUtils;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krms.dto.AgendaEditor;
 import org.kuali.rice.krms.dto.RuleEditor;
 import org.kuali.rice.krms.service.RuleViewHelperService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Kuali Student Team
@@ -72,7 +73,7 @@ public class AgendaBuilder {
         group.setHeaderText(rule.getRuleTypeInfo().getDescription());
 
         //Set the rule key on the action links.
-        List<Action> actionLinks = ComponentUtils.getComponentsOfTypeDeep(group, Action.class);
+        List<Action> actionLinks = ViewLifecycleUtils.getElementsOfTypeDeep(group, Action.class);
         for (Action actionLink : actionLinks) {
             actionLink.getActionParameters().put("ruleKey", rule.getKey());
             actionLink.getActionParameters().put("ruleType", rule.getRuleTypeInfo().getType());
@@ -88,12 +89,12 @@ public class AgendaBuilder {
 
     protected void setPropertyBindingPaths(Group group, String bindingPath) {
 
-        List<DataField> dataFields = ComponentUtils.getComponentsOfTypeDeep(group.getItems(), DataField.class);
+        List<DataField> dataFields = ViewLifecycleUtils.getElementsOfTypeDeep(group.getItems(), DataField.class);
         for (DataField collectionField : dataFields) {
             collectionField.getBindingInfo().setBindingName(bindingPath + collectionField.getBindingInfo().getBindingName());
         }
 
-        List<TreeGroup> treeFields = ComponentUtils.getComponentsOfTypeDeep(group.getItems(), TreeGroup.class);
+        List<TreeGroup> treeFields = ViewLifecycleUtils.getElementsOfTypeDeep(group.getItems(), TreeGroup.class);
         for (TreeGroup collectionField : treeFields) {
             collectionField.getBindingInfo().setBindingName(bindingPath + collectionField.getBindingInfo().getBindingName());
         }

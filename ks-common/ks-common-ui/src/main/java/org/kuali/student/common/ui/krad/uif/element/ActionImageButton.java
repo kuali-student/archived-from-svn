@@ -16,13 +16,12 @@
  */
 package org.kuali.student.common.ui.krad.uif.element;
 
-import org.apache.commons.lang.StringUtils;
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.element.Image;
-import org.kuali.rice.krad.uif.view.View;
-import org.kuali.student.common.uif.element.KSUifActionButton;
-
 import java.text.MessageFormat;
+
+import org.apache.commons.lang.StringUtils;
+import org.kuali.rice.krad.uif.element.Image;
+import org.kuali.rice.krad.uif.util.LifecycleElement;
+import org.kuali.student.common.uif.element.KSUifActionButton;
 
 /**
  * Field in the form of an image-only button that presents an action that
@@ -36,7 +35,7 @@ public class ActionImageButton extends KSUifActionButton {
     private String imageSourceOnHover;
 
     @Override
-    public void performFinalize(Object model, Component parent) {
+    public void performFinalize(Object model, LifecycleElement parent) {
         super.performFinalize(model, parent);
 
         Image img = this.getActionImage();

@@ -25,6 +25,7 @@ import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.container.GroupBase;
 import org.kuali.rice.krad.uif.lifecycle.ViewLifecycle;
 import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleRestriction;
+import org.kuali.rice.krad.uif.util.LifecycleElement;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krms.dto.AgendaEditor;
 import org.kuali.rice.krms.service.RuleViewHelperService;
@@ -59,7 +60,7 @@ public class AgendaSection extends GroupBase {
     }
 
     @Override
-    public void performApplyModel(Object model, Component parent) {
+    public void performApplyModel(Object model, LifecycleElement parent) {
         // get the collection for this group from the model
         List<Object> modelCollection = ObjectPropertyUtils.getPropertyValue(model,
                 this.getBindingInfo().getBindingPath());

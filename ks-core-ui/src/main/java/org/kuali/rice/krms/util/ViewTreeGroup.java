@@ -15,6 +15,9 @@
  */
 package org.kuali.rice.krms.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.util.tree.Node;
 import org.kuali.rice.core.api.util.tree.Tree;
@@ -24,12 +27,10 @@ import org.kuali.rice.krad.uif.container.Group;
 import org.kuali.rice.krad.uif.container.NodePrototype;
 import org.kuali.rice.krad.uif.container.TreeGroup;
 import org.kuali.rice.krad.uif.element.Message;
+import org.kuali.rice.krad.uif.lifecycle.ViewLifecycleUtils;
 import org.kuali.rice.krad.uif.util.ComponentUtils;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.uif.view.View;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Kuali Student Team
@@ -99,7 +100,7 @@ public class ViewTreeGroup extends TreeGroup {
         ComponentUtils.pushObjectToContext(nodeGroup, UifConstants.ContextVariableNames.NODE_PATH, nodePath);
 
         /*Overridden section*/
-        List<CollectionGroup> components = ComponentUtils.getComponentsOfTypeShallow(nodeGroup, CollectionGroup.class);
+        List<CollectionGroup> components = ViewLifecycleUtils.getElementsOfTypeShallow(nodeGroup, CollectionGroup.class);
         for (CollectionGroup fieldCollectionGroup : components) {
             fieldCollectionGroup.setSubCollectionSuffix(parentNode);
         }
