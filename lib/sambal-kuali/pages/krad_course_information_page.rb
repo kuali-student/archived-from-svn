@@ -9,7 +9,7 @@ class KradCourseInformation < BasePage
   element(:course_title) { |b| b.text_field(name: 'document.newMaintainableObject.course.courseTitle') }
   element(:course_title_error_state) { |b| b.text_field(name: 'document.newMaintainableObject.course.courseTitle', class: 'uif-textControl required validChar-document.newMaintainableObject.course.courseTitle0 error' ) }
 
-  element(:transcript_title) {|b| b.text_field(name: /transcriptTitle$/) }
+  element(:transcript_course_title) {|b| b.text_field(name: /transcriptTitle$/) }
   element(:subject_code) { |b| b.text_field(name: /subjectArea$/) }
   element(:course_number) { |b| b.text_field(name: /courseNumberSuffix$/) }
 

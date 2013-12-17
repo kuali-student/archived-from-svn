@@ -112,7 +112,7 @@ class BasePage < PageFactory
 
 
 
-      element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
+      #element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
 
 
 

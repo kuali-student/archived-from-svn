@@ -7,7 +7,6 @@ class KradCourseRequisites < BasePage
   element(:add_rule_link) { |b| b.link(text: 'Add Rule') }
   action(:collapse_all_rule_sections) { |b| b.link(text: '[-] collapse all').click }
 
-  # TODO:: So much repetitive code
   action(:add_rule_student_eligibility) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleA').link(text: 'Add Rule').click; b.loading_wait }
   action(:edit_rule_student_eligibility) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleA').link(text: 'Edit Rule').click; b.loading_wait }
   action(:delete_rule_student_eligibility) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleA').link(text: 'Delete Rule').click; b.loading_wait }
@@ -24,9 +23,9 @@ class KradCourseRequisites < BasePage
   action(:edit_rule_antirequisite) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleD').link(text: 'Edit Rule').click; b.loading_wait }
   action(:delete_rule_antirequisite) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleD').link(text: 'Delete Rule').click; b.loading_wait }
 
-  action(:add_rule_repeatable_for_credits) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Add Rule').click; b.loading_wait }
-  action(:edit_rule_repeatable_for_credits) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Edit Rule').click; b.loading_wait }
-  action(:delete_rule_repeatable_for_credits) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Delete Rule').click; b.loading_wait }
+  action(:add_rule_repeatable_for_credit) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Add Rule').click; b.loading_wait }
+  action(:edit_rule_repeatable_for_credit) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Edit Rule').click; b.loading_wait }
+  action(:delete_rule_repeatable_for_credit) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleE').link(text: 'Delete Rule').click; b.loading_wait }
 
   action(:add_rule_restricts_credits) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleF').link(text: 'Add Rule').click; b.loading_wait }
   action(:edit_rule_restricts_credits) { |b| b.div(id: 'KS-AgendaManage-RulePrototype_ruleF').link(text: 'Edit Rule').click; b.loading_wait }
@@ -71,13 +70,19 @@ class KradCourseRequisites < BasePage
   element(:free_form_text) {|b| b.text_field(name: /^document\.newMaintainableObject\.editTree\.rootElement\.children/) }
   element(:rule_credit) { |b| b.text_field(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.parameters[1].value') }
 
-
   action(:added_rule_restricts_credits_text) {|rule_text='you forgot to pass text', b| b.div(id: 'KS-ViewTree-Group_ruleF').span(text: /#{rule_text}/) }
 
+  element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
 
 
+  element(:course_requisite_added_rule){ |rule_name,b| b.span(text: rule_name)}
 
-
+  element(:student_eligibility_prerequisite_added_rule){ |rule_name,b| b.span(text: rule_name)}
+  element(:corequisite_added_rule){ |rule_name,b| b.span(text: rule_name)}
+  element(:recommended_preparation_added_rule){ |rule_name,b| b.span(text: rule_name)}
+  element(:antirequisite_added_rule){ |rule_name,b| b.span(text: rule_name)}
+  element(:repeatable_for_credit_added_rule){ |rule_name,b| b.span(text: rule_name)}
+  element(:course_that_restricts_credits_added_rule){ |rule_name,b| b.span(text: rule_name)}
 
 
 

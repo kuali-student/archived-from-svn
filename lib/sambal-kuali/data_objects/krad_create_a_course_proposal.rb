@@ -6,8 +6,8 @@ class KradCourseProposalObject < DataObject
   include Utilities
 
   # Course Information, Governance, Course Logistics, Active Dates completed
-  attr_accessor :proposal_title, :course_title, :transcript_title, :subject_code, :course_number,
-        :course_listing_subject, :course_listing_number, :joint_offering_number, :version_code_code, :version_code_title,
+  attr_accessor :proposal_title, :course_title, :transcript_course_title, :subject_code, :course_number,
+        :course_listing_subject, :course_listing_number, :joint_offering_number, :version_code_version_code, :version_code_title,
         :instructor, :instructor_first_name, :instructor_last_name, :instructor_username, :instructor_display_name,
         :description_rationale, :proposal_rationale,
         :instructor_adding_method, :joint_offering_adding_data, :joint_offering_name,
@@ -30,27 +30,59 @@ class KradCourseProposalObject < DataObject
         :audit, :pass_fail_transcript_grade,
         :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory,
         #Course Requisites
-        :student_eligibility_rule, :eligibility_add_method, :rule_adv_course_title, :rule_adv_course_code, :rule_adv_course_description_snip,
-        :corequisiste_rule,:recommended_preparation_rule, :antirequisite_rule,
-        :repeatable_for_credit_rule, :course_that_restricts_credits_rule, :rule_credit,
 
-        :corequisite_add_method, :recommended_preparation_add_method,
-        :antirequisite_add_method,
-        :course_that_restricts_credits_add_method, :student_eligibility_add_method,
 
-        :corequisiste_title, :corequisiste_course, :corequisiste_phrase,
-        :recommended_preparation_course, :recommended_preparation_title,
+        :rule_adv_course_title,
+        :rule_adv_course_code,
+        :rule_adv_course_description_snip,
+        :rule_credit,
+
+        :eligibility_add_method,
+        :student_eligibility_add_method,
+        :student_eligibility_course,
+        :student_eligibility_title,
+        :student_eligibility_phrase,
+        :student_eligibility_rule,
+        :student_eligibility_rule_with_value,
+
+        :corequisite_add_method,
+        :corequisite_title,
+        :corequisite_course,
+        :corequisite_phrase,
+        :course_requisite_added_rule,
+        :corequisite_rule,
+        :corequisite_rule,
+        :corequisite_rule_with_value,
+
+        :recommended_preparation_add_method,
+        :recommended_preparation_course,
+        :recommended_preparation_title,
         :recommended_preparation_phrase,
-        :antirequisite_course, :antirequisite_title, :antirequisite_phrase,
-        :student_eligibility_course, :student_eligibility_title, :student_eligibility_phrase,
-        :repeatable_for_credit_credits,
-        :course_that_restricts_credits_course, :course_that_restricts_credits_title,
+        :recommended_preparation_rule,
+        :recommended_preparation_rule_with_value,
+
+        :antirequisite_add_method,
+        :antirequisite_course,
+        :antirequisite_title,
+        :antirequisite_phrase,
+        :antirequisite_rule,
+        :antirequisite_rule_with_value,
+
+        :repeatable_for_credit_credit,
+        :repeatable_for_credit_credit,
+        :repeatable_for_credit_rule,
+        :repeatable_for_credit_rule_with_value,
+
+
+        :course_that_restricts_credits_add_method,
         :course_that_restricts_credits_course,
+        :course_that_restricts_credits_title,
+        :course_that_restricts_credits_course,
+        :course_that_restricts_credits_rule,
+        :course_that_restricts_credits_rule_with_value,
 
 
-
-
-  # Active Dates
+        # Active Dates
         :start_term, :pilot_course, :end_term,
         # Authors & Collaborators
         :author_name_search, :author_username_search, :author_permission, :action_request,
@@ -61,159 +93,178 @@ class KradCourseProposalObject < DataObject
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        #REQUIRED
+        #REQUIRED ON SAVE
         #COURSE INFORMATION
-          proposal_title:        random_alphanums(10,'test proposal title '),
-          course_title:          random_alphanums(10, 'test course title'),
-          subject_code:          'MATH',
-          course_number:         rand(100..999).to_s,
-          version_code_code:     'A',
-          version_code_title:    'TEST version code course title TEST',
-          description_rationale: random_alphanums(200),
-          proposal_rationale:    random_alphanums(200),
-        #GOVERNANCE
-          curriculum_oversight:  'CMNS-Mathematics',
+        proposal_title:        random_alphanums(10,'test proposal title '),
+        course_title:          random_alphanums(10, 'test course title'),
         #COURSE LOGISTICS
-          scheduling_term:      [:term_any, :term_fall, :term_spring, :term_summer],
-          assessment_scale:     [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
-          final_exam_status:    [:exam_standard, :exam_alternate, :exam_none],
-          final_exam_rationale: random_alphanums(50),
-          outcome_type:       '::random::', #['Fixed', 'Multiple', 'Range'].sample,
-          outcome_value:      rand(1..3).to_s,
-          credit_value_min:   rand(1..3).to_s,
-          credit_value_max:   rand(4..8).to_s,
-          outcome_multiple:   rand(1..3).to_s,
-          outcome_multiple2:  rand(4..7).to_s,
-        #ACTIVE DATES
-          start_term:         'Spring 1980', end_term: 'Fall 1980',
-          pilot_course: :set,
+        assessment_scale:     [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
+
+
+
+        ##REQUIRED ON SUBMIT
+        ##COURSE INFORMATION
+        #subject_code:          'MATH',
+        #course_number:         rand(100..999).to_s,
+        #
+        #transcript_course_title:  random_alphanums(5,'test transcript'),
+        #
+        #version_code_version_code:     'A',
+        #version_code_title:    'TEST version code course title TEST',
+        #description_rationale: random_alphanums(200),
+        #proposal_rationale:    random_alphanums(200),
+        ##GOVERNANCE
+        #curriculum_oversight: '::random::',# 'CMNS-Mathematics',
+        ##COURSE LOGISTICS
+        #final_exam_status:    [:exam_standard, :exam_alternate, :exam_none],
+        #final_exam_rationale: random_alphanums(50),
+        #outcome_type:       '::random::', #['Fixed', 'Multiple', 'Range'].sample,
+        #outcome_value:      rand(1..3).to_s,
+        #credit_value_min:   rand(1..3).to_s,
+        #credit_value_max:   rand(4..8).to_s,
+        #outcome_multiple:   rand(1..3).to_s,
+        #outcome_multiple2:  rand(4..7).to_s,
+        #
+        #activity_duration_type: '::random::', #['Day', 'Four Years', 'Half Semester', 'Hours', 'Mini-mester', 'Minutes', 'Month', 'Period', 'Quarter', 'Semester', 'Session', 'TBD', 'Term', 'Two Years', 'Week', 'Year'].sample,
+        #activity_type: '::random::', #['Directed', 'Discussion', 'Experiential Learning/Other', 'Homework', 'Lab', 'Lecture', 'Tutorial', 'Web Discuss', 'Web Lecture'].sample,
+        #activity_frequency: '::random::', #['per day', 'per month', 'per week'].sample,
+        #activity_contacted_hours: rand(1..9).to_s,
+        #activity_duration_count: rand(1..9).to_s,
+        #activity_class_size: rand(1..9).to_s,
+        #
+        #scheduling_term:      [:term_any, :term_fall, :term_spring, :term_summer],
+        #
+        ##ACTIVE DATES
+        #start_term: 'Spring 1980',
+        #pilot_course: :set,
+        #end_term: 'Fall 1980',
+
 
         #NON REQUIRED
-        #COURSE INFORMATION
-          transcript_title:  random_alphanums(5,'test transcript'),
-          course_listing_subject: 'FREN',
-          course_listing_number: '888',
-          joint_offering_number: 'HIST201',
-          instructor_display_name: 'SMITH, DAVID (s.davidb)',
-          instructor_first_name: 'DAVID',
-          instructor_last_name: 'SMITH',
-          instructor_username: 's.davidb',
-
-          instructor_adding_method:   ['auto_lookup_instructor_name', 'adv_username', 'adv_name'].sample,
-          joint_offering_adding_data: ['adv_given_name', 'adv_course_code', 'adv_plain_text', 'auto_lookup'].sample,
-
-          joint_offering_name:        'Interpreting American History: From 1865 to the Present',
-          joint_offering_description: 'The United States from the end of the Civil War to the present.',
-          joint_offering_course_code: 'HIST201',
-
-    #GOVERNANCE
-          admin_org_adding_method:    ['advanced', 'auto_lookup'].sample,
-          administering_organization: 'Biological Sciences',
-          campus_location:            [:location_all, :location_extended, :location_north, :location_south],
-
-          #BUG FOR IDENTIFIER
-          # adv_admin_org_identifier: 'ORGID-BISI',
-
-          adv_admin_org_name:         'Biological Sciences',
-          adv_admin_org_abbreviation: 'BISI',
-
-        #COURSE LOGISTICS
-          duration_type: '::random::', #['Day', 'Four Years', 'Half Semester', 'Hours', 'Mini-mester', 'Minutes', 'Month', 'Period', 'Quarter', 'Semester', 'Session', 'TBD', 'Term', 'Two Years', 'Week', 'Year'].sample,
-          duration_count: rand(1..9).to_s,
-          activity_duration_type: '::random::', #['Day', 'Four Years', 'Half Semester', 'Hours', 'Mini-mester', 'Minutes', 'Month', 'Period', 'Quarter', 'Semester', 'Session', 'TBD', 'Term', 'Two Years', 'Week', 'Year'].sample,
-          activity_type: '::random::', #['Directed', 'Discussion', 'Experiential Learning/Other', 'Homework', 'Lab', 'Lecture', 'Tutorial', 'Web Discuss', 'Web Lecture'].sample,
-          activity_frequency: '::random::', #['per day', 'per month', 'per week'].sample,
-          activity_contacted_hours: rand(1..9).to_s,
-          activity_duration_count: rand(1..9).to_s,
-          activity_class_size: rand(1..9).to_s,
-          audit: :set, pass_fail_transcript_grade: :set,
-
-          #COURSE REQUISITES
-
-          eligibility_add_method: 'text', #['text', 'advanced'].sample,
-          rule_adv_course_title: 'American Jewish Experience', rule_adv_course_code: 'HIST106', rule_adv_course_description_snip: 'History of the Jews in America',
-          rule_course_field: '', rule_credit: rand(1..4),
-
-          student_eligibility_rule: 'Must have successfully completed <course>',
-          corequisiste_rule: 'Must be concurrently enrolled in <course>',
-          recommended_preparation_rule: 'Must have successfully completed <course>',
-          antirequisite_rule: 'Must not have successfully completed <course>',
-          repeatable_for_credit_rule: 'May be repeated for a maximum of <n> credits',
-          course_that_restricts_credits_rule: 'Must not have successfully completed <course>',
-
-
-          student_eligibility_course: 'HIST110',
-          student_eligibility_title: 'The Ancient World',
-          student_eligibility_phrase: 'Interpretation of select literature and art of the ancient Mediterranean world with a view to illuminating the antecedents of modern culture; religion and myth in the ancient near East; Greek philosophical, scientific, and literary invention; and the Roman tradition in politics and administration.',
-
-          corequisite_add_method: ['text', 'advanced'],
-          corequisiste_title: 'Germany in the Nineteenth Century, 1815-1914',
-          corequisiste_course: 'HIST440',
-          corequisiste_phrase: 'Examines the social, economic, cultural, and political development of the major German states before 1871 and of Germany, excluding Austria, from 1871 to 1914.',
-
-          recommended_preparation_course: 'CHEM277',
-          recommended_preparation_title: 'Fundamentals of Analytical and Bioanalytical Chemistry Laboratory',
-          recommended_preparation_phrase: 'Quantitative analysis, inorganic analytical chemistry, and an introduction to bio-analytical instrumentation and techniques.',
-
-          antirequisite_course: 'HIST453',
-          antirequisite_title: 'Diplomatic History of the United States from 1914',
-          antirequisite_phrase: 'American foreign relations in the 20th-century. World War I, the Great Depression, World War II, the Cold War, the Korean War, and Vietnam. A continuation of HIST452.',
-
-          repeatable_for_credit_credits: rand(1..5).to_s,
-
-          course_that_restricts_credits_course: 'HIST454',
-          course_that_restricts_credits_title: 'Constitutional History of the United States: From Colonial Origins to 1860',
-          course_that_restricts_credits_phrase: 'The interaction of government, law, and politics in the constitutional system. The nature and purpose of constitutions and constitutionalism; the relationship between the constitution and social forces and influences, the way in which constitutional principles, rules, ideas, and institutions affect events and are in turn affected by events. The origins of American politics and constitutionalism through the constitutional convention of 1787. Major constitutional problems such as the origins of judicial review, democratization of government, slavery in the territories and political system as a whole.',
-
-
-
-          corequisite_add_method: ['text', 'advanced'].sample, recommended_preparation_add_method: ['text', 'advanced'].sample,
-          antirequisite_add_method: ['text', 'advanced'].sample,
-          course_that_restricts_credits_add_method: ['text', 'advanced'].sample, student_eligibility_add_method: ['text', 'advanced'].sample,
-
-        #student_eligibility_rule: '::random::'
-            #student_eligibility_rule: ['Must have successfully completed <course>', 'Must have successfully completed all courses from <courses>',
-          #                           'Must have successfully completed a minimum of <n> courses from <courses>', 'Must have successfully completed a minimum of <n> credits from <courses>',
-          #                           'Must have successfully completed a minimum of <n> credits from courses in the <org>', 'Must have earned a minimum of <n> total credits',
-          #                           'Must have earned a minimum cumulative GPA of <GPA>', 'Permission of instructor required', 'Permission of <administering org> required',
-          #                           'Must have been admitted to the <program> program', 'Must have been admitted to a program offered by <org>',
-          #                           'Must be admitted to any program offered at the course campus location', 'Students admitted to <program> may take no more than <n> courses in the <org> in <duration><durationType>',
-          #                           'Must have earned a minimum GPA of <GPA> in <courses>', 'Must have earned a minimum grade of <gradeType> <grade> in <courses>',
-          #                           'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>', 'Must have earned a minimum cumulative GPA of <GPA> in <duration><durationType>',
-          #                           'Student must be a member of <population>', 'Must successfully complete no more than <n> credits from <courses>', 'Must have successfully completed no more than <n> courses from <courses>',
-          #                           'Must not have earned a grade of <gradeType> <grade> or higher in <courses>', 'Must not have been admitted to the <program> program',
-          #                           'Students not admitted to <program> may take no more than <n> courses in the <org> in <duration><durationType>', 'Must have successfully completed <course> as of <term>',
-          #                           'Must have successfully completed <course> prior to <term>', 'Must have successfully completed <course> between <term1> and <term2>', 'Free Form Text'].sample,
-          #
-          #corequisiste_rule: '::random::'
-            #corequisiste_rule: ['Must be concurrently enrolled in <course>', 'Must be concurrently enrolled in a minimum of <n> courses from <courses>',
-          #              'Must be concurrently enrolled in all courses from <courses>', 'Must have earned a minimum of <n> total credits',
-          #              'Must have earned a minimum cumulative GPA of <GPA>', 'Free Form Text'].sample,
-          #
-          #recommended_preparation_rule: '::random::'
-            #recommended_preparation_rule: ['Must have successfully completed <course>', 'Must have successfully completed all courses from <courses>',
-          #                         'Must have successfully completed a minimum of <n> courses from <courses>', 'Must have successfully completed a minimum of <n> credits from <courses>',
-          #                         'Must have successfully completed a minimum of <n> credits from courses in the <org>', 'Must have earned a minimum of <n> total credits',
-          #                         'Must have earned a minimum cumulative GPA of <GPA>', 'Must have been admitted to the <program> program', 'Must have been admitted to a program offered by <org>',
-          #                         'Must be admitted to any program offered at the course campus location', 'Must have earned a minimum GPA of <GPA> in <courses>',
-          #                         'Must have earned a minimum grade of <gradeType> <grade> in <courses>', 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>',
-          #                         'Must have earned a minimum cumulative GPA of <GPA> in <duration><durationType>', 'Student must be a member of <population>',
-          #                         'Must successfully complete no more than <n> credits from <courses>', 'Must have successfully completed no more than <n> courses from <courses>',
-          #                         'Must have successfully completed <course> as of <term>', 'Must have successfully completed <course> prior to <term>',
-          #                         'Must have successfully completed <course> between <term1> and <term2>', 'Free Form Text'].sample,
-
-          #antirequisite_rule: '::random::'
-            #antirequisite_rule: ['Must not have successfully completed <course>', 'Must not have successfully completed any courses from <courses>',
-          #               'Must not have successfully completed any credits from <courses>', 'Must successfully complete no more than <n> credits from <courses>',
-          #               'Must not have earned a grade of <gradeType> <grade> or higher in <courses>', 'Free Form Text'].sample,
-
-        #AUTHORS & COLLABORATORS
-          author_name_method: ['auto_lookup', 'advanced_name', 'advanced_username'].sample,
-          author_name_search: 'User',author_username_search: 'user1', author_display_name: 'One, User (user1)',
-          author_permission: '::random::', #['Edit, Comments, View', 'Comments, View', 'View'].sample,
-          action_request: 'FYI',
-
-          author_notation: :set
+    #    #COURSE INFORMATION
+    #      course_listing_subject: 'FREN',
+    #      course_listing_number: '888',
+    #      joint_offering_number: 'HIST201',
+    #      instructor_display_name: 'SMITH, DAVID (s.davidb)',
+    #      instructor_first_name: 'DAVID',
+    #      instructor_last_name: 'SMITH',
+    #      instructor_username: 's.davidb',
+    #
+    #      instructor_adding_method:   'auto_lookup',#['auto_lookup', 'advanced', adv_username', 'adv_name'].sample,
+    #      joint_offering_adding_data: ['adv_given_name', 'adv_course_code', 'adv_plain_text', 'auto_lookup'].sample,
+    #
+    #      joint_offering_name:        'Interpreting American History: From 1865 to the Present',
+    #      joint_offering_description: 'The United States from the end of the Civil War to the present.',
+    #      joint_offering_course_code: 'HIST201',
+    #
+    ##GOVERNANCE
+    #      admin_org_adding_method:    ['advanced', 'auto_lookup'].sample,
+    #      administering_organization: 'Biological Sciences',
+    #      campus_location:            [:location_all, :location_extended, :location_north, :location_south],
+    #      #BUG FOR IDENTIFIER
+    #      # adv_admin_org_identifier: 'ORGID-BISI',
+    #      adv_admin_org_name:         'Biological Sciences',
+    #      adv_admin_org_abbreviation: 'BISI',
+    #
+    #    #COURSE LOGISTICS
+    #      duration_type: '::random::', #['Day', 'Four Years', 'Half Semester', 'Hours', 'Mini-mester', 'Minutes', 'Month', 'Period', 'Quarter', 'Semester', 'Session', 'TBD', 'Term', 'Two Years', 'Week', 'Year'].sample,
+    #      duration_count: rand(1..9).to_s,
+    #      audit: :set, pass_fail_transcript_grade: :set,
+    #
+    #      #COURSE REQUISITES
+    #
+    #      student_eligibility_add_method: 'text', #['text', 'advanced'].sample,
+    #      rule_adv_course_title: 'American Jewish Experience', rule_adv_course_code: 'HIST106', rule_adv_course_description_snip: 'History of the Jews in America',
+    #      rule_course_field: '', rule_credit: rand(1..4),
+    #
+    #      student_eligibility_rule: 'Must have successfully completed <course>',
+    #      corequisiste_rule: 'Must be concurrently enrolled in <course>',
+    #      recommended_preparation_rule: 'Must have successfully completed <course>',
+    #      antirequisite_rule: 'Must not have successfully completed <course>',
+    #      repeatable_for_credit_rule: 'May be repeated for a maximum of <n> credits',
+    #      course_that_restricts_credits_rule: 'Must not have successfully completed <course>',
+    #
+    #      student_eligibility_course: 'HIST110',
+    #      student_eligibility_title: 'The Ancient World',
+    #      student_eligibility_phrase: 'Interpretation of select literature and art of the ancient Mediterranean world with a view to illuminating the antecedents of modern culture; religion and myth in the ancient near East; Greek philosophical, scientific, and literary invention; and the Roman tradition in politics and administration.',
+    #
+    #      corequisite_add_method: ['text', 'advanced'],
+    #      corequisiste_title: 'Germany in the Nineteenth Century, 1815-1914',
+    #      corequisiste_course: 'HIST440',
+    #      corequisiste_phrase: 'Examines the social, economic, cultural, and political development of the major German states before 1871 and of Germany, excluding Austria, from 1871 to 1914.',
+    #
+    #      recommended_preparation_course: 'CHEM277',
+    #      recommended_preparation_title: 'Fundamentals of Analytical and Bioanalytical Chemistry Laboratory',
+    #      recommended_preparation_phrase: 'Quantitative analysis, inorganic analytical chemistry, and an introduction to bio-analytical instrumentation and techniques.',
+    #
+    #      antirequisite_course: 'HIST453',
+    #      antirequisite_title: 'Diplomatic History of the United States from 1914',
+    #      antirequisite_phrase: 'American foreign relations in the 20th-century. World War I, the Great Depression, World War II, the Cold War, the Korean War, and Vietnam. A continuation of HIST452.',
+    #
+    #      repeatable_for_credit_credits: rand(1..5).to_s,
+    #
+    #      course_that_restricts_credits_course: 'HIST454',
+    #      course_that_restricts_credits_title: 'Constitutional History of the United States: From Colonial Origins to 1860',
+    #      course_that_restricts_credits_phrase: 'The interaction of government, law, and politics in the constitutional system. The nature and purpose of constitutions and constitutionalism; the relationship between the constitution and social forces and influences, the way in which constitutional principles, rules, ideas, and institutions affect events and are in turn affected by events. The origins of American politics and constitutionalism through the constitutional convention of 1787. Major constitutional problems such as the origins of judicial review, democratization of government, slavery in the territories and political system as a whole.',
+    #
+    #      corequisite_add_method: ['text', 'advanced'].sample,
+    #      recommended_preparation_add_method: ['text', 'advanced'].sample,
+    #      antirequisite_add_method: ['text', 'advanced'].sample,
+    #      course_that_restricts_credits_add_method: ['text', 'advanced'].sample,
+    #      student_eligibility_add_method: ['text', 'advanced'].sample,
+    #
+    #      #
+    #      #student_eligibility_add_method: 'advanced',#['text', 'advanced'].sample,
+    #      #corequisite_add_method: 'advanced',# text',#['text', 'advanced'].sample,
+    #      #recommended_preparation_add_method: 'advanced',#'text',#['text', 'advanced'].sample,
+    #      #antirequisite_add_method: 'advanced',#'text',#['text', 'advanced'].sample,
+    #      #course_that_restricts_credits_add_method: 'advanced',#['text', 'advanced'].sample,
+    #
+    #
+    #
+    #      #student_eligibility_rule: '::random::'
+    #        #student_eligibility_rule: ['Must have successfully completed <course>', 'Must have successfully completed all courses from <courses>',
+    #      #                           'Must have successfully completed a minimum of <n> courses from <courses>', 'Must have successfully completed a minimum of <n> credits from <courses>',
+    #      #                           'Must have successfully completed a minimum of <n> credits from courses in the <org>', 'Must have earned a minimum of <n> total credits',
+    #      #                           'Must have earned a minimum cumulative GPA of <GPA>', 'Permission of instructor required', 'Permission of <administering org> required',
+    #      #                           'Must have been admitted to the <program> program', 'Must have been admitted to a program offered by <org>',
+    #      #                           'Must be admitted to any program offered at the course campus location', 'Students admitted to <program> may take no more than <n> courses in the <org> in <duration><durationType>',
+    #      #                           'Must have earned a minimum GPA of <GPA> in <courses>', 'Must have earned a minimum grade of <gradeType> <grade> in <courses>',
+    #      #                           'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>', 'Must have earned a minimum cumulative GPA of <GPA> in <duration><durationType>',
+    #      #                           'Student must be a member of <population>', 'Must successfully complete no more than <n> credits from <courses>', 'Must have successfully completed no more than <n> courses from <courses>',
+    #      #                           'Must not have earned a grade of <gradeType> <grade> or higher in <courses>', 'Must not have been admitted to the <program> program',
+    #      #                           'Students not admitted to <program> may take no more than <n> courses in the <org> in <duration><durationType>', 'Must have successfully completed <course> as of <term>',
+    #      #                           'Must have successfully completed <course> prior to <term>', 'Must have successfully completed <course> between <term1> and <term2>', 'Free Form Text'].sample,
+    #      #
+    #      #corequisiste_rule: '::random::'
+    #        #corequisiste_rule: ['Must be concurrently enrolled in <course>', 'Must be concurrently enrolled in a minimum of <n> courses from <courses>',
+    #      #              'Must be concurrently enrolled in all courses from <courses>', 'Must have earned a minimum of <n> total credits',
+    #      #              'Must have earned a minimum cumulative GPA of <GPA>', 'Free Form Text'].sample,
+    #      #
+    #      #recommended_preparation_rule: '::random::'
+    #        #recommended_preparation_rule: ['Must have successfully completed <course>', 'Must have successfully completed all courses from <courses>',
+    #      #                         'Must have successfully completed a minimum of <n> courses from <courses>', 'Must have successfully completed a minimum of <n> credits from <courses>',
+    #      #                         'Must have successfully completed a minimum of <n> credits from courses in the <org>', 'Must have earned a minimum of <n> total credits',
+    #      #                         'Must have earned a minimum cumulative GPA of <GPA>', 'Must have been admitted to the <program> program', 'Must have been admitted to a program offered by <org>',
+    #      #                         'Must be admitted to any program offered at the course campus location', 'Must have earned a minimum GPA of <GPA> in <courses>',
+    #      #                         'Must have earned a minimum grade of <gradeType> <grade> in <courses>', 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>',
+    #      #                         'Must have earned a minimum cumulative GPA of <GPA> in <duration><durationType>', 'Student must be a member of <population>',
+    #      #                         'Must successfully complete no more than <n> credits from <courses>', 'Must have successfully completed no more than <n> courses from <courses>',
+    #      #                         'Must have successfully completed <course> as of <term>', 'Must have successfully completed <course> prior to <term>',
+    #      #                         'Must have successfully completed <course> between <term1> and <term2>', 'Free Form Text'].sample,
+    #
+    #      #antirequisite_rule: '::random::'
+    #        #antirequisite_rule: ['Must not have successfully completed <course>', 'Must not have successfully completed any courses from <courses>',
+    #      #               'Must not have successfully completed any credits from <courses>', 'Must successfully complete no more than <n> credits from <courses>',
+    #      #               'Must not have earned a grade of <gradeType> <grade> or higher in <courses>', 'Free Form Text'].sample,
+    #
+    #    #AUTHORS & COLLABORATORS
+    #      author_name_method: ['auto_lookup', 'advanced_name', 'advanced_username'].sample,
+    #      author_name_search: 'User',author_username_search: 'user1', author_display_name: 'One, User (user1)',
+    #      author_permission: '::random::', #['Edit, Comments, View', 'Comments, View', 'View'].sample,
+    #      action_request: 'FYI',
+    #
+    #      author_notation: :set
 
     }
     set_options(defaults.merge(opts))
@@ -227,10 +278,7 @@ class KradCourseProposalObject < DataObject
   def create
 
     on KradRice do |create|
-
-      #if create.krad_curriculum_management_element.exists?
-        create.krad_curriculum_management
-      #end
+      create.krad_curriculum_management
     end
 
     on(KradCurriculum).create_a_course
@@ -239,15 +287,18 @@ class KradCourseProposalObject < DataObject
 
       #BUG KSCM-1240
       #create.expand_course_listing_section
-      #create.add_a_version_code unless @version_code_code.nil? and @version_code_title.nil?
+      #create.add_a_version_code unless @version_code_version_code.nil? and @version_code_title.nil?
 
       create.subject_code.fit @subject_code
       create.auto_lookup @subject_code unless @subject_code.nil?
-
       fill_out create, :proposal_title, :course_title
+
       #BUG KSCM-1240
-      # , :version_code_code, :version_code_title
+      # , :version_code_version_code, :version_code_title
       create.save_and_continue
+
+      create_course_proposal_required
+      course_proposal_nonrequired
     end
   end  #create
 
@@ -257,7 +308,7 @@ class KradCourseProposalObject < DataObject
 
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
 
-      fill_out page, :description_rationale, :proposal_rationale, :course_number
+      fill_out page, :description_rationale, :proposal_rationale, :course_number, :transcript_course_title
       page.save_and_continue
     end
 
@@ -314,13 +365,17 @@ class KradCourseProposalObject < DataObject
       page.course_information unless page.current_page('Course Information').exists?
       page.loading_wait
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
+
+
       page.add_another_course_listing unless @course_listing_subject.nil? and @course_listing_number.nil?
-      fill_out page, :course_listing_number, :transcript_title
+      fill_out page, :course_listing_number
+
       page.course_listing_subject.fit @course_listing_subject
       page.auto_lookup @course_listing_subject unless @course_listing_subject.nil?
       #Private
       add_joint_offering
       add_instructor
+
       page.save_and_continue
     end
 
@@ -409,11 +464,13 @@ class KradCourseProposalObject < DataObject
 
   #Used for Advanced Search to "Return Value" of the result that matches
   #Defaults to 4th Column to match instructor display name
-  def return_search_result(search_result_value_to_match, row_number=3, page)
+  def return_search_result(search_result_value_to_match, row_number=3)
+    on KradCourseRequisites do |page|
     page.search_results_table.rows.each do |row|
-      if row.cells[row_number].text == search_result_value_to_match
-        row.cells[0].link(text: 'return value').click
-        break
+        if row.cells[row_number].text == search_result_value_to_match
+          row.cells[0].link(text: 'return value').click
+          break
+        end
       end
     end
   end
@@ -467,10 +524,10 @@ class KradCourseProposalObject < DataObject
 
   def add_instructor
     on KradCourseInformation do |page|
-      if instructor_adding_method == 'adv_name' or instructor_adding_method == 'adv_username'
+      if instructor_adding_method == 'advanced' or instructor_adding_method == 'adv_name' or instructor_adding_method == 'adv_username'
         page.instructor_advanced_search
-        page.adv_name.fit @instructor_last_name if instructor_adding_method == 'adv_name'
-        page.adv_username.fit @instructor_username if instructor_adding_method == 'adv_username'
+        page.adv_name.fit @instructor_last_name if instructor_adding_method == 'adv_name' or instructor_adding_method == 'advanced'
+        page.adv_username.fit @instructor_username if instructor_adding_method == 'adv_username' or instructor_adding_method == 'advanced'
         page.adv_search
         page.adv_return_value_instructor @instructor_display_name
       end
@@ -478,6 +535,7 @@ class KradCourseProposalObject < DataObject
       if instructor_adding_method == 'auto_lookup'
         page.instructor_name.fit @instructor_last_name
         page.auto_lookup @instructor_display_name unless @instructor_display_name.nil?
+
       end
       # DUE TO RICE ISSUE NEED TO WAIT FOR FIELD TO DISPLAY THE RETURN RESULTS FOR ADV SEARCH
       # So we wait until the name field = returned value
@@ -510,27 +568,28 @@ class KradCourseProposalObject < DataObject
 
 #COURSE REQUISITES
   def adding_rule_student_eligibility
-    on KradCourseRequisites do |page|
-
-      puts @student_eligibility_add_method
-
-      page.expand_all_rule_sections
+    on KradCourseRequisites do |page| unless @student_eligibility_rule.nil?
+          page.expand_all_rule_sections
       #STUDENT ELIGIBILITY
       page.add_rule_student_eligibility
       page.add_statement
+      page.loading_wait
       page.rule_statement_option.fit @student_eligibility_rule
+      page.loading_wait
+
       #Complicated IF statement required for random pick.
 
-
       if  @student_eligibility_rule == 'Must have successfully completed <course>'
+        @student_eligibility_rule_with_value = @student_eligibility_rule.sub('<course>', @student_eligibility_course)
+
         # Enter text
         if @student_eligibility_add_method == 'text'
-          puts 'text'
+          puts 'student text'
           page.rule_course_field.fit @student_eligibility_course
         end
 
         if @student_eligibility_add_method == 'advanced'
-          puts 'advanced'
+          puts 'student advanced'
           page.advanced_search
           #pick one field
           page.adv_course_title.fit @student_eligibility_title
@@ -538,66 +597,72 @@ class KradCourseProposalObject < DataObject
           page.adv_plain_text_description_rule.fit @student_eligibility_phrase
           page.adv_search
           #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          return_search_result(@student_eligibility_course, '2')
+          return_search_result(@student_eligibility_course, 2)
         end
       end
-      puts "#{@student_eligibility_add_method}"
 
       page.preview_change
-
       page.update_rule
-
+                                        page.loading_wait
+    end
     end
   end
 
+
+
   def adding_rule_corequisite
-    on KradCourseRequisites do |page|
-      page.expand_all_rule_sections
+    on KradCourseRequisites do |page| unless @corequisite_rule.nil?
+      page.expand_all_rule_section
       page.add_rule_corequisite
       page.add_statement
-      page.rule_statement_option.fit @corequisiste_rule
+      page.rule_statement_option.fit @corequisite_rule
+      page.loading_wait
       #page.rule_course_field.fit @rule_adv_course_code
 
       if  @corequisiste_rule == 'Must be concurrently enrolled in <course>'
+        @corequisite_rule_with_value = @corequisite_rule.sub('<course>', @corequisite_course)
 
         if @corequisite_add_method == 'text'
-          page.rule_course_field.fit @corequisiste_course
+          page.rule_course_field.fit @corequisite_course
         end
 
         if @corequisite_add_method == 'advanced'
           page.advanced_search
-          page.adv_course_title.fit @corequisiste_title
-          page.adv_course_code_rule.fit @corequisiste_course
+          page.adv_course_title.fit @corequisite_title
+          page.adv_course_code_rule.fit @corequisite_course
           #bug where description is only displayed as '.'
-          #page.adv_plain_text_description_rule.fit @corequisiste_phrase
-          page.adv_search_button
-          page.return_search_result(@corequisiste_course, '2')
-          page.search_button
+          #page.adv_plain_text_description_rule.fit @corequisite_phrase
+
+          page.adv_search
+          page.loading_wait
+          return_search_result(@corequisite_course, 2)
         end
-
       end
-
       page.preview_change
       page.update_rule
     end
+    end
   end
 
+
   def adding_rule_recommended_preparation_rule
+    on KradCourseRequisites do |page| unless @recommended_preparation_rule.nil?
 
     page.expand_all_rule_sections
     page.add_rule_recommended_prep
     page.add_statement
     page.rule_statement_option.fit @recommended_preparation_rule
-
+    page.loading_wait
+    @recommended_preparation_rule_with_value = @recommended_preparation_rule.sub('<course>', @recommended_preparation_course)
 
     if @recommended_preparation_rule == 'Must have successfully completed <course>'
 
+
       if @recommended_preparation_add_method == 'text'
         page.rule_course_field.fit @recommended_preparation_course
-
       end
 
-      if @recommended_preparation_add_method == 'text'
+      if @recommended_preparation_add_method == 'advanced'
         page.advanced_search
         #pick one field
         page.adv_course_title.fit @recommended_preparation_title
@@ -605,86 +670,100 @@ class KradCourseProposalObject < DataObject
         page.adv_plain_text_description_rule.fit @recommended_preparation_phrase
         page.adv_search
         #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-        page.return_search_result(@recommended_preparation_course, 2)
+        return_search_result(@recommended_preparation_course, 2)
       end
-
     end
+
     page.preview_change
     page.update_rule
+    end
+    end
   end
 
   def adding_rule_antirequisite
+    on KradCourseRequisites do |page| unless @antirequisite_rule.nil?
+      page.expand_all_rule_sections
+      page.add_rule_antirequisite
+      page.add_statement
+      page.rule_statement_option.fit @antirequisite_rule
+      page.loading_wait
 
-    page.expand_all_rule_sections
-    page.add_rule_antirequisite
-    page.add_statement
-    page.rule_statement_option.fit @antirequisite_rule
+      if @antirequisite_rule == 'Must not have successfully completed <course>'
+        @antirequisite_rule_with_value = @antirequisite_rule.sub('<course>', @antirequisite_course)
 
-    if @antirequisite_rule == 'Must not have successfully completed <course>'
+        if @antirequisite_add_method == 'text'
+          page.rule_course_field.fit @antirequisite_course
+        end
 
-      if @antirequisite_add_method == 'text'
-        page.rule_course_field.fit @antirequisite_course
+        if @antirequisite_add_method == 'advanced'
+          page.advanced_search
+          #pick one field
+          page.adv_course_title.fit @antirequisite_title
+          page.adv_course_code_rule.fit @antirequisite_course
+          page.adv_plain_text_description_rule.fit @antirequisite_phrase
+          page.adv_search
+          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+          return_search_result(@antirequisite_course, 2)
+        end
       end
 
-      if @antirequisite_add_method == 'advanced'
-        page.advanced_search
-        #pick one field
-        page.adv_course_title.fit @antirequisite_title
-        page.adv_course_code_rule.fit @antirequisite_course
-        page.adv_plain_text_description_rule.fit @antirequisite_phrase
-        page.adv_search
-        #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-        page.return_search_result(@antirequisite_course, 2)
-      end
-
+      page.preview_change
+      page.update_rule
     end
-
-    page.preview_change
-    page.update_rule
+    end
   end
 
   def adding_rule_repeatable_for_credit
+    on KradCourseRequisites do |page| unless @repeatable_for_credit_rule.nil?
+      page.expand_all_rule_sections
+      page.add_rule_repeatable_for_credit
+      page.add_statement
+      page.rule_statement_option.fit @repeatable_for_credit_rule
+      page.loading_wait
 
+      if @repeatable_for_credit_rule == 'May be repeated for a maximum of <n> credits'
+        @repeatable_for_credit_rule_with_value = @repeatable_for_credit_rule.sub('<n>', @repeatable_for_credit_credit)
 
-    page.expand_all_rule_sections
-    page.add_rule_repeatable_for_credits
-    page.add_statement
-    page.rule_statement_option.fit @repeatable_for_credit_rule
-    page.loading_wait
+        page.rule_credit.fit @repeatable_for_credit_credit
+      end
 
-    if @repeatable_for_credit_rule == 'May be repeated for a maximum of <n> credits'
-      page.rule_credit.fit @repeatable_for_credit_credits
+      page.preview_change
+      page.update_rule
     end
-
-    page.preview_change
-    page.update_rule
+    end
   end
 
   def adding_course_that_restricts_credits
-    page.expand_all_rule_sections
-    page.add_rule_restricts_credits
-    page.add_statement
-    page.rule_statement_option.fit @course_that_restricts_credits_rule
-    if @course_that_restricts_credits_rule == 'Must not have successfully completed <course>'
-      if @course_that_restricts_credits_add_method == 'text'
-        page.rule_course_field.fit @course_that_restricts_credits_course
+    on KradCourseRequisites do |page| unless @course_that_restricts_credits_rule.nil?
+      page.expand_all_rule_sections
+      page.add_rule_restricts_credits
+      page.add_statement
+      page.rule_statement_option.fit @course_that_restricts_credits_rule
+      page.loading_wait
+
+      if @course_that_restricts_credits_rule == 'Must not have successfully completed <course>'
+        @course_that_restricts_credits_rule_with_value = @course_that_restricts_credits_rule.sub('<course>', @course_that_restricts_credits_course)
+
+        if @course_that_restricts_credits_add_method == 'text'
+          page.rule_course_field.fit @course_that_restricts_credits_course
+        end
+        if @course_that_restricts_credits_add_method == 'advanced'
+          page.advanced_search
+          #pick one field
+          page.adv_course_title.fit @course_that_restricts_credits_title
+          page.adv_course_code_rule.fit @course_that_restricts_credits_course
+          page.adv_plain_text_description_rule.fit @course_that_restricts_credits_phrase
+          page.adv_search
+          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+          return_search_result(@course_that_restricts_credits_course, 2)
+        end
       end
-      if @course_that_restricts_credits_add_method == 'advanced'
-        page.advanced_search
-        #pick one field
-        page.adv_course_title.fit @course_that_restricts_credits_title
-        page.adv_course_code_rule.fit @course_that_restricts_credits_course
-        page.adv_plain_text_description_rule.fit @course_that_restricts_credits_phrase
-        page.adv_search
-        #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-        page.return_search_result(@course_that_restricts_credits_course, 2)
-      end
+
+      page.preview_change
+      page.update_rule
     end
-    page.preview_change
-    page.update_rule
+    end
   end
-
-
 
   #AUTHORS AND COLLABORATORS
     def adding_author_name
@@ -726,7 +805,9 @@ class KradCourseProposalObject < DataObject
 #  end
 #end
 
-  end #object class
+    end #object class
+
+
 
 
 
