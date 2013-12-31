@@ -2,6 +2,8 @@ package org.kuali.student.ap.framework.config;
 
 import javax.ejb.EJB;
 
+import org.kuali.rice.core.framework.util.spring.OptionalResource;
+import org.kuali.student.ap.academicplan.service.AcademicPlanService;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.EnrollmentStatusHelper;
 import org.kuali.student.ap.framework.context.EnumerationHelper;
@@ -17,12 +19,11 @@ import org.kuali.student.ap.plannerreview.LearningPlanReviewStrategy;
 import org.kuali.student.ap.schedulebuilder.ScheduleBuildStrategy;
 import org.kuali.student.ap.schedulebuilder.ShoppingCartStrategy;
 import org.kuali.student.enrollment.academicrecord.service.AcademicRecordService;
-import org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService;
-import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
+import org.kuali.student.enrollment.courseofferingset.service.CourseOfferingSetService;
 import org.kuali.student.enrollment.lui.service.LuiService;
-import org.kuali.student.ap.academicplan.service.AcademicPlanService;
 import org.kuali.student.r2.common.messages.service.MessageService;
+import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
 import org.kuali.student.r2.core.atp.service.AtpService;
 import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.comment.service.CommentService;
@@ -142,6 +143,11 @@ public final class KsapFrameworkServiceLocator {
 		return getInstance().ksEnrollCourseOfferingService;
 	}
     
+	/**
+	 * Get the ks-enroll remote course offering set service.
+	 * 
+	 * @return The ks-enroll remote course offering set service.
+	 */
     public static CourseOfferingSetService getCourseOfferingSetService() {
         return getInstance().ksEnrollCourseOfferingSetService;
     }
@@ -504,17 +510,17 @@ public final class KsapFrameworkServiceLocator {
     private transient PlanHelper planHelper;
 
 	// provided by ks-ap-ui or institution override
-	@EJB
     @OptionalResource
+	@EJB
     private transient CourseSearchStrategy courseSearchStrategy;
 
     @OptionalResource
     @EJB
     private transient LearningPlanReviewStrategy learningPlanReviewStrategy;
+    
     @OptionalResource
     @EJB
     private transient ScheduleBuildStrategy scheduleBuildStrategy;
-
 
     @OptionalResource
     @EJB

@@ -13,32 +13,24 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.kuali.rice.kns.inquiry.KualiInquirableImpl;
-import org.kuali.student.ap.academicplan.service.AcademicPlanServiceConstants;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.framework.context.CourseSearchConstants;
-import org.kuali.student.ap.framework.context.PlanConstants;
-import org.kuali.student.ap.framework.context.TermHelper;
-import org.kuali.student.ap.framework.context.YearTerm;
-import org.kuali.student.ap.framework.course.CreditsFormatter;
-import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
-import org.kuali.student.r2.core.acal.infc.Term;
-import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayInfo;
-import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.ap.academicplan.service.AcademicPlanService;
 import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingItem;
 import org.kuali.student.ap.coursesearch.dataobject.CourseDetails;
 import org.kuali.student.ap.coursesearch.dataobject.CourseOfferingInstitution;
 import org.kuali.student.ap.coursesearch.dataobject.CourseOfferingTerm;
 import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
 import org.kuali.student.ap.coursesearch.dataobject.MeetingDetails;
-import org.kuali.student.myplan.plan.controller.PlanController;
-import org.kuali.student.myplan.plan.dataobject.AcademicRecordDataObject;
-import org.kuali.student.myplan.plan.dataobject.PlanItemDataObject;
-import org.kuali.student.myplan.plan.dataobject.PlannedCourseSummary;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.framework.context.CourseSearchConstants;
+import org.kuali.student.ap.framework.context.PlanConstants;
+import org.kuali.student.ap.framework.context.TermHelper;
+import org.kuali.student.ap.framework.context.YearTerm;
+import org.kuali.student.ap.framework.course.CreditsFormatter;
 import org.kuali.student.ap.utils.CourseLinkBuilder;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayInfo;
+import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.TimeOfDayInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -47,7 +39,7 @@ import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
-import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.enumerationmanagement.dto.EnumeratedValueInfo;
 import org.kuali.student.r2.core.room.infc.Building;
@@ -250,115 +242,7 @@ public class CourseDetailsInquiryHelperImpl extends KualiInquirableImpl {
 		else
 			courseDetails.setCourseOfferingInstitutionList(new java.util.ArrayList<CourseOfferingInstitution>(0));
 
-		// Course Plan + Academic Records
-		courseDetails.setPlannedCourseSummary(getPlannedCourseSummary(course, studentId));
-
 		return courseDetails;
-	}
-
-	/**
-	 * Retrieves plan summary for the course. Finds all the plan, backup and
-	 * academic record information spread across multiple terms for the provided
-	 * course Id and Student Id
-	 * 
-	 * @param courseId
-	 * @param studentId
-	 * @return
-	 */
-	public PlannedCourseSummary getPlannedCourseSummaryById(String courseId, String studentId) {
-		CourseInfo course = KsapFrameworkServiceLocator.getCourseHelper().getCourseInfo(courseId);
-		return getPlannedCourseSummary(course, studentId);
-	}
-
-	/**
-	 * Retrieves plan summary for the course. Finds all the plan, backup and
-	 * academic record information spread across multiple terms for the provided
-	 * course and student Id
-	 * 
-	 * @param course
-	 * @param studentId
-	 * @return
-	 */
-	public PlannedCourseSummary getPlannedCourseSummary(CourseInfo course, String studentId) {
-
-		PlannedCourseSummary plannedCourseSummary = new PlannedCourseSummary();
-
-		// Planned, backup and Saved Item
-		AcademicPlanService academicPlanService = KsapFrameworkServiceLocator.getAcademicPlanService();
-
-		try {
-			LearningPlanInfo plan = KsapFrameworkServiceLocator.getPlanHelper().getDefaultLearningPlan();
-			if (plan != null) {
-				plannedCourseSummary.setLearningPlanId(plan.getId());
-
-				// Fetch the plan items which are associated with the plan.
-				List<PlanItemInfo> planItemsInPlan = academicPlanService.getPlanItemsInPlan(plan.getId(),
-						KsapFrameworkServiceLocator.getContext().getContextInfo());
-
-				// Iterate through the plan items and set flags to indicate
-				// whether the item is a planned/backup or saved course.
-				for (PlanItem planItemInPlanTemp : planItemsInPlan) {
-					if (planItemInPlanTemp.getRefObjectId().equals(course.getId())) {
-						// Assuming type is planned or backup if not wishlist.
-						AcademicPlanServiceConstants.ItemCategory category = planItemInPlanTemp.getCategory();
-						if (category.equals(AcademicPlanServiceConstants.ItemCategory.WISHLIST)) {
-							plannedCourseSummary.setSavedItemId(planItemInPlanTemp.getId());
-							String dateStr = planItemInPlanTemp.getMeta().getCreateTime().toString();
-							dateStr = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER
-									.format(DateFormatters.DEFAULT_DATE_FORMATTER.parse(dateStr.substring(0, 10)));
-							plannedCourseSummary.setSavedItemDateCreated(dateStr);
-						} else {
-							PlanItemDataObject planItem = PlanItemDataObject.build(planItemInPlanTemp);
-							if (category.equals(AcademicPlanServiceConstants.ItemCategory.PLANNED)) {
-								plannedCourseSummary.getPlannedList().add(planItem);
-							} else if (category.equals(AcademicPlanServiceConstants.ItemCategory.BACKUP)) {
-								plannedCourseSummary.getBackupList().add(planItem);
-							}
-						}
-					}
-				}
-			}
-		} catch (org.kuali.student.r2.common.exceptions.DoesNotExistException e) {
-			// Ignore and not load any plan data
-		} catch (Exception e1) {
-			LOG.error(" Error loading plan information for course :" + course.getCode() + " " + e1.getMessage());
-		}
-
-		// Get Academic Record Data from the SWS and set that to CourseDetails
-		// acadRecordList
-		try {
-			List<StudentCourseRecordInfo> studentCourseRecordInfos = KsapFrameworkServiceLocator
-					.getAcademicRecordService().getCompletedCourseRecords(studentId,
-							KsapFrameworkServiceLocator.getContext().getContextInfo());
-			for (StudentCourseRecordInfo studentInfo : studentCourseRecordInfos) {
-				AcademicRecordDataObject acadrec = new AcademicRecordDataObject();
-
-                //TODO KSAP-147: drop the following call when termId is added to StudentCourseRecordInfo
-                //Find associated termId by termName and containing the course begin/end dates
-                String termId = KsapFrameworkServiceLocator.getTermHelper().findTermIdByNameAndContainingDates(studentInfo.getCourseBeginDate(), studentInfo.getCourseEndDate(), studentInfo.getTermName());
-				acadrec.setAtpId(termId);
-				acadrec.setPersonId(studentInfo.getPersonId());
-				acadrec.setCourseCode(studentInfo.getCourseCode());
-				acadrec.setCourseTitle(studentInfo.getCourseTitle());
-				acadrec.setCourseId(studentInfo.getId());
-				acadrec.setCredit(studentInfo.getCreditsEarned());
-				acadrec.setGrade(studentInfo.getCalculatedGradeValue());
-				acadrec.setRepeated(studentInfo.getIsRepeated()!=null?studentInfo.getIsRepeated():false);
-				acadrec.setActivityCode(studentInfo.getActivityCode());
-
-				if (course.getId().equalsIgnoreCase(studentInfo.getId())) {
-					plannedCourseSummary.getAcadRecList().add(acadrec);
-
-					YearTerm str = KsapFrameworkServiceLocator.getTermHelper().getYearTerm(termId);
-					plannedCourseSummary.getAcademicTerms().add(str.getTermName());
-				}
-			}
-		} catch (Exception e) {
-			LOG.error("Could not retrieve StudentCourseRecordInfo from the SWS");
-		}
-
-		return plannedCourseSummary;
-
 	}
 
 	/**
@@ -851,31 +735,6 @@ public class CourseDetailsInquiryHelperImpl extends KualiInquirableImpl {
 	 */
 	public boolean isCourseIdValid(String courseId) {
 		return KsapFrameworkServiceLocator.getCourseHelper().getCourseInfo(courseId) != null;
-	}
-
-	/**
-	 * Checks if the Given refObjId for a section (eg: com 453 A or com 453 AA
-	 * or can use a versionIndependentId) for the given atpId exists in
-	 * Plan/backup returns planItemId if exists otherwise returns null.
-	 * 
-	 * @param refObjId
-	 * @param atpId
-	 * @return
-	 */
-	public String getPlanItemId(String refObjId, String atpId) {
-		String planItemId = null;
-		try {
-			PlanController planController = new PlanController();
-			PlanItemInfo planItem = planController.getPlannedOrBackupPlanItem(refObjId, atpId);
-			if (planItem != null) {
-				planItemId = planItem.getId();
-			}
-
-		} catch (Exception e) {
-			LOG.error(" Exception loading plan item :" + refObjId + " for atp: " + atpId + " " + e.getMessage());
-			return null;
-		}
-		return planItemId;
 	}
 
 }

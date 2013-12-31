@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -44,8 +43,10 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.rice.ksb.service.KSBServiceLocator;
+import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
+import org.kuali.student.ap.coursesearch.form.CourseSearchFormImpl;
 import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
+import org.kuali.student.ap.coursesearch.util.CampusSearch;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.CourseSearchConstants;
@@ -53,9 +54,6 @@ import org.kuali.student.ap.framework.course.CourseSearchForm;
 import org.kuali.student.ap.framework.course.CourseSearchItem;
 import org.kuali.student.ap.framework.course.CourseSearchStrategy;
 import org.kuali.student.ap.framework.course.FacetKeyValue;
-import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
-import org.kuali.student.ap.coursesearch.form.CourseSearchFormImpl;
-import org.kuali.student.ap.coursesearch.util.CampusSearch;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
 import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
@@ -69,8 +67,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -1054,9 +1050,8 @@ public class CourseSearchController extends UifControllerBase {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) {
+		super.start(form, request, response);
 		form.setViewId("CourseSearch-FormView");
 		form.setView(super.getViewService()
 				.getViewById("CourseSearch-FormView"));
@@ -1072,9 +1067,8 @@ public class CourseSearchController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=start")
 	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) {
+		super.start(form, request, response);
 		return getUIFModelAndView(form);
 	}
 

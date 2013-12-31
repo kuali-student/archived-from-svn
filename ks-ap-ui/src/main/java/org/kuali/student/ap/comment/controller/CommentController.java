@@ -42,7 +42,6 @@ import org.kuali.student.ap.comment.dataobject.CommentDataObject;
 import org.kuali.student.ap.comment.dataobject.MessageDataObject;
 import org.kuali.student.ap.comment.form.CommentForm;
 import org.kuali.student.ap.comment.service.CommentQueryHelper;
-import org.kuali.student.myplan.service.MyPlanMailService;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
@@ -76,9 +75,8 @@ public class CommentController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=startCommentForm")
 	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) {
+		super.start(form, request, response);
 		Person user = GlobalVariables.getUserSession().getPerson();
 		String principleId = user.getPrincipalId();
 		CommentForm commentForm = (CommentForm) form;
@@ -256,7 +254,7 @@ public class CommentController extends UifControllerBase {
 		GlobalVariables.getMessageMap().clearErrorMessages();
 		form.setPageId(CommentConstants.COMMENT_RESPONSE_PAGE);
 
-		return start(form, result, httprequest, httpresponse);
+		return start(form, httprequest, httpresponse);
 	}
 
 	@RequestMapping(params = "methodToCall=addMessage")
@@ -391,7 +389,7 @@ public class CommentController extends UifControllerBase {
 					CommentConstants.ERROR_KEY_NOTIFICATION_FAILED);
 		}
 		GlobalVariables.getMessageMap().clearErrorMessages();
-		return start(form, result, httprequest, httpresponse);
+		return start(form, httprequest, httpresponse);
 	}
 
 	/**

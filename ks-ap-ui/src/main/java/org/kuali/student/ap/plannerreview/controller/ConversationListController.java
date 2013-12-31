@@ -45,9 +45,8 @@ public class ConversationListController  extends ConversationControllerBase {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get(@ModelAttribute("KualiForm") ConversationListForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		super.start(form, result, request, response);
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		super.start(form, request, response);
 		
 		try {
 			initialize(form);

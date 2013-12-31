@@ -1,51 +1,5 @@
 package org.kuali.student.ap.plannerreview.controller;
 
-import org.apache.log4j.Logger;
-import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.rice.krad.util.GlobalVariables;
-import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.academicplan.service.AcademicPlanServiceConstants;
-import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.framework.context.PlanConstants;
-import org.kuali.student.ap.framework.context.TermHelper;
-import org.kuali.student.ap.framework.context.YearTerm;
-import org.kuali.student.ap.plannerreview.form.ConversationCreateForm;
-import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
-import org.kuali.student.ap.plannerreview.infc.LearningPlanReviewTerm;
-import org.kuali.student.ap.plannerreview.dto.AcademicYearInfo;
-import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
-import org.kuali.student.ap.plannerreview.dto.CourseInfo;
-import org.kuali.student.ap.plannerreview.dto.CourseTypeInfo;
-import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewRequestInfo;
-import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewTermInfo;
-import org.kuali.student.ap.plannerreview.dto.PlanTermInfo;
-import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
-import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
-import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
-import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
-import org.kuali.student.ap.academicplan.service.AcademicPlanService;
-import org.kuali.student.myplan.plan.dataobject.PlanItemDataObject;
-import org.kuali.student.myplan.plan.dataobject.PlannedCourseDataObject;
-import org.kuali.student.r2.common.dto.RichTextInfo;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.kuali.student.r2.common.infc.RichText;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,6 +8,49 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.QName;
+
+import org.apache.log4j.Logger;
+import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.util.GlobalVariables;
+import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
+import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
+import org.kuali.student.ap.academicplan.service.AcademicPlanService;
+import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.framework.context.PlanConstants;
+import org.kuali.student.ap.framework.context.TermHelper;
+import org.kuali.student.ap.plannerreview.dto.AcademicYearInfo;
+import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
+import org.kuali.student.ap.plannerreview.dto.CourseInfo;
+import org.kuali.student.ap.plannerreview.dto.CourseTypeInfo;
+import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewRequestInfo;
+import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewTermInfo;
+import org.kuali.student.ap.plannerreview.dto.PlanTermInfo;
+import org.kuali.student.ap.plannerreview.form.ConversationCreateForm;
+import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
+import org.kuali.student.ap.plannerreview.infc.LearningPlanReviewTerm;
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
+import org.kuali.student.r2.common.dto.RichTextInfo;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.infc.RichText;
+import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
+import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/reviewCreate")
@@ -235,7 +232,7 @@ public class ConversationCreateController extends ConversationControllerBase {
 			BindingResult result, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		LOG.debug("IN changeStep(" + newStep + ")");
-		super.start(form, result, request, response);
+		super.start(form, request, response);
 		LOG.debug("CREATE_FORM: " + form);
 
 		if (ConversationConstants.CREATE_CONV_WIZARD_STEP3 == newStep) {
@@ -471,71 +468,72 @@ public class ConversationCreateController extends ConversationControllerBase {
 		}
 
 		for (PlanItemInfo planItem : planItems) {
-			PlannedCourseDataObject plannedCourseDO = new PlannedCourseDataObject();
-			String courseID = planItem.getRefObjectId();
+			
+			// TODO: REVIEW LINE
+//			String courseID = planItem.getRefObjectId();
 			// Only create a data object for the specified type.
 
-			plannedCourseDO.setPlanItemDataObject(PlanItemDataObject
-					.build(planItem));
-
-			// If the course info lookup fails just log the error and
-			// omit the item.
-			try {
-				if (getCourseDetailsInquiryService().isCourseIdValid(courseID)) {
-					plannedCourseDO
-							.setCourseDetails(getCourseDetailsInquiryService()
-									.retrieveCourseSummaryById(courseID));
-				}
-			} catch (Exception e) {
-				LOG.error(String.format(
-						"Unable to retrieve course info for plan item [%s].",
-						planItem.getId()), e);
-				continue;
-			}
-			String atp = plannedCourseDO.getPlanItemDataObject().getAtp();
-
-			CourseInfo course = new CourseInfo();
-			course.setCourseId(plannedCourseDO.getCourseDetails().getCourseId());
-			course.setCourseCode(plannedCourseDO.getCourseDetails().getCode());
-			course.setCourseName(plannedCourseDO.getCourseDetails()
-					.getCourseTitle());
-			course.setCourseDescription(plannedCourseDO.getCourseDetails()
-					.getCourseDescription());
-			boolean backup = false;
-
-			if (AcademicPlanServiceConstants.ItemCategory.WISHLIST.equals(planItem
-					.getCategory())) {
-				// Bookmarks don't have a term
-				bookmarks.put(course.getCourseId(), course);
-			} else {
-				PlanTermInfo pTerm = terms.get(atp);
-				if (pTerm == null) {
-					YearTerm term = getTermHelper().getYearTerm(atp);
-
-					pTerm = new PlanTermInfo(term.getTermId(),
-							term.getTermName(), term.getYear());
-					// term.
-					terms.put(atp, pTerm);
-					addTermToAcademicCalendar(pTerm, availableAcademicYears);
-				}
-				if (atp != null) {
-					atps.add(atp);
-				}
-				CourseInfo courseInfo = new CourseInfo(course.getCourseId(),
-						course.getCourseCode(), course.getCourseName(),
-						course.getCourseDescription(), backup);
-				if (AcademicPlanServiceConstants.ItemCategory.PLANNED
-						.equals(planItem.getCategory())) {
-					// addCourseToMap(plannedCourses, course, atp);
-					pTerm.addPlannedCourse(courseInfo);
-				} else if (AcademicPlanServiceConstants.ItemCategory.BACKUP
-						.equals(planItem.getCategory())) {
-					// addCourseToMap(backupCourses, course, atp);
-					backup = true;
-					courseInfo.setBackup(backup);
-					pTerm.addBackupCourse(courseInfo);
-				}
-			}
+//			plannedCourseDO.setPlanItemDataObject(PlanItemDataObject
+//					.build(planItem));
+//
+//			// If the course info lookup fails just log the error and
+//			// omit the item.
+//			try {
+//				if (getCourseDetailsInquiryService().isCourseIdValid(courseID)) {
+//					plannedCourseDO
+//							.setCourseDetails(getCourseDetailsInquiryService()
+//									.retrieveCourseSummaryById(courseID));
+//				}
+//			} catch (Exception e) {
+//				LOG.error(String.format(
+//						"Unable to retrieve course info for plan item [%s].",
+//						planItem.getId()), e);
+//				continue;
+//			}
+//			String atp = plannedCourseDO.getPlanItemDataObject().getAtp();
+//
+//			CourseInfo course = new CourseInfo();
+//			course.setCourseId(plannedCourseDO.getCourseDetails().getCourseId());
+//			course.setCourseCode(plannedCourseDO.getCourseDetails().getCode());
+//			course.setCourseName(plannedCourseDO.getCourseDetails()
+//					.getCourseTitle());
+//			course.setCourseDescription(plannedCourseDO.getCourseDetails()
+//					.getCourseDescription());
+//			boolean backup = false;
+//
+//			if (AcademicPlanServiceConstants.ItemCategory.WISHLIST.equals(planItem
+//					.getCategory())) {
+//				// Bookmarks don't have a term
+//				bookmarks.put(course.getCourseId(), course);
+//			} else {
+//				PlanTermInfo pTerm = terms.get(atp);
+//				if (pTerm == null) {
+//					YearTerm term = getTermHelper().getYearTerm(atp);
+//
+//					pTerm = new PlanTermInfo(term.getTermId(),
+//							term.getTermName(), term.getYear());
+//					// term.
+//					terms.put(atp, pTerm);
+//					addTermToAcademicCalendar(pTerm, availableAcademicYears);
+//				}
+//				if (atp != null) {
+//					atps.add(atp);
+//				}
+//				CourseInfo courseInfo = new CourseInfo(course.getCourseId(),
+//						course.getCourseCode(), course.getCourseName(),
+//						course.getCourseDescription(), backup);
+//				if (AcademicPlanServiceConstants.ItemCategory.PLANNED
+//						.equals(planItem.getCategory())) {
+//					// addCourseToMap(plannedCourses, course, atp);
+//					pTerm.addPlannedCourse(courseInfo);
+//				} else if (AcademicPlanServiceConstants.ItemCategory.BACKUP
+//						.equals(planItem.getCategory())) {
+//					// addCourseToMap(backupCourses, course, atp);
+//					backup = true;
+//					courseInfo.setBackup(backup);
+//					pTerm.addBackupCourse(courseInfo);
+//				}
+//			}
 		}
 
 		form.setBookmarkedCourses(bookmarks);

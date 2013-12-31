@@ -1,21 +1,32 @@
 package org.kuali.student.ap.planner.controller;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.kuali.rice.krad.uif.view.ViewAuthorizerBase;
 import org.kuali.rice.krad.web.controller.extension.KsapControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
+import org.kuali.student.ap.academicplan.infc.LearningPlan;
+import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.academicplan.service.AcademicPlanServiceConstants;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.util.KsapStringUtil;
 import org.kuali.student.ap.planner.PlannerForm;
-import org.kuali.student.ap.planner.support.PlanItemControllerHelper;
 import org.kuali.student.ap.planner.form.PlannerFormImpl;
+import org.kuali.student.ap.planner.support.PlanItemControllerHelper;
 import org.kuali.student.ap.planner.util.PlanEventUtils;
-import org.kuali.student.r2.core.acal.infc.Term;
-import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
-import org.kuali.student.ap.academicplan.infc.LearningPlan;
-import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
@@ -27,6 +38,7 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.exceptions.ReadOnlyException;
 import org.kuali.student.r2.common.exceptions.VersionMismatchException;
+import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.core.comment.dto.CommentInfo;
 import org.kuali.student.r2.core.comment.service.CommentService;
 import org.kuali.student.r2.lum.course.infc.Course;
@@ -37,17 +49,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Fix under KSAP-265
@@ -85,13 +86,13 @@ public class PlannerController extends KsapControllerBase {
      * Does not appear to be hit at any time.
      */
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView startPlanner(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
+	public ModelAndView startPlanner(@ModelAttribute("KualiForm") PlannerForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response) == null)
 			return null;
 
 		UifFormBase uifForm = (UifFormBase) form;
-		super.start(uifForm, result, request, response);
+		super.start(uifForm, request, response);
 
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
@@ -106,7 +107,7 @@ public class PlannerController extends KsapControllerBase {
      * to load the calendar term data.
      */
 	@RequestMapping(params = "methodToCall=load")
-	public ModelAndView loadPlanner(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
+	public ModelAndView loadPlanner(@ModelAttribute("KualiForm") PlannerForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response) == null)
 			return null;
@@ -119,7 +120,7 @@ public class PlannerController extends KsapControllerBase {
 
 		UifFormBase uifForm = (UifFormBase) newForm;
         uifForm.getView().setAuthorizer(new ViewAuthorizerBase());
-		super.start(uifForm, result, request, response);
+		super.start(uifForm, request, response);
 
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
@@ -131,7 +132,7 @@ public class PlannerController extends KsapControllerBase {
      * Loads the initial information for any dialog screen opened in the planner.
      */
 	@RequestMapping(params = "methodToCall=startDialog")
-	public ModelAndView startDialog(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
+	public ModelAndView startDialog(@ModelAttribute("KualiForm") PlannerForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
@@ -139,7 +140,7 @@ public class PlannerController extends KsapControllerBase {
 			return null;
 
 		UifFormBase uifForm = (UifFormBase) form;
-		super.start(uifForm, result, request, response);
+		super.start(uifForm, request, response);
 
 		String pageId = uifForm.getPageId();
 

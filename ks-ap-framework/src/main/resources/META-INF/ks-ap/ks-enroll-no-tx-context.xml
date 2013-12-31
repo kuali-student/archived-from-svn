@@ -985,8 +985,8 @@
 	</bean>
 
     <bean id="courseRecordAssembler"
-		class="org.kuali.student.enrollment.class2.academicrecord.service.assembler.StudentCourseRecordAssemblerMocalAllGradeA" >
-        <property name="luiService" ref="LuiService" />
+		class="org.kuali.student.enrollment.class2.academicrecord.service.assembler.StudentCourseRecordAssemblerMockAllGradeA" >
+        <property name="luiService" ref="luiService" />
         <property name="atpService" ref="atpEnrService" />
         <property name="gradingService" ref="gradingService" />
         <property name="lrcService" ref="lrcServiceCache" />

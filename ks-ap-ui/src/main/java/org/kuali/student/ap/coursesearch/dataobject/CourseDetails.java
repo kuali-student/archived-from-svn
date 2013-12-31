@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.kuali.student.ap.coursesearch.util.CrudMessageMatrixFormatter;
 import org.kuali.student.ap.coursesearch.util.ScheduledTermsPropertyEditor;
-import org.kuali.student.myplan.plan.dataobject.PlannedCourseSummary;
 
 /**
  * This data object records all instances where the course has been planned,
@@ -21,10 +19,7 @@ public class CourseDetails {
 	private CourseSummaryDetails courseSummaryDetails;
 	private List<CourseOfferingInstitution> courseOfferingInstitutionList;
 
-	private PlannedCourseSummary plannedCourseSummary;
-
 	public CourseDetails() {
-		plannedCourseSummary = new PlannedCourseSummary();
 	}
 
 	public String getSearchTerm() {
@@ -72,15 +67,6 @@ public class CourseDetails {
 		this.courseOfferingInstitutionList = courseOfferingInstitutionList;
 	}
 
-	public PlannedCourseSummary getPlannedCourseSummary() {
-		return plannedCourseSummary;
-	}
-
-	public void setPlannedCourseSummary(
-			PlannedCourseSummary plannedCourseSummary) {
-		this.plannedCourseSummary = plannedCourseSummary;
-	}
-
 	// TODO: Review why we really need this
 	// It's because we need access to more than on property in one of the
 	// property editors.
@@ -107,17 +93,6 @@ public class CourseDetails {
 	public List<CourseOfferingInstitution> getInstitutionsList() {
 		return getCourseOfferingInstitutionList();
 	}
-
-    /**
-     * get details formatted as a String using propertyFormatter setup to support KRAD rendering
-     * @return
-     */
-    @JsonIgnore
-    public String getDetailsFormatted() {
-        CrudMessageMatrixFormatter formatter = new CrudMessageMatrixFormatter();
-        formatter.setValue(this);
-        return formatter.getAsText();
-    }
 
     /**
      * get CourseSummaryDetails as an edited String using a propertyEditor setup to support KRAD rendering

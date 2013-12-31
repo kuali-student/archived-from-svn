@@ -1,4 +1,4 @@
-package org.kuali.student.myplan.service;
+package org.kuali.student.ap.comment.controller;
 
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.core.api.mail.*;

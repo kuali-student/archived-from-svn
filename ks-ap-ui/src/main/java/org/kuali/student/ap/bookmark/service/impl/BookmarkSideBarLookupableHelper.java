@@ -1,7 +1,16 @@
 package org.kuali.student.ap.bookmark.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.kuali.rice.krad.lookup.LookupForm;
 import org.kuali.rice.krad.lookup.LookupableImpl;
-import org.kuali.rice.krad.web.form.LookupForm;
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.service.AcademicPlanService;
@@ -16,22 +25,14 @@ import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.lum.course.infc.Course;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 public class BookmarkSideBarLookupableHelper extends
         LookupableImpl {
     private static final long serialVersionUID = -8872944782230428634L;
 
+    
     @Override
-    protected List<BookmarkSideBarWrapper> getSearchResults(
-            LookupForm lookupForm, Map<String, String> fieldValues,
-            boolean unbounded) {
+	public Collection<?> performSearch(LookupForm form, Map<String, String> searchCriteria,
+			boolean bounded) {
         String studentId = KsapFrameworkServiceLocator.getUserSessionHelper()
                 .getStudentId();
         try {
@@ -42,6 +43,7 @@ public class BookmarkSideBarLookupableHelper extends
             throw new RuntimeException(e);
         }
     }
+    
     protected List<BookmarkSideBarWrapper> getPlanItemsWishList(String studentId)
             throws InvalidParameterException, MissingParameterException, DoesNotExistException,
             OperationFailedException {
