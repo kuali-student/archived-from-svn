@@ -4,10 +4,20 @@
  */
 package org.kuali.student.enrollment.class2.courseoffering.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
-import org.kuali.student.enrollment.class2.courseoffering.service.RegistrationGroupCodeGenerator;
 import org.kuali.student.enrollment.class2.courseoffering.service.decorators.R1CourseServiceHelper;
 import org.kuali.student.enrollment.class2.courseoffering.service.helper.CopyActivityOfferingCommon;
 import org.kuali.student.enrollment.class2.courseoffering.service.helper.CourseOfferingServiceRolloverHelper;
@@ -47,7 +57,6 @@ import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.exceptions.ReadOnlyException;
 import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.common.infc.ValidationResult.ErrorLevel;
-import org.kuali.student.r2.common.permutation.PermutationCounter;
 import org.kuali.student.r2.common.util.constants.CourseOfferingServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.kuali.student.r2.common.util.constants.CourseWaitListServiceConstants;
@@ -69,18 +78,6 @@ import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.service.CourseService;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * @author nwright
  */
@@ -90,7 +87,6 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
 
     public static final String FIRST_REG_GROUP_CODE = "firstRegGroupCode";
     // ----------------------------------------------------------------
-    @Resource
     private CourseService courseService;
 
     public void setCourseService(CourseService courseService) {
@@ -101,7 +97,6 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
         return courseService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private AcademicCalendarService acalService;
 
     public AcademicCalendarService getAcalService() {
@@ -112,7 +107,6 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
         this.acalService = acalService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private CourseOfferingService coService;
 
     public void setCoService(CourseOfferingService coService) {
@@ -123,35 +117,30 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
         return coService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private RegistrationGroupCodeGeneratorFactory registrationCodeGeneratorFactory;
 
     public void setRegistrationCodeGeneratorFactory(RegistrationGroupCodeGeneratorFactory registrationCodeGeneratorFactory) {
         this.registrationCodeGeneratorFactory = registrationCodeGeneratorFactory;
     }
     // ----------------------------------------------------------------
-    @Resource
     private SchedulingService schedulingService;
 
     public void setSchedulingService(SchedulingService schedulingService) {
         this.schedulingService = schedulingService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private RoomService roomService;
 
     public void setRoomService(RoomService roomService) {
         this.roomService = roomService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private CourseOfferingTransformer courseOfferingTransformer;
 
     public void setCourseOfferingTransformer(CourseOfferingTransformer courseOfferingTransformer) {
         this.courseOfferingTransformer = courseOfferingTransformer;
     }
     // ----------------------------------------------------------------
-    @Resource
     private ActivityOfferingTransformer activityOfferingTransformer;
 
 
@@ -163,28 +152,24 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
         this.activityOfferingTransformer = activityOfferingTransformer;
     }
     // ----------------------------------------------------------------
-    @Resource
     private AcademicCalendarServiceFacade acalServiceFacade;
 
     public void setAcalServiceFacade(AcademicCalendarServiceFacade acalServiceFacade) {
         this.acalServiceFacade = acalServiceFacade;
     }
     // ----------------------------------------------------------------
-    @Resource
     private RolloverAssist rolloverAssist;
 
     public void setRolloverAssist(RolloverAssist rolloverAssist) {
         this.rolloverAssist = rolloverAssist;
     }
     // ----------------------------------------------------------------
-    @Resource
     private CourseWaitListService courseWaitListService;
 
     public void setCourseWaitListService(CourseWaitListService courseWaitListService) {
         this.courseWaitListService = courseWaitListService;
     }
     // ----------------------------------------------------------------
-    @Resource
     private ExamOfferingServiceFacade examOfferingServiceFacade;
 
     public ExamOfferingServiceFacade getExamOfferingServiceFacade() {
@@ -195,7 +180,6 @@ public class CourseOfferingServiceBusinessLogicImpl implements CourseOfferingSer
         this.examOfferingServiceFacade = examOfferingServiceFacade;
     }
     // ----------------------------------------------------------------
-    @Resource
     private CourseWaitListServiceFacade courseWaitListServiceFacade;
 
     public CourseWaitListServiceFacade getCourseWaitListServiceFacade() {
