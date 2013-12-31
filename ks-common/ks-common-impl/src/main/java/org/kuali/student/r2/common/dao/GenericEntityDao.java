@@ -44,7 +44,6 @@ public class GenericEntityDao<T extends PersistableEntity<String>> implements En
      */
     protected Class<T> entityClass;
 
-    @PersistenceContext
     protected EntityManager em;
 
     protected Boolean enableMaxIdFetch = Boolean.TRUE;

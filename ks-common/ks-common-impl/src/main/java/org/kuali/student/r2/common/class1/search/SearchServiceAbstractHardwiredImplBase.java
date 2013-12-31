@@ -12,6 +12,11 @@
  */
 package org.kuali.student.r2.common.class1.search;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -23,11 +28,6 @@ import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.dto.SearchResultInfo;
 import org.kuali.student.r2.core.search.service.SearchService;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Abstract class for hard wired impls
  *
@@ -36,8 +36,6 @@ import java.util.List;
 public abstract class SearchServiceAbstractHardwiredImplBase
         implements SearchService {
 
-
-    @Resource
     protected EntityManager entityManager;
 
     /**

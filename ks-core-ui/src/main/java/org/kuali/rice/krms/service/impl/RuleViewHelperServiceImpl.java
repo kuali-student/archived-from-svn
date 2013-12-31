@@ -128,7 +128,6 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
 
             if (template != null && template.getComponentId() != null) {
                 Component component = ComponentFactory.getNewComponentInstance(template.getComponentId());
-                ViewLifecycle.spawnSubLifecyle(model, component, container);
                 if(container.getId().equals(maintenanceDocumentForm.getUpdateComponentId())){
                     String nodePath = view.getDefaultBindingObjectPath() + "." + propEditor.getBindingPath();
                     ComponentUtils.pushObjectToContext(component, UifConstants.ContextVariableNames.NODE_PATH, nodePath);
@@ -141,7 +140,6 @@ public class RuleViewHelperServiceImpl extends KSViewHelperServiceImpl implement
 
             if (template != null && template.getConstantComponentId() != null) {
                 Component component = ComponentFactory.getNewComponentInstance(template.getConstantComponentId());
-                ViewLifecycle.spawnSubLifecyle(model, component, container);
 
                 //Add Proposition Type FieldGroup to Tree Node
                 components.add(component);
