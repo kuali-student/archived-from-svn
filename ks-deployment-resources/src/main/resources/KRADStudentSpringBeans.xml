@@ -82,6 +82,7 @@
                 <!-- Home Views -->
                 <value>classpath:org/kuali/student/common/main/KSFunctionalHomeView.xml</value>
                 <value>classpath:org/kuali/student/cm/main/CurriculumHomeView.xml</value> <!-- KSCM-727 Curriculum Management Course -->
+                <value>classpath:org/kuali/student/cm/main/CourseSelectView.xml</value>
                 <value>classpath:org/kuali/student/cm/main/FindCourseLookupView.xml</value>
                 
                 <!-- Krms -->
