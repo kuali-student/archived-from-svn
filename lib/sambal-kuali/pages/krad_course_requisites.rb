@@ -86,9 +86,23 @@ class KradCourseRequisites < BasePage
 
 
 
+#RECOMMENDED PREPARTATION
+
+  #page.rule_credit.set '2'
+  #page.rule_multicourse_type.set 'Approved Courses'
+  #page.rule_course_code_multiple.fit @multiple_course1
+  #page.add_course_code
+  #page.rule_course_code_multiple.fit @multiple_course2
+  #page.preview_change
 
 
 
+       #ADDING RULE COURSE THAT RESTRICTS CREDIT
+  element(:rule_multicourse_type){ |b| b.select_list(id: 'KRMS-MultiCourse-Type-Field_control') }
+  # 'Approved Courses', 'Course Sets', 'Course Ranges (Course numbers, common learning objectives, etc)'
+  element(:rule_course_code_multiple) { |b| b.text_field(name: 'newCollectionLines[\'document.newMaintainableObject.editTree.rootElement.children_0_.data.proposition.cluSet.clus\'].code') }
+  action(:add_course_code) {|b| b.button(id: 'KRMS-ApprovedCourseStackedCollectionGroup_add').click; b.loading_wait }
+            #STACK TRACE WHEN PREVIEWING RULE CHANGE
 
 
 

@@ -9,6 +9,7 @@ Then /^I should see data in the proposal title on course information$/ do
   on KradCourseInformation do |page|
     page.course_information
     page.proposal_title.value.should == @course_proposal.proposal_title
+    #TODO:: add in validation for assessment_scale
   end
 end
 
@@ -23,6 +24,11 @@ end
 # S2
 #-----
 Given /^I complete the required fields on the course proposal$/ do
+
+  # Change to 'I complete the fields required to submit the course proposal'
+
+
+
   #@course_proposal.KradCourseProposalRequired
   #@course_proposal.create_course_proposal_required
   @course_proposal  = create KradCourseProposalObject,
@@ -87,9 +93,9 @@ Then /^I should see data in required fields for the course proposal$/ do
   on KradCourseLogistics do |page|
     page.course_logistics
 
-    page.exam_standard.should be_checked if @course_proposal.exam_standard == 'set'
-    page.exam_alternate.should be_checked if @course_proposal.exam_alternate == 'set'
-    page.exam_none.should be_checked if @course_proposal.exam_none == 'set'
+    page.exam_standard.should be_checked unless @course_proposal.exam_standard.nil?
+    page.exam_alternate.should be_checked  unless @course_proposal.exam_alternate.nil?
+    page.exam_none.should be_checked unless @course_proposal.exam_none.nil?
 
     page.final_exam_rationale.value.should == @course_proposal.final_exam_rationale unless page.exam_standard.set?
 
@@ -103,12 +109,12 @@ Then /^I should see data in required fields for the course proposal$/ do
 
     page.activity_type.selected?(@course_proposal.activity_type).should == true
 
-    page.assessment_a_f.should be_checked if @course_proposal.assessment_a_f == 'set'
-    page.assessment_notation.should be_checked if @course_proposal.assessment_notation == 'set'
-    page.assessment_letter.should be_checked if @course_proposal.assessment_letter == 'set'
-    page.assessment_pass_fail.should be_checked if @course_proposal.assessment_pass_fail == 'set'
-    page.assessment_percentage.should be_checked if @course_proposal.assessment_percentage== 'set'
-    page.assessment_satisfactory.should be_checked if @course_proposal.assessment_satisfactory == 'set'
+    page.assessment_a_f.should be_checked if @course_proposal.assessment_a_f == :set
+    page.assessment_notation.should be_checked if @course_proposal.assessment_notation == :set
+    page.assessment_letter.should be_checked if @course_proposal.assessment_letter == :set
+    page.assessment_pass_fail.should be_checked if @course_proposal.assessment_pass_fail == :set
+    page.assessment_percentage.should be_checked if @course_proposal.assessment_percentage== :set
+    page.assessment_satisfactory.should be_checked if @course_proposal.assessment_satisfactory == :set
   end
 
   on KradActiveDates do |page|
@@ -536,7 +542,6 @@ When /^I complete all fields on the course proposal with auto\-lookup$/ do
                            audit: :set, pass_fail_transcript_grade: :set,
 
                            #COURSE REQUISITES
-
                            eligibility_add_method: 'text', #['text', 'advanced'].sample,
                            rule_adv_course_title: 'American Jewish Experience', rule_adv_course_code: 'HIST106', rule_adv_course_description_snip: 'History of the Jews in America',
                            rule_course_field: '', rule_credit: rand(1..4),
@@ -577,8 +582,6 @@ When /^I complete all fields on the course proposal with auto\-lookup$/ do
                            course_that_restricts_credits_add_method: 'text',
                            student_eligibility_add_method: 'text',
 
-
-
                            #AUTHORS & COLLABORATORS
                            author_name_method: 'auto_lookup',
                            author_name_search: 'User',author_username_search: 'user1', author_display_name: 'One, User (user1)',
@@ -590,11 +593,7 @@ When /^I complete all fields on the course proposal with auto\-lookup$/ do
                            admin_org_adding_method: 'auto_lookup',
                            author_name_method: 'auto_lookup',
 
-
-
                            author_notation: :set,
-
-
 
                            instructor_adding_method: 'auto_lookup',
                            joint_offering_adding_data: 'auto_lookup',
