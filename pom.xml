@@ -667,6 +667,10 @@
                         <artifactId>mysql-connector-java</artifactId>
                     </exclusion>
                     <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.geronimo.specs</groupId>
                         <artifactId>geronimo-activation_1.1_spec</artifactId>
                     </exclusion>
