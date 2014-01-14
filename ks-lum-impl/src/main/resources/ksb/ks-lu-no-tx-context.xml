@@ -106,7 +106,7 @@
     <bean id="luSearchManager"
           class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
         <constructor-arg index="0"
-                         value="classpath:META-INF/ks-ap/ksap-lu-search-config.xml"/>
+                         value="classpath:lu-search-config.xml"/>
         <property name="crossSearchManager" ref="lumCrossServiceSearchManager"/>
         <property name="dao" ref="luSearchableDao"/>
     </bean>
@@ -447,7 +447,7 @@
     <bean id="programSearchManager"
           class="org.kuali.student.r2.common.class1.search.SearchManagerImpl">
         <constructor-arg index="0"
-                         value="classpath:META-INF/ks-ap/ksap-lu-search-config.xml"/>
+                         value="classpath:lu-search-config.xml"/>
     </bean>
 
     <bean id="statementTreeViewAssembler" class="org.kuali.student.r1.core.statement.service.assembler.StatementTreeViewAssembler">
