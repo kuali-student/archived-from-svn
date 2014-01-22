@@ -4,6 +4,7 @@
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
+    <import resource="classpath:ks-core-api-dictionary-file-locations.xml"/>
     <!-- Academic Plan Service -->
     <bean id="learningPlanInfoDictionaryLocation" class="java.lang.String">
         <constructor-arg value="classpath:ks-LearningPlanInfo-dictionary.xml"/>
@@ -39,13 +40,9 @@
     </bean>
 
 
-    <!--THIS IS USED BY RICE DATA DICTIONARY SERVICE 
-     and the Global Student Dictionary Service, dataDictionaryServiceForAllUsedByRice
-     that is used in the rice dictionary validation service impl -->
-    <bean name="allDictionaryFileLocations" class="java.util.ArrayList">
-        <constructor-arg>
-            <!--  Looks like using merge here still clobbers the list -->
-            <list merge="true">
+    <bean name="ks-ap-dictionary-file-locations" class="java.util.ArrayList">
+        <constructor-arg index="0">
+        	<list>
                 <bean parent="learningPlanInfoDictionaryLocation" />
                 <bean parent="planItemInfoDictionaryLocation" />
                 <bean parent="planItemSetInfoDictionaryLocation" />
