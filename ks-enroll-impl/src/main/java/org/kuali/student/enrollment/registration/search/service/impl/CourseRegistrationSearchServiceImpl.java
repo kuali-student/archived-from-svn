@@ -39,7 +39,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used to do custom searches for Course Registration
@@ -51,18 +53,29 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
     @Resource
     private EntityManager entityManager;
 
-    public static final String REG_INFO_BY_PERSON_TERM_SEARCH_KEY = "kuali.search.type.lui.searchForCourseRegistrationByStudentAndTerm ";
+    public static final Map<String, TypeInfo> searchKeyToSearchTypeMap;
+
+    public static final String REG_INFO_BY_PERSON_TERM_SEARCH_KEY =
+            "kuali.search.type.lui.searchForCourseRegistrationByStudentAndTerm ";
+    public static final String AO_SCHEDULES_BY_AO_IDS_SEARCH_KEY =
+            "kuali.search.type.lui.searchForActivityOfferingSchedulesByAOIds";
+    public static final String LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_SEARCH_KEY =
+            "kuali.search.type.lpr.searchForLprTransIdsByAtpAndPersonAndTypeKey";
 
     public static final TypeInfo REG_INFO_BY_PERSON_TERM_SEARCH_TYPE;
+    public static final TypeInfo AO_SCHEDULES_BY_AO_IDS_SEARCH_TYPE;
+    public static final TypeInfo LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_KEY_SEARCH_TYPE;
 
     public static final String DEFAULT_EFFECTIVE_DATE = "01/01/2012";
 
     public static final class SearchParameters {
         public static final String AO_ID = "activityOfferingId";
+        public static final String AO_IDS = "activityOfferingIds";
         public static final String CO_ID = "courseOfferingId";
         public static final String RG_ID = "regGroupId";
         public static final String PERSON_ID = "personId";
         public static final String ATP_ID = "atpId";
+        public static final String TYPE_KEY = "typeKey";
     }
 
     public static final class SearchResultColumns {
@@ -83,9 +96,12 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
         public static final String ATP_ID = "atpId";
         public static final String ATP_CD = "atpCd";
         public static final String ATP_NAME = "atpName";
+        public static final String LPR_TRANS_ID = "lprTransId";
     }
 
     static {
+        searchKeyToSearchTypeMap = new HashMap<String, TypeInfo>();
+
         TypeInfo info = new TypeInfo();
         info.setKey(REG_INFO_BY_PERSON_TERM_SEARCH_KEY);
         info.setName("Registraion info by person and term");
@@ -93,6 +109,28 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
         info.setEffectiveDate(DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.parse(DEFAULT_EFFECTIVE_DATE));
 
         REG_INFO_BY_PERSON_TERM_SEARCH_TYPE = info;
+        searchKeyToSearchTypeMap.put(info.getKey(), info);
+
+        info = new TypeInfo();
+        info.setKey(AO_SCHEDULES_BY_AO_IDS_SEARCH_KEY);
+        info.setName("AO schedules by AO ids");
+        info.setDescr(new RichTextHelper().fromPlain("Returns AO schedules for given aoID"));
+        info.setEffectiveDate(DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.parse(DEFAULT_EFFECTIVE_DATE));
+
+        AO_SCHEDULES_BY_AO_IDS_SEARCH_TYPE = info;
+        searchKeyToSearchTypeMap.put(info.getKey(), info);
+
+        // Search for LPR transactions by personId, atpId, and typeKey.  Can be used to fetch an ID for a
+        // registration cart by looking for the registration cart ID.  It returns IDs only.
+        info = new TypeInfo();
+        String desc = "Lpr trans ids by person and term and typeKey";
+        info.setKey(LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_SEARCH_KEY);
+        info.setName(desc);
+        info.setDescr(new RichTextHelper().fromPlain(desc));
+        info.setEffectiveDate(DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER.parse(DEFAULT_EFFECTIVE_DATE));
+
+        LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_KEY_SEARCH_TYPE = info;
+        searchKeyToSearchTypeMap.put(info.getKey(), info);
     }
 
     @Override
@@ -106,8 +144,9 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
             InvalidParameterException,
             MissingParameterException,
             OperationFailedException {
-        if (REG_INFO_BY_PERSON_TERM_SEARCH_KEY.equals(searchTypeKey)) {
-            return REG_INFO_BY_PERSON_TERM_SEARCH_TYPE;
+        TypeInfo typeInfo = searchKeyToSearchTypeMap.get(searchTypeKey);
+        if (typeInfo != null) {
+            return typeInfo;
         }
 
         throw new DoesNotExistException("No Search Type Found for key: " + searchTypeKey);
@@ -118,7 +157,8 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
             throws InvalidParameterException,
             MissingParameterException,
             OperationFailedException {
-        return Arrays.asList(REG_INFO_BY_PERSON_TERM_SEARCH_TYPE);
+        return Arrays.asList(REG_INFO_BY_PERSON_TERM_SEARCH_TYPE, AO_SCHEDULES_BY_AO_IDS_SEARCH_TYPE,
+                LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_KEY_SEARCH_TYPE);
     }
 
     @Override
@@ -127,6 +167,10 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
 
         if (REG_INFO_BY_PERSON_TERM_SEARCH_TYPE.getKey().equals(searchRequestInfo.getSearchKey())) {
             return searchForCourseRegistrationByPersonAndTerm(searchRequestInfo);
+        } else if (AO_SCHEDULES_BY_AO_IDS_SEARCH_TYPE.getKey().equals(searchRequestInfo.getSearchKey())) {
+            return searchForActivityOfferingSchedulesByAoIds(searchRequestInfo);
+        } else if (LPR_TRANS_IDS_BY_PERSON_TERM_TYPE_KEY_SEARCH_TYPE.getKey().equals(searchRequestInfo.getSearchKey())) {
+            return searchForLprTransIdsByAtpAndPersonAndTypeKey(searchRequestInfo);
         } else {
             throw new OperationFailedException("Unsupported search type: " + searchRequestInfo.getSearchKey());
         }
@@ -207,6 +251,98 @@ public class CourseRegistrationSearchServiceImpl extends SearchServiceAbstractHa
         }
 
         return resultInfo;
+    }
+
+    /**
+     *
+     * @param searchRequestInfo Search request parameter
+     * @return Search result with list of LPR Transaction IDs
+     * @throws OperationFailedException
+     */
+    private SearchResultInfo searchForLprTransIdsByAtpAndPersonAndTypeKey(SearchRequestInfo searchRequestInfo)
+            throws OperationFailedException {
+        SearchRequestHelper requestHelper = new SearchRequestHelper(searchRequestInfo);
+        String atpId = requestHelper.getParamAsString(SearchParameters.ATP_ID);
+        String personId = requestHelper.getParamAsString(SearchParameters.PERSON_ID);
+        String typeKey = requestHelper.getParamAsString(SearchParameters.TYPE_KEY);
+
+        String queryStr = "SELECT lprTrans.ID " +
+                "FROM KSEN_LPR_TRANS lprTrans WHERE " +
+                " lprTrans.ATP_ID = :atpId AND " +
+                " lprTrans.LPR_TRANS_TYPE = :typeKey AND " +
+                " lprTrans.REQUESTING_PERS_ID = :personId";
+        Query query = entityManager.createNativeQuery(queryStr);
+        query.setParameter(SearchParameters.ATP_ID, atpId);
+        query.setParameter(SearchParameters.PERSON_ID, personId);
+        query.setParameter(SearchParameters.TYPE_KEY, typeKey);
+        // For some reason, this only returns a list of strings (probably since only one item is being
+        // queried for).
+        List<String> results = query.getResultList();
+
+        SearchResultInfo resultInfo = new SearchResultInfo();
+        for (String result : results) {
+            SearchResultRowInfo row = new SearchResultRowInfo();
+            row.addCell(SearchResultColumns.LPR_TRANS_ID, result);
+            resultInfo.getRows().add(row);
+        }
+
+        return resultInfo;
+    }
+
+    /**
+     * Returns list of Registration Info for the person: CO, AO, Schedules, etc.
+     *
+     * @throws OperationFailedException
+     */
+    private SearchResultInfo searchForActivityOfferingSchedulesByAoIds(SearchRequestInfo searchRequestInfo)
+            throws OperationFailedException {
+        SearchResultInfo resultInfo = new SearchResultInfo();
+        SearchRequestHelper requestHelper = new SearchRequestHelper(searchRequestInfo);
+        List<String> aoIdsList = requestHelper.getParamAsList(SearchParameters.AO_IDS);
+        String aoIds = commaString(aoIdsList);
+
+        String queryStr =
+                "SELECT lui.ID, lui.NAME, room.ROOM_CD, rBldg.BUILDING_CD, " +
+                        "schedTmslt.WEEKDAYS, schedTmslt.START_TIME_MS, schedTmslt.END_TIME_MS " +
+                        "FROM KSEN_LUI lui " +
+                        "LEFT OUTER JOIN KSEN_LUI_SCHEDULE aoSched " +
+                        "ON aoSched.LUI_ID = lui.ID " +
+                        "LEFT OUTER JOIN KSEN_SCHED_CMP schedCmp " +
+                        "ON schedCmp.SCHED_ID = aoSched.SCHED_ID " +
+                        "LEFT OUTER JOIN KSEN_ROOM room " +
+                        "ON room.ID = schedCmp.ROOM_ID " +
+                        "LEFT OUTER JOIN KSEN_ROOM_BUILDING rBldg " +
+                        "ON rBldg.ID = room.BUILDING_ID " +
+                        "LEFT OUTER JOIN KSEN_SCHED_CMP_TMSLOT schedCmpTmslt " +
+                        "ON schedCmpTmslt.SCHED_CMP_ID = schedCmp.ID " +
+                        "LEFT OUTER JOIN KSEN_SCHED_TMSLOT schedTmslt " +
+                        "ON schedTmslt.ID = schedCmpTmslt.TM_SLOT_ID " +
+                        "WHERE lui.ID IN (:aoIds)";
+
+        Query query = entityManager.createNativeQuery(queryStr);
+        query.setParameter(SearchParameters.AO_IDS, aoIds);
+        List<Object[]> results = query.getResultList();
+
+        for (Object[] resultRow : results) {
+            int i = 0;
+            SearchResultRowInfo row = new SearchResultRowInfo();
+            row.addCell(SearchResultColumns.LUI_ID, (String) resultRow[i++]);
+            row.addCell(SearchResultColumns.LUI_NAME, (String) resultRow[i++]);
+            row.addCell(SearchResultColumns.ROOM_CODE, (String) resultRow[i++]);
+            row.addCell(SearchResultColumns.BUILDING_CODE, (String) resultRow[i++]);
+            row.addCell(SearchResultColumns.WEEKDAYS, (String) resultRow[i++]);
+            BigDecimal startTimeMs = (BigDecimal) resultRow[i++];
+            row.addCell(SearchResultColumns.START_TIME_MS, (startTimeMs == null) ? "" : startTimeMs.toString());
+            BigDecimal endTimeMs = (BigDecimal) resultRow[i];
+            row.addCell(SearchResultColumns.END_TIME_MS, (endTimeMs == null) ? "" : endTimeMs.toString());
+            resultInfo.getRows().add(row);
+        }
+
+        return resultInfo;
+    }
+
+    private static String commaString(List<String> items){
+        return items.toString().replace("[", "'").replace("]", "'").replace(", ", "','");
     }
 
     public EntityManager getEntityManager() {
