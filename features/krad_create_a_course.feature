@@ -7,6 +7,7 @@ Feature: Create a Course Propsoal in Krad
 
   Scenario: Create a course proposal in krad
     When I create a course proposal in krad
+  # Then I should see the Initial Page
     Then I should see data in the proposal title on course information
     And I should see data in the course title on course information
 

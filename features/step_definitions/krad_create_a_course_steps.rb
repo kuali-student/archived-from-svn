@@ -5,6 +5,22 @@ Given /^I create a course proposal in krad$/ do
   @course_proposal = create KradCourseProposalObject
 end
 
+Given /^I create a course proposal$/ do
+  @course_proposal = create KradCourseProposalObject
+end
+
+Given /^I create a course proposal from blank$/ do
+  @course_proposal = create KradCourseProposalObject
+end
+
+Given /^I should see the Initial Page$/ do
+  on KradInitialPageAdmin do |page|
+    page.blank_proposal
+    page.curriculum_review_process.checkbox.click
+  end
+  #@course_proposal = create KradCourseProposalObject
+end
+
 Then /^I should see data in the proposal title on course information$/ do
   on KradCourseInformation do |page|
     page.course_information
