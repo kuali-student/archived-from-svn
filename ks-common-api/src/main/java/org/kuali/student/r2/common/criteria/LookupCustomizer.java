@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.mo.ModelBuilder;
-import org.kuali.rice.core.framework.persistence.jpa.criteria.Criteria;
+import org.kuali.rice.core.framework.persistence.jdbc.sql.Criteria;
 
 public class LookupCustomizer<T> {
     
