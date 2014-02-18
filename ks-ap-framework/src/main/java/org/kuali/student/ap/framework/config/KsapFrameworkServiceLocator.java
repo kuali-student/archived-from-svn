@@ -4,6 +4,7 @@ import javax.ejb.EJB;
 
 import org.kuali.rice.core.framework.util.spring.OptionalResource;
 import org.kuali.student.ap.academicplan.service.AcademicPlanService;
+import org.kuali.student.ap.academicplan.service.DegreeMapService;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.EnrollmentStatusHelper;
 import org.kuali.student.ap.framework.context.EnumerationHelper;
@@ -205,6 +206,11 @@ public final class KsapFrameworkServiceLocator {
 	public static LRCService getLrcService() {
 		return getInstance().ksLumLrcService;
 	}
+	
+	
+	public static DegreeMapService getDegreeMapService(){
+		return getInstance().degreeMapService;
+	}
 
 	/**
 	 * Get the KSAP context provider.
@@ -395,7 +401,13 @@ public final class KsapFrameworkServiceLocator {
     public void setKsLumLrcService(LRCService ksLumLrcService) {
         getInstance().ksLumLrcService = ksLumLrcService;
     }
+    
+    public void setDegreeMapService(DegreeMapService degreeMapService) {
+        getInstance().degreeMapService = degreeMapService;
+    }
 
+    
+    
     public void setKsapContext(KsapContext ksapContext) {
         getInstance().ksapContext = ksapContext;
     }
@@ -508,6 +520,8 @@ public final class KsapFrameworkServiceLocator {
 	private transient ShoppingCartHelper shoppingCartHelper;
     @EJB
     private transient PlanHelper planHelper;
+	@EJB
+	private transient DegreeMapService degreeMapService; 
 
 	// provided by ks-ap-ui or institution override
     @OptionalResource
