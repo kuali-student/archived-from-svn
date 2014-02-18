@@ -58,6 +58,7 @@ public class SchedulingServiceConstants {
 
     // schedule transaction types
     public static final String SCHEDULE_TRANSACTION_TYPE_REQUEST_TRANSACTION = "kuali.scheduling.schedule.transaction.type.request";
+    public static final String SCHEDULE_TRANSACTION_TYPE_RELEASE_TRANSACTION = "kuali.scheduling.schedule.transaction.type.release";
 
     // schedule batch types
     public static final String SCHEDULE_BATCH_TYPE_BATCH = "kuali.scheduling.schedule.batch.type.schedule.batch";
@@ -68,6 +69,7 @@ public class SchedulingServiceConstants {
     // time slot types
     // See https://wiki.kuali.org/display/STUDENT/Time+Slot+Types
 
+    public static final String TIME_SLOT_TYPE_GROUPING = "kuali.scheduling.type.time.slot";
     public static final String TIME_SLOT_TYPE_ACTIVITY_OFFERING_ADHOC = "kuali.scheduling.time.slot.type.activityoffering.adhoc";
     public static final String TIME_SLOT_TYPE_ACTIVITY_OFFERING_STANDARD = "kuali.scheduling.time.slot.type.activityoffering.standard";
     public static final String TIME_SLOT_TYPE_ACTIVITY_OFFERING_TBA = "kuali.scheduling.time.slot.type.activityoffering.tba";
