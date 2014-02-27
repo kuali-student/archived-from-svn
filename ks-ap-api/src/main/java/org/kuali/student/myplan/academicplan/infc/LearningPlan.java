@@ -1,5 +1,7 @@
 package org.kuali.student.myplan.academicplan.infc;
 
+import java.util.Date;
+
 import org.kuali.student.r2.common.infc.HasId;
 import org.kuali.student.r2.common.infc.RichText;
 import org.kuali.student.r2.common.infc.TypeStateEntity;
@@ -29,4 +31,21 @@ public interface LearningPlan extends HasId, TypeStateEntity {
      * @name Shared
      */
     public Boolean getShared();
+    
+	/**
+     * @name ProgramId
+     */
+	
+	public String getProgramId();
+	
+	/**
+     * @name effectiveDate
+     */
+    public Date getEffectiveDate();
+    
+	/**
+     * @name expirationDate
+     */
+    public Date getExpirationDate();
+
 }

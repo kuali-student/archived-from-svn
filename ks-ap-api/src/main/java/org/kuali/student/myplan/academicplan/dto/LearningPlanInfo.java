@@ -1,89 +1,130 @@
 package org.kuali.student.myplan.academicplan.dto;
 
 import org.kuali.student.myplan.academicplan.infc.LearningPlan;
+import org.kuali.student.r2.common.dto.MetaInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.dto.TypeStateEntityInfo;
 import org.w3c.dom.Element;
 
 import javax.xml.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
 
 /**
  * LearningPlan message structure
- *
- * @Author kmuthu
- * Date: 1/5/12
+ * 
+ * @Author kmuthu Date: 1/5/12
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "LearningPlanInfo", propOrder = {"studentId", "id", "typeKey", "stateKey", "shared", "descr", "meta", "attributes", "_futureElements"})
-public class LearningPlanInfo extends TypeStateEntityInfo implements LearningPlan {
+@XmlType(name = "LearningPlanInfo", propOrder = { "studentId", "id", "typeKey",
+		"stateKey", "shared", "programId", "effectiveDate", "expirationDate",
+		"descr", "meta", "attributes", "_futureElements" })
+public class LearningPlanInfo extends TypeStateEntityInfo implements
+		LearningPlan {
 
-    @XmlAttribute
-    private String id;
+	private static final long serialVersionUID = -121328557346975636L;
 
-    @XmlElement
-    private RichTextInfo descr;
+	@XmlAttribute
+	private String id;
 
-    @XmlElement
-    private String studentId;
+	@XmlElement
+	private RichTextInfo descr;
 
-    @XmlElement
-    private Boolean shared;
+	@XmlElement
+	private String studentId;
 
-    @XmlAnyElement
-    private List<Element> _futureElements;
+	@XmlElement
+	private Boolean shared;
 
+	@XmlAttribute
+	private String programId;
 
-    public LearningPlanInfo() {
-        this.id = null;
-        this.descr = null;
-        this.studentId = null;
-        this._futureElements = null;
-    }
+	@XmlAttribute
+	private Date effectiveDate;
 
-    public LearningPlanInfo(LearningPlan plan) {
-        super(plan);
+	@XmlAttribute
+	private Date expirationDate;
 
-        if(null != plan) {
-            this.id = plan.getId();
-            this.studentId = plan.getStudentId();
-            this.descr = (null != plan.getDescr()) ? new RichTextInfo(plan.getDescr()) : null;
-        }
-    }
+	@XmlAnyElement
+	private List<Element> _futureElements;
 
-    @Override
-    public String getId() {
-        return id;
-    }
+	public LearningPlanInfo() {
+		this.id = null;
+		this.descr = null;
+		this.studentId = null;
+		this._futureElements = null;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public LearningPlanInfo(LearningPlan plan) {
+		super(plan);
 
-    @Override
-    public RichTextInfo getDescr() {
-        return descr;
-    }
+		if (null != plan) {
+			this.id = plan.getId();
+			this.studentId = plan.getStudentId();
+			this.descr = (null != plan.getDescr()) ? new RichTextInfo(
+					plan.getDescr()) : null;
+		}
+	}
 
-    public void setDescr(RichTextInfo descr) {
-        this.descr = descr;
-    }
+	@Override
+	public String getId() {
+		return id;
+	}
 
-    @Override
-    public String getStudentId() {
-        return studentId;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
+	@Override
+	public RichTextInfo getDescr() {
+		return descr;
+	}
 
-    @Override
-    public Boolean getShared() {
-        return shared;
-    }
+	public void setDescr(RichTextInfo descr) {
+		this.descr = descr;
+	}
 
-    public void setShared(Boolean shared) {
-        this.shared = shared;
-    }
+	@Override
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
+	@Override
+	public Boolean getShared() {
+		return shared;
+	}
+
+	public void setShared(Boolean shared) {
+		this.shared = shared;
+	}
+
+	public String getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(String credentialProgramId) {
+		this.programId = credentialProgramId;
+	}
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
 }

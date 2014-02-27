@@ -3,6 +3,7 @@ package org.kuali.student.myplan.academicplan.infc;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.kuali.student.ap.academicplan.infc.TypedObjectReference;
 import org.kuali.student.r2.common.infc.HasId;
 import org.kuali.student.r2.common.infc.RichText;
 import org.kuali.student.r2.common.infc.TypeStateEntity;
@@ -12,25 +13,13 @@ import org.kuali.student.r2.common.infc.TypeStateEntity;
  *
  * @Author Kamal
  */
-public interface PlanItem extends HasId, TypeStateEntity {
+public interface PlanItem extends TypedObjectReference, HasId, TypeStateEntity {
 
     /**
      * A description of the Learning Plan Item
      * @name Description
      */
     public RichText getDescr();
-
-    /**
-     * Id to the reference object e.g Course, Requirements etc
-     * @name Reference Object Id
-     */
-    public String getRefObjectId();
-
-    /**
-     * Type of the Reference Object
-     * @name Reference Object Type
-     */
-    public String getRefObjectType();
 
     /**
      * Time Periods for which the item is planned for
