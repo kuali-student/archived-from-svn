@@ -88,6 +88,14 @@ public class PlanConstants extends AcademicPlanServiceConstants {
 	public static final String RANGE = "-";
 	public static final String MULTIPLE = ",";
 
+	/* Ref Type Types */
+    public static final String REF_TYPE_COURSE = "kuali.ap.ref.type.course";
+    public static final String REF_TYPE_ACTIVITY_OFFERING = "kuali.ap.ref.type.activityOffering";
+    public static final String REF_TYPE_PLACEHOLDER = "kuali.ap.ref.type.placeholder";
+    public static final String REF_TYPE_PLACEHOLDER_INSTANCE = "kuali.ap.ref.type.placeholderInstance";
+    public static final String REF_TYPE_DEGREE_MAP_REQUIREMENT = "kuali.ap.ref.type.degreeMapRequirement";
+	
+	
     /**
 	 * Names of javascript events that can be scheduled in response to the
 	 * outcome of a plan item request.

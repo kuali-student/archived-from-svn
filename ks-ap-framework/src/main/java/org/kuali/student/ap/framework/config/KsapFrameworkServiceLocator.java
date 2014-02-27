@@ -2,6 +2,7 @@ package org.kuali.student.ap.framework.config;
 
 import javax.ejb.EJB;
 
+import org.kuali.student.ap.academicplan.service.DegreeMapService;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.EnrollmentStatusHelper;
 import org.kuali.student.ap.framework.context.EnumerationHelper;
@@ -192,6 +193,10 @@ public final class KsapFrameworkServiceLocator {
 	public static LRCService getLrcService() {
 		return getInstance().ksLumLrcService;
 	}
+	
+	public static DegreeMapService getDegreeMapService() {
+		return getInstance().degreeMapService;
+	}
 
 	/**
 	 * Get the KSAP context provider.
@@ -369,7 +374,9 @@ public final class KsapFrameworkServiceLocator {
 	private transient ShoppingCartHelper shoppingCartHelper;
 	@EJB
 	private transient PlanHelper planHelper;
-	
+	@EJB
+	private transient DegreeMapService degreeMapService; 
+
 	// provided by ks-ap-ui or institution override
 	@EJB
 	@OptionalResource
