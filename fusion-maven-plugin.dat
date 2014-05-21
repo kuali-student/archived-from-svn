@@ -1,12 +1,12 @@
-# module = ks-api branch Path = enrollment/ks-api/branches/2.0.0-Mx revision = 68768
-ks-api::enrollment_ks-api_branches_2.0.0-Mx::6ec1597b748e271e267b6379ca08428dc28bf8f2
-# module = ks-core branch Path = enrollment/ks-core/trunk revision = 68768
-ks-core::enrollment_ks-core_trunk::32c766a1bcf204f0af63cdb51843461ee78c2cdb
-# module = ks-lum branch Path = enrollment/ks-lum/trunk revision = 68768
-ks-lum::enrollment_ks-lum_trunk::06d096a7fce78e2f6eab993a0bafda60a452bdb6
-# module = ks-enroll branch Path = enrollment/ks-enroll/trunk revision = 68768
-ks-enroll::enrollment_ks-enroll_trunk::a38739543326ff8171dc32d5d1cccf78ddd7084e
-# module = ks-ap branch Path = enrollment/ks-ap/trunk revision = 68768
-ks-ap::enrollment_ks-ap_trunk::6bdcc09259abb6f570aeb69a550b47370e6f2cdf
-# module = ks-deployments branch Path = enrollment/ks-deployments/trunk revision = 68768
-ks-deployments::enrollment_ks-deployments_trunk::033eeaefa35df7b1b20a837e73274b819dc17aa7
+# module = ks-ap branch Path = ds/ks-ap-0.8/0.8.0-FR2-M1/build-1234 revision = 69704
+ks-ap::ds_ks-ap-0.8_0.8.0-FR2-M1_build-1234::UNKNOWN
+# module = ks-api branch Path = lds/ks-api-2.1/2.1.1-FR2-M1/build-1234 revision = 69704
+ks-api::lds_ks-api-2.1_2.1.1-FR2-M1_build-1234::UNKNOWN
+# module = ks-core branch Path = ilds/ks-core-2.1/2.1.1-FR2-M1/build-1234 revision = 69704
+ks-core::ilds_ks-core-2.1_2.1.1-FR2-M1_build-1234::UNKNOWN
+# module = ks-deployments branch Path = tags/builds/ks-deployments-2.1/2.1.1-FR2-M1/build-1234 revision = 69704
+ks-deployments::tags_builds_ks-deployments-2.1_2.1.1-FR2-M1_build-1234::UNKNOWN
+# module = ks-enroll branch Path = builds/ks-enroll-0.2/0.2.0-FR2-M1/build-1234 revision = 69704
+ks-enroll::builds_ks-enroll-0.2_0.2.0-FR2-M1_build-1234::UNKNOWN
+# module = ks-lum branch Path = lds/ks-lum-2.1/2.1.1-FR2-M1/build-1234 revision = 69704
+ks-lum::lds_ks-lum-2.1_2.1.1-FR2-M1_build-1234::UNKNOWN
