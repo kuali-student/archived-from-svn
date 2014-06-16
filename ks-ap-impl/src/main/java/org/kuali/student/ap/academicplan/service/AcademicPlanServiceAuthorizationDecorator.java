@@ -267,12 +267,16 @@ extends AcademicPlanServiceDecorator
     public List<ValidationResultInfo> validatePlanItem(String validationType, PlanItemInfo planItemInfo,
             ContextInfo context)
             throws DoesNotExistException, InvalidParameterException, MissingParameterException,
-                   OperationFailedException, AlreadyExistsException, PermissionDeniedException {
+                   OperationFailedException, PermissionDeniedException {
         if (!permissionService.isAuthorized(context.getPrincipalId(), AcademicPlanServiceConstants.KS_AP_NAMESPACE,
                 AcademicPlanServiceConstants.SERVICE_NAME + "/validatePlanItem", qualifiers)) {
             throw new OperationFailedException("Permission Denied.");
         }
-        return getNextDecorator().validatePlanItem(validationType, checkItemAccess(planItemInfo, context), context);
+        try {
+			return getNextDecorator().validatePlanItem(validationType, checkItemAccess(planItemInfo, context), context);
+		} catch (AlreadyExistsException e) {
+            throw new OperationFailedException("Already Exists.", e);
+		}
     }
     /**
      * Check for missing parameter and throw localized exception if missing

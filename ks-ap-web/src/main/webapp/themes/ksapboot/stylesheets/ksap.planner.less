@@ -50,6 +50,10 @@ button.uif-primaryActionButton.ksap-carousel-prev.disabled img {
 button.uif-primaryActionButton.ksap-carousel-next.disabled img {
   background-position: -30px -100px;
 }
+
+.ksap-plan-heading {
+  margin: 10px 0;
+}
 .ksap-plan-header {
   text-align: center;
   width: 450px;
@@ -318,6 +322,10 @@ button.uif-primaryActionButton.ksap-carousel-next.disabled img {
   font-size: 14px;
 }
 
+.ks-plan-Instructions {
+  margin: 15px 0;
+}
+
 label.scheduled {
   background: #ccc;
   color: #333;
@@ -578,11 +586,6 @@ label.scheduled {
   margin: 0;
 }
 
-#PlannerDialog-FormView {
-  width: 300px;
-  min-height: 0;
-}
-
 #full_planned_courses_detail .uif-horizontalBoxLayout .uif-header-contentWrapper {
   width: auto;
   clear: none;
@@ -639,4 +642,14 @@ button img.rightArrowSmall {
 .ksap-view .ksap-popup-detail-label { /*Remove unneeded - On Planner, bookmarked list, add to plan popover. Popover needs layout changed to CSSGridLayout*/
   text-align:right;
   width: 140px;
+}
+
+#bookmark_summary_layout {
+
+  li {
+    padding: 5px 0;
+  }
+  .uif-tooltip {
+    border-bottom: 0;
+  }
 }

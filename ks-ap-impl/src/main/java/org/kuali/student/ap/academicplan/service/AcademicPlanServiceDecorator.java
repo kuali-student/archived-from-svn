@@ -8,7 +8,6 @@ import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.dto.ValidationResultInfo;
 import org.kuali.student.r2.common.exceptions.*;
 
-
 import java.util.List;
 
 public class AcademicPlanServiceDecorator implements AcademicPlanService {
@@ -149,8 +148,12 @@ public class AcademicPlanServiceDecorator implements AcademicPlanService {
     public List<ValidationResultInfo> validatePlanItem(String validationType, PlanItemInfo planItemInfo,
                                                        ContextInfo context)
             throws DoesNotExistException, InvalidParameterException, MissingParameterException,
-                   OperationFailedException, AlreadyExistsException, PermissionDeniedException {
-        return getNextDecorator().validatePlanItem(validationType, planItemInfo, context);
+                   OperationFailedException, PermissionDeniedException {
+        try {
+			return getNextDecorator().validatePlanItem(validationType, planItemInfo, context);
+		} catch (AlreadyExistsException e) {
+            throw new OperationFailedException("Already Exists.", e);
+		}
     }
 
 }
