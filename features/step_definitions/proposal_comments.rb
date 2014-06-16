@@ -80,11 +80,20 @@ Given(/^I have a basic course admin proposal with comments created as CS$/) do
 end
 
 And(/^I undo delete of one comment$/) do
-
+  on CmProposalComments do |page|
+    page.comment_list_header_text.should == "Comments (0)"
+    page.undo_delete_comment_link.exists?.should == true
+    page.undo_delete
+    page.close_dialog
+  end
 end
 
 Then(/^I should see the undeleted comment on the course admin proposal$/) do
-
+  steps %{And review the course proposal after finding it}
+  on CmProposalComments do |page|
+    page.comment_list_header_text.should == "Comments (1)"
+    page.comment_content_text(0).should == @comment_add.commentText
+  end
 end
 
 Given(/^I have a basic course proposal with comments created as Faculty with comments by CS$/) do
@@ -100,17 +109,19 @@ Then(/^I should see my comments and CS comments on the course proposal$/) do
   steps %{And review the course proposal after finding it}
   on CmProposalComments do |page|
     page.comment_list_header_text.should == "Comments (2)"
-    page.comment_content_text(1).should == @comment_add.commentText
+    page.comment_content_text(0).should == @comment_add.commentText
+    (page.comment_header_id_text(0).include? "alice").should == true
+    (page.comment_header_id_text(1).include? "fred").should == true
   end
 end
 
 And(/^I should not have edit or delete options for CS comments$/) do
   on CmProposalComments do |page|
     page.comment_list_header_text.should == "Comments (2)"
-    page.comment_edit_link(0).exists?.should == true
-    page.comment_delete_link(0).exists?.should == true
-    page.comment_edit_link(1).exists?.should == false
-    page.comment_delete_link(1).exists?.should == false
+    page.comment_edit_link(0).exists?.should == false
+    page.comment_delete_link(0).exists?.should == false
+    page.comment_edit_link(1).exists?.should == true
+    page.comment_delete_link(1).exists?.should == true
   end
 end
 
@@ -135,6 +146,11 @@ And (/^edit the course proposal after finding it$/) do
   sleep 1
 end
 
+When (/^I delete my comments without closing comment dialog$/) do
+  @course_proposal.load_comments_action
+  sleep 1
+  @comment_add.delete(0)
+end
 
 And (/^review the course proposal after finding it$/) do
   @course_proposal.review_proposal_action

@@ -32,7 +32,7 @@ Feature: Add/Edit/Delete/View Comments on a Proposal for different authors.
 @draft
   Scenario: PC1.5: Undo Delete Comments - CS
     Given I have a basic course admin proposal with comments created as CS
-    When I delete my comments
+    When I delete my comments without closing comment dialog
     And I undo delete of one comment
     And I perform a full search for the course proposal
     Then I should see the undeleted comment on the course admin proposal
