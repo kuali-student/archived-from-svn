@@ -29,6 +29,7 @@ class CmAdminOrgObject < DataFactory
       page.governance unless page.current_page('Governance').exists?
       page.organization_add unless page.admin_org_name(@admin_org_level).exists?
       page.admin_org_name(@admin_org_level).set @admin_org_name
+      sleep 3 #For auto lookup failure that intermittently occurs only on nightly
       page.auto_lookup @admin_org_name
       @admin_org_name = page.admin_org_name(@admin_org_level).value
     end
