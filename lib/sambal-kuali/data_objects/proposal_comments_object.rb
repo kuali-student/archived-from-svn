@@ -6,7 +6,7 @@ class CmCommentsObject < DataFactory
   include Workflows
   include Utilities
 
-  attr_accessor :commenterId, :commentText, :comment_date
+  attr_accessor  :commentText, :index
 
 
 
@@ -14,37 +14,38 @@ class CmCommentsObject < DataFactory
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        commenterId: "",
-        commentText: "",
-        comment_date: ""
+        index: 0,
+        commentText: random_alphanums(10,'test proposal comment '),
     }
+    set_options(defaults.merge(opts))
   end
 
-  def add_comment (inputText)
+  def create
     on CmProposalComments do |page|
-      page.comment_text_input.set inputText
+      page.comment_text_input.set @commentText
       page.add_comment
       page.loading_wait
     end
   end
 
-  def edit_comment (index, newInput)
+  def edit (opts={})
     on CmProposalComments do |page|
-      page.edit_comment(index)
+      page.edit_comment(opts[:index])
       if(page.alert.exists?)
         page.alert.ok
       end
-      page.edit_comment_text_field(index).set newInput
-      page.save_edited_comment(index)
+      page.edit_comment_text_field(opts[:index]).set opts[:commentText]
+      page.save_edited_comment(opts[:index])
       sleep 1
     end
+    set_options(opts)
   end
 
 
 
-  def delete (index)
+  def delete (opts={})
     on CmProposalComments do |page|
-      page.delete_comment(index)
+      page.delete_comment(opts[:index])
       if(page.alert.exists?)
         page.alert.ok
       end

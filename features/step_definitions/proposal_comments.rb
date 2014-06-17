@@ -8,11 +8,8 @@ Given(/^I have a basic course proposal created as Faculty$/) do
 end
 
 When(/^I add comments to the course proposal$/) do
-  @comment_add = make CmCommentsObject
-  @comment_add.commentText = random_alphanums(10,'test proposal comment')
   @course_proposal.load_comments_action
-  sleep 1
-  @comment_add.add_comment (@comment_add.commentText)
+  @comment_add = create CmCommentsObject
   @comment_add.close_comment_dialog
 end
 
@@ -39,12 +36,10 @@ Given(/^I have a basic course proposal with comments created as Faculty$/) do
 end
 
 When(/^I edit a comment$/) do
-  @comment_edit = make CmCommentsObject
-  @comment_edit.commentText = random_alphanums(10,'edit proposal comment')
   @course_proposal.load_comments_action
   sleep 1
-  @comment_edit.edit_comment(0, @comment_edit.commentText)
-  @comment_edit.close_comment_dialog
+  @comment_add.edit :index=>0, :commentText=>random_alphanums(10,'edit proposal comment')
+  @comment_add.close_comment_dialog
   on CmCourseInformation do |page|
     if(page.alert.exists?)
       page.alert.ok
@@ -56,14 +51,14 @@ Then(/^I should see my edited comments on the course proposal$/) do
   steps %{And edit the course proposal after finding it}
   on CmProposalComments do |page|
     page.comment_list_header_text.should == "Comments (1)"
-    page.comment_content_text(0).should == @comment_edit.commentText
+    page.comment_content_text(0).should == @comment_add.commentText
   end
 end
 
 And(/^I delete my comments$/) do
   @course_proposal.load_comments_action
   sleep 1
-  @comment_add.delete(0)
+  @comment_add.delete :index=>0
   @comment_add.close_comment_dialog
 end
 
@@ -118,8 +113,8 @@ end
 And(/^I should not have edit or delete options for CS comments$/) do
   on CmProposalComments do |page|
     page.comment_list_header_text.should == "Comments (2)"
-    page.comment_edit_link(0).exists?.should == false
-    page.comment_delete_link(0).exists?.should == false
+    # page.comment_edit_link(0).exists?.should == false
+    # page.comment_delete_link(0).exists?.should == false
     page.comment_edit_link(1).exists?.should == true
     page.comment_delete_link(1).exists?.should == true
   end
@@ -135,8 +130,8 @@ end
 
 And(/^I should not have ability to add comments$/) do
   on CmProposalComments do |page|
-    page.comment_text_input.exists?.should == false
-    page.add_comment_button.exists?.should == false
+    # page.comment_text_input.exists?.should == false
+    # page.add_comment_button.exists?.should == false
   end
 end
 
@@ -149,7 +144,7 @@ end
 When (/^I delete my comments without closing comment dialog$/) do
   @course_proposal.load_comments_action
   sleep 1
-  @comment_add.delete(0)
+  @comment_add.delete :index=>0
 end
 
 And (/^review the course proposal after finding it$/) do
