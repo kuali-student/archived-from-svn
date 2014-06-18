@@ -1,5 +1,5 @@
 @nightly
-Feature: Add/Edit/Delete/View Comments on a Proposal for different authors.
+Feature: GT.Add/Edit/Delete/View Comments on a Proposal for different authors.
 
   Scenario: PC1.1 Add Comments - Faculty
     Given I have a basic course proposal created as Faculty
@@ -32,14 +32,13 @@ Feature: Add/Edit/Delete/View Comments on a Proposal for different authors.
     And I perform a full search for the course proposal
     Then I should see the undeleted comment on the course admin proposal
 
-@draft
   Scenario: PC1.6: View-Only Comments by another user
     Given I have a basic course proposal with comments created as Faculty with comments by CS
     When I perform a search for the course proposal
     Then I should see my comments and CS comments on the course proposal
     And I should not have edit or delete options for CS comments
 
-@draft
+
   Scenario: PC1.7: No option to add comments for user with view-only access to a proposal
     Given I have a basic course admin proposal with comments created as CS
     When I am logged in as Faculty

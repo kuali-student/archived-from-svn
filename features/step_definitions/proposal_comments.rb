@@ -113,10 +113,14 @@ end
 And(/^I should not have edit or delete options for CS comments$/) do
   on CmProposalComments do |page|
     page.comment_list_header_text.should == "Comments (2)"
-    # page.comment_edit_link(0).exists?.should == false
-    # page.comment_delete_link(0).exists?.should == false
-    page.comment_edit_link(1).exists?.should == true
-    page.comment_delete_link(1).exists?.should == true
+    begin
+    page.comment_edit_link(0).should_not exist
+    page.comment_delete_link(0).should_not exist
+    rescue
+    #means the element was not found and exception was encountered when calling by index
+    end
+    page.comment_edit_link(1).should exist
+    page.comment_delete_link(1).should exist
   end
 end
 
@@ -130,8 +134,12 @@ end
 
 And(/^I should not have ability to add comments$/) do
   on CmProposalComments do |page|
-    # page.comment_text_input.exists?.should == false
-    # page.add_comment_button.exists?.should == false
+    begin
+    page.comment_text_input.should_not exist
+    page.add_comment_button.should_not exist
+    rescue
+     #means the element was not found and exception was encountered.
+    end
   end
 end
 
