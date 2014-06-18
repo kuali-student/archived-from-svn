@@ -23,7 +23,7 @@ class CmVersionCodeObject < DataFactory
 
   def create
     on CmCourseInformation do |page|
-      page.add_version_code
+      page.add_version_code unless page.version_code_code(@version_code_count).exists?
       page.version_code_code(@version_code_count).set @version_code
       page.version_code_title(@version_code_count).set @version_course_title
     end

@@ -35,7 +35,7 @@ class CmJointlyOfferedObject < DataFactory
 
   def create
     on CmCourseInformation do |page|
-      page.add_jointly_offered_course
+      page.add_jointly_offered_course unless page.jointly_offered_course(@jointly_offered_course_count).exists?
 
       if @auto_lookup
         page.jointly_offered_course(@jointly_offered_course_count).set @jointly_offered_course
