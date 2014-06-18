@@ -22,7 +22,7 @@ class CmOptionalFieldsObject < DataFactory
     @browser = browser
     defaults = {
         instructor_list: [(make CmInstructorObject), (make CmInstructorObject, :instructor_name => "SHUANG", :instructor_level => 2)],
-        admin_org_list: [(make CmAdminOrgObject), (make CmAdminOrgObject, :admin_org_name => "Pop", :admin_org_level => 2)],
+        admin_org_list: [(make CmAdminOrgObject), (make CmAdminOrgObject, :admin_org_name => "AGNR-AES-LESREC-Popular Hill Farm", :admin_org_level => 2)],
         term_any: :set,
         term_fall: :set,
         term_spring: :set,

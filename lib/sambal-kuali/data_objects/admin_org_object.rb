@@ -16,7 +16,7 @@ class CmAdminOrgObject < DataFactory
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        admin_org_name: ["Communication","Forage","Turfgrass"].sample,
+        admin_org_name: ["ARHU-Communication","AGNR-AES-CMREC-Forage Research Facility","AGNR-AES-CMREC-Turfgrass Research Facility"].sample,
         admin_org_level: 1,
         defer_save: false
     }
@@ -29,9 +29,6 @@ class CmAdminOrgObject < DataFactory
       page.governance unless page.current_page('Governance').exists?
       page.organization_add unless page.admin_org_name(@admin_org_level).exists?
       page.admin_org_name(@admin_org_level).set @admin_org_name
-      sleep 3 #For auto lookup failure that intermittently occurs only on nightly
-      page.auto_lookup @admin_org_name
-      @admin_org_name = page.admin_org_name(@admin_org_level).value
     end
   end
 
