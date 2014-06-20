@@ -37,6 +37,21 @@ module Workflows
     end
   end
 
+  def determine_edit_action
+    #if current page is find a proposal click the pencil icon
+    on CmReviewProposal do |page|
+      if page.proposal_title_element.exists?
+        edit_course_information
+      end
+    end
+    #if current page is review proposal click the course information edit icon
+    on FindProposalPage do |page|
+      if page.name.exist?
+        edit_proposal_action
+      end
+    end
+  end
+
   def log_in(user, pwd)
     current_user = ""
 

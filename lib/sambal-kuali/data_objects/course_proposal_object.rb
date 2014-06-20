@@ -7,91 +7,18 @@ class CmCourseProposalObject < DataFactory
   include Utilities
 
   # Course Information, Governance, Course Logistics, Active Dates completed
-  attr_accessor :optional_fields,:proposal_title, :course_title, :transcript_course_title, :subject_code, :course_number,
+  attr_accessor :proposal_title, :course_title,  :subject_code,
+                :optional_fields, :approve_fields, :submit_fields,
         :cross_listed_course_list,
         :jointly_offered_course_list,
         :version_code_list,
-        :instructor, :instructor_first_name, :instructor_last_name, :instructor_username, :instructor_display_name,
         :description_rationale, :proposal_rationale,
-        :instructor_adding_method, :joint_offering_adding_data, :joint_offering_name,
-        :joint_offering_description, :joint_offering_course_code,
-        # Governance Page
-        :camp_local, :campus_location, :curriculum_oversight, :administering_organization,
-        :location_north, :location_south, :location_extended, :location_all,
-        :administering_organization, :adv_admin_org_identifier,
-        :adv_admin_org_name, :adv_admin_org_abbreviation, :adv_admin_org_name, :admin_org_adding_method,
-        # Course Logistics
-        :term_any, :term_fall, :term_spring, :term_summer,
-        :assessment_scale,:final_exam_type, :final_exam_rationale,
-        :exam_standard, :exam_alternate, :exam_none,
         #
         :outcome_list,
         :format_list,
-        :audit, :pass_fail_transcript_grade,
-        :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory,
 
-        #Course Requisites
-
-
-        :rule_adv_course_title,
-        :rule_adv_course_code,
-        :rule_adv_course_description_snip,
-        :rule_credit,
-
-        :eligibility_add_method,
-        :student_eligibility_add_method,
-        :student_eligibility_course,
-        :student_eligibility_title,
-        :student_eligibility_phrase,
-        :student_eligibility_rule,
-        :student_eligibility_rule_with_value,
-
-        :corequisite_add_method,
-        :corequisite_title,
-        :corequisite_course,
-        :corequisite_phrase,
-        :course_requisite_added_rule,
-        :corequisite_rule,
-        :corequisite_rule,
-        :corequisite_rule_with_value,
-
-        :recommended_preparation_add_method,
-        :recommended_preparation_course,
-        :recommended_preparation_title,
-        :recommended_preparation_phrase,
-        :recommended_preparation_rule,
-        :recommended_preparation_rule_with_value,
-
-        :antirequisite_add_method,
-        :antirequisite_course,
-        :antirequisite_title,
-        :antirequisite_phrase,
-        :antirequisite_rule,
-        :antirequisite_rule_with_value,
-
-        :repeatable_for_credit_credit,
-        :repeatable_for_credit_credit,
-        :repeatable_for_credit_rule,
-        :repeatable_for_credit_rule_with_value,
-
-
-        :course_that_restricts_credits_add_method,
-        :course_that_restricts_credits_course,
-        :course_that_restricts_credits_title,
-        :course_that_restricts_credits_course,
-        :course_that_restricts_credits_rule,
-        :course_that_restricts_credits_rule_with_value,
-
-
-        # Active Dates
-        :start_term, :pilot_course, :end_term,
-
-        # Financials
-        :course_fees,
-
-        # Authors & Collaborators
-        :author_name_search, :author_username_search, :author_permission, :action_request,
-        :author_notation, :author_name_method, :author_display_name, :curriculum_review_process,
+        #Learning Objectives
+        :learning_objective_list,
 
         #Save
         :create_new_proposal,
@@ -109,30 +36,6 @@ class CmCourseProposalObject < DataFactory
         #COURSE INFORMATION
         proposal_title:             random_alphanums(10,'test proposal title '),
         course_title:               random_alphanums(10, 'test course title '),
-        subject_code:               "MATH",
-        course_number:              "123",
-        transcript_course_title:    random_alphanums(5,'test transcript'),
-        description_rationale:      random_alphanums(20, 'test description rationale '),
-        proposal_rationale:         random_alphanums(20, 'test proposal rationale '),
-        #GOVERNANCE
-        campus_location: [:location_all, :location_extended, :location_north, :location_south],
-        curriculum_oversight:       '::random::',
-        #COURSE LOGISTICS
-        #ASSESSMENT SCALE
-        assessment_scale:           [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
-        #FINAL EXAM
-        final_exam_type:            [:exam_standard, :exam_alternate, :exam_none],
-        final_exam_rationale:       random_alphanums(10,'test final exam rationale '),
-        #OUTCOMES
-        outcome_list: [
-            (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
-            (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
-            (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}"),
-
-        ],
-        format_list: [(make CmFormatsObject)],
-        start_term: '::random::',
-        #FINANCIALS
         curriculum_review_process:  nil,
         create_new_proposal:        true,
         blank_proposal:             false,
@@ -143,15 +46,9 @@ class CmCourseProposalObject < DataFactory
     }
     set_options(defaults.merge(opts))
 
-
-
     # random_checkbox and random_radio is used to select a random checkbox/radio on a page.
     # That will then be set the instance variable to :set, so that it can be used in the fill_out method for later tests
-    random_checkbox(@scheduling_term,"Scheduling Term")
-    random_radio(@final_exam_status)
-    random_checkbox(@campus_location,"Campus Location")
-    random_checkbox(@assessment_scale,"Assessment Scale")
-    random_radio(@final_exam_type)
+
   end
 
 
@@ -267,101 +164,48 @@ class CmCourseProposalObject < DataFactory
   def create_course_proposal_required
     on CmCourseInformation do |page|
       page.course_information unless page.current_page('Course Information').exists?
-
-      fill_out page, :proposal_title, :course_title, :transcript_course_title
-      page.subject_code.fit @subject_code
-      page.auto_lookup @subject_code unless @subject_code.nil?
-      fill_out page, :course_number
+      fill_out page, :proposal_title, :course_title
+    end
+    determine_save_action
 
 
-
-      if @cross_listed_course_list != nil
+      unless @cross_listed_course_list.nil?
         @cross_listed_course_list.each do |cross_listed_course|
           cross_listed_course.create
         end
       end
 
-      if @jointly_offered_course_list != nil
+      unless @jointly_offered_course_list.nil?
         @jointly_offered_course_list.each do |jointly_offered_course|
           jointly_offered_course.create
         end
       end
 
-      if @version_code_list != nil
+      unless @version_code_list.nil?
         @version_code_list.each do |version_code|
           version_code.create
         end
       end
 
-      fill_out page, :description_rationale, :proposal_rationale
-
-    end
-    determine_save_action
-
-    on CmGovernance do |page|
-      page.governance unless page.current_page('Governance').exists?
-
-      fill_out page, :location_all, :location_extended, :location_north, :location_south
-      page.curriculum_oversight.pick! @curriculum_oversight
-
-    end
-    determine_save_action
-
-    on CmCourseLogistics do |page|
-      page.course_logistics unless page.current_page('Course Logistics').exists?
-
-      page.loading_wait
-      #page.add_outcome unless @outcome_type.nil?
-      # outcome_type needs to be done first because of how page loading is working
-#      page.outcome_type.pick! '::random::'
-#      fill_out page, :outcome_type
-      fill_out page,
-               :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail,
-               :assessment_percentage, :assessment_satisfactory
-
-      sleep 1
-      #set_outcome_type
-      if @outcome_list != nil
-        @outcome_list.each do |outcome|
-          outcome.create
+      unless @submit_fields.nil?
+        @submit_fields.each do |submit_fields|
+          submit_fields.create
         end
       end
 
-      if @format_list != nil
-        @format_list.each do |format|
-          format.create
+      unless @approve_fields.nil?
+        @approve_fields.each do |approve_fields|
+          approve_fields.create
         end
       end
 
-
-
-
-      if @final_exam_type != nil
-        fill_out page, :exam_standard, :exam_alternate, :exam_none
-        #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
-        #if that radio is selected
-        page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
-        page.final_exam_rationale.fit @final_exam_rationale unless page.exam_standard.set?
+      unless @learning_objective_list.nil?
+          @learning_objective_list.each do |learning_objective|
+          learning_objective.create
+          end
       end
 
-    end
-    determine_save_action
-
-
-    on CmActiveDates do |page|
-      page.active_dates unless page.current_page('Active Dates').exists?
-      page.start_term.pick! @start_term unless start_term.nil?
-
-      #page.pilot_course.fit @pilot_course
-      #page.loading_wait
-      # SPECIAL:: Need this second start_term because end_term not immediately selectable after checkbox is selected
-      #page.start_term.fit @start_term
-      #sleep 1
-      #page.end_term.fit @end_term
-
-
-    end
-    determine_save_action
+  determine_save_action
 
   end # required proposal
   def course_proposal_nonrequired
@@ -488,17 +332,6 @@ class CmCourseProposalObject < DataFactory
   end
   end
 
-=begin
-  def determine_save_action
-  on CmCourseInformation do |create|
-    if @save_proposal
-       create.save_progress if create.logged_in_user == "Alice"
-       create.save_and_continue if create.logged_in_user == "Fred"
-    end
-    end
-  end
-=end
-
 
 
   def search(search_text)
@@ -593,33 +426,7 @@ class CmCourseProposalObject < DataFactory
      { "Yes" => :set, "No" => :clear }
   end
 
-  #Used to select a random checkbox/radio button and then set to :set for fill_out method
-  def random_checkbox(pass_in_an_array, type)
-    if type == "Campus Location"
-      @sample_checkbox_location = pass_in_an_array.sample unless pass_in_an_array.nil?
-      set(@sample_checkbox_location, :set)  unless pass_in_an_array.nil?
-    end
-    if type == "Assessment Scale"
-      @sample_checkbox_assessment = pass_in_an_array.sample unless pass_in_an_array.nil?
-      set(@sample_checkbox_assessment, :set)  unless pass_in_an_array.nil?
-    end
-  end
 
-  
-  def reset_checkbox(pass_in_an_array, type)
-    if type == "Campus Location"
-    set(@sample_checkbox_location, :clear) unless pass_in_an_array.nil?
-    pass_in_an_array.delete(@sample_checkbox_location)
-    @sample_checkbox_new_location = pass_in_an_array.sample
-    set(@sample_checkbox_new_location, :set) unless pass_in_an_array.nil?
-    end
-    if type == "Assessment Scale"
-      set(@sample_checkbox_assessment, :clear) unless pass_in_an_array.nil?
-      pass_in_an_array.delete(@sample_checkbox_assessment)
-      @sample_checkbox_new_assessment = pass_in_an_array.sample
-      set(@sample_checkbox_new_assessment, :set) unless pass_in_an_array.nil?
-    end
-  end
 
   def random_radio(pass_in_an_array)
     @sample_radio = pass_in_an_array.sample unless pass_in_an_array.nil?

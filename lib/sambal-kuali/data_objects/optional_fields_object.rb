@@ -8,7 +8,7 @@ class CmOptionalFieldsObject < DataFactory
 
   attr_accessor :instructor_list,
               :admin_org_list,
-              :term_any, :term_fall, :term_spring, :term_summer,
+
               :duration_type,
               :duration_count,
               :audit,

@@ -29,6 +29,7 @@ class CmCrossListedObject < DataFactory
 
   def create
       on CmCourseInformation do |page|
+        page.course_information unless page.current_page('Course Information').exists?
         page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
         page.add_cross_listed_course unless page.cross_listed_course_subject(@cross_list_course_count).exists?
         page.cross_listed_course_subject(@cross_list_course_count).set @cross_list_subject_code
