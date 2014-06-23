@@ -13,7 +13,8 @@ class CmFormatsObject < DataFactory
                   :contact_frequency,
                   :duration_count,
                   :duration_type,
-                  :class_size
+                  :class_size,
+                  :defer_save
 
 
   def initialize (browser, opts={})
@@ -26,7 +27,8 @@ class CmFormatsObject < DataFactory
             contact_frequency: '::random::',
             duration_count: (1..9).to_a.sample,
             duration_type: '::random::',
-            class_size: (1..9).to_a.sample
+            class_size: (1..9).to_a.sample,
+            defer_save: false
 
     }
     set_options(defaults.merge(opts))
@@ -56,7 +58,7 @@ class CmFormatsObject < DataFactory
       page.duration_count(opts[:format_level],opts[:activity_level]).fit opts[:duration_count]
       page.class_size(opts[:format_level],opts[:activity_level]).fit opts[:class_size]
     end
-    determine_save_action
+    determine_save_action unless opts[:defer_save]
     set_options(opts)
   end
 
@@ -67,7 +69,7 @@ class CmFormatsObject < DataFactory
     page.delete_format opts[:activity_level].nil?
     page.loading_wait
   end
-  determine_save_action
+  determine_save_action unless opts[:defer_save]
 end
 
 

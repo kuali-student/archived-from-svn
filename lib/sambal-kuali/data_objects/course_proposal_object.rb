@@ -76,53 +76,9 @@ class CmCourseProposalObject < DataFactory
       page.course_information unless page.current_page('Course Information').exists?
       page.proposal_title.fit opts[:proposal_title]
       page.course_title.fit opts[:course_title]
-      page.transcript_course_title.fit opts[:transcript_course_title]
-      page.subject_code.fit opts[:subject_code]
-      page.course_number.fit opts[:course_number]
-      page.description_rationale.fit opts[:description_rationale]
-      page.proposal_rationale.fit opts[:proposal_rationale]
     end
 
-    determine_save_action unless @defer_save
-
-    on CmGovernance do |page|
-      page.governance unless page.current_page('Governance').exists?
-      if opts[:campus_location] != nil
-        reset_checkbox(@campus_location, "Campus Location") unless opts[:campus_location].nil?
-        fill_out page, :location_all, :location_extended, :location_north, :location_south unless opts[:campus_location].nil?
-      end
-      page.curriculum_oversight.pick! opts[:curriculum_oversight] unless opts[:curriculum_oversight].nil?
-    end
-
-    determine_save_action unless @defer_save
-
-    on CmCourseLogistics do |page|
-      page.course_logistics unless page.current_page('Course Logistics').exists?
-      #Edit Assessment Scale\
-      if opts[:assessment_scale] != nil
-        reset_checkbox(@assessment_scale, "Assessment Scale")
-        fill_out page,  :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory
-      end
-      #Edit Final Exam Status
-      if opts[:final_exam_type] != nil
-        random_radio(opts[@final_exam_type])
-        fill_out page, :exam_standard, :exam_alternate, :exam_none
-        #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
-        #if that radio is selected
-        page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
-        page.final_exam_rationale.fit opts[:final_exam_rationale] unless page.exam_standard.set?
-      end
-
-    end
-    determine_save_action unless @defer_save
-    
-    on CmActiveDates do |page|
-      #Active Dates
-      page.active_dates unless page.current_page('Active Dates').exists?
-      page.start_term.pick! opts[:start_term] unless opts[:start_term].nil?
-    end
-
-    determine_save_action
+    determine_save_action unless opts[:@defer_save]
 
     set_options(opts)
   end

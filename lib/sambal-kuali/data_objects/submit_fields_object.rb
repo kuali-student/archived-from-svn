@@ -161,8 +161,6 @@ class CmSubmitFieldsObject < DataFactory
       page.start_term.pick! opts[:start_term] unless opts[:start_term].nil?
       determine_save_action unless opts[:defer_save]
     end
-
-
     set_options(opts)
   end
 

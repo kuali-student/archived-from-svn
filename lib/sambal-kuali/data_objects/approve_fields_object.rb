@@ -68,7 +68,6 @@ class CmApproveFieldsObject < DataFactory
       page.course_information unless page.current_page('Course Information').exists?
       page.transcript_course_title.fit opts[:transcript_course_title]
       page.course_number.fit opts[:course_number]
-      determine_save_action unless opts[:defer_save]
     end
 
     on CmGovernance do |page|
@@ -77,21 +76,10 @@ class CmApproveFieldsObject < DataFactory
         reset_campus(@campus_location) unless opts[:campus_location].nil?
         fill_out page, :location_all, :location_extended, :location_north, :location_south unless opts[:campus_location].nil?
       end
-      determine_save_action unless opts[:defer_save]
     end
-
-    on CmCourseLogistics do [page]
-    page.course_logistics unless page.current_page('Course Logistics').exists?
-    end
-
+    determine_save_action unless opts[:defer_save]
 
     set_options(opts)
-  end
-
-
-
-  def delete
-
   end
 
 

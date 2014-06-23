@@ -5,7 +5,10 @@ end
 
 Given /^I have a course admin proposal created as Curriculum Specialist$/ do
   steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject, :curriculum_review_process => "Yes"
+  @course_proposal = create CmCourseProposalObject, :curriculum_review_process => "Yes",
+                                                    :required_fields_only => false,
+                                                    :submit_fields => [(make CmSubmitFieldsObject)],
+                                                    :approve_fields => [(make CmApproveFieldsObject)]
 end
 
 Given /^I have a course proposal created as Faculty$/ do

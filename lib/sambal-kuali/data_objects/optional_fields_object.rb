@@ -118,7 +118,7 @@ class CmOptionalFieldsObject < DataFactory
     on CmCourseFinancials do |page|
       page.financials unless page.current_page('Financials').exists?
       page.justification_of_fees.fit opts[:justification_of_fees]
-      determine_save_action
+      determine_save_action unless opts[:defer_save]
     end
 
   set_options(opts)

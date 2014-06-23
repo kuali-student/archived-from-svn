@@ -6,7 +6,7 @@ class CmOutcomeObject < DataFactory
   include Workflows
   include Utilities
 
-  attr_accessor :outcome_type, :outcome_level, :credit_value
+  attr_accessor :outcome_type, :outcome_level, :credit_value, :defer_save
 
 
 
@@ -16,7 +16,8 @@ class CmOutcomeObject < DataFactory
     defaults = {
       outcome_type: "Fixed",
       outcome_level: 1,
-      credit_value: (1..5).to_a.sample
+      credit_value: (1..5).to_a.sample,
+      defer_save: false
     }
     set_options(defaults.merge(opts))
 
@@ -44,19 +45,19 @@ class CmOutcomeObject < DataFactory
       page.outcome_type(opts[:outcome_level]).pick! opts[:outcome_type] unless opts[:outcome_type].nil?
       page.credit_value(opts[:outcome_level]).fit opts[:credit_value]
     end
-    determine_save_action
+    determine_save_action unless opts[:defer_save]
     set_options(opts)
   end
 
 
 
-def delete
+def delete (opts={})
   on CmCourseLogistics do |page|
     page.course_logistics unless page.current_page('Course Logistics').exists?
-    page.delete_outcome(@outcome_level)
+    page.delete_outcome(opts[:outcome_level])
     page.loading_wait
   end
-  determine_save_action
+  determine_save_action unless opts[:defer_save]
 end
 
 

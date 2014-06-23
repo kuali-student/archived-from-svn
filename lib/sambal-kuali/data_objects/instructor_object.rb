@@ -30,7 +30,6 @@ class CmInstructorObject < DataFactory
       page.add_instructor unless page.instructor_name(@instructor_level).exists?
       page.instructor_name(@instructor_level).set @instructor_name
       page.auto_lookup @instructor_name
-      #@instructor_name = page.instructor_name(@instructor_level).value
     end
   end
 
@@ -45,6 +44,7 @@ class CmInstructorObject < DataFactory
       page.instructor_name(opts[:instructor_level]).fit opts[:instructor_name]
       page.auto_lookup opts[:instructor_name] unless opts[:instructor_name].nil?
     end
+    determine_save_action unless opts[:defer_save]
     set_options(opts)
   end
 

@@ -200,23 +200,32 @@ end
 And /^I edit the course proposal$/ do
   @course_proposal.edit   :proposal_title => "updated #{random_alphanums(10,'test proposal title ')}",
                           :course_title => "updated #{random_alphanums(10, 'test course title ')}",
-                          :transcript_course_title => "updated #{random_alphanums(1,'123')}",
-                          :subject_code => "ENGL",
-                          :course_number => (100..999).to_a.sample,
-                          :description_rationale => "updated #{random_alphanums(20, 'test description rationale ')}",
-                          :proposal_rationale => "updated #{random_alphanums(20, 'test proposal rationale ')}",
-                          :campus_location => [:location_all, :location_extended, :location_north, :location_south],
-                          :curriculum_oversight => '::random::',
-                          :assessment_scale => [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
-                          :final_exam_type => [:exam_standard, :exam_alternate, :exam_none],
-                          :final_exam_rationale => "updated #{random_alphanums(10,'test final exam rationale ')}",
-                          :start_term => '::random::'
+                          :defer_save => true
 
-  @course_proposal.outcome_list[0].delete
-  @course_proposal.outcome_list[1].edit :credit_value=>"#{(1..4).to_a.sample}-#{(5..9).to_a.sample}",
-                                        :outcome_level => 1
-  @course_proposal.add_outcome :outcome => (make CmOutcomeObject,:outcome_type => "Fixed",:outcome_level => 2, :credit_value => 5)
-  @course_proposal.format_list[0].edit :format_level => 1,
+  @course_proposal.submit_fields[0].edit :subject_code => "ENGL",
+                                         :description_rationale => "updated #{random_alphanums(20, 'test description rationale ')}",
+                                         :proposal_rationale => "updated #{random_alphanums(20, 'test proposal rationale ')}",
+                                         :curriculum_oversight => '::random::',
+                                         :assessment_scale => [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
+                                         :final_exam_type => [:exam_standard, :exam_alternate, :exam_none],
+                                         :final_exam_rationale => "updated #{random_alphanums(10,'test final exam rationale ')}"
+
+
+  @course_proposal.submit_fields[0].outcome_list[0].delete :defer_save => true, :outcome_level => 0
+  @course_proposal.submit_fields[0].outcome_list[1].edit :credit_value=>"#{(1..4).to_a.sample},#{(5..9).to_a.sample}",
+                                                         :outcome_level => 0,
+                                                         :defer_save => true
+  @course_proposal.submit_fields[0].add_outcome :outcome => (make CmOutcomeObject,:outcome_type => "Fixed",:outcome_level => 2, :credit_value => 5),
+                                                :defer_save => true
+
+  @course_proposal.approve_fields[0].edit :transcript_course_title => "updated #{random_alphanums(1,'123')}",
+                                          :course_number => (100..999).to_a.sample,
+                                          :campus_location => [:location_all, :location_extended, :location_north, :location_south],
+                                          :start_term => '::random::',
+                                          :defer_save => true
+
+
+  @course_proposal.approve_fields[0].format_list[0].edit :format_level => 1,
                                        :activity_level => 1,
                                        :type => '::random::',
                                        :contacted_hours => (1..9).to_a.sample,
@@ -367,55 +376,55 @@ And /^I should see updated data on the Review proposal page$/ do
     #COURSE INFORMATION SECTION
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
-    page.transcript_course_title.should == @course_proposal.transcript_course_title
-    page.subject_code_review.should == "#{@course_proposal.subject_code}"
-    page.course_number_review.should == "#{@course_proposal.course_number}"
-    page.description_review.should == "#{@course_proposal.description_rationale}"
-    page.proposal_rationale_review.should == "#{@course_proposal.proposal_rationale}"
+    page.transcript_course_title.should == @course_proposal.approve_fields[0].transcript_course_title
+    page.subject_code_review.should == "#{@course_proposal.submit_fields[0].subject_code}"
+    page.course_number_review.should == "#{@course_proposal.approve_fields[0].course_number}"
+    page.description_review.should == "#{@course_proposal.submit_fields[0].description_rationale}"
+    page.proposal_rationale_review.should == "#{@course_proposal.submit_fields[0].proposal_rationale}"
 
     #GOVERNANCE SECTION
-    page.curriculum_oversight_review.should == @course_proposal.curriculum_oversight unless @course_proposal.curriculum_oversight.nil?
+    page.curriculum_oversight_review.should == @course_proposal.submit_fields[0].curriculum_oversight unless @course_proposal.submit_fields[0].curriculum_oversight.nil?
 
     #COURSE LOGISTICS SECTION
     #ASSESSMENT SCALE
-    page.assessment_scale_review.should == plus_minus if @course_proposal.assessment_a_f == :set
-    page.assessment_scale_review.should == completed_notation if @course_proposal.assessment_notation == :set
-    page.assessment_scale_review.should == letter if @course_proposal.assessment_letter == :set
-    page.assessment_scale_review.should == pass_fail if @course_proposal.assessment_pass_fail == :set
-    page.assessment_scale_review.should == percentage if @course_proposal.assessment_percentage == :set
-    page.assessment_scale_review.should == satisfactory if @course_proposal.assessment_satisfactory == :set
+    page.assessment_scale_review.should == plus_minus if @course_proposal.submit_fields[0].assessment_a_f == :set
+    page.assessment_scale_review.should == completed_notation if @course_proposal.submit_fields[0].assessment_notation == :set
+    page.assessment_scale_review.should == letter if @course_proposal.submit_fields[0].assessment_letter == :set
+    page.assessment_scale_review.should == pass_fail if @course_proposal.submit_fields[0].assessment_pass_fail == :set
+    page.assessment_scale_review.should == percentage if @course_proposal.submit_fields[0].assessment_percentage == :set
+    page.assessment_scale_review.should == satisfactory if @course_proposal.submit_fields[0].assessment_satisfactory == :set
 
     #FINAL EXAM
-    page.final_exam_status_review.should == standard_exam unless @course_proposal.exam_standard.nil?
-    page.final_exam_status_review.should == alternate_exam unless @course_proposal.exam_alternate.nil?
-    page.final_exam_status_review.should == no_exam unless @course_proposal.exam_none.nil?
-    page.final_exam_rationale_review.should == @course_proposal.final_exam_rationale unless @course_proposal.exam_standard == :set
+    page.final_exam_status_review.should == standard_exam unless @course_proposal.submit_fields[0].exam_standard.nil?
+    page.final_exam_status_review.should == alternate_exam unless @course_proposal.submit_fields[0].exam_alternate.nil?
+    page.final_exam_status_review.should == no_exam unless @course_proposal.submit_fields[0].exam_none.nil?
+    page.final_exam_rationale_review.should == @course_proposal.submit_fields[0].final_exam_rationale unless @course_proposal.submit_fields[0].exam_standard == :set
 
     #FIXED OUTCOME
-    page.outcome_type_review(1).should == "Fixed" unless @course_proposal.outcome_list[3].outcome_type.nil?
-    page.outcome_credit_review(1) == "#{@course_proposal.outcome_list[3].credit_value}" unless @course_proposal.outcome_list[3].credit_value.nil?
+    page.outcome_type_review(1).should == "Fixed" unless @course_proposal.submit_fields[0].outcome_list[3].outcome_type.nil?
+    page.outcome_credit_review(1) == "#{@course_proposal.submit_fields[0].outcome_list[3].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[3].credit_value.nil?
 
     #RANGE OUTCOME
-    page.outcome_type_review(2).should == "Multiple" unless @course_proposal.outcome_list[1].outcome_type.nil?
-    page.outcome_credit_review(2) == "#{@course_proposal.outcome_list[1].credit_value}" unless @course_proposal.outcome_list[1].credit_value.nil?
+    page.outcome_type_review(2).should == "Multiple" unless @course_proposal.submit_fields[0].outcome_list[1].outcome_type.nil?
+    page.outcome_credit_review(2) == "#{@course_proposal.submit_fields[0].outcome_list[1].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[1].credit_value.nil?
 
     #MULTIPLE OUTCOME
-    page.outcome_type_review(3).should == "Range" unless @course_proposal.outcome_list[2].outcome_type.nil?
-    page.outcome_credit_review(3) == "#{@course_proposal.outcome_list[2].credit_value}" unless @course_proposal.outcome_list[2].credit_value.nil?
+    page.outcome_type_review(3).should == "Range" unless @course_proposal.submit_fields[0].outcome_list[2].outcome_type.nil?
+    page.outcome_credit_review(3) == "#{@course_proposal.submit_fields[0].outcome_list[2].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[2].credit_value.nil?
 
 
     #ACTIVITY FORMAT
-    page.activity_level_review(1).should == "Format #{@course_proposal.format_list[0].format_level}"
-    page.activity_type_review(1).should include "#{@course_proposal.format_list[0].type}".gsub(/\s+/, "")
-    page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.format_list[0].contacted_hours}"
-    page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.format_list[0].contact_frequency}"
-    page.activity_duration_type_count_review(1).should include "#{@course_proposal.format_list[0].duration_type}"
-    page.activity_duration_type_count_review(1).should include "#{@course_proposal.format_list[0].duration_count}"
-    page.activity_class_size_review(1).should == "#{@course_proposal.format_list[0].class_size}"
+    page.activity_level_review(1).should == "Format #{@course_proposal.approve_fields[0].format_list[0].format_level}"
+    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "")
+    page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
+    page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
+    page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"
+    page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_count}"
+    page.activity_class_size_review(1).should == "#{@course_proposal.approve_fields[0].format_list[0].class_size}"
 
 
     #ACTIVE DATES SECTION
-    page.start_term_review.should == @course_proposal.start_term unless @course_proposal.start_term.nil?
+    page.start_term_review.should == @course_proposal.submit_fields[0].start_term unless @course_proposal.submit_fields[0].start_term.nil?
 
   end
 

@@ -1,3 +1,4 @@
+@draft
 Feature: Course Proposal Details - Learning Objectives
 
 Background:
