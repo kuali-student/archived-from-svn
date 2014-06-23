@@ -407,9 +407,7 @@ When /^I complete the required fields on the course proposal$/ do
 end
 
 When(/^I create a basic course proposal with alternate identifier details$/) do
-  @course_proposal = create CmCourseProposalObject, subject_code: nil,
-                                                   course_number: nil,
-                                                   cross_listed_course_list:    [(make CmCrossListedObject, :auto_lookup => true), (make CmCrossListedObject, :cross_list_course_count => 2)],
+  @course_proposal = create CmCourseProposalObject,cross_listed_course_list:    [(make CmCrossListedObject, :auto_lookup => true), (make CmCrossListedObject, :cross_list_course_count => 2)],
                                                    jointly_offered_course_list: [
                                                                                  (make CmJointlyOfferedObject, :search_type => "name"),
                                                                                  (make CmJointlyOfferedObject, :search_type => "course code", :jointly_offered_course_count => 2, :search_by => "Courses Only"),
@@ -417,18 +415,8 @@ When(/^I create a basic course proposal with alternate identifier details$/) do
                                                                                  (make CmJointlyOfferedObject, :search_type => "blank", :jointly_offered_course_count => 4, :search_by => "Proposals Only"),
                                                                                  (make CmJointlyOfferedObject, :auto_lookup => true, :jointly_offered_course_count =>5)
                                                                                 ],
-                                                   version_code_list:           [(make CmVersionCodeObject), (make CmVersionCodeObject, :version_code_count => 2) ],
-                                                   transcript_course_title: nil,
-                                                   description_rationale: nil,
-                                                   proposal_rationale: nil,
-                                                   campus_location: nil,
-                                                   curriculum_oversight: nil,
-                                                   assessment_scale: nil,
-                                                   final_exam_type: nil,
-                                                   final_exam_rationale: nil,
-                                                   outcome_list: nil,
-                                                   format_list: nil,
-                                                   start_term:nil
+                                                   version_code_list:           [(make CmVersionCodeObject), (make CmVersionCodeObject, :version_code_count => 2) ]
+
 
 end
 
@@ -463,8 +451,7 @@ end
 
 
 And(/^I have a basic course proposal with alternate identifier details$/) do
-  @course_proposal = create CmCourseProposalObject, subject_code: nil,
-                            course_number: nil,
+  @course_proposal = create CmCourseProposalObject,
                             cross_listed_course_list:    [(make CmCrossListedObject, :auto_lookup => true), (make CmCrossListedObject, :cross_list_course_count => 2)],
                             jointly_offered_course_list: [
                                                           (make CmJointlyOfferedObject, :search_type => "name"),
@@ -473,18 +460,8 @@ And(/^I have a basic course proposal with alternate identifier details$/) do
                                                           (make CmJointlyOfferedObject, :search_type => "blank", :jointly_offered_course_count => 4, :search_by => "Proposals Only"),
                                                           (make CmJointlyOfferedObject, :auto_lookup => true, :jointly_offered_course_count =>5)
                                                           ],
-                            version_code_list:           [(make CmVersionCodeObject), (make CmVersionCodeObject, :version_code_count => 2) ],
-                            transcript_course_title: nil,
-                            description_rationale: nil,
-                            proposal_rationale: nil,
-                            campus_location: nil,
-                            curriculum_oversight: nil,
-                            assessment_scale: nil,
-                            final_exam_type: nil,
-                            final_exam_rationale: nil,
-                            outcome_list: nil,
-                            format_list: nil,
-                            start_term:nil
+                            version_code_list:           [(make CmVersionCodeObject), (make CmVersionCodeObject, :version_code_count => 2) ]
+
 end
 
 

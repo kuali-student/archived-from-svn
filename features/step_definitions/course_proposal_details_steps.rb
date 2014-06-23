@@ -60,26 +60,12 @@ Then(/^I should see Optional\-Other details on the course proposal$/) do
 end
 
 When(/^I create a course proposal with Optional\-Other fields$/) do
-  @course_proposal = create CmCourseProposalObject, subject_code: nil,
-                                                    course_number: nil,
-                                                    optional_fields: [(make CmOptionalFieldsObject)],
-                                                    cross_listed_course_list: nil,
-                                                    jointly_offered_course_list: nil,
-                                                    version_code_list: nil,
-                                                    transcript_course_title: nil,
-                                                    description_rationale: nil,
-                                                    proposal_rationale: nil,
-                                                    campus_location: nil,
-                                                    curriculum_oversight: nil,
-                                                    assessment_scale: nil,
-                                                    final_exam_type: nil,
-                                                    final_exam_rationale: nil,
-                                                    outcome_list: nil,
-                                                    format_list: nil,
-                                                    start_term: nil,
-                                                    defer_save: true,
-                                                    create_new_proposal: false,
-                                                    create_optional_fields: true
+  @course_proposal = create CmCourseProposalObject, :optional_fields => [(make CmOptionalFieldsObject)],
+                                                    :create_new_proposal => true,
+                                                    :create_optional_fields => true
+
+
+
 
 end
 
@@ -137,7 +123,6 @@ Then(/^I should see updated Optional Other details on the course proposal$/) do
 
     page.pilot_course_review.should == "Yes" if @course_proposal.optional_fields[0].pilot_course == :set
 
-    page.start_term_review.should == @course_proposal.start_term
     page.end_term_review.should_not == @course_proposal.optional_fields[0].end_term
     page.fee_justification_review.should == @course_proposal.optional_fields[0].justification_of_fees
 
@@ -146,26 +131,9 @@ Then(/^I should see updated Optional Other details on the course proposal$/) do
 end
 
 And(/^I have a basic course proposal created with Optional-Other fields$/) do
-  @course_proposal = create CmCourseProposalObject, subject_code: nil,
-                            course_number: nil,
-                            optional_fields: [(make CmOptionalFieldsObject)],
-                            cross_listed_course_list: nil,
-                            jointly_offered_course_list: nil,
-                            version_code_list: nil,
-                            transcript_course_title: nil,
-                            description_rationale: nil,
-                            proposal_rationale: nil,
-                            campus_location: nil,
-                            curriculum_oversight: nil,
-                            assessment_scale: nil,
-                            final_exam_type: nil,
-                            final_exam_rationale: nil,
-                            outcome_list: nil,
-                            format_list: nil,
-                            start_term: nil,
-                            defer_save: true,
-                            create_new_proposal: false,
-                            create_optional_fields: true
+  @course_proposal = create CmCourseProposalObject, :optional_fields => [(make CmOptionalFieldsObject)],
+                                                    :create_new_proposal => true,
+                                                    :create_optional_fields => true
 
 end
 
@@ -220,7 +188,7 @@ Then(/^I should no longer see Optional\-Other details on the course proposal$/) 
     page.pass_fail_transcript_review.should_not == "Yes"
 
     page.pilot_course_review.should_not == "Yes"
-    page.end_term_review.should_not == @course_proposal.end_term
+    page.end_term_review.should_not == @course_proposal.optional_fields[0].end_term
     page.fee_justification_review.should == ""
 
   end
