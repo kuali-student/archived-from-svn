@@ -311,61 +311,6 @@ And /^I should see the updated data on the Review proposal page$/ do
 
 end
 
-And /^I should see updated data on Review proposal page$/ do
-  on CmCourseInformation do |page|
-    page.review_proposal
-    page.loading_wait
-  end
-
-  on CmReviewProposal do |page|
-    #COURSE INFORMATION SECTION
-    page.proposal_title_review.should == @course_proposal.proposal_title
-    page.course_title_review.should == @course_proposal.course_title
-    page.transcript_course_title.should == @course_proposal.transcript_course_title
-    page.subject_code_review.should == "#{@course_proposal.subject_code}"
-    page.course_number_review.should == "#{@course_proposal.course_number}"
-    page.description_review.should == "#{@course_proposal.description_rationale}"
-    page.proposal_rationale_review.should == "#{@course_proposal.proposal_rationale}"
-
-    #GOVERNANCE SECTION
-    page.curriculum_oversight_review.should == @course_proposal.curriculum_oversight unless @course_proposal.curriculum_oversight.nil?
-
-    #COURSE LOGISTICS SECTION
-    #ASSESSMENT SCALE
-    page.assessment_scale_review.should == plus_minus if @course_proposal.assessment_a_f == :set
-    page.assessment_scale_review.should == completed_notation if @course_proposal.assessment_notation == :set
-    page.assessment_scale_review.should == letter if @course_proposal.assessment_letter == :set
-    page.assessment_scale_review.should == pass_fail if @course_proposal.assessment_pass_fail == :set
-    page.assessment_scale_review.should == percentage if @course_proposal.assessment_percentage == :set
-    page.assessment_scale_review.should == satisfactory if @course_proposal.assessment_satisfactory == :set
-
-    #FINAL EXAM
-    page.final_exam_status_review.should == standard_exam unless @course_proposal.exam_standard.nil?
-    page.final_exam_status_review.should == alternate_exam unless @course_proposal.exam_alternate.nil?
-    page.final_exam_status_review.should == no_exam unless @course_proposal.exam_none.nil?
-    page.final_exam_rationale_review.should == @course_proposal.final_exam_rationale unless @course_proposal.exam_standard == :set
-
-    #FIXED OUTCOME
-    page.outcome_type_review(1).should == "Fixed" unless @course_proposal.outcome_list[3].outcome_type.nil?
-    page.outcome_credit_review(1) == "#{@course_proposal.outcome_list[3].credit_value}" unless @course_proposal.outcome_list[3].credit_value.nil?
-
-    #RANGE OUTCOME
-    page.outcome_type_review(2).should == "Multiple" unless @course_proposal.outcome_list[1].outcome_type.nil?
-    page.outcome_credit_review(2) == "#{@course_proposal.outcome_list[1].credit_value}" unless @course_proposal.outcome_list[1].credit_value.nil?
-
-    #MULTIPLE OUTCOME
-    page.outcome_type_review(3).should == "Range" unless @course_proposal.outcome_list[2].outcome_type.nil?
-    page.outcome_credit_review(3) == "#{@course_proposal.outcome_list[2].credit_value}" unless @course_proposal.outcome_list[2].credit_value.nil?
-
-
-    #ACTIVE DATES SECTION
-    page.start_term_review.should == @course_proposal.start_term unless @course_proposal.start_term.nil?
-
-  end
-
-
-end
-
 
 And /^I should see updated data on the Review proposal page$/ do
   navigate_to_cm_home
