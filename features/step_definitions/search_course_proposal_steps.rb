@@ -1,6 +1,7 @@
 Given /^I have a course proposal created as Curriculum Specialist$/ do
   steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject
+  @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
+                            :submit_fields => [(make CmSubmitFieldsObject)]
 end
 
 Given /^I have a course admin proposal created as Curriculum Specialist$/ do
@@ -14,8 +15,8 @@ end
 Given /^I have a course proposal created as Faculty$/ do
   steps %{Given I am logged in as Faculty}
   @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
-                                                    :submit_fields => [(make CmSubmitFieldsObject)],
-                                                    :approve_fields => [(make CmApproveFieldsObject)]
+                                                    :submit_fields => [(make CmSubmitFieldsObject)]
+
 end
 
 Given /^I have a admin course proposal created as Curriculum Specialist and course proposal created as Faculty$/ do
@@ -114,45 +115,45 @@ And /^I can review the course (.*?)$/ do |proposal_type|
     page.course_title_review.should == @course_proposal.course_title
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Proposal)" if proposal_type == "proposal"
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Admin Proposal)" if proposal_type == "admin proposal"
-    page.subject_code_review.should == "#{@course_proposal.subject_code}"
-    page.description_review.should == "#{@course_proposal.description_rationale}"
-    page.proposal_rationale_review.should == "#{@course_proposal.proposal_rationale}"
+    page.subject_code_review.should == "#{@course_proposal.submit_fields[0].subject_code}"
+    page.description_review.should == "#{@course_proposal.submit_fields[0].description_rationale}"
+    page.proposal_rationale_review.should == "#{@course_proposal.submit_fields[0].proposal_rationale}"
 
     #GOVERNANCE SECTION
-    page.curriculum_oversight_review.should == @course_proposal.curriculum_oversight unless @course_proposal.curriculum_oversight.nil?
+    page.curriculum_oversight_review.should == @course_proposal.submit_fields[0].curriculum_oversight unless @course_proposal.submit_fields[0].curriculum_oversight.nil?
 
     #COURSE LOGISTICS SECTION
     #ASSESSMENT SCALE
-    page.assessment_scale_review.should == "A-F with Plus/Minus Grading" if @course_proposal.assessment_a_f == :set
-    page.assessment_scale_review.should == "Accepts a completed notation" if @course_proposal.assessment_notation == :set
-    page.assessment_scale_review.should == "Letter" if @course_proposal.assessment_letter == :set
-    page.assessment_scale_review.should == "Pass/Fail Grading" if @course_proposal.assessment_pass_fail == :set
-    page.assessment_scale_review.should == "Percentage Grading 0-100%" if @course_proposal.assessment_percentage == :set
-    page.assessment_scale_review.should == "Administrative Grade of Satisfactory" if @course_proposal.assessment_satisfactory == :set
+    page.assessment_scale_review.should == "A-F with Plus/Minus Grading" if @course_proposal.submit_fields[0].assessment_a_f == :set
+    page.assessment_scale_review.should == "Accepts a completed notation" if @course_proposal.submit_fields[0].assessment_notation == :set
+    page.assessment_scale_review.should == "Letter" if @course_proposal.submit_fields[0].assessment_letter == :set
+    page.assessment_scale_review.should == "Pass/Fail Grading" if @course_proposal.submit_fields[0].assessment_pass_fail == :set
+    page.assessment_scale_review.should == "Percentage Grading 0-100%" if @course_proposal.submit_fields[0].assessment_percentage == :set
+    page.assessment_scale_review.should == "Administrative Grade of Satisfactory" if @course_proposal.submit_fields[0].assessment_satisfactory == :set
 
     #FINAL EXAM
-    page.final_exam_status_review.should == "Standard Final Exam" unless @course_proposal.exam_standard.nil?
-    page.final_exam_status_review.should == "Alternate Final Assessment" unless @course_proposal.exam_alternate.nil?
-    page.final_exam_status_review.should == "No Final Exam or Assessment" unless @course_proposal.exam_none.nil?
-    page.final_exam_rationale_review.should == @course_proposal.final_exam_rationale unless @course_proposal.exam_standard == :set
+    page.final_exam_status_review.should == "Standard Final Exam" unless @course_proposal.submit_fields[0].exam_standard.nil?
+    page.final_exam_status_review.should == "Alternate Final Assessment" unless @course_proposal.submit_fields[0].exam_alternate.nil?
+    page.final_exam_status_review.should == "No Final Exam or Assessment" unless @course_proposal.submit_fields[0].exam_none.nil?
+    page.final_exam_rationale_review.should == @course_proposal.submit_fields[0].final_exam_rationale unless @course_proposal.submit_fields[0].exam_standard == :set
 
     #FIXED OUTCOME
-    page.outcome_level_review(1).should == "Outcome #{@course_proposal.outcome_list[0].outcome_level.to_i+1}" unless @course_proposal.outcome_list[0].outcome_level.nil?
-    page.outcome_type_review(1).should == "Fixed" unless @course_proposal.outcome_list[0].outcome_type.nil?
-    page.outcome_credit_review(1) == "#{@course_proposal.outcome_list[0].credit_value}" unless @course_proposal.outcome_list[0].credit_value.nil?
+    page.outcome_level_review(1).should == "Outcome #{@course_proposal.submit_fields[0].outcome_list[0].outcome_level.to_i+1}" unless @course_proposal.submit_fields[0].outcome_list[0].outcome_level.nil?
+    page.outcome_type_review(1).should == "Fixed" unless @course_proposal.submit_fields[0].outcome_list[0].outcome_type.nil?
+    page.outcome_credit_review(1) == "#{@course_proposal.submit_fields[0].outcome_list[0].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[0].credit_value.nil?
 
     #RANGE OUTCOME
-    page.outcome_level_review(2).should == "Outcome #{@course_proposal.outcome_list[1].outcome_level.to_i+1 }" unless @course_proposal.outcome_list[1].outcome_level.nil?
-    page.outcome_type_review(2).should == "Multiple" unless @course_proposal.outcome_list[1].outcome_type.nil?
-    page.outcome_credit_review(2) == "#{@course_proposal.outcome_list[1].credit_value}" unless @course_proposal.outcome_list[0].credit_value.nil?
+    page.outcome_level_review(2).should == "Outcome #{@course_proposal.submit_fields[0].outcome_list[1].outcome_level.to_i+1 }" unless @course_proposal.submit_fields[0].outcome_list[1].outcome_level.nil?
+    page.outcome_type_review(2).should == "Multiple" unless @course_proposal.submit_fields[0].outcome_list[1].outcome_type.nil?
+    page.outcome_credit_review(2) == "#{@course_proposal.submit_fields[0].outcome_list[1].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[1].credit_value.nil?
 
     #MULTIPLE OUTCOME
-    page.outcome_level_review(3).should == "Outcome #{@course_proposal.outcome_list[2].outcome_level.to_i+1}" unless @course_proposal.outcome_list[1].outcome_level.nil?
-    page.outcome_type_review(3).should == "Range" unless @course_proposal.outcome_list[2].outcome_type.nil?
-    page.outcome_credit_review(3) == "#{@course_proposal.outcome_list[2].credit_value}" unless @course_proposal.outcome_list[0].credit_value.nil?
+    page.outcome_level_review(3).should == "Outcome #{@course_proposal.submit_fields[0].outcome_list[2].outcome_level.to_i+1}" unless @course_proposal.submit_fields[0].outcome_list[2].outcome_level.nil?
+    page.outcome_type_review(3).should == "Range" unless @course_proposal.submit_fields[0].outcome_list[2].outcome_type.nil?
+    page.outcome_credit_review(3) == "#{@course_proposal.submit_fields[0].outcome_list[2].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[2].credit_value.nil?
 
     #ACTIVE DATES SECTION
-    page.start_term_review.should == @course_proposal.start_term unless @course_proposal.start_term.nil?
+    page.start_term_review.should == @course_proposal.submit_fields[0].start_term unless @course_proposal.submit_fields[0].start_term.nil?
 
     end
 
