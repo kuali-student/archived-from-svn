@@ -402,7 +402,9 @@ And /^I should see updated data on the Review proposal page for course (.*?)$/ d
 end
 
 When /^I complete the required fields on the course proposal$/ do
-  @course_proposal = create CmCourseProposalObject
+  @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
+                                                    :submit_fields => [(make CmSubmitFieldsObject)],
+                                                    :approve_fields => [(make CmApproveFieldsObject)]
 
 end
 
