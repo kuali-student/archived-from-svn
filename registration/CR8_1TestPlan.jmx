@@ -84,6 +84,7 @@
         <hashTree/>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Login as a Student" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/login.jsp" enabled="true">
@@ -250,6 +251,7 @@
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Go to Reg Cart" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/registration/index.jsp" enabled="true">
@@ -557,6 +559,7 @@
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Add Course to Cart" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/services/CourseRegistrationCartClientService/addCourseToCart" enabled="true">
@@ -655,6 +658,7 @@
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Submit Cart (register)" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/services/CourseRegistrationCartClientService/submitCart" enabled="true">
@@ -718,14 +722,15 @@
             <hashTree/>
           </hashTree>
         </hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Registration Status Polling" enabled="false">
-          <stringProp name="WhileController.condition">${__javaScript(&quot;${reg_status}&quot;!==&quot;kuali.lpr.trans.state.succeeded&quot; || &quot;${reg_status}&quot;==&quot;kuali.lpr.trans.state.failed&quot;,dummy)}</stringProp>
-        </WhileController>
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Registration Polling" enabled="true">
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
+          <boolProp name="TransactionController.parent">true</boolProp>
+        </TransactionController>
         <hashTree>
           <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Test Action" enabled="true">
             <intProp name="ActionProcessor.action">1</intProp>
             <intProp name="ActionProcessor.target">0</intProp>
-            <stringProp name="ActionProcessor.duration">2000</stringProp>
+            <stringProp name="ActionProcessor.duration">5000</stringProp>
           </TestAction>
           <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Polling" enabled="true">
@@ -822,6 +827,7 @@
         <hashTree>
           <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Add to Waitlist" enabled="true">
             <boolProp name="TransactionController.parent">true</boolProp>
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
           </TransactionController>
           <hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/services/CourseRegistrationClientService/personschedule" enabled="true">
@@ -967,14 +973,15 @@
               <hashTree/>
             </hashTree>
           </hashTree>
-          <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="Registration Status Polling" enabled="false">
-            <stringProp name="WhileController.condition">${__javaScript(&quot;${reg_status2}&quot;!==&quot;kuali.lpr.trans.state.succeeded&quot;,dummy)}</stringProp>
-          </WhileController>
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Registration Polling" enabled="true">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
+          </TransactionController>
           <hashTree>
             <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Test Action" enabled="true">
               <intProp name="ActionProcessor.action">1</intProp>
               <intProp name="ActionProcessor.target">0</intProp>
-              <stringProp name="ActionProcessor.duration">2000</stringProp>
+              <stringProp name="ActionProcessor.duration">5000</stringProp>
             </TestAction>
             <hashTree/>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Registration Polling" enabled="true">
@@ -1067,6 +1074,7 @@
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Get Schedule" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/services/CourseRegistrationClientService/personschedule" enabled="true">
@@ -1126,6 +1134,7 @@
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Logout" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/services/DevelopmentLoginClientService/logout" enabled="true">
