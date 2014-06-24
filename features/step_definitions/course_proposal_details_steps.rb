@@ -228,6 +228,53 @@ Then(/^I should see Learning Objective details on the course proposal$/) do
   end
 end
 
+When(/^I create a basic course proposal with authors and collaborators$/) do
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                                                 :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
+                                                                  (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear, :defer_save => true),
+                                                                  (make CmAuthCollaboratorObject, :name => "CHURCH", :author_level => 3, :permission => "Edit, Comments, View", :author_notation => :clear)
+                                                                  ]
+end
+
+Then(/^I should see author and collaborator details on the course proposal$/) do
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
 
 
+    #TODO after data persistence is completed.
+    #@course_proposal.author_list.each do |author|
+    #  page.element.should include author.name
+    #  page.element.should include author.permission
+    #  page.element
+    #end
+  end
 
+
+end
+
+Given(/^have a basic course proposal with authors and collaborators$/) do
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                            :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
+                                             (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear),
+
+                            ]
+end
+
+When(/^I update the author and collaborator details on the course proposal$/) do
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.edit_proposal_action
+  @course_proposal.author_list[0].edit :name => "SMITH",:author_notation => :clear, :defer_save => true
+  @course_proposal.author_list[1].edit :permission => "View"
+end
+
+Then(/^I should see updated author and collaborator details on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should no longer see author and collaborator details on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end

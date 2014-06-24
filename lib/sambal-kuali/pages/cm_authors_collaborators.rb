@@ -3,12 +3,12 @@ class CmAuthorsCollaborators < BasePage
   wrapper_elements
   cm_elements
 
-  element(:author_name) { |b| b.text_field(name: 'newCollectionLines[\'document.newMaintainableObject.collaboratorWrappers\'].displayName') }
-  element(:author_permission) { |b| b.select_list(name: 'newCollectionLines[\'document.newMaintainableObject.collaboratorWrappers\'].permission') }
-  element(:action_request) { |b| b.select_list(name: 'newCollectionLines[\'document.newMaintainableObject.collaboratorWrappers\'].action') }
-  element(:author_notation) { |b| b.checkbox(name: 'newCollectionLines[\'document.newMaintainableObject.collaboratorWrappers\'].author') }
-  action(:add_author) { |b| b.button(text: 'add').click; b.adding_line_wait }
-  action(:delete_author) { |b| b.button(text: 'delete').click }
+  element(:author_name) { |author_level,b| b.text_field(id: "KS-Author-displayName_line#{author_level-1}_control") }
+  element(:author_permission) { |author_level,b| b.select_list(id: "KS-PermissionDropDown_line#{author_level-1}_control") }
+  element(:action_required) { |author_level,b| b.select_list(id: "KS-ActionRequestDropDown_line#{author_level-1}_control" ) }
+  element(:author_notation) { |author_level,b| b.checkbox(name: "document.newMaintainableObject.dataObject.collaboratorWrappers[#{author_level-1}].author") }
+  action(:delete_author) { |author_level,b| b.a(id: /line#{author_level-1}/).i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
+  action(:add_person) { |b| b.button(id: "KS-CourseView-AuthorsAndCollaborators-Section_add").click; b.loading_wait }
   action(:added_author_information) { |text_present, b| b.span(text: text_present) }
   # view, comment, edit, fyi, false, true, <complete_username>
 end    #class
