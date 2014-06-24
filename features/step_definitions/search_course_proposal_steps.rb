@@ -15,7 +15,8 @@ end
 Given /^I have a course proposal created as Faculty$/ do
   steps %{Given I am logged in as Faculty}
   @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
-                                                    :submit_fields => [(make CmSubmitFieldsObject)]
+                                                    :submit_fields => [(make CmSubmitFieldsObject)],
+                                                    :approve_fields => [(make CmApproveFieldsObject)]
 
 end
 

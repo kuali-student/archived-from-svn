@@ -13,7 +13,8 @@ class CmApproveFieldsObject < DataFactory
                 :location_south,
                 :location_extended,
                 :location_all,
-                :format_list
+                :format_list,
+                :defer_save
 
 
   def initialize(browser, opts={})
@@ -24,7 +25,8 @@ class CmApproveFieldsObject < DataFactory
         #GOVERNANCE
         campus_location: [:location_all, :location_extended, :location_north, :location_south],
         #COURSE LOGISTICS
-        format_list: [(make CmFormatsObject)]
+        format_list: [(make CmFormatsObject)],
+        defer_save: false
     }
     set_options(defaults.merge(opts))
     random_campus(@campus_location)

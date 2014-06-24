@@ -208,20 +208,24 @@ And /^I edit the course proposal$/ do
                                          :curriculum_oversight => '::random::',
                                          :assessment_scale => [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
                                          :final_exam_type => [:exam_standard, :exam_alternate, :exam_none],
-                                         :final_exam_rationale => "updated #{random_alphanums(10,'test final exam rationale ')}"
+                                         :final_exam_rationale => "updated #{random_alphanums(10,'test final exam rationale ')}",
+                                         :start_term => '::random::'
+
 
 
   @course_proposal.submit_fields[0].outcome_list[0].delete :defer_save => true, :outcome_level => 0
   @course_proposal.submit_fields[0].outcome_list[1].edit :credit_value=>"#{(1..4).to_a.sample},#{(5..9).to_a.sample}",
                                                          :outcome_level => 0,
                                                          :defer_save => true
-  @course_proposal.submit_fields[0].add_outcome :outcome => (make CmOutcomeObject,:outcome_type => "Fixed",:outcome_level => 2, :credit_value => 5),
+  @course_proposal.submit_fields[0].add_outcome :outcome => (make CmOutcomeObject,
+                                                :outcome_type => "Fixed",
+                                                :outcome_level => 2,
+                                                :credit_value => 5),
                                                 :defer_save => true
 
   @course_proposal.approve_fields[0].edit :transcript_course_title => "updated #{random_alphanums(1,'123')}",
                                           :course_number => (100..999).to_a.sample,
                                           :campus_location => [:location_all, :location_extended, :location_north, :location_south],
-                                          :start_term => '::random::',
                                           :defer_save => true
 
 
