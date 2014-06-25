@@ -17,6 +17,6 @@ Background:
 
   Scenario: CC14.3 Delete author and collaborator details from a course proposal
     Given have a basic course proposal with authors and collaborators
-    When I update the author and collaborator details on the course proposal
+    When I delete the author and collaborator details on the course proposal
     And I perform a full search for the course proposal
     Then I should no longer see author and collaborator details on the course proposal

@@ -272,9 +272,37 @@ When(/^I update the author and collaborator details on the course proposal$/) do
 end
 
 Then(/^I should see updated author and collaborator details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |page|
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+
+    #Authors and Collaborators check
+    #TODO
+  end
+end
+
+When(/^I delete the author and collaborator details on the course proposal$/) do
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.edit_proposal_action
+  @course_proposal.author_list[0].delete :author_level => 1, :defer_save => true
+  @course_proposal.author_list[1].delete :author_level => 1
 end
 
 Then(/^I should no longer see author and collaborator details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+
+    @course_proposal.author_list.each do |author|
+      author.author_name_review.should_not include author.name
+      author.author_permission_review.should_not include author.permission
+      author.author_notation_review.should_not include author.author_notation
+    end
+
+
+  end
 end
