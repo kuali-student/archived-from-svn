@@ -323,7 +323,7 @@ public class DefaultScheduleBuildStrategy implements ScheduleBuildStrategy,
 		return meeting;
 	}
 
-	private ActivityOptionInfo getActivityOption(Term term, ActivityOfferingDisplayInfo aodi,
+	public ActivityOptionInfo getActivityOption(Term term, ActivityOfferingDisplayInfo aodi,
 			int courseIndex, String courseId, String campusCode, StringBuilder msg,
             KSDateTimeFormatter tdf, KSDateTimeFormatter udf, KSDateTimeFormatter ddf, Calendar sdcal, Calendar edcal,
 			Calendar tcal) {
@@ -1055,6 +1055,12 @@ public class DefaultScheduleBuildStrategy implements ScheduleBuildStrategy,
 	@Override
 	public ShoppingCartForm getInitialCartForm() {
 		return new DefaultShoppingCartForm();
+	}
+
+	@Override
+	public boolean isBuildAvailable(String termId, String campusCode) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -1,10 +1,14 @@
 package org.kuali.student.ap.framework.config;
 
+import javax.ejb.EJB;
+
 import org.kuali.rice.krms.api.repository.RuleManagementService;
 import org.kuali.student.ap.academicplan.service.AcademicPlanService;
+import org.kuali.student.ap.academicplan.service.DegreeMapService;
 import org.kuali.student.ap.coursesearch.CourseFacetStrategy;
 import org.kuali.student.ap.coursesearch.CourseSearchStrategy;
 import org.kuali.student.ap.framework.context.CourseHelper;
+import org.kuali.student.ap.framework.context.DegreeMapHelper;
 import org.kuali.student.ap.framework.context.EnrollmentStatusHelper;
 import org.kuali.student.ap.framework.context.EnumerationHelper;
 import org.kuali.student.ap.framework.context.KsapContext;
@@ -29,14 +33,12 @@ import org.kuali.student.r2.core.class1.type.service.TypeService;
 import org.kuali.student.r2.core.comment.service.CommentService;
 import org.kuali.student.r2.core.enumerationmanagement.service.EnumerationManagementService;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
-import org.kuali.student.r2.core.scheduling.service.SchedulingService;
 import org.kuali.student.r2.core.room.service.RoomService;
+import org.kuali.student.r2.core.scheduling.service.SchedulingService;
 import org.kuali.student.r2.lum.clu.service.CluService;
 import org.kuali.student.r2.lum.course.service.CourseService;
 import org.kuali.student.r2.lum.lrc.service.LRCService;
 import org.kuali.student.r2.lum.program.service.ProgramService;
-
-import javax.ejb.EJB;
 
 
 /**
@@ -345,6 +347,14 @@ public final class KsapFrameworkServiceLocator {
         return getInstance().planHelper;
     }
 
+	public static DegreeMapService getDegreeMapService() {
+		return getInstance().degreeMapService;
+	}
+	
+	public static DegreeMapHelper getDegreeMapHelper() {
+		return getInstance().degreeMapHelper;
+	}
+
     /**
      * Get the schedule build strategy.
      *
@@ -581,7 +591,11 @@ public final class KsapFrameworkServiceLocator {
     private transient ShoppingCartHelper shoppingCartHelper;
     @EJB
     private transient PlanHelper planHelper;
-
+	@EJB
+	private transient DegreeMapService degreeMapService;
+	@EJB
+	private transient DegreeMapHelper degreeMapHelper;
+	
     // provided by ks-ap-ui or institution override
     @EJB
     @OptionalResource

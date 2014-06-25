@@ -1,30 +1,37 @@
 package org.kuali.student.ap.framework.context.support;
 
-import org.kuali.rice.core.api.config.property.ConfigContext;
-import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
-import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
-import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
-import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.framework.context.PlanConstants;
-import org.kuali.student.ap.framework.context.PlanHelper;
-import org.kuali.student.common.collection.KSCollectionUtils;
-import org.kuali.student.r2.common.dto.RichTextInfo;
-import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
-import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.kuali.student.r2.core.acal.infc.Term;
-import org.kuali.student.r2.lum.course.infc.Course;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
+import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
+import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
+import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
+import org.kuali.student.ap.academicplan.infc.DegreeMapRequirement;
+import org.kuali.student.ap.academicplan.infc.Placeholder;
+import org.kuali.student.ap.academicplan.infc.PlaceholderInstance;
+import org.kuali.student.ap.academicplan.infc.PlanItem;
+import org.kuali.student.ap.academicplan.infc.TypedObjectReference;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.framework.context.PlaceholderResolver;
+import org.kuali.student.ap.framework.context.PlanConstants;
+import org.kuali.student.ap.framework.context.PlanHelper;
+import org.kuali.student.common.collection.KSCollectionUtils;
+import org.kuali.student.r2.common.dto.RichTextInfo;
+import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
+import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
+import org.kuali.student.r2.common.exceptions.DoesNotExistException;
+import org.kuali.student.r2.common.exceptions.InvalidParameterException;
+import org.kuali.student.r2.common.exceptions.MissingParameterException;
+import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.core.acal.infc.Term;
+import org.kuali.student.r2.lum.course.infc.Course;
 
 /**
  * Default implementation of the PlanHelper
@@ -179,4 +186,136 @@ public class DefaultPlanHelper implements PlanHelper {
             throw new IllegalStateException("LP lookup permission failure ", e);
         }
     }
+    
+	@Override
+	public Placeholder getPlaceHolder(TypedObjectReference ref) {
+
+		if (ref.getRefObjectType().equals(PlanConstants.REF_TYPE_PLACEHOLDER)) {
+
+			String placeholderId = ref.getRefObjectId();
+			Placeholder placeholder;
+			try {
+				placeholder = KsapFrameworkServiceLocator.getDegreeMapService()
+						.getPlaceholder(
+								placeholderId,
+								KsapFrameworkServiceLocator.getContext()
+										.getContextInfo());
+				if (PlanConstants.PLACEHOLDER_ERROR.equals(placeholder.getTypeKey()))
+						throw new IllegalArgumentException("Placeholder type is error.");
+				return placeholder;
+			} catch (DoesNotExistException e) {
+				return null;
+			} catch (InvalidParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder with id [%s].",
+						placeholderId), e);
+			} catch (MissingParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder with id [%s].",
+						placeholderId), e);
+			} catch (OperationFailedException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder with id [%s].",
+						placeholderId), e);
+			}
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public PlaceholderInstance getPlaceHolderInstance(TypedObjectReference ref) {
+		if (ref.getRefObjectType().equals(
+				PlanConstants.REF_TYPE_PLACEHOLDER_INSTANCE)) {
+
+			String pid = ref.getRefObjectId();
+			PlaceholderInstance pi;
+			
+			try {
+				pi = KsapFrameworkServiceLocator.getDegreeMapService()
+						.getPlaceholderInstance(
+								pid,
+								KsapFrameworkServiceLocator.getContext()
+										.getContextInfo());
+				return pi;
+			} catch (DoesNotExistException e) {
+				return null;
+			} catch (InvalidParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder instance with id [%s].",
+						pid), e);
+			} catch (MissingParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder instance with id [%s].",
+						pid), e);
+			} catch (OperationFailedException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch placeholder instance with id [%s].",
+						pid), e);
+			}
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public DegreeMapRequirement getRequirement(TypedObjectReference ref) {
+		if (ref.getRefObjectType().equals(
+				PlanConstants.REF_TYPE_DEGREE_MAP_REQUIREMENT)) {
+
+			String rid = ref.getRefObjectId();
+			DegreeMapRequirement dmr;
+			try {
+				dmr = KsapFrameworkServiceLocator.getDegreeMapService()
+						.getRequirement(
+								rid,
+								KsapFrameworkServiceLocator.getContext()
+										.getContextInfo());
+				return dmr;
+			} catch (DoesNotExistException e) {
+				return null;
+			} catch (InvalidParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch degree map requirement with id [%s].",
+						rid), e);
+			} catch (MissingParameterException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch degree map requirement with id [%s].",
+						rid), e);
+			} catch (OperationFailedException e) {
+				throw new RuntimeException(String.format(
+						"Could not fetch degree map requirement with id [%s].",
+						rid), e);
+			}
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public Set<String> getCourseIdsForPlaceHolder(Placeholder ph) {
+		// TODO Change to bean-switched version
+		PlaceholderResolver phr;
+
+		if (PlanConstants.PLACEHOLDER_COURSE.equals(ph.getTypeKey())) {
+			phr = new CoursePlaceholderResolver();
+		} else if (PlanConstants.PLACEHOLDER_SEARCH.equals(ph.getTypeKey())) {
+			phr = new SearchPlaceholderResolver();
+		} else {
+			throw new IllegalArgumentException("Placeholder type "
+					+ ph.getTypeKey() + " not recognized.");
+		}
+
+		try {
+			return phr.resolve(ph);
+		} catch (MissingParameterException e) {
+			throw new IllegalArgumentException(
+					"Missing requirement parameter for placeholder type "
+							+ ph.getTypeKey());
+		}
+	}
+	
 }

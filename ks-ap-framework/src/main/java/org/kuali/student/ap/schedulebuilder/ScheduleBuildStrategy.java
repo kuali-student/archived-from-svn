@@ -160,4 +160,6 @@ public interface ScheduleBuildStrategy {
 	 */
 	ActivityOption getActivityOption(String termId, String courseId, String regCode);
 
+	boolean isBuildAvailable(String termId, String campusCode);
+
 }
