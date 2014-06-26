@@ -2,7 +2,9 @@
 $test_site = "http://env2.ks.kuali.org"
 #$test_site = "http://env4.ks.kuali.org"
 $test_site = ENV['TEST_SITE'] unless ENV['TEST_SITE'] == nil
-
+#$file_folder = File.dirname(__FILE__)+'../.'
+$file_folder = "/home/likewise-open/HTCINDIA/arunkumarr/repos/student/test/functional-automation/cm-aft/lib/resources/"
+#$file_folder = "#{File}/lib/resources/"
 $: << File.dirname(__FILE__)+'/../../lib'
 
 require 'sambal-kuali'

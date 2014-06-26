@@ -20,6 +20,7 @@ class CmCourseProposalObject < DataFactory
         #Learning Objectives
         :learning_objective_list,
         :author_list,
+        :supporting_doc_list,
 
         #Save
         :create_new_proposal,
@@ -165,6 +166,12 @@ class CmCourseProposalObject < DataFactory
       unless @author_list.nil?
         @author_list.each do |authors|
           authors.create
+        end
+      end
+
+      unless @supporting_doc_list.nil?
+        @supporting_doc_list.each do |supporting_doc|
+          supporting_doc.create
         end
       end
 

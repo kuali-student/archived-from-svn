@@ -306,3 +306,35 @@ Then(/^I should no longer see author and collaborator details on the course prop
 
   end
 end
+
+When(/^I create a basic course proposal with Supporting Documents$/) do
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                                                    :supporting_doc_list => [(make CmSupportingDocsObject)]
+end
+
+
+Then(/^I should see Supporting Documents details on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^I have a basic course proposal with Supporting Documents$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+
+When(/^I update the Supporting Documents on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+
+Then(/^I should see updated Supporting Documents details on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I delete the Supporting Documents on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should no longer see Supporting Documents on the course proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
