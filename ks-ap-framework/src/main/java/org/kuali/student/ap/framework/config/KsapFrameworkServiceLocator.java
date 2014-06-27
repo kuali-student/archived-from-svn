@@ -1,5 +1,7 @@
 package org.kuali.student.ap.framework.config;
 
+import java.io.Serializable;
+
 import javax.ejb.EJB;
 
 import org.kuali.rice.krms.api.repository.RuleManagementService;
@@ -52,9 +54,11 @@ import org.kuali.student.r2.lum.program.service.ProgramService;
  * @version 0.4.5
  * @since 0.1.1
  */
-public final class KsapFrameworkServiceLocator {
+public final class KsapFrameworkServiceLocator implements Serializable {
 
-    /**
+	private static final long serialVersionUID = -7037375269237029592L;
+	
+	/**
      * Internally managed singleton instance.
      */
     private static KsapFrameworkServiceLocator instance;
