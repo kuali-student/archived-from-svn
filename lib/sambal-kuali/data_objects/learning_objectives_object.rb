@@ -20,15 +20,13 @@ include Utilities
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        learning_objective_text: random_alphanums(10,'test learning objective '),
+        learning_objective_text: random_alphanums(10,'Test Learning Objective '),
         category_text: random_alphanums(10,'on the fly category '),
-        category_type: "TBD",
         category_auto_lookup: false,
+        category_type: '::random::',
         learning_objective_level: 1,
         category_level: 1,
         defer_save: false
-
-
     }
     set_options(defaults.merge(opts))
 
@@ -37,15 +35,20 @@ include Utilities
   def create
     on CmLearningObjectives do |page|
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
-      page.add_learning_objective
+      page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
       page.objective_detail(@learning_objective_level).set @learning_objective_text
-      page.base_category_detail(@category_level).set @category_text
+      page.category_detail(@category_level).set @category_text
+      unless @category_type.nil?
+        page.add_category(@learning_objective_level)
+        page.category_type(@category_level).wait_until_present
+        page.category_type(@category_level).pick(@category_type)
+      end
+      page.add_category(@learning_objective_level)
+
 
     end
     determine_save_action unless @defer_save
   end
-
-
 
 
 

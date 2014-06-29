@@ -196,26 +196,9 @@ end
 
 
 When(/^I create a basic course proposal with Learning Objectives$/) do
-  @course_proposal = create CmCourseProposalObject, subject_code: nil,
-                            course_number: nil,
-                            cross_listed_course_list: nil,
-                            jointly_offered_course_list: nil,
-                            version_code_list: nil,
-                            transcript_course_title: nil,
-                            description_rationale: nil,
-                            proposal_rationale: nil,
-                            campus_location: nil,
-                            curriculum_oversight: nil,
-                            assessment_scale: nil,
-                            final_exam_type: nil,
-                            final_exam_rationale: nil,
-                            outcome_list: nil,
-                            format_list: nil,
-                            learning_objective_list: [(make CmLearningObjectiveObject), (make CmLearningObjectiveObject)],
-                            start_term: nil,
-                            defer_save: true,
-                            create_new_proposal: true,
-                            create_optional_fields: false
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                            :learning_objective_list => [(make CmLearningObjectiveObject, :defer_save => true),
+                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :category_level => 1, :category_text => "test category")]
 
 end
 
@@ -224,7 +207,7 @@ Then(/^I should see Learning Objective details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
-    page.lo_terms_review.should include @course_proposal.learning_objective_list[0].learning_objective_text
+    page.lo_terms_review(@course_proposal.learning_objective_list[0].learning_objective_level).should include @course_proposal.learning_objective_list[0].learning_objective_text
   end
 end
 

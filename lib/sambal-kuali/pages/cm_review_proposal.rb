@@ -53,7 +53,7 @@ class CmReviewProposal < BasePage
   value(:outcome_credit_review) { |outcome_level,b| b.div(id: "course_review_outcome_details").div(id: /line#{outcome_level-1}/, data_label: "Credit Value").text }
 
   #LEARNING OBJECTIVES
-  value(:lo_terms_review) { |b| b.textarea(id: "learningObjectivesSection_learningObjectives_control").text }
+  value(:lo_terms_review) { |lo_review,b| b.textarea(id: "learningObjectivesSection_learningObjectives_line#{lo_review-1}_control").text }
 
   #ACTIVITY FORMATS
   value(:activity_level_review) { |activity_level, b| b.div(id: "course_review_format_details").header(id: /line#{activity_level-1}/).span(class: "uif-headerText-span").text }
