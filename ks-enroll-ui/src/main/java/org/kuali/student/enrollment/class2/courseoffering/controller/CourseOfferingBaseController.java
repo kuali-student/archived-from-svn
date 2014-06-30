@@ -31,7 +31,7 @@ import java.util.Properties;
 public class CourseOfferingBaseController extends MaintenanceDocumentController {
 
     @Override
-    protected MaintenanceDocumentForm createInitialForm(HttpServletRequest request) {
+    protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();
     }
 

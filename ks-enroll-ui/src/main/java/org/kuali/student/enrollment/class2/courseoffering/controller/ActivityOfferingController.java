@@ -56,7 +56,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
     @RequestMapping(params = "methodToCall=" + KRADConstants.Maintenance.METHOD_TO_CALL_EDIT)
     public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
                                         HttpServletRequest request, HttpServletResponse response) throws Exception {
-        setupMaintenance(form, request, KRADConstants.MAINTENANCE_EDIT_ACTION);
+        setupMaintenanceEdit(form);
 
         // check view authorization
         // TODO: this needs to be invoked for each request

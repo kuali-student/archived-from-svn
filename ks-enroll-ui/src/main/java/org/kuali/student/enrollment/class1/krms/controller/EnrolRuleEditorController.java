@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletResponse;
 public class EnrolRuleEditorController extends RuleEditorController {
 
     @Override
-    protected MaintenanceDocumentForm createInitialForm(HttpServletRequest request) {
+    protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();
     }
 
@@ -65,7 +65,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
     public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
                                         HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        setupMaintenance(form, request, KRADConstants.MAINTENANCE_EDIT_ACTION);
+        setupMaintenanceEdit(form);
 
         return getModelAndView(form);
     }

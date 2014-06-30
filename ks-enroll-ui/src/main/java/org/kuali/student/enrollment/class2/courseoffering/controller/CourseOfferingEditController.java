@@ -48,7 +48,7 @@ import java.util.Properties;
 public class CourseOfferingEditController extends CourseOfferingBaseController {
 
     @Override
-    protected MaintenanceDocumentForm createInitialForm(HttpServletRequest request) {
+    protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();
     }
 
@@ -56,7 +56,7 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
     public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
                                         HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        setupMaintenance(form, request, KRADConstants.MAINTENANCE_EDIT_ACTION);
+        setupMaintenanceEdit(form);
 
         // check view authorization
         // TODO: this needs to be invoked for each request
