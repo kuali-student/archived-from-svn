@@ -17,9 +17,9 @@ package org.kuali.rice.krms.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.core.api.util.tree.Node;
+import org.kuali.rice.krad.maintenance.MaintenanceDocumentController;
 import org.kuali.rice.krad.uif.UifParameters;
 import org.kuali.rice.krad.util.GlobalVariables;
-import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.controller.MethodAccessible;
 import org.kuali.rice.krad.web.form.DialogResponse;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
@@ -83,7 +83,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //Compare rule with parent rule.
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
 
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
@@ -118,7 +118,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             agenda.getRuleEditors().put(ruleEditor.getKey(), dummyRule);
         }
 
-        return getUIFModelAndView(document);
+        return getModelAndView(document);
     }
 
     /**
@@ -144,7 +144,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_RULE_MAINTENANCE_PAGE_ID);
         }
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
@@ -160,7 +160,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
     @RequestMapping(params = "methodToCall=ajaxRefresh")
     public ModelAndView ajaxRefresh(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
                                     HttpServletRequest request, HttpServletResponse response) {
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -203,7 +203,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
     @RequestMapping(params = "methodToCall=copyRule")
     public ModelAndView copyRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return super.refresh(form, result, request, response);
+        return super.refresh(form);
     }
 
     /**
@@ -245,7 +245,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //refresh the tree
         viewHelper.refreshInitTrees(ruleEditor);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -320,7 +320,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
                         PropositionEditor parentProp = parent.getData().getProposition();
                         parentProp.getCompoundEditors().add(((index / 2) + 1), blank);
                     } else {
-                        return getUIFModelAndView(form);
+                        return getModelAndView(form);
                     }
                     this.getViewHelper(form).refreshInitTrees(ruleEditor);
                     if (blank != null) {
@@ -341,7 +341,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             }
             this.getViewHelper(form).refreshInitTrees(ruleEditor);
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -393,7 +393,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
                                           HttpServletRequest request, HttpServletResponse response) {
         moveSelectedProposition(form, true);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -411,7 +411,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
                                             HttpServletRequest request, HttpServletResponse response) {
         moveSelectedProposition(form, false);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -535,7 +535,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         }
         //Compare rule with parent rule.
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -585,7 +585,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         }
         //Compare rule with parent rule.
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -647,7 +647,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             }
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -672,7 +672,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         // get selected id
         String selectedPropKey = ruleEditor.getSelectedKey();
         if (StringUtils.isBlank(selectedPropKey)) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         // get the id to move
@@ -734,7 +734,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
 
         // call the super method to avoid the agenda tree being reloaded from the db
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -805,7 +805,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
 
         this.getViewHelper(form).refreshInitTrees(ruleEditor);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -837,7 +837,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //Compare rule with parent rule.
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -863,7 +863,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             //Validate the proposition and return if has errors.
             this.getViewHelper(form).validateProposition(proposition);
             if (!GlobalVariables.getMessageMap().getErrorMessages().isEmpty()) {
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
 
             String dialog = KRMSConstants.KSKRMS_DIALOG_YESNO_WARNING;
@@ -875,7 +875,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             //Reset the description and natural language for the proposition.
             this.getViewHelper(form).resetDescription(proposition);
             if (!GlobalVariables.getMessageMap().getErrorMessages().isEmpty()) {
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
 
             //Check if the proposition that was edited is the root proposition and replace.
@@ -900,7 +900,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         PropositionTreeUtil.resetEditModeOnPropositionTree(ruleEditor.getPropositionEditor());
         this.getViewHelper(form).refreshInitTrees(ruleEditor);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -962,7 +962,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         if ((proposition!=null) && (proposition.isEditMode())) {
             GlobalVariables.getMessageMap().putErrorForSectionId(KRMSConstants.KRMS_PROPOSITION_DETAILSECTION_ID+proposition.getIdSuffix(),
                     KRMSConstants.KRMS_MSG_ERROR_RULE_PREVIEW);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         if (!(ruleEditor.getProposition() == null && ruleEditor.getPropId() == null)) {
@@ -986,7 +986,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_AGENDA_MAINTENANCE_PAGE_ID);
         }
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
@@ -1017,7 +1017,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         }
 
         this.getViewHelper(form).refreshInitTrees(ruleEditor);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -1117,7 +1117,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         //Compare rule with parent rule.
         compareRulePropositions((MaintenanceDocumentForm) form, ruleEditor);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -1145,7 +1145,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_AGENDA_MAINTENANCE_PAGE_ID);
         }
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
@@ -1166,7 +1166,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
         proposition.clear();
         this.getViewHelper(form).configurePropositionForType(proposition);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -1266,7 +1266,7 @@ public class RuleEditorController extends MaintenanceDocumentController {
             rule.setLogicArea(StringUtils.EMPTY);
         }
 
-        return super.getUIFModelAndView(form);
+        return super.getModelAndView(form);
     }
 
     protected RuleEditor retrieveSelectedRuleEditor(MaintenanceDocumentForm document){

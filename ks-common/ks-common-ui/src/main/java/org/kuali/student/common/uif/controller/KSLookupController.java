@@ -52,8 +52,7 @@ public class KSLookupController extends LookupController {
 
     @RequestMapping(params = "methodToCall=start")
     @Override
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
 
         LookupForm lookupForm = (LookupForm) form;
 
@@ -70,7 +69,7 @@ public class KSLookupController extends LookupController {
                     KRADServiceLocatorWeb.getKualiModuleService().getResponsibleModuleService(lookupObjectClass);
             if (responsibleModuleService != null && responsibleModuleService.isExternalizable(lookupObjectClass)) {
                 String lookupUrl = responsibleModuleService.getExternalizableDataObjectLookupUrl(lookupObjectClass,
-                        KRADUtils.convertRequestMapToProperties(request.getParameterMap()));
+                        KRADUtils.convertRequestMapToProperties(form.getRequest().getParameterMap()));
 
                 Properties redirectUrlProps = new Properties();
                 redirectUrlProps.put(UifParameters.REDIRECTED_LOOKUP, "true");
@@ -81,7 +80,7 @@ public class KSLookupController extends LookupController {
             }
         }
 
-        return super.start(lookupForm, request, response);
+        return super.start(lookupForm);
     }
 
     /**
