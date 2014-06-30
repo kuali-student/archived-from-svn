@@ -175,7 +175,7 @@ class CmCourseProposalObject < DataFactory
         end
       end
 
-  determine_save_action
+  determine_save_action unless @defer_save
 
   end # required proposal
   def course_proposal_nonrequired

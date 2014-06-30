@@ -71,4 +71,8 @@ class CmReviewProposal < BasePage
   # FINANCIAL FEES
   value(:fee_justification_review ) { |b| b.textarea(id: "financialsSection_justificationOfFees_control").text }
 
+  #AUTHORS & COLLABORATORS
+  value(:author_name_review) { |author_level,b| b.div(id: "course_review_authors_and_collaborators_details").header(id: /line#{author_level-1}/).span(class: "uif-headerText-span").text }
+  value(:author_permission_review) { |author_level,b| b.div(id: "course_review_authors_and_collaborators_details").section(id: /line#{author_level-1}/).div(data_label: "Permissions").textarea(name: /permission/).text  }
+  value(:author_notation_review) { |author_level,b| b.div(id: "course_review_authors_and_collaborators_details").section(id: /line#{author_level-1}/).div(data_label: "Action Request").textarea(name: /action/).text }
 end

@@ -213,10 +213,11 @@ end
 
 When(/^I create a basic course proposal with authors and collaborators$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                 :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
-                                                                  (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear, :defer_save => true),
-                                                                  (make CmAuthCollaboratorObject, :name => "CHURCH", :author_level => 3, :permission => "Edit, Comments, View", :author_notation => :clear)
-                                                                  ]
+                                                    :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
+                                                                     (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear, :defer_save => true),
+                                                                     (make CmAuthCollaboratorObject, :name => "CHURCH", :author_level => 3, :permission => "Edit, Comments, View", :author_notation => :clear)
+                                                                     ],
+                                                    :defer_save => true
 end
 
 Then(/^I should see author and collaborator details on the course proposal$/) do
@@ -225,44 +226,39 @@ Then(/^I should see author and collaborator details on the course proposal$/) do
   on CmReviewProposal do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
+    collection_index = 0
 
-
-    #TODO after data persistence is completed.
-    #@course_proposal.author_list.each do |author|
-    #  page.element.should include author.name
-    #  page.element.should include author.permission
-    #  page.element
-    #end
+      @course_proposal.author_list.each do |author|
+          page.author_name_review(@course_proposal.author_list[collection_index].author_level).should include author.name
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Open Document" if author.permission == "View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Open Document" if author.permission == "Comments, View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Edit Document" if author.permission == "Edit, Comments, View"
+          page.author_notation_review(@course_proposal.author_list[collection_index].author_level).should == "F" if author.author_notation == :set
+          collection_index += 1
+      end
+    end
   end
 
-
-end
 
 Given(/^have a basic course proposal with authors and collaborators$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
                                              (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear),
 
-                            ]
+                            ],
+                            :defer_save => true
 end
 
 When(/^I update the author and collaborator details on the course proposal$/) do
   navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.edit_proposal_action
-  @course_proposal.author_list[0].edit :name => "SMITH",:author_notation => :clear, :defer_save => true
-  @course_proposal.author_list[1].edit :permission => "View"
+  @course_proposal.author_list[0].edit :name => "SMITH",:author_notation => :clear, :author_level => 1, :auto_lookup => true, :defer_save => true
+  @course_proposal.author_list[1].edit :permission => "View", :author_level => 2
 end
 
 Then(/^I should see updated author and collaborator details on the course proposal$/) do
-  @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
-    page.proposal_title_review.should == @course_proposal.proposal_title
-    page.course_title_review.should == @course_proposal.course_title
-
-    #Authors and Collaborators check
-    #TODO
-  end
+  steps %{Then I should see author and collaborator details on the course proposal}
 end
 
 When(/^I delete the author and collaborator details on the course proposal$/) do
@@ -279,14 +275,14 @@ Then(/^I should no longer see author and collaborator details on the course prop
   on CmReviewProposal do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
+    collection_index = 0
 
     @course_proposal.author_list.each do |author|
-      author.author_name_review.should_not include author.name
-      author.author_permission_review.should_not include author.permission
-      author.author_notation_review.should_not include author.author_notation
+        page.author_name_review(@course_proposal.author_list[collection_index].author_level).should_not include author.name
+        page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should_not include author.permission
+        page.author_notation_review(@course_proposal.author_list[collection_index].author_level).should_not include author.author_notation
+        collection_index += 1
     end
-
-
   end
 end
 

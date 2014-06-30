@@ -51,10 +51,10 @@ class CmAuthCollaboratorObject < DataFactory
     on CmAuthorsCollaborators do |page|
       page.authors_collaborators unless page.current_page('Authors & Collaborators').exists?
       page.add_person unless page.author_name(opts[:author_level]).exists?
-      page.author_name(opts[:author_level]).fit opts[:name]
+      page.author_name(opts[:author_level]).set opts[:name] unless opts[:name].nil?
       page.auto_lookup(opts[:name]) if opts[:auto_lookup]
       page.author_permission(opts[:author_level]).pick! opts[:permission]
-      page.author_notation(opts[:author_notation]).fit opts[:author_notation]
+      page.author_notation(opts[:author_level]).fit opts[:author_notation]
     end
     determine_save_action unless opts[:defer_save]
     set_options(opts)
