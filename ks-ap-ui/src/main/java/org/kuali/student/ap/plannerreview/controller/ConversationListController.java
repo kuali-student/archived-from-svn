@@ -59,7 +59,7 @@ public class ConversationListController  extends ConversationControllerBase {
 		LOG.debug("CONVO_FORM: {}", form);
 		form.setViewId(CONVO_FORM);
 		form.setView(super.getViewService().getViewById(CONVO_FORM));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 	
     @RequestMapping(params = "methodToCall=ajaxRefresh")
@@ -76,7 +76,7 @@ public class ConversationListController  extends ConversationControllerBase {
 		}
 		form.setViewId(CONVO_FORM);
 		form.setView(super.getViewService().getViewById(CONVO_FORM));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
     }
 	
 	private void initialize(ConversationListForm form) throws PermissionDeniedException{

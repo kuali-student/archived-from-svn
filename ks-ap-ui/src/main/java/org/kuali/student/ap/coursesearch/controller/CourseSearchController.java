@@ -1100,7 +1100,7 @@ public class CourseSearchController extends UifControllerBase {
 		form.setViewId("CourseSearch-FormView");
 		form.setView(super.getViewService()
 				.getViewById("CourseSearch-FormView"));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	@RequestMapping(value = "/course/", method = RequestMethod.GET)
@@ -1115,7 +1115,7 @@ public class CourseSearchController extends UifControllerBase {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		super.start(form, request, response);
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
     /**
@@ -1318,7 +1318,7 @@ public class CourseSearchController extends UifControllerBase {
 			@ModelAttribute("KualiForm") CourseSearchFormImpl form,
 			HttpServletRequest httprequest,
 			HttpServletResponse httpresponse) {
-		return getUIFModelAndView(form,
+		return getModelAndView(form,
 				CourseSearchConstants.COURSE_SEARCH_RESULT_PAGE);
 	}
 

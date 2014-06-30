@@ -59,7 +59,7 @@ public class ConversationViewController  extends ConversationControllerBase {
 		LOG.debug("CONVO_FORM: {}", form);
 		form.setViewId(CONVO_FORM);
 		form.setView(super.getViewService().getViewById(CONVO_FORM));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 	
 	@RequestMapping(params = "methodToCall=send")
@@ -78,7 +78,7 @@ public class ConversationViewController  extends ConversationControllerBase {
 				throw new ServletException("Unexpected authorization failure", e);
 			}
 		}
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 	
 	/**

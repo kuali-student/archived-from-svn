@@ -88,7 +88,7 @@ public class ScheduleBuildController extends UifControllerBase {
 
 		form.setViewId(SB_FORM);
 		form.setView(super.getViewService().getViewById(SB_FORM));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	private static class EventAggregateData {

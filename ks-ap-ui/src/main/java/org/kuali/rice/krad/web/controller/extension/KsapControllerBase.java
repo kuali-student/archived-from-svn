@@ -24,7 +24,7 @@ public abstract class KsapControllerBase extends UifControllerBase {
      * @return ModelAndView object with the contained form
      */
     @Override
-    protected ModelAndView getUIFModelAndView(UifFormBase form, String pageId) {
+    protected ModelAndView getModelAndView(UifFormBase form, String pageId) {
         return getUIFModelAndViewHelper(form, pageId);
     }
 

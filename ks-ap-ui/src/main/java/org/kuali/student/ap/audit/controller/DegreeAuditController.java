@@ -221,7 +221,7 @@ public class DegreeAuditController extends UifControllerBase {
 					DegreeAuditConstants.TECHNICAL_PROBLEM, params);
 		}
 
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	@RequestMapping(params = "methodToCall=runAudit")
@@ -233,7 +233,7 @@ public class DegreeAuditController extends UifControllerBase {
 			GlobalVariables.getMessageMap().clearErrorMessages();
 			GlobalVariables.getMessageMap().putError("audit_report_section",
 					PlanConstants.ERROR_KEY_ADVISER_ACCESS);
-			return getUIFModelAndView(form);
+			return getModelAndView(form);
 		}
 		String programParam = form.getProgramParam();
 		if ((programParam != null) && (!programParam.isEmpty())) {
@@ -313,7 +313,7 @@ public class DegreeAuditController extends UifControllerBase {
 							"",
 							DegreeAuditConstants.DEGREE_AUDIT_INFO_SELECT_PROGRAM_BEFORE_SUBMIT);
 		}
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	@RequestMapping(value = "/status")
@@ -422,7 +422,7 @@ public class DegreeAuditController extends UifControllerBase {
 			String[] params, String page, String section) {
 		GlobalVariables.getMessageMap().putErrorForSectionId(section, errorKey,
 				params);
-		return getUIFModelAndView(form, page);
+		return getModelAndView(form, page);
 	}
 
 	/**
@@ -433,6 +433,6 @@ public class DegreeAuditController extends UifControllerBase {
 		GlobalVariables.getMessageMap().clearErrorMessages();
 		GlobalVariables.getMessageMap().putWarningForSectionId(section,
 				errorKey, params);
-		return getUIFModelAndView(form, page);
+		return getModelAndView(form, page);
 	}
 }

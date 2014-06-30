@@ -168,7 +168,7 @@ public class ConversationCreateController extends ConversationControllerBase {
 			}
 
 		}
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class ConversationCreateController extends ConversationControllerBase {
 
 		form.setViewId(viewId);
 		form.setView(super.getViewService().getViewById(viewId));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	/**

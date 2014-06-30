@@ -87,7 +87,7 @@ public class ShoppingCartController extends UifControllerBase {
 		uifForm.setJumpToId("popupForm");
 		uifForm.setViewId(SB_CART_FORM);
 		uifForm.setView(super.getViewService().getViewById(SB_CART_FORM));
-		return getUIFModelAndView(uifForm);
+		return getModelAndView(uifForm);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class ShoppingCartController extends UifControllerBase {
 		UifFormBase uifForm = (UifFormBase) form;
 		uifForm.setViewId(SB_CART_FORM);
 		uifForm.setView(super.getViewService().getViewById(SB_CART_FORM));
-		return getUIFModelAndView(uifForm);
+		return getModelAndView(uifForm);
 	}
 
 	@RequestMapping(params = "pageId="

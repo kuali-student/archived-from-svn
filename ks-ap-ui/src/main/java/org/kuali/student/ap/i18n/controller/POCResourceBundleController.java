@@ -58,7 +58,7 @@ public class POCResourceBundleController extends KsapControllerBase {
         form.setView(super.getViewService().getViewById(RB_FORM));
         ((POCResourceBundleFormImpl)form).setLocale(getLocaleFromContext());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private String getLocaleFromContext() {

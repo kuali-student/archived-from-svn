@@ -95,7 +95,7 @@ public class CommentController extends UifControllerBase {
 
 			}
 		}
-		return getUIFModelAndView(commentForm);
+		return getModelAndView(commentForm);
 	}
 
 	@RequestMapping(params = "methodToCall=addComment")
@@ -400,7 +400,7 @@ public class CommentController extends UifControllerBase {
 		GlobalVariables.getMessageMap().clearErrorMessages();
 		GlobalVariables.getMessageMap().putErrorForSectionId(section, errorKey,
 				params);
-		return getUIFModelAndView(form, page);
+		return getModelAndView(form, page);
 	}
 
 	public CommentQueryHelper getCommentQueryHelper() {

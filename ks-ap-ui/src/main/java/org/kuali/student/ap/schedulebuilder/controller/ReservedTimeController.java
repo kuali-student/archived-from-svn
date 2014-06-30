@@ -69,7 +69,7 @@ public class ReservedTimeController extends UifControllerBase {
 		super.start(form, request, response);
 		form.setViewId(FORM);
 		form.setView(super.getViewService().getViewById(FORM));
-		return getUIFModelAndView(form);
+		return getModelAndView(form);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, params = {

@@ -102,7 +102,7 @@ public class PlannerController extends KsapControllerBase {
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
 
-		return getUIFModelAndView(uifForm);
+		return getModelAndView(uifForm);
 	}
 
     /**
@@ -131,7 +131,7 @@ public class PlannerController extends KsapControllerBase {
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
 
-		return getUIFModelAndView(uifForm);
+		return getModelAndView(uifForm);
 	}
 
     /**
@@ -197,7 +197,7 @@ public class PlannerController extends KsapControllerBase {
 		uifForm.setViewId(DIALOG_FORM);
 		uifForm.setView(super.getViewService().getViewById(DIALOG_FORM));
 
-		return getUIFModelAndView(uifForm);
+		return getModelAndView(uifForm);
 	}
 
     /**
