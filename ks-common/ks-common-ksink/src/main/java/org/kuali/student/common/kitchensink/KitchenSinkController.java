@@ -52,17 +52,16 @@ import java.util.Map;
 public class KitchenSinkController extends UifControllerBase {
 
     /**
-     * @see org.kuali.rice.krad.web.controller.UifControllerBase#createInitialForm(javax.servlet.http.HttpServletRequest)
+     * @see org.kuali.rice.krad.web.controller.UifControllerBase#createInitialForm()
      */
     @Override
-    protected KitchenSinkForm createInitialForm(HttpServletRequest request) {
+    protected KitchenSinkForm createInitialForm() {
         return new KitchenSinkForm();
     }
 
     @Override
     @RequestMapping(params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         KitchenSinkForm uiTestForm = (KitchenSinkForm) form;
 
         // pre-select option key "3" in checkbox controls
@@ -72,7 +71,7 @@ public class KitchenSinkController extends UifControllerBase {
         // pre-select option key "2" in dropdown controls
         uiTestForm.setDropdownSelection("2");
 
-        return getUIFModelAndView(uiTestForm);
+        return getModelAndView(uiTestForm);
     }
 
     @RequestMapping(params = "methodToCall=collection")
@@ -99,7 +98,7 @@ public class KitchenSinkController extends UifControllerBase {
         //List<KitchenSinkFormCollection1> collectionList2 = KitchenSinkFormCollection1.clone(collectionList);
         //form.setCollection2(KitchenSinkFormCollection1.clone(collectionList));
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /* test method for CollectionTest sandbox/test view
@@ -122,7 +121,7 @@ public class KitchenSinkController extends UifControllerBase {
         collectionList.add(new KitchenSinkFormCollection1("ENGL104", "English for International Teaching Assistants", "1999-12-31"));
         form.setCollection(collectionList);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     } //*/
 
     @RequestMapping(params = "methodToCall=collectionOne")
@@ -133,7 +132,7 @@ public class KitchenSinkController extends UifControllerBase {
         collectionList.add(new KitchenSinkFormCollection1("A", "First letter of the alphabet", "1970-01-01"));
         form.setCollection(collectionList);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=configProperties")
@@ -148,7 +147,7 @@ public class KitchenSinkController extends UifControllerBase {
         }
         form.setConfigProperties(configProperties);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=collectionTerm")
@@ -160,7 +159,7 @@ public class KitchenSinkController extends UifControllerBase {
         collectionList.add(new KitchenSinkFormCollection1("Winter 2000", "kuali.atp.type.Winter", "2000-01-01"));
         form.setCollection(collectionList);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=addLineCollectionAsForm")
@@ -180,7 +179,7 @@ public class KitchenSinkController extends UifControllerBase {
             GlobalVariables.getMessageMap().addGrowlMessage("NOTE", "kitchensink.addLine");
         }
 
-        return super.addLine(form, result, request, response);
+        return super.addLine(form);
     }
 
     @RequestMapping(params = "methodToCall=getActivities")
@@ -200,7 +199,7 @@ public class KitchenSinkController extends UifControllerBase {
         }
 
         form.setActivityList(activities);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=trees")
@@ -210,7 +209,7 @@ public class KitchenSinkController extends UifControllerBase {
         form.getTree1().setRootElement(buildTree1());
         form.getTree2().setRootElement(buildTree2());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private Node<KitchenSinkFormCollection2, String> buildTree2() {
@@ -280,35 +279,35 @@ public class KitchenSinkController extends UifControllerBase {
     public ModelAndView growl(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                               HttpServletRequest request, HttpServletResponse response) {
         GlobalVariables.getMessageMap().addGrowlMessage("", "kitchensink.custom", "This is an example of a growl with no icon.");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlError")
     public ModelAndView growlError(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                                    HttpServletRequest request, HttpServletResponse response) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.ERROR, "kitchensink.custom", "This is an example of an error growl.");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlInfo")
     public ModelAndView growlInfo(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                                   HttpServletRequest request, HttpServletResponse response) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, "kitchensink.custom", "This is an example of an information growl.");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlSuccess")
     public ModelAndView growlSuccess(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                                      HttpServletRequest request, HttpServletResponse response) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, "kitchensink.custom", "This is an example of a success growl.");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlWarning")
     public ModelAndView growlWarning(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                                      HttpServletRequest request, HttpServletResponse response) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.WARNING, "kitchensink.custom", "This is an example of a warning growl.");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=dialogButtonConfirm")
@@ -333,7 +332,7 @@ public class KitchenSinkController extends UifControllerBase {
             KSUifUtils.addGrowlMessageIcon(GrowlIcon.ERROR, "kitchensink.custom", "Be more careful next time.");
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
 
@@ -347,7 +346,7 @@ public class KitchenSinkController extends UifControllerBase {
             return showDialog(dialogId, true, form);
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
 
@@ -360,7 +359,7 @@ public class KitchenSinkController extends UifControllerBase {
         // Code goes here to save form to database
         //
         GlobalVariables.getMessageMap().addGrowlMessage("NOTE", "kitchensink.saveForm");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=saveLightboxForm")
@@ -375,9 +374,9 @@ public class KitchenSinkController extends UifControllerBase {
 
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, "kitchensink.custom", "Lightbox form saved.");
         // growl doesn't show because returnFromLightbox() executes performRedirect(), w/o growl params:
-        return getUIFModelAndView(form);
-        //return getUIFModelAndView(form);//shows growl,lightbox remains,hidden bean displays
-        //return refresh(form, result, request, response);//same as getUIFModelAndView
+        return getModelAndView(form);
+        //return getModelAndView(form);//shows growl,lightbox remains,hidden bean displays
+        //return refresh(form, result, request, response);//same as getModelAndView
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=processFormRowSelection")
@@ -398,7 +397,7 @@ public class KitchenSinkController extends UifControllerBase {
             }
         }
         GlobalVariables.getMessageMap().addGrowlMessage("PROCESSED:", "kitchensink.custom", sb.toString());
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=popoverMethodToCall")
@@ -408,7 +407,7 @@ public class KitchenSinkController extends UifControllerBase {
                 "Text set in server-side method before the popover is displayed.  "
             +   form.getStringField2()
             );
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private int popupCount = 0;
@@ -416,7 +415,7 @@ public class KitchenSinkController extends UifControllerBase {
     public ModelAndView popoverRefreshBeforeDisplay(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
                                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
         form.setStringField3(Integer.toString(++popupCount));
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=processPopoverForm")
@@ -426,7 +425,7 @@ public class KitchenSinkController extends UifControllerBase {
         if ("error".equals(form.getStringField1().toLowerCase())) {
                 GlobalVariables.getMessageMap().putErrorForSectionId("stringField1","kitchensink.custom","Popover form with error is displayed automatically.");
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     List<KitchenSinkMockDisplayScheduleData> displayScheduleList = KitchenSinkMockDisplayScheduleData.mockTestData();
