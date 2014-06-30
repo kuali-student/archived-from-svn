@@ -75,6 +75,10 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseOfferingRolloverController.class);
     public static final String ROLLOVER_DETAILS_PAGEID = "selectTermForRolloverDetails";
 
+    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
+    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
+    }
+
     @Override
     protected UifFormBase createInitialForm(@SuppressWarnings("unused") HttpServletRequest request) {
         return new CourseOfferingRolloverManagementForm();

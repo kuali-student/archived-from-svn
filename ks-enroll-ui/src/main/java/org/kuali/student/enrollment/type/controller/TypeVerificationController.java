@@ -58,6 +58,10 @@ import java.util.*;
 @RequestMapping(value = "/typeVerification")
 public class TypeVerificationController extends UifControllerBase  {
 
+    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
+    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
+    }
+
     private transient TypeService typeService;
     private List<TypeVerificationBasics> equivalences;
     private List<TypeVerificationBasics> inDBNotInJava;
