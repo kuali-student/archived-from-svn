@@ -56,7 +56,7 @@ public class TimeSlotController extends UifControllerBase {
                                HttpServletRequest request, HttpServletResponse response) {
 
         super.start(form, request, response);
-        return  getUIFModelAndView(form);
+        return  getModelAndView(form);
     }
 
     /**
@@ -101,7 +101,7 @@ public class TimeSlotController extends UifControllerBase {
             form.setTimeSlotsLoaded(true);
         }
 
-        return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
 
 
@@ -112,7 +112,7 @@ public class TimeSlotController extends UifControllerBase {
 
         validateTimeSlot(form);
         if (GlobalVariables.getMessageMap().hasErrors()){
-            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+            return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         boolean isUnique = getViewHelperService(form).isUniqueTimeSlot(form);
@@ -122,7 +122,7 @@ public class TimeSlotController extends UifControllerBase {
             String endTime = form.getAddOrEditEndTime() + " " + form.getAddOrEditEndTimeAmPm();
             String timeSlotTypeName = getTypeService().getType(form.getAddOrEditTermKey(),contextInfo).getName();
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_DUPLICATE_ERROR,timeSlotTypeName,form.getAddOrEditDays(),startTime,endTime);
-            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+            return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         getViewHelperService(form).createTimeSlot(form);
@@ -131,7 +131,7 @@ public class TimeSlotController extends UifControllerBase {
             KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS,TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_ADD_SUCCESS);
         }
 
-        return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
 
     @RequestMapping(params = "methodToCall=editTimeSlot")
@@ -144,7 +144,7 @@ public class TimeSlotController extends UifControllerBase {
 
         validateTimeSlot(form);
         if (GlobalVariables.getMessageMap().hasErrors()){
-            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+            return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         boolean isUnique = getViewHelperService(form).isUniqueTimeSlot(form,tsWrapper.getTimeSlotInfo());
@@ -154,14 +154,14 @@ public class TimeSlotController extends UifControllerBase {
             String endTime = form.getAddOrEditEndTime() + " " + form.getAddOrEditEndTimeAmPm();
             String timeSlotTypeName = getTypeService().getType(form.getAddOrEditTermKey(),contextInfo).getName();
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_DUPLICATE_ERROR,timeSlotTypeName,form.getAddOrEditDays(),startTime,endTime);
-            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+            return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         boolean isInUse = getViewHelperService(form).isTimeSlotInUse(tsWrapper.getTimeSlotInfo());
 
         if (isInUse){
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, TimeSlotConstants.ApplicationResouceKeys.TIMESLOT_IN_USE, tsWrapper.getTimeSlotInfo().getName());
-            return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+            return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
         }
 
         getViewHelperService(form).updateTimeSlot(form,tsWrapper);
@@ -171,7 +171,7 @@ public class TimeSlotController extends UifControllerBase {
         }
 
         form.setEditInProcess(false);
-        return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
 
     private void validateTimeSlot(TimeSlotForm form){
@@ -213,6 +213,6 @@ public class TimeSlotController extends UifControllerBase {
 
         getViewHelperService(form).deleteTimeSlots(form);
 
-        return getUIFModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
+        return getModelAndView(form, TimeSlotConstants.TIME_SLOT_PAGE);
     }
 }

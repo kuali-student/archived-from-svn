@@ -122,7 +122,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
             checkViewAuthorization(form, methodToCall);
         }
 
-        return getUIFModelAndView(maintenanceForm);
+        return getModelAndView(maintenanceForm);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         wrapper.setShowCreateFormatSection(true);
         wrapper.setShowCopyFormatSection(false);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -223,7 +223,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
         wrapper.setShowCreateFormatSection(false);
         wrapper.setShowCopyFormatSection(true);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -263,7 +263,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
             joint.setSelectedToJointlyOfferred(true);
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -284,7 +284,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
             maintainable.copyJointFormatOfferings(wrapper);
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=continueFromCreate")
@@ -306,13 +306,13 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.COURSEOFFERING_CREATE_ERROR_PARAMETER_IS_REQUIRED, "Course Code");
         }
         if (GlobalVariables.getMessageMap().getErrorCount() > 0) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         TermInfo term = CourseOfferingManagementUtil.getTerm(termCode);
         if (term == null) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.COURSEOFFERING_CREATE_ERROR_TERM_INVALID, termCode);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         coWrapper.setTerm(term);
@@ -344,7 +344,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                 coWrapper.setAdminOrg(null);
                 coWrapper.setCourse(null);
 
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             } else {
                 // check if SOC state is "published"
                 ContextInfo contextInfo = ContextUtils.createDefaultContextInfo();
@@ -361,7 +361,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                         GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.COURSEOFFERING_CREATE_ERROR_TERM_RESTRICTED);
                         coWrapper.setSocInfo(null);
 
-                        return getUIFModelAndView(form);
+                        return getModelAndView(form);
                     } else {
                         if (coWrapper.isCreateFromCatalog()) {
                             Properties urlParameters = CourseOfferingManagementUtil._buildCOURLParameters(course.getId(), term.getId(), soc.getId(), KRADConstants.Maintenance.METHOD_TO_CALL_NEW);
@@ -383,12 +383,12 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                             //Enable the create button
                             coWrapper.setEnableCreateButton(true);
 
-                            return getUIFModelAndView(form, CourseOfferingConstants.COPY_COURSEOFFERING_PAGE);
+                            return getModelAndView(form, CourseOfferingConstants.COPY_COURSEOFFERING_PAGE);
                         }
                     }
                 } else {
                     GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_SOC_NOT_EXISTS);
-                    return getUIFModelAndView(form);
+                    return getModelAndView(form);
                 }
             }
         } else {
@@ -400,7 +400,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                     GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CourseOfferingConstants.ERROR_INVALID_CLU_VERSION, courseCode, termCode);
             }
 
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
     }
 
@@ -421,7 +421,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
 
         if (existingCO == null){
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS,CourseOfferingConstants.COURSEOFFERING_CREATE_ERROR_PARAMETER_IS_REQUIRED, "Selected Course");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         List<String> optionKeys = CourseOfferingControllerPopulateUIForm.getOptionKeys(createWrapper, existingCO);

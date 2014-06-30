@@ -59,7 +59,7 @@ public class KitchenSinkPerformanceController extends UifControllerBase {
                               HttpServletRequest request, HttpServletResponse response) {
         KitchenSinkPerformanceForm perfForm = (KitchenSinkPerformanceForm) form;
 
-        return getUIFModelAndView(perfForm);
+        return getModelAndView(perfForm);
     }
 
     /**
@@ -88,7 +88,7 @@ public class KitchenSinkPerformanceController extends UifControllerBase {
         form.setPerfCollection(collectionList); // add collection to form.
 
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private ScheduleOfClassesService getScheduleOfClassesService() {

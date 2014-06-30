@@ -132,7 +132,7 @@ public class AcademicCalendarController extends UifControllerBase {
             acalForm.setDefaultTabToShow(request.getParameter(CalendarConstants.SELECT_TAB));
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=reload")
@@ -141,7 +141,7 @@ public class AcademicCalendarController extends UifControllerBase {
         String acalId = acalForm.getAcademicCalendarInfo().getId();
         getAcalViewHelperService(acalForm).populateAcademicCalendar(acalId, acalForm);
         acalForm.setReload(false);
-        return getUIFModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
+        return getModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
     }
 
     /**
@@ -205,7 +205,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         acalForm.getView().setReadOnly(false);
 
-        return getUIFModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
+        return getModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
     }
 
     /**
@@ -275,7 +275,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         getAcalViewHelperService(acalForm).copyToCreateAcademicCalendar(acalForm);
 
-        return getUIFModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
+        return getModelAndView(acalForm, CalendarConstants.ACADEMIC_CALENDAR_EDIT_PAGE);
 
     }
 
@@ -353,7 +353,7 @@ public class AcademicCalendarController extends UifControllerBase {
     public ModelAndView save(@ModelAttribute("KualiForm") AcademicCalendarForm academicCalendarForm, BindingResult result,
                              HttpServletRequest request, HttpServletResponse response) {
         AcademicCalendarForm acal = saveAcademicCalendarDirtyFields(academicCalendarForm);
-        return getUIFModelAndView(acal);
+        return getModelAndView(acal);
     }
 
     /**
@@ -389,7 +389,7 @@ public class AcademicCalendarController extends UifControllerBase {
             return redirectToSearch(acalForm,request,urlParameters);
         } else {
             GlobalVariables.getMessageMap().putInfo(KRADConstants.GLOBAL_MESSAGES, CalendarConstants.MessageKeys.ERROR_DELETING, acalForm.getAcademicCalendarInfo().getName(),statusInfo.getMessage());
-            return getUIFModelAndView(acalForm);
+            return getModelAndView(acalForm);
         }
 
 
@@ -434,7 +434,7 @@ public class AcademicCalendarController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
     }
 
     /**
@@ -503,7 +503,7 @@ public class AcademicCalendarController extends UifControllerBase {
         }
         getAcalViewHelperService(academicCalendarForm).populateAcademicCalendar(academicCalendarForm.getAcademicCalendarInfo().getId(), academicCalendarForm);
         academicCalendarForm.setDefaultTabToShow(CalendarConstants.ACAL_TERM_TAB);
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
     }
 
 
@@ -522,7 +522,7 @@ public class AcademicCalendarController extends UifControllerBase {
         academicCalendarForm.setFieldsToSave(processDirtyFields(academicCalendarForm));
         ((HolidayCalendarWrapper)academicCalendarForm.getNewCollectionLines().get("holidayCalendarList")).setId(StringUtils.EMPTY);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
     }
 
     private void setDeleteTermMessageWithContext(AcademicCalendarForm academicCalendarForm){
@@ -590,7 +590,7 @@ public class AcademicCalendarController extends UifControllerBase {
                 academicCalendarForm.getTermWrapperList().remove(subTerm);
             }
         }
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
     }
 
     /**
@@ -628,7 +628,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         academicCalendarForm.getAddedCollectionItems().remove(keyDateWrapper);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
 
     }
 
@@ -661,7 +661,7 @@ public class AcademicCalendarController extends UifControllerBase {
         }
         termWrapper.getExamdates().remove(selectedLineIndex);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
 
     }
 
@@ -688,7 +688,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         termWrapper.getKeyDatesGroupWrappers().remove(keydateGroup);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
 
     }
 
@@ -715,7 +715,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         academicCalendarForm.getHolidayCalendarList().remove(selectedLineIndex);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
 
     }
 
@@ -748,7 +748,7 @@ public class AcademicCalendarController extends UifControllerBase {
         academicCalendarForm.getEvents().remove(selectedLineIndex);
         academicCalendarForm.getAddedCollectionItems().remove(deletedEvent);
 
-        return getUIFModelAndView(academicCalendarForm);
+        return getModelAndView(academicCalendarForm);
 
     }
 
@@ -767,7 +767,7 @@ public class AcademicCalendarController extends UifControllerBase {
 
         makeAcalOfficial(acalForm);
 
-        return getUIFModelAndView(acalForm);
+        return getModelAndView(acalForm);
     }
 
     public AcademicCalendarService getAcalService() {

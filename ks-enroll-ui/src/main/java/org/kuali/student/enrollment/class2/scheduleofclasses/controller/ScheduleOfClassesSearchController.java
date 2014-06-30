@@ -91,7 +91,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
         configureCurrentTermCodeOnInitialRequest( scheduleOfClassesSearchForm );
         //This scenario will be very rare if ever (no published term in db)
         if (GlobalVariables.getMessageMap().hasErrors() && GlobalVariables.getMessageMap().containsMessageKey(ScheduleOfClassesConstants.SOC_MSG_ERROR_NO_PUBLISHED_TERM)) {
-            return getUIFModelAndView(scheduleOfClassesSearchForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
+            return getModelAndView(scheduleOfClassesSearchForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
         }
         configureDefaultAoDisplayFormat( scheduleOfClassesSearchForm );
         configureSelectableAoRenderingWidget( scheduleOfClassesSearchForm, request );
@@ -165,7 +165,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
         } else {
             LOG.error("Error: term can't be empty");
             GlobalVariables.getMessageMap().putError("termCode", ScheduleOfClassesConstants.SOC_MSG_ERROR_TERM_IS_EMPTY);
-            return getUIFModelAndView(theForm);
+            return getModelAndView(theForm);
         }
 
         // Second, handle searchType
@@ -177,7 +177,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
             } else {
                 LOG.error( ERROR_SEARCH_FIELD_CANNOT_BE_EMPTY );
                 GlobalVariables.getMessageMap().putError( SEARCH_FIELD, ScheduleOfClassesConstants.SOC_MSG_ERROR_COURSE_IS_EMPTY);
-                return getUIFModelAndView(theForm);
+                return getModelAndView(theForm);
             }
         } else if (theForm.getSearchType().equals("instructor")) {
             String instructorId = theForm.getInstructor();
@@ -188,7 +188,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
             } else {
                 LOG.error( ERROR_SEARCH_FIELD_CANNOT_BE_EMPTY );
                 GlobalVariables.getMessageMap().putError( SEARCH_FIELD, ScheduleOfClassesConstants.SOC_MSG_ERROR_COURSE_IS_EMPTY);
-                return getUIFModelAndView(theForm);
+                return getModelAndView(theForm);
             }
         } else if (theForm.getSearchType().equals("department")) {
             String departmentId = theForm.getDepartment();
@@ -199,7 +199,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
             } else {
                 LOG.error( ERROR_SEARCH_FIELD_CANNOT_BE_EMPTY );
                 GlobalVariables.getMessageMap().putError( SEARCH_FIELD, ScheduleOfClassesConstants.SOC_MSG_ERROR_COURSE_IS_EMPTY);
-                return getUIFModelAndView(theForm);
+                return getModelAndView(theForm);
             }
         } else if (theForm.getSearchType().equals("titleDesc")) {
             String titleDesc = theForm.getTitleDesc();
@@ -209,11 +209,11 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
             } else {
                 LOG.error(ERROR_SEARCH_FIELD_CANNOT_BE_EMPTY );
                 GlobalVariables.getMessageMap().putError( SEARCH_FIELD, ScheduleOfClassesConstants.SOC_MSG_ERROR_COURSE_IS_EMPTY);
-                return getUIFModelAndView(theForm);
+                return getModelAndView(theForm);
             }
         }
 
-        return getUIFModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
+        return getModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
     }
 
     /**
@@ -290,7 +290,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
         }
 
 
-        return getUIFModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
+        return getModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
     }
 
     /**
@@ -361,6 +361,6 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
             ScheduleOfClassesUtil.loadRegRequisites(requisites, activityOfferingClusterWrapper.getRgWrapperList());
         }
 
-        return getUIFModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
+        return getModelAndView(theForm, ScheduleOfClassesConstants.SOC_RESULT_PAGE);
     }
 }

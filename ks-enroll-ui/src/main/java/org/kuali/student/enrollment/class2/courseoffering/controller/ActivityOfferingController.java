@@ -4,12 +4,12 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
+import org.kuali.rice.krad.maintenance.MaintenanceDocumentController;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.UifParameters;
 import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.controller.MethodAccessible;
 import org.kuali.rice.krad.web.form.DocumentFormBase;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
@@ -45,7 +45,7 @@ import java.util.Properties;
 public class ActivityOfferingController extends MaintenanceDocumentController {
 
     @Override
-    protected MaintenanceDocumentForm createInitialForm(HttpServletRequest request) {
+    protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();
     }
 
@@ -69,7 +69,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         //populate the previousFormsMap of the form. The map contains info about the previous view to generate customized breadcrumb
         KSUifUtils.populationPreviousFormsMap(request, (KSUifMaintenanceDocumentForm) form);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @MethodAccessible
@@ -93,7 +93,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
             activityOfferingWrapper.getNewScheduleRequest().setEndTimes(endTimes);
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @MethodAccessible
@@ -124,7 +124,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         activityOfferingWrapper.getNewScheduleRequest().setEndTime("");
         activityOfferingWrapper.getNewScheduleRequest().getEndTimes().clear();
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=editScheduleComponent")
@@ -144,7 +144,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         List<String> endTimes = viewHelper.getEndTimes(days, startTime, activityOfferingWrapper.getTimeSlotType());
         activityOfferingWrapper.getNewScheduleRequest().setEndTimes(endTimes);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=deleteScheduleComponent")
@@ -156,7 +156,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         activityOfferingWrapper.getDeletedScheduleComponents().add(scheduleWrapper);
         activityOfferingWrapper.getRequestedScheduleComponents().remove(scheduleWrapper);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=addScheduleComponent")
@@ -197,7 +197,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
         form.setJumpToId("ActivityOffering-DeliveryLogistic-Actuals");
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -238,7 +238,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         }
 
         if (GlobalVariables.getMessageMap().hasErrors()) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         String loadNewAO = form.getActionParameters().get("aoId");
@@ -333,7 +333,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
         activityOfferingWrapper.setRemovedFromColoSet(true);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private Object getSelectedObject(MaintenanceDocumentForm form) {

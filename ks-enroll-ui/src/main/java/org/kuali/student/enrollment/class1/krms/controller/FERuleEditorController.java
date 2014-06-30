@@ -69,7 +69,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         String refObjectId = ruleWrapper.getType().getKey();
         if ((refObjectId == null) || (refObjectId.isEmpty())){
             GlobalVariables.getMessageMap().putError("type.key", EnrolKRMSConstants.KSKRMS_MSG_INFO_FE_INVALID_TERMTYPE);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         FERuleEditorMaintainableImpl maintainable = (FERuleEditorMaintainableImpl) document.getDocument().getNewMaintainableObject();
@@ -177,7 +177,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
 
         }
         ruleWrapper.setAgendaDirty(true);
-        return getUIFModelAndView(document);
+        return getModelAndView(document);
     }
 
     /**
@@ -246,7 +246,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         wrapper.setAgendas(((FERuleManagementWrapper) dataObject).getAgendas());
 
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -302,7 +302,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         MaintenanceDocumentForm feRuleMaintenanceForm = (MaintenanceDocumentForm) form;
         FERuleManagementWrapper feRuleMgtWrapper = (FERuleManagementWrapper)AgendaUtilities.getRuleWrapper(feRuleMaintenanceForm);
         if (this.getViewHelper(form).validateRule(ruleEditor)) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         } else {
             PropositionTreeUtil.resetEditModeOnPropositionTree(ruleEditor.getPropositionEditor());
             PropositionTreeUtil.resetNewProp(ruleEditor.getPropositionEditor());

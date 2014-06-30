@@ -98,7 +98,7 @@ public class HolidayCalendarController extends UifControllerBase {
                             boolean duplicated = isDuplicateHoliday(newHoliday, holiday);
                             if(duplicated){
                                 GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "ERROR: The holiday being added is already in the collection.");
-                                return getUIFModelAndView(form);
+                                return getModelAndView(form);
                             }
                         }
                 }
@@ -140,7 +140,7 @@ public class HolidayCalendarController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -257,7 +257,7 @@ public class HolidayCalendarController extends UifControllerBase {
             // this should never happen
             GlobalVariables.getMessageMap().putError( KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM,
                                                       "Unexpected error; the holiday to copy has been misplaced.");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         List<HolidayWrapper> newHolidays;
@@ -288,7 +288,7 @@ public class HolidayCalendarController extends UifControllerBase {
         form.setHolidays(newHolidays);
         form.setHcId(null);
         form.setMeta(form.getHolidayCalendarInfo().getMeta());
-        return getUIFModelAndView(form, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+        return getModelAndView(form, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
     }
 
     /**
@@ -330,7 +330,7 @@ public class HolidayCalendarController extends UifControllerBase {
         hcForm.setHcId(null);
         hcForm.setHolidayCalendarInfo( new HolidayCalendarInfo());
         hcForm.setHolidays(new ArrayList<HolidayWrapper>());
-        //        return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+        //        return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
 
         // Made this consistent with the rest of the controllers for creating blank acal/hcal
         Properties urlParameters = new Properties();
@@ -361,7 +361,7 @@ public class HolidayCalendarController extends UifControllerBase {
     public ModelAndView toEdit(@ModelAttribute("KualiForm") HolidayCalendarForm hcForm, BindingResult result,
                                HttpServletRequest request, HttpServletResponse response){
         restoreForm(hcForm);
-        return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+        return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
     }
 
     @RequestMapping(params = "methodToCall=toCopy")
@@ -476,7 +476,7 @@ public class HolidayCalendarController extends UifControllerBase {
             e.printStackTrace();
         }
 
-        return getUIFModelAndView(hcForm);
+        return getModelAndView(hcForm);
     }
 
     private ModelAndView updateHolidayCalendarForm(HolidayCalendarForm hcForm, String updateMsg, boolean isSetOfficial) throws Exception {
@@ -485,17 +485,17 @@ public class HolidayCalendarController extends UifControllerBase {
         getHolidayCalendarFormHelper(hcForm).populateHolidayCalendarDefaults(hcForm);
 
         if (GlobalVariables.getMessageMap().getErrorCount() > 0){
-            return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+            return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
         }
 
         if (!isValidHolidayCalendar(hcForm.getHolidayCalendarInfo())) {
-            return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+            return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
         }
 
         // passed edits, so update the holiday calendar
         getHolidayCalendarFormHelper(hcForm).saveHolidayCalendar(hcForm,isSetOfficial);
         if (GlobalVariables.getMessageMap().hasErrors()){
-            return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+            return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
         }
 
         HolidayCalendarInfo hCalInfo = hcForm.getHolidayCalendarInfo();
@@ -509,7 +509,7 @@ public class HolidayCalendarController extends UifControllerBase {
         Collections.sort(hcForm.getHolidays());
 
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, updateMsg, hCalInfo.getName());
-        return getUIFModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
+        return getModelAndView(hcForm, CalendarConstants.HOLIDAYCALENDAR_EDITPAGE);
 
     }
 

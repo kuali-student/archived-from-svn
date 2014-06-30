@@ -111,7 +111,7 @@ public class HoldIssueInfoController extends UifControllerBase {
 
         form.setHoldIssueInfoList(results);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=create")
@@ -133,7 +133,7 @@ public class HoldIssueInfoController extends UifControllerBase {
             createHoldIssueInfo = holdService.createHoldIssue(holdIssueInfo.getTypeKey(), holdIssueInfo, getContextInfo() );
         } catch (Exception e) {
 
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         form.getView().setApplyDirtyCheck(false);
@@ -151,7 +151,7 @@ public class HoldIssueInfoController extends UifControllerBase {
     public ModelAndView clear(@ModelAttribute("KualiForm") HoldIssueInfoForm form, BindingResult result,
                                HttpServletRequest request, HttpServletResponse response) throws Exception {
         clearValues(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=view")
@@ -179,7 +179,7 @@ public class HoldIssueInfoController extends UifControllerBase {
             throw new RuntimeException("organization not found. ", e);
         }
 
-        return getUIFModelAndView(form, "holdView-ViewPage");
+        return getModelAndView(form, "holdView-ViewPage");
 
     }
 
@@ -205,7 +205,7 @@ public class HoldIssueInfoController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(form, "holdView-EditPage");
+        return getModelAndView(form, "holdView-EditPage");
     }
 
     @RequestMapping(params = "methodToCall=modify")
@@ -225,7 +225,7 @@ public class HoldIssueInfoController extends UifControllerBase {
         try {
             getHoldService().updateHoldIssue(holdIssueInfo.getId(), holdIssueInfo, getContextInfo());
         } catch (Exception e) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
             /*e.printStackTrace();
             throw new RuntimeException("Modify Hold failed. ", e);*/
         }
@@ -258,7 +258,7 @@ public class HoldIssueInfoController extends UifControllerBase {
             throw new RuntimeException("Error Performing Delete",e);
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=back")
@@ -266,7 +266,7 @@ public class HoldIssueInfoController extends UifControllerBase {
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
         clearValues(form);
         resetForm(form);
-        return getUIFModelAndView(form, "holdView-SearchPage");
+        return getModelAndView(form, "holdView-SearchPage");
     }
 
     private void clearValues(HoldIssueInfoForm form) {

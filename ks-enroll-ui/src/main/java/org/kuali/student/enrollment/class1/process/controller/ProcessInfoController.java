@@ -111,12 +111,12 @@ public class ProcessInfoController extends UifControllerBase {
                 if (processInfos.size() > 0) {
                     GlobalVariables.getMessageMap().putErrorForSectionId("processName", "error.enroll.process.save.failed",processInfo.getName());
                     form.setIsSaveSuccess(false);
-                    return getUIFModelAndView(form);
+                    return getModelAndView(form);
                 }
             }
             ProcessInfo createProcessInfo = processService.createProcess(processInfo.getKey(), processInfo.getTypeKey(), processInfo, getContextInfo());
         } catch (Exception e) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         form.getView().setApplyDirtyCheck(false);
@@ -143,7 +143,7 @@ public class ProcessInfoController extends UifControllerBase {
             processService = getProcessService();
             processService.updateProcess(processInfo.getKey(),processInfo, getContextInfo());
         } catch (Exception e) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         //FIXME  form.setValidateDirty(false);
@@ -178,20 +178,20 @@ public class ProcessInfoController extends UifControllerBase {
 
         form.setProcessInfos(results);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=clear")
     public ModelAndView clear(@ModelAttribute("KualiForm") ProcessInfoForm form) throws Exception {
         clearValues(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=back")
     public ModelAndView back(@ModelAttribute("KualiForm") ProcessInfoForm form) throws Exception {
         clearValues(form);
         resetForm(form);
-        return getUIFModelAndView(form, "processInfoSearch-SearchPage");
+        return getModelAndView(form, "processInfoSearch-SearchPage");
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=edit")
@@ -215,7 +215,7 @@ public class ProcessInfoController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(form, "processInfoSearch-EditPage");
+        return getModelAndView(form, "processInfoSearch-EditPage");
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=delete")
@@ -250,7 +250,7 @@ public class ProcessInfoController extends UifControllerBase {
                     getProcessService().updateProcess(processInfo.getKey(), processInfo, getContextInfo());
                     form.setLightboxScript("closeLightbox('" + dialogId + "');");
                     form.getDialogManager().removeAllDialogs();
-                    return getUIFModelAndView(form);
+                    return getModelAndView(form);
                 }
             } else if(isInstructionActive && form.getStateKey().equals("disabled")){
                 processInfo.setStateKey(form.getStateKey());
@@ -263,7 +263,7 @@ public class ProcessInfoController extends UifControllerBase {
             throw new RuntimeException("Unable to get process");
         }
 */
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private ProcessInfo getSelectedProcessInfo(ProcessInfoForm form, String actionLink){

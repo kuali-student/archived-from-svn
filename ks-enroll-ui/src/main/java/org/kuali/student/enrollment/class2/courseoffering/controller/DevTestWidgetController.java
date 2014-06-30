@@ -67,7 +67,7 @@ public class DevTestWidgetController extends UifControllerBase {
                 return _startFirstServiceCall(form, request, response);
             }
         }
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
         // return super.start(theForm, result, request, response);
     }
 
@@ -76,7 +76,7 @@ public class DevTestWidgetController extends UifControllerBase {
         // Doesn't do anything really, but is there for customization
         DevTestWidgetForm theForm = (DevTestWidgetForm) form;
         LOGGER.info("firstServiceCall");
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     @RequestMapping(params = "methodToCall=alphaTest")
@@ -85,7 +85,7 @@ public class DevTestWidgetController extends UifControllerBase {
         LOGGER.info("alphaTest in DevTestWidgetController");
         DevTestWidgetViewHelperService helper = getViewHelperService(form);
         helper.runAlphaTest(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=betaTest")
@@ -94,7 +94,7 @@ public class DevTestWidgetController extends UifControllerBase {
         LOGGER.info("betaTest in DevTestWidgetController");
         DevTestWidgetViewHelperService helper = getViewHelperService(form);
         helper.runBetaTest(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=gammaTest")
@@ -103,7 +103,7 @@ public class DevTestWidgetController extends UifControllerBase {
         LOGGER.info("gammaTest in DevTestWidgetController");
         DevTestWidgetViewHelperService helper = getViewHelperService(form);
         helper.runGammaTest(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=deltaTest")
@@ -112,7 +112,7 @@ public class DevTestWidgetController extends UifControllerBase {
         LOGGER.info("deltaTest in DevTestWidgetController");
         DevTestWidgetViewHelperService helper = getViewHelperService(form);
         helper.runDeltaTest(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     public DevTestWidgetViewHelperService getViewHelperService(DevTestWidgetForm serviceCallForm) {

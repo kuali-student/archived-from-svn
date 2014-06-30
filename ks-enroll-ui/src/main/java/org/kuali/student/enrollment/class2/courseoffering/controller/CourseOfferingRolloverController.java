@@ -107,13 +107,13 @@ public class CourseOfferingRolloverController extends UifControllerBase {
                 return _startRolloverDetails(form, request, response);
             }
         }
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startPerformRollover(@ModelAttribute("KualiForm") UifFormBase form) {
         CourseOfferingRolloverManagementForm theForm = (CourseOfferingRolloverManagementForm) form;
         LOGGER.info("startPerformRollover");
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startRolloverDetails(@ModelAttribute("KualiForm") UifFormBase form,
@@ -127,16 +127,16 @@ public class CourseOfferingRolloverController extends UifControllerBase {
                 return showRolloverResults(theForm);
             }
         } catch (Exception ex) {
-            return getUIFModelAndView(theForm);
+            return getModelAndView(theForm);
         }
 
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startReleaseToDepts(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form) {
         LOGGER.info("startReleaseToDepts");
         form.computeReleaseToDeptsDisabled();
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=goTargetTerm")
@@ -153,12 +153,12 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         if (sourceTermsByCode.isEmpty()) {
             GlobalVariables.getMessageMap().putError("sourceTermCode", "error.courseoffering.sourceTerm.inValid");
             form.setIsRolloverButtonDisabled(true);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         if (targetTermsByCode.isEmpty()) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.targetTerm.inValid");
             form.setIsRolloverButtonDisabled(true);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         TermInfo targetTerm = helper.findTermByTermCode(targetTermCd).get(0);
@@ -168,11 +168,11 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         if (!likeTerms) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.likeTerms.validation");
             form.setIsRolloverButtonDisabled(true);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         } else if (!sourcePrecedesTarget) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.years.validation");
             form.setIsRolloverButtonDisabled(true);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         List<TermInfo> termList = helper.findTermByTermCode(form.getTargetTermCode());
@@ -183,7 +183,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             if (!coIds.isEmpty()) {
                 // Print error message if there are course offerings in the target term
                 GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.rollover.targetTermExists");
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
             // Get first term
             TermInfo matchingTerm = termList.get(firstTerm);
@@ -204,7 +204,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             form.resetForm();
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.courseoffering.targetTerm.inValid");
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=goSourceTerm")
@@ -213,7 +213,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         if (form.getSourceTermCode().isEmpty()) {
             GlobalVariables.getMessageMap().putError("sourceTermCode", "error.courseoffering.sourceTerm.inValid");
             form.setIsRolloverButtonDisabled(true);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         CourseOfferingViewHelperService helper = CourseOfferingManagementUtil.getCoViewHelperService(form);
         List<TermInfo> termList = helper.findTermByTermCode(form.getSourceTermCode());
@@ -227,7 +227,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             if (!sourceTermHasSoc) {
                 GlobalVariables.getMessageMap().putError("sourceTermCode", "error.rollover.sourceTerm.noSoc");
                 form.setIsRolloverButtonDisabled(true);
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
             form.setDisplayedSourceTermCode(sourceTermCode);
             // Set the start date
@@ -245,7 +245,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             form.resetForm();
             GlobalVariables.getMessageMap().putError("soucrceTermCode", "error.courseoffering.sourceTerm.inValid");
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private boolean validateSourceTargetTerms(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form) throws Exception {
@@ -378,14 +378,14 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     public ModelAndView performRollover(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form,
                                         @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         if (!validateSourceTargetTerms(form)) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         CourseOfferingViewHelperService helper = CourseOfferingManagementUtil.getCoViewHelperService(form);
 
         if (form.getSourceTerm() == null || form.getTargetTerm() == null) {
             form.setStatusField("(setUp) Source/target term objects appear to be missing");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         form.setStatusField("");
         String sourceTermId = form.getSourceTerm().getId();
@@ -407,7 +407,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             return start(form, request, response);
         } else {
             // Had problems, stay in the same screen
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
     }
 
@@ -417,7 +417,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         CourseOfferingViewHelperService helper = CourseOfferingManagementUtil.getCoViewHelperService(form);
         if (form.getSourceTerm() == null || form.getTargetTerm() == null) {
             form.setStatusField("(cleanUp) Source/target term objects appear to be missing");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         form.setStatusField("");
 
@@ -427,7 +427,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         if (info != null) {
             form.setStatusField("Num items processed: " + info.getItemsProcessed());
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private void _disableReleaseToDeptsIfNeeded(CourseOfferingViewHelperService helper, String targetTermId,
@@ -584,7 +584,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         if (termList.isEmpty()) {
             GlobalVariables.getMessageMap().putError("rolloverTargetTermCode", "error.rollover.targetTerm.noResults", targetTermCode);
             form.resetForm(); // TODO: Does this make sense?  I don't think so. cclin
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         } else {
             int firstValue = 0;
             TermInfo targetTerm = termList.get(firstValue);
@@ -596,7 +596,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             if (socRolloverResultInfos == null || socRolloverResultInfos.isEmpty()) {
                 GlobalVariables.getMessageMap().putError("rolloverTargetTermCode", "error.rollover.targetTerm.noResults", targetTermCode);
                 form.resetForm(); // TODO: Does this make sense?  I don't think so. cclin
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             } else {
                 if (socRolloverResultInfos.size() > 1) {
                     LOGGER.warn("Multiple Soc Rollover Results Found");
@@ -625,7 +625,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
                 }
             }
         }
-        return getUIFModelAndView(form, ROLLOVER_DETAILS_PAGEID);
+        return getModelAndView(form, ROLLOVER_DETAILS_PAGEID);
     }
 
     /**
@@ -661,14 +661,14 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     public ModelAndView checkApproval(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
                                       @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         LOGGER.info("checkApproval {}", form.getAcceptIndicator());
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=redoRollover")
     public ModelAndView redoRollover(@ModelAttribute("KualiForm") CourseOfferingRolloverManagementForm form, @SuppressWarnings("unused") BindingResult result,
                                      @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         LOGGER.info("redoRollover ");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=confirmReleaseToDepts")
@@ -681,7 +681,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         } else if (form.getActionParamaterValue("confirm").equals("do") ){
             form = releaseToDepts(form);
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private String getTermDisplayString(String termId, TermInfo term) {

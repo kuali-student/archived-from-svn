@@ -245,7 +245,7 @@ public class AORuleEditorController extends EnrolRuleEditorController {
 
         }
 
-        return getUIFModelAndView(document);
+        return getModelAndView(document);
     }
 
     /**
@@ -320,7 +320,7 @@ public class AORuleEditorController extends EnrolRuleEditorController {
         AORuleManagementWrapper aoRuleMgtWrapper = (AORuleManagementWrapper) ruleWrapper;
         aoRuleMgtWrapper.setAgendaDirty(true);
 
-        return getUIFModelAndView(document);
+        return getModelAndView(document);
     }
 
     protected void compareRulePropositions(MaintenanceDocumentForm form, RuleEditor ruleEditor) {

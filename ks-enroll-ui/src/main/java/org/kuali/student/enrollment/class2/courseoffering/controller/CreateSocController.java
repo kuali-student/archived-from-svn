@@ -67,14 +67,14 @@ public class CreateSocController extends UifControllerBase {
                 return _startSelectTermForSocCreation(form);
             }
         }
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startSelectTermForSocCreation(@ModelAttribute("KualiForm") UifFormBase form) {
         // Doesn't do anything really, but is there for customization
         CreateSocForm theForm = (CreateSocForm) form;
         LOGGER.info("selectTermForSocCreation");
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     @RequestMapping(params = "methodToCall=createSocTerm")
@@ -86,10 +86,10 @@ public class CreateSocController extends UifControllerBase {
             helper.getTermByTermCode(form.getSocTermCode());
         } catch (InvalidParameterException e) {
             form.setSocMessage(form.getSocTermCode() + " is an invalid term");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         } catch (Exception e) {
             form.setSocMessage(form.getSocTermCode() + " is producing an unknown error");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         SocInfo socInfo = helper.createSocForTerm(form.getSocTermCode());
 
@@ -104,6 +104,6 @@ public class CreateSocController extends UifControllerBase {
             form.setSocMessage("Term " + form.getSocTermCode() + " is created with state: " + socInfo.getStateKey());
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 }

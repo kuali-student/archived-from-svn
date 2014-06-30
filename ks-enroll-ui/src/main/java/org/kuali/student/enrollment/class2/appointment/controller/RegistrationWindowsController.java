@@ -87,7 +87,7 @@ public class RegistrationWindowsController extends UifControllerBase {
         if (StringUtils.isNotBlank(termId)) {
             try {
                 getViewHelperService(theForm).loadTermAndPeriods(termId, theForm);
-                return getUIFModelAndView(theForm);
+                return getModelAndView(theForm);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -108,10 +108,10 @@ public class RegistrationWindowsController extends UifControllerBase {
         getViewHelperService(searchForm).searchForTerm(termType, termYear, searchForm);
 
         if (GlobalVariables.getMessageMap().hasErrors()) {
-            return getUIFModelAndView(searchForm, AppointmentConstants.SELECT_TERM_PAGE);
+            return getModelAndView(searchForm, AppointmentConstants.SELECT_TERM_PAGE);
         }
 
-        return getUIFModelAndView(searchForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+        return getModelAndView(searchForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
     }
 
     @RequestMapping(params = "methodToCall=show")
@@ -124,7 +124,7 @@ public class RegistrationWindowsController extends UifControllerBase {
 
         form = populatePeriodCollections(form);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=save")
@@ -134,7 +134,7 @@ public class RegistrationWindowsController extends UifControllerBase {
         //Loop through the form's appointment windows and create/update them using the appointmentService
         getViewHelperService(form).saveWindows(form);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=assignStudents")
@@ -166,7 +166,7 @@ public class RegistrationWindowsController extends UifControllerBase {
                 }
             }
         }
-        return getUIFModelAndView(uifForm);
+        return getModelAndView(uifForm);
     }
 
     @RequestMapping(params = "methodToCall=breakAppointments")
@@ -241,13 +241,13 @@ public class RegistrationWindowsController extends UifControllerBase {
                         urlParameters.put("growlMessage", AppointmentConstants.APPOINTMENT_MSG_INFO_DELETED);
                         urlParameters.put("windowName", window.getWindowName());
 
-                        return getUIFModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+                        return getModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
                     } else {
                         //There was an error
                         urlParameters.put("growlMessage", AppointmentConstants.APPOINTMENT_MSG_ERROR_BREAK_APPOINTMENTS_FAILURE);
                         urlParameters.put("windowName", status.getMessage());
 
-                        return getUIFModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+                        return getModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
                     }
                 } else {
                     getAppointmentService().deleteAppointmentWindowCascading(window.getId(), new ContextInfo());
@@ -255,15 +255,15 @@ public class RegistrationWindowsController extends UifControllerBase {
                     urlParameters.put("growlMessage", AppointmentConstants.APPOINTMENT_MSG_INFO_DELETED);
                     urlParameters.put("windowName", window.getWindowName());
 
-                    return getUIFModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+                    return getModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
                 }
             } else {
                 //TODO: log window == null message
-                return getUIFModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+                return getModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
             }
         } catch (Exception e) {
             //TODO: log exception
-            return getUIFModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
+            return getModelAndView(uifForm, AppointmentConstants.REGISTRATION_WINDOWS_EDIT_PAGE);
         }
     }
 
@@ -290,7 +290,7 @@ public class RegistrationWindowsController extends UifControllerBase {
         }
         uifForm = populatePeriodCollections(uifForm);
 
-        return getUIFModelAndView(uifForm);
+        return getModelAndView(uifForm);
     }
 
     private RegistrationWindowsManagementForm populatePeriodCollections(RegistrationWindowsManagementForm uifForm)

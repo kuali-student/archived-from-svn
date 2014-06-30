@@ -115,7 +115,7 @@ public class CheckInfoController extends UifControllerBase {
 
         form.setCheckInfoList(results);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=update")
@@ -132,7 +132,7 @@ public class CheckInfoController extends UifControllerBase {
             processService = getProcessService();
             processService.updateCheck(checkInfo.getId(),checkInfo, getContextInfo());
         } catch (Exception e) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         form.getView().setApplyDirtyCheck(false);
 
@@ -161,7 +161,7 @@ public class CheckInfoController extends UifControllerBase {
            processService = getProcessService();
            processService.createCheck(checkInfo.getTypeKey(), checkInfo, getContextInfo());
         } catch (Exception e) {
-            return getUIFModelAndView(createForm);
+            return getModelAndView(createForm);
         }
 
         form.getView().setApplyDirtyCheck(false);
@@ -187,7 +187,7 @@ public class CheckInfoController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(form, "checkInfoSearch-EditPage");
+        return getModelAndView(form, "checkInfoSearch-EditPage");
     }
 
     @RequestMapping(params = "methodToCall=openCreateForm")
@@ -235,7 +235,7 @@ public class CheckInfoController extends UifControllerBase {
                     getProcessService().updateProcess(processInfo.getKey(), processInfo, getContextInfo());
                     form.setLightboxScript("closeLightbox('" + dialogId + "');");
                     form.getDialogManager().removeAllDialogs();
-                    return getUIFModelAndView(form);
+                    return getModelAndView(form);
                 }
             } else if(isInstructionActive && form.getStateKey().equals("disabled")){
                 processInfo.setStateKey(form.getStateKey());
@@ -248,21 +248,21 @@ public class CheckInfoController extends UifControllerBase {
             throw new RuntimeException("Unable to get process");
         }
 */
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=clear")
     public ModelAndView clear(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         clearValues(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=back")
     public ModelAndView back(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
         clearValues(form);
-        return getUIFModelAndView(form, "checkInfoSearch-SearchPage");
+        return getModelAndView(form, "checkInfoSearch-SearchPage");
     }
 
     private void clearValues(CheckInfoForm form) {

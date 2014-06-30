@@ -72,7 +72,7 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
             }
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @Override

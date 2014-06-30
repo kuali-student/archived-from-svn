@@ -55,7 +55,7 @@ public class GradingController extends UifControllerBase {
         List<GradeStudent> students = ((GradingViewHelperService) gradingForm.getViewHelperService()).loadStudents(selectedCourse,gradingForm);
         gradingForm.setStudents(students);
 
-        return getUIFModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=loadStudents")
@@ -88,7 +88,7 @@ public class GradingController extends UifControllerBase {
             gradingForm.setStudents(students);
         }
 
-        return getUIFModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.UNASSIGN_GRADE_METHOD)
@@ -115,19 +115,19 @@ public class GradingController extends UifControllerBase {
         ((GradingViewHelperService) gradingForm.getViewHelperService()).unAssignGrade(gradingForm.getView(),
                 gradingForm, selectedCollectionPath, selectedLineIndex);
 
-        return getUIFModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.BACK_TO_GRADING_METHOD)
     public ModelAndView backToGrading(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return getUIFModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.BACK_TO_TERM)
     public ModelAndView backToTerm(@ModelAttribute("KualiForm") StudentGradeForm studentGradeForm, BindingResult result,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return getUIFModelAndView(studentGradeForm, GradingConstants.STUDENT_TERM_RECORD_PAGE);
+        return getModelAndView(studentGradeForm, GradingConstants.STUDENT_TERM_RECORD_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.SAVE_METHOD)
@@ -143,7 +143,7 @@ public class GradingController extends UifControllerBase {
         // only refreshing page
         //RICE22M4 gradingForm.setRenderFullView(false);
 
-        return getUIFModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.GRADE_ROSTER_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall="  + GradingConstants.LOAD_COURSES_METHOD)
@@ -151,7 +151,7 @@ public class GradingController extends UifControllerBase {
             HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         ((GradingViewHelperService) gradingForm.getViewHelperService()).loadCourses(gradingForm);
-        return getUIFModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
 
     }
 
@@ -166,7 +166,7 @@ public class GradingController extends UifControllerBase {
             GlobalVariables.getMessageMap().putInfo("firstName",GradingConstants.INFO_GRADE_ROSTER_SUBMITTED);
         }
 
-        return getUIFModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
+        return getModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.VIEW_GRADES)
@@ -175,7 +175,7 @@ public class GradingController extends UifControllerBase {
 
         ((GradingViewHelperService) studentGradeForm.getViewHelperService()).loadStudentGrades(studentGradeForm);
 
-        return getUIFModelAndView(studentGradeForm, GradingConstants.STUDENT_CREDIT_DETAILS_PAGE);
+        return getModelAndView(studentGradeForm, GradingConstants.STUDENT_CREDIT_DETAILS_PAGE);
     }
 
     private void resetValuesForPageChange(GradingForm form){

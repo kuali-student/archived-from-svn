@@ -71,7 +71,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
                 return _startSelectTermForDiagnoseRollover(form, request, response);
             }
         }
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startSelectTermForDiagnoseRollover(@ModelAttribute("KualiForm") UifFormBase form,
@@ -79,7 +79,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
         // Doesn't do anything really, but is there for customization
         DiagnoseRolloverForm theForm = (DiagnoseRolloverForm) form;
         LOGGER.info("selectTermForDiagnoseRollover");
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     @RequestMapping(params = "methodToCall=goTargetTerm")
@@ -90,18 +90,18 @@ public class DiagnoseRolloverController extends UifControllerBase {
         if (targetTerm == null) {
             form.alertTargetTermValid(false);
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.diagnose.rolloverco.targetTermInvalid", form.getTargetTermCode());
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         form.setTargetTerm(targetTerm);
         if (helper.termHasACourseOffering(targetTerm.getId(), form.getCourseOfferingCode())) {
             // TODO: fix error message
             form.alertTargetTermHasCO();
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.diagnose.rolloverco.coInTargetTerm", form.getCourseOfferingCode(), form.getTargetTermCode());
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         form.setDisplayedTargetTermCode(targetTerm.getCode());
         form.alertTargetTermValid(true);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=goSourceCO")
@@ -116,7 +116,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
                 // Print error message if there are isn't a SOC in the source term (not critical--could change)
                 GlobalVariables.getMessageMap().putError("sourceTermCode", "error.rollover.sourceTerm.noSoc");
                 form.resetForm();
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
             // Get first term
             form.setDisplayedSourceTermCode(sourceTermCode);
@@ -136,7 +136,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
                 // TODO: Fix error message
                 form.alertSourceCoValid(false);
                 GlobalVariables.getMessageMap().putError("courseOfferingCode", "error.diagnose.rolloverco.coNotInSourceTerm", form.getCourseOfferingCode(), form.getSourceTerm().getId());
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
             form.setCoCodeId(coInfo.getId());
             form.setDisplayedCourseOfferingCode(coInfo.getCourseOfferingCode());
@@ -147,7 +147,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
             form.resetForm();
             GlobalVariables.getMessageMap().putError("sourceTermCode", "error.diagnose.rolloverco.sourceTermInvalid", form.getSourceTermCode());
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=deleteCoInTargetTerm")
@@ -159,7 +159,7 @@ public class DiagnoseRolloverController extends UifControllerBase {
         if (success) {
             form.alertTargetTermValid(true);
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=performCoRollover")
@@ -170,6 +170,6 @@ public class DiagnoseRolloverController extends UifControllerBase {
         Map<String, Object> keyValues = helper.rolloverCourseOfferingFromSourceTermToTargetTerm(form.getCourseOfferingCode(), form.getSourceTerm().getId(), form.getTargetTerm().getId());
         double diffInSeconds = (Double) keyValues.get(DiagnoseRolloverViewHelperServiceImpl.DURATION_IN_SECONDS);
         form.setRolloverDuration(diffInSeconds  + "s");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 }

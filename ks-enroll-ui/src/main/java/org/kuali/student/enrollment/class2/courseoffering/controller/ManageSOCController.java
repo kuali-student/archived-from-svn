@@ -86,7 +86,7 @@ public class ManageSOCController extends UifControllerBase {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.OPEN_SOC_STATE_KEY, socForm.getSocInfo().getStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_LOCK);
-            return getUIFModelAndView(socForm);
+            return getModelAndView(socForm);
         }
 
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
@@ -101,7 +101,7 @@ public class ManageSOCController extends UifControllerBase {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.LOCKED_SOC_STATE_KEY, socForm.getSocInfo().getStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_SCHEDULE);
-            return getUIFModelAndView(socForm);
+            return getModelAndView(socForm);
         }
 
         String dialogId = ManageSocConstants.ConfirmDialogs.MASS_SCHEDULING;
@@ -134,7 +134,7 @@ public class ManageSOCController extends UifControllerBase {
         } else {
             socForm.clear();
         }
-        return getUIFModelAndView(socForm);
+        return getModelAndView(socForm);
 
 
     }
@@ -149,7 +149,7 @@ public class ManageSOCController extends UifControllerBase {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.SOC_SCHEDULING_STATE_COMPLETED, socForm.getSocInfo().getSchedulingStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_FINALEDIT);
-            return getUIFModelAndView(socForm);
+            return getModelAndView(socForm);
         }
 
         String dialogId = ManageSocConstants.ConfirmDialogs.FINAL_EDITS;
@@ -174,7 +174,7 @@ public class ManageSOCController extends UifControllerBase {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.FINALEDITS_SOC_STATE_KEY, socForm.getSocInfo().getStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_PUBLISH);
-            return getUIFModelAndView(socForm);
+            return getModelAndView(socForm);
         }
 
         String dialogId = ManageSocConstants.ConfirmDialogs.MASS_PUBLISHLING;
@@ -196,7 +196,7 @@ public class ManageSOCController extends UifControllerBase {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.PUBLISHED_SOC_STATE_KEY, socForm.getSocInfo().getStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_CLOSE);
-            return getUIFModelAndView(socForm);
+            return getModelAndView(socForm);
         }
 
         String dialogId = ManageSocConstants.ConfirmDialogs.CLOSE_SET;

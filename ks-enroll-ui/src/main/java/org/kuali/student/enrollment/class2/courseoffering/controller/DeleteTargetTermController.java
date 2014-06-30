@@ -65,7 +65,7 @@ public class DeleteTargetTermController extends UifControllerBase {
         DeleteTargetTermForm theForm = (DeleteTargetTermForm) form;
         Date date = Calendar.getInstance().getTime();
         LOGGER.error("{} {}", date, theForm);
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     @RequestMapping(params = "methodToCall=goTargetTerm")
@@ -77,7 +77,7 @@ public class DeleteTargetTermController extends UifControllerBase {
         if (termInfos == null || termInfos.isEmpty()) {
             // Must have a valid term
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.submit.sourceTerm"); // TODO: Change error
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         int firstTerm = 0;
         TermInfo termInfo = termInfos.get(firstTerm);
@@ -87,7 +87,7 @@ public class DeleteTargetTermController extends UifControllerBase {
         String endDateStr = helperService.formatDate(termInfo.getEndDate());
         form.setTargetTermStartDate(startDateStr);
         form.setTargetTermEndDate(endDateStr);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=deleteTargetTerm")
@@ -96,20 +96,20 @@ public class DeleteTargetTermController extends UifControllerBase {
 
         if (form.getTargetTermCode() == null || form.getTargetTermCode().length() == 0) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.submit.sourceTerm");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         // Check for target SOC
         CourseOfferingViewHelperService helperService = CourseOfferingManagementUtil.getCoViewHelperService(form);
         SocInfo mainSoc = helperService.getMainSoc(form.getDisplayedTargetTermId());
         if (mainSoc == null) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.delete.targetTerm.noSoc");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         if (!mainSoc.getStateKey().equals(CourseOfferingSetServiceConstants.DRAFT_SOC_STATE_KEY)) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.delete.targetTerm.notDraftSoc");
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
         helperService.deleteTargetTerm(form.getDisplayedTargetTermId(), form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 }

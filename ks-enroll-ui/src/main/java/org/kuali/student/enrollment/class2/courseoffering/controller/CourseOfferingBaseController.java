@@ -5,7 +5,7 @@ import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.UifParameters;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
+import org.kuali.rice.krad.maintenance.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.form.DocumentFormBase;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
@@ -49,7 +49,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
             viewHelper.populateFormatNames(dataObject);
         }
 
-        return getUIFModelAndView(form);    // because there were errors, return a MAV to re-nav back to
+        return getModelAndView(form);    // because there were errors, return a MAV to re-nav back to
     }
 
     @RequestMapping(params = "methodToCall=cancel")
@@ -130,7 +130,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
         if (validAction){
             return super.addBlankLine(form, request, response);
         } else {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
     }
 }

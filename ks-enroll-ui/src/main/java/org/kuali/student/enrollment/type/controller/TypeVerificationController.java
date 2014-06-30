@@ -292,7 +292,7 @@ public class TypeVerificationController extends UifControllerBase  {
         ((TypeVerificationInfo) form).setNotInDB(typeInfo.getNotInDB());
 
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
 

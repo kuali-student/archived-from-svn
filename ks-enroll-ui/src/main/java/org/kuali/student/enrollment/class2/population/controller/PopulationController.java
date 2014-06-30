@@ -3,7 +3,7 @@ package org.kuali.student.enrollment.class2.population.controller;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.util.KRADConstants;
-import org.kuali.rice.krad.web.controller.MaintenanceDocumentController;
+import org.kuali.rice.krad.maintenance.MaintenanceDocumentController;
 import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
@@ -36,7 +36,7 @@ public class PopulationController extends MaintenanceDocumentController {
         PopulationWrapper wrapper = (PopulationWrapper)form.getDocument().getNewMaintainableObject().getDataObject();
 
         wrapper.setCreateByRule(true);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=createByCombiningPopulations")
@@ -45,7 +45,7 @@ public class PopulationController extends MaintenanceDocumentController {
         PopulationWrapper wrapper = (PopulationWrapper)form.getDocument().getNewMaintainableObject().getDataObject();
         wrapper.setCreateByRule(false);
         wrapper.setEnableCreateButton(false);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
 
     }
 

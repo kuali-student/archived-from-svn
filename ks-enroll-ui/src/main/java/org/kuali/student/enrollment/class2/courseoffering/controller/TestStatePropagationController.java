@@ -100,7 +100,7 @@ public class TestStatePropagationController extends UifControllerBase {
             }
         }
 
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     private ModelAndView _startStatePropagationTest(@ModelAttribute("KualiForm") UifFormBase form,
@@ -108,7 +108,7 @@ public class TestStatePropagationController extends UifControllerBase {
         // Doesn't do anything really, but is there for customization
         TestStatePropagationForm theForm = (TestStatePropagationForm) form;
         LOGGER.info("firstServiceCall");
-        return getUIFModelAndView(theForm);
+        return getModelAndView(theForm);
     }
 
     @Transactional
@@ -117,7 +117,7 @@ public class TestStatePropagationController extends UifControllerBase {
                                              @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
         TestStatePropagationViewHelperService helper = getViewHelperService(form);
         helper.runTests(form);
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     public TestStatePropagationViewHelperService getViewHelperService(TestStatePropagationForm serviceCallForm) {
@@ -145,7 +145,7 @@ public class TestStatePropagationController extends UifControllerBase {
 
         populateFormWithTargetSocInfo( form );
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private void populateFormWithTargetSocInfo( TestStatePropagationForm form ) {

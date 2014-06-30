@@ -38,7 +38,7 @@ public class CourseRegistrationKradController extends UifControllerBase {
                               HttpServletRequest request, HttpServletResponse response) {
         CourseRegistrationKradForm perfForm = (CourseRegistrationKradForm) form;
 
-        return getUIFModelAndView(perfForm);
+        return getModelAndView(perfForm);
     }
 
     @RequestMapping(params = "methodToCall=searchForCourses")
@@ -59,7 +59,7 @@ public class CourseRegistrationKradController extends UifControllerBase {
         form.setCourseOfferingSearchResults(collectionList); // add collection to form.
 
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private ScheduleOfClassesService getScheduleOfClassesService() {

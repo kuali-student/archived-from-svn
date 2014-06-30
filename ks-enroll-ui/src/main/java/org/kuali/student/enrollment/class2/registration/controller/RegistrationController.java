@@ -215,8 +215,8 @@ public class RegistrationController extends UifControllerBase {
                 }
             }
 
-//            return getUIFModelAndView(regForm, regForm.getViewId(), "registrationPage");
-            return getUIFModelAndView(regForm, "registrationPage");
+//            return getModelAndView(regForm, regForm.getViewId(), "registrationPage");
+            return getModelAndView(regForm, "registrationPage");
         } catch (InvalidParameterException e) {
             throw new RuntimeException(e);
         } catch (MissingParameterException e) {
@@ -286,7 +286,7 @@ public class RegistrationController extends UifControllerBase {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     protected List<String> getCourseOfferingIds(RegistrationForm registrationForm, ContextInfo context) throws InvalidParameterException, MissingParameterException, DoesNotExistException, PermissionDeniedException, OperationFailedException {
@@ -392,7 +392,7 @@ public class RegistrationController extends UifControllerBase {
         }
 
 
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     @RequestMapping(params = "methodToCall=registerClass")
@@ -440,14 +440,14 @@ public class RegistrationController extends UifControllerBase {
 		}
 
 
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     @RequestMapping(params = "methodToCall=submitRegistration")
     public ModelAndView submitRegistration(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
                                            HttpServletRequest request, HttpServletResponse response) {
         processSubmitRegRequest(registrationForm.getRegRequest(), registrationForm, false);
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     protected void processSubmitRegRequest(RegistrationRequestInfo regRequest, RegistrationForm registrationForm, boolean oneClick) {
@@ -575,7 +575,7 @@ public class RegistrationController extends UifControllerBase {
         	 throw new RuntimeException(e);
 		}
 
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     /**
@@ -639,7 +639,7 @@ public class RegistrationController extends UifControllerBase {
 			throw new RuntimeException(e);
 		}
 
-        return getUIFModelAndView(registrationForm);
+        return getModelAndView(registrationForm);
     }
 
     protected void processValidationResults(List<ValidationResultInfo> validationResultInfos, String operation) {

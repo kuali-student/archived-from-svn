@@ -67,7 +67,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
 
         setupMaintenance(form, request, KRADConstants.MAINTENANCE_EDIT_ACTION);
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -179,7 +179,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
         //Build the membershipquery
         CluSetRangeWrapper range = prop.getCluSetRange();
         if(!CluSetRangeHelper.validateCourseRange(prop, range)){
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         MembershipQueryInfo membershipQueryInfo = CluSetRangeHelper.buildMembershipQuery(range);
@@ -191,7 +191,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
         cluSetRange.setClusInRange(this.getViewHelper(form).getCoursesInRange(membershipQueryInfo));
 
         if(!CluSetRangeHelper.validateCoursesInRange(prop, range, cluSetRange)) {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         prop.getCourseSet().getCluSetRanges().add(cluSetRange);
@@ -199,7 +199,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
         //Reset range helper to clear values on screen.
         range.reset();
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**

@@ -104,7 +104,7 @@ public class CalendarSearchController  extends UifControllerBase {
             } catch (NumberFormatException e) {
                 GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "ERROR: invalid year entered.");
                 resetForm(searchForm);
-                return getUIFModelAndView(searchForm);
+                return getModelAndView(searchForm);
             }
         }
 
@@ -141,12 +141,12 @@ public class CalendarSearchController  extends UifControllerBase {
         session.setAttribute(CalendarConstants.SESSION_CALENDAR_SEARCH_NAME, searchForm.getName());
         session.setAttribute(CalendarConstants.SESSION_CALENDAR_SEARCH_YEAR, searchForm.getYear());
         // Cannot just put null as an argument, since two matching method signatures now exist:
-        // getUIFModelAndView(UifFormBase form, String pageId)
+        // getModelAndView(UifFormBase form, String pageId)
         // and
-        // getUIFModelAndView(UifFormBase form, Map<String, Object> additionalViewAttributes)
+        // getModelAndView(UifFormBase form, Map<String, Object> additionalViewAttributes)
         //
         String pageId = null;
-        return getUIFModelAndView(searchForm, pageId);
+        return getModelAndView(searchForm, pageId);
     }
 
     /**
@@ -345,7 +345,7 @@ public class CalendarSearchController  extends UifControllerBase {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, "ERROR: invalid calendar type.");
         }
 
-        return getUIFModelAndView(searchForm);
+        return getModelAndView(searchForm);
 
     }
 
