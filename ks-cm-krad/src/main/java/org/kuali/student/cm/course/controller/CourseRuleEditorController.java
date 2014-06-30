@@ -120,7 +120,7 @@ public class CourseRuleEditorController extends RuleEditorController {
         PropositionEditor proposition = PropositionTreeUtil.getProposition(ruleEditor);
         if ((proposition!=null) && (proposition.isEditMode())) {
             GlobalVariables.getMessageMap().putErrorForSectionId(KRMSConstants.KRMS_PROPOSITION_DETAILSECTION_ID, KRMSConstants.KRMS_MSG_ERROR_RULE_PREVIEW);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         if (!(ruleEditor.getProposition() == null && ruleEditor.getPropId() == null)) {
@@ -166,7 +166,7 @@ public class CourseRuleEditorController extends RuleEditorController {
             agenda.getRuleEditors().put(ruleEditor.getKey(), dummyRule);
         }
 
-        return getUIFModelAndView(documentForm);
+        return getModelAndView(documentForm);
     }
 
     /**

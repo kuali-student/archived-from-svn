@@ -245,7 +245,7 @@ public class CourseController extends CourseRuleEditorController {
         if (!GlobalVariables.getMessageMap().hasErrors()) {
             return super.route(form, result, request, response);    //To change body of overridden methods use File | Settings | File Templates.
         }
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -264,7 +264,7 @@ public class CourseController extends CourseRuleEditorController {
             CourseInfoWrapper wrapper = getCourseInfoWrapper(form);
             wrapper.setMissingRequiredFields(true);
         }
-        return getUIFModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL);
+        return getModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL);
     }
 
     /**
@@ -290,7 +290,7 @@ public class CourseController extends CourseRuleEditorController {
             wrapper.getUiHelper().setSelectedSection(section);
         }
 
-        return getUIFModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.CREATE_COURSE);
+        return getModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.CREATE_COURSE);
     }
 
     /**
@@ -370,7 +370,7 @@ public class CourseController extends CourseRuleEditorController {
         final String selectedCollectionPath = form.getActionParamaterValue(UifParameters.SELECTED_COLLECTION_PATH);
         if (StringUtils.isBlank(selectedCollectionPath)) {
             GlobalVariables.getMessageMap().putErrorForSectionId(CourseViewSections.SUPPORTING_DOCUMENTS.getSectionId(), CurriculumManagementConstants.MessageKeys.UNABLE_TO_ADD_LINE);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         String selectedLine = form.getActionParamaterValue(UifParameters.SELECTED_LINE_INDEX);
@@ -383,7 +383,7 @@ public class CourseController extends CourseRuleEditorController {
 
         if (selectedLineIndex == -1) {
             GlobalVariables.getMessageMap().putErrorForSectionId(CourseViewSections.SUPPORTING_DOCUMENTS.getSectionId(), CurriculumManagementConstants.MessageKeys.UNABLE_TO_DELETE_LINE);
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
 
         final DocumentInfo toRemove = courseInfoWrapper.getSupportingDocuments().remove(selectedLineIndex);
@@ -495,11 +495,11 @@ public class CourseController extends CourseRuleEditorController {
                 CourseViewSections nextSection = CourseViewSections.values()[currentSection.ordinal() + 1];
                 courseInfoWrapper.getUiHelper().setSelectedSection(nextSection);
             }
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         } else if (StringUtils.equalsIgnoreCase(nextOrCurrentPage, "KS-CourseView-ReviewProposalLink")) {
-            return getUIFModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL);
+            return getModelAndView(form, CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL);
         } else {
-            return getUIFModelAndView(form);
+            return getModelAndView(form);
         }
     }
 
@@ -513,7 +513,7 @@ public class CourseController extends CourseRuleEditorController {
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=previousPage")
     public ModelAndView previousPage(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, HttpServletRequest request) {
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -662,12 +662,12 @@ public class CourseController extends CourseRuleEditorController {
             } catch (Exception e) {
                 LOG.error("Error creating a new comment", e);
                 GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, CurriculumManagementConstants.MessageKeys.ERROR_CREATE_COMMENT);
-                return getUIFModelAndView(form);
+                return getModelAndView(form);
             }
             ittCommentInfo = newComment;
         }
         //form.getDialogManager().removeDialog("commentsLightBox");
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
 
     }
 
@@ -752,7 +752,7 @@ public class CourseController extends CourseRuleEditorController {
             courseInfoWrapper.setPreviousSubjectCode(courseInfoWrapper.getCourseInfo().getSubjectArea());
         }
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @MethodAccessible
@@ -768,7 +768,7 @@ public class CourseController extends CourseRuleEditorController {
         ResultValuesGroupInfoWrapper rvg = courseInfoWrapper.getCreditOptionWrappers().get(Integer.parseInt(outComeIndex));
         rvg.getUiHelper().setResultValue("");
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
 
@@ -819,7 +819,7 @@ public class CourseController extends CourseRuleEditorController {
         loModel.moveUpCurrent();
         clearSelectedLoItem(loModel.getLoWrappers());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveDown")
@@ -830,7 +830,7 @@ public class CourseController extends CourseRuleEditorController {
         loItemModel.moveDownCurrent();
         clearSelectedLoItem(loItemModel.getLoWrappers());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveRight")
@@ -841,7 +841,7 @@ public class CourseController extends CourseRuleEditorController {
         loItemModel.indentCurrent();
         clearSelectedLoItem(loItemModel.getLoWrappers());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     /**
@@ -867,7 +867,7 @@ public class CourseController extends CourseRuleEditorController {
         loItemModel.outdentCurrent();
         clearSelectedLoItem(loItemModel.getLoWrappers());
 
-        return getUIFModelAndView(form);
+        return getModelAndView(form);
     }
 
     private LoDisplayWrapperModel setupLoModel(MaintenanceDocumentForm form) {
