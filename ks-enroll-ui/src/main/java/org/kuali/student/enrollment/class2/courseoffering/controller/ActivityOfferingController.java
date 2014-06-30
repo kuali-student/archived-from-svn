@@ -279,11 +279,11 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
     @RequestMapping(params = "methodToCall=cancel")
     @Override
-    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form) {
 
         DocumentFormBase documentForm = (DocumentFormBase) form;
-        performWorkflowAction(documentForm, UifConstants.WorkflowAction.CANCEL);
+        super.cancel(documentForm);
+
 
         String loadNewAO = form.getActionParameters().get("aoId");
         String returnLocation = form.getReturnLocation();

@@ -53,17 +53,16 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
     }
 
     @Override
-    public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView setupMaintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) {
 
         setupMaintenanceEdit(form);
 
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
+            String methodToCall = form.getRequest().getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
             checkViewAuthorization(form, methodToCall);
-            String crossListedAlias = request.getParameter("editCrossListedCoAlias");
+            String crossListedAlias = form.getRequest().getParameter("editCrossListedCoAlias");
             if(StringUtils.equals(crossListedAlias, "true")) {
                 Object selectedObject =  form.getDocument().getNewMaintainableObject().getDataObject();
                 if(selectedObject instanceof CourseOfferingEditWrapper) {

@@ -85,18 +85,14 @@ public class EnrolRuleEditorController extends RuleEditorController {
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=cancel")
     @Override
-    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form) {
 
         DocumentFormBase documentForm = (DocumentFormBase) form;
-        performWorkflowAction(documentForm, UifConstants.WorkflowAction.CANCEL);
+        super.cancel(documentForm);
 
         return back(form);
     }
