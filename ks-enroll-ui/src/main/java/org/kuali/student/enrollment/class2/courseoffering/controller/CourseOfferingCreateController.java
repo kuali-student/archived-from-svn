@@ -92,29 +92,28 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
      *
      */
     @Override
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         MaintenanceDocumentForm maintenanceForm = (MaintenanceDocumentForm) form;
         setupMaintenanceNewWithExisting(maintenanceForm);
 
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
+            String methodToCall = form.getRequest().getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
 
             // check if creating CO and populate the form
-            String createCO = request.getParameter(CourseOfferingConstants.CREATE_COURSEOFFERING);
+            String createCO = form.getRequest().getParameter(CourseOfferingConstants.CREATE_COURSEOFFERING);
             if (createCO != null && createCO.equals("true")) {
-                CourseOfferingControllerPopulateUIForm.populateCreateCourseOfferingForm(maintenanceForm, request);
+                CourseOfferingControllerPopulateUIForm.populateCreateCourseOfferingForm(maintenanceForm, form.getRequest());
             }
             // done with creating CO
 
-            String pageId = request.getParameter("pageId");
+            String pageId = form.getRequest().getParameter("pageId");
             if (pageId != null && pageId.equals("courseOfferingCopyPage")){
                 Object selectedObject =  maintenanceForm.getDocument().getNewMaintainableObject().getDataObject();
                 if (selectedObject instanceof CourseOfferingCreateWrapper)  {
                     CourseOfferingCreateWrapper coCreateWrapper = (CourseOfferingCreateWrapper)selectedObject;
-                    String targetTermCode = request.getParameter("targetTermCode");
-                    String catalogCourseCode = request.getParameter("catalogCourseCode");
-                    String coId = request.getParameter("courseOfferingId");
+                    String targetTermCode = form.getRequest().getParameter("targetTermCode");
+                    String catalogCourseCode = form.getRequest().getParameter("catalogCourseCode");
+                    String coId = form.getRequest().getParameter("courseOfferingId");
 
                     CourseOfferingControllerPopulateUIForm.copyCourseOfferingInfo(coCreateWrapper, targetTermCode, catalogCourseCode, coId);
                 }
@@ -128,10 +127,9 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
     @Override
     @MethodAccessible
     @RequestMapping(params = "methodToCall=route")
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
 
-        super.route(form, result, request, response);
+        super.route(form);
 
         if( GlobalVariables.getMessageMap().hasErrors() ) {
             return handleRouteForErrors( form );
@@ -145,11 +143,11 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
     public
     @ResponseBody
     List<KeyValue> ajaxGetFinalExamDriverTypes(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) {
+                                     HttpServletResponse response) {
 
         List<KeyValue> keyValueList = null;
         try {
-            String formatId = request.getParameter("formatId");
+            String formatId = form.getRequest().getParameter("formatId");
             CourseOfferingEditMaintainableImpl maintainable = (CourseOfferingEditMaintainableImpl) KSControllerHelper.getViewHelperService(form);
             keyValueList = maintainable.getFinalExamDriverTypes(formatId, form);
         } catch (Exception e) {
@@ -163,11 +161,11 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
     public
     @ResponseBody
     List<KeyValue> ajaxGetGradeRosterLevelTypes(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) {
+                                     HttpServletResponse response) {
 
         List<KeyValue> keyValueList = null;
         try {
-            String formatId = request.getParameter("formatId");
+            String formatId = form.getRequest().getParameter("formatId");
             CourseOfferingEditMaintainableImpl maintainable = (CourseOfferingEditMaintainableImpl) KSControllerHelper.getViewHelperService(form);
             keyValueList = maintainable.getGradeRosterLevelTypes(formatId, form);
         } catch (Exception e) {
@@ -235,7 +233,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
      */
     @RequestMapping(params = "methodToCall=markCourseForJointOffering")
     public ModelAndView markCourseForJointOffering(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
-                HttpServletRequest request, HttpServletResponse response) throws Exception {
+                 HttpServletResponse response) throws Exception {
 
         CourseOfferingCreateWrapper wrapper = (CourseOfferingCreateWrapper) form.getDocument().getNewMaintainableObject().getDataObject();
         int index = wrapper.getSelectedJointCourseIndex();
@@ -405,8 +403,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
     }
 
     @RequestMapping(params = "methodToCall=createFromCopy")
-    public ModelAndView createFromCopy(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
-         @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView createFromCopy(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         CourseOfferingCreateWrapper createWrapper = (CourseOfferingCreateWrapper) form.getDocument().getNewMaintainableObject().getDataObject();
         CourseOfferingInfo existingCO = null;

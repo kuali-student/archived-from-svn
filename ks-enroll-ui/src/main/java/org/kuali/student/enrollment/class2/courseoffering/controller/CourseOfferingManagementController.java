@@ -95,14 +95,13 @@ public class CourseOfferingManagementController extends UifControllerBase {
     }
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CourseOfferingManagementForm();
     }
 
     @Override
     @RequestMapping(params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase uifForm,
-                              @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase uifForm) {
 
         if (!(uifForm instanceof CourseOfferingManagementForm)) {
             throw new RuntimeException("Form object passed into start method was not of expected type CourseOfferingManagementForm. Got " + uifForm.getClass().getSimpleName());
@@ -112,7 +111,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
 
         // set adminOrg to the form to temporarily overcome that we actually need page level authorization but not view
         // level authorization.
-        String inputValue = request.getParameter("adminOrg");
+        String inputValue = form.getRequest().getParameter("adminOrg");
         if ((inputValue != null) && !inputValue.isEmpty()) {
             form.setAdminOrg(inputValue);
         }
@@ -130,15 +129,15 @@ public class CourseOfferingManagementController extends UifControllerBase {
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
+            String methodToCall = form.getRequest().getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
             checkViewAuthorization(form, methodToCall);
             form.setEditAuthz(CourseOfferingManagementUtil.checkEditViewAuthz(form));
         }
 
         // check if the view is invoked within portal or not
-        inputValue = request.getParameter("withinPortal");
+        inputValue = form.getRequest().getParameter("withinPortal");
         if ((inputValue != null) && !inputValue.isEmpty()) {
-            boolean withinPortal = Boolean.valueOf(request.getParameter("withinPortal"));
+            boolean withinPortal = Boolean.valueOf(form.getRequest().getParameter("withinPortal"));
             form.setWithinPortal(withinPortal);
         }
 
@@ -158,11 +157,11 @@ public class CourseOfferingManagementController extends UifControllerBase {
 
 
     @Override
-    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase uifForm, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase uifForm) throws Exception {
         //Refresh AO list on KRMS return
         CourseOfferingManagementForm form = (CourseOfferingManagementForm) uifForm;
         CourseOfferingManagementUtil.getViewHelperService(form).setupRuleIndicator(form.getActivityWrapperList());
-        return super.refresh(form, result, request, response);
+        return super.refresh(form);
     }
 
     /**
@@ -926,8 +925,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
 
     @RequestMapping(params = "methodToCall=cancel")
     @Override
-    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form) {
 
         CourseOfferingManagementForm theForm = (CourseOfferingManagementForm) form;
 

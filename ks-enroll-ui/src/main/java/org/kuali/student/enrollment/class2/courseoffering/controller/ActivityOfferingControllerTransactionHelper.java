@@ -12,8 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 public interface ActivityOfferingControllerTransactionHelper {
 
 	public abstract ModelAndView routeSuper(DocumentFormBase form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response,
 			ActivityOfferingController activityOfferingController);
 
 }

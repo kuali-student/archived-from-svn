@@ -103,7 +103,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
 
         String newUrl = urlToRedirectTo.replaceAll("growl[^&]*&", "");
         form.setReturnLocation(newUrl);
-        return back(form,result,request,response);
+        return back(form);
     }
 
 
@@ -113,8 +113,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=addBlankLine")
     @Override
-    public ModelAndView addBlankLine(@ModelAttribute("KualiForm") final UifFormBase form,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addBlankLine(@ModelAttribute("KualiForm") final UifFormBase form) {
 
         boolean validAction = true;
         if (((MaintenanceDocumentForm)form).getDocument().getNewMaintainableObject().getDataObject() instanceof CourseOfferingEditWrapper){
@@ -132,7 +131,7 @@ public class CourseOfferingBaseController extends MaintenanceDocumentController 
         }
 
         if (validAction){
-            return super.addBlankLine(form, request, response);
+            return super.addBlankLine(form);
         } else {
             return getModelAndView(form);
         }

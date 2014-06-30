@@ -77,10 +77,9 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
 
     @Override
     @RequestMapping(params = "methodToCall=route")
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
 
-        super.route(form, result, request, response);
+        super.route(form);
 
         if( GlobalVariables.getMessageMap().hasErrors() ) {
             return handleRouteForErrors( form );

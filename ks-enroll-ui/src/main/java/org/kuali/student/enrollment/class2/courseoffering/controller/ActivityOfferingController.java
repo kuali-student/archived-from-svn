@@ -210,9 +210,8 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
      *
      * @return model and view
      */
-    public ModelAndView routeSuper(DocumentFormBase form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
-        return super.route(form, result, request, response);
+    public ModelAndView routeSuper(DocumentFormBase form, HttpServletResponse response) {
+        return super.route(form);
     }
 
     /**
@@ -220,8 +219,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
      */
     @Override
     @RequestMapping(params = "methodToCall=route")
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
 
         /**
          * The route method will call ActivityOfferingRule#isDocumentValidForSave() followed by
@@ -236,7 +234,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
             //be displayed in the UI
 
             ActivityOfferingControllerTransactionHelper helper = CourseOfferingManagementUtil.getActivityOfferingControllerTransactionHelper();
-            helper.routeSuper(form, result, request, response, this);
+            helper.routeSuper(form, this);
         } catch (Exception e) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, RiceKeyConstants.ERROR_CUSTOM, KSObjectUtils.unwrapException(20, e).getMessage());
         }
@@ -316,7 +314,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
 
         String newUrl = url.replaceAll("growl[^&]*&", "");
         form.setReturnLocation(newUrl);
-        return back(form, result, request, response);
+        return back(form);
     }
 
     @RequestMapping(params = "methodToCall=breakColo")

@@ -73,17 +73,13 @@ public class EnrolRuleEditorController extends RuleEditorController {
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @Override
     @RequestMapping(params = "methodToCall=route")
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
-        super.route(form, result, request, response);
-        return back(form, result, request, response);
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
+        super.route(form);
+        return back(form);
     }
 
     /**
@@ -102,7 +98,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
         DocumentFormBase documentForm = (DocumentFormBase) form;
         performWorkflowAction(documentForm, UifConstants.WorkflowAction.CANCEL);
 
-        return back(form,result,request,response);
+        return back(form);
     }
 
     /**
@@ -132,7 +128,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
         if(!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)){
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_RULE_MAINTENANCE_PAGE_ID);
         }
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
