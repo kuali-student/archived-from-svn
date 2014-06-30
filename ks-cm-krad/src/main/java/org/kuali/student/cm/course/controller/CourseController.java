@@ -129,7 +129,7 @@ public class CourseController extends CourseRuleEditorController {
      * @return a new instance of a MaintenanceDocumentForm
      */
     @Override
-    protected MaintenanceDocumentForm createInitialForm(HttpServletRequest request) {
+    protected MaintenanceDocumentForm createInitialForm() {
         MaintenanceDocumentForm form = new MaintenanceDocumentForm();
         String useReviewProcessParam = request.getParameter(URL_PARAM_USE_CURRICULUM_REVIEW);
         // only do the manually setup of the MaintenanceDocumentForm fields if the URL_PARAM_USE_CURRICULUM_REVIEW param was passed in from initial view
