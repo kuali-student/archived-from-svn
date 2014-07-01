@@ -36,14 +36,17 @@ include Utilities
     on CmLearningObjectives do |page|
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
       page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
-      page.objective_detail(@learning_objective_level).set @learning_objective_text
+      page.objective_detail(1).set @learning_objective_text
       page.category_detail(@category_level).set @category_text
-      unless @category_type.nil?
-        page.add_category(@learning_objective_level)
+      if @category_auto_lookup
+        page.auto_lookup @category_text
+      else
+        page.add_category(@category_level)
         page.category_type(@category_level).wait_until_present
         page.category_type(@category_level).pick(@category_type)
       end
-      page.add_category(@learning_objective_level)
+      sleep 2
+      page.add_category(@category_level)
 
 
     end

@@ -198,7 +198,7 @@ end
 When(/^I create a basic course proposal with Learning Objectives$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :learning_objective_list => [(make CmLearningObjectiveObject, :defer_save => true),
-                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :category_level => 1, :category_text => "test category")]
+                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :category_level => 1, :category_text => "literacy", :category_auto_lookup => true)]
 
 end
 
