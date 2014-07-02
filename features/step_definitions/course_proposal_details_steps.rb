@@ -207,7 +207,8 @@ Then(/^I should see Learning Objective details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
-    page.lo_terms_review(@course_proposal.learning_objective_list[0].learning_objective_level).should include @course_proposal.learning_objective_list[0].learning_objective_text
+    index = @course_proposal.learning_objective_list[0].learning_objective_level
+    page.lo_terms_review(index).should include @course_proposal.learning_objective_list[index].learning_objective_text
   end
 end
 

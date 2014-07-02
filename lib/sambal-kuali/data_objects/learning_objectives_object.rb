@@ -37,16 +37,17 @@ include Utilities
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
       page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
       page.objective_detail(1).set @learning_objective_text
+
+=begin
       page.category_detail(@category_level).set @category_text
       if @category_auto_lookup
         page.auto_lookup @category_text
       else
         page.add_category(@category_level)
-        page.category_type(@category_level).wait_until_present
-        page.category_type(@category_level).pick(@category_type)
       end
       sleep 2
       page.add_category(@category_level)
+=end
 
 
     end

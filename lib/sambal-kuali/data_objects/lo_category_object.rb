@@ -10,11 +10,25 @@ class CmLoCategoryObject < DataFactory
               :type
 
 
+  CATEGORY_TO_TEACH_ENGLISH = "Certificate to Teach English"
+  CATEGORY_COMMUNICATION = "Communication"
+  CATEGORY_WRITING = "Writing"
+  CATEGORY_SCIENTIFIC_METHOD = "Scientific method"
+  CATEGORY_MATHEMATICAL_REASONING = "Mathematical reasoning"
+  CATEGORY_SCIENTIFIC_REASONING = "Scientific reasoning"
+
+  CATEGORY_TYPE_SKILL = "Skill"
+  CATEGORY_TYPE_SUBJECT = "Subject"
+  CATEGORY_TYPE_ACCREDITATION = "Accreditation"
+
+=begin
+  Because the app validates the categories we need to use the predefined categories and types
+=end
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        :category_name => random_alphanums(10,'category name '),
-        :category_type => '::random::'
+        :category_name => CATEGORY_MATHEMATICAL_REASONING,
+        :category_type => CATEGORY_TYPE_SKILL
     }
     set_options(defaults.merge(opts))
 
@@ -23,31 +37,25 @@ class CmLoCategoryObject < DataFactory
   def create
       navigate_to_lo_categories
       on CmLoCategoryPage do |page|
-        page.add_category
-          on AddLoCategoryPopup do |add_lo|
-            add_lo.category_name.set @category_name
-            add_lo.category_type.pick! @category_type
-            add_lo.create_category
-          end
-        page.adding_line_wait
+        page.select_category(@category_name)
+        page.add_categories
+        page.loading_wait
       end
-
-
   end
 
 
-
-
-
-  def edit (opts={})
-
-    set_options(opts)
+  def select_all_types ()
+    on CmLoCategoryPage do |page|
+      page.type_select_all_link.click
+      page.loading_wait
+    end
   end
 
-
-
-  def delete
-
+  def clear_all_types ()
+    on CmLoCategoryPage do |page|
+      page.type_clear_all_link.click
+      page.loading_wait
+    end
   end
 
 
