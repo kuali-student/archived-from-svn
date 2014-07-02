@@ -71,7 +71,7 @@ public class CalendarSearchController  extends UifControllerBase {
     private ContextInfo contextInfo;
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CalendarSearchForm();
     }
 

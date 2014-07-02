@@ -75,7 +75,7 @@ public class HoldIssueInfoController extends UifControllerBase {
 
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new HoldIssueInfoForm();
     }
 

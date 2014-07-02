@@ -76,7 +76,7 @@ public class ScheduleOfClassesSearchController extends UifControllerBase {
     private static final String ERROR_SEARCH_FIELD_CANNOT_BE_EMPTY = "Error: search field can't be empty";
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new ScheduleOfClassesSearchForm();
     }
 

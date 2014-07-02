@@ -66,7 +66,7 @@ public class CheckInfoController extends UifControllerBase {
     private Map<String,String> actionParameters;
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CheckInfoForm();
     }
 

@@ -60,7 +60,7 @@ public class StatePropagationTestController extends UifControllerBase {
      }
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new UifFormBase();
     }
 

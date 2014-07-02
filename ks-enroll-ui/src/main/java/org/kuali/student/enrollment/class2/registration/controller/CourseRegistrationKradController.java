@@ -28,7 +28,7 @@ public class CourseRegistrationKradController extends UifControllerBase {
     ScheduleOfClassesService scheduleOfClassesService;
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CourseRegistrationKradForm();
     }
 

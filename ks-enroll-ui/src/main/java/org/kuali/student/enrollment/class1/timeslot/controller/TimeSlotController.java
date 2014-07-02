@@ -46,7 +46,7 @@ public class TimeSlotController extends UifControllerBase {
     private ContextInfo contextInfo;
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new TimeSlotForm();
     }
 

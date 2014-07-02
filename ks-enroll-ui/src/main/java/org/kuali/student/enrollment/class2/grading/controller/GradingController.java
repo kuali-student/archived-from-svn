@@ -39,7 +39,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/grading")
 public class GradingController extends UifControllerBase {
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
         if (StringUtils.equals(httpServletRequest.getParameter("viewId"), "StudentGradeView")) {
             return new StudentGradeForm();
         } else {

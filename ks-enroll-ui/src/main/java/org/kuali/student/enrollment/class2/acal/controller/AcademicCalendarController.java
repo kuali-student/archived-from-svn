@@ -100,7 +100,7 @@ public class AcademicCalendarController extends UifControllerBase {
     private AcademicCalendarServiceFacade academicCalendarServiceFacade;
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new AcademicCalendarForm();
     }
 

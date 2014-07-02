@@ -49,7 +49,7 @@ public class KitchenSinkPerformanceController extends UifControllerBase {
      * @see org.kuali.rice.krad.web.controller.UifControllerBase#createInitialForm(javax.servlet.http.HttpServletRequest)
      */
     @Override
-    protected KitchenSinkPerformanceForm createInitialForm(HttpServletRequest request) {
+    protected KitchenSinkPerformanceForm createInitialForm() {
         return new KitchenSinkPerformanceForm();
     }
 
