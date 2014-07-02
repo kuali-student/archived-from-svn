@@ -116,9 +116,7 @@ public class DegreeAuditController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=audit")
 	public ModelAndView audit(
-			@ModelAttribute("KualiForm") DegreeAuditForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) {
+			@ModelAttribute("KualiForm") DegreeAuditForm form) {
 		boolean systemKeyExists = true;
 		try {
 
@@ -226,9 +224,7 @@ public class DegreeAuditController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=runAudit")
 	public ModelAndView runAudit(
-			@ModelAttribute("KualiForm") DegreeAuditForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) {
+			@ModelAttribute("KualiForm") DegreeAuditForm form) {
 		if (KsapFrameworkServiceLocator.getUserSessionHelper().isAdviser()) {
 			GlobalVariables.getMessageMap().clearErrorMessages();
 			GlobalVariables.getMessageMap().putError("audit_report_section",

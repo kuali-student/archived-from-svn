@@ -1018,9 +1018,7 @@ public class CourseSearchController extends UifControllerBase {
 
 	@RequestMapping(value = "/course/{courseCd}", method = RequestMethod.GET)
 	public String get(@PathVariable("courseCd") String courseCd,
-			@ModelAttribute("KualiForm") CourseSearchForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			@ModelAttribute("KualiForm") CourseSearchForm form) throws IOException {
 
 		String number = "";
 		String subject = "";
@@ -1093,10 +1091,8 @@ public class CourseSearchController extends UifControllerBase {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, request, response);
+	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form) {
+		super.start(form);
 		form.setViewId("CourseSearch-FormView");
 		form.setView(super.getViewService()
 				.getViewById("CourseSearch-FormView"));
@@ -1104,17 +1100,13 @@ public class CourseSearchController extends UifControllerBase {
 	}
 
 	@RequestMapping(value = "/course/", method = RequestMethod.GET)
-	public String doGet(@ModelAttribute("KualiForm") UifFormBase form,
-			HttpServletRequest request,
-			HttpServletResponse response) {
+	public String doGet(@ModelAttribute("KualiForm") UifFormBase form) {
 		return "redirect:/kr-krad/course";
 	}
 
 	@RequestMapping(params = "methodToCall=start")
-	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, request, response);
+	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
+		super.start(form);
 		return getModelAndView(form);
 	}
 

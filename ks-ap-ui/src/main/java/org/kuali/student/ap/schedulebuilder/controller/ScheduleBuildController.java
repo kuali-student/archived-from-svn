@@ -60,10 +60,8 @@ public class ScheduleBuildController extends UifControllerBase {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		super.start(form, request, response);
+	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form) throws IOException {
+		super.start(form);
 
 		ScheduleBuildForm sbform = (ScheduleBuildForm) form;
 		try {
@@ -363,9 +361,7 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=build")
 	public ModelAndView build(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
 
 		form.buildSchedules();
 
@@ -526,9 +522,7 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=save")
 	public ModelAndView saveSchedule(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
 
 		JsonObjectBuilder json = Json.createObjectBuilder();
 
@@ -589,9 +583,7 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=remove")
 	public ModelAndView removeSchedule(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
 
 		form.removeSchedule();
 

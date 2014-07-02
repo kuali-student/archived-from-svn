@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping(value = "/launch")
 public class LaunchController extends UifControllerBase {
-     public UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+     public UifFormBase createInitialForm() {
         return new LaunchForm();
     }
 

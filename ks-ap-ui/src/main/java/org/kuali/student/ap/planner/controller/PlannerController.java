@@ -91,13 +91,12 @@ public class PlannerController extends KsapControllerBase {
      * Does not appear to be hit at any time.
      */
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView startPlanner(@ModelAttribute("KualiForm") PlannerForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response) == null)
+	public ModelAndView startPlanner(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
+		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form) == null)
 			return null;
 
 		UifFormBase uifForm = (UifFormBase) form;
-		super.start(uifForm, request, response);
+		super.start(uifForm);
 
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
@@ -113,9 +112,8 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=load")
-	public ModelAndView loadPlanner(@ModelAttribute("KualiForm") PlannerForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response) == null)
+	public ModelAndView loadPlanner(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
+		if (PlanItemControllerHelper.getAuthorizedLearningPlan(form) == null)
 			return null;
         // Set form to load terms
         PlannerFormImpl newForm = (PlannerFormImpl) form;
@@ -126,7 +124,7 @@ public class PlannerController extends KsapControllerBase {
 
 		UifFormBase uifForm = (UifFormBase) newForm;
         uifForm.getView().setAuthorizer(new ViewAuthorizerBase());
-		super.start(uifForm, request, response);
+		super.start(uifForm);
 
 		uifForm.setViewId(PLANNER_FORM);
 		uifForm.setView(super.getViewService().getViewById(PLANNER_FORM));
@@ -139,15 +137,14 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=startDialog")
-	public ModelAndView startDialog(@ModelAttribute("KualiForm") PlannerForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView startDialog(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
 		if (plan == null)
 			return null;
 
 		UifFormBase uifForm = (UifFormBase) form;
-		super.start(uifForm, request, response);
+		super.start(uifForm);
 
 		String pageId = uifForm.getPageId();
 
@@ -167,7 +164,7 @@ public class PlannerController extends KsapControllerBase {
         // Retrieve plan item information if an id is returned
 		boolean hasPlanItem = form.getPlanItemId() != null;
 		if (hasPlanItem) {
-			PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+			PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 			if (planItem == null)
 				return null;
 
@@ -206,10 +203,9 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + EDIT_TERM_NOTE_PAGE)
-	public ModelAndView editTermNote(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView editTermNote(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
 		if (plan == null)
 			return null;
 
@@ -332,11 +328,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + QUICKADD_COURSE_PAGE)
-	public ModelAndView addPlanItem(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView addPlanItem(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve student's plan
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
         JsonObjectBuilder eventList = Json.createObjectBuilder();
 		if (plan == null)
 			return null;
@@ -384,11 +379,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + COPY_COURSE_PAGE)
-	public ModelAndView copyCourse(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView copyCourse(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve the student's plan
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
 		if (plan == null)
 			return null;
 
@@ -412,8 +406,7 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + EDIT_PLAN_ITEM_PAGE)
-	public ModelAndView editPlanItem(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView editPlanItem(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
 		String expectedTermId = form.getTermId();
 		boolean creditEdited = false;
@@ -425,7 +418,7 @@ public class PlannerController extends KsapControllerBase {
 			return null;
 		}
 
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 		if (planItem == null)
 			return null;
 
@@ -526,16 +519,15 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + COPY_PLAN_ITEM_PAGE)
-	public ModelAndView copyPlanItem(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView copyPlanItem(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve student's plan.
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
 		if (plan == null)
 			return null;
 
         // Retrieve plan item to be copied
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 		if (planItem == null)
 			return null;
 
@@ -563,8 +555,7 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + MOVE_PLAN_ITEM_PAGE)
-	public ModelAndView movePlanItem(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView movePlanItem(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
 		String expectedTermId = form.getTermId();
 		if (expectedTermId == null) {
@@ -578,7 +569,7 @@ public class PlannerController extends KsapControllerBase {
 		Term term = KsapFrameworkServiceLocator.getTermHelper().getTerm(termId);
 
         // Retrieve plan item information
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 		if (planItem == null)
 			return null;
 
@@ -626,8 +617,7 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + DELETE_PLAN_ITEM_PAGE)
-	public ModelAndView deletePlanItem(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView deletePlanItem(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
 		String expectedTermId = form.getTermId();
 		if (expectedTermId == null) {
@@ -637,7 +627,7 @@ public class PlannerController extends KsapControllerBase {
 		Term term = KsapFrameworkServiceLocator.getTermHelper().getTerm(expectedTermId);
 
         // Retrieve valid plan item
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 		if (planItem == null)
 			return null;
 
@@ -672,11 +662,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
 	@RequestMapping(method = RequestMethod.POST, params = "methodToCall=updatePlanItemCategory")
-	public ModelAndView updatePlanItemType(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public ModelAndView updatePlanItemType(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve a valid plan item
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
 		if (planItem == null)
 			return null;
 
@@ -834,11 +823,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + ADD_BOOKMARK_PAGE)
-    public ModelAndView addBookmarkedCourse(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView addBookmarkedCourse(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve student's plan
-        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
         JsonObjectBuilder eventList = Json.createObjectBuilder();
         if (plan == null)
             return null;
@@ -878,11 +866,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + DELETE_BOOKMARK_PAGE)
-    public ModelAndView deleteBookmark(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView deleteBookmark(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve valid plan item
-        PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form, request, response);
+        PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
         if (planItem == null)
             return null;
 
@@ -916,11 +903,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=addBookmark")
-    public ModelAndView addBookmark(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+    public ModelAndView addBookmark(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException{
 
         JsonObjectBuilder eventList = Json.createObjectBuilder();
-        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
 
         Course course = form.getCourse();
         if (course == null) {
@@ -971,11 +957,10 @@ public class PlannerController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + ADD_COURSE_PAGE)
-    public ModelAndView addCourse(@ModelAttribute("KualiForm") PlannerForm form, BindingResult result,
-                                            HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView addCourse(@ModelAttribute("KualiForm") PlannerForm form) throws IOException, ServletException {
 
         // Retrieve student's plan
-        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request, response);
+        LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
         JsonObjectBuilder eventList = Json.createObjectBuilder();
         if (plan == null)
             return null;

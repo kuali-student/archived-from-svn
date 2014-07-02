@@ -44,10 +44,8 @@ public class ConversationListController  extends ConversationControllerBase {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") ConversationListForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		super.start(form, request, response);
+	public ModelAndView get(@ModelAttribute("KualiForm") ConversationListForm form) throws IOException {
+		super.start(form);
 		
 		try {
 			initialize(form);
@@ -63,9 +61,7 @@ public class ConversationListController  extends ConversationControllerBase {
 	}
 	
     @RequestMapping(params = "methodToCall=ajaxRefresh")
-    public ModelAndView ajaxRefresh(@ModelAttribute("KualiForm") ConversationListForm form,
-    		HttpServletRequest request,
-    		HttpServletResponse response)
+    public ModelAndView ajaxRefresh(@ModelAttribute("KualiForm") ConversationListForm form)
             throws Exception {
     	try {
 			initialize(form);

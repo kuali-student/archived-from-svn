@@ -45,10 +45,8 @@ public class ConversationViewController  extends ConversationControllerBase {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") ConversationViewForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		super.start(form, request, response);
+	public ModelAndView get(@ModelAttribute("KualiForm") ConversationViewForm form) throws IOException {
+		super.start(form);
 		try {
 			initialize(form);
 		} catch (PermissionDeniedException e) {
@@ -64,9 +62,7 @@ public class ConversationViewController  extends ConversationControllerBase {
 	
 	@RequestMapping(params = "methodToCall=send")
 	public ModelAndView submit(
-			@ModelAttribute("KualiForm") ConversationViewForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ConversationViewForm form) throws IOException, ServletException {
 		
 		if (!result.hasErrors()) {
 			RichText richMessage = new RichTextInfo(form.getNewComment(), form.getNewComment());

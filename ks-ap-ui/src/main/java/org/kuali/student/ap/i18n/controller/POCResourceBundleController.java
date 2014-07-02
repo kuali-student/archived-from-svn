@@ -38,7 +38,7 @@ public class POCResourceBundleController extends KsapControllerBase {
     private static final String RB_FORM = "POCResourceBundle-FormView";
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
         return new POCResourceBundleFormImpl();
     }
 
@@ -49,10 +49,9 @@ public class POCResourceBundleController extends KsapControllerBase {
      */
     @MethodAccessible
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=startRB")
-    public ModelAndView startRB(@ModelAttribute("KualiForm") UifFormBase form,
-                                     HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView startRB(@ModelAttribute("KualiForm") UifFormBase form) throws IOException, ServletException {
         LOG.debug("In start()");
-        super.start(form, request, response);
+        super.start(form);
 
         form.setViewId(RB_FORM);
         form.setView(super.getViewService().getViewById(RB_FORM));

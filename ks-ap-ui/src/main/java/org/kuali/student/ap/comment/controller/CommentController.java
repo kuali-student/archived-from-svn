@@ -75,10 +75,8 @@ public class CommentController extends UifControllerBase {
 	}
 
 	@RequestMapping(params = "methodToCall=startCommentForm")
-	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-			HttpServletRequest request,
-			HttpServletResponse response) {
-		super.start(form, request, response);
+	public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
+		super.start(form);
 		Person user = GlobalVariables.getUserSession().getPerson();
 		String principleId = user.getPrincipalId();
 		CommentForm commentForm = (CommentForm) form;

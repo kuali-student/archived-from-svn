@@ -38,8 +38,7 @@ public class ReservedTimeController extends UifControllerBase {
 	private static final String FORM = "ScheduleBuild-ReservedTime-FormView";
 	private static final String CREATE_PAGE = "sb_create_reserved_time_page";
 
-	private static boolean authorize(ReservedTimeForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	private static boolean authorize(ReservedTimeForm form)
 			throws IOException {
 		try {
 			KsapFrameworkServiceLocator.getScheduleBuildStrategy()
@@ -61,12 +60,10 @@ public class ReservedTimeController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=startDialog")
 	public ModelAndView startDialog(
-			@ModelAttribute("KualiForm") ReservedTimeForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		if (!authorize(form, request, response))
+			@ModelAttribute("KualiForm") ReservedTimeForm form) throws IOException, ServletException {
+		if (!authorize(form))
 			return null;
-		super.start(form, request, response);
+		super.start(form);
 		form.setViewId(FORM);
 		form.setView(super.getViewService().getViewById(FORM));
 		return getModelAndView(form);
@@ -76,10 +73,8 @@ public class ReservedTimeController extends UifControllerBase {
 			"methodToCall=createReservedTime",
 			"view.currentPageId=" + CREATE_PAGE })
 	public ModelAndView postCreate(
-			@ModelAttribute("KualiForm") ReservedTimeForm form,
-			BindingResult result, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		if (!authorize(form, request, response))
+			@ModelAttribute("KualiForm") ReservedTimeForm form) throws IOException, ServletException {
+		if (!authorize(form))
 			return null;
 
 		if (result.hasErrors()) {
