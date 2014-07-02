@@ -76,7 +76,7 @@ public class CreateCourseInitialController extends UifControllerBase {
         urlParameters.put(KRADConstants.PARAMETER_COMMAND, KewApiConstants.INITIATE_COMMAND);
         urlParameters.put(KRADConstants.DATA_OBJECT_CLASS_ATTRIBUTE, CourseInfoWrapper.class.getName());
         urlParameters.put(KRADConstants.RETURN_LOCATION_PARAMETER, RETURN_LOCATION_PARAMETER );
-        String uri = request.getRequestURL().toString().replace(CurriculumManagementConstants.ControllerRequestMappings.CREATE_COURSE_INITIAL,CurriculumManagementConstants.ControllerRequestMappings.CREATE_COURSE);
+        String uri = form.getRequest().getRequestURL().toString().replace(CurriculumManagementConstants.ControllerRequestMappings.CREATE_COURSE_INITIAL,CurriculumManagementConstants.ControllerRequestMappings.CREATE_COURSE);
 
         return performRedirect(form, uri, urlParameters);
     }

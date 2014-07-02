@@ -131,7 +131,7 @@ public class CourseController extends CourseRuleEditorController {
     @Override
     protected MaintenanceDocumentForm createInitialForm() {
         MaintenanceDocumentForm form = new MaintenanceDocumentForm();
-        String useReviewProcessParam = request.getParameter(URL_PARAM_USE_CURRICULUM_REVIEW);
+        String useReviewProcessParam = form.getRequest().getParameter(URL_PARAM_USE_CURRICULUM_REVIEW);
         // only do the manually setup of the MaintenanceDocumentForm fields if the URL_PARAM_USE_CURRICULUM_REVIEW param was passed in from initial view
         if (StringUtils.isNotBlank(useReviewProcessParam)) {
             Boolean isUseReviewProcess = new Boolean(useReviewProcessParam);
@@ -207,11 +207,11 @@ public class CourseController extends CourseRuleEditorController {
     @Override
     @RequestMapping(params = "methodToCall=docHandler")
     public ModelAndView docHandler(@ModelAttribute("KualiForm") DocumentFormBase formBase) throws Exception {
-        ModelAndView modelAndView = super.docHandler(formBase, result, request, response);
+        ModelAndView modelAndView = super.docHandler(formBase);
 
         if (formBase.getPageId().equals(CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL)) {
             //  Build a redirect to the reviewCourseProposal handler for validation.
-            java.util.Map requestParameterMap = request.getParameterMap();
+            java.util.Map requestParameterMap = formBase.getRequest().getParameterMap();
             Properties urlParameters = new Properties();
             for (Object p : requestParameterMap.entrySet()) {
                 Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) p;
@@ -458,9 +458,6 @@ public class CourseController extends CourseRuleEditorController {
      * This will save the Course Proposal.
      *
      * @param form     {@link MaintenanceDocumentForm} instance used for this action
-     * @param result
-     * @param request  {@link HttpServletRequest} instance of the actual HTTP request made
-     * @param response The intended {@link HttpServletResponse} sent back to the user
      * @return The new {@link ModelAndView} that contains the newly created/updated {@CourseInfo} and {@ProposalInfo} information.
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=saveProposal")
@@ -593,9 +590,6 @@ public class CourseController extends CourseRuleEditorController {
      * Server-side action for rendering the comments lightbox
      *
      * @param form     {@link MaintenanceDocumentForm} instance used for this action
-     * @param result
-     * @param request  {@link HttpServletRequest} instance of the actual HTTP request made
-     * @param response The intended {@link HttpServletResponse} sent back to the user
      * @throws Exception
      */
     @RequestMapping(params = "methodToCall=showComment")
@@ -706,9 +700,6 @@ public class CourseController extends CourseRuleEditorController {
      * Server-side action for rendering the decisions lightbox
      *
      * @param form     {@link MaintenanceDocumentForm} instance used for this action
-     * @param result
-     * @param request  {@link HttpServletRequest} instance of the actual HTTP request made
-     * @param response The intended {@link HttpServletResponse} sent back to the user
      * @throws Exception
      */
     @RequestMapping(params = "methodToCall=showDecisions")

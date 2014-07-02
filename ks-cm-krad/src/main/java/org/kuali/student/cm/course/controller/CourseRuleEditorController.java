@@ -169,7 +169,7 @@ public class CourseRuleEditorController extends RuleEditorController {
         states.put(KRMSConstants.KRMS_PARM_ACTIVE_TAB, KSKRMS_RULE_CO_EDITWITHOBJECT_ID);
 
         //Set the selected rule statement key.
-        String selectedKey = request.getParameter(KRMSConstants.KRMS_PARM_SELECTED_KEY);
+        String selectedKey = form.getRequest().getParameter(KRMSConstants.KRMS_PARM_SELECTED_KEY);
         getRuleEditor(form).setSelectedKey(selectedKey);
 
         return this.goToEditProposition(form);
