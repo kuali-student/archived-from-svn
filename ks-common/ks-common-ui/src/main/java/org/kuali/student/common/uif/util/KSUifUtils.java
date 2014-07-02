@@ -117,37 +117,36 @@ public class KSUifUtils {
      * Populate the KSUifMaintenanceDocumentForm.previousFormsMap which holds information of the previous view where a user is
      * directed from in a multiple views senario. The map will be used to generate the customized breadcrumb.
      *
-     * @param request - instance of HttpServletRequest
      * @param form - any form that extends KSUifMaintenanceDocumentForm
      *
      */
-    public static <T extends KSUifMaintenanceDocumentForm> void populationPreviousFormsMap (HttpServletRequest request, T form) {
-        if (request.getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY)!=null || request.getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY)!=null
-                || request.getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY)!=null || request.getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY)!=null
-                || request.getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY)!=null) {
+    public static <T extends KSUifMaintenanceDocumentForm> void populationPreviousFormsMap (T form) {
+        if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY)!=null || form.getRequest().getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY)!=null
+                || form.getRequest().getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY)!=null || form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY)!=null
+                || form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY)!=null) {
             Map<String, Map<String, String>> previousFormsMap = new HashMap<String, Map<String, String>>();
             Map<String, String> tempFormMap = new HashMap<String, String>();
-            if (request.getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY)!=null &&
-                    !request.getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY).isEmpty()) {
-                tempFormMap.put(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY, request.getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY));
+            if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY)!=null &&
+                    !form.getRequest().getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY).isEmpty()) {
+                tempFormMap.put(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY, form.getRequest().getParameter(BREADCRUMB_PREVIOUS_CONTROLLER_PATH_KEY));
             }
-            if (request.getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY)!=null &&
-                    !request.getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY).isEmpty()) {
-                tempFormMap.put(BREADCRUMB_PREVIOUS_VIEW_ID_KEY, request.getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY));
+            if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY)!=null &&
+                    !form.getRequest().getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY).isEmpty()) {
+                tempFormMap.put(BREADCRUMB_PREVIOUS_VIEW_ID_KEY, form.getRequest().getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY));
             }
-            if (request.getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY)!=null &&
-                    !request.getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY).isEmpty()) {
-                tempFormMap.put(BREADCRUMB_PREVIOUS_HOME_URL_KEY, request.getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY));
+            if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY)!=null &&
+                    !form.getRequest().getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY).isEmpty()) {
+                tempFormMap.put(BREADCRUMB_PREVIOUS_HOME_URL_KEY, form.getRequest().getParameter(BREADCRUMB_PREVIOUS_HOME_URL_KEY));
             }
-            if (request.getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY)!=null &&
-                    !request.getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY).isEmpty()) {
-                tempFormMap.put(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY, request.getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY));
+            if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY)!=null &&
+                    !form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY).isEmpty()) {
+                tempFormMap.put(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY, form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORM_HISTORY_KEY));
             }
-            if (request.getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY)!=null &&
-                    !request.getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY).isEmpty()) {
-                tempFormMap.put(BREADCRUMB_PREVIOUS_FORMKEY_KEY, request.getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY));
+            if (form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY)!=null &&
+                    !form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY).isEmpty()) {
+                tempFormMap.put(BREADCRUMB_PREVIOUS_FORMKEY_KEY, form.getRequest().getParameter(BREADCRUMB_PREVIOUS_FORMKEY_KEY));
             }
-            previousFormsMap.put(request.getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY), tempFormMap);
+            previousFormsMap.put(form.getRequest().getParameter(BREADCRUMB_PREVIOUS_VIEW_ID_KEY), tempFormMap);
         }
 
     }
