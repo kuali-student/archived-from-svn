@@ -55,8 +55,21 @@ include Utilities
   end
 
 
+  def show_find_lo_lightbox
+    on CmLearningObjectives do |page|
+      page.find_learning_objective
+    end
+  end
 
-  def edit (opts={})
+
+def show_select_category_lightbox(opts={})
+  on CmLearningObjectives do |page|
+    page.find_categories(opts[:category_level])
+  end
+end
+
+
+def edit (opts={})
 
     set_options(opts)
   end
