@@ -55,8 +55,7 @@ public class KitchenSinkPerformanceController extends UifControllerBase {
 
     @Override
     @RequestMapping(params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         KitchenSinkPerformanceForm perfForm = (KitchenSinkPerformanceForm) form;
 
         return getModelAndView(perfForm);
@@ -72,8 +71,7 @@ public class KitchenSinkPerformanceController extends UifControllerBase {
      * @return    ModelAndView
      */
     @RequestMapping(params = "methodToCall=buildcollection")
-    public ModelAndView buildCollection(@ModelAttribute("KualiForm") KitchenSinkPerformanceForm form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView buildCollection(@ModelAttribute("KualiForm") KitchenSinkPerformanceForm form) {
 
         String courseCode = form.getInputOne(); // get input from page
         String termId = KUALI_ATP_2012_FALL;

@@ -54,8 +54,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
      * action
      */
     @RequestMapping(params = "methodToCall=" + KRADConstants.Maintenance.METHOD_TO_CALL_EDIT)
-    public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
         setupMaintenanceEdit(form);
 
         // check view authorization
@@ -313,8 +312,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
     }
 
     @RequestMapping(params = "methodToCall=breakColo")
-    public ModelAndView breakColo(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
-                                  @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView breakColo(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) {
 
         ActivityOfferingWrapper activityOfferingWrapper = (ActivityOfferingWrapper) form.getDocument().getNewMaintainableObject().getDataObject();
 

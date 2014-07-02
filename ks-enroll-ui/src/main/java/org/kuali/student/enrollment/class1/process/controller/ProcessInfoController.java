@@ -76,18 +76,16 @@ public class ProcessInfoController extends UifControllerBase {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         ProcessInfoForm processInfoForm = (ProcessInfoForm)form;
         processInfoForm.setIsSaveSuccess(false);
         processInfoForm.setIsInstructionActive(false);
 
-        return super.start(form, request, response);
+        return super.start(form);
     }
 
     @RequestMapping(params = "methodToCall=save")
-    public ModelAndView save(@ModelAttribute("KualiForm") ProcessInfoForm form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView save(@ModelAttribute("KualiForm") ProcessInfoForm form) throws Exception {
         ProcessInfo processInfo =  new ProcessInfo();
 
         processInfo.setKey("kuali.process."+ form.getTypeKey() + "."+form.getName() );
@@ -124,12 +122,11 @@ public class ProcessInfoController extends UifControllerBase {
         GlobalVariables.getMessageMap().putInfo("Process", "info.enroll.save.success");
         form.setIsSaveSuccess(true);
 
-        return refresh(form, result, request, response);
+        return refresh(form);
     }
 
     @RequestMapping(params = "methodToCall=update")
-    public ModelAndView update(@ModelAttribute("KualiForm") ProcessInfoForm form, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView update(@ModelAttribute("KualiForm") ProcessInfoForm form) throws Exception {
         ProcessInfo processInfo =  new ProcessInfo();
 
         processInfo = getProcessService().getProcess(form.getKey(), getContextInfo());
@@ -150,7 +147,7 @@ public class ProcessInfoController extends UifControllerBase {
         GlobalVariables.getMessageMap().putInfo("Process", "info.enroll.save.success");
         form.setIsSaveSuccess(true);
 
-        return refresh(form, result, request, response);
+        return refresh(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=search")
@@ -219,8 +216,7 @@ public class ProcessInfoController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=delete")
-    public ModelAndView delete(@ModelAttribute("KualiForm") ProcessInfoForm form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView delete(@ModelAttribute("KualiForm") ProcessInfoForm form) throws Exception {
         form.setIsInstructionActive(false);
         form.setDialogStateKey("");
 
@@ -257,7 +253,7 @@ public class ProcessInfoController extends UifControllerBase {
                 getProcessService().updateProcess(processInfo.getKey(), processInfo, getContextInfo());
             } else {
                 form.setInstructionInfoList(activeInstructions);
-                return showDialog(dialogId, form, request, response);
+                return showDialog(dialogId, form);
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to get process");

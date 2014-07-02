@@ -48,7 +48,7 @@ public class CreateSocController extends UifControllerBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateSocController.class);
 
     @Override
-    protected UifFormBase createInitialForm(@SuppressWarnings("unused") HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CreateSocForm();
     }
 
@@ -78,8 +78,7 @@ public class CreateSocController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=createSocTerm")
-    public ModelAndView createSocTerm(@ModelAttribute("KualiForm") CreateSocForm form, @SuppressWarnings("unused") BindingResult result,
-                                          @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView createSocTerm(@ModelAttribute("KualiForm") CreateSocForm form) throws Exception {
         CreateSocViewHelperService helper = CourseOfferingManagementUtil.getSocViewHelperService(form);
         // First, check if term exists
         try {

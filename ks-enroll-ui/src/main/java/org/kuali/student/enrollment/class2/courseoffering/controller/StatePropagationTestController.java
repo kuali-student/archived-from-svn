@@ -66,9 +66,8 @@ public class StatePropagationTestController extends UifControllerBase {
 
     @RequestMapping(value = "/statusview/{termCode}/{coCode}", method = RequestMethod.GET)
     @ResponseBody
-    public String showAOStates(@PathVariable("termCode") String termCode, @PathVariable("coCode") String coCode, @ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return showAOStates(termCode, coCode, StringUtils.EMPTY, form, result, request, response);
+    public String showAOStates(@PathVariable("termCode") String termCode, @PathVariable("coCode") String coCode, @ModelAttribute("KualiForm") UifFormBase form) throws IOException {
+        return showAOStates(termCode, coCode, StringUtils.EMPTY, form);
     }
 
     @RequestMapping(value = "/statusview/{termCode}/{coCode}/{aoCode}", method = RequestMethod.GET)

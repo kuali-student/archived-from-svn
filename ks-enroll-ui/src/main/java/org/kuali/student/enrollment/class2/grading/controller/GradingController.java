@@ -48,8 +48,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.LOAD_GRADES_ROSTER_METHOD)
-    public ModelAndView loadGradeRoster(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView loadGradeRoster(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
 
         String selectedCourse = gradingForm.getSelectedCourse();
         List<GradeStudent> students = ((GradingViewHelperService) gradingForm.getViewHelperService()).loadStudents(selectedCourse,gradingForm);
@@ -59,8 +58,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=loadStudents")
-    public ModelAndView loadStudents(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView loadStudents(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
 
         int selectedLineIndex = -1;
         String selectedLine = gradingForm.getActionParamaterValue(UifParameters.SELECTED_LINE_INDEX);
@@ -92,8 +90,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.UNASSIGN_GRADE_METHOD)
-    public ModelAndView unassignGrade(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView unassignGrade(@ModelAttribute("KualiForm") GradingForm gradingForm) {
 
         String selectedCollectionPath = gradingForm.getActionParamaterValue(UifParameters.SELECTED_COLLECTION_PATH);
         if (StringUtils.isBlank(selectedCollectionPath)) {
@@ -119,20 +116,17 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.BACK_TO_GRADING_METHOD)
-    public ModelAndView backToGrading(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView backToGrading(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
         return getModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.BACK_TO_TERM)
-    public ModelAndView backToTerm(@ModelAttribute("KualiForm") StudentGradeForm studentGradeForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView backToTerm(@ModelAttribute("KualiForm") StudentGradeForm studentGradeForm) throws Exception {
         return getModelAndView(studentGradeForm, GradingConstants.STUDENT_TERM_RECORD_PAGE);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.SAVE_METHOD)
-    public ModelAndView save(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView save(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
 
         boolean success = ((GradingViewHelperService) gradingForm.getViewHelperService()).saveGrades(gradingForm);
 
@@ -147,8 +141,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall="  + GradingConstants.LOAD_COURSES_METHOD)
-    public ModelAndView loadCourses(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView loadCourses(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
 
         ((GradingViewHelperService) gradingForm.getViewHelperService()).loadCourses(gradingForm);
         return getModelAndView(gradingForm, GradingConstants.SELECT_COURSE_OFFERING_PAGE);
@@ -156,8 +149,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall="  + GradingConstants.SUBMIT_METHOD)
-    public ModelAndView submit(@ModelAttribute("KualiForm") GradingForm gradingForm, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView submit(@ModelAttribute("KualiForm") GradingForm gradingForm) throws Exception {
 
         boolean success = ((GradingViewHelperService) gradingForm.getViewHelperService()).submitGradeRoster(gradingForm);
 
@@ -170,8 +162,7 @@ public class GradingController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=" + GradingConstants.VIEW_GRADES)
-    public ModelAndView viewGrades(@ModelAttribute("KualiForm") StudentGradeForm studentGradeForm,
-            BindingResult result, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView viewGrades(@ModelAttribute("KualiForm") StudentGradeForm studentGradeForm) throws Exception {
 
         ((GradingViewHelperService) studentGradeForm.getViewHelperService()).loadStudentGrades(studentGradeForm);
 

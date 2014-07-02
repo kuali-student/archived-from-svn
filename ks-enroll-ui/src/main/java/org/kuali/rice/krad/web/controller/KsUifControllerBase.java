@@ -50,8 +50,7 @@ public abstract class KsUifControllerBase extends UifControllerBase {
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=performFieldSuggest")
     public
     @ResponseBody
-    AttributeQueryResult performFieldSuggest(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) {
+    AttributeQueryResult performFieldSuggest(@ModelAttribute("KualiForm") UifFormBase form) {
 
         // retrieve query fields from request
         Map<String, String> queryParameters = new HashMap<String, String>();

@@ -34,16 +34,14 @@ public class CourseRegistrationKradController extends UifControllerBase {
 
     @Override
     @RequestMapping(params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         CourseRegistrationKradForm perfForm = (CourseRegistrationKradForm) form;
 
         return getModelAndView(perfForm);
     }
 
     @RequestMapping(params = "methodToCall=searchForCourses")
-    public ModelAndView searchForCourses(@ModelAttribute("KualiForm") CourseRegistrationKradForm form, BindingResult result,
-                                        HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView searchForCourses(@ModelAttribute("KualiForm") CourseRegistrationKradForm form) {
 
         String courseCode = form.getCourseCode();
         String termCode = form.getTermCode();

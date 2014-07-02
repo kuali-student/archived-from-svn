@@ -37,9 +37,8 @@ public class ActivityOfferingControllerTransactionHelperImpl implements Activity
 	 */
     @Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ModelAndView routeSuper(DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response, ActivityOfferingController activityOfferingController) {
-        return activityOfferingController.routeSuper(form, result, request, response);
+    public ModelAndView routeSuper(DocumentFormBase form, ActivityOfferingController activityOfferingController) {
+        return activityOfferingController.routeSuper(form);
     }
 
 }

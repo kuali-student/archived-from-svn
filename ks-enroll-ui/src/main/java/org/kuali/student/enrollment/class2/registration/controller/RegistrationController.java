@@ -79,7 +79,7 @@ public class RegistrationController extends UifControllerBase {
     private transient CourseService courseService;
     private transient CourseRegistrationService courseRegistrationService;
 
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
             return new RegistrationForm();
     }
 
@@ -166,8 +166,7 @@ public class RegistrationController extends UifControllerBase {
      * the view for rendering
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=showRegistration")
-    public ModelAndView showRegistration(@ModelAttribute("KualiForm") UifFormBase formBase, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView showRegistration(@ModelAttribute("KualiForm") UifFormBase formBase) {
         ContextInfo context = new ContextInfo();
         RegistrationForm regForm = (RegistrationForm) formBase;
         try {
@@ -236,8 +235,7 @@ public class RegistrationController extends UifControllerBase {
      * Method used to search for course offerings based on criteria entered
      */
     @RequestMapping(params = "methodToCall=searchCourseOfferings")
-    public ModelAndView searchCourseOfferings(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView searchCourseOfferings(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         ContextInfo context = new ContextInfo();
 
         try {
@@ -348,8 +346,7 @@ public class RegistrationController extends UifControllerBase {
     }
 
         @RequestMapping(params = "methodToCall=dropClass")
-    public ModelAndView dropClass(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                           HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView dropClass(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         ContextInfo context = new ContextInfo();
         RegistrationGroupWrapper regGroupWrapper = findRegGroupByIndex(registrationForm);
 
@@ -396,8 +393,7 @@ public class RegistrationController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=registerClass")
-    public ModelAndView registerClass(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                           HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView registerClass(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         ContextInfo context = new ContextInfo();
         RegistrationGroupWrapper regGroupWrapper = findRegGroupByIndex(registrationForm);
 
@@ -444,8 +440,7 @@ public class RegistrationController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=submitRegistration")
-    public ModelAndView submitRegistration(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                           HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView submitRegistration(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         processSubmitRegRequest(registrationForm.getRegRequest(), registrationForm, false);
         return getModelAndView(registrationForm);
     }
@@ -510,8 +505,7 @@ public class RegistrationController extends UifControllerBase {
      * After the document is loaded calls method to setup the maintenance object
      */
     @RequestMapping(params = "methodToCall=removeFromCart")
-    public ModelAndView removeFromCart(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                      HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView removeFromCart(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         ContextInfo context = new ContextInfo();
 
         RegistrationRequest regRequest = registrationForm.getRegRequest();
@@ -582,8 +576,7 @@ public class RegistrationController extends UifControllerBase {
      * After the document is loaded calls method to setup the maintenance object
      */
     @RequestMapping(params = "methodToCall=addToCart")
-    public ModelAndView addToCart(@ModelAttribute("KualiForm") RegistrationForm registrationForm, BindingResult result,
-                                      HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addToCart(@ModelAttribute("KualiForm") RegistrationForm registrationForm) {
         ContextInfo context = new ContextInfo();
 
         RegistrationGroupWrapper regGroupWrapper = findRegGroupByIndex(registrationForm);

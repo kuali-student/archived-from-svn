@@ -62,8 +62,7 @@ public class EnrolRuleEditorController extends RuleEditorController {
      * action
      */
     @RequestMapping(params = "methodToCall=" + KRADConstants.Maintenance.METHOD_TO_CALL_EDIT)
-    public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView maintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         setupMaintenanceEdit(form);
 
@@ -100,15 +99,11 @@ public class EnrolRuleEditorController extends RuleEditorController {
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @Override
     @RequestMapping(params = "methodToCall=addRule")
-    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         //Clear the client state on new edit rule.
         form.getClientStateForSyncing().clear();
@@ -131,14 +126,10 @@ public class EnrolRuleEditorController extends RuleEditorController {
      * Controller method used to display the lightbox with the list of courses in the selected range.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params="methodToCall=viewCourseRange")
-    public ModelAndView viewCourseRange(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView viewCourseRange(@ModelAttribute("KualiForm") UifFormBase form) {
 
         MaintenanceDocumentForm document = (MaintenanceDocumentForm) form;
         CORuleManagementWrapper ruleWrapper = (CORuleManagementWrapper) document.getDocument().getNewMaintainableObject().getDataObject();
@@ -156,14 +147,10 @@ public class EnrolRuleEditorController extends RuleEditorController {
      * Controller method used to add a new course range to the list of course ranges.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=addRange")
-    public ModelAndView addRange(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                      HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addRange(@ModelAttribute("KualiForm") UifFormBase form) {
 
         LURuleEditor rule = (LURuleEditor) getRuleEditor(form);
         LUPropositionEditor prop = (LUPropositionEditor) PropositionTreeUtil.getProposition(rule);

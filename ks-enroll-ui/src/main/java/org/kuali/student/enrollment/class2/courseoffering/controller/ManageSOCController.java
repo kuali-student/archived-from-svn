@@ -64,13 +64,12 @@ public class ManageSOCController extends UifControllerBase {
     private BatchScheduler batchScheduler;
 
     @Override
-    protected UifFormBase createInitialForm(@SuppressWarnings("unused") HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new ManageSOCForm();
     }
 
     @RequestMapping(params = "methodToCall=lockSOC")
-    public ModelAndView lockSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView lockSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
 
         LOG.debug("Locking SOC");
 
@@ -92,12 +91,11 @@ public class ManageSOCController extends UifControllerBase {
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
         viewHelper.lockSOC(socForm);
 
-        return buildModel(socForm, result, request, response);
+        return buildModel(socForm);
     }
 
     @RequestMapping(params = "methodToCall=sendApprovedActivitiesToScheduler")
-    public ModelAndView sendApprovedActivitiesToScheduler(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                                          @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView sendApprovedActivitiesToScheduler(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
 
         if (!StringUtils.equals(CourseOfferingSetServiceConstants.LOCKED_SOC_STATE_KEY, socForm.getSocInfo().getStateKey())) {
             GlobalVariables.getMessageMap().putError(KRADConstants.GLOBAL_ERRORS, ManageSocConstants.MessageKeys.ERROR_INVALID_STATUS_FOR_SCHEDULE);
@@ -113,15 +111,14 @@ public class ManageSOCController extends UifControllerBase {
         // start send approved activities to scheduler
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
         viewHelper.startMassScheduling(socForm);
-        return buildModel(socForm, result, request, response);
+        return buildModel(socForm);
     }
 
     /**
      * This is called when the user enters the term code and hit the Go button.
      */
     @RequestMapping(params = "methodToCall=buildModel")
-    public ModelAndView buildModel(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                   @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView buildModel(@ModelAttribute("KualiForm") ManageSOCForm socForm) {
 
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
 
@@ -140,8 +137,7 @@ public class ManageSOCController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=allowFinalEdits")
-    public ModelAndView allowFinalEdits(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                        @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView allowFinalEdits(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
 
         if (socForm.getSocInfo() == null) {
             throw new RuntimeException("SocInfo not exists in the form. Please enter the term code and click on GO button");
@@ -161,12 +157,11 @@ public class ManageSOCController extends UifControllerBase {
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
         viewHelper.allowSOCFinalEdit(socForm);
 
-        return buildModel(socForm, result, request, response);
+        return buildModel(socForm);
     }
 
     @RequestMapping(params = "methodToCall=publishSOC")
-    public ModelAndView publishSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                   @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView publishSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
 
         if (socForm.getSocInfo() == null) {
             throw new RuntimeException("SocInfo not exists in the form. Please enter the term code and click on GO button");
@@ -184,12 +179,11 @@ public class ManageSOCController extends UifControllerBase {
         }
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
         viewHelper.publishSOC(socForm);
-        return buildModel(socForm, result, request, response);
+        return buildModel(socForm);
     }
 
     @RequestMapping(params = "methodToCall=closeSOC")
-    public ModelAndView closeSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                 @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView closeSOC(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
         if (socForm.getSocInfo() == null) {
             throw new RuntimeException("SocInfo not exists in the form. Please enter the term code and click on GO button");
         }
@@ -207,12 +201,11 @@ public class ManageSOCController extends UifControllerBase {
         ManageSOCViewHelperService viewHelper = (ManageSOCViewHelperService) KSControllerHelper.getViewHelperService(socForm);
         viewHelper.closeSOC(socForm);
 
-        return buildModel(socForm, result, request, response);
+        return buildModel(socForm);
     }
 
     @RequestMapping(params = "methodToCall=createEOBulkScheduler")
-    public ModelAndView createEOBulkScheduler(@ModelAttribute("KualiForm") ManageSOCForm socForm, @SuppressWarnings("unused") BindingResult result,
-                                                          @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView createEOBulkScheduler(@ModelAttribute("KualiForm") ManageSOCForm socForm) throws Exception {
 
         KSDateTimeFormatter dateFormatter = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER;
         String date = dateFormatter.format(new Date());
@@ -224,7 +217,7 @@ public class ManageSOCController extends UifControllerBase {
         List<BatchParameter> parameters = new ArrayList<BatchParameter>();
         parameters.add(new BatchParameter("kuali.batch.socId", socForm.getSocInfo().getId()));
         this.getBatchScheduler().schedule("kuali.batch.job.examOffering.slotting", parameters, dateAndTime, ContextUtils.createDefaultContextInfo());
-        return super.navigate(socForm, result, request, response);
+        return super.navigate(socForm);
     }
 
     private BatchScheduler getBatchScheduler() {

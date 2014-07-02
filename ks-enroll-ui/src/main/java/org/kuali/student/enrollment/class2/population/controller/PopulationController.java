@@ -30,8 +30,7 @@ import java.util.Properties;
 public class PopulationController extends MaintenanceDocumentController {
 
     @RequestMapping(params = "methodToCall=createByRule")
-    public ModelAndView createByRule(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
-                                          @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView createByRule(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         PopulationWrapper wrapper = (PopulationWrapper)form.getDocument().getNewMaintainableObject().getDataObject();
 
@@ -40,8 +39,7 @@ public class PopulationController extends MaintenanceDocumentController {
     }
 
     @RequestMapping(params = "methodToCall=createByCombiningPopulations")
-    public ModelAndView createByCombiningPopulations (@ModelAttribute("KualiForm") MaintenanceDocumentForm form, @SuppressWarnings("unused") BindingResult result,
-                                                      @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView createByCombiningPopulations (@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
         PopulationWrapper wrapper = (PopulationWrapper)form.getDocument().getNewMaintainableObject().getDataObject();
         wrapper.setCreateByRule(false);
         wrapper.setEnableCreateButton(false);
@@ -51,7 +49,7 @@ public class PopulationController extends MaintenanceDocumentController {
 
     @Override
     @RequestMapping(params = "methodToCall=cancel")
-    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancel(@ModelAttribute("KualiForm") UifFormBase form) {
 
         //Redirect to the Lookup (called "Manage Populations")
 

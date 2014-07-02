@@ -81,12 +81,11 @@ public class CheckInfoController extends UifControllerBase {
      */
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         CheckInfoForm checkForm = (CheckInfoForm) form;
         checkForm.setIsSaveSuccess(false);
         checkForm.setIsInstructionActive(false);
-        return super.start(form, request, response);
+        return super.start(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=search")
@@ -119,8 +118,7 @@ public class CheckInfoController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=update")
-    public ModelAndView update(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView update(@ModelAttribute("KualiForm") CheckInfoForm form) throws Exception {
         CheckInfo checkInfo = form.getCheckInfo();
 
         checkInfo.setName(form.getName());
@@ -138,12 +136,11 @@ public class CheckInfoController extends UifControllerBase {
 
         GlobalVariables.getMessageMap().putInfo("Check Info", "info.enroll.save.success");
 
-        return refresh(form, result, request, response);
+        return refresh(form);
     }
 
    @RequestMapping(params = "methodToCall=create")
-    public ModelAndView create(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView create(@ModelAttribute("KualiForm") UifFormBase form) throws Exception {
        CheckInfoForm createForm = (CheckInfoForm) form;
        CheckInfo checkInfo = new CheckInfo();
        checkInfo.setName(createForm.getName());
@@ -167,12 +164,11 @@ public class CheckInfoController extends UifControllerBase {
         form.getView().setApplyDirtyCheck(false);
         createForm.setStateKey(checkInfo.getStateKey());
         createForm.setCheckInfo(checkInfo);
-        return back(createForm, result, request, response);
+        return back(createForm);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=edit")
-    public ModelAndView edit(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView edit(@ModelAttribute("KualiForm") CheckInfoForm form) throws Exception {
         CheckInfo checkInfo = getSelectedCheckInfo(form, "edit");
 
         if ((checkInfo.getId() != null) && !checkInfo.getId().trim().isEmpty()) {
@@ -191,8 +187,7 @@ public class CheckInfoController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=openCreateForm")
-    public ModelAndView openCreateForm(@ModelAttribute("KualiForm") CheckInfoForm searchForm, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView openCreateForm(@ModelAttribute("KualiForm") CheckInfoForm searchForm) throws Exception {
         String controllerPath;
         Properties urlParameters = new Properties();
 
@@ -205,8 +200,7 @@ public class CheckInfoController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=delete")
-    public ModelAndView delete(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView delete(@ModelAttribute("KualiForm") CheckInfoForm form) throws Exception {
         form.setIsInstructionActive(false);
         form.setDialogStateKey("");
 
@@ -242,7 +236,7 @@ public class CheckInfoController extends UifControllerBase {
                 getProcessService().updateProcess(processInfo.getKey(), processInfo, getContextInfo());
             } else {
                 form.setInstructionInfoList(activeInstructions);
-                return showDialog(dialogId, form, request, response);
+                return showDialog(dialogId, form);
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to get process");
@@ -252,15 +246,13 @@ public class CheckInfoController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=clear")
-    public ModelAndView clear(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView clear(@ModelAttribute("KualiForm") CheckInfoForm form) throws Exception {
         clearValues(form);
         return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=back")
-    public ModelAndView back(@ModelAttribute("KualiForm") CheckInfoForm form, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView back(@ModelAttribute("KualiForm") CheckInfoForm form) throws Exception {
         clearValues(form);
         return getModelAndView(form, "checkInfoSearch-SearchPage");
     }

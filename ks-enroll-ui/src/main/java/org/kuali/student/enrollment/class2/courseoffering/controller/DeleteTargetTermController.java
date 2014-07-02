@@ -51,7 +51,7 @@ public class DeleteTargetTermController extends UifControllerBase {
     private final static Logger LOGGER = LoggerFactory.getLogger(DeleteTargetTermForm.class);
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
         return new DeleteTargetTermForm();
     }
 
@@ -91,8 +91,7 @@ public class DeleteTargetTermController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=deleteTargetTerm")
-    public ModelAndView deleteTargetTerm(@ModelAttribute("KualiForm") DeleteTargetTermForm form, @SuppressWarnings("unused") BindingResult result,
-                                         @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView deleteTargetTerm(@ModelAttribute("KualiForm") DeleteTargetTermForm form) throws Exception {
 
         if (form.getTargetTermCode() == null || form.getTargetTermCode().length() == 0) {
             GlobalVariables.getMessageMap().putError("targetTermCode", "error.submit.sourceTerm");

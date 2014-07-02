@@ -41,20 +41,16 @@ public class BatchController extends UifControllerBase {
 
     private BatchScheduler batchScheduler;
 
-    public UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    public UifFormBase createInitialForm() {
         return new BatchForm();
     }
 
     /**
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=scheduleBatch")
-    public ModelAndView scheduleBatch(@ModelAttribute("KualiForm") BatchForm form, @SuppressWarnings("unused") BindingResult result,
-                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView scheduleBatch(@ModelAttribute("KualiForm") BatchForm form) {
 
         KSDateTimeFormatter dateFormatter = DateFormatters.MONTH_DAY_YEAR_DATE_FORMATTER;
         String date = dateFormatter.format(form.getStartDate());
@@ -64,7 +60,7 @@ public class BatchController extends UifControllerBase {
         Date dateAndTime = dateTimeFormatter.parse(date + " " + form.getStartTime() + " " + form.getStartTimeAmPm());
 
         this.getBatchScheduler().schedule("kuali.batch.job.examOffering.slotting", null, dateAndTime, ContextUtils.createDefaultContextInfo());
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     private BatchScheduler getBatchScheduler() {

@@ -78,16 +78,15 @@ public class CalendarSearchController  extends UifControllerBase {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         CalendarSearchForm calendarSearchForm = (CalendarSearchForm)form;
 
-        String calendarSearchType = request.getParameter(CalendarConstants.CALENDAR_SEARCH_TYPE);
+        String calendarSearchType = form.getRequest().getParameter(CalendarConstants.CALENDAR_SEARCH_TYPE);
         if (null != calendarSearchType) {
             calendarSearchForm.setCalendarType(calendarSearchType);
         }
 
-        return super.start(form, request, response);
+        return super.start(form);
     }
 
     /**
@@ -95,8 +94,7 @@ public class CalendarSearchController  extends UifControllerBase {
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=search")
-    public ModelAndView search(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView search(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         if (searchForm.getYear() != null && !searchForm.getYear().isEmpty()) {
             try {
@@ -110,7 +108,7 @@ public class CalendarSearchController  extends UifControllerBase {
 
         searchForm.setClickSearchButton(true);
         //if no search criteria was set, it means the search method is called from redirection. Then retrieve search criteria from http session
-        HttpSession session = request.getSession(true);
+        HttpSession session = searchForm.getRequest().getSession(true);
         if ((searchForm.getCalendarType()==null || searchForm.getCalendarType().isEmpty()) &&
                 (searchForm.getName()==null || searchForm.getName().isEmpty()) &&
                 (searchForm.getYear()==null || searchForm.getYear().isEmpty())) {
@@ -153,15 +151,11 @@ public class CalendarSearchController  extends UifControllerBase {
      * This is called when the user clicked on Search button in the Calendar Search page.
      *
      * @param searchForm
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
 
     @RequestMapping(params = "methodToCall=view")
-    public ModelAndView view(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView view(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         AcalSearchResult atp = getSelectedAtp(searchForm, "view");
         Properties urlParameters;
@@ -192,14 +186,10 @@ public class CalendarSearchController  extends UifControllerBase {
      * This is called when the user clicked on Edit button in the Calendar Search page.
      *
      * @param searchForm
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=edit")
-    public ModelAndView edit(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView edit(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         AcalSearchResult atp = getSelectedAtp(searchForm, "edit");
 
@@ -232,14 +222,10 @@ public class CalendarSearchController  extends UifControllerBase {
      * This is called when the user clicked on Copy button in the Calendar Search page with Holiday calendar selected.
      *
      * @param searchForm
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=copy")
-    public ModelAndView copy(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView copy(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         AcalSearchResult atp = getSelectedAtp(searchForm, "copy");
 
@@ -265,8 +251,7 @@ public class CalendarSearchController  extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=createBlankAcademicCalendar")
-    public ModelAndView createBlankAcademicCalendar(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView createBlankAcademicCalendar(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         Properties urlParameters = new Properties();
         urlParameters.put(UifParameters.VIEW_ID, CalendarConstants.ACAL_VIEW);
@@ -279,8 +264,7 @@ public class CalendarSearchController  extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=createBlankHolidayCalendar")
-    public ModelAndView createBlankHolidayCalendar(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView createBlankHolidayCalendar(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
 
         Properties urlParameters = new Properties();
         urlParameters.put(UifParameters.VIEW_ID, CalendarConstants.HOLIDAYCALENDAR_FLOWVIEW);
@@ -296,14 +280,10 @@ public class CalendarSearchController  extends UifControllerBase {
      * This is called when the user clicked on Delete button in the Calendar Search page with Holiday calendar selected.
      *
      * @param searchForm
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=delete")
-    public ModelAndView delete(@ModelAttribute("KualiForm") CalendarSearchForm searchForm, BindingResult result,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView delete(@ModelAttribute("KualiForm") CalendarSearchForm searchForm) throws Exception {
         String dialogId = CalendarConstants.SEARCH_DELETE_CONFIRMATION_DIALOG;
         // returns null if no response OR if response was negative
         if (searchForm.getDialogResponse(dialogId) == null) {

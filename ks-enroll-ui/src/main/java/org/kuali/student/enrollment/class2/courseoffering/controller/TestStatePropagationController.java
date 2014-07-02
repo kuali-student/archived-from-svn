@@ -78,7 +78,7 @@ public class TestStatePropagationController extends UifControllerBase {
     private AcademicCalendarService acalService;
 
     @Override
-    protected UifFormBase createInitialForm(@SuppressWarnings("unused") HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new TestStatePropagationForm();
     }
 
@@ -96,7 +96,7 @@ public class TestStatePropagationController extends UifControllerBase {
         if (paramMap.containsKey(PAGE_ID)) {
             String pageId = ((String []) paramMap.get(PAGE_ID))[0];
             if (pageId.equals("testStatePropagationPageId")) {
-                return _startStatePropagationTest(form, request, response);
+                return _startStatePropagationTest(form);
             }
         }
 
@@ -113,8 +113,7 @@ public class TestStatePropagationController extends UifControllerBase {
 
     @Transactional
     @RequestMapping(params = "methodToCall=testStatePropagation")
-    public ModelAndView testStatePropagation(@ModelAttribute("KualiForm") TestStatePropagationForm form, @SuppressWarnings("unused") BindingResult result,
-                                             @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) throws Exception {
+    public ModelAndView testStatePropagation(@ModelAttribute("KualiForm") TestStatePropagationForm form) throws Exception {
         TestStatePropagationViewHelperService helper = getViewHelperService(form);
         helper.runTests(form);
         return getModelAndView(form);

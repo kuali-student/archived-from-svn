@@ -54,14 +54,10 @@ public class FERuleEditorController extends EnrolRuleEditorController {
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=show")
-    public ModelAndView show(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                             @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView show(@ModelAttribute("KualiForm") UifFormBase form) {
 
         MaintenanceDocumentForm document = (MaintenanceDocumentForm) form;
         FERuleManagementWrapper ruleWrapper = (FERuleManagementWrapper) AgendaUtilities.getRuleWrapper(document);
@@ -77,22 +73,18 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         this.displayLinkedTermTypeMessages(document);
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_AGENDA_FE_MAINTENANCE_PAGE_ID);
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @Override
     @RequestMapping(params = "methodToCall=route")
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
-        super.route(form, result, request, response);
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
+        super.route(form);
 
         Properties urlParameters = new Properties();
         urlParameters.put(KRADConstants.DISPATCH_REQUEST_PARAMETER, KRADConstants.START_METHOD);
@@ -104,15 +96,11 @@ public class FERuleEditorController extends EnrolRuleEditorController {
 
     /**
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @Override
     @RequestMapping(params = "methodToCall=addRule")
-    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
 
         MaintenanceDocumentForm document = (MaintenanceDocumentForm) form;
@@ -142,21 +130,17 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         this.getViewHelper(form).refreshInitTrees(ruleWrapper.getRuleEditor());
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_RULE_FE_MAINTENANCE_PAGE_ID);
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
      * Deletes selected rule from agenda on Manage Course Requistes page
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=deleteRule")
-    public ModelAndView deleteRule(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                   @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView deleteRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         MaintenanceDocumentForm document = (MaintenanceDocumentForm) form;
         FERuleManagementWrapper ruleWrapper = (FERuleManagementWrapper)AgendaUtilities.getRuleWrapper(document);
@@ -185,14 +169,10 @@ public class FERuleEditorController extends EnrolRuleEditorController {
      * Code (04a screen)
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=goToRuleView")
-    public ModelAndView goToRuleView(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                     @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView goToRuleView(@ModelAttribute("KualiForm") UifFormBase form) {
 
         //Clear the client state on new edit rule.
         form.getClientStateForSyncing().clear();
@@ -215,20 +195,16 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         this.getViewHelper(form).refreshInitTrees(ruleWrapper.getRuleEditor());
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_RULE_FE_MAINTENANCE_PAGE_ID);
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=loadTermType")
-    public ModelAndView loadTermType(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                     HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView loadTermType(@ModelAttribute("KualiForm") UifFormBase form) {
 
         MaintenanceDocumentForm maintenanceDocumentForm = (MaintenanceDocumentForm) form;
         FERuleEditorMaintainableImpl maintainable = (FERuleEditorMaintainableImpl) maintenanceDocumentForm.getDocument().getNewMaintainableObject();
@@ -253,48 +229,36 @@ public class FERuleEditorController extends EnrolRuleEditorController {
      * Reverts rule to previous state and navigates to agenda maintenance page.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=cancelEditRule")
-    public ModelAndView cancelEditRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancelEditRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_AGENDA_FE_MAINTENANCE_PAGE_ID);
-        return super.cancelEditRule(form, result, request, response);
+        return super.cancelEditRule(form);
     }
 
     /**
      * Back to search input page.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=cancelEditMatrix")
-    public ModelAndView cancelEditMatrix(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancelEditMatrix(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_INPUT_FE_MAINTENANCE_PAGE_ID);
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
     /**
      * Updates rule and redirects to agenda maintenance page.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=updateRule")
-    public ModelAndView updateRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView updateRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         FERuleEditor ruleEditor = (FERuleEditor) getRuleEditor(form);
         RuleManagementWrapper ruleWrapper = AgendaUtilities.getRuleWrapper((MaintenanceDocumentForm) form);
@@ -333,7 +297,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, EnrolKRMSConstants.KSKRMS_AGENDA_FE_MAINTENANCE_PAGE_ID);
         feRuleMgtWrapper.setAgendaDirty(true);
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
 
 
@@ -341,14 +305,10 @@ public class FERuleEditorController extends EnrolRuleEditorController {
      * Retrieves selected proposition key and initializes edit on propostion.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=getSelectedKey")
-    public ModelAndView getSelectedKey(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView getSelectedKey(@ModelAttribute("KualiForm") UifFormBase form) {
 
         //Clear the current states of the tabs to open the first tab again with the edit tree.
         Map<String, String> states = (Map<String, String>) form.getClientStateForSyncing().get(EnrolKRMSConstants.KSKRMS_RULE_FE_TABS_ID);
@@ -358,7 +318,7 @@ public class FERuleEditorController extends EnrolRuleEditorController {
         String selectedKey = request.getParameter(KRMSConstants.KRMS_PARM_SELECTED_KEY);
         getRuleEditor(form).setSelectedKey(selectedKey);
 
-        return this.goToEditProposition(form, result, request, response);
+        return this.goToEditProposition(form);
     }
 
     private RuleEditor getSelectedRule(MaintenanceDocumentForm form, String actionLink) {
