@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CMHomeController extends UifControllerBase {
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CMHomeForm();
     }
 

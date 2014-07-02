@@ -39,7 +39,7 @@ public class LoCategoryController extends UifControllerBase {
     private static final Logger LOG = LoggerFactory.getLogger(LoCategoryController.class);
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         //Need to register a null date converter for the BeanUtils copy process, otherwise an exception is thrown if a null date is copied.
         ConvertUtils.register(new DateConverter(null), Date.class);
         LoCategoryForm form = new LoCategoryForm();
