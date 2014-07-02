@@ -57,8 +57,7 @@ public class DeleteTargetTermController extends UifControllerBase {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         if (!(form instanceof DeleteTargetTermForm)){
             throw new RuntimeException("Form object passed into start method was not of expected type DeleteTargetTermForm. Got " + form.getClass().getSimpleName());
         }

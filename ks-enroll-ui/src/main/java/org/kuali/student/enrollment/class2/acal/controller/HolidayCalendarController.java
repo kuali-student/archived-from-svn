@@ -112,8 +112,6 @@ public class HolidayCalendarController extends UifControllerBase {
      * This is starting page before we enter any Holiday management activities.
      *
      * @param form
-     * @param request
-     * @param response
      * @return
      */
 
@@ -122,9 +120,9 @@ public class HolidayCalendarController extends UifControllerBase {
     public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         HolidayCalendarForm hcForm = (HolidayCalendarForm) form;
 
-        String hcId = request.getParameter(CalendarConstants.CALENDAR_ID);
+        String hcId = form.getRequest().getParameter(CalendarConstants.CALENDAR_ID);
 
-        String readOnlyView = request.getParameter(CalendarConstants.READ_ONLY_VIEW);
+        String readOnlyView = form.getRequest().getParameter(CalendarConstants.READ_ONLY_VIEW);
         hcForm.getView().setReadOnly(BooleanUtils.toBoolean(readOnlyView));
 
         if ((hcId != null) && !hcId.trim().isEmpty()) {
@@ -151,10 +149,10 @@ public class HolidayCalendarController extends UifControllerBase {
         HolidayCalendarInfo hcInfo = null;
 
         try {
-            String calendarId = request.getParameter(CalendarConstants.CALENDAR_ID);
+            String calendarId = form.getRequest().getParameter(CalendarConstants.CALENDAR_ID);
             if (calendarId != null && !calendarId.trim().isEmpty()) {
                 hcInfo = getHolidayCalendarFormHelper(form).getHolidayCalendar(calendarId);
-            } else if (StringUtils.equals(request.getParameter(CalendarConstants.PAGE_ID), CalendarConstants.HOLIDAYCALENDAR_COPYPAGE)) { //if it goes to HCAL copy page, retrieve the latest HCAL for copy create
+            } else if (StringUtils.equals(form.getRequest().getParameter(CalendarConstants.PAGE_ID), CalendarConstants.HOLIDAYCALENDAR_COPYPAGE)) { //if it goes to HCAL copy page, retrieve the latest HCAL for copy create
                 hcInfo = getHolidayCalendarFormHelper(form).getNewestHolidayCalendar();
             }
         }
@@ -209,7 +207,7 @@ public class HolidayCalendarController extends UifControllerBase {
         HolidayCalendarInfo hcInfo = null;
 
         try {
-            String calendarId = request.getParameter(CalendarConstants.CALENDAR_ID);
+            String calendarId = form.getRequest().getParameter(CalendarConstants.CALENDAR_ID);
             if (calendarId == null || calendarId.trim().isEmpty()) {
                 hcInfo = getHolidayCalendarFormHelper(form).getNewestHolidayCalendar();
             }

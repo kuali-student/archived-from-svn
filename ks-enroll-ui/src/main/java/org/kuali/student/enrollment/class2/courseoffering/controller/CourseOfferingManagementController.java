@@ -919,9 +919,6 @@ public class CourseOfferingManagementController extends UifControllerBase {
      * save RSI(s) of exam offering(s)
      *
      * @param theForm
-     * @param result
-     * @param request
-     * @param response
      * @return ModelAndView
      * @throws Exception
      */
@@ -1033,9 +1030,9 @@ public class CourseOfferingManagementController extends UifControllerBase {
         RSIJSONResponseData jsonResponseDTO = new RSIJSONResponseData();
         jsonResponseDTO.setHasErrors(false);
 
-        String selectedCollectionPath = request.getParameter(UifParameters.SELECTED_COLLECTION_PATH);
+        String selectedCollectionPath = theForm.getRequest().getParameter(UifParameters.SELECTED_COLLECTION_PATH);
         theForm.getActionParameters().put(UifParameters.SELECTED_COLLECTION_PATH, selectedCollectionPath);
-        String selectedLine = request.getParameter(UifParameters.SELECTED_LINE_INDEX);
+        String selectedLine = theForm.getRequest().getParameter(UifParameters.SELECTED_LINE_INDEX);
         theForm.getActionParameters().put(UifParameters.SELECTED_LINE_INDEX, selectedLine);
 
         Object selectedObject = CourseOfferingManagementUtil.getSelectedObject(theForm, "edit");

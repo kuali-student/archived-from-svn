@@ -264,8 +264,8 @@ public class RegistrationWindowsController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=refreshAfterDialog")
     public ModelAndView refreshAfterDialog(@ModelAttribute("KualiForm") RegistrationWindowsManagementForm uifForm) throws Exception {
 
-        String windowName = request.getParameter("windowName");
-        String growlMessage = request.getParameter("growlMessage");
+        String windowName = uifForm.getRequest().getParameter("windowName");
+        String growlMessage = uifForm.getRequest().getParameter("growlMessage");
         if (growlMessage != null) {
             if (windowName != null) {
                 GlobalVariables.getMessageMap().addGrowlMessage("", growlMessage, windowName);

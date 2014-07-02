@@ -118,7 +118,7 @@ public class CourseOfferingCreateController extends CourseOfferingBaseController
                     CourseOfferingControllerPopulateUIForm.copyCourseOfferingInfo(coCreateWrapper, targetTermCode, catalogCourseCode, coId);
                 }
             }
-            checkViewAuthorization(form, methodToCall);
+            getControllerService().checkViewAuthorization(form);
         }
 
         return getModelAndView(maintenanceForm);

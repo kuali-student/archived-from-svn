@@ -54,26 +54,26 @@ public abstract class KsUifControllerBase extends UifControllerBase {
 
         // retrieve query fields from request
         Map<String, String> queryParameters = new HashMap<String, String>();
-        for (Object parameterName : request.getParameterMap().keySet()) {
+        for (Object parameterName : form.getRequest().getParameterMap().keySet()) {
             if (parameterName.toString().startsWith(UifParameters.QUERY_PARAMETER + ".")) {
                 String fieldName = StringUtils.substringAfter(parameterName.toString(),
                         UifParameters.QUERY_PARAMETER + ".");
-                String fieldValue = request.getParameter(parameterName.toString());
+                String fieldValue = form.getRequest().getParameter(parameterName.toString());
                 queryParameters.put(fieldName, fieldValue);
             }
         }
 
         // retrieve id for field to perform query for
-        String queryFieldId = request.getParameter(UifParameters.QUERY_FIELD_ID);
+        String queryFieldId = form.getRequest().getParameter(UifParameters.QUERY_FIELD_ID);
         if (StringUtils.isBlank(queryFieldId)) {
             throw new RuntimeException("Unable to find id for field to perform query on under request parameter name: "
                     + UifParameters.QUERY_FIELD_ID);
         }
 
         // get the field term to match
-        String queryTerm = request.getParameter(UifParameters.QUERY_TERM);
+        String queryTerm = form.getRequest().getParameter(UifParameters.QUERY_TERM);
         Boolean isBlankQueryTermAllowed =
-                "true".equalsIgnoreCase(request.getParameter("blankQueryTermAllowed"));
+                "true".equalsIgnoreCase(form.getRequest().getParameter("blankQueryTermAllowed"));
         if ( ! isBlankQueryTermAllowed) {
             if (StringUtils.isBlank(queryTerm)) {
                 throw new RuntimeException(

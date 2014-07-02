@@ -61,7 +61,7 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
             String methodToCall = form.getRequest().getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
-            checkViewAuthorization(form, methodToCall);
+            getControllerService().checkViewAuthorization(form);
             String crossListedAlias = form.getRequest().getParameter("editCrossListedCoAlias");
             if(StringUtils.equals(crossListedAlias, "true")) {
                 Object selectedObject =  form.getDocument().getNewMaintainableObject().getDataObject();

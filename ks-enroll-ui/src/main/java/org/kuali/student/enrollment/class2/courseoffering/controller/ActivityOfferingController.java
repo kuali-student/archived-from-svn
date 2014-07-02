@@ -65,7 +65,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         }
 
         //populate the previousFormsMap of the form. The map contains info about the previous view to generate customized breadcrumb
-        KSUifUtils.populationPreviousFormsMap(request, (KSUifMaintenanceDocumentForm) form);
+        KSUifUtils.populationPreviousFormsMap((KSUifMaintenanceDocumentForm) form);
 
         return getModelAndView(form);
     }
@@ -204,7 +204,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
      *
      * @return model and view
      */
-    public ModelAndView routeSuper(DocumentFormBase form, HttpServletResponse response) {
+    public ModelAndView routeSuper(DocumentFormBase form) {
         return super.route(form);
     }
 

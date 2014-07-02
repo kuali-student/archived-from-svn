@@ -54,13 +54,12 @@ public class DevTestWidgetController extends UifControllerBase {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         if (!(form instanceof DevTestWidgetForm)){
             throw new RuntimeException("Form object passed into start method was not of expected type DevTestWidgetForm. Got " + form.getClass().getSimpleName());
         }
         DevTestWidgetForm theForm = (DevTestWidgetForm) form;
-        Map paramMap = request.getParameterMap();
+        Map paramMap = form.getRequest().getParameterMap();
         if (paramMap.containsKey(PAGE_ID)) {
             String pageId = ((String []) paramMap.get(PAGE_ID))[0];
             if (pageId.equals("firstServiceCall")) {
@@ -71,8 +70,7 @@ public class DevTestWidgetController extends UifControllerBase {
         // return super.start(theForm);
     }
 
-    private ModelAndView _startFirstServiceCall(@ModelAttribute("KualiForm") UifFormBase form,
-                                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    private ModelAndView _startFirstServiceCall(@ModelAttribute("KualiForm") UifFormBase form) {
         // Doesn't do anything really, but is there for customization
         DevTestWidgetForm theForm = (DevTestWidgetForm) form;
         LOGGER.info("firstServiceCall");
