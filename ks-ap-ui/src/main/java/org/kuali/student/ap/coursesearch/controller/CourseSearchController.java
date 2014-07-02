@@ -1012,7 +1012,7 @@ public class CourseSearchController extends UifControllerBase {
 	}
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
         return (UifFormBase) searcher.createSearchForm();
 	}
 

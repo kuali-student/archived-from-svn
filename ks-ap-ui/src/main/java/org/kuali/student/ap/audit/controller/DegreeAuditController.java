@@ -98,7 +98,7 @@ public class DegreeAuditController extends UifControllerBase {
 	}
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return new DegreeAuditForm();
 	}
 

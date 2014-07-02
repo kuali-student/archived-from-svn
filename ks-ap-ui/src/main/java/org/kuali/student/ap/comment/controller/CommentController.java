@@ -70,7 +70,7 @@ public class CommentController extends UifControllerBase {
 	private transient String propertiesFilePath = "/org/kuali/student/kr-krad/KSAP-ApplicationResources.properties";
 
 	@Override
-	protected CommentForm createInitialForm(HttpServletRequest request) {
+	protected CommentForm createInitialForm() {
 		return new CommentForm();
 	}
 

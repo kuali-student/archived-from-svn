@@ -54,7 +54,7 @@ public class ScheduleBuildController extends UifControllerBase {
 	public static final String SB_FORM = "ScheduleBuild-FormView";
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return (UifFormBase) KsapFrameworkServiceLocator
 				.getScheduleBuildStrategy().getInitialForm();
 	}

@@ -72,7 +72,7 @@ public class ConversationCreateController extends ConversationControllerBase {
 	private TermHelper termHelper;
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		LOG.debug("IN createInitialForm()");
 		return new ConversationCreateForm();
 	}

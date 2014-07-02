@@ -40,7 +40,7 @@ public class ConversationViewController  extends ConversationControllerBase {
 	public static final String CONVO_FORM = "Conversation-FormView";
 	
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return new ConversationViewForm();
 	}
 	

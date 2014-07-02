@@ -55,7 +55,7 @@ public class ReservedTimeController extends UifControllerBase {
 	}
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return new ReservedTimeForm();
 	}
 

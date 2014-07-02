@@ -91,7 +91,7 @@ public class ShoppingCartController extends UifControllerBase {
 	}
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return (UifFormBase) KsapFrameworkServiceLocator
 				.getScheduleBuildStrategy().getInitialCartForm();
 	}

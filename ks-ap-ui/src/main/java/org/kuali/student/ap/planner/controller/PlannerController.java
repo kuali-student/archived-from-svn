@@ -81,7 +81,7 @@ public class PlannerController extends KsapControllerBase {
     private static final String ADD_COURSE_PAGE = "course_add_course_page";
 
 	@Override
-	protected UifFormBase createInitialForm(HttpServletRequest request) {
+	protected UifFormBase createInitialForm() {
 		return new PlannerFormImpl();
 	}
 
