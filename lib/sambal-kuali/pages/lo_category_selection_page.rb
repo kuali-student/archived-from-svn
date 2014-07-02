@@ -1,4 +1,4 @@
-class CmLoCategoryObject < BasePage
+class CmLoCategoryFindPage < BasePage
 
   wrapper_elements
   cm_elements

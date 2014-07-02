@@ -230,10 +230,10 @@ Then(/^I should see author and collaborator details on the course proposal$/) do
 
       @course_proposal.author_list.each do |author|
           page.author_name_review(@course_proposal.author_list[collection_index].author_level).should include author.name
-          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Open Document" if author.permission == "View"
-          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Open Document" if author.permission == "Comments, View"
-          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Edit Document" if author.permission == "Edit, Comments, View"
-          page.author_notation_review(@course_proposal.author_list[collection_index].author_level).should == "F" if author.author_notation == :set
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "View" if author.permission == "View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comments, View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comments, View"
+          page.action_request_review(@course_proposal.author_list[collection_index].author_level).should == "FYI"
           collection_index += 1
       end
     end
@@ -277,13 +277,9 @@ Then(/^I should no longer see author and collaborator details on the course prop
     page.course_title_review.should == @course_proposal.course_title
     collection_index = 0
 
-    @course_proposal.author_list.each do |author|
-        page.author_name_review(@course_proposal.author_list[collection_index].author_level).should_not include author.name
-        page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should_not include author.permission
-        page.author_notation_review(@course_proposal.author_list[collection_index].author_level).should_not include author.author_notation
-        collection_index += 1
-    end
-  end
+    page.empty_authors_collab_review.exists?.should == true #implication is that no information is displayed on authors and collaborators section
+
+   end
 end
 
 When(/^I create a basic course proposal with Supporting Documents$/) do

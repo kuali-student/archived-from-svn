@@ -1,4 +1,4 @@
-@draft
+@nightly
 Feature: GT.Course Proposal Details Authors Collaborators
 
 Background:
