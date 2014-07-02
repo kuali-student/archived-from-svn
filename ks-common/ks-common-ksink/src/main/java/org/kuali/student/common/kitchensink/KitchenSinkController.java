@@ -75,8 +75,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=collection")
-    public ModelAndView collection(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView collection(@ModelAttribute("KualiForm") KitchenSinkForm form) {
 
         List<KitchenSinkFormCollection1> collectionList = new ArrayList<KitchenSinkFormCollection1>();
         collectionList.add(new KitchenSinkFormCollection1("Item #1", "A primary item", "2001-01-01"));
@@ -103,8 +102,7 @@ public class KitchenSinkController extends UifControllerBase {
 
     /* test method for CollectionTest sandbox/test view
     @RequestMapping(params = "methodToCall=subcollection")
-    public ModelAndView subcollection(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView subcollection(@ModelAttribute("KualiForm") KitchenSinkForm form) {
 
         List<KitchenSinkFormCollection2> subCollectionList = new ArrayList<KitchenSinkFormCollection2>();
         subCollectionList.add(new KitchenSinkFormCollection2("A","W","02:00 PM","04:50 PM"));
@@ -125,8 +123,7 @@ public class KitchenSinkController extends UifControllerBase {
     } //*/
 
     @RequestMapping(params = "methodToCall=collectionOne")
-    public ModelAndView collectionOne(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView collectionOne(@ModelAttribute("KualiForm") KitchenSinkForm form) {
 
         List<KitchenSinkFormCollection1> collectionList = new ArrayList<KitchenSinkFormCollection1>();
         collectionList.add(new KitchenSinkFormCollection1("A", "First letter of the alphabet", "1970-01-01"));
@@ -136,8 +133,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=configProperties")
-    public ModelAndView configProperties(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                         HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView configProperties(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         List<ConcreteKeyValue> configProperties = new ArrayList<ConcreteKeyValue>();
         Map<String, String> map = ConfigLogger.getDisplaySafeConfig(
                         ConfigContext.getCurrentContextConfig().getProperties());
@@ -151,8 +147,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=collectionTerm")
-    public ModelAndView collectionTerm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                      HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView collectionTerm(@ModelAttribute("KualiForm") KitchenSinkForm form) {
 
         List<KitchenSinkFormCollection1> collectionList = new ArrayList<KitchenSinkFormCollection1>();
         collectionList.add(new KitchenSinkFormCollection1("Fall 1997", "kuali.atp.type.Fall", "1997-09-01"));
@@ -163,8 +158,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=addLineCollectionAsForm")
-    public ModelAndView addLineCollectionAsForm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addLineCollectionAsForm(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         List<KitchenSinkFormCollection1> collectionList = form.getCollection();
         Map<String, Object> newCollectionLines = form.getNewCollectionLines();
         if (null != newCollectionLines && !newCollectionLines.isEmpty()) {
@@ -185,10 +179,7 @@ public class KitchenSinkController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=getActivities")
     public ModelAndView getActivities(
             @RequestParam(value = "actionParameters", required = false) Map<String, Integer> actionParameters,
-            @ModelAttribute("KualiForm") KitchenSinkForm form,
-            BindingResult result,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+            @ModelAttribute("KualiForm") KitchenSinkForm form) throws Exception {
 
         List<KitchenSinkMockActivityData> activities = new ArrayList<KitchenSinkMockActivityData>();
 
@@ -203,8 +194,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=trees")
-    public ModelAndView trees(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView trees(@ModelAttribute("KualiForm") KitchenSinkForm form) {
 
         form.getTree1().setRootElement(buildTree1());
         form.getTree2().setRootElement(buildTree2());
@@ -276,43 +266,37 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(params = "methodToCall=growl")
-    public ModelAndView growl(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView growl(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         GlobalVariables.getMessageMap().addGrowlMessage("", "kitchensink.custom", "This is an example of a growl with no icon.");
         return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlError")
-    public ModelAndView growlError(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView growlError(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.ERROR, "kitchensink.custom", "This is an example of an error growl.");
         return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlInfo")
-    public ModelAndView growlInfo(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                  HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView growlInfo(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.INFORMATION, "kitchensink.custom", "This is an example of an information growl.");
         return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlSuccess")
-    public ModelAndView growlSuccess(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                     HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView growlSuccess(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, "kitchensink.custom", "This is an example of a success growl.");
         return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=growlWarning")
-    public ModelAndView growlWarning(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                     HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView growlWarning(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         KSUifUtils.addGrowlMessageIcon(GrowlIcon.WARNING, "kitchensink.custom", "This is an example of a warning growl.");
         return getModelAndView(form);
     }
 
     @RequestMapping(params = "methodToCall=dialogButtonConfirm")
-    public ModelAndView dialogButtonConfirm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView dialogButtonConfirm(@ModelAttribute("KualiForm") KitchenSinkForm form) throws Exception {
         String dialogId = "messageBoxDialog";
 
 
@@ -337,8 +321,7 @@ public class KitchenSinkController extends UifControllerBase {
 
 
     @RequestMapping(params = "methodToCall=customDialog")
-    public ModelAndView customDialog(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView customDialog(@ModelAttribute("KualiForm") KitchenSinkForm form) throws Exception {
         String dialogId = "lightboxDialog2";
 
         // dialog has not been answered
@@ -351,8 +334,7 @@ public class KitchenSinkController extends UifControllerBase {
 
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=saveForm")
-    public ModelAndView saveForm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView saveForm(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         //
         // Code goes here to edit form and exit if any errors exist
         //
@@ -363,8 +345,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=saveLightboxForm")
-    public ModelAndView saveLightboxForm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                         HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView saveLightboxForm(@ModelAttribute("KualiForm") KitchenSinkForm form)
             throws Exception {
         String dialogId = "lightboxDialog1";
 
@@ -376,12 +357,11 @@ public class KitchenSinkController extends UifControllerBase {
         // growl doesn't show because returnFromLightbox() executes performRedirect(), w/o growl params:
         return getModelAndView(form);
         //return getModelAndView(form);//shows growl,lightbox remains,hidden bean displays
-        //return refresh(form, result, request, response);//same as getModelAndView
+        //return refresh(form);//same as getModelAndView
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=processFormRowSelection")
-    public ModelAndView processFormRowSelection(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView processFormRowSelection(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         //
         // This method should do something with the selected rows, like send them to another page or maybe
         // save them, or...  For this example the selected row name will just be added to a growl message.
@@ -401,8 +381,7 @@ public class KitchenSinkController extends UifControllerBase {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=popoverMethodToCall")
-    public ModelAndView popoverMethodToCall(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView popoverMethodToCall(@ModelAttribute("KualiForm") KitchenSinkForm form) throws Exception {
         form.setStringField2(
                 "Text set in server-side method before the popover is displayed.  "
             +   form.getStringField2()
@@ -412,15 +391,13 @@ public class KitchenSinkController extends UifControllerBase {
 
     private int popupCount = 0;
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=popoverRefreshBeforeDisplay")
-    public ModelAndView popoverRefreshBeforeDisplay(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView popoverRefreshBeforeDisplay(@ModelAttribute("KualiForm") KitchenSinkForm form) throws Exception {
         form.setStringField3(Integer.toString(++popupCount));
         return getModelAndView(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=processPopoverForm")
-    public ModelAndView processPopoverForm(@ModelAttribute("KualiForm") KitchenSinkForm form, BindingResult result,
-                                           HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView processPopoverForm(@ModelAttribute("KualiForm") KitchenSinkForm form) {
         GlobalVariables.getMessageMap().addGrowlMessage("NOTE", "kitchensink.custom", "processPopoverForm");
         if ("error".equals(form.getStringField1().toLowerCase())) {
                 GlobalVariables.getMessageMap().putErrorForSectionId("stringField1","kitchensink.custom","Popover form with error is displayed automatically.");
