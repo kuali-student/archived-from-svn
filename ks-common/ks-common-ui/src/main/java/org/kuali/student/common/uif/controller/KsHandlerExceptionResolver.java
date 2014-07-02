@@ -119,7 +119,7 @@ public class KsHandlerExceptionResolver extends UifHandlerExceptionResolver {
         // Set the ajax return type
         incidentReportForm.setAjaxReturnType(UifConstants.AjaxReturnTypes.UPDATEVIEW.getKey());
 
-        ModelAndView modelAndView = UifControllerHelper.getModelAndView(incidentReportForm, "page2");
+        ModelAndView modelAndView = UifControllerHelper.getUIFModelAndView(incidentReportForm, "page2");
         try {
             UifControllerHelper.prepareView(request, modelAndView);
         } catch (Exception e) {
