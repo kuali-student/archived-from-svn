@@ -206,8 +206,7 @@ public class CourseController extends CourseRuleEditorController {
      */
     @Override
     @RequestMapping(params = "methodToCall=docHandler")
-    public ModelAndView docHandler(@ModelAttribute("KualiForm") DocumentFormBase formBase, BindingResult result, HttpServletRequest request,
-                                   HttpServletResponse response) throws Exception {
+    public ModelAndView docHandler(@ModelAttribute("KualiForm") DocumentFormBase formBase) throws Exception {
         ModelAndView modelAndView = super.docHandler(formBase, result, request, response);
 
         if (formBase.getPageId().equals(CurriculumManagementConstants.CourseViewPageIds.REVIEW_PROPOSAL)) {
@@ -237,13 +236,13 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     @Override
-    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView route(@ModelAttribute("KualiForm") DocumentFormBase form) {
         // manually call the view validation service as this validation cannot be run client-side in current setup
 //        KRADServiceLocatorWeb.getViewValidationService().validateView(form.getPostedView(), form, KewApiConstants.ROUTE_HEADER_ENROUTE_CD);
         KSViewAttributeValueReader reader = new KSViewAttributeValueReader(form);
         KRADServiceLocatorWeb.getDictionaryValidationService().validate(reader, true, KewApiConstants.ROUTE_HEADER_ENROUTE_CD, form.getView().getStateMapping());
         if (!GlobalVariables.getMessageMap().hasErrors()) {
-            return super.route(form, result, request, response);    //To change body of overridden methods use File | Settings | File Templates.
+            return super.route(form);    //To change body of overridden methods use File | Settings | File Templates.
         }
         return getModelAndView(form);
     }
@@ -253,8 +252,7 @@ public class CourseController extends CourseRuleEditorController {
      */
     @MethodAccessible
     @RequestMapping(params = "methodToCall=reviewCourseProposal")
-    public ModelAndView reviewCourseProposal(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView reviewCourseProposal(@ModelAttribute("KualiForm") DocumentFormBase form) throws Exception {
 
         ((CourseInfoMaintainable) ((MaintenanceDocumentForm) form).getDocument().getNewMaintainableObject()).updateReview();
 
@@ -271,8 +269,7 @@ public class CourseController extends CourseRuleEditorController {
      * load the course proposal review page
      */
     @RequestMapping(params = "methodToCall=editCourseProposalPage")
-    public ModelAndView editCourseProposalPage(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView editCourseProposalPage(@ModelAttribute("KualiForm") DocumentFormBase form) throws Exception {
 
 
         String displaySectionId = form.getActionParameters().get("displaySection");
@@ -303,10 +300,9 @@ public class CourseController extends CourseRuleEditorController {
      * @return The new {@link ModelAndView} that contains the newly created/updated Supporting document information.
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=addSupportingDocument")
-    public ModelAndView addSupportingDocument(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView addSupportingDocument(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) {
         final CourseInfoMaintainable maintainable = getCourseMaintainableFrom(form);
-        final ModelAndView retval = addLine(form, result, request, response);
+        final ModelAndView retval = addLine(form);
 
         CourseInfoWrapper courseInfoWrapper = getCourseInfoWrapper(form);
 
@@ -360,12 +356,11 @@ public class CourseController extends CourseRuleEditorController {
      * @return The new {@link ModelAndView} that contains the newly created/updated Supporting document information.
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=removeSupportingDocument")
-    public ModelAndView removeSupportingDocument(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                                 HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView removeSupportingDocument(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) {
         final CourseInfoMaintainable maintainable = getCourseMaintainableFrom(form);
 
         CourseInfoWrapper courseInfoWrapper = getCourseInfoWrapper(form);
-        // final ModelAndView retval = super.deleteLine(form, result, request, response);
+        // final ModelAndView retval = super.deleteLine(form);
 
         final String selectedCollectionPath = form.getActionParamaterValue(UifParameters.SELECTED_COLLECTION_PATH);
         if (StringUtils.isBlank(selectedCollectionPath)) {
@@ -394,7 +389,7 @@ public class CourseController extends CourseRuleEditorController {
             throw new RuntimeException("Unable to delete document: " + toRemove.getId(), e);
         }
 
-        return deleteLine(form, result, request, response);
+        return deleteLine(form);
     }
 
     /**
@@ -412,7 +407,7 @@ public class CourseController extends CourseRuleEditorController {
 
         form.setDocTypeName(CurriculumManagementConstants.DocumentTypeNames.CourseProposal.COURSE_MODIFY);
         form.setDataObjectClassName(CourseInfo.class.getName());
-        final ModelAndView retval = super.docHandler(form, result, request, response);
+        final ModelAndView retval = super.docHandler(form);
 
         return retval;
     }
@@ -431,7 +426,7 @@ public class CourseController extends CourseRuleEditorController {
                                        final HttpServletResponse response) throws Exception {
         form.setDocTypeName(CurriculumManagementConstants.DocumentTypeNames.CourseProposal.COURSE_RETIRE);
         form.setDataObjectClassName(CourseInfo.class.getName());
-        final ModelAndView retval = super.docHandler(form, result, request, response);
+        final ModelAndView retval = super.docHandler(form);
 
         return retval;
     }
@@ -469,15 +464,14 @@ public class CourseController extends CourseRuleEditorController {
      * @return The new {@link ModelAndView} that contains the newly created/updated {@CourseInfo} and {@ProposalInfo} information.
      */
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=saveProposal")
-    public ModelAndView saveProposal(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView saveProposal(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         CourseInfoWrapper courseInfoWrapper = getCourseInfoWrapper(form);
         form.getDocument().getDocumentHeader().setDocumentDescription(courseInfoWrapper.getProposalInfo().getName());
 
         ModelAndView modelAndView;
 
-        modelAndView = save(form, result, request, response);
+        modelAndView = save(form);
 
         if (GlobalVariables.getMessageMap().hasErrors()) {
             return modelAndView;
@@ -505,10 +499,9 @@ public class CourseController extends CourseRuleEditorController {
 
     @Override
     @RequestMapping(params = "methodToCall=blanketApprove")
-    public ModelAndView blanketApprove(@ModelAttribute("KualiForm") DocumentFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
-        saveProposal((MaintenanceDocumentForm) form, result, request, response);
-        return super.blanketApprove(form, result, request, response);
+    public ModelAndView blanketApprove(@ModelAttribute("KualiForm") DocumentFormBase form) throws Exception {
+        saveProposal((MaintenanceDocumentForm) form);
+        return super.blanketApprove(form);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=previousPage")
@@ -606,8 +599,7 @@ public class CourseController extends CourseRuleEditorController {
      * @throws Exception
      */
     @RequestMapping(params = "methodToCall=showComment")
-    public ModelAndView showComment(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView showComment(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         // redirect back to client to display lightbox
         return showDialog("commentsLightBox", false, form);
@@ -623,8 +615,7 @@ public class CourseController extends CourseRuleEditorController {
      * @throws Exception
      */
     @RequestMapping(params = "methodToCall=saveAndCloseComment")
-    public ModelAndView saveAndCloseComment(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView saveAndCloseComment(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
 
         //TODO KSCM-848 : Will need to replace these temp values once we get UMD's reference data
@@ -721,8 +712,7 @@ public class CourseController extends CourseRuleEditorController {
      * @throws Exception
      */
     @RequestMapping(params = "methodToCall=showDecisions")
-    public ModelAndView showDecisions(@ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                      HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView showDecisions(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) throws Exception {
 
         String dialogId = DECISIONS_DIALOG_KEY;
         // note this is not a confirmation dialog
@@ -812,8 +802,7 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveUp")
-    public ModelAndView moveLearningObjectiveUp(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                                HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView moveLearningObjectiveUp(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form)
             throws Exception {
         LoDisplayWrapperModel loModel = setupLoModel(form);
         loModel.moveUpCurrent();
@@ -823,8 +812,7 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveDown")
-    public ModelAndView moveLearningObjectiveDown(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                                  HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView moveLearningObjectiveDown(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form)
             throws Exception {
         LoDisplayWrapperModel loItemModel = setupLoModel(form);
         loItemModel.moveDownCurrent();
@@ -834,8 +822,7 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveRight")
-    public ModelAndView moveLearningObjectiveRight(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                                   HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView moveLearningObjectiveRight(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form)
             throws Exception {
         LoDisplayWrapperModel loItemModel = setupLoModel(form);
         loItemModel.indentCurrent();
@@ -849,9 +836,8 @@ public class CourseController extends CourseRuleEditorController {
      */
     @Override
     @RequestMapping(method = RequestMethod.POST, params = "methodToCall=navigate")
-    public ModelAndView navigate(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                 HttpServletRequest request, HttpServletResponse response) {
-        final ModelAndView retval = super.navigate(form, result, request, response);
+    public ModelAndView navigate(@ModelAttribute("KualiForm") UifFormBase form) {
+        final ModelAndView retval = super.navigate(form);
         final CourseInfoMaintainable maintainable = getCourseMaintainableFrom((MaintenanceDocumentForm) form);
 
         ((CourseInfoMaintainable) ((MaintenanceDocumentForm) form).getDocument().getNewMaintainableObject()).updateReview();
@@ -860,8 +846,7 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     @RequestMapping(params = "methodToCall=moveLearningObjectiveLeft")
-    public ModelAndView moveLearningObjectiveLeft(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form, BindingResult result,
-                                                  HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView moveLearningObjectiveLeft(final @ModelAttribute("KualiForm") MaintenanceDocumentForm form)
             throws Exception {
         LoDisplayWrapperModel loItemModel = setupLoModel(form);
         loItemModel.outdentCurrent();

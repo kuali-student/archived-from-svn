@@ -49,7 +49,7 @@ public class CreateCourseInitialController extends UifControllerBase {
     private final String RETURN_LOCATION_PARAMETER = "cmHome?" + KRADConstants.DISPATCH_REQUEST_PARAMETER + "=" + KRADConstants.START_METHOD + "&" + UifConstants.UrlParams.VIEW_ID + "=curriculumHomeView";
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
         CourseInitialForm courseForm= new CourseInitialForm();
         courseForm.setUseReviewProcess(false);
         courseForm.setCurriculumSpecialistUser(CourseProposalUtil.isUserCurriculumSpecialist());
@@ -61,8 +61,7 @@ public class CreateCourseInitialController extends UifControllerBase {
      * setup the maintenance object
      */
     @RequestMapping(params = "methodToCall=continueCreateCourse")
-    public ModelAndView continueCreateCourse(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView continueCreateCourse(@ModelAttribute("KualiForm") UifFormBase form) throws Exception {
 
         Properties urlParameters = new Properties();
         if (!CourseProposalUtil.isUserCurriculumSpecialist()) {

@@ -64,21 +64,17 @@ public class LoCategoryController extends UifControllerBase {
     }
 
     @Override
-    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-            HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase form) {
         LoCategoryForm loCatForm = (LoCategoryForm) form;
         loCatForm.setLoCategories(getLoCategories());
-        return super.refresh(loCatForm, result, request, response);
+        return super.refresh(loCatForm);
     }
 
     @Override
-    public ModelAndView addLine(@ModelAttribute("KualiForm") UifFormBase uifForm, BindingResult result,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        ModelAndView model = super.addLine(uifForm, result, request, response);
+    public ModelAndView addLine(@ModelAttribute("KualiForm") UifFormBase uifForm) {
+        ModelAndView model = super.addLine(uifForm);
         try {
-            model = refresh(uifForm, result, request, response);
+            model = refresh(uifForm);
         } catch (Exception e) {
             LOG.error("An error occurred while refreshing the Learning Objective Categories", e);
         }
@@ -86,12 +82,10 @@ public class LoCategoryController extends UifControllerBase {
     }
 
     @Override
-    public ModelAndView saveLine(@ModelAttribute("KualiForm") UifFormBase uifForm, BindingResult result,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        ModelAndView model = super.saveLine(uifForm, result, request, response);
+    public ModelAndView saveLine(@ModelAttribute("KualiForm") UifFormBase uifForm) {
+        ModelAndView model = super.saveLine(uifForm);
         try {
-            model = refresh(uifForm, result, request, response);
+            model = refresh(uifForm);
         } catch (Exception e) {
             LOG.error("An error occurred while refreshing the Learning Objective Categories", e);
         }

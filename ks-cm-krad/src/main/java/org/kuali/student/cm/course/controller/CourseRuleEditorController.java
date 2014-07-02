@@ -59,18 +59,14 @@ public class CourseRuleEditorController extends RuleEditorController {
     /**
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @Override
     @RequestMapping(params = "methodToCall=addRule")
-    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView addRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, "KS-RuleMaintenance-Page-Parent");
-        return super.addRule(form, result, request, response);
+        return super.addRule(form);
     }
 
     /**
@@ -78,39 +74,30 @@ public class CourseRuleEditorController extends RuleEditorController {
      * Code (04a screen)
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=goToRuleView")
-    public ModelAndView goToRuleView(@ModelAttribute("KualiForm") UifFormBase form, @SuppressWarnings("unused") BindingResult result,
-                                     @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView goToRuleView(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, "KS-RuleMaintenance-Page-Parent");
-        return super.goToRuleView(form, result, request, response);
+        return super.goToRuleView(form);
     }
 
     /**
      * Reverts rule to previous state and navigates to agenda maintenance page.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=cancelEditRule")
-    public ModelAndView cancelEditRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView cancelEditRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, "KS-CourseView-CourseRequisitesPage");
-        return super.cancelEditRule(form, result, request, response);
+        return super.cancelEditRule(form);
     }
 
     @Override
-    public ModelAndView updateRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                   HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView updateRule(@ModelAttribute("KualiForm") UifFormBase form) {
 
         form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, "KS-CourseView-CourseRequisitesPage");
         
@@ -139,14 +126,13 @@ public class CourseRuleEditorController extends RuleEditorController {
         if (!form.getActionParameters().containsKey(UifParameters.NAVIGATE_TO_PAGE_ID)) {
             form.getActionParameters().put(UifParameters.NAVIGATE_TO_PAGE_ID, KRMSConstants.KRMS_AGENDA_MAINTENANCE_PAGE_ID);
         }
-        return super.navigate(form, result, request, response);
+        return super.navigate(form);
     }
     
     
 
     @Override
-    public ModelAndView deleteRule(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result, HttpServletRequest request,
-            HttpServletResponse response) {
+    public ModelAndView deleteRule(@ModelAttribute("KualiForm") UifFormBase form) {
         MaintenanceDocumentForm documentForm = (MaintenanceDocumentForm) form;
         CourseInfoMaintainable courseInfoMaintainable = (CourseInfoMaintainable)documentForm.getDocument().getNewMaintainableObject();
         RuleManagementWrapper ruleWrapper = courseInfoMaintainable.getCourseRuleManagementWrapper();
@@ -173,14 +159,10 @@ public class CourseRuleEditorController extends RuleEditorController {
      * Retrieves selected proposition key and initializes edit on propostion.
      *
      * @param form
-     * @param result
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping(params = "methodToCall=getSelectedKey")
-    public ModelAndView getSelectedKey(@ModelAttribute("KualiForm") UifFormBase form, BindingResult result,
-                                       HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView getSelectedKey(@ModelAttribute("KualiForm") UifFormBase form) {
 
         //Clear the current states of the tabs to open the first tab again with the edit tree.
         Map<String, String> states = (Map<String, String>) form.getClientStateForSyncing().get(KSKRMS_RULE_CO_TABS_ID);
@@ -190,7 +172,7 @@ public class CourseRuleEditorController extends RuleEditorController {
         String selectedKey = request.getParameter(KRMSConstants.KRMS_PARM_SELECTED_KEY);
         getRuleEditor(form).setSelectedKey(selectedKey);
 
-        return this.goToEditProposition(form, result, request, response);
+        return this.goToEditProposition(form);
     }
 
     protected void compareRulePropositions(MaintenanceDocumentForm form, RuleEditor ruleEditor) {
