@@ -44,10 +44,6 @@ import java.util.Properties;
 @RequestMapping(value = "/activityOffering")
 public class ActivityOfferingController extends MaintenanceDocumentController {
 
-    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
-    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
-    }
-
     @Override
     protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();
@@ -65,8 +61,7 @@ public class ActivityOfferingController extends MaintenanceDocumentController {
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
-            checkViewAuthorization(form, methodToCall);
+            getControllerService().checkViewAuthorization(form);
 //            form.setEditAuthz(checkEditViewAuthz(form));
         }
 

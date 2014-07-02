@@ -58,10 +58,6 @@ import java.util.*;
 @RequestMapping(value = "/typeVerification")
 public class TypeVerificationController extends UifControllerBase  {
 
-    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
-    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
-    }
-
     private transient TypeService typeService;
     private List<TypeVerificationBasics> equivalences;
     private List<TypeVerificationBasics> inDBNotInJava;
@@ -277,14 +273,12 @@ public class TypeVerificationController extends UifControllerBase  {
 
     @Override
     @RequestMapping(params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
 
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
-            checkViewAuthorization(form, methodToCall);
+            getControllerService().checkViewAuthorization(form);
         }
 
         getEquivalence();
@@ -302,7 +296,7 @@ public class TypeVerificationController extends UifControllerBase  {
 
 
     @Override
-    protected UifFormBase createInitialForm(HttpServletRequest httpServletRequest) {
+    protected UifFormBase createInitialForm() {
         return typeInfo;
     }
 

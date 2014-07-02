@@ -75,19 +75,14 @@ public class CourseOfferingRolloverController extends UifControllerBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseOfferingRolloverController.class);
     public static final String ROLLOVER_DETAILS_PAGEID = "selectTermForRolloverDetails";
 
-    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
-    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
-    }
-
     @Override
-    protected UifFormBase createInitialForm(@SuppressWarnings("unused") HttpServletRequest request) {
+    protected UifFormBase createInitialForm() {
         return new CourseOfferingRolloverManagementForm();
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = "methodToCall=start")
-    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form,
-                              @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    public ModelAndView start(@ModelAttribute("KualiForm") UifFormBase form) {
         if (!(form instanceof CourseOfferingRolloverManagementForm)) {
             throw new RuntimeException("Form object passed into start method was not of expected type CourseOfferingRolloverManagementForm. Got " + form.getClass().getSimpleName());
         }
@@ -96,11 +91,10 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = request.getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
-            checkViewAuthorization(theForm, methodToCall);
+            getControllerService().checkViewAuthorization(theForm);
         }
 
-        Map paramMap = request.getParameterMap();
+        Map paramMap = form.getRequest().getParameterMap();
         if (paramMap.containsKey("pageId")) {
             String pageId = ((String[]) paramMap.get("pageId"))[0];
             if (pageId.equals("selectTermsForRollover")) {
@@ -108,7 +102,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             } else if (pageId.equals("releaseToDepts")) {
                 return _startReleaseToDepts(theForm);
             } else if (pageId.equals("selectTermForRolloverDetails")) {
-                return _startRolloverDetails(form, request, response);
+                return _startRolloverDetails(form);
             }
         }
         return getModelAndView(theForm);
@@ -120,8 +114,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
         return getModelAndView(theForm);
     }
 
-    private ModelAndView _startRolloverDetails(@ModelAttribute("KualiForm") UifFormBase form,
-                                               @SuppressWarnings("unused") HttpServletRequest request, @SuppressWarnings("unused") HttpServletResponse response) {
+    private ModelAndView _startRolloverDetails(@ModelAttribute("KualiForm") UifFormBase form) {
         CourseOfferingRolloverManagementForm theForm = (CourseOfferingRolloverManagementForm) form;
         LOGGER.info("startRolloverDetails");
         String rolloverTerm = theForm.getRolloverTargetTermCode();
@@ -408,7 +401,7 @@ public class CourseOfferingRolloverController extends UifControllerBase {
             form.setRolloverTargetTermCode(form.getTargetTermCode());
             showRolloverResults(form); // TODO: Factor out a common method?
             // Switch to rollover details page
-            return start(form, request, response);
+            return start(form);
         } else {
             // Had problems, stay in the same screen
             return getModelAndView(form);

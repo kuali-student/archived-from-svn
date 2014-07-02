@@ -30,10 +30,6 @@ import java.util.Properties;
 
 public class CourseOfferingBaseController extends MaintenanceDocumentController {
 
-    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
-    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
-    }
-
     @Override
     protected MaintenanceDocumentForm createInitialForm() {
         return new KSUifMaintenanceDocumentForm();

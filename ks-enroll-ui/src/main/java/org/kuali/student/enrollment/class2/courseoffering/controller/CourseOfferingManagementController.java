@@ -90,10 +90,6 @@ public class CourseOfferingManagementController extends UifControllerBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourseOfferingManagementController.class);
 
-    // TODO: KSENROLL-13348 remove this method once KULRICE-12907 is resolved
-    protected void checkViewAuthorization(UifFormBase form, String methodToCall) {
-    }
-
     @Override
     protected UifFormBase createInitialForm() {
         return new CourseOfferingManagementForm();
@@ -129,8 +125,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
         // check view authorization
         // TODO: this needs to be invoked for each request
         if (form.getView() != null) {
-            String methodToCall = form.getRequest().getParameter(KRADConstants.DISPATCH_REQUEST_PARAMETER);
-            checkViewAuthorization(form, methodToCall);
+            getControllerService().checkViewAuthorization(form);
             form.setEditAuthz(CourseOfferingManagementUtil.checkEditViewAuthz(form));
         }
 
@@ -157,7 +152,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
 
 
     @Override
-    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase uifForm) throws Exception {
+    public ModelAndView refresh(@ModelAttribute("KualiForm") UifFormBase uifForm) {
         //Refresh AO list on KRMS return
         CourseOfferingManagementForm form = (CourseOfferingManagementForm) uifForm;
         CourseOfferingManagementUtil.getViewHelperService(form).setupRuleIndicator(form.getActivityWrapperList());
