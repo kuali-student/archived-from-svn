@@ -386,7 +386,14 @@ class CmCourseProposalObject < DataFactory
     determine_save_action
   end
 
+  def add_author (opts)
+    defaults = {
 
+    }
+    options = defaults.merge(opts)
+    options[:author].create
+    @author_list << options[:author]
+  end
 
   #-----
   private

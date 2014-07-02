@@ -253,12 +253,31 @@ When(/^I update the author and collaborator details on the course proposal$/) do
   navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.edit_proposal_action
-  @course_proposal.author_list[0].edit :name => "SMITH",:author_notation => :clear, :author_level => 1, :auto_lookup => true, :defer_save => true
-  @course_proposal.author_list[1].edit :permission => "View", :author_level => 2
+  @course_proposal.author_list[0].delete :author_level => 1, :defer_save => true
+  @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
+                                                             :name => "SMITH",
+                                                             :author_notation => :clear,
+                                                             :author_level => 2,
+                                                             :auto_lookup => true)
 end
 
 Then(/^I should see updated author and collaborator details on the course proposal$/) do
-  steps %{Then I should see author and collaborator details on the course proposal}
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+    collection_index = 1
+    begin
+      page.author_name_review(collection_index).should include @course_proposal.author_list[collection_index].name
+      page.author_permission_review(collection_index).should include "View" if @course_proposal.author_list[collection_index].permission == "View"
+      page.author_permission_review(collection_index).should include "Comment, View" if @course_proposal.author_list[collection_index].permission == "Comments, View"
+      page.author_permission_review(collection_index).should include "Edit, Comment, View" if @course_proposal.author_list[collection_index].permission == "Edit, Comments, View"
+      page.action_request_review(collection_index).should == "FYI"
+      collection_index += 1
+    end until collection_index == 2
+
+  end
 end
 
 When(/^I delete the author and collaborator details on the course proposal$/) do
