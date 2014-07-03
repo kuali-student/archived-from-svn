@@ -4,7 +4,7 @@ class CmLearningObjectives < BasePage
   cm_elements # for loading
 
   def frm
-    self.iframe(class: "fancybox-iframe")
+    frame(class: "fancybox-iframe")
   end
 
   element(:keyword_in_learning_objective) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
@@ -42,12 +42,11 @@ class CmLearningObjectives < BasePage
 
   #Select Categories popup
   element(:type_select_all_link) {|b| b.frm.a(id: 'Lo-type-selection-select-all-link') }
-  element(:type_clear_all_link) {|index,b|b.frm.a(id: "Lo-type-selection-deselect-all-link")}
-  element(:category_filter_input) {|b|b.frm.input(id: "LoCategory-Category-Filter-Input_control") }
+  element(:type_clear_all_link)  {|b|b.frm.a(id: 'Lo-type-selection-deselect-all-link')}
+  element(:category_filter_input) {|b|b.frm.input(id: 'LoCategory-Category-Filter-Input_control') }
 
 
   element(:add_categories_button) { |b| b.frm.button(id: 'KSCM-AddCategoryButton')}
-  element(:comment_header_id_text) {|index, b|b.frm.header(id: "KSCM-CommentField-comment-header-id_line#{index}").text}
 
   action(:add_categories) { |b| b.frm.button(id: 'KSCM-AddCategoryButton').click; b.loading_wait }
 
