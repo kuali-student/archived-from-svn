@@ -277,7 +277,7 @@
         </property>
         <property name="items">
             <list>
-                <bean parent="KS-Uif-DataField" p:propertyName="yearRange">
+                <bean parent="Uif-DataField" p:propertyName="yearRange">
                     <property name="fieldLabel.render" value="false"/>
                     <property name="cssClasses">
                         <list merge="true">

@@ -171,7 +171,7 @@
     <!-- THEMES ######################################################################################## -->
 
     <bean id="KSAPTheme" abstract="true" parent="KSAPTheme-parentBean"/>
-    <bean id="KSAPTheme-parentBean" parent="Uif-BaseTheme">
+    <bean id="KSAPTheme-parentBean" parent="GlobalTheme">
         <property name="usesThemeBuilder" value="false"/>
         <property name="cssFiles">
             <list merge="true">
@@ -203,7 +203,7 @@
     
     <!--Base generic KS theme with no CSS or JS included-->
     <bean id="KSAPRetrievedTheme" abstract="true" parent="KSAPRetrievedTheme-parentBean"/>
-    <bean id="KSAPRetrievedTheme-parentBean" parent="Uif-BaseTheme">
+    <bean id="KSAPRetrievedTheme-parentBean" parent="GlobalTheme">
         <property name="usesThemeBuilder" value="false"/>
         <property name="cssFiles">
             <list merge="false"/>
@@ -578,7 +578,7 @@
 
     <!-- Light weight fields -->
     <bean id="KSAP-SimpleDataField" parent="KSAP-SimpleDataField-parentBean"/>
-    <bean id="KSAP-SimpleDataField-parentBean" abstract="true" parent="KS-Uif-DataField" scope="prototype">
+    <bean id="KSAP-SimpleDataField-parentBean" abstract="true" parent="Uif-DataField" scope="prototype">
         <property name="fieldLabel.render" value="false"/>
         <property name="template" value="/ks-ap/WEB-INF/ftl/components/KSAPSimpleDataField.ftl"/>
         <property name="templateName" value="ksap_simpleDataField"/>

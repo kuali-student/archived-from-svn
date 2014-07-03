@@ -82,7 +82,7 @@
         <!--</property>-->
     <!--</bean>-->
 
-    <bean id="CourseInfo-LookupView-ForKSAP" parent="KS-Uif-LookupView">
+    <bean id="CourseInfo-LookupView-ForKSAP" parent="Uif-LookupView">
         <property name="viewName" value="CourseInfo-LookupView-ForKSAP"/>
         <property name="headerText" value="Course Lookup For KSAP" />
         <property name="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo" />
