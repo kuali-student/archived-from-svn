@@ -3,7 +3,7 @@ class CmAuthorsCollaborators < BasePage
   wrapper_elements
   cm_elements
 
-  element(:author_name) { |author_level,b| b.textarea(id: "KS-Author-displayName_line#{author_level-1}_control") }
+  element(:author_name) { |author_level,b| b.text_field(id: "KS-Author-displayName_line#{author_level-1}_control") }
   element(:author_permission) { |author_level,b| b.select_list(id: "KS-PermissionDropDown_line#{author_level-1}_control") }
   element(:action_required) { |author_level,b| b.select_list(id: "KS-ActionRequestDropDown_line#{author_level-1}_control" ) }
   element(:author_notation) { |author_level,b| b.checkbox(name: "document.newMaintainableObject.dataObject.collaboratorWrappers[#{author_level-1}].author") }

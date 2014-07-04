@@ -66,9 +66,9 @@ class CmCourseRequisites < BasePage
 
   #course_that_restricts_credits_rule: ['Must not have successfully completed <course>', 'Must not have successfully completed any courses from <courses>', 'Free Form Text']
 
-  element(:rule_course_field) {|b| b.textarea(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.courseInfo.code').when_present }
-  element(:free_form_text) {|b| b.textarea(name: /^document\.newMaintainableObject\.editTree\.rootElement\.children/) }
-  element(:rule_credit) { |b| b.textarea(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.parameters[1].value') }
+  element(:rule_course_field) {|b| b.text_field(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.courseInfo.code').when_present }
+  element(:free_form_text) {|b| b.text_field(name: /^document\.newMaintainableObject\.editTree\.rootElement\.children/) }
+  element(:rule_credit) { |b| b.text_field(name: 'document.newMaintainableObject.editTree.rootElement.children[0].data.proposition.parameters[1].value') }
 
   action(:added_rule_restricts_credits_text) {|rule_text='you forgot to pass text', b| b.div(id: 'KS-ViewTree-Group_ruleF').span(text: /#{rule_text}/) }
 
@@ -100,7 +100,7 @@ class CmCourseRequisites < BasePage
        #ADDING RULE COURSE THAT RESTRICTS CREDIT
   element(:rule_multicourse_type){ |b| b.select_list(id: 'KRMS-MultiCourse-Type-Field_control') }
   # 'Approved Courses', 'Course Sets', 'Course Ranges (Course numbers, common learning objectives, etc)'
-  element(:rule_course_code_multiple) { |b| b.textarea(name: 'newCollectionLines[\'document.newMaintainableObject.editTree.rootElement.children_0_.data.proposition.cluSet.clus\'].code') }
+  element(:rule_course_code_multiple) { |b| b.text_field(name: 'newCollectionLines[\'document.newMaintainableObject.editTree.rootElement.children_0_.data.proposition.cluSet.clus\'].code') }
   action(:add_course_code) {|b| b.button(id: 'KRMS-ApprovedCourseStackedCollectionGroup_add').click; b.loading_wait }
             #STACK TRACE WHEN PREVIEWING RULE CHANGE
 

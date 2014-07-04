@@ -2,8 +2,8 @@ class Login < PageFactory
 
   page_url "#{$test_site}/login.jsp"
 
-  element(:username_field) { |b| b.textarea(:name=>"j_username") }
-  element(:password_field) { |b| b.textarea(:name=>"j_password") }
+  element(:username_field) { |b| b.text_field(:name=>"j_username") }
+  element(:password_field) { |b| b.text_field(:name=>"j_password") }
   element(:login_button) { |b| b.button(:value=>"Login") }
 
   def login_with username, password

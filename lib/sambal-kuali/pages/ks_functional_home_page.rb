@@ -11,8 +11,8 @@ class KSFunctionalHome < BasePage
   action(:cm_home) { |b| b.div(id: "KS-StudentHome-CurriculumManagement").click }
   action(:ks_maintenace) { |b| b.div(id: "KS-StudentHome-KSMaintenance").click }
 
-  element(:username_field) { |b| b.textarea(:name=>"j_username") }
-  element(:password_field) { |b| b.textarea(:name=>"j_password") }
+  element(:username_field) { |b| b.text_field(:name=>"j_username") }
+  element(:password_field) { |b| b.text_field(:name=>"j_password") }
   element(:login_button) { |b| b.button(:value=>"Login") }
 
   element(:logout_button) { |b| b.button(value: "Logout") }

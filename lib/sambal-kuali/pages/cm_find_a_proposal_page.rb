@@ -5,7 +5,7 @@ cm_elements
 #expected_element :name
 
 
-element(:name) { |b| b.textarea(name: "lookupCriteria[title]") }
+element(:name) { |b| b.text_field(name: "lookupCriteria[title]") }
 element(:lookup_results) { |b| b.div(id: "uLookupResults") }
 action(:find_a_proposal) { |b| b.button(id: "courseProposalLookup_searchButton").click; b.loading_wait }
 action(:proposal_title_element)  { |proposal_title,b| b.div(id:"#{proposal_title}" ).span(class: "uif-readOnlyContent") }

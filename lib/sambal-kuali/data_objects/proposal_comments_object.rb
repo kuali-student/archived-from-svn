@@ -34,7 +34,7 @@ class CmCommentsObject < DataFactory
       if(page.alert.exists?)
         page.alert.ok
       end
-      page.edit_comment_textarea(opts[:index]).set opts[:commentText]
+      page.edit_comment_text_field(opts[:index]).set opts[:commentText]
       page.save_edited_comment(opts[:index])
       sleep 1
     end

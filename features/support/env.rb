@@ -34,7 +34,7 @@ if ENV['HEADLESS']
       browser = Watir::Browser.new :firefox, :http_client => client
       browser.goto("#{$test_site}/login.jsp")
       sleep 2
-      raise "connect failed" unless  browser.textarea(id: "j_username").exists?
+      raise "connect failed" unless  browser.text_field(id: "j_username").exists?
       browser.close
       puts "debug env.rb - success: browser connection attempt #{retry_ctr}"
     rescue
