@@ -88,28 +88,28 @@ class BasePage < PageFactory
       action(:advanced_search) { |b| b.link(text: 'Advanced Search').click; b.adv_search_button.wait_until_present}
       #Course Information:  Joint Offering
       element(:adv_search_by) { |b| b.frame(class: 'fancybox-iframe').select_list(name: 'lookupCriteria[searchBy]') }
-      element(:adv_given_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseTitle]') }
-      element(:adv_course_code) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseCode]') }
-      element(:adv_plain_text_description) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
+      element(:adv_given_name) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[courseTitle]') }
+      element(:adv_course_code) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[courseCode]') }
+      element(:adv_plain_text_description) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[descr.plain]') }
 
-      element(:adv_course_title) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[title]') }
-      element(:adv_course_code_rule) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[code]') }
-      element(:adv_plain_text_description_rule) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[description]') }
+      element(:adv_course_title) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[title]') }
+      element(:adv_course_code_rule) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[code]') }
+      element(:adv_plain_text_description_rule) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[description]') }
 
       action(:adv_return_value) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value ='+"#{title_return_value}").click; b.loading_wait }
 
       #Course Information: Instructor
-      element(:adv_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[displayName]') }
-      element(:adv_username) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personId]') }
-      element(:adv_username_capD){ |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[personID]') }
+      element(:adv_name) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[displayName]') }
+      element(:adv_username) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[personId]') }
+      element(:adv_username_capD){ |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[personID]') }
 
       action(:adv_return_value_instructor) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{title_return_value}").click; b.loading_wait }
       action(:adv_return_value_name) { |title_return_value, b| b.frame(class: 'fancybox-iframe').link(title: 'return value Name='+"#{title_return_value}").click; b.loading_wait }
 
       #Governance: Administering Org
-      element(:adv_identifier) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[id]') }
-      element(:adv_org_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[organizationName]') }
-      element(:adv_abbreviation) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[abbreviation]') }
+      element(:adv_identifier) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[id]') }
+      element(:adv_org_name) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[organizationName]') }
+      element(:adv_abbreviation) { |b| b.frame(class: 'fancybox-iframe').textarea(name: 'lookupCriteria[abbreviation]') }
 
       action(:adv_admin_org_return_value) { |org_name, org_abbr, b | b.frame(class: 'fancybox-iframe').link(title: 'return value Name=' + "#{org_name}" + ' Abbreviation=' + "#{org_abbr}").click; b.loading_wait }
 

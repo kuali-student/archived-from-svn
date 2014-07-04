@@ -7,10 +7,10 @@ class CmProposalComments < BasePage
     self.iframe(class: "fancybox-iframe")
   end
 
-  element(:comment_text_input) {|b| b.frm.text_field(id: 'KSCM-NewCommentField_control') }
+  element(:comment_text_input) {|b| b.frm.textarea(id: 'KSCM-NewCommentField_control') }
   element(:comment_edit_link) {|index,b|b.frm.a(id: "KSCM-CommentEditAction_line#{index}")}
   element(:comment_delete_link) {|index,b|b.frm.a(id: "KSCM-CommentDeleteAction_line#{index}")}
-  element(:edit_comment_text_field) {|index,b|b.frm.text_field(id: "KSCM-Comment-Add_line#{index}_control") }
+  element(:edit_comment_textarea) {|index,b|b.frm.textarea(id: "KSCM-Comment-Add_line#{index}_control") }
   element(:undo_delete_comment_link) {|b|b.frm.a(id: "KSCM-Comment-undo-delete")}
   element(:add_comment_button) { |b| b.frm.button(text: 'Add Comment')}
   element(:comment_header_id_text) {|index, b|b.frm.header(id: "KSCM-CommentField-comment-header-id_line#{index}").text}

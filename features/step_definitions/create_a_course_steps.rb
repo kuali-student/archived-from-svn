@@ -831,7 +831,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.course_information
     page.transcript_course_title.value.should == @course_proposal.transcript_course_title
     #page.subject_code.value.should == @course_proposal.subject_code
-    #@course_proposal.verify_text_field(page, 'course_listing_subject', 'course_listing_number', 'joint_offering_number')
+    #@course_proposal.verify_textarea(page, 'course_listing_subject', 'course_listing_number', 'joint_offering_number')
     page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
     page.course_listing_subject.value.should == @course_proposal.course_listing_subject
     page.course_listing_number.value.should == @course_proposal.course_listing_number
@@ -841,7 +841,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
 
   on CmGovernance do |page|
     page.governance
-    #@course_proposal.verify_text_field(page, 'added_administering_organization' )
+    #@course_proposal.verify_textarea(page, 'added_administering_organization' )
     page.added_administering_organization.value.should == @course_proposal.administering_organization unless @course_proposal.administering_organization.nil?
     page.location_north.should be_checked if @course_proposal.location_north == 'set'
     page.location_south.should be_checked if @course_proposal.location_south == 'set'
@@ -862,7 +862,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.audit.should be_checked
     page.pass_fail_transcript_grade.should be_checked
 
-    #@course_proposal.verify_text_field(page, 'activity_contacted_hours', 'activity_duration_count', 'activity_class_size' )
+    #@course_proposal.verify_textarea(page, 'activity_contacted_hours', 'activity_duration_count', 'activity_class_size' )
 
     page.contacted_hours.value.should == @course_proposal.activity_contacted_hours
     page.frequency.selected?(@course_proposal.activity_frequency).should == true unless @course_proposal.activity_frequency.nil?
