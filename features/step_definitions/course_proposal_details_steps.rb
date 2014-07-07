@@ -215,8 +215,13 @@ Then(/^I should see Learning Objective details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
-    index = @course_proposal.learning_objective_list[0].learning_objective_level
-    page.lo_terms_review(index).should include @course_proposal.learning_objective_list[index].learning_objective_text
+    total = @course_proposal.learning_objective_list.length
+    for i in 0..total
+      if i ==  total then
+        break
+      end
+      page.learning_objectives_review.should include @course_proposal.learning_objective_list[i].learning_objective_text
+    end
   end
 end
 

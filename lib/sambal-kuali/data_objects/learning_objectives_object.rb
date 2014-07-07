@@ -62,7 +62,15 @@ end
 def edit (opts={})
 
     set_options(opts)
-  end
+end
 
+def advanced_find
+     on CmFindLearningObjectivesPage do |page|
+       page.show_learning_objectives
+       sleep 2 #to make sure that selection doesn't happen too quick
+       page.select_multiple_learning_objectives(3)
+       page.add_learning_objectives
+    end
+end
 
 end

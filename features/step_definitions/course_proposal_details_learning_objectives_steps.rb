@@ -9,6 +9,11 @@ When(/^I create a basic course proposal with Learning Objectives added using adv
                                                                :advanced_search => true,
                                                                :defer_save => true,
                                                                :category_list => [(make CmLoCategoryObject,:category_name => random_alphanums(10),:on_the_fly => true,:defer_save => true)])]
+  @my_lo = @course_proposal.learning_objective_list[0]
+  @my_lo.show_find_lo_lightbox
+  @my_lo.advanced_find
+
+  @course_proposal.determine_save_action
 
 end
 
