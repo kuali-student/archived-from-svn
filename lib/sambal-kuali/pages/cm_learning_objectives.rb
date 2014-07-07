@@ -3,9 +3,6 @@ class CmLearningObjectives < BasePage
   wrapper_elements
   cm_elements # for loading
 
-  def frm
-    frame(class: "fancybox-iframe")
-  end
 
   element(:keyword_in_learning_objective) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
   element(:learning_objective_category) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[name]') }
@@ -39,69 +36,5 @@ class CmLearningObjectives < BasePage
   #Find Learning Objectives popup
   action(:show_learning_objectives) {|b|b.frm.button(id: 'show_learning_objectives_button').click; b.loading_wait}
   action(:add_learning_objectives) {|b|b.frm.button(id: 'KS-AddLo-Button').click; b.loading_wait}
-
-  #Select Categories popup
-  element(:type_select_all_link) {|b| b.frm.a(id: 'Lo-type-selection-select-all-link') }
-  element(:type_clear_all_link)  {|b|b.frm.a(id: 'Lo-type-selection-deselect-all-link')}
-  element(:category_filter_input) {|b|b.frm.input(id: 'LoCategory-Category-Filter-Input_control') }
-
-
-  element(:add_categories_button) { |b| b.frm.button(id: 'KSCM-AddCategoryButton')}
-
-  action(:add_categories) { |b| b.frm.button(id: 'KSCM-AddCategoryButton').click; b.loading_wait }
-
-  CATEGORY_NAME_COLUMN = 1
-  CATEGORY_TYPE_COLUMN = 2
-
-  def row_by_category(category)
-    lookup_result_table.row(text: /\b#{Regexp.escape(category)}\b/)
-  end
-
-  def select_category(category)
-    if row_by_category(category).exists? then
-      row_by_category(category).checkbox.set
-      return row_by_category(category).cells[CATEGORY_NAME_COLUMN].text
-    else
-      return nil
-    end
-  end
-
-  def deselect_category(category)
-    row_by_category(category).checkbox.clear
-  end
-
-  def row_by_index(index)
-    lookup_result_table.rows.item(index)
-  end
-
-  def select_category_by_index(index)
-    if row_by_index(index).exists? then
-      row_by_index(index).checkbox.set
-      return row_by_index(index).cells[CATEGORY_NAME_COLUMN].text
-    else
-      return nil
-    end
-  end
-
-  def select_categories(index_list)
-    index_list.each do |index|
-      row_by_index(index).checkbox.set
-    end
-  end
-
-  def select_all_categories()
-    lookup_result_table.rows[0].checkbox.set
-  end
-
-  def deselect_all_categories()
-    lookup_result_table.rows[0].checkbox.clear
-  end
-
-
-  def deselect_categories(index_list)
-    index_list.each do |index|
-      row_by_index(index).checkbox.clear
-    end
-  end
 
 end

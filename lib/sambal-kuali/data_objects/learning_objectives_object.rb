@@ -7,11 +7,9 @@ include Workflows
 include Utilities
 
   attr_reader   :learning_objective_text,
-                :category_text,
-                :category_type,
-                :category_auto_lookup,
                 :learning_objective_level,
-                :category_level,
+                :category_list,
+                :advanced_search,
                 :defer_save
 
 
@@ -21,11 +19,9 @@ include Utilities
     @browser = browser
     defaults = {
         learning_objective_text: random_alphanums(10,'Test Learning Objective '),
-        category_text: random_alphanums(10,'on the fly category '),
-        category_auto_lookup: false,
-        category_type: '::random::',
         learning_objective_level: 1,
-        category_level: 1,
+        category_list: [(make CmLoCategoryObject)],
+        advanced_search: false,
         defer_save: false
     }
     set_options(defaults.merge(opts))
@@ -38,17 +34,11 @@ include Utilities
       page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
       page.objective_detail(1).set @learning_objective_text
 
-=begin
-      page.category_detail(@category_level).set @category_text
-      if @category_auto_lookup
-        page.auto_lookup @category_text
-      else
-        page.add_category(@category_level)
+      unless @category_list.nil?
+        @category_list.each do |category|
+          category.create
+        end
       end
-      sleep 2
-      page.add_category(@category_level)
-=end
-
 
     end
     determine_save_action unless @defer_save

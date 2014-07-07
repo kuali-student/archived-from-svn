@@ -197,8 +197,16 @@ end
 
 When(/^I create a basic course proposal with Learning Objectives$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :learning_objective_list => [(make CmLearningObjectiveObject, :defer_save => true),
-                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :category_level => 1, :category_text => "literacy", :category_auto_lookup => true)]
+                            :learning_objective_list => [(make CmLearningObjectiveObject, :learning_objective_text => "learning objective text1",:defer_save => true,
+                                                               :category_list => [(make CmLoCategoryObject,:category_name => random_alphanums(10),:on_the_fly => true,:defer_save => true)]),
+                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :defer_save => true,
+                                                               :category_list => [(make CmLoCategoryObject,:category_name => "literacy", :category_level => 1, :category_selection => 1, :auto_lookup => true,:defer_save => true),
+                                                                                  (make CmLoCategoryObject,:category_name => "Communication", :advanced_search => true, :category_selection => 2,:defer_save => true),
+                                                                                  (make CmLoCategoryObject,:category_name => "Critical", :advanced_search => true, :category_selection => 1, :defer_save => true)
+                                                               ]
+                                                         )
+                                                        ]
+
 
 end
 
