@@ -33,8 +33,10 @@ class CmSupportingDocsObject < DataFactory
     view
     on CmSupportingDocuments do |attach|
       attach.add_supporting_doc unless attach.document_select(@document_level).exists?
-      attach.document_select(@document_level).set ($file_folder+@file_name)
+      file_path = $target_folder+"/"+@file_name
+      attach.document_select(@document_level).set (file_path)
       attach.document_description(@document_level).fit @description
+      attach.add_supporting_doc unless attach.document_select(@document_level).exists?
     end
     determine_save_action unless @defer_save
   end
