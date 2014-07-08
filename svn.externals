@@ -15,10 +15,9 @@
 # You must rerun the svn propset command (shown above) and commit after editing any of
 # the external paths for the changes to take effect.
 #
-
-^/enrollment/ks-api/branches/2.0.0-Mx ks-api
-^/enrollment/ks-core/trunk ks-core
-^/enrollment/ks-lum/trunk ks-lum
-^/enrollment/ks-enroll/trunk ks-enroll
-^/enrollment/ks-ap/trunk ks-ap
-^/enrollment/ks-deployments/trunk ks-deployments
+^/enrollment/ks-api/branches/rice-2.4.2-upgrade ks-api
+^/enrollment/ks-core/branches/rice-2.4.2-upgrade ks-core
+^/enrollment/ks-lum/branches/rice-2.4.2-upgrade ks-lum
+^/enrollment/ks-enroll/branches/rice-2.4.2-upgrade ks-enroll
+^/enrollment/ks-ap/branches/rice-2.4.2-upgrade ks-ap
+^/enrollment/ks-deployments/branches/rice-2.4.2-upgrade ks-deployments
