@@ -9,4 +9,4 @@ ks-enroll::enrollment_ks-enroll_trunk::329edde30c5e518234a38e6b4f51d0cd72ec69fd
 # module = ks-ap branch Path = enrollment/ks-ap/trunk revision = 68768
 ks-ap::enrollment_ks-ap_trunk::1bc3cd534270f3715c1d261adf7170fa232472ef
 # module = ks-deployments branch Path = enrollment/ks-deployments/trunk revision = 68768
-ks-deployments::enrollment_ks-deployments_trunk::244620c310e458dd0c6483c7f053b4ab5e3299be
+ks-deployments::enrollment_ks-deployments_trunk::1ee08281817641ea75ce88e6eca4dd879683fe76
