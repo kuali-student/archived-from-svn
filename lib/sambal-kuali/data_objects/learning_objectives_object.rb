@@ -77,6 +77,13 @@ def edit (opts={})
   set_options(opts)
 end
 
+def delete (opts={})
+  on CmLearningObjectives do |page|
+    page.delete_learning_objective(opts[:objective_level])
+    page.loading_wait
+  end
+end
+
 def advanced_find
      on(CmLearningObjectives).find_learning_objective
      on CmFindLearningObjectivesPage do |advanced_lo_search|

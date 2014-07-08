@@ -70,9 +70,22 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
 end
 
 When(/^I delete the Learning Objectives$/) do
-  pending # express the regexp above with the code you wish you had
+  @delete_loo_level = 0
+  current_lo = @course_proposal.learning_objective_list[0]
+  current_lo.delete(:objective_level=> @delete_loo_level)
+  @course_proposal.determine_save_action
 end
 
 Then(/^I should no longer see Learning Objective details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+
+  my_lo_list = @course_proposal.learning_objective_list
+  total = my_lo_list.length
+  on CmReviewProposal do |page|
+    if(total <= 1)
+      page.learning_objectives_empty_text.should == ""
+    else
+      page.learning_objectives_review.should_not include my_lo_list[@delete_loo_level].learning_objective_text
+    end
+  end
 end
