@@ -70,8 +70,11 @@ end
 
 
 def edit (opts={})
-
-    set_options(opts)
+  on CmLearningObjectives do |page|
+    page.objective_detail(opts[:objective_level]).set opts[:learning_objective_text]
+    page.loading_wait
+  end
+  set_options(opts)
 end
 
 def advanced_find

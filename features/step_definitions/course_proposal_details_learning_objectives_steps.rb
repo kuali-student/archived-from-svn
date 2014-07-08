@@ -42,15 +42,31 @@ When(/^I create a basic course proposal with Learning Objectives added using adv
 end
 
 Given(/^I have a basic course proposal with Learning Objectives$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                            :learning_objective_list => [(make CmLearningObjectiveObject,
+                                                               :learning_objective_text => "learning objective text2",
+                                                               :advanced_search => false,
+                                                               :defer_save => true,
+                                                               :category_list => [(make CmLoCategoryObject,:category_name => random_alphanums(10),:on_the_fly => true,:defer_save => true)])]
 end
 
 When(/^I edit the Learning Objectives$/) do
-  pending # express the regexp above with the code you wish you had
+  current_lo = @course_proposal.learning_objective_list[0]
+  current_lo.edit(:objective_level=>1, :learning_objective_text=>"Edited learning objective text2")
+  @course_proposal.determine_save_action
 end
 
 Then(/^I should see updated Learning Objective details on the course proposal$/) do
- pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+
+  my_lo_list = @course_proposal.learning_objective_list
+  on CmReviewProposal do |page|
+    index = 0
+    my_lo_list.each do
+      page.learning_objectives_review.should include my_lo_list[index].learning_objective_text
+      index +=1
+    end
+  end
 end
 
 When(/^I delete the Learning Objectives$/) do
