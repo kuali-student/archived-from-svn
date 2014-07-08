@@ -8,7 +8,7 @@ class CmLearningObjectives < BasePage
   # 'Administering Org', 'Financial Control Division', 'Curriculum Oversight', 'Institution']
 
   action(:add_learning_objective) { |b| b.button(id: "LearningObjective-ToolBar-AddNewObjective").click; b.loading_wait }
-  action(:find_learning_objective) { |b| b.button(id: "KS-LearningObjective-QuickFinder_act").click; b.loading_wait }
+  action(:find_learning_objective) { |b| b.button(id: "KS-LearningObjective-QuickFinder_act").click }
 
   action(:objective_detail) { |objective_level, b| b.text_field(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_control") }
   action(:search_for_lo) { |objective_level,b| b.a(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_quickfinder_act") }

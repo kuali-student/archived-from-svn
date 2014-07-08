@@ -8,11 +8,18 @@ class CmFindLearningObjectivesPage < BasePage
     iframe(class: "fancybox-iframe")
   end
 
+  #filter
+  element(:filter_results) { |b| b.frm.text_field(id: "LoDisplayInfoWrapper-LookupView-Filter-Input_control") }
 
-  element(:keyword_in_learning_objective) { |b| b.frm.text_field(name: 'lookupCriteria[descr.plain]') }
-  element(:learning_objective_category) { |b| b..text_field(name: 'lookupCriteria[name]') }
-  element(:organization_name) { |b| b.frm.text_field(name: 'lookupCriteria[orgName]') }
-  element(:organization_type) { |b| b.frm.select_list(name:'lookupCriteria[orgType]') }
+  #search by radio
+  element(:search_by_all) {|b| b.frm.radio(value: "All")}
+  element(:search_by_course) {|b| b.frm.radio(value: "COURSE_OLY")}
+  element(:search_by_program) {|b| b.frm.radio(value: "PRG_OLY")}
+
+  #type of search
+  element(:search_type) { |b| b.frm.select_list(id: "searchByCriteria_control") }
+  element(:learning_objective_text) { |b| b.frm.text_field(id: "searchByField_control") }
+  action(:show_learning_objectives) {|b|b.frm.button(id: 'show_learning_objectives_button').click; b.loading_wait }
   element(:add_learning_objectives_button) {|b|b.frm.button(id: 'KS-AddLo-Button')}
 
   SELECT_COLUMN = 0
@@ -22,7 +29,7 @@ class CmFindLearningObjectivesPage < BasePage
   action(:close) { |b| b.frm.a(title: "Close").click }
 
   #Find Learning Objectives popup
-  action(:show_learning_objectives) {|b|b.frm.button(id: 'show_learning_objectives_button').click; b.loading_wait}
+
   action(:add_learning_objectives) {|b|b.frm.button(id: 'KS-AddLo-Button').click; b.loading_wait}
 
   def row_by_index(index)

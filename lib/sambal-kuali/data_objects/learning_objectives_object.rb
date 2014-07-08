@@ -10,6 +10,11 @@ include Utilities
                 :learning_objective_level,
                 :category_list,
                 :advanced_search,
+                :lo_selection,
+                :search_by_all,
+                :search_by_course,
+                :search_by_program,
+                :search_type,
                 :defer_save
 
 
@@ -32,7 +37,12 @@ include Utilities
     on CmLearningObjectives do |page|
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
       page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
-      page.objective_detail(1).set @learning_objective_text
+      if @advanced_search
+        advanced_find
+      else
+        page.objective_detail(1).set @learning_objective_text
+      end
+      
 
       unless @category_list.nil?
         @category_list.each do |category|
@@ -65,11 +75,17 @@ def edit (opts={})
 end
 
 def advanced_find
-     on CmFindLearningObjectivesPage do |page|
-       page.show_learning_objectives
+     on(CmLearningObjectives).find_learning_objective
+     on CmFindLearningObjectivesPage do |advanced_lo_search|
+       fill_out advanced_lo_search, :search_by_all, :search_by_course, :search_by_program
+       advanced_lo_search.search_type.pick @search_type unless @search_type.nil?
+       advanced_lo_search.loading_wait
+       sleep 2 # wait for the text box to appear
+       advanced_lo_search.learning_objective_text.set @learning_objective_text
+       advanced_lo_search.show_learning_objectives
        sleep 2 #to make sure that selection doesn't happen too quick
-       page.select_multiple_learning_objectives(3)
-       page.add_learning_objectives
+       advanced_lo_search.select_multiple_learning_objectives(@lo_selection)
+       advanced_lo_search.add_learning_objectives
     end
 end
 
