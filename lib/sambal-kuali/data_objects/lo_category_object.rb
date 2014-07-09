@@ -8,6 +8,7 @@ class CmLoCategoryObject < DataFactory
 
   attr_reader :category_name,
               :category_type,
+              :lo_level,
               :category_level,
               :advanced_search,
               :on_the_fly,
@@ -34,8 +35,7 @@ class CmLoCategoryObject < DataFactory
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        :category_name => "text for dataObject",
-        #:category_type => CATEGORY_TYPE_SKILL,
+        :category_name => random_alphanums(10, 'text for category '),
         :category_type => '::random::',
         :category_level => 1,
         :auto_lookup => false,
@@ -58,13 +58,25 @@ class CmLoCategoryObject < DataFactory
   # end
 
   def create
-    on CmLearningObjectives do |page|
-      page.learning_objectives unless page.current_page('Learning Objectives').exists?
+    view
       auto_lookup_entry if @auto_lookup
       on_the_fly_entry if @on_the_fly
       advanced_search if @advanced_search
-    end
     determine_save_action unless @defer_save
+  end
+
+  def delete (opts={})
+    view
+    on CmLearningObjectives do |category|
+      category.delete_category(opts[:lo_level], opts[:category_level])
+    end
+    determine_save_action unless opts[:defer_save]
+  end
+
+  def add (opts={})
+    view
+    on_fly_entry if opts[:@on_the_fly]
+    set_options(opts)
   end
 
 
@@ -113,7 +125,11 @@ class CmLoCategoryObject < DataFactory
     end
   end
 
-
+  def view
+    on CmLearningObjectives do |page|
+      page.learning_objectives unless page.current_page('Learning Objectives').exists?
+    end
+  end
 
 end
 

@@ -20,6 +20,12 @@ class CmLearningObjectives < BasePage
   action(:add_category) { |objective_level,b| b.button(id: "KS-LearningObjective-Category-Add_line#{objective_level-1}_add").click; b.loading_wait }
 
   action(:category_detail_added) { |objective_level,category_level,b| b.text_field(id: "KS-LearningObjective-Category_line#{objective_level-1}_line#{category_level-1}" ) }
-  action(:delete_category) { |objective_level,category_level,b| b.button(id: "KS-LearningObjective-Category-Delete_line#{objective_level}_line#{category_level}").click; b.loading_wait }
+  action(:delete_category) { |objective_level,category_level,b| b.a(id: "KS-LearningObjective-Category-Delete_line#{objective_level-1}_line#{category_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
+
+  #organize LO
+  action(:move_up_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-MoveUp_line#{lo_level-1}"); b.loading_wait }
+  action(:move_down_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-MoveDown_line#{lo_level-1}").click; b.loading_wait }
+  action(:outdent_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-IncreaseIndent_line#{lo_level-1}").click; b.loading_wait }
+  action(:indent_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-IncreaseIndent_line#{lo_level-1}").click; b.loading_wait }
 
 end

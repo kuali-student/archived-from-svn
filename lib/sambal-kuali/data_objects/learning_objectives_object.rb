@@ -15,9 +15,8 @@ include Utilities
                 :search_by_course,
                 :search_by_program,
                 :search_type,
+                :organize_action,
                 :defer_save
-
-
 
 
   def initialize(browser, opts={})
@@ -34,15 +33,14 @@ include Utilities
   end
 
   def create
+    view
     on CmLearningObjectives do |page|
-      page.learning_objectives unless page.current_page('Learning Objectives').exists?
-      page.add_learning_objective unless page.objective_detail(@learning_objective_level).exists?
+      page.add_learning_objective
       if @advanced_search
         advanced_find
       else
         page.objective_detail(1).set @learning_objective_text
       end
-      
 
       unless @category_list.nil?
         @category_list.each do |category|
@@ -54,28 +52,17 @@ include Utilities
     determine_save_action unless @defer_save
   end
 
-
-  def show_find_lo_lightbox
-    on CmLearningObjectives do |page|
-      page.find_learning_objective
-    end
-  end
-
-
-def show_select_category_lightbox(opts={})
-  on CmLearningObjectives do |page|
-    page.find_categories(opts[:category_level])
-  end
-end
-
-
 def edit (opts={})
+  view
   on CmLearningObjectives do |page|
-    page.objective_detail(opts[:objective_level]).set opts[:learning_objective_text]
-    page.loading_wait
+    page.objective_detail(opts[:learning_objective_level]).set opts[:learning_objective_text] unless opts[:learning_objective_text].nil?
   end
   set_options(opts)
+
+  determine_save_action unless opts[:defer_save]
+
 end
+
 
 def delete (opts={})
   on CmLearningObjectives do |page|
@@ -98,5 +85,50 @@ def advanced_find
        advanced_lo_search.add_learning_objectives
     end
 end
+
+def organize_learning_objective (opts={})
+
+  case opts[:organize_action]
+
+      when "Indent"
+        on CmLearningObjectives do |learn_obj|
+          learn_obj.indent_lo(opts[:learning_objective_level])
+        end
+      when "Outdent"
+        on CmLearningObjectives do |learn_obj|
+          learn_obj.outdent_lo(opts[:learning_objective_level])
+        end
+      when "Move Up"
+        on CmLearningObjectives do |learn_obj|
+          learn_obj.move_up_lo(opts[:learning_objective_level])
+        end
+      when "Move Down"
+        on CmLearningObjectives do |learn_obj|
+          learn_obj.move_down_lo(opts[:learning_objective_level])
+        end
+  end
+  determine_save_action unless opts[:defer_save]
+end
+
+def add_category (opts)
+  defaults = {
+      :category_name => random_alphanums(10, 'text for dataObject'),
+      :category_type => '::random::',
+      :category_level => 1,
+      :auto_lookup => false,
+      :on_the_fly => false,
+  }
+  options = defaults.merge(opts)
+  options[:category].create
+  @category_list << options[:category]
+end
+
+   def view
+      on CmLearningObjectives do |page|
+        page.learning_objectives unless page.current_page('Learning Objectives').exists?
+      end
+   end
+
+
 
 end
