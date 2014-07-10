@@ -6,7 +6,7 @@ include StringFactory
 include Workflows
 include Utilities
 
-  attr_reader   :learning_objective_text,
+  attr_accessor :learning_objective_text,
                 :learning_objective_level,
                 :category_list,
                 :advanced_search,
@@ -98,29 +98,31 @@ def organize_learning_objective (opts={})
         on CmLearningObjectives do |learn_obj|
           learn_obj.outdent_lo(opts[:learning_objective_level])
         end
-      when "Move Up"
+      when "Up"
         on CmLearningObjectives do |learn_obj|
           learn_obj.move_up_lo(opts[:learning_objective_level])
         end
-      when "Move Down"
+      when "Down"
         on CmLearningObjectives do |learn_obj|
           learn_obj.move_down_lo(opts[:learning_objective_level])
         end
   end
   determine_save_action unless opts[:defer_save]
+  set_options(opts)
 end
 
 def add_category (opts)
   defaults = {
-      :category_name => random_alphanums(10, 'text for dataObject'),
-      :category_type => '::random::',
-      :category_level => 1,
-      :auto_lookup => false,
-      :on_the_fly => false,
+      # :category_name => random_alphanums(10, 'text for dataObject'),
+      # :category_type => '::random::',
+      # :category_level => 1,
+      # :auto_lookup => false,
+      # :on_the_fly => false
   }
   options = defaults.merge(opts)
   options[:category].create
   @category_list << options[:category]
+  sleep 2 #remove!
 end
 
    def view

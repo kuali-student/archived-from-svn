@@ -6,38 +6,23 @@ class CmLoCategoryObject < DataFactory
   include Workflows
   include Utilities
 
-  attr_reader :category_name,
-              :category_type,
-              :lo_level,
-              :category_level,
-              :advanced_search,
-              :on_the_fly,
-              :auto_lookup,
-              :defer_save,
-              :category_selection
+  attr_accessor :category_name,
+                :category_type,
+                :lo_level,
+                :category_level,
+                :advanced_search,
+                :on_the_fly,
+                :auto_lookup,
+                :defer_save,
+                :category_selection
 
-
-
-  CATEGORY_TO_TEACH_ENGLISH = "Certificate to Teach English"
-  CATEGORY_COMMUNICATION = "Communication"
-  CATEGORY_WRITING = "Writing"
-  CATEGORY_SCIENTIFIC_METHOD = "Scientific method"
-  CATEGORY_MATHEMATICAL_REASONING = "Mathematical reasoning"
-  CATEGORY_SCIENTIFIC_REASONING = "Scientific reasoning"
-
-  CATEGORY_TYPE_SKILL = "Skill"
-  CATEGORY_TYPE_SUBJECT = "Subject"
-  CATEGORY_TYPE_ACCREDITATION = "Accreditation"
-
-=begin
-  Because the app validates the categories we need to use the predefined categories and types
-=end
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
         :category_name => random_alphanums(10, 'text for category '),
         :category_type => '::random::',
         :category_level => 1,
+        :lo_level => 1,
         :auto_lookup => false,
         :on_the_fly => false,
         :advanced_search => false,
@@ -47,15 +32,6 @@ class CmLoCategoryObject < DataFactory
     set_options(defaults.merge(opts))
 
   end
-
-  # def create
-  #     navigate_to_lo_categories
-  #     on CmLoCategoryPage do |page|
-  #       page.select_category(@category_name)
-  #       page.add_categories
-  #       page.loading_wait
-  #     end
-  # end
 
   def create
     view
@@ -96,19 +72,19 @@ class CmLoCategoryObject < DataFactory
 
   def auto_lookup_entry
     on CmLearningObjectives do |page|
-      page.category_detail(1).set @category_name
+      page.category_detail(@lo_level,@category_level).set @category_name
       page.auto_lookup @category_name
-      page.add_category(1)
+      page.add_category(@lo_level, @category_level)
     end
   end
 
   def on_the_fly_entry
     on CmLearningObjectives do |page|
-      page.category_detail(1).set @category_name
-      page.add_category(1)
-      page.category_type(1).wait_until_present
-      page.category_type(1).pick(@category_type)
-      page.add_category(1)
+      page.category_detail(@lo_level, @category_level).set @category_name
+      page.add_category(@lo_level, @category_level)
+      page.category_type(@lo_level, @category_level).wait_until_present
+      page.category_type(@lo_level, @category_level).pick(@category_type)
+      page.add_category(@lo_level, @category_level)
     end
   end
 
