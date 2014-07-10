@@ -54,14 +54,20 @@ public class PlannerItem implements
 		uniqueId = UUID.randomUUID().toString();
 		termId = completedRecord.getTermName();
 		campusCode = completedRecord.getAttributeValue("campusCode");
+		
 		courseCode = completedRecord.getCourseCode();
-        List<Course> courses = KsapFrameworkServiceLocator.getCourseHelper().getCoursesByCode(courseCode);
-        for(Course course : courses){
-            if(course.getStateKey().equals("Active")){
-                courseId = course.getId();
-                break;
-            }
-        }
+		courseId = completedRecord.getAttributeValue("courseId");
+		if (courseId == null) {
+			List<Course> courses = KsapFrameworkServiceLocator
+					.getCourseHelper().getCoursesByCode(courseCode);
+			for (Course course : courses) {
+				if (course.getStateKey().equals("Active")) {
+					courseId = course.getId();
+					break;
+				}
+			}
+		}
+		
 		activityCode = completedRecord.getActivityCode();
 		courseTitle = completedRecord.getCourseTitle();
 

@@ -1,5 +1,7 @@
 package org.kuali.student.ap.framework.context.support;
 
+import java.io.Serializable;
+
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.YearTerm;
 import org.kuali.student.r2.core.acal.infc.Term;
@@ -10,8 +12,9 @@ import org.slf4j.LoggerFactory;
  * Data Storage for the Term and Year of a single atp. Formats different output
  * forms of the data
  */
-public class DefaultYearTerm implements YearTerm, Comparable<YearTerm> {
+public class DefaultYearTerm implements YearTerm, Serializable, Comparable<YearTerm> {
 
+	private static final long serialVersionUID = -6544664411255069478L;
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultYearTerm.class);
 
 	private final String termId;

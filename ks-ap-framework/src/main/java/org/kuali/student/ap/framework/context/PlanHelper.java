@@ -9,6 +9,7 @@ import org.kuali.student.ap.academicplan.infc.Placeholder;
 import org.kuali.student.ap.academicplan.infc.PlaceholderInstance;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.academicplan.infc.TypedObjectReference;
+import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.lum.course.infc.Course;
 
@@ -24,6 +25,25 @@ public interface PlanHelper {
      */
     public LearningPlanInfo getDefaultLearningPlan();
 
+	/**
+	 * Gets the plan items in a learning plan.
+	 *
+	 * @param planId
+	 *            The learning plan ID.
+	 * @return Default Learning Plan
+	 */
+	public List<PlanItem> getPlanItems(String planId);
+
+	/**
+	 * Gets the completed course records (via AcademicRecordService) for the
+	 * student by ID.
+	 * 
+	 * @param studentId
+	 *            The student principal ID.
+	 * @return completed course records
+	 */
+	public List<StudentCourseRecordInfo> getCompletedRecords(String studentId);      
+    
     /**
      * Gets the id of the term that the planner should display first.
      *
@@ -82,6 +102,5 @@ public interface PlanHelper {
      */
 
     public DegreeMapRequirement getRequirement(TypedObjectReference ref);
-      
-    
+
 }
