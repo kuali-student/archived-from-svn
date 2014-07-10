@@ -221,7 +221,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
                 CourseOfferingManagementUtil.prepareManageAOsModelAndView(form, coListWrapper);
 
                 // indicate that default values should be applied to this view
-                form.addViewThatNeedsDefaultValuesApplied(form.getViewId());
+                form.setApplyDefaultValues(true);
 
                 return getUIFModelAndView(form, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
             }
@@ -306,7 +306,7 @@ public class CourseOfferingManagementController extends UifControllerBase {
     @RequestMapping(params = "methodToCall=loadAOs_RGs_AOCs")
     public ModelAndView loadAOs_RGs_AOCs(@ModelAttribute("KualiForm") CourseOfferingManagementForm form) throws Exception {
         // indicate that default values should be applied to this view
-        form.addViewThatNeedsDefaultValuesApplied(form.getViewId());
+        form.setApplyDefaultValues(true);
 
         if (ActivityOfferingClusterHandler.loadAOs_RGs_AOCs(form)) {
             return getUIFModelAndView(form, CourseOfferingConstants.MANAGE_THE_CO_PAGE);
