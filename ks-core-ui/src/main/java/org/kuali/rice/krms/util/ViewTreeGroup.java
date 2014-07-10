@@ -101,7 +101,7 @@ public class ViewTreeGroup extends TreeGroup {
         /*Overridden section*/
         List<CollectionGroup> components = ViewLifecycleUtils.getElementsOfTypeShallow(nodeGroup, CollectionGroup.class);
         for (CollectionGroup fieldCollectionGroup : components) {
-            fieldCollectionGroup.setSubCollectionSuffix(parentNode);
+            fieldCollectionGroup.setContainerIdSuffix(parentNode);
         }
         node.setData(nodeGroup);
 
