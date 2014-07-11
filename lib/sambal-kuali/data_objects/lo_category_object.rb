@@ -44,7 +44,11 @@ class CmLoCategoryObject < DataFactory
   def delete (opts={})
     view
     on CmLearningObjectives do |category|
-      category.delete_category(opts[:lo_level], opts[:category_level])
+      begin
+        category.delete_category(opts[:lo_level], opts[:category_level])
+      rescue
+        puts "no category exists."
+      end
     end
     determine_save_action unless opts[:defer_save]
   end

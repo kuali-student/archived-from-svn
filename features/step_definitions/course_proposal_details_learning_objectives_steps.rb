@@ -48,7 +48,7 @@ Given(/^I have a basic course proposal with Learning Objectives$/) do
                    :auto_lookup => true,
                    :defer_save => true)
   learn_obj1 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 1 '),
-                                                :learning_objective_level => 1,
+                                                :learning_objective_level => 3,
                                                 :advanced_search => false,
                                                 :display_level => 2,
                                                 :defer_save => true,
@@ -67,7 +67,7 @@ Given(/^I have a basic course proposal with Learning Objectives$/) do
 
 
   learn_obj3 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 3 '),
-                                                :learning_objective_level => 3,
+                                                :learning_objective_level => 1,
                                                 :advanced_search => false,
                                                 :display_level => 4,
                                                 :defer_save => true,
@@ -150,7 +150,7 @@ When(/^I edit the Learning Objectives$/) do
 
   #Add a new LO4
   learn_obj4 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 4 '),
-                     :learning_objective_level => 4,
+                     :learning_objective_level => 1,
                      :advanced_search => false,
                      :display_level => 1,
                      :defer_save => true,
@@ -158,6 +158,10 @@ When(/^I edit the Learning Objectives$/) do
 
   @course_proposal.add_learning_objective :learn_obj => learn_obj4
 
+  # move down the other LOs objective level
+  @course_proposal.learning_objective_list[0].learning_objective_level = 2
+  @course_proposal.learning_objective_list[1].learning_objective_level = 3
+  @course_proposal.learning_objective_list[2].learning_objective_level = 4
 
 end
 
@@ -167,10 +171,20 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
   lo_list = @course_proposal.learning_objective_list
   on CmReviewProposal do |page|
     lo_list.each do |lo|
-      page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
+      page.learning_objectives_review(lo.display_level-1).should include lo.learning_objective_text
+      cat_included = false
+
       lo.category_list.each do |cat|
-        page.learning_objectives_review(lo.display_level).should include cat.category_name unless cat.category_name == "literacy" #exclude deleted category
+        begin
+          if page.learning_objectives_review(lo.display_level-1).should include cat.category_name
+            cat_included = true
+            break
+          end
+        rescue
+          cat_included = false
+        end
       end
+      cat_included.should == true unless lo.category_list.length == 0
     end
   end
 end
