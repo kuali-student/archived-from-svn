@@ -50,6 +50,7 @@ Given(/^I have a basic course proposal with Learning Objectives$/) do
   learn_obj1 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 1 '),
                                                 :learning_objective_level => 1,
                                                 :advanced_search => false,
+                                                :display_level => 2,
                                                 :defer_save => true,
                                                 :category_list => [lo1_cat1])
 
@@ -60,6 +61,7 @@ Given(/^I have a basic course proposal with Learning Objectives$/) do
   learn_obj2 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 2 '),
                                                 :learning_objective_level => 2,
                                                 :advanced_search => false,
+                                                :display_level => 3,
                                                 :defer_save => true,
                                                 :category_list => [lo2_cat1] )
 
@@ -67,6 +69,7 @@ Given(/^I have a basic course proposal with Learning Objectives$/) do
   learn_obj3 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 3 '),
                                                 :learning_objective_level => 3,
                                                 :advanced_search => false,
+                                                :display_level => 4,
                                                 :defer_save => true,
                                                 :category_list => [] )
 
@@ -149,6 +152,7 @@ When(/^I edit the Learning Objectives$/) do
   learn_obj4 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 4 '),
                      :learning_objective_level => 4,
                      :advanced_search => false,
+                     :display_level => 1,
                      :defer_save => true,
                      :category_list => [] )
 
@@ -163,9 +167,9 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
   lo_list = @course_proposal.learning_objective_list
   on CmReviewProposal do |page|
     lo_list.each do |lo|
-      puts lo.learning_objective_text
+      page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
       lo.category_list.each do |cat|
-        puts cat.category_name
+        page.learning_objectives_review(lo.display_level).should include cat.category_name unless cat.category_name == "literacy" #exclude deleted category
       end
     end
   end
@@ -196,6 +200,7 @@ Given(/^I have a basic course proposal created with Learning Objectives$/) do
   learn_obj3 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 3 '),
                      :learning_objective_level => 3,
                      :advanced_search => false,
+                     :defer_save => true,
                      :category_list => [] )
 
 
@@ -210,11 +215,10 @@ When(/^I delete the Learning Objectives$/) do
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.edit_proposal_action
 
-  lo_list  =  @course_proposal.learning_objective_list
-  lo_list.each do |lo|
-    lo.delete :objective_level => 1
-  end
 
+  @course_proposal.learning_objective_list[0].delete :objective_level => 1, :defer_save => true
+  @course_proposal.learning_objective_list[1].delete :objective_level => 1, :defer_save => true
+  @course_proposal.learning_objective_list[2].delete :objective_level => 1
 
 end
 
@@ -225,11 +229,6 @@ Then(/^I should no longer see Learning Objective details on the course proposal$
 
   on CmReviewProposal do |page|
     page.learning_objectives_empty_text.exists?.should == true #implication is that no information is displayed on Learning Objective section
-    lo_list.each do |lo|
-      page.learning_objectives_summary_review.should_not include lo.learning_objective_text
-    end
-
-
   end
 end
 

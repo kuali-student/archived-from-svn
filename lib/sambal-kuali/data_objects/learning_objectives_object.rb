@@ -39,6 +39,7 @@ include Utilities
       page.add_learning_objective unless @advanced_search
       if @advanced_search
         advanced_find
+        @learning_objective_text = page.objective_detail(1).text
       else
         page.objective_detail(1).set @learning_objective_text
       end
@@ -49,7 +50,7 @@ include Utilities
         end
       end
 
-      @learning_objective_text = page.objective_detail(1).text
+
 
     end
     determine_save_action unless @defer_save
@@ -71,7 +72,7 @@ def delete (opts={})
   view
   on CmLearningObjectives do |page|
     page.delete_learning_objective(opts[:objective_level])
-    determine_save_action unless opts[:defer_save]
+   determine_save_action unless opts[:defer_save]
   end
 end
 
