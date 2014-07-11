@@ -5,9 +5,9 @@ Background:
   Given I am logged in as Faculty
 
   Scenario: CC12.1 Add new Learning Objectives to a Course Proposal
-    When I create a basic course proposal with Learning Objectives
+    When I create a basic course proposal with Learning Objectives using category lookup
     And I perform a full search for the course proposal
-    Then I should see Learning Objective details on the course proposal
+    Then I should see Learning Objective and category details on the course proposal
 
   Scenario: CC12.2 Add Learning Objectives a Course Proposal using advanced search
     When I create a basic course proposal with Learning Objectives added using advanced search
@@ -21,7 +21,7 @@ Background:
     Then I should see updated Learning Objective details on the course proposal
 
   Scenario: CC12.4 Delete Learning Objectives from a Course Proposal
-    Given I have a basic course proposal with Learning Objectives
+    Given I have a basic course proposal created with Learning Objectives
     When I delete the Learning Objectives
     And I perform a full search for the course proposal
     Then I should no longer see Learning Objective details on the course proposal

@@ -16,6 +16,7 @@ include Utilities
                 :search_by_program,
                 :search_type,
                 :organize_action,
+                :display_level
                 :defer_save
 
 
@@ -35,7 +36,7 @@ include Utilities
   def create
     view
     on CmLearningObjectives do |page|
-      page.add_learning_objective
+      page.add_learning_objective unless @advanced_search
       if @advanced_search
         advanced_find
       else
@@ -47,6 +48,8 @@ include Utilities
           category.create
         end
       end
+
+      @learning_objective_text = page.objective_detail(1).text
 
     end
     determine_save_action unless @defer_save
@@ -65,9 +68,10 @@ end
 
 
 def delete (opts={})
+  view
   on CmLearningObjectives do |page|
     page.delete_learning_objective(opts[:objective_level])
-    page.loading_wait
+    determine_save_action unless opts[:defer_save]
   end
 end
 
@@ -77,10 +81,10 @@ def advanced_find
        fill_out advanced_lo_search, :search_by_all, :search_by_course, :search_by_program
        advanced_lo_search.search_type.pick @search_type unless @search_type.nil?
        advanced_lo_search.loading_wait
-       sleep 2 # wait for the text box to appear
+       sleep 1 # wait for the text box to appear
        advanced_lo_search.learning_objective_text.set @learning_objective_text
        advanced_lo_search.show_learning_objectives
-       sleep 2 #to make sure that selection doesn't happen too quick
+       sleep 1 #to make sure that selection doesn't happen too quick
        advanced_lo_search.select_multiple_learning_objectives(@lo_selection)
        advanced_lo_search.add_learning_objectives
     end

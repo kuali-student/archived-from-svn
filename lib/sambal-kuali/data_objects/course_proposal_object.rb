@@ -395,6 +395,16 @@ class CmCourseProposalObject < DataFactory
     @author_list << options[:author]
   end
 
+  def add_learning_objective (opts)
+    defaults = {
+
+    }
+    options = defaults.merge(opts)
+    options[:learn_obj].create
+    @learning_objective_list << options[:learn_obj]
+    determine_save_action
+  end
+
   #-----
   private
   #-----

@@ -151,8 +151,6 @@ When(/^I delete Optional\-Other details on the course proposal$/) do
                                            :term_fall => :clear,
                                            :term_spring => :clear,
                                            :term_summer => :clear,
-                                           :duration_type => '::random::',
-                                           :duration_count => (1..999).to_a.sample,
                                            :duration_type => "",
                                            :duration_count => "",
                                            :audit => :clear,
@@ -195,17 +193,57 @@ Then(/^I should no longer see Optional\-Other details on the course proposal$/) 
 end
 
 
-When(/^I create a basic course proposal with Learning Objectives$/) do
+When(/^I create a basic course proposal with Learning Objectives using category lookup$/) do
+  lo1_cat1 = (make CmLoCategoryObject,:category_name => random_alphanums(10),
+                                      :on_the_fly => true,
+                                      :defer_save => true)
+  learn_obj1 = (make CmLearningObjectiveObject, :learning_objective_text => "learning objective text1",
+                                                :defer_save => true,
+                                                :display_level => 2,
+                                                :category_list => [lo1_cat1])
+
+  lo2_cat1 = (make CmLoCategoryObject,:category_name => "literacy",
+                                      :category_level => 1,
+                                      :category_selection => 1,
+                                      :auto_lookup => true,
+                                      :defer_save => true)
+
+  lo2_cat2 = (make CmLoCategoryObject,:category_name => "Communication",
+                                      :advanced_search => true,
+                                      :category_selection => 2,
+                                      :defer_save => true)
+
+  lo2_cat3 = (make CmLoCategoryObject,:category_name => "Critical",
+                                      :advanced_search => true,
+                                      :category_selection => 1,
+                                      :defer_save => true)
+
+  learn_obj2 = (make CmLearningObjectiveObject, :learning_objective_level => 2,
+                                                :learning_objective_text => "learning objective text 2",
+                                                :defer_save => true,
+                                                :display_level => 1,
+                                                :category_list => [lo2_cat1, lo2_cat2, lo2_cat3])
+
+
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :learning_objective_list => [(make CmLearningObjectiveObject, :learning_objective_text => "learning objective text1",:defer_save => true,
-                                                               :category_list => [(make CmLoCategoryObject,:category_name => random_alphanums(10),:on_the_fly => true,:defer_save => true)]),
-                                                         (make CmLearningObjectiveObject, :learning_objective_level => 2, :learning_objective_text => "learning objective text 2", :defer_save => true,
-                                                               :category_list => [(make CmLoCategoryObject,:category_name => "literacy", :category_level => 1, :category_selection => 1, :auto_lookup => true,:defer_save => true),
-                                                                                  (make CmLoCategoryObject,:category_name => "Communication", :advanced_search => true, :category_selection => 2,:defer_save => true),
-                                                                                  (make CmLoCategoryObject,:category_name => "Critical", :advanced_search => true, :category_selection => 1, :defer_save => true)
-                                                               ]
-                                                         )
-                                                        ]
+                            :learning_objective_list => [learn_obj1, learn_obj2]
+
+
+end
+
+
+Then(/^I should see Learning Objective and category details on the course proposal$/) do
+  @course_proposal.review_proposal_action
+
+  lo_list = @course_proposal.learning_objective_list
+  on CmReviewProposal do |page|
+    lo_list.each do |lo|
+      page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
+        lo.category_list.each do |cat|
+          page.learning_objectives_review(lo.display_level).should include cat.category_name
+        end
+    end
+  end
 
 
 end
@@ -214,15 +252,13 @@ end
 Then(/^I should see Learning Objective details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
-    total = @course_proposal.learning_objective_list.length
-    for i in 0..total
-      if i ==  total then
-        break
+  lo_list = @course_proposal.learning_objective_list
+    on CmReviewProposal do |page|
+      lo_list.each do |lo|
+        page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
       end
-      page.learning_objectives_review.should include @course_proposal.learning_objective_list[i].learning_objective_text
-    end
   end
+
 end
 
 When(/^I create a basic course proposal with authors and collaborators$/) do

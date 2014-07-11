@@ -10,9 +10,9 @@ class CmLearningObjectives < BasePage
   action(:add_learning_objective) { |b| b.button(id: "LearningObjective-ToolBar-AddNewObjective").click; b.loading_wait }
   action(:find_learning_objective) { |b| b.button(id: "KS-LearningObjective-QuickFinder_act").click }
 
-  action(:objective_detail) { |objective_level, b| b.text_field(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_control") }
+  action(:objective_detail) { |objective_level,b| b.text_field(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_control") }
   action(:search_for_lo) { |objective_level,b| b.a(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_quickfinder_act") }
-  action(:delete_learning_objective) { |objective_level, b| b.a(id: "LearningObjectives-Icon-Delete_line#{objective_level}").click ; b.loading_wait }
+  action(:delete_learning_objective) { |objective_level, b| b.a(id: "LearningObjectives-Icon-Delete_line#{objective_level-1}").click ; b.loading_wait }
 
 #  action(:category_detail) { |category_level,b| b.text_field(id: "KS-LearningObjective-Category_line#{category_level-1}_add_control") }
   action(:category_detail) { |objective_level,category_level,b| b.div(id: "learning_objective_section_#{objective_level-1}").text_field(id: "KS-LearningObjective-Category_line#{category_level-1}_add_control") }
