@@ -1,4 +1,4 @@
-@draft
+@nightly
 Feature: Course Proposal Details - Learning Objectives
 
 Background:
