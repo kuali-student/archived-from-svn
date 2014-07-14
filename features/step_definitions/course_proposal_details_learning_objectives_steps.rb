@@ -189,50 +189,16 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
   end
 end
 
-
-Given(/^I have a basic course proposal created with Learning Objectives$/) do
-  lo1_cat1 = (make CmLoCategoryObject,:category_name => 'literacy' ,
-                   :auto_lookup => true,
-                   :defer_save => true)
-  learn_obj1 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 1 '),
-                     :learning_objective_level => 1,
-                     :advanced_search => false,
-                     :defer_save => true,
-                     :category_list => [lo1_cat1])
-
-  lo2_cat1 = (make CmLoCategoryObject,:category_name => 'Scientific',
-                   :auto_lookup => true,
-                   :defer_save => true)
-
-  learn_obj2 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 2 '),
-                     :learning_objective_level => 2,
-                     :advanced_search => false,
-                     :defer_save => true,
-                     :category_list => [lo2_cat1] )
-
-
-  learn_obj3 = (make CmLearningObjectiveObject, :learning_objective_text => random_alphanums(10, 'learning objective 3 '),
-                     :learning_objective_level => 3,
-                     :advanced_search => false,
-                     :defer_save => true,
-                     :category_list => [] )
-
-
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :learning_objective_list => [learn_obj1,learn_obj2, learn_obj3]
-
-
-end
-
 When(/^I delete the Learning Objectives$/) do
   navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.edit_proposal_action
 
 
-  @course_proposal.learning_objective_list[0].delete :objective_level => 1, :defer_save => true
-  @course_proposal.learning_objective_list[1].delete :objective_level => 1, :defer_save => true
-  @course_proposal.learning_objective_list[2].delete :objective_level => 1
+  @course_proposal.learning_objective_list[0].delete :learning_objective_level => 1, :defer_save => true
+  @course_proposal.learning_objective_list[1].delete :learning_objective_level => 2, :defer_save => true #delete indented outcome
+  @course_proposal.learning_objective_list[1].delete :learning_objective_level => 1
+
 
 end
 

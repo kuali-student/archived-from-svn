@@ -21,7 +21,7 @@ Background:
     Then I should see updated Learning Objective details on the course proposal
 
   Scenario: CC12.4 Delete Learning Objectives from a Course Proposal
-    Given I have a basic course proposal created with Learning Objectives
+    Given I have a basic course proposal with Learning Objectives
     When I delete the Learning Objectives
     And I perform a full search for the course proposal
     Then I should no longer see Learning Objective details on the course proposal

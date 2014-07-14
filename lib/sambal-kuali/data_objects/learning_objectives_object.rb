@@ -71,7 +71,7 @@ end
 def delete (opts={})
   view
   on CmLearningObjectives do |page|
-    page.delete_learning_objective(opts[:objective_level])
+    page.delete_learning_objective(opts[:learning_objective_level])
    determine_save_action unless opts[:defer_save]
   end
 end
