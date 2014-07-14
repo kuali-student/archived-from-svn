@@ -70,6 +70,7 @@ class BasePage < PageFactory
       element(:deleting_line) { |b| b.image(alt: "Deleting Line...") }
 
       action(:loading_wait) {|b| b.image(alt: "Loading...").wait_while_present }
+      action(:loading_extra_wait) {|b| b.image(alt: "Loading...").wait_while_present(60) }
       action(:adding_line_wait) {|b| b.adding_line.wait_while_present }
       action(:deleting_line_wait) { |b| b.deleting_line.wait_while_present }
       action(:saving_wait) { |b| b.saving.wait_while_present }

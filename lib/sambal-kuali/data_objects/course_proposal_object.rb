@@ -405,6 +405,16 @@ class CmCourseProposalObject < DataFactory
     determine_save_action
   end
 
+  def add_supporting_doc (opts)
+    defaults = {
+
+    }
+    options = defaults.merge(opts)
+    options[:supporting_doc].create
+    @supporting_doc_list << options[:supporting_doc]
+    determine_save_action
+  end
+
   #-----
   private
   #-----

@@ -79,4 +79,8 @@ class CmReviewProposal < BasePage
   value(:author_permission_review) { |author_level,b| b.div(id: "course_review_authors_and_collaborators_details").section(id: /line#{author_level-1}/).div(data_label: "Permissions").textarea(name: /permission/).text  }
   value(:action_request_review) { |author_level,b| b.div(id: "course_review_authors_and_collaborators_details").section(id: /line#{author_level-1}/).div(data_label: "Action Request").textarea(name: /action/).text }
   element(:empty_authors_collab_review) { |b| b.textarea(id: "emptyStringAuthorsAndCollaborators_control") }
+
+  #SUPPORTING DOCS
+  element(:supporting_docs_section) { |b| b.section(id: "SupportingDocuments-Review-section") }
+
 end

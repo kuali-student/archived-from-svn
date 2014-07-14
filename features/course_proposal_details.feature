@@ -28,7 +28,6 @@ Feature: GT.Course Proposal Details
     And I perform a full search for the course proposal
     Then I should see Optional-Other details on the course proposal
 
-
   Scenario: CC6.2 Edit Optional-Other details on a course proposal
     Given I am logged in as Curriculum Specialist
     And I have a basic course proposal created with Optional-Other fields
@@ -36,13 +35,13 @@ Feature: GT.Course Proposal Details
     And I perform a full search for the course proposal
     Then I should see updated Optional Other details on the course proposal
 
-
   Scenario: CC6.3 Delete Optional-Other details on a course proposal
     Given I am logged in as Faculty
     And I have a basic course proposal created with Optional-Other fields
     When I delete Optional-Other details on the course proposal
     And I perform a full search for the course proposal
     Then I should no longer see Optional-Other details on the course proposal
+
 @draft
   Scenario: CC15.1 Add Supporting Documents to a Course Proposal
     Given I am logged in as Faculty
@@ -51,13 +50,15 @@ Feature: GT.Course Proposal Details
     Then I should see Supporting Documents details on the course proposal
 @draft
   Scenario: CC15.2 Edit Supporting Documents on a course proposal
-    Given I have a basic course proposal with Supporting Documents
+    Given I am logged in as Faculty
+    And I have a basic course proposal with Supporting Documents
     When I update the Supporting Documents on the course proposal
     And I perform a full search for the course proposal
     Then I should see updated Supporting Documents details on the course proposal
-  @draft
+@draft
   Scenario: CC15.3 Delete Supporting Documents from a course proposal
-    Given I have a basic course proposal with Supporting Documents
+    Given I am logged in as Faculty
+    And I have a basic course proposal with Supporting Documents
     When I delete the Supporting Documents on the course proposal
     And I perform a full search for the course proposal
     Then I should no longer see Supporting Documents on the course proposal

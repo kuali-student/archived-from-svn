@@ -13,16 +13,19 @@ class CmSupportingDocsObject < DataFactory
                 :document_level
 
 
-
-
-
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        :type => "pdf",
-        :file_name => "price_list.pdf",
-        :description => "Price List Details",
-        :document_level => 1
+        :type => ["doc","docx","gif","gz",
+                  "jpg","mp3","pdf","png",
+                  "ppt","rar","rtf","tar",
+                  "tif","tiff","txt", "wav",
+                  "xls", "xml", "zip"
+                  ].to_a.sample,
+        :file_name => "test_file",
+        :description => [random_alphanums(10, "supporting doc description ")," "].to_a.sample,
+        :document_level => 1,
+        :defer_save => false
 
     }
     set_options(defaults.merge(opts))
@@ -33,11 +36,12 @@ class CmSupportingDocsObject < DataFactory
     view
     on CmSupportingDocuments do |attach|
       attach.add_supporting_doc unless attach.document_select(@document_level).exists?
-      file_path = $target_folder+"/"+@file_name
-      attach.document_select(@document_level).set (file_path)
+      file_path = $target_folder+"/"+@file_name+"."+@type
+      puts file_path
+      puts "Description is #{@description}"
+      attach.document_select(@document_level).set file_path
       attach.document_description(@document_level).fit @description
-      attach.add_supporting_doc unless attach.document_select(@document_level).exists?
-    end
+     end
     determine_save_action unless @defer_save
   end
 
@@ -61,8 +65,12 @@ class CmSupportingDocsObject < DataFactory
 
 
 
-  def delete
-
+  def delete (opts={})
+    view
+    on CmSupportingDocuments do |page|
+      page.delete(opts[:document_level])
+      determine_save_action unless opts[:defer_save]
+    end
   end
 
 

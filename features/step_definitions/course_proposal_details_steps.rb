@@ -352,33 +352,86 @@ Then(/^I should no longer see author and collaborator details on the course prop
 end
 
 When(/^I create a basic course proposal with Supporting Documents$/) do
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                    :supporting_doc_list => [(make CmSupportingDocsObject)]
+  support_doc1 = (make CmSupportingDocsObject, :defer_save => true)
+  support_doc2 = (make CmSupportingDocsObject,:document_level => 2, :defer_save => true)
+  support_doc3 = (make CmSupportingDocsObject,:document_level => 3 )
+
+   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                                                     :supporting_doc_list => [support_doc1, support_doc2,support_doc3],
+                                                     :defer_save => true
 end
 
 
 Then(/^I should see Supporting Documents details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+
+    #Supporting Documents
+    #TODO persistence on review proposal unavailable.
+    # @course_proposal.cross_listed_course_list.each do |supporting_docs|
+    #   page.supporting_docs_review.should include "#{supporting_docs.file_name}.#{supporting_docs.file_type}"
+    #   page.supporting_docs_review.should include supporting_docs.description
+    # end
+
+  end
+
 end
 
 Given(/^I have a basic course proposal with Supporting Documents$/) do
-  pending # express the regexp above with the code you wish you had
+  support_doc1 = (make CmSupportingDocsObject, :defer_save => true)
+  support_doc2 = (make CmSupportingDocsObject,:document_level => 2, :defer_save => true)
+  support_doc3 = (make CmSupportingDocsObject,:document_level => 3 )
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                                                    :supporting_doc_list => [support_doc1, support_doc2, support_doc3],
+                                                    :defer_save => false
 end
 
 
 When(/^I update the Supporting Documents on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.edit_proposal_action
+
+  #Delete 1st Supporting Doc [0]
+  @course_proposal.supporting_doc_list[0].delete :document_level => 1
+
+  # Edit Description on 2nd Supporting Doc [1]
+  @course_proposal.supporting_doc_list[0].delete :document_level => 1
+  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject, :defer_save => true)
+
+
+  #Add a new supporting doc [3]
+  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject)
 end
 
 
 Then(/^I should see updated Supporting Documents details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |page|
+    #TODO update review proposal steps
+    #page.supporting_docs_empty_text.exists?.should == true #implication is that no information is displayed on Supporting Docs section
+  end
 end
 
 When(/^I delete the Supporting Documents on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.edit_proposal_action
+
+  @course_proposal.supporting_doc_list[0].delete :document_level => 1, :defer_save => true
+  @course_proposal.supporting_doc_list[1].delete :document_level => 1, :defer_save => true
+  @course_proposal.supporting_doc_list[2].delete :document_level => 1
+
 end
 
 Then(/^I should no longer see Supporting Documents on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+    on CmReviewProposal do |page|
+    #TODO update review proposal steps
+    #page.supporting_docs_empty_text.exists?.should == true #implication is that no information is displayed on Supporting Docs section
+  end
 end
