@@ -16,14 +16,24 @@ class CmRequisiteRuleObject < DataFactory
   include Foundry
 
   attr_accessor :section,
-                :default_rule
+                :rule,
+                :course,
+                :add_method,
+                :search_title,
+                :search_phrase,
+                :complete_rule_text
 
   def initialize(browser, opts={})
     @browser = browser
 
     defaults = {
         :section => "Student Eligibility & Prerequisite",
-        :default_rule => "Permission of instructor required"
+        :rule => "Permission of instructor required",
+        :course => "ENGL201",
+        :add_method => "text",
+        :search_title => "English",
+        :search_phrase => "ENGL",
+        :complete_rule_text => "Permission of instructor required"
     }
 
     options = defaults.merge(opts)
@@ -50,6 +60,18 @@ class CmRequisiteRuleObject < DataFactory
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
   end
+
+  def preview_rule_changes
+    on CmRequisiteRules do |page|
+      begin
+        page.preview_change
+      rescue Exception => e
+        page.preview_change_btn_2.click
+        page.loading.wait_while_present
+      end
+    end
+  end
+
 
   def advanced_search(field, code)
     on CmRequisiteRules do |page|
@@ -104,16 +126,12 @@ end
 class CmRequisiteRule < CmRequisiteRuleObject
   include Foundry
 
-  attr_accessor :submit_btn,
-                :section,
-                :course
-
   def initialize(browser, opts={})
     @browser = browser
 
     defaults = {
         :section => "Corequisite",
-        :default_rule => "Must be concurrently enrolled in <course>",
+        :rule => "Must be concurrently enrolled in <course>",
         :course => "ENGL101"
     }
 

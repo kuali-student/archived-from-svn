@@ -107,14 +107,15 @@ class CmCourseProposalObject < DataFactory
 
   end
 
-  def create_proposal_with_requisites
+  def create_proposal_with_requisites (opts={})
 
     on CmCourseRequisites do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
 
     end
-    adding_rule_student_eligibility
+    adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list]
 
+    determine_save_action unless @defer_save
   end
 
 
@@ -513,41 +514,62 @@ class CmCourseProposalObject < DataFactory
   end
 
 #COURSE REQUISITES
-  def adding_rule_student_eligibility
+  def adding_rule_student_eligibility (opts={})
     on CmCourseRequisites do |page|
       page.expand_all_rule_sections
       #STUDENT ELIGIBILITY
       page.add_rule_student_eligibility
-      page.add_statement
+      @rule_list = opts[:eligibility_rule_list]
+      @rule_list.each do |item|
+        add_one_rule (item)
+      end
+      update_adding_rules
+    end
+  end
+
+  def add_one_rule (requisite_rule)
+    on CmRequisiteRules do |page|
+
+      page.add_btn
       page.loading_wait
-      page.rule_statement_option.fit @student_eligibility_rule
+      begin
+        page.rule_statement_option.fit requisite_rule.rule
+      rescue Exception => e
+        page.rule_statement_option_2.fit requisite_rule.rule
+      end
+
       page.loading_wait
 
-      if  @student_eligibility_rule == 'Must have successfully completed <course>'
-        @student_eligibility_rule_with_value = @student_eligibility_rule.sub('<course>', @student_eligibility_course)
+      if  requisite_rule.rule == 'Must have successfully completed <course>'
+        requisite_rule.complete_rule_text = requisite_rule.rule.sub('<course>', requisite_rule.course)
 
         # Enter text
-        if @student_eligibility_add_method == 'text'
+        if requisite_rule.add_method == 'text'
           puts 'student text'
-          page.rule_course_field.fit @student_eligibility_course
+          page.course_field.fit requisite_rule.course
         end
 
-        if @student_eligibility_add_method == 'advanced'
+        if requisite_rule.add_method == 'advanced'
           puts 'student advanced'
           page.advanced_search
           #pick one field
-          page.adv_course_title.fit @student_eligibility_title
-          page.adv_course_code_rule.fit @student_eligibility_course
-          page.adv_plain_text_description_rule.fit @student_eligibility_phrase
+          page.adv_course_title.fit requisite_rule.search_title
+          page.adv_course_code_rule.fit requisite_rule.course
+          page.adv_plain_text_description_rule.fit requisite_rule.search_phrase
           page.adv_search
           #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          return_search_result(@student_eligibility_course, 2)
+          return_search_result(requisite_rule.course, 2)
         end
       end
 
-      page.preview_change
-      page.update_rule
-                                        page.loading_wait
+      requisite_rule.preview_rule_changes
+    end
+  end
+
+  def update_adding_rules
+    on CmRequisiteRules do |page|
+      page.update_rule_btn
+      page.loading_wait
     end
   end
 

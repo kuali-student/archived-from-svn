@@ -5,9 +5,19 @@ When(/^I create a basic course proposal with single variable requisites$/) do
                             :course_title => random_alphanums(10,'test basic course title ')
   @course_proposal.create_course_continue
   @course_proposal.create_basic_proposal
+
+  rule1 = make CmRequisiteRuleObject,
+               :rule => "Must have successfully completed <course>"
+
   requisite_obj1 = (make CmCourseRequisite)
+  requisite_obj1.left_group_node = rule1
+  requisite_obj1.logic_operator = "AND"
+
   @course_proposal.course_requisite_list = [requisite_obj1]
-  @course_proposal = @course_proposal.create_proposal_with_requisites
+  @student_eligibility_rule_list = [requisite_obj1.current_rule[0], requisite_obj1.left_group_node]
+  @course_proposal = @course_proposal.create_proposal_with_requisites :eligibility_rule_list =>@student_eligibility_rule_list
+
+  @course_proposal.determine_save_action
 
 end
 

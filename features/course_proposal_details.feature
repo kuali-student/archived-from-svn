@@ -42,20 +42,19 @@ Feature: GT.Course Proposal Details
     And I perform a full search for the course proposal
     Then I should no longer see Optional-Other details on the course proposal
 
-@draft
   Scenario: CC15.1 Add Supporting Documents to a Course Proposal
     Given I am logged in as Faculty
     When I create a basic course proposal with Supporting Documents
     And I perform a full search for the course proposal
     Then I should see Supporting Documents details on the course proposal
-@draft
+
   Scenario: CC15.2 Edit Supporting Documents on a course proposal
     Given I am logged in as Faculty
     And I have a basic course proposal with Supporting Documents
     When I update the Supporting Documents on the course proposal
     And I perform a full search for the course proposal
     Then I should see updated Supporting Documents details on the course proposal
-@draft
+
   Scenario: CC15.3 Delete Supporting Documents from a course proposal
     Given I am logged in as Faculty
     And I have a basic course proposal with Supporting Documents

@@ -35,7 +35,8 @@ class CmCourseRequisite < DataFactory
     @browser = browser
     defaults = {
         requisite_type: REQUISITE_TYPE_PREREQUISITE,
-        current_rule: [(make CmRequisiteRuleObject)]
+        current_rule: [(make CmRequisiteRuleObject)],
+        logic_operator: "AND"
     }
     set_options(defaults.merge(opts))
 
