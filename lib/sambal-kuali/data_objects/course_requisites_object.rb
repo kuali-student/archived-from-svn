@@ -1,161 +1,54 @@
-# Created data used for testing
+# course requisite used for testing
 #
-# CMRequisitesData contained in Course Proposal
+# CMRequisites contained in Course Proposal
 #
 # class attributes are initialized with default data unless values are explicitly provided
 #
-# Typical usage: (with optional setting of explicit data value in  )
-#  @editAgenda = make ManageCORequisitesData
-#  @editAgenda.create_data_advanced_search(section, course)
 # Methods:
 #  @initialize(browser, opts={})
 #
 # Note the use of the ruby options hash pattern re: setting attribute values
 
-class CmRequisitesRuleData < DataFactory
-  include Foundry
+class CmCourseRequisite < DataFactory
 
-  attr_accessor :submit_btn,
-                :section,
-                :default_rule
+  include Foundry
+  include DateFactory
+  include StringFactory
+  include Workflows
+  include Utilities
+
+  attr_accessor :requisite_type,
+                :left_group_node,
+                :right_group_node,
+                :logic_operator,
+                :current_rule
+
+  REQUISITE_TYPE_PREREQUISITE = "Prerequisite"
+  REQUISITE_TYPE_CO_REQUISITE  = "Corequisite"
+  REQUISITE_TYPE_RECOMMENDED_PREPARATION = "Recommended Preparation"
+  REQUISITE_TYPE_ANTI_REQUISITE = "Antirequisite"
+  REQUISITE_TYPE_REPEATABLE_FOR_CREDIT = "Repeatable for Credit"
+  REQUISITE_TYPE_RESTRICTS_CREDITS = "Course that Restricts Credits"
+
 
   def initialize(browser, opts={})
     @browser = browser
-
     defaults = {
-        :section => "Student Eligibility & Prerequisite",
-        :default_rule => "Permission of instructor required"
+        requisite_type: REQUISITE_TYPE_PREREQUISITE,
+        current_rule: [(make CmRequisiteRuleObject)]
     }
+    set_options(defaults.merge(opts))
 
-    options = defaults.merge(opts)
-
-    set_options(options)
   end
 
-  def open_agenda_section
-    sections = {"Student Eligibility & Prerequisite"=>:eligibility_prereq_section,
-                "Antirequisite"=>:antirequisite_section, "Corequisite"=>:corequisite_section,
-                "Recommended Preparation"=>:recommended_prep_section,
-                "Repeatable for Credit"=>:repeatable_credit_section,
-                "Course that Restricts Credits"=>:restricted_credit_section}
+  def create
+    view
     on CmCourseRequisites do |page|
-      page.loading.wait_while_present(60)
-      if !page.send(sections[@section]).span(id: /Course-AgendaManage-RulePrototype_rule[A-Z]_toggle_exp/).visible?
-        page.send(sections[@section]).when_present.click
+      page.expand_all_rule_sections
+      on CmRequisiteRules do |rule_page|
+             rule_page.create_requisite_rule
       end
     end
+    determine_save_action unless @defer_save
   end
-
-  def navigate_to_requisite
-    on CmCourseRequisites do |page|
-      page.course_requisites unless page.current_page('Course Requisites').exists?
-    end
-  end
-
-  def advanced_search(field, code)
-    on CmRequisiteRules do |page|
-      page.edit_loading.wait_while_present
-      if field == "course title"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.cluSet\.clus"))
-        page.lookup_course_title.when_present.set code
-      elsif field == "course set"
-        page.loading.wait_while_present
-        page.search_link
-        page.lookup_set_name.when_present.set code
-      elsif field == "program code"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.progCluSet\.clus"))
-        page.lookup_course_code.when_present.set code
-      elsif field == "class standing"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.classStanding"))
-        page.lookup_class_standing.when_present.set code
-      elsif field == "org"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.orgInfo\.id"))
-        page.lookup_abrev_org.when_present.set code
-      elsif field == "population"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.orgInfo\.population\.id"))
-        page.lookup_population.when_present.set code
-      end
-      page.lookup_search_button
-      page.loading.wait_while_present
-      page.return_course_code(/.*#{Regexp.escape(code)}.*/i).a( text: /Select/).click
-      page.loading.wait_while_present
-    end
-  end
-
-  def click_search_link( regex)
-    on CmRequisiteRules do |page|
-      elements = page.edit_tree_section.elements( :tag_name, 'a')
-      elements.each do |elem|
-        if elem.text == "Advanced Search" && page.edit_tree_section.a( id: elem.id).attribute_value('data-submit_data') =~ regex
-          page.edit_tree_section.a(id: elem.id).click
-          break
-        end
-      end
-      raise "co requisites click_search_link: link not found for: #{regex}"
-    end
-  end
-
-end
-
-class CmRequisiteRule < CmRequisitesRuleData
-  include Foundry
-
-  attr_accessor :submit_btn,
-                :section,
-                :course
-
-  def initialize(browser, opts={})
-    @browser = browser
-
-    defaults = {
-        :section => "Corequisite",
-        :default_rule => "Must be concurrently enrolled in <course>",
-        :course => "ENGL101"
-    }
-
-    options = defaults.merge(opts)
-
-    set_options(options)
-  end
-
-  def cr_edit_add( edit_or_add)
-    begin
-      open_agenda_section
-      on CmRequisiteRules do |page|
-        if edit_or_add == "add"
-          page.coreq_add
-        else
-          page.coreq_edit
-        end
-      end
-    rescue Watir::Wait::TimeoutError
-      #means Data setup was not needed
-      on CmRequisiteRules do |page|
-        page.alert.ok
-      end
-    end
-  end
-
-  def cr_data_setup( number_statements_to_add = 10)
-    navigate_to_requisites
-    on CmRequisiteRules do |page|
-      page.loading.wait_while_present
-      page.show_disclosure("coreq")
-      if page.coreq_edit_link.exists?
-        page.coreq_edit
-      else
-        page.coreq_add
-      end
-      page.loading.wait_while_present
-      if cr_create_rule_tree( number_statements_to_add)
-        commit_changes( return_to_edit_page = true)
-      end
-    end
-  end
-
 end

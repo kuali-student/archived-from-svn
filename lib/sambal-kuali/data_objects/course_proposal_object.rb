@@ -19,6 +19,9 @@ class CmCourseProposalObject < DataFactory
 
         #Learning Objectives
         :learning_objective_list,
+        #Course Requisites
+        :course_requisite_list,
+
         :author_list,
         :supporting_doc_list,
 
@@ -101,6 +104,16 @@ class CmCourseProposalObject < DataFactory
     @optional_fields.each do |optional|
      optional.create
     end
+
+  end
+
+  def create_proposal_with_requisites
+
+    on CmCourseRequisites do |page|
+      page.course_requisites unless page.current_page('Course Requisites').exists?
+
+    end
+    adding_rule_student_eligibility
 
   end
 
@@ -501,8 +514,8 @@ class CmCourseProposalObject < DataFactory
 
 #COURSE REQUISITES
   def adding_rule_student_eligibility
-    on CmCourseRequisites do |page| unless @student_eligibility_rule.nil?
-          page.expand_all_rule_sections
+    on CmCourseRequisites do |page|
+      page.expand_all_rule_sections
       #STUDENT ELIGIBILITY
       page.add_rule_student_eligibility
       page.add_statement
@@ -535,7 +548,6 @@ class CmCourseProposalObject < DataFactory
       page.preview_change
       page.update_rule
                                         page.loading_wait
-    end
     end
   end
 

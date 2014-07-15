@@ -1,5 +1,14 @@
 When(/^I create a basic course proposal with single variable requisites$/) do
-  pending # express the regexp above with the code you wish you had
+  steps %{Given I am logged in as Faculty}
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => false, :create_basic_propsal => true,
+                            :proposal_title => random_alphanums(10,'test basic proposal title '),
+                            :course_title => random_alphanums(10,'test basic course title ')
+  @course_proposal.create_course_continue
+  @course_proposal.create_basic_proposal
+  requisite_obj1 = (make CmCourseRequisite)
+  @course_proposal.course_requisite_list = [requisite_obj1]
+  @course_proposal = @course_proposal.create_proposal_with_requisites
+
 end
 
 Then(/^I should see the single variable requisites on the course proposal$/) do
