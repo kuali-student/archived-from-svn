@@ -366,16 +366,13 @@ Then(/^I should see Supporting Documents details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
-
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
 
     #Supporting Documents
-    #TODO persistence on review proposal unavailable.
-    # @course_proposal.cross_listed_course_list.each do |supporting_docs|
-    #   page.supporting_docs_review.should include "#{supporting_docs.file_name}.#{supporting_docs.file_type}"
-    #   page.supporting_docs_review.should include supporting_docs.description
-    # end
+      @course_proposal.supporting_doc_list.each do |supporting_docs|
+         page.supporting_docs_review.should include "#{supporting_docs.file_name}.#{supporting_docs.type}"
+      end
 
   end
 
@@ -396,24 +393,28 @@ When(/^I update the Supporting Documents on the course proposal$/) do
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.edit_proposal_action
 
-  #Delete 1st Supporting Doc [0]
-  @course_proposal.supporting_doc_list[0].delete :document_level => 1
+  # Delete 1st Supporting Doc [0]
+  @course_proposal.supporting_doc_list[0].delete :document_level => 1, :defer_save => true
 
   # Edit Description on 2nd Supporting Doc [1]
-  @course_proposal.supporting_doc_list[0].delete :document_level => 1
-  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject, :defer_save => true)
+  @course_proposal.supporting_doc_list[1].delete :document_level => 1, :defer_save => true
+  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject, :document_level=> 2, :defer_save => true), :defer_save => true
 
+  # Add a new supporting doc [3]
+  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject, :document_level => 3, :defer_save => true )
 
-  #Add a new supporting doc [3]
-  @course_proposal.add_supporting_doc :supporting_doc => (make CmSupportingDocsObject)
 end
 
 
 Then(/^I should see updated Supporting Documents details on the course proposal$/) do
   @course_proposal.review_proposal_action
   on CmReviewProposal do |page|
-    #TODO update review proposal steps
-    #page.supporting_docs_empty_text.exists?.should == true #implication is that no information is displayed on Supporting Docs section
+    collection_index = 2 #exclude deleted items [0] and [1]
+    supporting_doc_list = @course_proposal.supporting_doc_list
+    begin
+      page.supporting_docs_review.should include "#{supporting_doc_list[index].file_name}.#{supporting_doc_list[index].type}"
+      collection_index += 1
+    end until collection_index == supporting_doc_list.count
   end
 end
 
@@ -431,7 +432,10 @@ end
 Then(/^I should no longer see Supporting Documents on the course proposal$/) do
   @course_proposal.review_proposal_action
     on CmReviewProposal do |page|
-    #TODO update review proposal steps
-    #page.supporting_docs_empty_text.exists?.should == true #implication is that no information is displayed on Supporting Docs section
+      page.proposal_title_review.should == @course_proposal.proposal_title
+      page.course_title_review.should == @course_proposal.course_title
+      @course_proposal.supporting_doc_list.each do |supporting_docs|
+        page.supporting_docs_review.should_not include "#{supporting_docs.file_name}.#{supporting_docs.type}"
+      end
   end
 end

@@ -81,6 +81,6 @@ class CmReviewProposal < BasePage
   element(:empty_authors_collab_review) { |b| b.textarea(id: "emptyStringAuthorsAndCollaborators_control") }
 
   #SUPPORTING DOCS
-  element(:supporting_docs_section) { |b| b.section(id: "SupportingDocuments-Review-section") }
-
+  value(:supporting_docs_review) { |b| b.div(id: "supporting_document_review_section").text }
+  element(:empty_supporting_docs_review) { |b| b.textarea(id: " ")}
 end

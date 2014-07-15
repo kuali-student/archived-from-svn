@@ -425,7 +425,7 @@ class CmCourseProposalObject < DataFactory
     options = defaults.merge(opts)
     options[:supporting_doc].create
     @supporting_doc_list << options[:supporting_doc]
-    determine_save_action
+    determine_save_action unless opts[:defer_save]
   end
 
   #-----
