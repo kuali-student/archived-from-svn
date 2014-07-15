@@ -412,7 +412,7 @@ Then(/^I should see updated Supporting Documents details on the course proposal$
     collection_index = 2 #exclude deleted items [0] and [1]
     supporting_doc_list = @course_proposal.supporting_doc_list
     begin
-      page.supporting_docs_review.should include "#{supporting_doc_list[index].file_name}.#{supporting_doc_list[index].type}"
+      page.supporting_docs_review.should include "#{supporting_doc_list[collection_index].file_name}.#{supporting_doc_list[collection_index].type}"
       collection_index += 1
     end until collection_index == supporting_doc_list.count
   end
