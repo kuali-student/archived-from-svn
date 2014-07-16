@@ -1,5 +1,5 @@
 @nightly
-Feature: GT.Add/Edit/Delete/View Comments on a Proposal for different authors.
+Feature: GT.Add/Edit/Delete/View Comments on a Proposal for different authors
 
   Scenario: PC1.1 Add Comments - Faculty
     Given I have a basic course proposal created as Faculty

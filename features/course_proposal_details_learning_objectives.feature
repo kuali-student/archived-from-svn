@@ -1,5 +1,5 @@
 @nightly
-Feature: Course Proposal Details - Learning Objectives
+Feature: GT.Course Proposal Details - Learning Objectives
 
 Background:
   Given I am logged in as Faculty
