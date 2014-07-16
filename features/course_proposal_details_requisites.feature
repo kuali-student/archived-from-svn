@@ -1,10 +1,10 @@
 @draft
 Feature: Course Proposal Details_Requisites
-  Scenario: CC13.1 Add single variable requisites of different types to a Course Proposal
-    When I create a basic course proposal with single variable requisites
+  Scenario: CC13.1 Add a single and 0 variable Eligibility requisite to a Course Proposal
+    When I create a basic course proposal
+    And I add two basic Eligibility requisites
     And I perform a full search for the course proposal
-    Then I should see the single variable requisites on the course proposal
-
+    Then I should see the the basic Eligibility requisites on the course proposal
 
   Scenario: CC13.2 Add multiple variable requisites to a Course Proposal
     When I create a basic course proposal with multiple variable requisites

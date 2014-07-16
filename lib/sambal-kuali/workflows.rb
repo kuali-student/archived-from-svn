@@ -24,6 +24,11 @@ module Workflows
 
   def navigate_to_cm_home
     on(CmCourseInformation).cm_home_via_breadcrumb
+    on CmCourseInformation do |page|
+      if (page.alert.exists?)
+        page.alert.ok
+      end
+    end
   end
 
   def navigate_to_functional_home

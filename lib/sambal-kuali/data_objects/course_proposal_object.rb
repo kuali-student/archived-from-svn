@@ -107,15 +107,11 @@ class CmCourseProposalObject < DataFactory
 
   end
 
-  def create_proposal_with_requisites (opts={})
-
+  def add_course_requisites (opts={})
     on CmCourseRequisites do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
-
     end
     adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list]
-
-    determine_save_action unless @defer_save
   end
 
 
@@ -128,9 +124,6 @@ class CmCourseProposalObject < DataFactory
       determine_save_action
     end
   end
-
-
-
 
 
   def create_course_proposal_required
