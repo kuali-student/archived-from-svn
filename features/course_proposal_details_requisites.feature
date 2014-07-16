@@ -6,11 +6,11 @@ Feature: Course Proposal Details_Requisites
     And I perform a full search for the course proposal
     Then I should see the the basic Eligibility requisites on the course proposal
 
-  Scenario: CC13.2 Add multiple variable requisites to a Course Proposal
-    When I create a basic course proposal with multiple variable requisites
+  Scenario: CC13.2 Add multiple variable requisite to a Course Proposal
+    When I create a basic course proposal
+    And I add a Recommended Preparation rule with multiple variables including course set
     And I perform a full search for the course proposal
-    Then I should see the multiple variable requisites on the course proposal
-
+    Then I should see the multiple variable requisite on the course proposal
 
   Scenario: CC13.3 Edit requisites on a Course Proposal
     Given have a basic course proposal with requisite details

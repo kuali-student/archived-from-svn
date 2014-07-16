@@ -33,8 +33,8 @@ class CmRequisiteRules < BasePage
 
   action(:cancel_statement) { |b| b.link(id: 'KS-CancelProp-Button_node_0_parent_root').click; b.loading_wait }
 
-  element(:rule_dropdown) { |b| b.edit_tree_section.select(:name => /.*editTree.*proposition.typeId/)}
-  element(:multi_course_dropdown) { |b| b.edit_tree_section.select(:name => /.*editTree.*proposition.multipleCourseType/)}
+  element(:rule_dropdown) { |b| b.select(:name => /.*editTree.*proposition.typeId/)}
+  element(:multi_course_dropdown) { |b| b.select(:name => /.*editTree.*proposition.multipleCourseType/)}
   element(:course_field) { |b| b.text_field(:name => /.*editTree.*proposition\.courseInfo\.code/)}
   element(:free_text_field) { |b| b.textarea(:name => /.*editTree.*proposition\.termParameter/)}
   element(:courses_field) { |b| b.text_field(:name => /.*editTree.*proposition\.courseSet\.clus\'\]\.code/)}
@@ -47,11 +47,11 @@ class CmRequisiteRules < BasePage
   element(:term_two_field) { |b| b.text_field(:name => /.*editTree.*proposition\.termCode2/)}
   element(:population_field) { |b| b.text_field(:name => /.*editTree.*proposition\.population\.name/)}
 
-  action(:completed) { |b| b.grade_section.radio(:id => /KRMS-GradeScale-Field.*_control_0/).when_present.click}
-  action(:letter) { |b| b.grade_section.radio(:id => /KRMS-GradeScale-Field.*_control_1/).when_present.click}
-  action(:pass_fail) { |b| b.grade_section.radio(:id => /KRMS-GradeScale-Field.*_control_2/).when_present.click}
-  action(:percentage) { |b| b.grade_section.radio(:id => /KRMS-GradeScale-Field.*_control_3/).when_present.click}
-  action(:grade) { |b| b.grade_section.radio(:id => /KRMS-GradeScale-Field.*_control_4/).when_present.click}
+  action(:completed) { |b| b.radio(:id => /KRMS-GradeScale-Field.*_control_0/).when_present.click}
+  action(:letter) { |b| b.radio(:id => /KRMS-GradeScale-Field.*_control_1/).when_present.click}
+  action(:pass_fail) { |b| b.radio(:id => /KRMS-GradeScale-Field.*_control_2/).when_present.click}
+  action(:percentage) { |b| b.radio(:id => /KRMS-GradeScale-Field.*_control_3/).when_present.click}
+  action(:grade) { |b| b.radio(:id => /KRMS-GradeScale-Field.*_control_4/).when_present.click}
 
   element(:lookup_section) { |b| b.frm_popup.div(id: "CourseLookupView")}
   element(:lookup_results) { |b| b.frm_popup.section(id: "uLookupResults")}
@@ -84,7 +84,9 @@ class CmRequisiteRules < BasePage
   element(:rule_multicourse_type){ |b| b.select_list(id: 'KRMS-MultiCourse-Type-Field_control') }
 # 'Approved Courses', 'Course Sets', 'Course Ranges (Course numbers, common learning objectives, etc)'
   element(:rule_course_code_multiple) { |b| b.text_field(name: 'newCollectionLines[\'document.newMaintainableObject.editTree.rootElement.children_0_.data.proposition.cluSet.clus\'].code') }
-  action(:add_course_code) {|b| b.button(id: 'KRMS-ApprovedCourseStackedCollectionGroup_add').click; b.loading_wait }
-  #STACK TRACE WHEN PREVIEWING RULE CHANGE
+  action(:add_course_code) {|b| b.button(id:'KRMS-ApprovedCourseStackedCollectionGroup_node_0_parent_root_add').click; b.loading_wait }
+  element(:course_lookup_table) { |b| b.frame(class: 'fancybox-iframe').table(id: "uLookupResults_layout") }
+  element(:select_link) { |index, b| b.frame(class: 'fancybox-iframe').a(id: "u1ywkyae_line#{index}") }
+  action(:select_course) {|index, b|b.select_link(index).click;  b.loading_wait }
 
 end

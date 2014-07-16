@@ -18,9 +18,12 @@ class CmRequisiteRuleObject < DataFactory
   attr_accessor :section,
                 :rule,
                 :course,
+                :completed_course_number,
+                :course_combination_type,
                 :add_method,
                 :search_title,
                 :search_phrase,
+                :search_course_code,
                 :complete_rule_text
 
   def initialize(browser, opts={})

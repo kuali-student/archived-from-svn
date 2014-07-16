@@ -111,9 +111,25 @@ class CmCourseProposalObject < DataFactory
     on CmCourseRequisites do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
-    adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list]
-  end
+    $section = opts[:requisite_type]
+    case $section
+      when "Prerequisite"
+        adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list]
+      when "Corequisite"
+        adding_rule_corequisite
+      when "Recommended Preparation"
+        adding_rule_recommended_preparation_rule :eligibility_rule_list => opts[:eligibility_rule_list]
+      when "Antirequisite"
+        adding_rule_antirequisite
+      when "Repeatable for Credit"
+        adding_rule_repeatable_for_credit
+      when "Course that Restricts Credits"
+        adding_course_that_restricts_credits
+      else
+        raise "No requisite rule section defined!"
+    end
 
+  end
 
 
   def create_course_proposal_required_for_save
@@ -555,6 +571,42 @@ class CmCourseProposalObject < DataFactory
         end
       end
 
+      if requisite_rule.rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
+
+        #enter  Number of Courses:
+        page.integer_field.fit requisite_rule.completed_course_number
+
+        #pick the courses, dynamic course ranges, or Course sets.
+        page.multi_course_dropdown.fit requisite_rule.course_combination_type
+
+        $i = 0
+        $num = requisite_rule.completed_course_number
+        while $i < $num do
+          # Enter course Code text
+          if requisite_rule.add_method == 'text'
+            puts 'course Code text'
+            page.course_field.fit requisite_rule.course
+          end
+
+          if requisite_rule.add_method == 'advanced'
+            puts 'advanced search'
+            page.advanced_search
+            #pick one field
+            page.adv_course_code_rule.fit requisite_rule.search_course_code
+            page.adv_search
+            #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+            page.select_course($i)
+          end
+          page.add_course_code
+          $i +=1
+        end
+
+        page.completed
+        page.loading_wait
+        page.grade_dropdown.fit "A"
+
+      end
+
       requisite_rule.preview_rule_changes
     end
   end
@@ -591,7 +643,7 @@ class CmCourseProposalObject < DataFactory
 
           page.adv_search
           page.loading_wait
-          return_search_result(@corequisite_course, 2)
+          page.select_link()
         end
       end
       page.preview_change
@@ -600,35 +652,15 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
-  def adding_rule_recommended_preparation_rule
-    on CmCourseRequisites do |page| unless @recommended_preparation_rule.nil?
-
-    page.expand_all_rule_sections
-    page.add_rule_recommended_prep
-    page.add_statement
-    page.rule_statement_option.fit @recommended_preparation_rule
-    page.loading_wait
-    @recommended_preparation_rule_with_value = @recommended_preparation_rule.sub('<course>', @recommended_preparation_course)
-
-    if @recommended_preparation_rule == 'Must have successfully completed <course>'
-
-      if @recommended_preparation_add_method == 'text'
-        page.rule_course_field.fit @recommended_preparation_course
+  def adding_rule_recommended_preparation_rule (opts={})
+    on CmCourseRequisites do |page|
+      page.expand_all_rule_sections
+      page.add_rule_recommended_prep
+      @rule_list = opts[:eligibility_rule_list]
+      @rule_list.each do |item|
+        add_one_rule (item)
       end
-
-      if @recommended_preparation_add_method == 'advanced'
-        page.advanced_search
-        page.adv_course_title.fit @recommended_preparation_title
-        page.adv_course_code_rule.fit @recommended_preparation_course
-        page.adv_plain_text_description_rule.fit @recommended_preparation_phrase
-        page.adv_search
-        #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-        return_search_result(@recommended_preparation_course, 2)
-      end
-    end
-    page.preview_change
-    page.update_rule
-    end
+      update_adding_rules
     end
   end
 
