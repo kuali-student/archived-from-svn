@@ -171,12 +171,12 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
   lo_list = @course_proposal.learning_objective_list
   on CmReviewProposal do |page|
     lo_list.each do |lo|
-      page.learning_objectives_review(lo.display_level-1).should include lo.learning_objective_text
+      page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
       cat_included = false
 
       lo.category_list.each do |cat|
         begin
-          if page.learning_objectives_review(lo.display_level-1).should include cat.category_name
+          if page.learning_objectives_review(lo.display_level).should include cat.category_name
             cat_included = true
             break
           end

@@ -54,8 +54,8 @@ class CmReviewProposal < BasePage
 
   #LEARNING OBJECTIVES
   value(:lo_terms_review) { |lo_review,b| b.textarea(id: "learningObjectivesSection_learningObjectives_line#{lo_review-1}_control").text }
-  value(:learning_objectives_summary_review) { |b| b.div(id: "indentedLearningObjects").text }
-  value(:learning_objectives_review) { |index,b| b.div(id: "indentedLearningObjects").ul(index: index-1).text }
+  value(:learning_objectives_summary_review) { |b| b.div(id: "course_review_learning_objectives").text }
+  value(:learning_objectives_review) { |lo_level,b| b.div(id: "learning_objective_item_line#{lo_level-1}").text }
   element(:learning_objectives_empty_text) { |b| b.div(id: "emptyStringLOs") }
 
   #ACTIVITY FORMATS
