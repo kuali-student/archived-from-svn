@@ -11,6 +11,7 @@ import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
@@ -309,6 +310,12 @@ public class DefaultCourseHelper implements CourseHelper, Serializable {
 				throw new IllegalStateException("CLU lookup error", e);
 			}
 		return rv;
+	}
+
+	@Override
+	public List<ActivityOfferingInfo> getActivityOfferings(String courseId) {
+		// TODO: Implement for KS. Current supported via IU override for iGPS 2.0.
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
