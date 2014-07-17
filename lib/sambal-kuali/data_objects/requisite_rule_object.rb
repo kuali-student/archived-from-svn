@@ -15,7 +15,7 @@
 class CmRequisiteRuleObject < DataFactory
   include Foundry
 
-  attr_accessor :section,
+  attr_accessor :type,
                 :rule,
                 :course,
                 :completed_course_number,
@@ -30,7 +30,7 @@ class CmRequisiteRuleObject < DataFactory
     @browser = browser
 
     defaults = {
-        :section => "Student Eligibility & Prerequisite",
+        :type => "Student Eligibility & Prerequisite",
         :rule => "Permission of instructor required",
         :course => "ENGL201",
         :add_method => "text",
@@ -67,9 +67,9 @@ class CmRequisiteRuleObject < DataFactory
   def preview_rule_changes
     on CmRequisiteRules do |page|
       begin
-        page.preview_change
+        page.preview_change('')
       rescue Exception => e
-        page.preview_change_btn_2.click
+        page.preview_change_btn('node_2_parent_').click
         page.loading.wait_while_present
       end
     end
@@ -121,60 +121,6 @@ class CmRequisiteRuleObject < DataFactory
         end
       end
       raise "co requisites click_search_link: link not found for: #{regex}"
-    end
-  end
-
-end
-
-class CmRequisiteRule < CmRequisiteRuleObject
-  include Foundry
-
-  def initialize(browser, opts={})
-    @browser = browser
-
-    defaults = {
-        :section => "Corequisite",
-        :rule => "Must be concurrently enrolled in <course>",
-        :course => "ENGL101"
-    }
-
-    options = defaults.merge(opts)
-
-    set_options(options)
-  end
-
-  def cr_edit_add( edit_or_add)
-    begin
-      open_agenda_section
-      on CmRequisiteRules do |page|
-        if edit_or_add == "add"
-          page.coreq_add
-        else
-          page.coreq_edit
-        end
-      end
-    rescue Watir::Wait::TimeoutError
-      #means Data setup was not needed
-      on CmRequisiteRules do |page|
-        page.alert.ok
-      end
-    end
-  end
-
-  def cr_data_setup( number_statements_to_add = 10)
-    navigate_to_requisites
-    on CmRequisiteRules do |page|
-      page.loading.wait_while_present
-      page.show_disclosure("coreq")
-      if page.coreq_edit_link.exists?
-        page.coreq_edit
-      else
-        page.coreq_add
-      end
-      page.loading.wait_while_present
-      if cr_create_rule_tree( number_statements_to_add)
-        commit_changes( return_to_edit_page = true)
-      end
     end
   end
 

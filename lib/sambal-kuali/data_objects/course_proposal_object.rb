@@ -542,9 +542,9 @@ class CmCourseProposalObject < DataFactory
       page.add_btn
       page.loading_wait
       begin
-        page.rule_statement_option.fit requisite_rule.rule
+        page.rule_statement_option('').fit requisite_rule.rule
       rescue Exception => e
-        page.rule_statement_option_2.fit requisite_rule.rule
+        page.rule_statement_option('node_2_parent_').fit requisite_rule.rule
       end
 
       page.loading_wait

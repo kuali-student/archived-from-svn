@@ -26,8 +26,7 @@ class CmRequisiteRules < BasePage
 
   #Add Rule Section
   # This is the drop down for rule statement
-  element(:rule_statement_option) {|b| b.select_list(:id=>/KRMS-PropositionType-Dropdown_node_0_parent_root_control/) }
-  element(:rule_statement_option_2) {|b|b.select_list(:id => 'KRMS-PropositionType-Dropdown_node_2_parent_node_0_parent_root_control')}
+  element(:rule_statement_option) {|node, b|b.select_list(id: "KRMS-PropositionType-Dropdown_#{node}node_0_parent_root_control")}
   element(:search_link_element) { |b| b.edit_tree_section.a(:text => /Advanced Search/)}
   action(:search_link) { |b| b.search_link_element.click;  b.loading.wait_while_present}
 
@@ -64,21 +63,8 @@ class CmRequisiteRules < BasePage
   action(:lookup_search_button) { |b| b.frm_popup.button(id: "button_search").click;  b.loading.wait_while_present}
   element(:lookup_results_table) { |b| b.frm_popup.section(id: "uLookupResults").table() }
 
-  element(:preview_change_btn) { |b| b.button( :id => "KS-RulePreview-Button_node_0_parent_root")}
-  element(:preview_change_btn_2) {|b|b.button(:id => "KS-RulePreview-Button_node_2_parent_node_0_parent_root")}
-  action(:preview_change) { |b| b.preview_change_btn.click; b.loading.wait_while_present}
-
-
-#RECOMMENDED PREPARTATION
-
-#page.rule_credit.set '2'
-#page.rule_multicourse_type.set 'Approved Courses'
-#page.rule_course_code_multiple.fit @multiple_course1
-#page.add_course_code
-#page.rule_course_code_multiple.fit @multiple_course2
-#page.preview_change
-
-
+  element(:preview_change_btn) { |node, b| b.button(id: "KS-RulePreview-Button_#{node}node_0_parent_root")}
+  action(:preview_change) { |node, b| b.preview_change_btn(node).click; b.loading.wait_while_present}
 
 #ADDING RULE COURSE THAT RESTRICTS CREDIT
   element(:rule_multicourse_type){ |b| b.select_list(id: 'KRMS-MultiCourse-Type-Field_control') }

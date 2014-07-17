@@ -31,7 +31,7 @@ end
 
 And(/^I add a Recommended Preparation rule with multiple variables including course set$/) do
   rule1 = make CmRequisiteRuleObject,
-               :section => "Recommended Preparation",
+               :type => "Recommended Preparation",
                :rule => "Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>",
                :add_method => "advanced",
                :search_course_code => "BSCI2",
