@@ -1,19 +1,17 @@
 When(/^I create a basic course proposal$/) do
   steps %{Given I am logged in as Faculty}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => false, :create_basic_propsal => true,
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :proposal_title => random_alphanums(10,'test basic proposal title '),
                             :course_title => random_alphanums(10,'test basic course title ')
-  @course_proposal.create_course_continue
-  @course_proposal.create_basic_proposal
+
+
 end
 
 And(/^I add two basic Eligibility requisites$/) do
   rule1 = make CmRequisiteRuleObject,
                :rule => "Must have successfully completed <course>"
 
-  requisite_obj1 = (make CmCourseRequisite)
-  requisite_obj1.left_group_node = rule1
-  requisite_obj1.logic_operator = "AND"
+  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :logic_operator => "AND")
 
   @course_proposal.course_requisite_list = [requisite_obj1]
   @student_eligibility_rule_list = [requisite_obj1.current_rule[0], requisite_obj1.left_group_node]
