@@ -113,12 +113,12 @@ class CmCourseProposalObject < DataFactory
     end
     $section = opts[:requisite_type]
     case $section
-      when "Prerequisite"
-        adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list]
+      when "Student Eligibility & Prerequisite"
+        adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
       when "Corequisite"
         adding_rule_corequisite
       when "Recommended Preparation"
-        adding_rule_recommended_preparation_rule :eligibility_rule_list => opts[:eligibility_rule_list]
+        adding_rule_recommended_preparation_rule :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
       when "Antirequisite"
         adding_rule_antirequisite
       when "Repeatable for Credit"
@@ -549,8 +549,20 @@ class CmCourseProposalObject < DataFactory
   def adding_rule_student_eligibility (opts={})
     on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
-      #STUDENT ELIGIBILITY
-      page.add_rule_student_eligibility
+      #STUDENT ELIGIBILITY #A,G,M,S
+      begin
+        page.add_rule_student_eligibility('A')
+      rescue Exception => e
+        begin
+          page.add_rule_student_eligibility('G')
+        rescue Exception => e
+          begin
+            page.add_rule_student_eligibility('M')
+          rescue Exception => e
+            page.add_rule_student_eligibility('S')
+          end
+        end
+      end
       @rule_list = opts[:eligibility_rule_list]
       @rule_list.each do |item|
         add_one_rule (item)
@@ -676,10 +688,24 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_recommended_preparation_rule (opts={})
+    @rule_list = opts[:eligibility_rule_list]
+
     on CmCourseRequistitesPage do |page|
       page.expand_all_rule_sections
-      page.add_rule_recommended_prep
-      @rule_list = opts[:eligibility_rule_list]
+      #recommended_preparation C,I,O,U
+      begin
+        page.add_rule_recommended_prep('C')
+      rescue Exception => e
+        begin
+          page.add_rule_recommended_prep('I')
+        rescue Exception => e
+          begin
+            page.add_rule_recommended_prep('O')
+          rescue Exception => e
+            page.add_rule_recommended_prep('U')
+          end
+        end
+      end
       @rule_list.each do |item|
         add_one_rule (item)
       end

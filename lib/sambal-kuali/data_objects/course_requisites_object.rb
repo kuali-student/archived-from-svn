@@ -23,7 +23,7 @@ class CmCourseRequisite < DataFactory
                 :logic_operator,
                 :current_rule
 
-  REQUISITE_TYPE_PREREQUISITE = "Prerequisite"
+  REQUISITE_TYPE_PREREQUISITE = "Student Eligibility & Prerequisite"
   REQUISITE_TYPE_CO_REQUISITE  = "Corequisite"
   REQUISITE_TYPE_RECOMMENDED_PREPARATION = "Recommended Preparation"
   REQUISITE_TYPE_ANTI_REQUISITE = "Antirequisite"

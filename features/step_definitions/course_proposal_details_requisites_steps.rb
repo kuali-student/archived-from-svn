@@ -36,8 +36,7 @@ And(/^I add a Recommended Preparation rule with multiple variables including cou
                :completed_course_number => 3,
                :course_combination_type => "Approved Courses"
 
-  requisite_obj1 = make CmCourseRequisite, {:requisite_type => "Recommended Preparation"}
-  requisite_obj1.left_group_node = rule1
+  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :requisite_type => "Recommended Preparation", :logic_operator => "AND")
 
   @course_proposal.course_requisite_list = [requisite_obj1]
   @student_eligibility_rule_list = [requisite_obj1.left_group_node]
