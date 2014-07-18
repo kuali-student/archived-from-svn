@@ -44,7 +44,7 @@ class CmCourseRequisite < DataFactory
 
   def create
     view
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.expand_all_rule_sections
       on CmRequisiteRules do |rule_page|
              rule_page.create_requisite_rule
@@ -52,4 +52,22 @@ class CmCourseRequisite < DataFactory
     end
     determine_save_action unless @defer_save
   end
+
+  def edit (opts={})
+    view
+      on CmCourseRequisite do |rule_page|
+        rule_page.edit_rule_student_eligibility if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
+      end
+    set_options(opts)
+  end
+
+  def view
+    on CmCourseInformation do |page|
+      page.course_requisites unless page.current_page('Course Requisites').exists?
+    end
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+    end
+  end
+
 end

@@ -67,7 +67,7 @@ end
 
 
 When(/^I update the requisite details on the course proposal$/) do
-   pending # express the regexp above with the code you wish you had
+   @course_proposal.course_requisite_list[0].rule_list[0].edit :requisite_type => "Prerequisite"
 end
 
 Then(/^I should see updated requisite details on the course proposal$/) do

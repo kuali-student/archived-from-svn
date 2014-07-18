@@ -108,7 +108,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def add_course_requisites (opts={})
-    on CmCourseRequisites do |page|
+    on CmCourseInformation do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
     $section = opts[:requisite_type]
@@ -132,7 +132,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def delete_requisite_rules (opts={})
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
       $section = opts[:requisite_type]
       case $section
@@ -272,7 +272,7 @@ class CmCourseProposalObject < DataFactory
       page.save_and_continue
     end
 
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
 
   #Private methods do to complexity of adding rules
@@ -308,7 +308,7 @@ class CmCourseProposalObject < DataFactory
   #Used for Advanced Search to "Return Value" of the result that matches
   #Defaults to 4th Column to match instructor display name but can be altered for different advacned search results by passing in a number of the column
   def return_search_result(search_result_value_to_match, row_number=3)
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
     page.search_results_table.rows.each do |row|
         if row.cells[row_number].text == search_result_value_to_match
           row.cells[0].link(text: 'return value').click
@@ -547,7 +547,7 @@ class CmCourseProposalObject < DataFactory
 
 #COURSE REQUISITES
   def adding_rule_student_eligibility (opts={})
-    on CmCourseRequisites do |page|
+    on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
       #STUDENT ELIGIBILITY
       page.add_rule_student_eligibility
@@ -642,7 +642,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_corequisite
-    on CmCourseRequisites do |page| unless @corequisite_rule.nil?
+    on CmCourseRequistitesPage do |page| unless @corequisite_rule.nil?
       page.expand_all_rule_section
       page.add_rule_corequisite
       page.add_statement
@@ -676,7 +676,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_recommended_preparation_rule (opts={})
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.expand_all_rule_sections
       page.add_rule_recommended_prep
       @rule_list = opts[:eligibility_rule_list]
@@ -688,7 +688,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_antirequisite
-    on CmCourseRequisites do |page| unless @antirequisite_rule.nil?
+    on CmCourseRequistitesPage do |page| unless @antirequisite_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_antirequisite
       page.add_statement
@@ -721,7 +721,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_repeatable_for_credit
-    on CmCourseRequisites do |page| unless @repeatable_for_credit_rule.nil?
+    on CmCourseRequistitesPage do |page| unless @repeatable_for_credit_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_repeatable_for_credit
       page.add_statement
@@ -741,7 +741,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_course_that_restricts_credits
-    on CmCourseRequisites do |page| unless @course_that_restricts_credits_rule.nil?
+    on CmCourseRequistitesPage do |page| unless @course_that_restricts_credits_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_restricts_credits
       page.add_statement

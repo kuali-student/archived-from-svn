@@ -44,13 +44,19 @@ class CmRequisiteRuleObject < DataFactory
     set_options(options)
   end
 
+
+
+  def edit (opts ={})
+
+  end
+
   def open_agenda_section
     sections = {"Student Eligibility & Prerequisite"=>:eligibility_prereq_section,
                 "Antirequisite"=>:antirequisite_section, "Corequisite"=>:corequisite_section,
                 "Recommended Preparation"=>:recommended_prep_section,
                 "Repeatable for Credit"=>:repeatable_credit_section,
                 "Course that Restricts Credits"=>:restricted_credit_section}
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.loading.wait_while_present(60)
       if !page.send(sections[@section]).span(id: /Course-AgendaManage-RulePrototype_rule[A-Z]_toggle_exp/).visible?
         page.send(sections[@section]).when_present.click
@@ -59,7 +65,7 @@ class CmRequisiteRuleObject < DataFactory
   end
 
   def navigate_to_requisite
-    on CmCourseRequisites do |page|
+    on CmCourseRequistitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
   end

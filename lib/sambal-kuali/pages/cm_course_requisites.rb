@@ -1,9 +1,9 @@
-class CmCourseRequisites < BasePage
+class CmCourseRequisitesPage < BasePage
 
   wrapper_elements
   cm_elements
 
-  action(:expand_all_rule_sections) { |b| b.link(text: '[+] expand all').click; b.loading_wait }
+  action(:expand_all_rule_sections) { |b| b.div(id: "CourseRequisites-DisclosureLinks-AgendaMaintenance").link(text: '[+] expand all').click; b.loading_wait }
   # element(:add_rule_link) { |b| b.link(text: 'Add Rule') }
   action(:collapse_all_rule_sections) { |b| b.link(text: '[-] collapse all').click }
 
