@@ -18,8 +18,7 @@ Feature: Course Proposal Details_Requisites
     And I perform a full search for the course proposal
     Then I should see updated requisite details on the course proposal
 
-
-  Scenario: CC14.4 Delete with requisite details from a course proposal
+  Scenario: CC13.4 Delete with requisite details from a course proposal
     Given have a basic course proposal with requisite details
     When I delete the requisite details on the course proposal
     And I perform a full search for the course proposal

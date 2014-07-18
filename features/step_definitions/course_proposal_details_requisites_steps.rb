@@ -20,7 +20,7 @@ And(/^I add two basic Eligibility requisites$/) do
   @course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
                                          :eligibility_rule_list =>@student_eligibility_rule_list
 
-  @course_proposal.determine_save_action
+#  @course_proposal.determine_save_action
 
 end
 
@@ -61,7 +61,8 @@ Then(/^I should see the multiple variable requisites on the course proposal$/) d
 end
 
 Given(/^have a basic course proposal with requisite details$/) do
-  pending # express the regexp above with the code you wish you had
+  steps %{When I create a basic course proposal}
+  steps %{And I add two basic Eligibility requisites}
 end
 
 
@@ -74,9 +75,15 @@ Then(/^I should see updated requisite details on the course proposal$/) do
 end
 
 When(/^I delete the requisite details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  course_requisite_list = @course_proposal.course_requisite_list
+  course_requisite_list.each do |requisite|
+    @course_proposal.delete_requisite_rules :requisite_type => requisite.requisite_type
+  end
+
+  @course_proposal.determine_save_action
 end
 
 Then(/^I should no longer see with requisite details on the course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @course_proposal.review_proposal_action
+
 end

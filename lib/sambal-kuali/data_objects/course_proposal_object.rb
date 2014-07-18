@@ -131,6 +131,29 @@ class CmCourseProposalObject < DataFactory
 
   end
 
+  def delete_requisite_rules (opts={})
+    on CmCourseRequisites do |page|
+      page.course_requisites unless page.current_page('Course Requisites').exists?
+      $section = opts[:requisite_type]
+      case $section
+        when "Prerequisite"
+          page.delete_rule_student_eligibility
+        when "Corequisite"
+          page.delete_rule_corequisite
+        when "Recommended Preparation"
+          page.delete_rule_recommended_prep
+        when "Antirequisite"
+          page.delete_rule_antirequisite
+        when "Repeatable for Credit"
+          page.delete_rule_repeatable_for_credit
+        when "Course that Restricts Credits"
+          page.delete_rule_restricts_credits
+        else
+          raise "No requisite rule type defined!"
+      end
+    end
+  end
+
 
   def create_course_proposal_required_for_save
     on CmCourseInformation do |page|
