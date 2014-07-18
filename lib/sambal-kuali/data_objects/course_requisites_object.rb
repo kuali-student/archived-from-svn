@@ -20,8 +20,7 @@ class CmCourseRequisite < DataFactory
   attr_accessor :requisite_type,
                 :left_group_node,
                 :right_group_node,
-                :logic_operator,
-                :current_rule
+                :logic_operator
 
   REQUISITE_TYPE_PREREQUISITE = "Student Eligibility & Prerequisite"
   REQUISITE_TYPE_CO_REQUISITE  = "Corequisite"
@@ -35,7 +34,6 @@ class CmCourseRequisite < DataFactory
     @browser = browser
     defaults = {
         requisite_type: REQUISITE_TYPE_PREREQUISITE,
-        current_rule: [(make CmRequisiteRuleObject)],
         logic_operator: "AND"
     }
     set_options(defaults.merge(opts))

@@ -132,12 +132,25 @@ class CmCourseProposalObject < DataFactory
   end
 
   def delete_requisite_rules (opts={})
-    on CmCourseRequistitesPage do |page|
+    on CmCourseRequisitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
       $section = opts[:requisite_type]
       case $section
-        when "Prerequisite"
-          page.delete_rule_student_eligibility
+        when "Student Eligibility & Prerequisite"
+          #STUDENT ELIGIBILITY #A,G,M,S
+          begin
+            page.delete_rule('A')
+          rescue Exception => e
+            begin
+              page.delete_rule('G')
+            rescue Exception => e
+              begin
+                page.delete_rule('M')
+              rescue Exception => e
+                page.delete_rule('S')
+              end
+            end
+          end
         when "Corequisite"
           page.delete_rule_corequisite
         when "Recommended Preparation"
@@ -551,19 +564,45 @@ class CmCourseProposalObject < DataFactory
       page.expand_all_rule_sections
       #STUDENT ELIGIBILITY #A,G,M,S
       begin
-        page.add_rule_student_eligibility('A')
+        page.add_rule('A')
       rescue Exception => e
         begin
-          page.add_rule_student_eligibility('G')
+          page.add_rule('G')
         rescue Exception => e
           begin
-            page.add_rule_student_eligibility('M')
+            page.add_rule('M')
           rescue Exception => e
-            page.add_rule_student_eligibility('S')
+            page.add_rule('S')
           end
         end
       end
       @rule_list = opts[:eligibility_rule_list]
+      @rule_list.each do |item|
+        add_one_rule (item)
+      end
+      update_adding_rules
+    end
+  end
+
+  def adding_rule_recommended_preparation_rule (opts={})
+    @rule_list = opts[:eligibility_rule_list]
+
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+      #recommended_preparation C,I,O,U
+      begin
+        page.add_rule('C')
+      rescue Exception => e
+        begin
+          page.add_rule('I')
+        rescue Exception => e
+          begin
+            page.add_rule('O')
+          rescue Exception => e
+            page.add_rule('U')
+          end
+        end
+      end
       @rule_list.each do |item|
         add_one_rule (item)
       end
@@ -654,7 +693,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_corequisite
-    on CmCourseRequistitesPage do |page| unless @corequisite_rule.nil?
+    on CmCourseRequisitesPage do |page| unless @corequisite_rule.nil?
       page.expand_all_rule_section
       page.add_rule_corequisite
       page.add_statement
@@ -687,34 +726,8 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
-  def adding_rule_recommended_preparation_rule (opts={})
-    @rule_list = opts[:eligibility_rule_list]
-
-    on CmCourseRequistitesPage do |page|
-      page.expand_all_rule_sections
-      #recommended_preparation C,I,O,U
-      begin
-        page.add_rule_recommended_prep('C')
-      rescue Exception => e
-        begin
-          page.add_rule_recommended_prep('I')
-        rescue Exception => e
-          begin
-            page.add_rule_recommended_prep('O')
-          rescue Exception => e
-            page.add_rule_recommended_prep('U')
-          end
-        end
-      end
-      @rule_list.each do |item|
-        add_one_rule (item)
-      end
-      update_adding_rules
-    end
-  end
-
   def adding_rule_antirequisite
-    on CmCourseRequistitesPage do |page| unless @antirequisite_rule.nil?
+    on CmCourseRequisitesPage do |page| unless @antirequisite_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_antirequisite
       page.add_statement
@@ -747,7 +760,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_rule_repeatable_for_credit
-    on CmCourseRequistitesPage do |page| unless @repeatable_for_credit_rule.nil?
+    on CmCourseRequisitesPage do |page| unless @repeatable_for_credit_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_repeatable_for_credit
       page.add_statement
@@ -767,7 +780,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def adding_course_that_restricts_credits
-    on CmCourseRequistitesPage do |page| unless @course_that_restricts_credits_rule.nil?
+    on CmCourseRequisitesPage do |page| unless @course_that_restricts_credits_rule.nil?
       page.expand_all_rule_sections
       page.add_rule_restricts_credits
       page.add_statement

@@ -11,10 +11,12 @@ And(/^I add two basic Eligibility requisites$/) do
   rule1 = make CmRequisiteRuleObject,
                :rule => "Must have successfully completed <course>"
 
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :logic_operator => "AND")
+  rule2 = (make CmRequisiteRuleObject)
+
+  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :right_group_node => rule2, :logic_operator => "AND")
 
   @course_proposal.course_requisite_list = [requisite_obj1]
-  @student_eligibility_rule_list = [requisite_obj1.current_rule[0], requisite_obj1.left_group_node]
+  @student_eligibility_rule_list = [requisite_obj1.right_group_node, requisite_obj1.left_group_node]
   @course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
                                          :eligibility_rule_list =>@student_eligibility_rule_list
 
