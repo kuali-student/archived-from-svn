@@ -56,7 +56,7 @@ And(/^I add two basic Eligibility requisites$/) do
 
   requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :right_group_node => rule2, :logic_operator => "AND")
 
-  @course_proposal.course_requisite_list << [requisite_obj1]
+  @course_proposal.course_requisite_list = [requisite_obj1]
   @student_eligibility_rule_list = [requisite_obj1.right_group_node, requisite_obj1.left_group_node]
   @course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
                                          :eligibility_rule_list =>@student_eligibility_rule_list
@@ -125,5 +125,26 @@ end
 
 Then(/^I should no longer see with requisite details on the course proposal$/) do
   @course_proposal.review_proposal_action
-
+  course_requisite_list = @course_proposal.course_requisite_list
+  course_requisite_list.each do |requisite|
+    on CmReviewProposal do |page|
+      $requisite_type = requisite.requisite_type
+      case $requisite_type
+        when "Student Eligibility & Prerequisite"
+          page.prerequisites_rules.should == ""
+        when "Corequisite"
+          page.corequisite_rules.should == ""
+        when "Recommended Preparation"
+          page.preparation_rules.should == ""
+        when "Antirequisite"
+          page.antirequisite_rules.should == ""
+        when "Repeatable for Credit"
+          page.restrictsCredits_rules.should == ""
+        when "Course that Restricts Credits"
+          page.repeatableForCredit_rules.should == ""
+        else
+          raise "No requisite rule section defined!"
+      end
+    end
+  end
 end

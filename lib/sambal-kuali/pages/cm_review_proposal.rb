@@ -59,23 +59,23 @@ class CmReviewProposal < BasePage
   element(:learning_objectives_empty_text) { |b| b.div(id: "emptyStringLOs") }
 
   #COURSE REQUISITES
-  value(:prerequisites_rules) {|b|b.div(id: "courseRequisitesSection.Prerequisite").text }
-  value(:prerequisites_label) {|b|b.div(id: "courseRequisitesSection.Prerequisite_label").text }
+  value(:prerequisites_rules) {|b|b.textarea(id: "courseRequisitesSection.Prerequisite_control").text }
+  value(:prerequisites_label) {|b|b.label(id: "courseRequisitesSection.Prerequisite_label").text }
 
-  value(:corequisite_rules) {|b|b.div(id: "courseRequisitesSection.Corequisite").text }
-  value(:corequisite_label) {|b|b.div(id: "courseRequisitesSection.Corequisite_label").text }
+  value(:corequisite_rules) {|b|b.textarea(id: "courseRequisitesSection.Corequisite_control").text }
+  value(:corequisite_label) {|b|b.label(id: "courseRequisitesSection.Corequisite_label").text }
 
-  value(:preparation_rules) {|b|b.div(id: "courseRequisitesSection.Preparation").text }
-  value(:preparation_label) {|b|b.div(id: "courseRequisitesSection.Preparation_label").text }
+  value(:preparation_rules) {|b|b.textarea(id: "courseRequisitesSection.Preparation_control").text }
+  value(:preparation_label) {|b|b.label(id: "courseRequisitesSection.Preparation_label").text }
 
-  value(:antirequisite_rules) {|b|b.div(id: "courseRequisitesSection.Antirequisite").text }
-  value(:antirequisite_label) {|b|b.div(id: "courseRequisitesSection.Antirequisite_label").text }
+  value(:antirequisite_rules) {|b|b.textarea(id: "courseRequisitesSection.Antirequisite_control").text }
+  value(:antirequisite_label) {|b|b.label(id: "courseRequisitesSection.Antirequisite_label").text }
 
-  value(:restrictsCredits_rules) {|b|b.div(id: "courseRequisitesSection.RestrictsCredits").text }
-  value(:restrictsCredits_label) {|b|b.div(id: "courseRequisitesSection.RestrictsCredits_label").text }
+  value(:restrictsCredits_rules) {|b|b.textarea(id: "courseRequisitesSection.RestrictsCredits_control").text }
+  value(:restrictsCredits_label) {|b|b.label(id: "courseRequisitesSection.RestrictsCredits_label").text }
 
-  value(:repeatableForCredit_rules) {|b|b.div(id: "courseRequisitesSection.RepeatableForCredit").text }
-  value(:repeatableForCredit_label) {|b|b.div(id: "courseRequisitesSection.RepeatableForCredit_label").text }
+  value(:repeatableForCredit_rules) {|b|b.textarea(id: "courseRequisitesSection.RepeatableForCredit_control").text }
+  value(:repeatableForCredit_label) {|b|b.label(id: "courseRequisitesSection.RepeatableForCredit_label").text }
 
   #ACTIVITY FORMATS
   value(:activity_level_review) { |activity_level, b| b.div(id: "course_review_format_details").header(id: /line#{activity_level-1}/).span(class: "uif-headerText-span").text }
