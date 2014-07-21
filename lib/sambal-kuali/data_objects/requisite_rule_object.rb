@@ -24,7 +24,8 @@ class CmRequisiteRuleObject < DataFactory
                 :search_title,
                 :search_phrase,
                 :search_course_code,
-                :complete_rule_text
+                :complete_rule_text,
+                :logic_operator
 
   def initialize(browser, opts={})
     @browser = browser
@@ -44,7 +45,80 @@ class CmRequisiteRuleObject < DataFactory
     set_options(options)
   end
 
+def create
+  on CmRequisiteRules do |page|
 
+    page.add_btn
+    page.loading_wait
+    begin
+      page.rule_statement_option('').fit @rule
+    rescue Exception => e
+      page.rule_statement_option('node_2_parent_').fit @rule
+    end
+
+    page.loading_wait
+
+    if  @rule == 'Must have successfully completed <course>'
+      @complete_rule_text = @rule.sub('<course>', @course)
+
+      # Enter text
+      if @add_method == 'text'
+        puts 'student text'
+        page.course_field.fit @course
+      end
+
+      if @add_method == 'advanced'
+        puts 'student advanced'
+        page.advanced_search
+        #pick one field
+        page.adv_course_title.fit @search_title
+        page.adv_course_code_rule.fit @course
+        page.adv_plain_text_description_rule.fit @search_phrase
+        page.adv_search
+        #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+        return_search_result(@course, 2)
+      end
+    end
+
+    if @rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
+
+      #enter  Number of Courses:
+      page.integer_field.fit @completed_course_number
+
+      #pick the courses, dynamic course ranges, or Course sets.
+      page.multi_course_dropdown.fit @course_combination_type
+
+      $i = 0
+      $num = @completed_course_number
+      while $i < $num do
+        # Enter course Code text
+        if @add_method == 'text'
+          puts 'course Code text'
+          page.course_field.fit @course
+        end
+
+        if @add_method == 'advanced'
+          puts 'advanced search'
+          page.advanced_search
+          #pick one field
+          page.adv_course_code_rule.fit @search_course_code
+          page.adv_search
+          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+          page.select_course($i)
+        end
+        page.add_course_code
+        $i +=1
+      end
+
+      page.completed
+      page.loading_wait
+      page.grade_dropdown.fit "A"
+
+    end
+
+    preview_rule_changes
+  end
+end
 
   def edit (opts ={})
 

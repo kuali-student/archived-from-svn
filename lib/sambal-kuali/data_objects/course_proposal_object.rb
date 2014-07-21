@@ -222,6 +222,13 @@ class CmCourseProposalObject < DataFactory
           end
       end
 
+      unless @course_requisite_list.nil?
+        @course_requisite_list.each do |course_requisite|
+          course_requisite.create
+        end
+      end
+
+
       unless @author_list.nil?
         @author_list.each do |authors|
           authors.create
@@ -572,7 +579,11 @@ class CmCourseProposalObject < DataFactory
           begin
             page.add_rule('M')
           rescue Exception => e
-            page.add_rule('S')
+            begin
+              page.add_rule('S')
+            rescue Exception => e
+            page.add_rule('Y')
+            end
           end
         end
       end
