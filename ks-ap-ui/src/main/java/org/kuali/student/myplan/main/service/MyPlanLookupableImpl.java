@@ -2,8 +2,8 @@ package org.kuali.student.myplan.main.service;
 
 import java.util.Map;
 
-import org.kuali.rice.krad.lookup.LookupableImpl;
 import org.kuali.rice.krad.lookup.LookupForm;
+import org.kuali.rice.krad.lookup.LookupableImpl;
 
 /**
  * MyPlan Lookupable Impl extends the default LookupableImpl and overrides the

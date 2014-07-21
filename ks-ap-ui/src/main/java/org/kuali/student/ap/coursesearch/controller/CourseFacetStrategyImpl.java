@@ -15,6 +15,14 @@
 
 package org.kuali.student.ap.coursesearch.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.student.ap.coursesearch.CourseFacetStrategy;
 import org.kuali.student.ap.coursesearch.CreditsFormatter;
@@ -25,14 +33,6 @@ import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Implementation class for facet strategy

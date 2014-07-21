@@ -2,14 +2,9 @@ package org.kuali.rice.krad.uif.layout.extension;
 
 import java.util.List;
 
-import org.kuali.rice.krad.uif.component.Component;
-import org.kuali.rice.krad.uif.container.CollectionGroup;
 import org.kuali.rice.krad.uif.container.collections.LineBuilderContext;
 import org.kuali.rice.krad.uif.field.Field;
-import org.kuali.rice.krad.uif.field.FieldGroup;
 import org.kuali.rice.krad.uif.layout.TableLayoutManagerBase;
-import org.kuali.rice.krad.uif.lifecycle.ViewLifecycle;
-import org.kuali.rice.krad.uif.view.View;
 import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingItem;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 import org.slf4j.Logger;
@@ -59,10 +54,6 @@ public class CourseSectionDetailsLayoutManager extends TableLayoutManagerBase {
 				rowCss.add(r2css.toString());
 				rowCss.add(r2css.toString());
 			}
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("AO luiId {} lineIndex = {} css(1) {} css(2,3) {}",
-                        aoi.getLuiId(), lineIndex, r1css, r2css);
-            }
 		}
 	}
 

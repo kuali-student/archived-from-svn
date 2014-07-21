@@ -14,12 +14,12 @@
  */
 package org.kuali.student.ap.coursesearch.form;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.coursesearch.util.CollectionListPropertyEditor;
 import org.kuali.student.enrollment.courseoffering.infc.CourseOffering;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * This data object stores the data used in the display of the KSAP-CourseSectionDetailsDialog-FormView

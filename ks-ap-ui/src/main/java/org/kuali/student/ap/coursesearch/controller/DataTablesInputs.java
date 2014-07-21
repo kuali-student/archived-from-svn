@@ -1,7 +1,8 @@
 package org.kuali.student.ap.coursesearch.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Input command processor for supporting DataTables server-side processing.

@@ -2,13 +2,15 @@ package org.kuali.student.ap.planner;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.coursesearch.CreditsFormatter;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
@@ -44,7 +46,11 @@ public class PlannerItem implements
 	private String grade;
     private AcademicPlanServiceConstants.ItemCategory category;
     private String categoryString;
+    
+    private Date dateAdded;
 
+    private List<Attribute> attributes;
+    
 	private transient String creditString;
 
 	public PlannerItem() {
@@ -54,14 +60,20 @@ public class PlannerItem implements
 		uniqueId = UUID.randomUUID().toString();
 		termId = completedRecord.getTermName();
 		campusCode = completedRecord.getAttributeValue("campusCode");
+		
 		courseCode = completedRecord.getCourseCode();
-        List<Course> courses = KsapFrameworkServiceLocator.getCourseHelper().getCoursesByCode(courseCode);
-        for(Course course : courses){
-            if(course.getStateKey().equals("Active")){
-                courseId = course.getId();
-                break;
-            }
-        }
+		courseId = completedRecord.getAttributeValue("courseId");
+		if (courseId == null) {
+			List<Course> courses = KsapFrameworkServiceLocator
+					.getCourseHelper().getCoursesByCode(courseCode);
+			for (Course course : courses) {
+				if (course.getStateKey().equals("Active")) {
+					courseId = course.getId();
+					break;
+				}
+			}
+		}
+		
 		activityCode = completedRecord.getActivityCode();
 		courseTitle = completedRecord.getCourseTitle();
 
@@ -81,6 +93,11 @@ public class PlannerItem implements
 			setGrade(grade);
 		}
 
+		dateAdded = completedRecord.getMeta() == null ? null
+				: completedRecord.getMeta().getCreateTime();
+		
+		attributes = new ArrayList<Attribute>(
+				completedRecord.getAttributes());
 	}
 
 	public PlannerItem(PlanItem planItem, Course course) {
@@ -135,6 +152,12 @@ public class PlannerItem implements
 							.isCartAvailable(termId, campusCode)) {
 				menuSuffix = "_cartavailable";
 	    }
+		
+		dateAdded = planItem.getMeta() == null ? null
+				: planItem.getMeta().getCreateTime();
+		
+		attributes = new ArrayList<Attribute>(planItem.getAttributes());
+		attributes.addAll(course.getAttributes());
 	}
 
 	public String getParentUniqueId() {
@@ -297,4 +320,21 @@ public class PlannerItem implements
     public void setCategoryString(String categoryString) {
         this.categoryString=categoryString;
     }
+
+	public Date getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(Date dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
+	public List<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
+	}
+    
 }

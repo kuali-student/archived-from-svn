@@ -1,9 +1,9 @@
 package org.kuali.student.ap.coursesearch.controller;
 
+import java.io.Serializable;
+
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.student.ap.coursesearch.FacetState;
-
-import java.io.Serializable;
 
 /**
  * Simple object for tracking facet click/count state.

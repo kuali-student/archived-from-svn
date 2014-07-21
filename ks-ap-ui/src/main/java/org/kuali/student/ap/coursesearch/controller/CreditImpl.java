@@ -14,6 +14,8 @@
  */
 package org.kuali.student.ap.coursesearch.controller;
 
+import java.math.BigDecimal;
+
 import org.kuali.student.ap.coursesearch.CourseSearchItem;
 import org.kuali.student.ap.coursesearch.Credit;
 
@@ -23,9 +25,9 @@ import org.kuali.student.ap.coursesearch.Credit;
 public class CreditImpl implements Credit {
     private String id;
     private String display;
-    private float min;
-    private float max;
-    private float[] multiple;
+    private BigDecimal min;
+    private BigDecimal max;
+    private BigDecimal[] multiple;
     private CourseSearchItem.CreditType type;
 
     public String getId() {
@@ -36,15 +38,15 @@ public class CreditImpl implements Credit {
         return display;
     }
 
-    public float getMin() {
+    public BigDecimal getMin() {
         return min;
     }
 
-    public float getMax() {
+    public BigDecimal getMax() {
         return max;
     }
 
-    public float[] getMultiple() {
+    public BigDecimal[] getMultiple() {
         return multiple;
     }
 
@@ -60,18 +62,18 @@ public class CreditImpl implements Credit {
         this.display = display;
     }
 
-    public void setMin(float min) {
+    public void setMin(BigDecimal min) {
         this.min = min;
     }
 
-    public void setMax(float max) {
+    public void setMax(BigDecimal max) {
         this.max = max;
     }
 
-    public void setMultiple(float[] multiple) {
+    public void setMultiple(BigDecimal[] multiple) {
         this.multiple = multiple;
     }
-    public void setMultiple(int i, float multiple) {
+    public void setMultiple(int i, BigDecimal multiple) {
         this.multiple[i] = multiple;
     }
 

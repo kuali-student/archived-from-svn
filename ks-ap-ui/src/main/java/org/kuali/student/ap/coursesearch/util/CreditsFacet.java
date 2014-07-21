@@ -1,15 +1,16 @@
 package org.kuali.student.ap.coursesearch.util;
 
-import org.kuali.student.ap.coursesearch.CourseSearchItem;
-import org.kuali.student.ap.coursesearch.CourseSearchItem.CreditType;
-import org.kuali.student.ap.coursesearch.dataobject.CourseSearchItemImpl;
-import org.kuali.student.ap.coursesearch.dataobject.FacetItem;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.kuali.student.ap.coursesearch.CourseSearchItem;
+import org.kuali.student.ap.coursesearch.CourseSearchItem.CreditType;
+import org.kuali.student.ap.coursesearch.dataobject.CourseSearchItemImpl;
+import org.kuali.student.ap.coursesearch.dataobject.FacetItem;
 
 /**
  * Logic for building list of FacetItems and coding CourseSearchItems.
@@ -19,9 +20,9 @@ public class CreditsFacet extends AbstractFacet {
     /**
      * DISPLAY_MAX will be the cutoff for when we switch to 6+
      */
-	private static final int DISPLAY_MAX = 6;
+	private static final BigDecimal DISPLAY_MAX = new BigDecimal(6);
 
-	private HashSet<Float> creditFacetSet = new HashSet<Float>();
+	private HashSet<BigDecimal> creditFacetSet = new HashSet<BigDecimal>();
 
 	public CreditsFacet() {
 		super();
@@ -51,13 +52,14 @@ public class CreditsFacet extends AbstractFacet {
 	 */
 	@Override
 	public void process(CourseSearchItem course) {
-		float min = course.getCreditMin();
-        float max = course.getCreditMax();
+		BigDecimal min = course.getCreditMin();
+		BigDecimal max = course.getCreditMax();
 
-		List<Float> list = new ArrayList<Float>();
+		List<BigDecimal> list = new ArrayList<BigDecimal>();
 		switch (course.getCreditType()) {
 		case Range:
-			for (float x = min; x <= max; x++) {
+			BigDecimal one = new BigDecimal(1);
+			for (BigDecimal x = min; x.compareTo(max) <= 0; x = x.add(one)) {
 				list.add(x);
 			}
 			break;
@@ -66,7 +68,7 @@ public class CreditsFacet extends AbstractFacet {
 			break;
 		case Multiple:
             if (course.getMultipleCredits() != null) {
-                for (float credit : course.getMultipleCredits()) {
+                for (BigDecimal credit : course.getMultipleCredits()) {
                     list.add(credit);
                 }
             }
@@ -84,14 +86,14 @@ public class CreditsFacet extends AbstractFacet {
 		creditFacetSet.addAll(list);
 
 		Set<String> facetKeys = new java.util.LinkedHashSet<String>();
-		for (Float credit : list) {
-		    if (credit < DISPLAY_MAX)
+		for (BigDecimal credit : list) {
+		    if (credit.compareTo(DISPLAY_MAX) < 0)
 			    facetKeys.add(credit.toString());
             else
                 facetKeys.add(DISPLAY_MAX + "+");
         }
 		if (CreditType.Range.equals(course.getCreditType())
-				&& max >= DISPLAY_MAX)
+				&& max.compareTo(DISPLAY_MAX) >= 0)
 			facetKeys.add(DISPLAY_MAX + "+");
 		((CourseSearchItemImpl) course).setCreditsFacetKeys(facetKeys);
 	}

@@ -294,7 +294,7 @@
         <property name="header.render" value="true" />
         <property name="items">
             <list>
-                <bean id="plan_base_atpId" parent="KS-Uif-DataField"
+                <bean id="plan_base_atpId" parent="Uif-DataField"
                       p:propertyName="termName" p:cssClasses="ksap-hide">
                     <property name="fieldLabel.render" value="false" />
                 </bean>

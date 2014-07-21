@@ -1,19 +1,22 @@
 package org.kuali.student.myplan.service;
 
-import org.kuali.rice.core.api.config.property.ConfigContext;
-import org.kuali.rice.core.api.mail.*;
-import org.kuali.rice.kim.api.identity.Person;
-import org.kuali.rice.krad.exception.InvalidAddressException;
-
-import org.kuali.rice.krad.util.GlobalVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.rice.core.api.mail.EmailBcList;
+import org.kuali.rice.core.api.mail.EmailBody;
+import org.kuali.rice.core.api.mail.EmailCcList;
+import org.kuali.rice.core.api.mail.EmailFrom;
+import org.kuali.rice.core.api.mail.EmailSubject;
+import org.kuali.rice.core.api.mail.EmailToList;
+import org.kuali.rice.core.api.mail.MailMessage;
+import org.kuali.rice.core.api.mail.Mailer;
+import org.kuali.rice.krad.exception.InvalidAddressException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**

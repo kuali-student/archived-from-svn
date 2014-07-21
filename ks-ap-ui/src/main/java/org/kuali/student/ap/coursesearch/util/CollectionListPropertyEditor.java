@@ -17,7 +17,6 @@ package org.kuali.student.ap.coursesearch.util;
 
 
 import java.beans.PropertyEditorSupport;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;

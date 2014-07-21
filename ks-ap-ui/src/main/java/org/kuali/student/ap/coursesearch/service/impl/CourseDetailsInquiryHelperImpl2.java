@@ -1,5 +1,10 @@
 package org.kuali.student.ap.coursesearch.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.cxf.common.util.StringUtils;
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.kns.inquiry.KualiInquirableImpl;
@@ -28,11 +33,6 @@ import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.infc.Course;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Inquiry Helper for the CourseDetails-InquiryView
@@ -130,7 +130,7 @@ public class CourseDetailsInquiryHelperImpl2 extends KualiInquirableImpl {
         }
 
         //Load plan status information
-        List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course);
+        List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course.getId());
         courseDetails.setPlanStatusMessage(createPlanningStatusMessages(planItems));
         courseDetails.setBookmarkStatusMessage(createBookmarkStatusMessages(planItems));
 
@@ -185,7 +185,7 @@ public class CourseDetailsInquiryHelperImpl2 extends KualiInquirableImpl {
         }
 
         //Load plan status information
-        List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course);
+        List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course.getId());
         courseDetails.setPlannedMessage(createPlanningStatusMessages(planItems));
         courseDetails.setBookmarkMessage(createBookmarkStatusMessages(planItems));
         courseDetails.setBookmarked(KsapFrameworkServiceLocator.getCourseHelper().isCourseBookmarked(course, planItems));

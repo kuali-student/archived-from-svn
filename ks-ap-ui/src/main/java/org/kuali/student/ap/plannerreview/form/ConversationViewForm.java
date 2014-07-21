@@ -1,9 +1,9 @@
 package org.kuali.student.ap.plannerreview.form;
 
-import org.kuali.student.ap.plannerreview.infc.Conversation;
-import org.kuali.student.ap.plannerreview.dto.ConversationDateCommentInfo;
-
 import java.util.List;
+
+import org.kuali.student.ap.plannerreview.dto.ConversationDateCommentInfo;
+import org.kuali.student.ap.plannerreview.infc.Conversation;
 
 public class ConversationViewForm extends ConversationFormBase {
 

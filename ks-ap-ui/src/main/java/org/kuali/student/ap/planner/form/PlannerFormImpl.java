@@ -1,12 +1,12 @@
 package org.kuali.student.ap.planner.form;
 
-import org.kuali.student.ap.planner.PlannerTerm;
-import org.kuali.student.ap.planner.support.DefaultPlannerForm;
-import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
-import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
+import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
+import org.kuali.student.ap.planner.PlannerTerm;
+import org.kuali.student.ap.planner.support.DefaultPlannerForm;
 
 /**
  * Extends the default planner form to tie in course summary details from course

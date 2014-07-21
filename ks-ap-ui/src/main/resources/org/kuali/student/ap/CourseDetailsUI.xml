@@ -514,7 +514,7 @@
                             <bean parent="Uif-VerticalBoxSection" p:colSpan="10">
                                 <property name="items">
                                     <list>
-                                        <bean p:id="@{dataObject.courseCode}_courseSubject" parent="KS-Uif-DataField"
+                                        <bean p:id="@{dataObject.courseCode}_courseSubject" parent="Uif-DataField"
                                               p:propertyName="subject">
                                             <property name="fieldLabel.renderColon" value="false"/>
                                             <property name="fieldLabel.render" value="false"/>

@@ -14,14 +14,15 @@
  */
 package org.kuali.student.ap.coursesearch.service;
 
+import java.util.Map;
+
+import javax.json.JsonObjectBuilder;
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.rice.krad.uif.service.ViewHelperService;
 import org.kuali.student.ap.coursesearch.CourseSearchForm;
 import org.kuali.student.ap.coursesearch.FacetState;
 import org.kuali.student.ap.coursesearch.controller.SessionSearchInfo;
-
-import javax.json.JsonObjectBuilder;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  *  ViewHelper class used to populate the data on the Course Search page (CourseSearchUI.xml)

@@ -1,12 +1,12 @@
 package org.kuali.student.ap.coursesearch.util;
 
-import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingItem;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingItem;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Created by IntelliJ IDEA.

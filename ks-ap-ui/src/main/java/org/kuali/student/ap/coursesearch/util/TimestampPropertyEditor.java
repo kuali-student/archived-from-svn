@@ -16,15 +16,17 @@ package org.kuali.student.ap.coursesearch.util;
  */
 
 
+import java.beans.PropertyEditorSupport;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.kuali.student.r2.common.util.date.KSDateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.beans.PropertyEditorSupport;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.util.*;
 
 public class TimestampPropertyEditor extends PropertyEditorSupport implements Serializable {
 

@@ -1,9 +1,9 @@
 package org.kuali.student.ap.plannerreview.dto;
 
-import org.kuali.student.ap.plannerreview.infc.ConversationComment;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kuali.student.ap.plannerreview.infc.ConversationComment;
 
 public class ConversationDateCommentInfo implements Comparable<ConversationDateCommentInfo> {
 

@@ -24,7 +24,6 @@ import org.kuali.student.ap.framework.context.YearTerm;
 import org.kuali.student.ap.framework.util.KsapConstants;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.common.collection.KSCollectionUtils;
-import org.kuali.student.common.util.security.ContextUtils;
 import org.kuali.student.enrollment.courseofferingset.dto.SocInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -778,7 +777,7 @@ public class DefaultTermHelper implements TermHelper {
         for (Term term : inputTerms){
             List<String> socIds;
             try {
-                socIds = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSocIdsByTerm(term.getId(), ContextUtils.createDefaultContextInfo());
+                socIds = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSocIdsByTerm(term.getId(), KsapFrameworkServiceLocator.getContext().getContextInfo());
             } catch (Exception e){
                 if (LOG.isDebugEnabled()){
                     LOG.debug("Getting SOCs for the term " + term.getCode() + " results in service error");
@@ -798,7 +797,7 @@ public class DefaultTermHelper implements TermHelper {
             SocInfo socInfo;
             int firstId = 0;
             try {
-                socInfo = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSoc(socIds.get(firstId), ContextUtils.createDefaultContextInfo());
+                socInfo = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSoc(socIds.get(firstId), KsapFrameworkServiceLocator.getContext().getContextInfo());
             } catch (Exception e){
                 if (LOG.isDebugEnabled()){
                     LOG.debug("Error getting the soc [id={}]", socIds.get(firstId));
@@ -817,7 +816,7 @@ public class DefaultTermHelper implements TermHelper {
     private SocInfo getPublishedSocForTerm(String termId) {
         List<String> socIds = null;
         try {
-            socIds = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSocIdsByTerm(termId, ContextUtils.createDefaultContextInfo());
+            socIds = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSocIdsByTerm(termId, KsapFrameworkServiceLocator.getContext().getContextInfo());
         } catch (Exception e){
             if (LOG.isDebugEnabled()){
                 LOG.debug("Getting SOCs for the term " + termId + " results in service error");
@@ -836,7 +835,7 @@ public class DefaultTermHelper implements TermHelper {
             }
             if (socId != null) {
                 try {
-                    socInfo = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSoc(socId, ContextUtils.createDefaultContextInfo());
+                    socIds = KsapFrameworkServiceLocator.getCourseOfferingSetService().getSocIdsByTerm(termId, KsapFrameworkServiceLocator.getContext().getContextInfo());
                 } catch (Exception e){
                     if (LOG.isDebugEnabled()){
                         LOG.debug("Error getting the soc [id={}]", socId);

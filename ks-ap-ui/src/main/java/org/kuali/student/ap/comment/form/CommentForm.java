@@ -1,10 +1,10 @@
 package org.kuali.student.ap.comment.form;
 
-import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.comment.dataobject.CommentDataObject;
-
 import java.util.Date;
 import java.util.List;
+
+import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.comment.dataobject.CommentDataObject;
 
 public class CommentForm extends UifFormBase {
     private String from;

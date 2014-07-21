@@ -5,11 +5,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.comment.CommentConstants;
 import org.kuali.student.ap.comment.dataobject.CommentDataObject;
 import org.kuali.student.ap.comment.dataobject.MessageDataObject;
-import org.kuali.student.r2.common.dto.ContextInfo;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
 import org.kuali.student.r2.common.exceptions.MissingParameterException;

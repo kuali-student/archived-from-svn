@@ -14,12 +14,10 @@
  */
 package org.kuali.student.ap.coursesearch.dataobject;
 
+import java.util.List;
+
 import org.kuali.student.ap.coursesearch.util.CollectionListPropertyEditor;
 import org.kuali.student.ap.coursesearch.util.ScheduledTermsPropertyEditor;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This data object stores the data used in the display of the CourseDetails-InquiryView

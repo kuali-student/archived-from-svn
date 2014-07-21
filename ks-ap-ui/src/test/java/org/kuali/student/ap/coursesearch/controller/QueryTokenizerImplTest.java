@@ -1,13 +1,13 @@
 package org.kuali.student.ap.coursesearch.controller;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.kuali.student.ap.coursesearch.QueryTokenizer;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.kuali.student.ap.coursesearch.QueryTokenizer;
 
 public class QueryTokenizerImplTest {
     String sample = " A abc123 edc&i \"quoted text !@#\" 0 00 000 0000 3xx 4XX ";

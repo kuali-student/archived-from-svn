@@ -1,18 +1,18 @@
 package org.kuali.student.ap.plannerreview.util;
 
-import org.kuali.rice.core.api.util.ConcreteKeyValue;
-import org.kuali.rice.core.api.util.KeyValue;
-import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
-import org.kuali.rice.krad.uif.view.ViewModel;
-import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
-import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
-import org.kuali.student.ap.plannerreview.form.ConversationCreateForm;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.kuali.rice.core.api.util.ConcreteKeyValue;
+import org.kuali.rice.core.api.util.KeyValue;
+import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
+import org.kuali.rice.krad.uif.view.ViewModel;
+import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
+import org.kuali.student.ap.plannerreview.form.ConversationCreateForm;
+import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
 
 /**
  * Builds the option list for the control to display available advisors for a student

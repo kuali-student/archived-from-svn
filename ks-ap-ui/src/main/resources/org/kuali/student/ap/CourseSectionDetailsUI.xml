@@ -696,7 +696,7 @@
         </property>
         <property name="validationMessages" ref="KS-ValidationMessages-Off"/>
         <property name="layoutManager.richTable">
-            <bean parent="KS-Uif-RichTable"/>
+            <bean parent="Uif-RichTable"/>
         </property>
         <property name="layoutManager.richTable.templateOptions">
             <map merge="true">

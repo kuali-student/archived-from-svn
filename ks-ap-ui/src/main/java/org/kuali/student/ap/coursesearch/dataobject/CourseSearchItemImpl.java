@@ -14,6 +14,19 @@
  */
 package org.kuali.student.ap.coursesearch.dataobject;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.kuali.rice.core.api.config.property.ConfigContext;
@@ -32,18 +45,6 @@ import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 /**
  * Wrapper for CourseInfo data.
  */
@@ -59,9 +60,9 @@ public class CourseSearchItemImpl implements CourseSearchItem {
 	private String courseName;
 
 	private String credit;
-	private float creditMin;
-	private float creditMax;
-    private float[] multipleCredits;
+	private BigDecimal creditMin;
+	private BigDecimal creditMax;
+    private BigDecimal[] multipleCredits;
 	private CreditType creditType;
 
 	private List<String> genEduReqs;
@@ -155,27 +156,27 @@ public class CourseSearchItemImpl implements CourseSearchItem {
 		this.credit = credit;
 	}
 
-	public float getCreditMin() {
+	public BigDecimal getCreditMin() {
 		return creditMin;
 	}
 
-	public void setCreditMin(float creditMin) {
+	public void setCreditMin(BigDecimal creditMin) {
 		this.creditMin = creditMin;
 	}
 
-	public float getCreditMax() {
+	public BigDecimal getCreditMax() {
 		return creditMax;
 	}
 
-	public void setCreditMax(float creditMax) {
+	public void setCreditMax(BigDecimal creditMax) {
 		this.creditMax = creditMax;
 	}
 
-    public float[] getMultipleCredits() {
+    public BigDecimal[] getMultipleCredits() {
         return multipleCredits;
     }
 
-    public void setMultipleCredits(float[] multipleCredits) {
+    public void setMultipleCredits(BigDecimal[] multipleCredits) {
         this.multipleCredits = multipleCredits;
     }
 

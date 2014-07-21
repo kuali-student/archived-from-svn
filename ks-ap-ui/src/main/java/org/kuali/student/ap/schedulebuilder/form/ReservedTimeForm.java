@@ -1,14 +1,14 @@
 package org.kuali.student.ap.schedulebuilder.form;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
+
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.schedulebuilder.infc.ReservedTime;
 import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.common.util.date.KSDateTimeFormatter;
 import org.kuali.student.r2.core.scheduling.constants.SchedulingServiceConstants;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
 
 public class ReservedTimeForm extends UifFormBase implements ReservedTime {
 

@@ -272,7 +272,11 @@ extends AcademicPlanServiceDecorator
                 AcademicPlanServiceConstants.SERVICE_NAME + "/validatePlanItem", qualifiers)) {
             throw new OperationFailedException("Permission Denied.");
         }
-        return getNextDecorator().validatePlanItem(validationType, checkItemAccess(planItemInfo, context), context);
+        try {
+			return getNextDecorator().validatePlanItem(validationType, checkItemAccess(planItemInfo, context), context);
+		} catch (AlreadyExistsException e) {
+            throw new OperationFailedException("Already Exists.", e);
+		}
     }
     /**
      * Check for missing parameter and throw localized exception if missing

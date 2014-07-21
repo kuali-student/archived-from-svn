@@ -1,14 +1,14 @@
 package org.kuali.student.ap.plannerreview.form;
 
-import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
-import org.kuali.student.ap.plannerreview.dto.AcademicYearInfo;
-import org.kuali.student.ap.plannerreview.dto.CourseInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Map;
+
+import org.kuali.student.ap.plannerreview.dto.AcademicYearInfo;
+import org.kuali.student.ap.plannerreview.dto.CourseInfo;
+import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConversationCreateForm extends ConversationFormBase {
 

@@ -1,8 +1,8 @@
 package org.kuali.student.ap.plannerreview.form;
 
-import org.kuali.student.ap.plannerreview.dto.ConversationYearInfo;
-
 import java.util.List;
+
+import org.kuali.student.ap.plannerreview.dto.ConversationYearInfo;
 
 
 public class ConversationListForm extends ConversationFormBase {

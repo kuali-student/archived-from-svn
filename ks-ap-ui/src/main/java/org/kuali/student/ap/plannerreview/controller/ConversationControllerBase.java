@@ -1,17 +1,19 @@
 package org.kuali.student.ap.plannerreview.controller;
 
+import java.util.Map;
+
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.kim.api.identity.PersonService;
 import org.kuali.rice.kim.api.services.KimApiServiceLocator;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
-import org.kuali.student.ap.plannerreview.infc.ConversationCommenter;
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.ap.plannerreview.LearningPlanReviewStrategy;
 import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
 import org.kuali.student.ap.plannerreview.dto.ConversationCommenterInfo;
+import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
+import org.kuali.student.ap.plannerreview.infc.ConversationCommenter;
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
 import org.kuali.student.r2.common.exceptions.InvalidParameterException;
@@ -20,8 +22,6 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.core.organization.dto.OrgInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
-
-import java.util.Map;
 
 public abstract class ConversationControllerBase extends UifControllerBase {
 	

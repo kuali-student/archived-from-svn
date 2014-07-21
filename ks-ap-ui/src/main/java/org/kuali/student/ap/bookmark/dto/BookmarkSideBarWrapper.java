@@ -1,8 +1,8 @@
 package org.kuali.student.ap.bookmark.dto;
 
-import org.kuali.student.ap.common.infc.HasUniqueId;
-
 import java.util.Date;
+
+import org.kuali.student.ap.common.infc.HasUniqueId;
 
 public class BookmarkSideBarWrapper implements HasUniqueId, Comparable<BookmarkSideBarWrapper> {
     private String courseId;

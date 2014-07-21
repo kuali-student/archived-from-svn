@@ -1,14 +1,12 @@
 package org.kuali.student.ap.bookmark.dto;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.kuali.student.ap.common.infc.HasUniqueId;
 import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
 import org.kuali.student.ap.coursesearch.util.CollectionListPropertyEditor;
 import org.kuali.student.ap.coursesearch.util.ScheduledTermsPropertyEditor;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,9 +1,9 @@
 package org.kuali.student.ap.plannerreview.dto;
 
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 
 public class PlanTermInfo implements Comparable<PlanTermInfo> {
 	

@@ -1,15 +1,28 @@
 package org.kuali.student.ap.planner.support;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
+
 import org.kuali.rice.krad.web.bind.RequestAccessible;
+import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
+import org.kuali.student.ap.coursesearch.CreditsFormatter;
+import org.kuali.student.ap.coursesearch.CreditsFormatter.Range;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.TermHelper;
-import org.kuali.student.ap.coursesearch.CreditsFormatter;
-import org.kuali.student.ap.coursesearch.CreditsFormatter.Range;
 import org.kuali.student.ap.planner.PlannerForm;
 import org.kuali.student.ap.planner.PlannerItem;
 import org.kuali.student.ap.planner.PlannerTerm;
@@ -32,19 +45,6 @@ import org.kuali.student.r2.lum.lrc.dto.ResultValueRangeInfo;
 import org.kuali.student.r2.lum.lrc.dto.ResultValuesGroupInfo;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.UUID;
-
 /**
  * KSAP planner form.
  * 
@@ -63,43 +63,43 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 
 	private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 
-    @RequestAccessible
-    private String courseCd;
-    @RequestAccessible
+	@RequestAccessible
+	private String courseCd;
+	@RequestAccessible
 	private BigDecimal courseCredit;
-    @RequestAccessible
+	@RequestAccessible
 	private String courseNote;
-    @RequestAccessible
+	@RequestAccessible
 	private String termNote;
-    @RequestAccessible
+	@RequestAccessible
 	private boolean backup;
-    //used to indicated if the course has been bookmarked in KSAP
-    //Note: because when bookmarked is true, we need to display
-    //      the checkbox of keepBookmarked and leave it as unchecked by default,
-    //      we have to define two separate fields
-    @RequestAccessible
-    private boolean bookmarked;
-    //used to hold the checkbox value in "Add to Plan" popover form
-    @RequestAccessible
-    private boolean keepBookmarked;
+	// used to indicated if the course has been bookmarked in KSAP
+	// Note: because when bookmarked is true, we need to display
+	// the checkbox of keepBookmarked and leave it as unchecked by default,
+	// we have to define two separate fields
+	@RequestAccessible
+	private boolean bookmarked;
+	// used to hold the checkbox value in "Add to Plan" popover form
+	@RequestAccessible
+	private boolean keepBookmarked;
 
-    @RequestAccessible
+	@RequestAccessible
 	private AcademicPlanServiceConstants.ItemCategory expectedPlanItemCategory;
-    @RequestAccessible
+	@RequestAccessible
 	private AcademicPlanServiceConstants.ItemCategory targetPlanItemCategory;
 
-    @RequestAccessible
+	@RequestAccessible
 	private String targetTermId;
 
-    @RequestAccessible
+	@RequestAccessible
 	private int focusTermIndex;
 
-    @RequestAccessible
+	@RequestAccessible
 	private transient boolean termNoteInitialized;
-    @RequestAccessible
+	@RequestAccessible
 	private transient BigDecimal creditsForPlanItem;
 	private transient List<PlannerTerm> terms;
-    @RequestAccessible
+	@RequestAccessible
 	private transient String creditString;
 
 	@Override
@@ -122,23 +122,23 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 		this.backup = backup;
 	}
 
-    public boolean isBookmarked() {
-        return bookmarked;
-    }
+	public boolean isBookmarked() {
+		return bookmarked;
+	}
 
-    public void setBookmarked(boolean bookmarked) {
-        this.bookmarked = bookmarked;
-    }
+	public void setBookmarked(boolean bookmarked) {
+		this.bookmarked = bookmarked;
+	}
 
-    public boolean isKeepBookmarked() {
-        return keepBookmarked;
-    }
+	public boolean isKeepBookmarked() {
+		return keepBookmarked;
+	}
 
-    public void setKeepBookmarked(boolean keepBookmarked) {
-        this.keepBookmarked = keepBookmarked;
-    }
+	public void setKeepBookmarked(boolean keepBookmarked) {
+		this.keepBookmarked = keepBookmarked;
+	}
 
-    @Override
+	@Override
 	public void setCourseId(String courseId) {
 		super.setCourseId(courseId);
 		this.creditString = null;
@@ -171,71 +171,75 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 	public BigDecimal getCreditsForPlanItem() {
 		return getCreditsForPlanItem(getCourse());
 	}
-    public BigDecimal getCreditsForPlanItem(Course course) {
-        if (creditsForPlanItem == null && courseCredit != null) {
-            BigDecimal minCredit = BigDecimal.ZERO;
-            BigDecimal maxCredit = ONE_HUNDRED;
-            ResultValuesGroupInfo rci;
-            try{
-                rci = KSCollectionUtils.getRequiredZeroElement(course.getCreditOptions());
-            }catch (OperationFailedException e){
-                throw new RuntimeException("Invalid Credit Options", e);
-            }
-            String type = rci.getTypeKey();
-            if (type.equals("kuali.result.values.group.type.fixed")) {
-                boolean useAttributes = rci.getResultValueKeys().isEmpty();
-                if (!useAttributes)
-                    try {
-                        ResultValueInfo rv = KsapFrameworkServiceLocator
-                                .getLrcService().getResultValue(
-                                        KSCollectionUtils.getRequiredZeroElement(rci.getResultValueKeys()),
-                                                KsapFrameworkServiceLocator
-                                                        .getContext().getContextInfo());
-                        if (rv == null)
-                            useAttributes = true;
-                        else
-                            minCredit = maxCredit = new BigDecimal(
-                                    rv.getValue());
-                    } catch (DoesNotExistException e) {
-                        throw new IllegalArgumentException("LRC lookup error",
-                                e);
-                    } catch (InvalidParameterException e) {
-                        throw new IllegalArgumentException("LRC lookup error",
-                                e);
-                    } catch (MissingParameterException e) {
-                        throw new IllegalArgumentException("LRC lookup error",
-                                e);
-                    } catch (OperationFailedException e) {
-                        throw new IllegalStateException("LRC lookup error", e);
-                    } catch (PermissionDeniedException e) {
-                        throw new IllegalStateException("LRC lookup error", e);
-                    }
-                if (useAttributes)
-                    minCredit = maxCredit = new BigDecimal(
-                            rci.getAttributeValue("fixedCreditValue"));
-            } else if (type.equals("kuali.result.values.group.type.range")) {
-                ResultValueRangeInfo rvr = rci.getResultValueRange();
-                if (rvr != null) {
-                    minCredit = new BigDecimal(rvr.getMinValue());
-                    maxCredit = new BigDecimal(rvr.getMaxValue());
-                } else {
-                    minCredit = new BigDecimal(
-                            rci.getAttributeValue("minCreditValue"));
-                    maxCredit = new BigDecimal(
-                            rci.getAttributeValue("maxCreditValue"));
-                }
-            }
 
-            if (courseCredit.compareTo(maxCredit) > 0)
-                creditsForPlanItem = maxCredit;
-            else if (courseCredit.compareTo(minCredit) < 0)
-                creditsForPlanItem = minCredit;
-            else
-                creditsForPlanItem = courseCredit;
+	public BigDecimal getCreditsForPlanItem(Course course) {
+		if (creditsForPlanItem == null && courseCredit != null) {
+			BigDecimal minCredit = BigDecimal.ZERO;
+			BigDecimal maxCredit = ONE_HUNDRED;
+			ResultValuesGroupInfo rci;
+			try {
+				rci = KSCollectionUtils.getRequiredZeroElement(course
+						.getCreditOptions());
+			} catch (OperationFailedException e) {
+				throw new RuntimeException("Invalid Credit Options", e);
+			}
+			String type = rci.getTypeKey();
+			if (type.equals("kuali.result.values.group.type.fixed")) {
+				boolean useAttributes = rci.getResultValueKeys().isEmpty();
+				if (!useAttributes)
+					try {
+						ResultValueInfo rv = KsapFrameworkServiceLocator
+								.getLrcService()
+								.getResultValue(
+										KSCollectionUtils.getRequiredZeroElement(rci
+												.getResultValueKeys()),
+										KsapFrameworkServiceLocator
+												.getContext().getContextInfo());
+						if (rv == null)
+							useAttributes = true;
+						else
+							minCredit = maxCredit = new BigDecimal(
+									rv.getValue());
+					} catch (DoesNotExistException e) {
+						throw new IllegalArgumentException("LRC lookup error",
+								e);
+					} catch (InvalidParameterException e) {
+						throw new IllegalArgumentException("LRC lookup error",
+								e);
+					} catch (MissingParameterException e) {
+						throw new IllegalArgumentException("LRC lookup error",
+								e);
+					} catch (OperationFailedException e) {
+						throw new IllegalStateException("LRC lookup error", e);
+					} catch (PermissionDeniedException e) {
+						throw new IllegalStateException("LRC lookup error", e);
+					}
+				if (useAttributes)
+					minCredit = maxCredit = new BigDecimal(
+							rci.getAttributeValue("fixedCreditValue"));
+			} else if (type.equals("kuali.result.values.group.type.range")) {
+				ResultValueRangeInfo rvr = rci.getResultValueRange();
+				if (rvr != null) {
+					minCredit = new BigDecimal(rvr.getMinValue());
+					maxCredit = new BigDecimal(rvr.getMaxValue());
+				} else {
+					minCredit = new BigDecimal(
+							rci.getAttributeValue("minCreditValue"));
+					maxCredit = new BigDecimal(
+							rci.getAttributeValue("maxCreditValue"));
+				}
+			}
 
-        }
-        return creditsForPlanItem;
-    }
+			if (courseCredit.compareTo(maxCredit) > 0)
+				creditsForPlanItem = maxCredit;
+			else if (courseCredit.compareTo(minCredit) < 0)
+				creditsForPlanItem = minCredit;
+			else
+				creditsForPlanItem = courseCredit;
+
+		}
+		return creditsForPlanItem;
+	}
 
 	public String getCourseNote() {
 		return courseNote;
@@ -295,7 +299,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 		return expectedPlanItemCategory;
 	}
 
-	public void setExpectedPlanItemCategory(AcademicPlanServiceConstants.ItemCategory category) {
+	public void setExpectedPlanItemCategory(
+			AcademicPlanServiceConstants.ItemCategory category) {
 		this.expectedPlanItemCategory = category;
 	}
 
@@ -303,7 +308,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 		return targetPlanItemCategory;
 	}
 
-	public void setTargetPlanItemCategory(AcademicPlanServiceConstants.ItemCategory targetPlanItemCategory) {
+	public void setTargetPlanItemCategory(
+			AcademicPlanServiceConstants.ItemCategory targetPlanItemCategory) {
 		this.targetPlanItemCategory = targetPlanItemCategory;
 	}
 
@@ -333,7 +339,7 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 
 		setCourseCd(course.getCode());
 		setBackup(planItem.getCategory().equals(
-                AcademicPlanServiceConstants.ItemCategory.BACKUP));
+				AcademicPlanServiceConstants.ItemCategory.BACKUP));
 
 		RichText descr = planItem.getDescr();
 		setCourseNote(descr != null && StringUtils.hasText(descr.getPlain()) ? descr
@@ -353,43 +359,14 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			Map<String, List<PlannerItem>> completed = new HashMap<String, List<PlannerItem>>();
 			Map<String, List<PlannerTermNote>> termNotes = new HashMap<String, List<PlannerTermNote>>();
 
-			List<StudentCourseRecordInfo> completedRecords;
-			try {
-				completedRecords = KsapFrameworkServiceLocator
-						.getAcademicRecordService().getCompletedCourseRecords(
-								learningPlan.getStudentId(),
-								KsapFrameworkServiceLocator.getContext()
-										.getContextInfo());
-			} catch (DoesNotExistException e) {
-				throw new IllegalArgumentException("AR lookup failure", e);
-			} catch (InvalidParameterException e) {
-				throw new IllegalArgumentException("AR lookup failure", e);
-			} catch (MissingParameterException e) {
-				throw new IllegalArgumentException("AR lookup failure", e);
-			} catch (OperationFailedException e) {
-				throw new IllegalStateException("AR lookup failure", e);
-			} catch (PermissionDeniedException e) {
-				throw new IllegalStateException("AR lookup failure", e);
-			}
+			List<StudentCourseRecordInfo> completedRecords = KsapFrameworkServiceLocator
+					.getPlanHelper().getCompletedRecords(learningPlan.getStudentId());
 
-			List<PlanItem> planItems;
-			try {
-				planItems = new ArrayList<PlanItem>(KsapFrameworkServiceLocator
-						.getAcademicPlanService().getPlanItemsInPlan(
-								learningPlan.getId(),
-								KsapFrameworkServiceLocator.getContext()
-										.getContextInfo()));
-			} catch (InvalidParameterException e) {
-				throw new IllegalArgumentException("LP lookup failure", e);
-			} catch (MissingParameterException e) {
-				throw new IllegalArgumentException("LP lookup failure", e);
-			} catch (OperationFailedException e) {
-				throw new IllegalStateException("LP lookup failure", e);
-			} catch (PermissionDeniedException e) {
-                throw new IllegalStateException("LP lookup permission failure", e);
-            }
+			List<PlanItem> planItems = new ArrayList<>(
+					KsapFrameworkServiceLocator.getPlanHelper().getPlanItems(
+							learningPlan.getId()));
 
-            List<String> courseIds = new ArrayList<String>(
+			List<String> courseIds = new ArrayList<String>(
 					completedRecords.size() + planItems.size());
 			SortedSet<String> termIds = new TreeSet<String>();
 
@@ -397,7 +374,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			while (planItemIterator.hasNext()) {
 				PlanItem planItem = planItemIterator.next();
 
-				AcademicPlanServiceConstants.ItemCategory category = planItem.getCategory();
+				AcademicPlanServiceConstants.ItemCategory category = planItem
+						.getCategory();
 				String refTypeKey = planItem.getRefObjectType();
 				List<String> planTermIds = planItem.getPlanTermIds();
 				if (!PlanConstants.COURSE_TYPE.equals(refTypeKey)
@@ -417,7 +395,7 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 
 			if (completedRecords != null)
 				for (StudentCourseRecordInfo completedRecord : completedRecords) {
-					String termId =completedRecord.getTermId();
+					String termId = completedRecord.getTermId();
 					termIds.add(termId);
 					List<PlannerItem> itemList = completed.get(termId);
 					if (itemList == null)
@@ -431,7 +409,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			courseHelper.frontLoad(courseIds);
 
 			for (PlanItem planItem : planItems) {
-				AcademicPlanServiceConstants.ItemCategory category = planItem.getCategory();
+				AcademicPlanServiceConstants.ItemCategory category = planItem
+						.getCategory();
 				Course course = courseHelper.getCourseInfo(planItem
 						.getRefObjectId());
 
@@ -460,28 +439,30 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			}
 
 			TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
-            List<Term> tempTerms = new ArrayList<Term>();
-            for(String tempId : termIds){
-                tempTerms.add(termHelper.getTerm(tempId));
-            }
-            String firstTermId;
-            if(termIds.isEmpty()){
-                firstTermId = termHelper.getCurrentTerm().getId();
-            }else{
-                firstTermId = termIds.first();
-            }
-            Term firstTerm;
-            if(tempTerms.size()>0){
-                tempTerms = termHelper.sortTermsByStartDate(tempTerms,true);
-                firstTerm = tempTerms.get(0);
-                firstTermId = firstTerm.getId();
-            }else{
-                firstTerm = termHelper.getTerm(firstTermId);
-            }
+			List<Term> tempTerms = new ArrayList<Term>();
+			for (String tempId : termIds) {
+				tempTerms.add(termHelper.getTerm(tempId));
+			}
+			String firstTermId;
+			if (termIds.isEmpty()) {
+				firstTermId = termHelper.getCurrentTerm().getId();
+			} else {
+				firstTermId = termIds.first();
+			}
+			Term firstTerm;
+			if (tempTerms.size() > 0) {
+				tempTerms = termHelper.sortTermsByStartDate(tempTerms, true);
+				firstTerm = tempTerms.get(0);
+				firstTermId = firstTerm.getId();
+			} else {
+				firstTerm = termHelper.getTerm(firstTermId);
+			}
 			termHelper.frontLoadForPlanner(firstTermId);
 
-			List<Term> calendarTerms = KsapFrameworkServiceLocator.getPlanHelper().getPlannerCalendarTerms(firstTerm);
-			String focusTermId = KsapFrameworkServiceLocator.getPlanHelper().getPlannerFirstTermId();
+			List<Term> calendarTerms = KsapFrameworkServiceLocator
+					.getPlanHelper().getPlannerCalendarTerms(firstTerm);
+			String focusTermId = KsapFrameworkServiceLocator.getPlanHelper()
+					.getPlannerFirstTermId();
 
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(firstTerm.getStartDate());
@@ -527,8 +508,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 
 			List<PlannerTerm> pterms = new ArrayList<PlannerTerm>(
 					termIds.size());
-            for(Term t : calendarTerms){
-			    String termId = t.getId();
+			for (Term t : calendarTerms) {
+				String termId = t.getId();
 				PlannerTerm pterm = new PlannerTerm(termId);
 				pterm.setUniqueId(UUID.randomUUID().toString());
 
@@ -570,7 +551,7 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			}
 
 			terms = pterms;
-            Collections.sort(terms);
+			Collections.sort(terms);
 		}
 
 		return terms;
@@ -578,7 +559,8 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 
 	public boolean isVariableCredit() {
 		Range range = CreditsFormatter.getRange(getCourse());
-        if(range.getMultiple()!=null && !range.getMultiple().isEmpty()) return true;
+		if (range.getMultiple() != null && !range.getMultiple().isEmpty())
+			return true;
 		return !range.getMax().equals(range.getMin());
 	}
 

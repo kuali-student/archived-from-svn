@@ -1,22 +1,5 @@
 package org.kuali.student.ap.plannerreview.controller;
 
-import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.plannerreview.infc.Conversation;
-import org.kuali.student.ap.plannerreview.infc.ConversationComment;
-import org.kuali.student.ap.plannerreview.dto.ConversationInfo;
-import org.kuali.student.ap.plannerreview.dto.ConversationYearInfo;
-import org.kuali.student.ap.plannerreview.form.ConversationListForm;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.plannerreview.dto.ConversationInfo;
+import org.kuali.student.ap.plannerreview.dto.ConversationYearInfo;
+import org.kuali.student.ap.plannerreview.form.ConversationListForm;
+import org.kuali.student.ap.plannerreview.infc.Conversation;
+import org.kuali.student.ap.plannerreview.infc.ConversationComment;
+import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller

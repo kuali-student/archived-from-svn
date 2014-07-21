@@ -14,6 +14,19 @@
  */
 package org.kuali.student.ap.coursesearch.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kuali.rice.krad.uif.UifConstants;
@@ -37,7 +50,6 @@ import org.kuali.student.ap.coursesearch.util.CourseDetailsUtil;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.common.collection.KSCollectionUtils;
-import org.kuali.student.common.util.security.ContextUtils;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
@@ -65,18 +77,6 @@ import org.kuali.student.r2.core.scheduling.dto.TimeSlotInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * {@inheritDoc}
@@ -858,7 +858,7 @@ public class CourseDetailsViewHelperServiceImpl extends ViewHelperServiceImpl im
         RoomInfo roomInfo = null;
         if (StringUtils.isNotBlank(roomId)) {
             try {
-                roomInfo = KsapFrameworkServiceLocator.getRoomService().getRoom(roomId, ContextUtils.createDefaultContextInfo());
+                roomInfo = KsapFrameworkServiceLocator.getRoomService().getRoom(roomId, KsapFrameworkServiceLocator.getContext().getContextInfo());
             } catch (DoesNotExistException e) {
                 throw new IllegalArgumentException("Room Service lookup error", e);
             } catch (InvalidParameterException e) {

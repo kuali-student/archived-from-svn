@@ -1,14 +1,15 @@
 package org.kuali.student.ap.framework.context;
 
+import java.util.List;
+
 import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.coursesearch.CourseSearchItem;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.infc.Course;
-
-import java.util.List;
 
 /**
  * Helper class that provides some convenience methods around Course interactions.
@@ -30,6 +31,15 @@ public interface CourseHelper {
      * @return
      */
 	CourseInfo getCourseInfo(String courseId);
+	
+	/**
+	 * Gets a list of activity offerings for a course.
+	 * 
+	 * @param courseId
+	 *            course ID
+	 * @return list of activity offerings
+	 */
+	List<ActivityOfferingInfo> getActivityOfferings(String courseId);
 
     /**
      * Get the list of ActivityOfferingDisplayInfo objects for the given courseId and term

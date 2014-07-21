@@ -1,23 +1,34 @@
 package org.kuali.student.ap.planner.controller;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.kuali.rice.krad.uif.view.ViewAuthorizerBase;
 import org.kuali.rice.krad.web.controller.MethodAccessible;
 import org.kuali.rice.krad.web.controller.extension.KsapControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
+import org.kuali.student.ap.academicplan.dto.TypedObjectReferenceInfo;
 import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
-import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.ap.framework.util.KsapStringUtil;
 import org.kuali.student.ap.planner.PlannerForm;
 import org.kuali.student.ap.planner.form.PlannerFormImpl;
 import org.kuali.student.ap.planner.support.PlanItemControllerHelper;
 import org.kuali.student.ap.planner.util.PlanEventUtils;
 import org.kuali.student.common.collection.KSCollectionUtils;
-import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
 import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
@@ -26,11 +37,7 @@ import org.kuali.student.r2.common.exceptions.InvalidParameterException;
 import org.kuali.student.r2.common.exceptions.MissingParameterException;
 import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.kuali.student.r2.common.exceptions.ReadOnlyException;
-import org.kuali.student.r2.common.exceptions.VersionMismatchException;
 import org.kuali.student.r2.core.acal.infc.Term;
-import org.kuali.student.r2.core.comment.dto.CommentInfo;
-import org.kuali.student.r2.core.comment.service.CommentService;
 import org.kuali.student.r2.lum.course.infc.Course;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,17 +48,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Fix under KSAP-265
@@ -190,7 +186,7 @@ public class PlannerController extends KsapControllerBase {
             }
 		} else {
             //Load course related planItems to identify if the course has been bookmarked
-            List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course);
+            List<PlanItem> planItems = KsapFrameworkServiceLocator.getPlanHelper().loadStudentsPlanItemsForCourse(course.getId());
             form.setBookmarked(KsapFrameworkServiceLocator.getCourseHelper().isCourseBookmarked(course, planItems));
         }
 
@@ -225,100 +221,8 @@ public class PlannerController extends KsapControllerBase {
 		if (termNote != null)
 			termNote = KsapStringUtil.replaceSmartCharacters(termNote);
 
-        // Retrieve the list of term notes for this plan.
-		CommentService commentService = KsapFrameworkServiceLocator.getCommentService();
-		List<CommentInfo> commentInfos;
-		try {
-			commentInfos = commentService.getCommentsByReferenceAndType(plan.getId(),
-					PlanConstants.TERM_NOTE_COMMENT_TYPE, KsapFrameworkServiceLocator.getContext().getContextInfo());
-		} catch (DoesNotExistException e) {
-			throw new IllegalArgumentException("Comment lookup failure", e);
-		} catch (InvalidParameterException e) {
-			throw new IllegalArgumentException("Comment lookup failure", e);
-		} catch (MissingParameterException e) {
-			throw new IllegalArgumentException("Comment lookup failure", e);
-		} catch (OperationFailedException e) {
-			throw new IllegalStateException("Comment lookup failure", e);
-		} catch (PermissionDeniedException e) {
-			throw new IllegalStateException("Comment lookup failure", e);
-		}
-
-
-        // Create replacement rich text with new term note
-		RichTextInfo newNote = new RichTextInfo();
-		newNote.setFormatted(termNote);
-		newNote.setPlain(termNote);
-
-        // Search for existing term note for that term.
-        boolean found = false;
-		for (CommentInfo comment : commentInfos) {
-			String commentAtpId = comment.getAttributeValue(PlanConstants.TERM_NOTE_COMMENT_ATTRIBUTE_ATPID);
-			if (termId.equals(commentAtpId)) {
-				found = true;
-				comment.setCommentText(newNote);
-				try {
-                    if(StringUtils.isEmpty(termNote)){
-                        commentService.deleteComment(comment.getId(),KsapFrameworkServiceLocator.getContext().getContextInfo());
-                    }else{
-                        // If existing note is found replace the rich text and update it in the database.
-                        commentService.updateComment(comment.getId(), comment, KsapFrameworkServiceLocator.getContext()
-                                .getContextInfo());
-                    }
-				} catch (DataValidationErrorException e) {
-					throw new IllegalArgumentException("Comment lookup failure", e);
-				} catch (DoesNotExistException e) {
-					throw new IllegalArgumentException("Comment lookup failure", e);
-				} catch (InvalidParameterException e) {
-					throw new IllegalArgumentException("Comment lookup failure", e);
-				} catch (MissingParameterException e) {
-					throw new IllegalArgumentException("Comment lookup failure", e);
-				} catch (OperationFailedException e) {
-					throw new IllegalStateException("Comment lookup failure", e);
-				} catch (PermissionDeniedException e) {
-					throw new IllegalStateException("Comment lookup failure", e);
-				} catch (ReadOnlyException e) {
-					throw new IllegalStateException("Comment lookup failure", e);
-				} catch (VersionMismatchException e) {
-					throw new IllegalStateException("Comment lookup failure", e);
-				}
-				break;
-			}
-		}
-
-        // If no existing note is found create new term note and save it to the database
-		if (!found && !StringUtils.isEmpty(termNote)) {
-			CommentInfo newComment = new CommentInfo();
-			newComment.setCommentText(newNote);
-			newComment.setEffectiveDate(KsapHelperUtil.getCurrentDate());
-			newComment.setReferenceId(plan.getId());
-			newComment.setReferenceTypeKey(PlanConstants.TERM_NOTE_COMMENT_TYPE);
-			newComment.setTypeKey(PlanConstants.TERM_NOTE_COMMENT_TYPE);
-			newComment.setStateKey("ACTIVE");
-			AttributeInfo atpIdAttr = new AttributeInfo();
-			atpIdAttr.setKey(PlanConstants.TERM_NOTE_COMMENT_ATTRIBUTE_ATPID);
-			atpIdAttr.setValue(termId);
-			newComment.getAttributes().add(atpIdAttr);
-			try {
-				commentService.createComment(newComment.getReferenceId(), newComment.getReferenceTypeKey(),
-						PlanConstants.TERM_NOTE_COMMENT_TYPE, newComment, KsapFrameworkServiceLocator.getContext()
-								.getContextInfo());
-			} catch (DataValidationErrorException e) {
-				throw new IllegalArgumentException("Comment lookup failure", e);
-			} catch (DoesNotExistException e) {
-				throw new IllegalArgumentException("Comment lookup failure", e);
-			} catch (InvalidParameterException e) {
-				throw new IllegalArgumentException("Comment lookup failure", e);
-			} catch (MissingParameterException e) {
-				throw new IllegalArgumentException("Comment lookup failure", e);
-			} catch (OperationFailedException e) {
-				throw new IllegalStateException("Comment lookup failure", e);
-			} catch (PermissionDeniedException e) {
-				throw new IllegalStateException("Comment lookup failure", e);
-			} catch (ReadOnlyException e) {
-				throw new IllegalStateException("Comment lookup failure", e);
-			}
-		}
-
+		KsapFrameworkServiceLocator.getPlanHelper().editTermNote(plan.getId(), termId, termNote);
+		
         // Create Json strings for displaying action's response and updating the planner screen.
         JsonObjectBuilder eventList = Json.createObjectBuilder();
         eventList = PlanEventUtils.updateTermNoteEvent(uniqueId, termNote, eventList);
@@ -473,32 +377,14 @@ public class PlannerController extends KsapControllerBase {
 			}
 		}
 
-        // Update the plan item in the database
-		try {
-			planItemInfo = KsapFrameworkServiceLocator.getAcademicPlanService().updatePlanItem(planItemInfo.getId(),
-					planItemInfo, KsapFrameworkServiceLocator.getContext().getContextInfo());
-		} catch (DataValidationErrorException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (InvalidParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (MissingParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (DoesNotExistException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (OperationFailedException e) {
-			throw new IllegalStateException("LP service failure", e);
-		} catch (PermissionDeniedException e) {
-			throw new IllegalStateException("LP service failure", e);
-        } catch (VersionMismatchException e) {
-            //TODO:  ksap-1012 handle VersionMismatchException appropriately
-            throw new IllegalStateException("LP service failure", e);
-		}
+		PlanItem updatedPlanItem = KsapFrameworkServiceLocator.getPlanHelper()
+				.updatePlanItem(planItemInfo);
 
         // Construct json events for updating the planner screen
         JsonObjectBuilder eventList = Json.createObjectBuilder();
-        eventList = PlanEventUtils.updatePlanItemEvent(form.getUniqueId(), planItemInfo, eventList);
+        eventList = PlanEventUtils.updatePlanItemEvent(form.getUniqueId(), updatedPlanItem, eventList);
         try{
-            eventList = PlanEventUtils.updateTotalCreditsEvent(true, KSCollectionUtils.getRequiredZeroElement(planItemInfo.getPlanTermIds()), eventList);
+            eventList = PlanEventUtils.updateTotalCreditsEvent(true, KSCollectionUtils.getRequiredZeroElement(updatedPlanItem.getPlanTermIds()), eventList);
         }catch(OperationFailedException e){
             LOG.warn("Unable to update total credits", e);
         }
@@ -583,31 +469,12 @@ public class PlannerController extends KsapControllerBase {
 			return null;
 
         // Replaces the existing term information with the new term
-		PlanItemInfo planItemInfo = new PlanItemInfo(planItem);
+		PlanItem planItemInfo = new PlanItemInfo(planItem);
 		List<String> planTermIds = new ArrayList<String>(1);
 		planTermIds.add(termId);
-		planItemInfo.setPlanTermIds(planTermIds);
+		((PlanItemInfo) planItemInfo).setPlanTermIds(planTermIds);
 
-        // Save updated plan item
-		try {
-			planItemInfo = KsapFrameworkServiceLocator.getAcademicPlanService().updatePlanItem(planItemInfo.getId(),
-					planItemInfo, KsapFrameworkServiceLocator.getContext().getContextInfo());
-		} catch (DataValidationErrorException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (InvalidParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (MissingParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (DoesNotExistException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (OperationFailedException e) {
-			throw new IllegalStateException("LP service failure", e);
-		} catch (PermissionDeniedException e) {
-			throw new IllegalStateException("LP service failure", e);
-        } catch (VersionMismatchException e) {
-            //TODO:  ksap-1012 handle VersionMismatchException appropriately
-            throw new IllegalStateException("LP service failure", e);
-		}
+		planItemInfo = KsapFrameworkServiceLocator.getPlanHelper().updatePlanItem(planItemInfo);
 
         // Create json strings for displaying action's response and updating the planner screen.
         JsonObjectBuilder eventList = Json.createObjectBuilder();
@@ -641,21 +508,7 @@ public class PlannerController extends KsapControllerBase {
 		if (planItem == null)
 			return null;
 
-        // Delete plan item from the database
-		try {
-			KsapFrameworkServiceLocator.getAcademicPlanService().deletePlanItem(planItem.getId(),
-					KsapFrameworkServiceLocator.getContext().getContextInfo());
-		} catch (InvalidParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (MissingParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (DoesNotExistException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (OperationFailedException e) {
-			throw new IllegalStateException("LP service failure", e);
-		} catch (PermissionDeniedException e) {
-			throw new IllegalStateException("LP service failure", e);
-		}
+		KsapFrameworkServiceLocator.getPlanHelper().removePlanItem(planItem.getId());
 
         // Create json strings for displaying action's response and updating the planner screen.
         JsonObjectBuilder eventList = Json.createObjectBuilder();
@@ -680,33 +533,13 @@ public class PlannerController extends KsapControllerBase {
 		if (planItem == null)
 			return null;
 
-		PlanItemInfo planItemInfo = new PlanItemInfo(planItem);
-
+		PlanItem planItemInfo = new PlanItemInfo(planItem);
 
         // Set the new category for the item
-        planItemInfo.setCategory(form.isBackup() ? AcademicPlanServiceConstants.ItemCategory.BACKUP
+        ((PlanItemInfo) planItemInfo).setCategory(form.isBackup() ? AcademicPlanServiceConstants.ItemCategory.BACKUP
                 : AcademicPlanServiceConstants.ItemCategory.PLANNED);
 
-        // Update the plan item in the database.
-		try {
-			planItemInfo = KsapFrameworkServiceLocator.getAcademicPlanService().updatePlanItem(planItemInfo.getId(),
-					planItemInfo, KsapFrameworkServiceLocator.getContext().getContextInfo());
-		} catch (DataValidationErrorException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (InvalidParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (MissingParameterException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (DoesNotExistException e) {
-			throw new IllegalArgumentException("LP service failure", e);
-		} catch (OperationFailedException e) {
-			throw new IllegalStateException("LP service failure", e);
-		} catch (PermissionDeniedException e) {
-			throw new IllegalStateException("LP service failure", e);
-        } catch (VersionMismatchException e) {
-            //TODO:  ksap-1012 handle VersionMismatchException appropriately
-            throw new IllegalStateException("LP service failure", e);
-		}
+        planItemInfo = KsapFrameworkServiceLocator.getPlanHelper().updatePlanItem(planItemInfo);
 
         // Create json strings for displaying action's response and updating the planner screen.
         JsonObjectBuilder eventList = Json.createObjectBuilder();
@@ -733,7 +566,6 @@ public class PlannerController extends KsapControllerBase {
                                  HttpServletResponse response) throws IOException, ServletException {
         AcademicPlanServiceConstants.ItemCategory category = form.isBackup() ? AcademicPlanServiceConstants.ItemCategory.BACKUP
                 : AcademicPlanServiceConstants.ItemCategory.PLANNED;
-        Term term = KsapFrameworkServiceLocator.getTermHelper().getTerm(termId);
         JsonObjectBuilder eventList = Json.createObjectBuilder();
         PlanItem wishlistPlanItem = null;
 
@@ -757,70 +589,18 @@ public class PlannerController extends KsapControllerBase {
             }
 
         // If item is in wishlist use existing entry instead of creating new.
-        boolean create = wishlistPlanItem == null;
-        PlanItemInfo planItemInfo;
-        if (create) {
-            planItemInfo = new PlanItemInfo();
-            planItemInfo.setCategory(category);
-            planItemInfo.setTypeKey(AcademicPlanServiceConstants.LEARNING_PLAN_ITEM_TYPE);
-            planItemInfo.setStateKey(PlanConstants.LEARNING_PLAN_ITEM_ACTIVE_STATE_KEY);
-            planItemInfo.setLearningPlanId(plan.getId());
-        } else {
-            assert plan.getId().equals(wishlistPlanItem.getLearningPlanId()) : plan.getId() + " "
-                    + wishlistPlanItem.getLearningPlanId();
+        if (wishlistPlanItem != null)
             eventList = PlanEventUtils.makeRemoveEvent(form.getUniqueId(), wishlistPlanItem, eventList);
-            planItemInfo = new PlanItemInfo(wishlistPlanItem);
-            planItemInfo.setCategory(category);
-        }
 
-        // Fill in course information
-        planItemInfo.setRefObjectId(course.getId());
-        planItemInfo.setRefObjectType(PlanConstants.COURSE_TYPE);
-        List<String> planTermIds = new ArrayList<String>(1);
-        planTermIds.add(termId);
-        planItemInfo.setPlanTermIds(planTermIds);
-
-        if (StringUtils.hasText(form.getCourseNote())) {
-            RichTextInfo descr = new RichTextInfo();
-            descr.setPlain(form.getCourseNote());
-            descr.setFormatted(form.getCourseNote());
-            planItemInfo.setDescr(descr);
-        } else
-            planItemInfo.setDescr(null);
-        planItemInfo.setCredit(form.getCreditsForPlanItem(course));
-
-        try {
-            if (create) {
-                // If creating new add it to the database
-                planItemInfo = KsapFrameworkServiceLocator.getAcademicPlanService().createPlanItem(planItemInfo,
-                        KsapFrameworkServiceLocator.getContext().getContextInfo());
-            } else {
-                // If using wish list item update it
-                planItemInfo = KsapFrameworkServiceLocator.getAcademicPlanService().updatePlanItem(
-                        planItemInfo.getId(), planItemInfo, KsapFrameworkServiceLocator.getContext().getContextInfo());
-            }
-        } catch (AlreadyExistsException e) {
-            LOG.warn(String.format("Course %s is already planned for %s", course.getCode(), term.getName()), e);
-            PlanEventUtils.sendJsonEvents(false,
-                    "Course " + course.getCode() + " is already planned for " + term.getName(), response, eventList);
-            return;
-        } catch (DataValidationErrorException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (InvalidParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (MissingParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (DoesNotExistException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (OperationFailedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        } catch (PermissionDeniedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        } catch (VersionMismatchException e) {
-            //TODO:  ksap-1012 handle VersionMismatchException appropriately
-            throw new IllegalStateException("LP service failure", e);
-        }
-
+		PlanItem planItemInfo = KsapFrameworkServiceLocator.getPlanHelper().addPlanItem(
+				plan.getId(),
+				category,
+				form.getCourseNote(),
+				form.getCreditsForPlanItem(course),
+				Collections.singletonList(termId),
+				new TypedObjectReferenceInfo(PlanConstants.COURSE_TYPE,
+						course.getId()));
+        
         // Create json strings for displaying action's response and updating the planner screen.
         eventList = PlanEventUtils.makeAddEvent(planItemInfo, eventList);
         eventList = PlanEventUtils.updateTotalCreditsEvent(true, termId, eventList);
@@ -886,21 +666,7 @@ public class PlannerController extends KsapControllerBase {
         if (planItem == null)
             return null;
 
-        // Delete plan item from the database
-        try {
-            KsapFrameworkServiceLocator.getAcademicPlanService().deletePlanItem(planItem.getId(),
-                    KsapFrameworkServiceLocator.getContext().getContextInfo());
-        } catch (InvalidParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (MissingParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (DoesNotExistException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (OperationFailedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        } catch (PermissionDeniedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        }
+        KsapFrameworkServiceLocator.getPlanHelper().removePlanItem(planItem.getId());
 
         // Create json strings for displaying action's response and updating the planner screen.
         JsonObjectBuilder eventList = Json.createObjectBuilder();
@@ -930,34 +696,15 @@ public class PlannerController extends KsapControllerBase {
         }
 
         // Add the course to the plan
-        PlanItemInfo newBookmark = new PlanItemInfo();
-        newBookmark.setRefObjectId(course.getId());
-        newBookmark.setTypeKey(AcademicPlanServiceConstants.LEARNING_PLAN_ITEM_TYPE);
-        newBookmark.setStateKey(PlanConstants.LEARNING_PLAN_ITEM_ACTIVE_STATE_KEY);
-        newBookmark.setRefObjectType(PlanConstants.COURSE_TYPE);
-        newBookmark.setCategory(AcademicPlanServiceConstants.ItemCategory.WISHLIST);
-        newBookmark.setLearningPlanId(plan.getId());
+		PlanItem newBookmark = KsapFrameworkServiceLocator.getPlanHelper().addPlanItem(
+				plan.getId(),
+				AcademicPlanServiceConstants.ItemCategory.WISHLIST,
+				null,
+				null,
+				Collections.<String> emptyList(),
+				new TypedObjectReferenceInfo(PlanConstants.COURSE_TYPE, course
+						.getId()));
 
-        try {
-                // If creating new add it to the database
-            newBookmark = KsapFrameworkServiceLocator.getAcademicPlanService().createPlanItem(newBookmark,
-                        KsapFrameworkServiceLocator.getContext().getContextInfo());
-        } catch (AlreadyExistsException e) {
-            LOG.warn(String.format("Course %s is already bookmarked", course.getCode()), e);
-            PlanEventUtils.sendJsonEvents(false,
-                    "Course " + course.getCode() + " is already bookmarked", response, eventList);
-            return null;
-        } catch (DataValidationErrorException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (InvalidParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (MissingParameterException e) {
-            throw new IllegalArgumentException("LP service failure", e);
-        } catch (OperationFailedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        } catch (PermissionDeniedException e) {
-            throw new IllegalStateException("LP service failure", e);
-        }
         eventList = PlanEventUtils.makeAddBookmarkEvent(newBookmark, eventList);
         eventList = PlanEventUtils.makeUpdateBookmarkTotalEvent(newBookmark, eventList);
         PlanEventUtils.sendJsonEvents(true, "Course " + course.getCode() + " added to bookmarks",

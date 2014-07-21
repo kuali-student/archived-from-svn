@@ -14,9 +14,9 @@
  */
 package org.kuali.student.ap.coursesearch.dataobject;
 
-import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
-
 import java.util.List;
+
+import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 
 public class FormatOfferingInfoWrapper {
     private String formatOfferingName;

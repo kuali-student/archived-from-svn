@@ -1,5 +1,6 @@
 package org.kuali.student.ap.coursesearch;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -49,20 +50,20 @@ public interface CourseSearchItem {
 	 * 
 	 * @return The credits minimum value.
 	 */
-	float getCreditMin();
+	BigDecimal getCreditMin();
 
 	/**
 	 * Get the credits maximum value, for use with CreditsFacet.
 	 * 
 	 * @return The credits maximum value.
 	 */
-	float getCreditMax();
+	BigDecimal getCreditMax();
 
     /**
      * Get the multiple values of credits, for use with CreditsFacet
      * @return The array of credit values
      */
-    float[] getMultipleCredits();
+	BigDecimal[] getMultipleCredits();
 
 	/**
 	 * Get the credit type for use with CreditsFacet.

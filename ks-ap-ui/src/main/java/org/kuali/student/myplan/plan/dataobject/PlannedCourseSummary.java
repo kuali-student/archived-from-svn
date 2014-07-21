@@ -1,10 +1,10 @@
 package org.kuali.student.myplan.plan.dataobject;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.springframework.util.StringUtils;
 
 /**
  * kmuthu Don't forget to add comment

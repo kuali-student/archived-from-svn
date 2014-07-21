@@ -14,6 +14,8 @@
  */
 package org.kuali.student.ap.coursesearch;
 
+import java.math.BigDecimal;
+
 /**
  * Stores credit information to use in the course search
  */
@@ -23,11 +25,11 @@ public interface Credit {
 
 	String getDisplay();
 
-	float getMin();
+	BigDecimal getMin();
 
-	float getMax();
+	BigDecimal getMax();
 
-    float[] getMultiple();
+	BigDecimal[] getMultiple();
 
 	CourseSearchItem.CreditType getType();
 	

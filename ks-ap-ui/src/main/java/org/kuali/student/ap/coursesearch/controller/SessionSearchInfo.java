@@ -15,6 +15,16 @@
 
 package org.kuali.student.ap.coursesearch.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.student.ap.coursesearch.CourseFacetStrategy;
 import org.kuali.student.ap.coursesearch.CourseSearchForm;
 import org.kuali.student.ap.coursesearch.CourseSearchItem;
@@ -25,15 +35,6 @@ import org.kuali.student.ap.coursesearch.SearchInfo;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Session-bound search results cache. This object backs the facet and data

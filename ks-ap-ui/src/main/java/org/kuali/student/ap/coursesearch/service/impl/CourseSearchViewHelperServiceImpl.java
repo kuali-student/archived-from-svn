@@ -14,6 +14,17 @@
  */
 package org.kuali.student.ap.coursesearch.service.impl;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.krad.uif.service.impl.ViewHelperServiceImpl;
 import org.kuali.student.ap.coursesearch.CourseSearchForm;
@@ -28,16 +39,6 @@ import org.kuali.student.ap.coursesearch.service.CourseSearchViewHelperService;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 /**
  *  ViewHelper class used to populate the data on the Course Search page (CourseSearchUI.xml)

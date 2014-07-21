@@ -14,6 +14,11 @@
  */
 package org.kuali.student.ap.coursesearch.service;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.json.JsonObjectBuilder;
+
 import org.kuali.rice.krad.uif.service.ViewHelperService;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.coursesearch.dataobject.ActivityOfferingDetailsWrapper;
@@ -23,10 +28,6 @@ import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
-
-import javax.json.JsonObjectBuilder;
-import java.util.List;
-import java.util.Map;
 
 /**
  * ViewHelper class used to populate the data on the bottom half of the CourseDetails page (CourseSearchDetailsUI.xml)

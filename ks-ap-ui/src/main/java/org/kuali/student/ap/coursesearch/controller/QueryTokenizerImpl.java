@@ -14,14 +14,14 @@
  */
 package org.kuali.student.ap.coursesearch.controller;
 
-import org.kuali.student.ap.coursesearch.QueryTokenizer;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.kuali.student.ap.coursesearch.QueryTokenizer;
 
 /**
  *  Handles the parsing and extracting of query text into components and tokens

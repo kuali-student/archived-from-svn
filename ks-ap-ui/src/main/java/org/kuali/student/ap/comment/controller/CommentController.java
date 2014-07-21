@@ -35,12 +35,12 @@ import org.kuali.rice.krad.exception.InvalidAddressException;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.comment.CommentConstants;
 import org.kuali.student.ap.comment.dataobject.CommentDataObject;
 import org.kuali.student.ap.comment.dataobject.MessageDataObject;
 import org.kuali.student.ap.comment.form.CommentForm;
 import org.kuali.student.ap.comment.service.CommentQueryHelper;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.myplan.service.MyPlanMailService;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
@@ -235,8 +235,6 @@ public class CommentController extends UifControllerBase {
 		if (StringUtils.isNotEmpty(toAddress)) {
 			try {
 				sendMessage(fromAddress, toAddress, subject, body);
-				logger.info("Sent comment email ({}) to: {} From: {}",
-                        messageText, toAddress, fromAddress);
 			} catch (Exception e) {
 				logger.error(String.format(
 						"Could not send e-mail from [%s] to [%s].",
@@ -370,9 +368,6 @@ public class CommentController extends UifControllerBase {
 		if (StringUtils.isNotEmpty(toAddress)) {
 			try {
 				sendMessage(fromAddress, toAddress, subject, body);
-				logger.info("Sent message email ({}) to student: {} from adviser: {}",
-                        messageText, studentName, adviserName);
-
 			} catch (Exception e) {
 				logger.error(String.format(
 						"Could not send e-mail from [%s] to [%s].",

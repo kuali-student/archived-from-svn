@@ -1,13 +1,24 @@
 package org.kuali.student.ap.plannerreview.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.plannerreview.infc.Conversation;
-import org.kuali.student.ap.plannerreview.infc.ConversationComment;
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
 import org.kuali.student.ap.plannerreview.dto.ConversationCommentInfo;
 import org.kuali.student.ap.plannerreview.dto.ConversationDateCommentInfo;
 import org.kuali.student.ap.plannerreview.form.ConversationViewForm;
+import org.kuali.student.ap.plannerreview.infc.Conversation;
+import org.kuali.student.ap.plannerreview.infc.ConversationComment;
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.infc.RichText;
@@ -19,16 +30,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 @Controller

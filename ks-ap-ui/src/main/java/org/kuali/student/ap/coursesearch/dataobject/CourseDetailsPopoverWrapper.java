@@ -15,10 +15,10 @@
 package org.kuali.student.ap.coursesearch.dataobject;
 
 
+import java.util.List;
+
 import org.kuali.student.ap.coursesearch.util.CollectionListPropertyEditor;
 import org.kuali.student.ap.coursesearch.util.ScheduledTermsPropertyEditor;
-
-import java.util.List;
 
 /**
  * This data object stores the data used in the display of the CourseDetailsPopover-InquiryView

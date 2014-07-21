@@ -14,10 +14,10 @@
  */
 package org.kuali.student.ap.coursesearch.dataobject;
 
+import java.util.List;
+
 import org.kuali.student.ap.coursesearch.util.CourseDetailsUtil;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
-
-import java.util.List;
 
 public class CourseOfferingDetailsWrapper {
 

@@ -1,10 +1,10 @@
 package org.kuali.student.ap.coursesearch.controller;
 
-import org.kuali.student.ap.coursesearch.CourseSearchForm;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.kuali.student.ap.coursesearch.CourseSearchForm;
 
 /**
  * Opaque key representing a unique search form.

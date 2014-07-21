@@ -1,5 +1,8 @@
 package org.kuali.student.ap.coursesearch.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
@@ -9,9 +12,6 @@ import org.kuali.student.ap.coursesearch.dataobject.CourseOfferingDetailsWrapper
 import org.kuali.student.ap.coursesearch.dataobject.CourseTermDetailsWrapper;
 import org.kuali.student.ap.coursesearch.dataobject.FormatOfferingInfoWrapper;
 import org.kuali.student.ap.coursesearch.form.CourseSectionDetailsForm;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * OptionsFinder used to populate the available format offerings for a given term and course offering.

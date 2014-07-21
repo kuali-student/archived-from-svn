@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.kuali.rice.core.api.config.property.ConfigContext;
+import org.kuali.student.ap.coursesearch.dataobject.CourseDetails;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.YearTerm;
-import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingService;
-import org.kuali.student.ap.coursesearch.dataobject.CourseDetails;
 import org.kuali.student.myplan.plan.dataobject.AcademicRecordDataObject;
 import org.kuali.student.myplan.plan.dataobject.PlanItemDataObject;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.util.date.DateFormatters;
+import org.kuali.student.r2.core.acal.infc.Term;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

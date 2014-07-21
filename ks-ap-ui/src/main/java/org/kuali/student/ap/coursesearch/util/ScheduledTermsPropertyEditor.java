@@ -22,7 +22,6 @@ import java.util.List;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.TermHelper;
 import org.kuali.student.ap.framework.context.YearTerm;
-import org.kuali.student.ap.coursesearch.dataobject.CourseSummaryDetails;
 
 public class ScheduledTermsPropertyEditor extends PropertyEditorSupport {
 //	protected CollectionListPropertyEditorHtmlListType listType = CollectionListPropertyEditorHtmlListType.UL;

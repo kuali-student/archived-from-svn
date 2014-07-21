@@ -14,6 +14,19 @@
  */
 package org.kuali.student.ap.coursesearch.controller;
 
+import static org.kuali.rice.core.api.criteria.PredicateFactory.equal;
+import static org.kuali.rice.core.api.criteria.PredicateFactory.or;
+
+import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.core.api.criteria.Predicate;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
@@ -58,19 +71,6 @@ import org.kuali.student.r2.lum.clu.service.CluService;
 import org.kuali.student.r2.lum.lrc.dto.ResultValuesGroupInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.kuali.rice.core.api.criteria.PredicateFactory.equal;
-import static org.kuali.rice.core.api.criteria.PredicateFactory.or;
 
 public class CourseSearchStrategyImpl implements CourseSearchStrategy {
 
@@ -551,18 +551,16 @@ public class CourseSearchStrategyImpl implements CourseSearchStrategy {
                     CreditImpl credit = new CreditImpl();
                     credit.setId(resultValuesGroupInfo.getKey());
                     credit.setType(CourseSearchItem.CreditType.valueOf(types.get(resultValuesGroupInfo.getTypeKey())));
-                    Float tempVlaueHolder = 0F;
+                    BigDecimal tempVlaueHolder = BigDecimal.ZERO;
                     credit.setMin(tempVlaueHolder);
                     credit.setMax(tempVlaueHolder);
                     if (range.getMin() != null && range.getMax() != null) {
-                        credit.setMin(range.getMin().floatValue());
-                        credit.setMax(range.getMax().floatValue());
+                        credit.setMin(range.getMin());
+                        credit.setMax(range.getMax());
                     }
                     if (range.getMultiple() != null && range.getMultiple().size() > 0) {
-                        credit.setMultiple(new float[range.getMultiple().size()]);
-                        for (int i = 0; i < range.getMultiple().size(); i++) {
-                            credit.setMultiple(i,range.getMultiple().get(i).floatValue());
-                        }
+						credit.setMultiple(range.getMultiple().toArray(
+								new BigDecimal[range.getMultiple().size()]));
                     }
                     credit.setDisplay(CreditsFormatter.formatCredits(range));
                     creditMap.put(credit.getId(), credit);

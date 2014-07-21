@@ -15,16 +15,16 @@
 
 package org.kuali.student.ap.planner.util;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
 import org.kuali.rice.krad.uif.view.ViewModel;
 import org.kuali.student.ap.coursesearch.CreditsFormatter;
 import org.kuali.student.ap.planner.form.PlannerFormImpl;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CourseCreditListBuilder extends UifKeyValuesFinderBase {
 

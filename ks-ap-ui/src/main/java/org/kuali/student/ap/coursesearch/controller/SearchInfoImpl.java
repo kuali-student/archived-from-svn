@@ -1,14 +1,14 @@
 package org.kuali.student.ap.coursesearch.controller;
 
-import org.kuali.rice.core.api.util.KeyValue;
-import org.kuali.student.ap.coursesearch.CourseSearchItem;
-import org.kuali.student.ap.coursesearch.SearchInfo;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.kuali.rice.core.api.util.KeyValue;
+import org.kuali.student.ap.coursesearch.CourseSearchItem;
+import org.kuali.student.ap.coursesearch.SearchInfo;
 
 /**
  * Simple object representing pre-processed search data.

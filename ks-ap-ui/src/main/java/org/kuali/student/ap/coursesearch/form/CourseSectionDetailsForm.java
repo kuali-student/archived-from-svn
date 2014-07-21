@@ -1,9 +1,9 @@
 package org.kuali.student.ap.coursesearch.form;
 
+import java.util.List;
+
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.coursesearch.dataobject.CourseTermDetailsWrapper;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

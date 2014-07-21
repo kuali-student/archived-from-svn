@@ -15,13 +15,13 @@
  */
 package org.kuali.student.myplan.main.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.myplan.main.form.LaunchForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/launch")
