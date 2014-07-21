@@ -27,7 +27,7 @@ class CmRequisiteRules < BasePage
   #Add Rule Section
   # This is the drop down for rule statement
   element(:rule_statement_option) {|node, b|b.select_list(id: "KRMS-PropositionType-Dropdown_#{node}node_0_parent_root_control")}
-  element(:search_link_element) { |b| b.edit_tree_section.a(:text => /Advanced Search/)}
+  element(:search_link_element) { |b| b.a(:text => /Advanced Search/)}
   action(:search_link) { |b| b.search_link_element.click;  b.loading.wait_while_present}
 
   action(:cancel_statement) { |b| b.link(id: 'KS-CancelProp-Button_node_0_parent_root').click; b.loading_wait }
@@ -72,7 +72,7 @@ class CmRequisiteRules < BasePage
   element(:rule_course_code_multiple) { |b| b.text_field(name: 'newCollectionLines[\'document.newMaintainableObject.editTree.rootElement.children_0_.data.proposition.cluSet.clus\'].code') }
   action(:add_course_code) {|b| b.button(id:'KRMS-ApprovedCourseStackedCollectionGroup_node_0_parent_root_add').click; b.loading_wait }
   element(:course_lookup_table) { |b| b.frame(class: 'fancybox-iframe').table(id: "uLookupResults_layout") }
-  element(:select_link) { |index, b| b.frame(class: 'fancybox-iframe').a(id: "u1ywkyae_line#{index}") }
+  element(:select_link) { |index, b| b.frame(class: 'fancybox-iframe').a(id: /line#{index}/) }
   action(:select_course) {|index, b|b.select_link(index).click;  b.loading_wait }
 
 end

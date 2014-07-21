@@ -45,80 +45,81 @@ class CmRequisiteRuleObject < DataFactory
     set_options(options)
   end
 
-def create
-  on CmRequisiteRules do |page|
+  def create
+    on CmRequisiteRules do |page|
 
-    page.add_btn
-    page.loading_wait
-    begin
-      page.rule_statement_option('').fit @rule
-    rescue Exception => e
-      page.rule_statement_option('node_2_parent_').fit @rule
-    end
-
-    page.loading_wait
-
-    if  @rule == 'Must have successfully completed <course>'
-      @complete_rule_text = @rule.sub('<course>', @course)
-
-      # Enter text
-      if @add_method == 'text'
-        puts 'student text'
-        page.course_field.fit @course
+      page.add_btn
+      page.loading_wait
+      begin
+        page.rule_statement_option('').fit @rule
+      rescue Exception => e
+        page.rule_statement_option('node_2_parent_').fit @rule
       end
 
-      if @add_method == 'advanced'
-        puts 'student advanced'
-        page.advanced_search
-        #pick one field
-        page.adv_course_title.fit @search_title
-        page.adv_course_code_rule.fit @course
-        page.adv_plain_text_description_rule.fit @search_phrase
-        page.adv_search
-        #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-        return_search_result(@course, 2)
-      end
-    end
+      page.loading_wait
 
-    if @rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
+      if  @rule == 'Must have successfully completed <course>'
+        @complete_rule_text = @rule.sub('<course>', @course)
 
-      #enter  Number of Courses:
-      page.integer_field.fit @completed_course_number
-
-      #pick the courses, dynamic course ranges, or Course sets.
-      page.multi_course_dropdown.fit @course_combination_type
-
-      $i = 0
-      $num = @completed_course_number
-      while $i < $num do
-        # Enter course Code text
+        # Enter text
         if @add_method == 'text'
-          puts 'course Code text'
+          puts 'student text'
           page.course_field.fit @course
         end
 
         if @add_method == 'advanced'
-          puts 'advanced search'
+          puts 'student advanced'
           page.advanced_search
           #pick one field
-          page.adv_course_code_rule.fit @search_course_code
+          page.adv_course_title.fit @search_title
+          page.adv_course_code_rule.fit @course
+          page.adv_plain_text_description_rule.fit @search_phrase
           page.adv_search
           #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          page.select_course($i)
+          return_search_result(@course, 2)
         end
-        page.add_course_code
-        $i +=1
       end
 
-      page.completed
-      page.loading_wait
-      page.grade_dropdown.fit "A"
+      if @rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
 
+        #enter  Number of Courses:
+        page.integer_field.fit @completed_course_number
+
+        #pick the courses, dynamic course ranges, or Course sets.
+        page.multi_course_dropdown.fit @course_combination_type
+
+        $i = 0
+        $num = @completed_course_number
+        while $i < $num do
+          # Enter course Code text
+          if @add_method == 'text'
+            puts 'course Code text'
+            page.course_field.fit @course
+          end
+
+          if @add_method == 'advanced'
+            puts 'advanced search'
+            page.search_link
+            #pick one field
+            #page.adv_course_code_rule.fit @search_course_code
+            #page.adv_search
+            #number is the column number 1 = course title, 2 = Course Code, 4 = Description
+            #page.select_course($i)
+            rule_advanced_search("course code", @search_course_code, $i)
+          end
+          page.add_course_code
+          $i +=1
+        end
+
+        page.completed
+        page.loading_wait
+        page.grade_dropdown.fit "A"
+
+      end
+
+      preview_rule_changes
     end
-
-    preview_rule_changes
   end
-end
 
   def edit (opts ={})
 
@@ -156,38 +157,18 @@ end
   end
 
 
-  def advanced_search(field, code)
-    on CmRequisiteRules do |page|
-      page.edit_loading.wait_while_present
+  def rule_advanced_search(field, code, index)
+    on CmRequisiteAdvancedSearchPage do |page|
       if field == "course title"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.cluSet\.clus"))
-        page.lookup_course_title.when_present.set code
-      elsif field == "course set"
-        page.loading.wait_while_present
-        page.search_link
-        page.lookup_set_name.when_present.set code
-      elsif field == "program code"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.progCluSet\.clus"))
-        page.lookup_course_code.when_present.set code
-      elsif field == "class standing"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.classStanding"))
-        page.lookup_class_standing.when_present.set code
-      elsif field == "org"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.orgInfo\.id"))
-        page.lookup_abrev_org.when_present.set code
-      elsif field == "population"
-        page.loading.wait_while_present
-        click_search_link( Regexp.new(".*editTree.+proposition\.orgInfo\.population\.id"))
-        page.lookup_population.when_present.set code
+        page.search_course_title.fit code
+      elsif field == "course code"
+        page.search_course_code.fit code
+      elsif field == "description"
+        page.adv_plain_text_description.fit code
       end
-      page.lookup_search_button
-      page.loading.wait_while_present
-      page.return_course_code(/.*#{Regexp.escape(code)}.*/i).a( text: /Select/).click
-      page.loading.wait_while_present
+      page.course_search
+      sleep 5
+      page.select_result(index)
     end
   end
 
