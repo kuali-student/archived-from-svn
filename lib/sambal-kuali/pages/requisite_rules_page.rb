@@ -75,4 +75,9 @@ class CmRequisiteRules < BasePage
   element(:select_link) { |index, b| b.frame(class: 'fancybox-iframe').a(id: /line#{index}/) }
   action(:select_course) {|index, b|b.select_link(index).click;  b.loading_wait }
 
+# editing rules
+  element(:select_rule_operator) {|b|b.select_link(id: 'prop_compoundOpCode_node_1_parent_node_0_parent_root_control')}
+  element(:rule_a_element_link) {|b|b.div(:id => /.*_node_0_parent_node_0_parent_root/)}
+  element(:rule_b_element_link) {|b|b.div(:id => /.*_node_2_parent_node_0_parent_root/)}
+
 end

@@ -111,8 +111,8 @@ class CmCourseProposalObject < DataFactory
     on CmCourseInformation do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
-    $section = opts[:requisite_type]
-    case $section
+    section = opts[:requisite_type]
+    case section
       when "Student Eligibility & Prerequisite"
         adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
       when "Corequisite"
@@ -134,10 +134,10 @@ class CmCourseProposalObject < DataFactory
   def delete_requisite_rules (opts={})
     on CmCourseRequisitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
-      $section = opts[:requisite_type]
-      case $section
+      section = opts[:requisite_type]
+      case section
         when "Student Eligibility & Prerequisite"
-          #STUDENT ELIGIBILITY #A,G,M,S
+          #STUDENT ELIGIBILITY #A,G,M,S,Y
           begin
             page.delete_rule('A')
           rescue Exception => e
@@ -147,7 +147,11 @@ class CmCourseProposalObject < DataFactory
               begin
                 page.delete_rule('M')
               rescue Exception => e
-                page.delete_rule('S')
+                begin
+                  page.delete_rule('S')
+                rescue Exception => e
+                  page.delete_rule('Y')
+                end
               end
             end
           end
@@ -664,9 +668,9 @@ class CmCourseProposalObject < DataFactory
         #pick the courses, dynamic course ranges, or Course sets.
         page.multi_course_dropdown.fit requisite_rule.course_combination_type
 
-        $i = 0
-        $num = requisite_rule.completed_course_number
-        while $i < $num do
+        i = 0
+        num = requisite_rule.completed_course_number
+        while i < num do
           # Enter course Code text
           if requisite_rule.add_method == 'text'
             puts 'course Code text'
@@ -680,10 +684,10 @@ class CmCourseProposalObject < DataFactory
             page.adv_course_code_rule.fit requisite_rule.search_course_code
             page.adv_search
             #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-            page.select_course($i)
+            page.select_course(i)
           end
           page.add_course_code
-          $i +=1
+          i +=1
         end
 
         page.completed

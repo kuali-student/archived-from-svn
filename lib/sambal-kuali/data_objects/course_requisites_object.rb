@@ -65,9 +65,11 @@ class CmCourseRequisite < DataFactory
 
   def edit (opts={})
     view
-      on CmCourseRequisite do |rule_page|
-        rule_page.edit_rule_student_eligibility if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
-      end
+    on CmCourseRequisite do |rule_page|
+      rule_page.edit_rule_student_eligibility :logic_operator => opts[:logic_operator],
+                                              :left_group_node => opts[:left_group_node],
+                                              :right_group_node => opts[:right_group_node] if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
+    end
     set_options(opts)
   end
 
@@ -77,6 +79,59 @@ class CmCourseRequisite < DataFactory
     end
     on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
+    end
+  end
+
+  def edit_rule_student_eligibility (opts={})
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+      sleep 3
+      #STUDENT ELIGIBILITY #A,G,M,S
+      begin
+        page.edit_rule('A')
+      rescue Exception => e
+        begin
+          page.edit_rule('G')
+        rescue Exception => e
+          begin
+            page.edit_rule('M')
+          rescue Exception => e
+            begin
+              page.edit_rule('S')
+            rescue Exception => e
+              page.edit_rule('Y')
+            end
+          end
+        end
+      end
+      edit_A_rule :left_group_node => opts[:left_group_node] unless opts[:left_group_node].nil?
+      edit_B_rule :right_group_node => opts[:right_group_node] unless opts[:right_group_node].nil?
+      edit_operator :logic_operator => opts[:logic_operator] unless opts[:logic_operator].nil?
+
+      update_adding_rules
+    end
+  end
+
+  def edit_A_rule (opts={})
+    on CmRequisiteRules do |page|
+      page.rule_a_element_link
+      page.loading_wait
+      page.edit_btn
+      page.course_field.fit opts[:left_group_node].course
+    end
+    preview_rule_changes
+  end
+
+  def edit_B_rule (opts={})
+    on CmRequisiteRules do |page|
+      # add contents
+    end
+  end
+
+  def edit_operator (opts={})
+    on CmRequisiteRules do |page|
+      page.select_rule_operator.fit opts[:logic_operator]
+      page.loading_wait
     end
   end
 
