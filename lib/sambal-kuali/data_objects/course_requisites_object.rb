@@ -86,23 +86,11 @@ class CmCourseRequisite < DataFactory
     on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
       sleep 3
-      #STUDENT ELIGIBILITY #A,G,M,S
+      #STUDENT ELIGIBILITY #A,G,M,S,
       begin
-        page.edit_rule('A')
+        page.edit_rule_student_eligibility
       rescue Exception => e
-        begin
-          page.edit_rule('G')
-        rescue Exception => e
-          begin
-            page.edit_rule('M')
-          rescue Exception => e
-            begin
-              page.edit_rule('S')
-            rescue Exception => e
-              page.edit_rule('Y')
-            end
-          end
-        end
+        page.edit_rule('Y')
       end
       edit_A_rule :left_group_node => opts[:left_group_node] unless opts[:left_group_node].nil?
       edit_B_rule :right_group_node => opts[:right_group_node] unless opts[:right_group_node].nil?
@@ -144,18 +132,11 @@ class CmCourseRequisite < DataFactory
       sleep 3
       #STUDENT ELIGIBILITY #A,G,M,S
       begin
-        page.add_rule('A')
+        page.add_rule_student_eligibility
       rescue Exception => e
-        begin
-          page.add_rule('G')
-        rescue Exception => e
-          begin
-            page.add_rule('M')
-          rescue Exception => e
-            page.add_rule('S')
-          end
-        end
+        page.add_rule('AE')
       end
+
       unless @rule_list.nil?
         @rule_list.each do |rule|
           #add_one_rule (item)
@@ -171,17 +152,9 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       #recommended_preparation C,I,O,U
       begin
-        page.add_rule('C')
+        page.add_rule_recommended_prep
       rescue Exception => e
-        begin
-          page.add_rule('I')
-        rescue Exception => e
-          begin
-            page.add_rule('O')
-          rescue Exception => e
-            page.add_rule('U')
-          end
-        end
+        page.add_rule('AA')
       end
       @rule_list.each do |rule|
         rule.create
@@ -202,11 +175,7 @@ class CmCourseRequisite < DataFactory
 
       page.add_btn
       page.loading_wait
-      begin
-        page.rule_statement_option('').fit requisite_rule.rule
-      rescue Exception => e
-        page.rule_statement_option('node_2_parent_').fit requisite_rule.rule
-      end
+      page.rule_statement_option.fit requisite_rule.rule
 
       page.loading_wait
 

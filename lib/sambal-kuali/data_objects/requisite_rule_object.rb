@@ -50,11 +50,7 @@ class CmRequisiteRuleObject < DataFactory
 
       page.add_btn
       page.loading_wait
-      begin
-        page.rule_statement_option('').fit @rule
-      rescue Exception => e
-        page.rule_statement_option('node_2_parent_').fit @rule
-      end
+      page.rule_statement_option.fit @rule
 
       page.loading_wait
 

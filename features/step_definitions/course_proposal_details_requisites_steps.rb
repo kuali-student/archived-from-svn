@@ -78,7 +78,6 @@ Then(/^I should see the the basic Eligibility requisites on the course proposal$
         when "Student Eligibility & Prerequisite"
           page.prerequisites_operator_and_rules.should include requisite.left_group_node.complete_rule_text
           page.prerequisites_operator_and_rules.should include requisite.right_group_node.complete_rule_text
-#          page.prerequisites_operator.should == requisite.logic_operator
           page.prerequisites_operator_and_rules.should include requisite.logic_operator
         else
           raise "No requisite rule section defined!"
@@ -160,7 +159,6 @@ Then(/^I should see updated requisite details on the course proposal$/) do
         when "Student Eligibility & Prerequisite"
           page.prerequisites_operator_and_rules.should include requisite.left_group_node.complete_rule_text
           page.prerequisites_operator_and_rules.should include requisite.right_group_node.complete_rule_text
-#          page.prerequisites_operator.should == requisite.logic_operator
           page.prerequisites_operator_and_rules.should include requisite.logic_operator
         else
           raise "No requisite rule section defined!"

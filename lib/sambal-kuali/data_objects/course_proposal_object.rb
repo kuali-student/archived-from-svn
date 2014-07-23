@@ -140,21 +140,9 @@ class CmCourseProposalObject < DataFactory
         when "Student Eligibility & Prerequisite"
           #STUDENT ELIGIBILITY #A,G,M,S,Y
           begin
-            page.delete_rule('A')
+            page.delete_rule_student_eligibility
           rescue Exception => e
-            begin
-              page.delete_rule('G')
-            rescue Exception => e
-              begin
-                page.delete_rule('M')
-              rescue Exception => e
-                begin
-                  page.delete_rule('S')
-                rescue Exception => e
-                  page.delete_rule('Y')
-                end
-              end
-            end
+            page.delete_rule('AE')
           end
         when "Corequisite"
           page.delete_rule_corequisite
@@ -583,22 +571,11 @@ class CmCourseProposalObject < DataFactory
       page.expand_all_rule_sections
       #STUDENT ELIGIBILITY #A,G,M,S
       begin
-        page.add_rule('A')
+        page.add_rule_student_eligibility
       rescue Exception => e
-        begin
-          page.add_rule('G')
-        rescue Exception => e
-          begin
-            page.add_rule('M')
-          rescue Exception => e
-            begin
-              page.add_rule('S')
-            rescue Exception => e
-            page.add_rule('Y')
-            end
-          end
-        end
+          page.add_rule('AE')
       end
+
       @rule_list = opts[:eligibility_rule_list]
       @rule_list.each do |item|
         add_one_rule (item)
@@ -614,17 +591,9 @@ class CmCourseProposalObject < DataFactory
       page.expand_all_rule_sections
       #recommended_preparation C,I,O,U
       begin
-        page.add_rule('C')
+        page.add_rule_recommended_prep
       rescue Exception => e
-        begin
-          page.add_rule('I')
-        rescue Exception => e
-          begin
-            page.add_rule('O')
-          rescue Exception => e
-            page.add_rule('U')
-          end
-        end
+          page.add_rule('AA')
       end
       @rule_list.each do |item|
         add_one_rule (item)
@@ -638,12 +607,7 @@ class CmCourseProposalObject < DataFactory
 
       page.add_btn
       page.loading_wait
-      begin
-        page.rule_statement_option('').fit requisite_rule.rule
-      rescue Exception => e
-        page.rule_statement_option('node_2_parent_').fit requisite_rule.rule
-      end
-
+      page.rule_statement_option.fit requisite_rule.rule
       page.loading_wait
 
       if  requisite_rule.rule == 'Must have successfully completed <course>'

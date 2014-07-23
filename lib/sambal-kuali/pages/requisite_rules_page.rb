@@ -26,7 +26,7 @@ class CmRequisiteRules < BasePage
 
   #Add Rule Section
   # This is the drop down for rule statement
-  element(:rule_statement_option) {|node, b|b.select_list(id: "KRMS-PropositionType-Dropdown_#{node}node_0_parent_root_control")}
+  element(:rule_statement_option) {|b|b.select_list(:id => /KRMS-PropositionType-Dropdown.*node_0_parent_root_control/)}
   element(:search_link_element) { |b| b.a(:text => /Advanced Search/)}
   action(:search_link) { |b| b.search_link_element.click;  b.loading.wait_while_present}
 
