@@ -7,6 +7,10 @@ module Workflows
     on(CmCurriculum).find_a_course_proposal
   end
 
+  def navigate_to_find_course
+    on(CmCurriculum).find_a_course
+  end
+
   def navigate_rice_to_cm_home
     on CmRice do |create|
       #puts @assessment_a_f.inspect
