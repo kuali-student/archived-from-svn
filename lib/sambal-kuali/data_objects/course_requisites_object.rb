@@ -65,10 +65,10 @@ class CmCourseRequisite < DataFactory
 
   def edit (opts={})
     view
-    on CmCourseRequisite do |rule_page|
-      rule_page.edit_rule_student_eligibility :logic_operator => opts[:logic_operator],
-                                              :left_group_node => opts[:left_group_node],
-                                              :right_group_node => opts[:right_group_node] if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
+    if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
+      edit_rule_student_eligibility :logic_operator => opts[:logic_operator],
+                                    :left_group_node => opts[:left_group_node],
+                                    :right_group_node => opts[:right_group_node]
     end
     set_options(opts)
   end
@@ -113,19 +113,22 @@ class CmCourseRequisite < DataFactory
   end
 
   def edit_A_rule (opts={})
+    edited_rule = opts[:left_group_node]
     on CmRequisiteRules do |page|
-      page.rule_a_element_link
+      page.rule_a_element_link.click
       page.loading_wait
       page.edit_btn
       page.course_field.fit opts[:left_group_node].course
     end
-    preview_rule_changes
+    edited_rule.preview_rule_changes
   end
 
   def edit_B_rule (opts={})
+    edited_rule = opts[:right_group_node]
     on CmRequisiteRules do |page|
-      # add contents
+      # add editing contents
     end
+    edited_rule.preview_rule_changes
   end
 
   def edit_operator (opts={})

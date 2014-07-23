@@ -150,8 +150,11 @@ class CmRequisiteRuleObject < DataFactory
       begin
         page.preview_change('')
       rescue Exception => e
-        page.preview_change_btn('node_2_parent_').click
-        page.loading.wait_while_present
+        begin
+          page.preview_change('node_0_parent_')
+        rescue Exception => e
+          page.preview_change('node_2_parent_')
+        end
       end
     end
   end

@@ -137,7 +137,7 @@ When(/^I update the requisite details on the course proposal$/) do
   edited_rule1 = (make CmRequisiteRuleObject, :rule => "Must have successfully completed <course>", :course => "ENGL301",
                 :complete_rule_text => "Must have successfully completed ENGL301")
 
-  @course_proposal.course_requisite_list[0].edit :requisite_type => "Prerequisite", :logic_operator => "OR",
+  @course_proposal.course_requisite_list[0].edit :requisite_type => "Student Eligibility & Prerequisite", :logic_operator => "OR",
                                                  :left_group_node => edited_rule1
 end
 
