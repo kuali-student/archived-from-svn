@@ -31,7 +31,8 @@ class CmCourseProposalObject < DataFactory
         :defer_save,
         :blank_proposal,
         :create_basic_proposal,
-        :create_optional_fields
+        :create_optional_fields,
+        :curriculum_review_process
 
 
 
@@ -484,6 +485,13 @@ class CmCourseProposalObject < DataFactory
     @supporting_doc_list << options[:supporting_doc]
     determine_save_action unless opts[:defer_save]
   end
+
+  def submit_proposal
+    on(CmCourseInformation).review_proposal
+    on(CmReviewProposal).submit_proposal
+    on(CmReviewProposal).submit_confirmation
+  end
+
 
   #-----
   private

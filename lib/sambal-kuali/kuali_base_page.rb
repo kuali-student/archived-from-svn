@@ -77,7 +77,7 @@ class BasePage < PageFactory
       action(:save_progress) { |b| b.button(text: "Save Progress").click }
       action(:cancel_action) { |b| b.link(text: "Cancel").click; b.loading.wait_while_present }
       element(:review_proposal_element) { |b| b.a(id: "course_details_review_proposal_link") }
-      action(:review_proposal) { |b| b.review_proposal_element.click }
+      action(:review_proposal) { |b| b.review_proposal_element.click; b.loading_wait }
 
       element(:save_continue) { |b| b.button(id: 'usave') }
       action(:save_and_continue) { |b| b.save_continue.click; b.saving_wait }
