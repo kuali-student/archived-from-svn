@@ -1,24 +1,24 @@
 @draft
 Feature: GT.Find a Course
 
-  Scenario: CC xx.1 Verify empty search string results in validation error
+  Scenario: FC1.1 Verify empty search string results in validation error
     Given I am logged in as Faculty
-    When I perform a blank course code search
+    When I perform a blank search for Courses
     Then I get a course code required validation error
 
-  Scenario: CC xx.2 Verify partial search string on Course code returns correct results
+  Scenario: FC1.2 Verify partial search string on Course code returns correct results
     Given I am logged in as Curriculum Specialist
-    When I search for a course code with partial search string
+    When I perform a partial search for Courses
     Then I get the results matching the search criteria
 
-  Scenario: CC xx.3 Verify full search string on Course Code returns correct results
+  Scenario: FC1.3 Verify full search string on Course Code returns correct results
     Given I am logged in as Faculty
-    When I search for a Course Code with complete search string
+    When I perform a full search for Courses
     Then I get correct course returned on the search
 
-  Scenario: CC xx.4 Verify that no matching results message is displayed
+  Scenario: FC1.4 Verify that no matching results message is displayed
     Given I am logged in as Curriculum Specialist
-    When I search for a course code by an invalid search term
+    When I perform an invalid search for Courses
     Then a message indicating no matching records is displayed.
 
 
