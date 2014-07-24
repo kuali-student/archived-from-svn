@@ -15,7 +15,7 @@ Then(/^I get a course code required validation error$/) do
 end
 
 
-When(/^I perform a partial string search for Courses$/) do
+When(/^I search for Courses by entering partial course code$/) do
   @course = make CmCourseObject, :search_term => "HIST2", :course_code => "HIST2"
   @course.search_for_course
 end
@@ -30,7 +30,7 @@ Then(/^I get the results matching the search criteria$/) do
 end
 
 
-When(/^I perform a full string search for Courses$/) do
+When(/^I search for Courses by entering complete course code$/) do
   @course = make CmCourseObject, :search_term => "BSCI106", :course_code => "BSCI106"
   @course.search_for_course
 end
