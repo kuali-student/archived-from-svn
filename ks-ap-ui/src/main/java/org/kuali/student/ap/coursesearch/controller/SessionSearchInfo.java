@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.student.ap.coursesearch.CourseFacetStrategy;
 import org.kuali.student.ap.coursesearch.CourseSearchForm;
 import org.kuali.student.ap.coursesearch.CourseSearchItem;
@@ -136,7 +137,7 @@ public class SessionSearchInfo {
     }
 
     private Map<String, Map<String, FacetState>> createFacetStateMap(CourseSearchStrategy searcher) {
-        Map<String, List<String>> facetColumns = searchResults.get(0).getFacetColumns();
+        Map<String, List<KeyValue>> facetColumns = searchResults.get(0).getFacetColumns();
         assert facetColumns.size() == KsapFrameworkServiceLocator.getCourseFacetStrategy().getFacetSort().size() : facetColumns
                 .size()
                 + " != "
@@ -181,7 +182,7 @@ public class SessionSearchInfo {
 
         // Determine the number of facet columns - this should be uniform
         // across the facet state table and the facet columns in each row
-        Map<String, List<String>> facetCols;
+        Map<String, List<KeyValue>> facetCols;
         if(!(searchResults==null) && !searchResults.isEmpty()){
             facetCols = searchResults.get(0).getFacetColumns();
         }else{
@@ -240,7 +241,7 @@ public class SessionSearchInfo {
             /**
              * Column iterator.
              */
-            Iterator<List<String>> fi = new Iterator<List<String>>() {
+            Iterator<List<KeyValue>> fi = new Iterator<List<KeyValue>>() {
                 @Override
                 public boolean hasNext() {
                     // break column loop once row has been removed,
@@ -249,7 +250,7 @@ public class SessionSearchInfo {
                 }
 
                 @Override
-                public List<String> next() {
+                public List<KeyValue> next() {
                     // break column loop once row has been removed
                     if (removed)
                         throw new IllegalStateException(
@@ -293,10 +294,10 @@ public class SessionSearchInfo {
              *
              * @return The column iterator, reset to the start of the row.
              */
-            private Iterable<List<String>> facets() {
-                return new Iterable<List<String>>() {
+            private Iterable<List<KeyValue>> facets() {
+                return new Iterable<List<KeyValue>>() {
                     @Override
-                    public Iterator<List<String>> iterator() {
+                    public Iterator<List<KeyValue>> iterator() {
                         j = -1;
                         return fi;
                     }
@@ -337,7 +338,7 @@ public class SessionSearchInfo {
             SearchInfo ln = li.next();
             // li maintains its own handle to the row
             assert ln == li.current; // ln is otherwise unused
-            for (List<String> cell : li.facets()) {
+            for (List<KeyValue> cell : li.facets()) {
                 if (li.isSearchable()) {
                     if (li.searchString == null
                             || li.searchString.trim().equals(""))
@@ -346,14 +347,14 @@ public class SessionSearchInfo {
                         li.remove();
                     else {
                         boolean match = false;
-                        for (String c : cell) {
+                        for (KeyValue c : cell) {
                             if (match)
                                 continue;
                             if (li.searchPattern == null) {
-                                if (c.toUpperCase().equals(
+                                if (c.getKey().toUpperCase().equals(
                                         li.searchString.toUpperCase()))
                                     match = true;
-                            } else if (li.searchPattern.matcher(c)
+                            } else if (li.searchPattern.matcher(c.getKey())
                                     .matches())
                                 match = true;
                         }

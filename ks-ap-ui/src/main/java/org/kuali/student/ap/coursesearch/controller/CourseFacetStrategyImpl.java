@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kuali.rice.core.api.util.KeyValue;
@@ -119,7 +120,7 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
      * @see org.kuali.student.ap.coursesearch.CourseFacetStrategy#updateFacetCounts(java.util.List, java.util.Map, java.util.Map)
      */
     @Override
-    public void updateFacetCounts(List<SearchInfo> searchResults, Map<String, Map<String, FacetState>> facetState, Map<String, List<String>> facetCols) {
+    public void updateFacetCounts(List<SearchInfo> searchResults, Map<String, Map<String, FacetState>> facetState, Map<String, List<KeyValue>> facetCols) {
         // Reset the count on all facet state leaf nodes to 0
         Map<String, Boolean> all = new java.util.HashMap<String, Boolean>(
                 facetState.size());
@@ -141,7 +142,7 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
 
             // identify filtered rows before counting
             boolean filtered = false;
-            for (Map.Entry<String, List<String>> fce : facetCols.entrySet()) {
+            for (Entry<String, List<KeyValue>> fce : facetCols.entrySet()) {
                 if (filtered)
                     continue;
                 String fk = fce.getKey();
@@ -153,8 +154,8 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
                     // Filter unless there is at least one match for one
                     // checked facet on this row
                     boolean hasOne = false;
-                    for (String fci : row.getFacetColumns().get(fk))
-                        if (!hasOne && getFacetState(fci, fk, facetState).isChecked())
+                    for (KeyValue fci : row.getFacetColumns().get(fk))
+                        if (!hasOne && getFacetState(fci.getKey(), fk, facetState).isChecked())
                             hasOne = true;
                     assert !filtered : "filtered state changed";
                     filtered = !hasOne;
@@ -163,10 +164,10 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
 
             if (!filtered)
                 // count all cells in all non-filtered rows
-                for (Map.Entry<String, List<String>> fce : row.getFacetColumns()
+                for (Entry<String, List<KeyValue>> fce : row.getFacetColumns()
                         .entrySet())
-                    for (String fci : fce.getValue())
-                        getFacetState(fci, fce.getKey(), facetState).incrementCount();
+                    for (KeyValue fci : fce.getValue())
+                        getFacetState(fci.getKey(), fce.getKey(), facetState).incrementCount();
         }
     }
 
@@ -269,7 +270,7 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
      * @see org.kuali.student.ap.coursesearch.CourseFacetStrategy#createInitialFacetStateMap(java.util.Map, java.util.List)
      */
     @Override
-    public Map<String, Map<String, FacetState>> createInitialFacetStateMap(Map<String, List<String>> facetColumns, List<SearchInfo> searchResults) {
+    public Map<String, Map<String, FacetState>> createInitialFacetStateMap(Map<String, List<KeyValue>> facetColumns, List<SearchInfo> searchResults) {
         Map<String, Map<String, FacetState>> facetStateMap = new java.util.HashMap<String, Map<String, FacetState>>(
                 facetColumns.size());
         for (String fk : facetColumns.keySet())
@@ -326,7 +327,7 @@ public class CourseFacetStrategyImpl implements CourseFacetStrategy {
      * @see org.kuali.student.ap.coursesearch.CourseFacetStrategy#processFacetStateMap(java.util.Map, java.util.Map)
      */
     @Override
-    public Map<String, Map<String, FacetState>> processFacetStateMap(Map<String, Map<String, FacetState>> facetStateMap, Map<String, List<String>> facetColumns) {
+    public Map<String, Map<String, FacetState>> processFacetStateMap(Map<String, Map<String, FacetState>> facetStateMap, Map<String, List<KeyValue>> facetColumns) {
         // Post-process based on calculated totals and per-column rules
         for (String fk : facetColumns.keySet()) {
             final Map<String, FacetState> fm = facetStateMap.get(fk);

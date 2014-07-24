@@ -19,6 +19,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.rice.core.api.util.KeyValue;
+
 /**
  * Strategy interface for specifying course search facet behavior.
  */
@@ -52,7 +54,7 @@ public interface CourseFacetStrategy {
      * @param facetState - Map of the current facet information
      * @param facetCols  - Map of the facet available for each search item.
      */
-    void updateFacetCounts(List<SearchInfo> searchResults, Map<String, Map<String, FacetState>> facetState, Map<String, List<String>> facetCols);
+    void updateFacetCounts(List<SearchInfo> searchResults, Map<String, Map<String, FacetState>> facetState, Map<String, List<KeyValue>> facetCols);
 
     /**
      * Update checked state on all facets following a click event from the
@@ -81,7 +83,7 @@ public interface CourseFacetStrategy {
      * @param searchResults - List of results returned in the search
      * @return A map to each possible facet value and its initial state in the search results
      */
-    Map<String, Map<String, FacetState>> createInitialFacetStateMap(Map<String, List<String>> facetColumns, List<SearchInfo> searchResults);
+    Map<String, Map<String, FacetState>> createInitialFacetStateMap(Map<String, List<KeyValue>> facetColumns, List<SearchInfo> searchResults);
 
     /**
      * Refines and updates the facet states
@@ -90,5 +92,5 @@ public interface CourseFacetStrategy {
      * @param facetColumns - Map of the facet available for each search item.
      * @return - Refined map of the facet states of all facet values
      */
-    Map<String, Map<String, FacetState>> processFacetStateMap(Map<String, Map<String, FacetState>> facetStateMap, Map<String, List<String>> facetColumns);
+    Map<String, Map<String, FacetState>> processFacetStateMap(Map<String, Map<String, FacetState>> facetStateMap, Map<String, List<KeyValue>> facetColumns);
 }

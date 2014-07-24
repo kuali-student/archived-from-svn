@@ -22,19 +22,19 @@ public class SearchInfoImpl implements Serializable, SearchInfo {
 
     private final CourseSearchItem item;
     private final String[] sortColumns;
-    private final Map<String, List<String>> facetColumns;
+    private final Map<String, List<KeyValue>> facetColumns;
 
     public SearchInfoImpl(CourseSearchItem item) {
         this.item = item;
         sortColumns = item.getSortColumns();
-        facetColumns = new java.util.LinkedHashMap<String, List<String>>();
+        facetColumns = new java.util.LinkedHashMap<String, List<KeyValue>>();
         for (Map.Entry<String, Map<String, Map<String, KeyValue>>> fe : item
                 .getFacetColumns().entrySet()) {
-            List<String> fl = facetColumns.get(fe.getKey());
+            List<KeyValue> fl = facetColumns.get(fe.getKey());
             if (fl == null)
-                facetColumns.put(fe.getKey(), fl = new ArrayList<String>());
+                facetColumns.put(fe.getKey(), fl = new ArrayList<KeyValue>());
             for (Map<String, KeyValue> fv : fe.getValue().values())
-                fl.addAll(fv.keySet());
+                fl.addAll(fv.values());
         }
 
     }
@@ -57,7 +57,7 @@ public class SearchInfoImpl implements Serializable, SearchInfo {
     }
 
     @Override
-    public Map<String, List<String>> getFacetColumns() {
+    public Map<String, List<KeyValue>> getFacetColumns() {
         return facetColumns;
     }
 }

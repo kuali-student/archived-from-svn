@@ -3,6 +3,8 @@ package org.kuali.student.ap.coursesearch;
 import java.util.List;
 import java.util.Map;
 
+import org.kuali.rice.core.api.util.KeyValue;
+
 /**
  * Simple object representing pre-processed search data.
  *
@@ -27,5 +29,5 @@ public interface SearchInfo {
      * Get the facet columns
      * @return
      */
-    Map<String, List<String>> getFacetColumns();
+    Map<String, List<KeyValue>> getFacetColumns();
 }
