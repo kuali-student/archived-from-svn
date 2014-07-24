@@ -72,7 +72,7 @@ When(/^I enter remaining fields on the partially created course proposal as Curr
   @course_proposal.submit_fields[0].add_outcome :outcome => (make CmOutcomeObject,
                                                                   :outcome_type => "Fixed",
                                                                   :outcome_level => 0,
-                                                                  :credit_value => 5)
+                                                                  :credit_value => 4)
 
 end
 
