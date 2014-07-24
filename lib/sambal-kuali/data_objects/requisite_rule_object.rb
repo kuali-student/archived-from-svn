@@ -121,20 +121,6 @@ class CmRequisiteRuleObject < DataFactory
 
   end
 
-  def open_agenda_section
-    sections = {"Student Eligibility & Prerequisite"=>:eligibility_prereq_section,
-                "Antirequisite"=>:antirequisite_section, "Corequisite"=>:corequisite_section,
-                "Recommended Preparation"=>:recommended_prep_section,
-                "Repeatable for Credit"=>:repeatable_credit_section,
-                "Course that Restricts Credits"=>:restricted_credit_section}
-    on CmCourseRequistitesPage do |page|
-      page.loading.wait_while_present(60)
-      if !page.send(sections[@section]).span(id: /Course-AgendaManage-RulePrototype_rule[A-Z]_toggle_exp/).visible?
-        page.send(sections[@section]).when_present.click
-      end
-    end
-  end
-
   def navigate_to_requisite
     on CmCourseRequistitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
@@ -143,15 +129,7 @@ class CmRequisiteRuleObject < DataFactory
 
   def preview_rule_changes
     on CmRequisiteRules do |page|
-      begin
-        page.preview_change('')
-      rescue Exception => e
-        begin
-          page.preview_change('node_0_parent_')
-        rescue Exception => e
-          page.preview_change('node_2_parent_')
-        end
-      end
+        page.preview_change
     end
   end
 

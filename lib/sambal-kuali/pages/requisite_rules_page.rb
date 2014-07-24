@@ -63,8 +63,8 @@ class CmRequisiteRules < BasePage
   action(:lookup_search_button) { |b| b.frm_popup.button(id: "button_search").click;  b.loading.wait_while_present}
   element(:lookup_results_table) { |b| b.frm_popup.section(id: "uLookupResults").table() }
 
-  element(:preview_change_btn) { |node, b| b.button(id: "KS-RulePreview-Button_#{node}node_0_parent_root")}
-  action(:preview_change) { |node, b| b.preview_change_btn(node).click; b.loading.wait_while_present}
+  element(:preview_change_btn) { |b| b.button(:id => /KS-RulePreview-Button.*parent_root/)}
+  action(:preview_change) { |b| b.preview_change_btn.click; b.loading.wait_while_present}
 
 #ADDING RULE COURSE THAT RESTRICTS CREDIT
   element(:rule_multicourse_type){ |b| b.select_list(id: 'KRMS-MultiCourse-Type-Field_control') }

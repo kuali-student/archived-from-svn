@@ -19,12 +19,6 @@ When(/^I create a basic course proposal with two basic Eligibility requisites$/)
                             :proposal_title => random_alphanums(10,'test basic proposal title '),
                             :course_title => random_alphanums(10,'test basic course title '),
                             :course_requisite_list => [requisite_obj1]
-
-
-  #@course_proposal.course_requisite_list << [requisite_obj1]
-  #@student_eligibility_rule_list = [requisite_obj1.right_group_node, requisite_obj1.left_group_node]
-  #@course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
-                                        #:eligibility_rule_list => @student_eligibility_rule_list
   sleep 1
 end
 
@@ -50,24 +44,6 @@ When(/^I create a basic course proposal with Recommended Preparation rule with m
 
 end
 
-
-And(/^I add two basic Eligibility requisites$/) do
-  rule1 = make CmRequisiteRuleObject,
-               :rule => "Must have successfully completed <course>"
-
-  rule2 = (make CmRequisiteRuleObject)
-
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :right_group_node => rule2, :logic_operator => "AND")
-
-  @course_proposal.course_requisite_list = [requisite_obj1]
-  @student_eligibility_rule_list = [requisite_obj1.right_group_node, requisite_obj1.left_group_node]
-  @course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
-                                         :eligibility_rule_list =>@student_eligibility_rule_list
-  sleep 1
-  @course_proposal.determine_save_action
-
-end
-
 Then(/^I should see the the basic Eligibility requisites on the course proposal$/) do
   @course_proposal.review_proposal_action
   course_requisite_list = @course_proposal.course_requisite_list
@@ -86,26 +62,7 @@ Then(/^I should see the the basic Eligibility requisites on the course proposal$
   end
 end
 
-And(/^I add a Recommended Preparation rule with multiple variables including course set$/) do
-  rule1 = make CmRequisiteRuleObject,
-               :type => "Recommended Preparation",
-               :rule => "Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>",
-               :add_method => "advanced",
-               :search_course_code => "BSCI2",
-               :completed_course_number => 3,
-               :course_combination_type => "Approved Courses",
-               :complete_rule_text => "Must successfully complete a minimum of 3 courses with a minimum grade of A from"
 
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :requisite_type => "Recommended Preparation", :logic_operator => "AND")
-
-  @course_proposal.course_requisite_list << [requisite_obj1]
-  @student_eligibility_rule_list = [requisite_obj1.left_group_node]
-  @course_proposal.add_course_requisites :requisite_type => requisite_obj1.requisite_type,
-                                         :eligibility_rule_list =>@student_eligibility_rule_list
-
-  @course_proposal.determine_save_action
-
-end
 
 Then(/^I should see the multiple variable requisite on the course proposal$/) do
   @course_proposal.review_proposal_action
@@ -135,15 +92,16 @@ end
 When(/^I update the requisite details on the course proposal$/) do
   edited_rule1 = (make CmRequisiteRuleObject, :rule => "Must have successfully completed <course>", :course => "ENGL301",
                 :complete_rule_text => "Must have successfully completed ENGL301")
-
+  edited_rule_list = [(edited_rule1), (@course_proposal.course_requisite_list[0].right_group_node)]
   @course_proposal.course_requisite_list[0].edit :requisite_type => "Student Eligibility & Prerequisite", :logic_operator => "OR",
-                                                 :left_group_node => edited_rule1
+                                                 :left_group_node => edited_rule1, :rule_list => edited_rule_list
+  @course_proposal.determine_save_action
 end
 
 When(/^I delete the requisite details on the course proposal$/) do
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
-    @course_proposal.delete_requisite_rules :requisite_type => requisite.requisite_type
+    @course_proposal.delete_requisite :requisite_type => requisite.requisite_type
   end
 
   @course_proposal.determine_save_action

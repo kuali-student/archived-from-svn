@@ -43,14 +43,13 @@ class CmCourseRequisite < DataFactory
 
   def create
     view
-    #$section = opts[:requisite_type]
     case @requisite_type
       when "Student Eligibility & Prerequisite"
-        adding_rule_student_eligibility# :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
+        adding_rule_student_eligibility
       when "Corequisite"
         adding_rule_corequisite
       when "Recommended Preparation"
-        adding_rule_recommended_preparation_rule# :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
+        adding_rule_recommended_preparation_rule
       when "Antirequisite"
         adding_rule_antirequisite
       when "Repeatable for Credit"
@@ -140,7 +139,7 @@ class CmCourseRequisite < DataFactory
       unless @rule_list.nil?
         @rule_list.each do |rule|
           #add_one_rule (item)
-            rule.create
+          rule.create
         end
       end
       update_adding_rules

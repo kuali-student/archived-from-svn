@@ -108,31 +108,7 @@ class CmCourseProposalObject < DataFactory
 
   end
 
-  def add_course_requisites (opts={})
-    on CmCourseInformation do |page|
-      page.course_requisites unless page.current_page('Course Requisites').exists?
-    end
-    section = opts[:requisite_type]
-    case section
-      when "Student Eligibility & Prerequisite"
-        adding_rule_student_eligibility :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
-      when "Corequisite"
-        adding_rule_corequisite
-      when "Recommended Preparation"
-        adding_rule_recommended_preparation_rule :eligibility_rule_list => opts[:eligibility_rule_list],  :requisite_type=>opts[:requisite_type]
-      when "Antirequisite"
-        adding_rule_antirequisite
-      when "Repeatable for Credit"
-        adding_rule_repeatable_for_credit
-      when "Course that Restricts Credits"
-        adding_course_that_restricts_credits
-      else
-        raise "No requisite rule section defined!"
-    end
-
-  end
-
-  def delete_requisite_rules (opts={})
+  def delete_requisite (opts={})
     on CmCourseRequisitesPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
       section = opts[:requisite_type]
@@ -237,6 +213,7 @@ class CmCourseProposalObject < DataFactory
   determine_save_action unless @defer_save
 
   end # required proposal
+
   def course_proposal_nonrequired
     on CmCourseInformation do |page|
 
@@ -261,8 +238,6 @@ class CmCourseProposalObject < DataFactory
     on CmGovernance do |page|
       page.governance unless page.current_page('Governance').exists?
 
-
-
       # Admin organization in private method do to complexity of advanced search adding
       adding_admin_organization
 
@@ -285,24 +260,10 @@ class CmCourseProposalObject < DataFactory
       page.save_and_continue
     end
 
-    on CmCourseRequistitesPage do |page|
-      page.course_requisites unless page.current_page('Course Requisites').exists?
-
-  #Private methods do to complexity of adding rules
-  #STUDENT ELIGIBILITY
-      adding_rule_student_eligibility
-  #COREQUISITE
-      adding_rule_corequisite
-  #RECOMMENDED PREPARATION
-      adding_rule_recommended_preparation_rule
-  #ANTIREQUISITE
-      adding_rule_antirequisite
-  #REPEATABLE FOR CREDIT
-      adding_rule_repeatable_for_credit
-  #COURSE THAT RESTRICTS CREDIT
-      adding_course_that_restricts_credits
-
-      page.save_and_continue
+    unless @course_requisite_list.nil?
+      @course_requisite_list.each do |requisite|
+        requisite.create
+      end
     end
 
     on CmAuthorsCollaborators do |page|
@@ -562,120 +523,6 @@ class CmCourseProposalObject < DataFactory
         page.adv_admin_org_return_value(@adv_admin_org_name, @adv_admin_org_abbreviation)
         page.organization_add unless @administering_organization.nil?
       end
-    end
-  end
-
-#COURSE REQUISITES
-  def adding_rule_student_eligibility (opts={})
-    on CmCourseRequisitesPage do |page|
-      page.expand_all_rule_sections
-      #STUDENT ELIGIBILITY #A,G,M,S
-      begin
-        page.add_rule_student_eligibility
-      rescue Exception => e
-          page.add_rule('AE')
-      end
-
-      @rule_list = opts[:eligibility_rule_list]
-      @rule_list.each do |item|
-        add_one_rule (item)
-      end
-      update_adding_rules
-    end
-  end
-
-  def adding_rule_recommended_preparation_rule (opts={})
-    @rule_list = opts[:eligibility_rule_list]
-
-    on CmCourseRequisitesPage do |page|
-      page.expand_all_rule_sections
-      #recommended_preparation C,I,O,U
-      begin
-        page.add_rule_recommended_prep
-      rescue Exception => e
-          page.add_rule('AA')
-      end
-      @rule_list.each do |item|
-        add_one_rule (item)
-      end
-      update_adding_rules
-    end
-  end
-
-  def add_one_rule (requisite_rule)
-    on CmRequisiteRules do |page|
-
-      page.add_btn
-      page.loading_wait
-      page.rule_statement_option.fit requisite_rule.rule
-      page.loading_wait
-
-      if  requisite_rule.rule == 'Must have successfully completed <course>'
-        requisite_rule.complete_rule_text = requisite_rule.rule.sub('<course>', requisite_rule.course)
-
-        # Enter text
-        if requisite_rule.add_method == 'text'
-          puts 'student text'
-          page.course_field.fit requisite_rule.course
-        end
-
-        if requisite_rule.add_method == 'advanced'
-          puts 'student advanced'
-          page.advanced_search
-          #pick one field
-          page.adv_course_title.fit requisite_rule.search_title
-          page.adv_course_code_rule.fit requisite_rule.course
-          page.adv_plain_text_description_rule.fit requisite_rule.search_phrase
-          page.adv_search
-          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          return_search_result(requisite_rule.course, 2)
-        end
-      end
-
-      if requisite_rule.rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
-
-        #enter  Number of Courses:
-        page.integer_field.fit requisite_rule.completed_course_number
-
-        #pick the courses, dynamic course ranges, or Course sets.
-        page.multi_course_dropdown.fit requisite_rule.course_combination_type
-
-        i = 0
-        num = requisite_rule.completed_course_number
-        while i < num do
-          # Enter course Code text
-          if requisite_rule.add_method == 'text'
-            puts 'course Code text'
-            page.course_field.fit requisite_rule.course
-          end
-
-          if requisite_rule.add_method == 'advanced'
-            puts 'advanced search'
-            page.advanced_search
-            #pick one field
-            page.adv_course_code_rule.fit requisite_rule.search_course_code
-            page.adv_search
-            #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-            page.select_course(i)
-          end
-          page.add_course_code
-          i +=1
-        end
-
-        page.completed
-        page.loading_wait
-        page.grade_dropdown.fit "A"
-
-      end
-
-      requisite_rule.preview_rule_changes
-    end
-  end
-
-  def update_adding_rules
-    on CmRequisiteRules do |page|
-      page.update_rule_btn
-      page.loading_wait
     end
   end
 
