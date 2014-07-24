@@ -25,7 +25,8 @@ class CmRequisiteRuleObject < DataFactory
                 :search_phrase,
                 :search_course_code,
                 :complete_rule_text,
-                :logic_operator
+                :logic_operator,
+                :repeatable_for_credit_credit
 
   def initialize(browser, opts={})
     @browser = browser
@@ -84,9 +85,9 @@ class CmRequisiteRuleObject < DataFactory
         #pick the courses, dynamic course ranges, or Course sets.
         page.multi_course_dropdown.fit @course_combination_type
 
-        $i = 0
-        $num = @completed_course_number
-        while $i < $num do
+        i = 0
+        num = @completed_course_number
+        while i < num do
           # Enter course Code text
           if @add_method == 'text'
             puts 'course Code text'
@@ -101,10 +102,10 @@ class CmRequisiteRuleObject < DataFactory
             #page.adv_search
             #number is the column number 1 = course title, 2 = Course Code, 4 = Description
             #page.select_course($i)
-            rule_advanced_search("course code", @search_course_code, $i)
+            rule_advanced_search("course code", @search_course_code, i)
           end
           page.add_course_code
-          $i +=1
+          i +=1
         end
 
         page.completed
@@ -113,6 +114,48 @@ class CmRequisiteRuleObject < DataFactory
 
       end
 
+      if  @rule == 'Must be concurrently enrolled in <course>'
+
+        if @add_method == 'text'
+          page.course_field.fit @course
+        end
+
+        if @add_method == 'advanced'
+          puts 'advanced search'
+          page.search_link
+          #pick the first course
+          rule_advanced_search("course code", @search_course_code, 0)
+        end
+      end
+
+      if @rule == 'Must not have successfully completed <course>'
+
+        if @add_method == 'text'
+          page.course_field.fit @course
+        end
+
+        if @add_method == 'advanced'
+          page.search_link
+          #pick the first course
+          rule_advanced_search("course code", @search_course_code, 0)
+        end
+      end
+
+      if @rule == 'May be repeated for a maximum of <n> credits'
+        page.integer_field.when_present.set @repeatable_for_credit_credit
+      end
+
+
+      if @rule == 'Must not have successfully completed <course>'
+        if @add_method == 'text'
+          page.course_field.fit @course
+        end
+        if @add_method == 'advanced'
+          page.search_link
+          #pick the first course
+          rule_advanced_search("course code", @search_course_code, 0)
+        end
+      end
       preview_rule_changes
     end
   end
@@ -146,19 +189,6 @@ class CmRequisiteRuleObject < DataFactory
       page.course_search
       sleep 5
       page.select_result(index)
-    end
-  end
-
-  def click_search_link( regex)
-    on CmRequisiteRules do |page|
-      elements = page.edit_tree_section.elements( :tag_name, 'a')
-      elements.each do |elem|
-        if elem.text == "Advanced Search" && page.edit_tree_section.a( id: elem.id).attribute_value('data-submit_data') =~ regex
-          page.edit_tree_section.a(id: elem.id).click
-          break
-        end
-      end
-      raise "co requisites click_search_link: link not found for: #{regex}"
     end
   end
 

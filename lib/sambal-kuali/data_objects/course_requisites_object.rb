@@ -138,7 +138,6 @@ class CmCourseRequisite < DataFactory
 
       unless @rule_list.nil?
         @rule_list.each do |rule|
-          #add_one_rule (item)
           rule.create
         end
       end
@@ -169,74 +168,83 @@ class CmCourseRequisite < DataFactory
     end
   end
 
-  def add_one_rule (requisite_rule)
-    on CmRequisiteRules do |page|
-
-      page.add_btn
-      page.loading_wait
-      page.rule_statement_option.fit requisite_rule.rule
-
-      page.loading_wait
-
-      if  requisite_rule.rule == 'Must have successfully completed <course>'
-        requisite_rule.complete_rule_text = requisite_rule.rule.sub('<course>', requisite_rule.course)
-
-        # Enter text
-        if requisite_rule.add_method == 'text'
-          puts 'student text'
-          page.course_field.fit requisite_rule.course
-        end
-
-        if requisite_rule.add_method == 'advanced'
-          puts 'student advanced'
-          page.advanced_search
-          #pick one field
-          page.adv_course_title.fit requisite_rule.search_title
-          page.adv_course_code_rule.fit requisite_rule.course
-          page.adv_plain_text_description_rule.fit requisite_rule.search_phrase
-          page.adv_search
-          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          return_search_result(requisite_rule.course, 2)
-        end
+  def adding_rule_corequisite
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+      sleep 3
+      #corequisite: B,H,N,T,Z,AF
+      begin
+        page.add_rule_corequisite
+      rescue Exception => e
+        page.add_rule('AF')
       end
 
-      if requisite_rule.rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
-
-        #enter  Number of Courses:
-        page.integer_field.fit requisite_rule.completed_course_number
-
-        #pick the courses, dynamic course ranges, or Course sets.
-        page.multi_course_dropdown.fit requisite_rule.course_combination_type
-
-        $i = 0
-        $num = requisite_rule.completed_course_number
-        while $i < $num do
-          # Enter course Code text
-          if requisite_rule.add_method == 'text'
-            puts 'course Code text'
-            page.course_field.fit requisite_rule.course
-          end
-
-          if requisite_rule.add_method == 'advanced'
-            puts 'advanced search'
-            page.advanced_search
-            #pick one field
-            page.adv_course_code_rule.fit requisite_rule.search_course_code
-            page.adv_search
-            #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-            page.select_course($i)
-          end
-          page.add_course_code
-          $i +=1
+      unless @rule_list.nil?
+        @rule_list.each do |rule|
+          rule.create
         end
+      end
+      update_adding_rules
+    end
+  end
 
-        page.completed
-        page.loading_wait
-        page.grade_dropdown.fit "A"
-
+  def adding_rule_antirequisite
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+      sleep 3
+      #antirequisite: D,J,P,V,AB
+      begin
+        page.add_rule_antirequisite
+      rescue Exception => e
+        page.add_rule('AB')
       end
 
-      requisite_rule.preview_rule_changes
+      unless @rule_list.nil?
+        @rule_list.each do |rule|
+          rule.create
+        end
+      end
+      update_adding_rules
+    end
+  end
+
+  def adding_rule_repeatable_for_credit
+    on CmCourseRequisitesPage do |page|
+      page.expand_all_rule_sections
+      sleep 2
+      #repeatable_for_credit: E,K,Q,W,AC
+      begin
+        page.add_rule_repeatable_for_credit
+      rescue Exception => e
+        page.add_rule('AC')
+      end
+
+      unless @rule_list.nil?
+        @rule_list.each do |rule|
+          rule.create
+        end
+      end
+      update_adding_rules
+    end
+  end
+
+  def adding_course_that_restricts_credits
+    on CmCourseRequisitesPage do |page|
+        page.expand_all_rule_sections
+        sleep 2
+        #restricts_credits: F,L,R,X, AD
+        begin
+          page.add_rule_restricts_credits
+        rescue Exception => e
+          page.add_rule('AD')
+        end
+
+        unless @rule_list.nil?
+          @rule_list.each do |rule|
+            rule.create
+          end
+        end
+        update_adding_rules
     end
   end
 
