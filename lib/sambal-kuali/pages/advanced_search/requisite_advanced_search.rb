@@ -13,7 +13,7 @@ class CmRequisiteAdvancedSearchPage < BasePage
 
   action(:search_return_value) { |title_return_value, b| b.frm.link(title: 'return value ='+"#{title_return_value}").click }
   action(:course_search) { |b| b.frm.button(id: "button_search").click }
-  action(:select_result) { |index, b| b.frm.a(id: /line#{index}/).click}
+  action(:select_result) { |index, b| b.frm.a(id: /.*_line#{index}/).click}
   element(:results_table) { |b| b.frm.table(id: "uLookupResults_layout")}
 
   def return_value(search_text)

@@ -65,15 +65,10 @@ class CmRequisiteRuleObject < DataFactory
         end
 
         if @add_method == 'advanced'
-          puts 'student advanced'
-          page.advanced_search
-          #pick one field
-          page.adv_course_title.fit @search_title
-          page.adv_course_code_rule.fit @course
-          page.adv_plain_text_description_rule.fit @search_phrase
-          page.adv_search
-          #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-          return_search_result(@course, 2)
+          puts 'student advanced ' + @search_course_code
+          page.search_link
+          #pick the first course
+          rule_advanced_search("course code", @search_course_code, 0)
         end
       end
 
@@ -177,14 +172,14 @@ class CmRequisiteRuleObject < DataFactory
   end
 
 
-  def rule_advanced_search(field, code, index)
+  def rule_advanced_search(field, search_text, index)
     on CmRequisiteAdvancedSearchPage do |page|
       if field == "course title"
-        page.search_course_title.fit code
+        page.search_course_title.fit search_text
       elsif field == "course code"
-        page.search_course_code.fit code
+        page.search_course_code.fit search_text
       elsif field == "description"
-        page.adv_plain_text_description.fit code
+        page.adv_plain_text_description.fit search_text
       end
       page.course_search
       sleep 5

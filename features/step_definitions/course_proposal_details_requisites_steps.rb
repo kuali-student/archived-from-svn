@@ -1,12 +1,3 @@
-When(/^I create a basic course proposal$/) do
-  steps %{Given I am logged in as Faculty}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :proposal_title => random_alphanums(10,'test basic proposal title '),
-                            :course_title => random_alphanums(10,'test basic course title ')
-
-
-end
-
 When(/^I create a basic course proposal with two basic Eligibility requisites$/) do
   steps %{Given I am logged in as Faculty}
 
