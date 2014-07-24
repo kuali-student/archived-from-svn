@@ -84,7 +84,7 @@ class CmCourseProposalObject < DataFactory
       page.course_title.fit opts[:course_title]
     end
 
-    determine_save_action unless opts[:@defer_save]
+    determine_save_action unless opts[:defer_save]
 
     set_options(opts)
   end
