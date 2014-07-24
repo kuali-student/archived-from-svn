@@ -1,4 +1,4 @@
-@draft
+@nightly
 Feature: GT.Find a Course
 
   Scenario: FC1.1 Verify empty search string results in validation error
@@ -8,12 +8,12 @@ Feature: GT.Find a Course
 
   Scenario: FC1.2 Verify partial search string on Course code returns correct results
     Given I am logged in as Curriculum Specialist
-    When I perform a partial search for Courses
+    When I perform a partial string search for Courses
     Then I get the results matching the search criteria
 
   Scenario: FC1.3 Verify full search string on Course Code returns correct results
     Given I am logged in as Faculty
-    When I perform a full search for Courses
+    When I perform a full string search for Courses
     Then I get correct course returned on the search
 
   Scenario: FC1.4 Verify that no matching results message is displayed
