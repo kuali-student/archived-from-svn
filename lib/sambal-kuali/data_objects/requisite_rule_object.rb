@@ -57,19 +57,8 @@ class CmRequisiteRuleObject < DataFactory
 
       if  @rule == 'Must have successfully completed <course>'
         @complete_rule_text = @rule.sub('<course>', @course)
-
         # Enter text
-        if @add_method == 'text'
-          puts 'student text'
-          page.course_field.fit @course
-        end
-
-        if @add_method == 'advanced'
-          puts 'student advanced ' + @search_course_code
-          page.search_link
-          #pick the first course
-          rule_advanced_search("course code", @search_course_code, 0)
-        end
+        enter_rule_text(0)
       end
 
       if @rule == 'Must successfully complete a minimum of <n> courses from <courses> with a minimum grade of <gradeType> <grade>'
@@ -84,21 +73,7 @@ class CmRequisiteRuleObject < DataFactory
         num = @completed_course_number
         while i < num do
           # Enter course Code text
-          if @add_method == 'text'
-            puts 'course Code text'
-            page.course_field.fit @course
-          end
-
-          if @add_method == 'advanced'
-            puts 'advanced search'
-            page.search_link
-            #pick one field
-            #page.adv_course_code_rule.fit @search_course_code
-            #page.adv_search
-            #number is the column number 1 = course title, 2 = Course Code, 4 = Description
-            #page.select_course($i)
-            rule_advanced_search("course code", @search_course_code, i)
-          end
+          enter_rule_text(i)
           page.add_course_code
           i +=1
         end
@@ -106,51 +81,24 @@ class CmRequisiteRuleObject < DataFactory
         page.completed
         page.loading_wait
         page.grade_dropdown.fit "A"
-
       end
 
       if  @rule == 'Must be concurrently enrolled in <course>'
-
-        if @add_method == 'text'
-          page.course_field.fit @course
-        end
-
-        if @add_method == 'advanced'
-          puts 'advanced search'
-          page.search_link
-          #pick the first course
-          rule_advanced_search("course code", @search_course_code, 0)
-        end
+        enter_rule_text(0)
       end
 
       if @rule == 'Must not have successfully completed <course>'
-
-        if @add_method == 'text'
-          page.course_field.fit @course
-        end
-
-        if @add_method == 'advanced'
-          page.search_link
-          #pick the first course
-          rule_advanced_search("course code", @search_course_code, 0)
-        end
+        enter_rule_text(0)
       end
 
       if @rule == 'May be repeated for a maximum of <n> credits'
         page.integer_field.when_present.set @repeatable_for_credit_credit
       end
 
-
       if @rule == 'Must not have successfully completed <course>'
-        if @add_method == 'text'
-          page.course_field.fit @course
-        end
-        if @add_method == 'advanced'
-          page.search_link
-          #pick the first course
-          rule_advanced_search("course code", @search_course_code, 0)
-        end
+        enter_rule_text(0)
       end
+
       preview_rule_changes
     end
   end
@@ -159,18 +107,27 @@ class CmRequisiteRuleObject < DataFactory
 
   end
 
-  def navigate_to_requisite
-    on CmCourseRequistitesPage do |page|
-      page.course_requisites unless page.current_page('Course Requisites').exists?
-    end
-  end
-
   def preview_rule_changes
     on CmRequisiteRules do |page|
         page.preview_change
     end
   end
 
+  def enter_rule_text (index)
+    on CmRequisiteRules do |page|
+      # Enter text
+      if @add_method == 'text'
+        puts 'add text ' + @course
+        page.course_field.fit @course
+      end
+
+      if @add_method == 'advanced'
+        puts 'advanced search ' + @search_course_code
+        page.search_link
+        rule_advanced_search("course code", @search_course_code, index)
+      end
+    end
+  end
 
   def rule_advanced_search(field, search_text, index)
     on CmRequisiteAdvancedSearchPage do |page|
