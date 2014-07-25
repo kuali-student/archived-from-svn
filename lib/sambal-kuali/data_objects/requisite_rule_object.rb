@@ -104,26 +104,22 @@ class CmRequisiteRuleObject < DataFactory
   end
 
   def edit (opts ={})
+    rule_level = opts[:rule_level].to_i
+    req_level = opts[:requisite_level].to_i
+    operator_level = opts[:rule_level].to_i + 1
     on CmRequisiteRules do |page|
-      case opts[:level]
-        when "A"
-          page.rule_a_element_link.click
-          page.loading_wait
-          page.edit_btn
-          page.course_field.fit @course
-        when "B"
-          #Add editing contents
-        else
-          raise "No Rule level defined!"
-      end
+      page.rule_element_link(rule_level).click
+      page.loading_wait
+      page.edit_btn
+      page.course_field.fit @course
     end
     preview_rule_changes
-    edit_operator(opts[:operator]) unless opts[:operator].nil?
+    edit_operator(opts[:operator], req_level, operator_level) unless opts[:operator].nil?
   end
 
-  def edit_operator (operator)
+  def edit_operator (operator, req_level, operator_level)
     on CmRequisiteRules do |page|
-      page.select_rule_operator.fit operator
+      page.select_rule_operator(req_level, operator_level).fit operator
       page.loading_wait
     end
   end

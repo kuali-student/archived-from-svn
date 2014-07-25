@@ -91,8 +91,8 @@ class CmCourseRequisite < DataFactory
       rescue Exception => e
         page.edit_rule('AE')
       end
-      opts[:left_group_node].edit :level => 'A', :operator => opts[:logic_operator] unless opts[:left_group_node].nil?
-      opts[:right_group_node].edit :level => 'B' unless opts[:right_group_node].nil?
+      opts[:left_group_node].edit :rule_level => '0', :requisite_level => '0', :operator => opts[:logic_operator] unless opts[:left_group_node].nil?
+      opts[:right_group_node].edit :rule_level => '2', :requisite_level => '0', :operator => opts[:logic_operator] unless opts[:right_group_node].nil?
       update_adding_rules
     end
   end

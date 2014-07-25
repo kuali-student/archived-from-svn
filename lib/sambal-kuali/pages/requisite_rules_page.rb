@@ -76,8 +76,7 @@ class CmRequisiteRules < BasePage
   action(:select_course) {|index, b|b.select_link(index).click;  b.loading_wait }
 
 # editing rules
-  element(:select_rule_operator) {|b|b.select(:id => /prop_compoundOpCode.*parent_root_control/)}
-  element(:rule_a_element_link) {|b|b.div(:id => /.*_node_0_parent_node_0_parent_root/)}
-  element(:rule_b_element_link) {|b|b.div(:id => /.*_node_2_parent_node_0_parent_root/)}
+  element(:select_rule_operator) {|level1, level2, b|b.select(:id => "prop_compoundOpCode_node_#{level2}_parent_node_#{level1}_parent_root_control")}
+  element(:rule_element_link) {|level, b|b.div(:id => /.*_node_#{level}_parent_node_0_parent_root/)}
 
 end
