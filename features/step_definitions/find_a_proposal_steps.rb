@@ -1,5 +1,5 @@
 When(/^I perform a blank search for Courses$/) do
-  @course = make CmCourseObject, :search_term => " "
+  @course = make CmCourseObject, :search_term => nil
   @course.search_for_course
 end
 
