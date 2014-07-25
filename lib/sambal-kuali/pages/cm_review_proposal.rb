@@ -76,11 +76,12 @@ class CmReviewProposal < BasePage
   value(:repeatableForCredit_operator_and_rules) {|b|b.div(id: "CoursePreview-AgendaManage-RulePrototype_ruleF_disclosureContent").text }
 
   #ACTIVITY FORMATS
-  value(:activity_level_review) { |activity_level, b| b.div(id: "course_review_format_details").header(id: /line#{activity_level-1}/).span(class: "uif-headerText-span").text }
-  value(:activity_type_review)  { |activity_level, b| b.div(id: "course_review_activity_details_line#{activity_level-1}").header(id: /line#{activity_level-1}_line#{activity_level-1}/).span(class: "uif-headerText-span").text }
-  value(:activity_contact_hours_frequency_review) { |activity_level, b| b.div(id: "course_review_activity_details_line#{activity_level-1}").div(data_label: "Contact Hours").text }
-  value(:activity_duration_type_count_review) { |activity_level, b| b.div(id: "course_review_activity_details_line#{activity_level-1}").div(data_label: "Duration").text }
-  value(:activity_class_size_review) { |activity_level, b| b.div(id: "course_review_activity_details_line#{activity_level-1}").div(data_label: "Anticipated Class Size").text }
+  element(:activity_format_review_section) { |b| b.div(id:"course_review_format_details") }
+  value(:activity_level_review) { |activity_level, b| b.activity_format_review_section.header(id: /line#{activity_level-1}/).span(class: "uif-headerText-span").text }
+  value(:activity_type_review)  { |activity_level, b| b.activity_format_review_section.header(id: /line#{activity_level-1}_line#{activity_level-1}/).span(class: "uif-headerText-span").text }
+  value(:activity_contact_hours_frequency_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Contact Hours").text }
+  value(:activity_duration_type_count_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Duration").text }
+  value(:activity_class_size_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Anticipated Class Size").text }
 
   # ACTIVE DATES REVIEW FIELDS
   action(:edit_active_dates) { |b| b.a(id: 'ActiveDates-Review-Edit-link').click }
