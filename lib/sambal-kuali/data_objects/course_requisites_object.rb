@@ -85,43 +85,15 @@ class CmCourseRequisite < DataFactory
     on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
       sleep 3
-      #STUDENT ELIGIBILITY #A,G,M,S,
+      #STUDENT ELIGIBILITY #A,G,M,S,Y,AE
       begin
         page.edit_rule_student_eligibility
       rescue Exception => e
-        page.edit_rule('Y')
+        page.edit_rule('AE')
       end
-      edit_A_rule :left_group_node => opts[:left_group_node] unless opts[:left_group_node].nil?
-      edit_B_rule :right_group_node => opts[:right_group_node] unless opts[:right_group_node].nil?
-      edit_operator :logic_operator => opts[:logic_operator] unless opts[:logic_operator].nil?
-
+      opts[:left_group_node].edit :level => 'A', :operator => opts[:logic_operator] unless opts[:left_group_node].nil?
+      opts[:right_group_node].edit :level => 'B' unless opts[:right_group_node].nil?
       update_adding_rules
-    end
-  end
-
-  def edit_A_rule (opts={})
-    edited_rule = opts[:left_group_node]
-    on CmRequisiteRules do |page|
-      page.rule_a_element_link.click
-      page.loading_wait
-      page.edit_btn
-      page.course_field.fit opts[:left_group_node].course
-    end
-    edited_rule.preview_rule_changes
-  end
-
-  def edit_B_rule (opts={})
-    edited_rule = opts[:right_group_node]
-    on CmRequisiteRules do |page|
-      # add editing contents
-    end
-    edited_rule.preview_rule_changes
-  end
-
-  def edit_operator (opts={})
-    on CmRequisiteRules do |page|
-      page.select_rule_operator.fit opts[:logic_operator]
-      page.loading_wait
     end
   end
 

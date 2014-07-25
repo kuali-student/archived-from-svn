@@ -69,13 +69,13 @@ class CmRequisiteRuleObject < DataFactory
         #pick the courses, dynamic course ranges, or Course sets.
         page.multi_course_dropdown.fit @course_combination_type
 
-        i = 0
-        num = @completed_course_number
-        while i < num do
+        selected_row_num = 0
+        total_courses_to_be_selected = @completed_course_number
+        while selected_row_num < total_courses_to_be_selected do
           # Enter course Code text
-          enter_rule_text(i)
+          enter_rule_text(selected_row_num)
           page.add_course_code
-          i +=1
+          selected_row_num +=1
         end
 
         page.completed
@@ -104,7 +104,28 @@ class CmRequisiteRuleObject < DataFactory
   end
 
   def edit (opts ={})
+    on CmRequisiteRules do |page|
+      case opts[:level]
+        when "A"
+          page.rule_a_element_link.click
+          page.loading_wait
+          page.edit_btn
+          page.course_field.fit @course
+        when "B"
+          #Add editing contents
+        else
+          raise "No Rule level defined!"
+      end
+    end
+    preview_rule_changes
+    edit_operator(opts[:operator]) unless opts[:operator].nil?
+  end
 
+  def edit_operator (operator)
+    on CmRequisiteRules do |page|
+      page.select_rule_operator.fit operator
+      page.loading_wait
+    end
   end
 
   def preview_rule_changes
