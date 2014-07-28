@@ -7,7 +7,26 @@ class CmCourseObject < DataFactory
   include Utilities
 
   attr_accessor :course_code,
-                :search_term
+                :search_term,
+                # COURSE INFORMATION
+                :course_title,
+                :transcript_course_title,
+                :description,
+                # GOVERNANCE
+                :campus_location,
+                :curriculum_oversight,
+                # COURSE LOGISTICS
+                :assessment_scale,
+                :audit,
+                :pass_fail_transcript_grade,
+                :final_exam_status,
+                :outcome_list,
+                :format_list,
+                # ACTIVE DATES
+                :start_term,
+                :pilot_course
+
+
 
 
 
@@ -28,6 +47,14 @@ class CmCourseObject < DataFactory
     on CmFindACoursePage do |search|
       search.course_code.set search_term
       search.find_courses
+    end
+  end
+
+
+  def view_course
+    search_for_course
+    on CmFindACoursePage do |view|
+      view.view_course(@course_code)
     end
   end
 

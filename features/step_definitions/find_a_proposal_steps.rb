@@ -57,3 +57,67 @@ Then(/^a message indicating no matching records is displayed\.$/) do
     error.no_lookup_results_text.should include "did not match any records"
   end
 end
+
+When(/^I view the details of a course using Find a Course$/) do
+  outcome = (make CmOutcomeObject, :outcome_level => 1, :outcome_type => "Fixed", :credit_value => 3)
+
+  format = (make CmFormatsObject,   :format_level => 1,
+                                   :activity_level => 1,
+                                   :type => "Lecture",
+                                   :contacted_hours => 3,
+                                   :contact_frequency => "week",
+                                   :duration_count => nil,
+                                   :duration_type => nil,
+                                   :class_size => 0 )
+
+  @course = make CmCourseObject, :course_title => "The Rise of the West: 1500 - 1789",
+                                 :transcript_course_title => "WEST 1500-1789",
+                                 :search_term => "HIST112",
+                                 :course_code => "HIST112",
+                                 :description => "History of early modern Europe.",
+                                 :campus_location => "North",
+                                 :curriculum_oversight => "ARHU-History",
+                                 :assessment_scale => "Letter; Pass/Fail Grading",
+                                 :audit => "Yes",
+                                 :pass_fail_transcript_grade => "Yes",
+                                 :final_exam_status => "Standard Final Exam",
+                                 :outcome_list => [outcome],
+                                 :format_list => [format],
+                                 :start_term => "Fall 2007",
+                                 :pilot_course => "No"
+
+
+  @course.view_course
+end
+
+
+
+
+Then(/^I can view all the details of the course on course review$/) do
+    on CmReviewProposal do |review|
+      #COURSE INFORMATION
+      review.course_title_review.should include @course.course_title
+      review.transcript_course_title.should include @course.transcript_course_title
+      "#{review.subject_code_review}""#{review.course_number_review}".should include @course.course_code
+      review.description_review.should include @course.description
+      #GOVERNANCE
+      review.campus_locations_review.should include @course.campus_location
+      review.curriculum_oversight_review.should include @course.curriculum_oversight
+      #COURSE LOGISTICS
+      review.assessment_scale_review.should include @course.assessment_scale
+      review.audit_review.should include @course.audit
+      review.pass_fail_transcript_review.should include @course.pass_fail_transcript_grade
+      review.final_exam_status_review.should include @course.final_exam_status
+      #OUTCOMES
+      review.outcome_level_review(1).should include "#{@course.outcome_list[0].outcome_level}"
+      review.outcome_type_review(1).should include @course.outcome_list[0].outcome_type
+      review.outcome_credit_review(1).should include "#{@course.outcome_list[0].credit_value}"
+      #FORMATS
+      review.activity_level_review(1).should include "#{@course.format_list[0].activity_level}"
+      review.activity_type_review(1).should include @course.format_list[0].type
+      review.activity_contact_hours_frequency_review(1).should include "#{@course.format_list[0].contacted_hours}"
+      review.activity_contact_hours_frequency_review(1).should include @course.format_list[0].contact_frequency
+      review.activity_class_size_review(1).should include "#{@course.format_list[0].class_size}"
+
+    end
+end

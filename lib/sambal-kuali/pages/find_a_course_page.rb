@@ -15,6 +15,7 @@ class CmFindACoursePage < BasePage
   element(:no_lookup_results) { |b| b.p(id: "KS-Uif-Message-ZeroLookupResults") }
   value(:no_lookup_results_text) { |b| b.p(id: "KS-Uif-Message-ZeroLookupResults").text }
   value(:validation_message) { |b| b.div(id: "Uif-ViewContentWrapper").ul(class: "uif-validationMessagesList").text }
+  action(:view_course) { |course_title,b| b.a(id: "#{course_title}_view").i(class: "ks-fontello-icon-eye").click }
 
   def results_list_course_code
     code_list = []
