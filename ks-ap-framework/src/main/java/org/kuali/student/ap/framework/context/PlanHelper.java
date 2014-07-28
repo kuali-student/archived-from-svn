@@ -30,6 +30,22 @@ public interface PlanHelper {
 	 * @return Default Learning Plan
 	 */
 	LearningPlanInfo getDefaultLearningPlan();
+	
+	/**
+	 * Update the default learning plan for the current session.
+	 * 
+	 * @param learningPlanId learning plan ID
+	 */
+	void setDefaultLearningPlan(String learningPlanId);
+
+	/**
+	 * Retrieves a learning plan for the current student by ID.
+	 *
+	 * @param learningPlanId
+	 *            plan ID
+	 * @return Learning Plan
+	 */
+	LearningPlanInfo getLearningPlan(String learningPlanId);
 
 	/**
 	 * Gets the plan items in a learning plan.
@@ -39,6 +55,15 @@ public interface PlanHelper {
 	 * @return Default Learning Plan
 	 */
 	List<PlanItem> getPlanItems(String planId);
+
+	/**
+	 * Load a plan item from any of the student's learning plans by ID.
+	 * 
+	 * @param planItemId
+	 *            plan item ID
+	 * @return a plan item from one of the student's learning plans by ID
+	 */
+	PlanItem getPlanItem(String planItemId);
 
 	/**
 	 * Adds a plan item to a learning plan.
@@ -55,7 +80,7 @@ public interface PlanHelper {
 	 *            planned term IDs
 	 * @param ref
 	 *            course/placeholder reference data
-	 * @return 
+	 * @return
 	 */
 	PlanItem addPlanItem(String learningPlanId, ItemCategory category,
 			String descr, BigDecimal units, List<String> termIds,
@@ -111,7 +136,7 @@ public interface PlanHelper {
 	 *            The student principal ID.
 	 * @return completed course records
 	 */
-	List<StudentCourseRecordInfo> getCompletedRecords(String studentId);
+	List<StudentCourseRecordInfo> getCompletedRecords();
 
 	/**
 	 * Gets the id of the term that the planner should display first.

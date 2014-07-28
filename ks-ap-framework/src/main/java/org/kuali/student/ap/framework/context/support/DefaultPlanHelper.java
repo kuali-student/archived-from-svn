@@ -25,7 +25,6 @@ import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlaceholderResolver;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.PlanHelper;
-import org.kuali.student.ap.framework.context.TermHelper;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
@@ -132,6 +131,43 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	}
 
 	@Override
+	public void setDefaultLearningPlan(String learningPlanId) {
+		throw new UnsupportedOperationException("TODO: only supported in iGPS");
+	}
+
+	@Override
+	public LearningPlanInfo getLearningPlan(String learningPlanId) {
+		try {
+			LearningPlanInfo learningPlan = KsapFrameworkServiceLocator
+					.getAcademicPlanService().getLearningPlan(
+							learningPlanId,
+							KsapFrameworkServiceLocator.getContext()
+									.getContextInfo());
+			String lpStudent = learningPlan.getStudentId();
+			if (lpStudent == null
+					|| !lpStudent.equals(KsapFrameworkServiceLocator
+							.getUserSessionHelper().getStudentId()))
+				return null;
+			else
+				return learningPlan;
+		} catch (DoesNotExistException e) {
+			LOG.warn(String.format("Learning plan %s does not exist",
+					learningPlanId), e);
+			return null;
+		} catch (InvalidParameterException e) {
+			LOG.warn(String.format("Invalid learning plan ID %s",
+					learningPlanId), e);
+			return null;
+		} catch (MissingParameterException e) {
+			throw new IllegalStateException("LP lookup failure", e);
+		} catch (OperationFailedException e) {
+			throw new IllegalStateException("LP lookup failure", e);
+		} catch (PermissionDeniedException e) {
+			throw new IllegalStateException("LP lookup permission failure", e);
+		}
+	}
+
+	@Override
 	public List<PlanItem> getPlanItems(String planId) {
 		try {
 			return new ArrayList<PlanItem>(KsapFrameworkServiceLocator
@@ -151,14 +187,46 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	}
 
 	@Override
+	public PlanItem getPlanItem(String planItemId) {
+		try {
+			PlanItemInfo rv = KsapFrameworkServiceLocator
+					.getAcademicPlanService().getPlanItem(
+							planItemId,
+							KsapFrameworkServiceLocator.getContext()
+									.getContextInfo());
+			if (rv != null) {
+				String studentId = KsapFrameworkServiceLocator
+						.getUserSessionHelper().getStudentId();
+				LearningPlanInfo lp = KsapFrameworkServiceLocator
+						.getAcademicPlanService().getLearningPlan(
+								rv.getLearningPlanId(),
+								KsapFrameworkServiceLocator.getContext()
+										.getContextInfo());
+				if (studentId == null || !studentId.equals(lp.getStudentId()))
+					return null;
+			}
+			return rv;
+		} catch (DoesNotExistException e) {
+			LOG.warn(String.format("Plan item %s does not exist", planItemId),
+					e);
+			return null;
+		} catch (InvalidParameterException e) {
+			LOG.warn(String.format("Invalid plan item ID %s", planItemId), e);
+			return null;
+		} catch (MissingParameterException e) {
+			throw new IllegalStateException("LP lookup failure", e);
+		} catch (OperationFailedException e) {
+			throw new IllegalStateException("LP lookup failure", e);
+		} catch (PermissionDeniedException e) {
+			throw new IllegalStateException("LP lookup permission failure", e);
+		}
+	}
+
+	@Override
 	public PlanItem addPlanItem(String learningPlanId, ItemCategory category,
 			String descr, BigDecimal units, List<String> termIds,
 			TypedObjectReference ref) {
 		PlanHelper planHelper = KsapFrameworkServiceLocator.getPlanHelper();
-		TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
-
-		String termId = null; // TODO
-		Term term = termHelper.getTerm(termId);
 		PlanItem wishlistPlanItem = null;
 
 		// Get list of existing plan items
@@ -228,8 +296,7 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 		} catch (AlreadyExistsException e) {
 			LOG.warn(
 					"Reference " + ref.getRefObjectType() + " "
-							+ ref.getRefObjectId() + " is already planned for "
-							+ term.getName(), e);
+							+ ref.getRefObjectId() + " is already planned", e);
 		} catch (DataValidationErrorException e) {
 			throw new IllegalArgumentException("LP service failure", e);
 		} catch (InvalidParameterException e) {
@@ -414,11 +481,12 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	}
 
 	@Override
-	public List<StudentCourseRecordInfo> getCompletedRecords(String studentId) {
+	public List<StudentCourseRecordInfo> getCompletedRecords() {
 		try {
 			return KsapFrameworkServiceLocator.getAcademicRecordService()
 					.getCompletedCourseRecords(
-							studentId,
+							KsapFrameworkServiceLocator.getUserSessionHelper()
+									.getStudentId(),
 							KsapFrameworkServiceLocator.getContext()
 									.getContextInfo());
 		} catch (DoesNotExistException e) {

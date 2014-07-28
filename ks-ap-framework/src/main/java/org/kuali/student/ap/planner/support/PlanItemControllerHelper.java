@@ -65,7 +65,7 @@ public final class PlanItemControllerHelper {
 			return null;
 		}
 
-		if (!PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType())) {
+		if (!PlanConstants.REF_TYPE_COURSE.equals(planItem.getRefObjectType())) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Plan item " + planItemId
 					+ " does not refer to a course, found " + planItem.getRefObjectType());
 			return null;

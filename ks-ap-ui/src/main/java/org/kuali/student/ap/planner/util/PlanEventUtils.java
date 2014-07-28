@@ -94,7 +94,7 @@ public class PlanEventUtils {
                 .getCourseHelper();
         TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
 
-        assert PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType()) : planItem
+        assert PlanConstants.REF_TYPE_COURSE.equals(planItem.getRefObjectType()) : planItem
                 .getRefObjectType() + " " + planItem.getId();
 
         Course course = courseHelper.getCourseInfo(planItem.getRefObjectId());
@@ -312,7 +312,7 @@ public class PlanEventUtils {
 				.getCourseHelper();
 		TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
 
-		assert PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType()) : planItem
+		assert PlanConstants.REF_TYPE_COURSE.equals(planItem.getRefObjectType()) : planItem
 				.getRefObjectType() + " " + planItem.getId();
 
 		Course course = courseHelper.getCourseInfo(planItem.getRefObjectId());
@@ -548,7 +548,7 @@ public class PlanEventUtils {
         CourseHelper courseHelper = KsapFrameworkServiceLocator
                 .getCourseHelper();
 
-        assert PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType()) : planItem
+        assert PlanConstants.REF_TYPE_COURSE.equals(planItem.getRefObjectType()) : planItem
                 .getRefObjectType() + " " + planItem.getId();
 
         Course course = courseHelper.getCourseInfo(planItem.getRefObjectId());

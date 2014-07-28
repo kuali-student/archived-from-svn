@@ -598,7 +598,7 @@ public class PlannerController extends KsapControllerBase {
 				form.getCourseNote(),
 				form.getCreditsForPlanItem(course),
 				Collections.singletonList(termId),
-				new TypedObjectReferenceInfo(PlanConstants.COURSE_TYPE,
+				new TypedObjectReferenceInfo(PlanConstants.REF_TYPE_COURSE,
 						course.getId()));
         
         // Create json strings for displaying action's response and updating the planner screen.
@@ -702,7 +702,7 @@ public class PlannerController extends KsapControllerBase {
 				null,
 				null,
 				Collections.<String> emptyList(),
-				new TypedObjectReferenceInfo(PlanConstants.COURSE_TYPE, course
+				new TypedObjectReferenceInfo(PlanConstants.REF_TYPE_COURSE, course
 						.getId()));
 
         eventList = PlanEventUtils.makeAddBookmarkEvent(newBookmark, eventList);

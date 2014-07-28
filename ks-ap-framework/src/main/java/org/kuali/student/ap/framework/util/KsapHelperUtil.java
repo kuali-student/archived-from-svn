@@ -339,7 +339,7 @@ public class KsapHelperUtil {
         }
 
         for (PlanItemInfo planItem : planItems) {
-            if (!PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType()))
+            if (!PlanConstants.REF_TYPE_COURSE.equals(planItem.getRefObjectType()))
                 continue;
 
             BigDecimal credit = planItem.getCredits();

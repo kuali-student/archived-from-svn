@@ -360,7 +360,7 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 			Map<String, List<PlannerTermNote>> termNotes = new HashMap<String, List<PlannerTermNote>>();
 
 			List<StudentCourseRecordInfo> completedRecords = KsapFrameworkServiceLocator
-					.getPlanHelper().getCompletedRecords(learningPlan.getStudentId());
+					.getPlanHelper().getCompletedRecords();
 
 			List<PlanItem> planItems = new ArrayList<>(
 					KsapFrameworkServiceLocator.getPlanHelper().getPlanItems(
@@ -378,7 +378,7 @@ public class DefaultPlannerForm extends AbstractPlanItemForm implements
 						.getCategory();
 				String refTypeKey = planItem.getRefObjectType();
 				List<String> planTermIds = planItem.getPlanTermIds();
-				if (!PlanConstants.COURSE_TYPE.equals(refTypeKey)
+				if (!PlanConstants.REF_TYPE_COURSE.equals(refTypeKey)
 						|| (!AcademicPlanServiceConstants.ItemCategory.CART
 								.equals(category)
 								&& !AcademicPlanServiceConstants.ItemCategory.PLANNED

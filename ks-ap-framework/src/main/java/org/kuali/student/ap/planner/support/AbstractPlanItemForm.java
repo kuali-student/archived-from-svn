@@ -74,6 +74,11 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 		this.planItem = null;
 		this.course = null;
 		this.existingPlanItems = null;
+		try {
+			KsapFrameworkServiceLocator.getPlanHelper().setDefaultLearningPlan(
+					learningPlanId);
+		} catch (UnsupportedOperationException e) {
+		}
 	}
 
 	@Override
@@ -83,20 +88,7 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 			if (!StringUtils.hasText(learningPlanId)) {
 				learningPlan = KsapFrameworkServiceLocator.getPlanHelper().getDefaultLearningPlan();
 			} else {
-				try {
-					learningPlan = KsapFrameworkServiceLocator.getAcademicPlanService().getLearningPlan(learningPlanId,
-							KsapFrameworkServiceLocator.getContext().getContextInfo());
-				} catch (DoesNotExistException e) {
-					LOG.warn(String.format("Learning plan %s does not exist", learningPlanId), e);
-				} catch (InvalidParameterException e) {
-					LOG.warn(String.format("Invalid learning plan ID %s", learningPlanId), e);
-				} catch (MissingParameterException e) {
-					throw new IllegalStateException("LP lookup failure", e);
-				} catch (OperationFailedException e) {
-					throw new IllegalStateException("LP lookup failure", e);
-				} catch (PermissionDeniedException e) {
-                    throw new IllegalStateException("LP lookup permission failure", e);
-                }
+				learningPlan = KsapFrameworkServiceLocator.getPlanHelper().getLearningPlan(learningPlanId);
             }
 
 		}
@@ -151,20 +143,7 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 	@Override
 	public PlanItem getPlanItem() {
 		if (planItem == null && planItemId != null) {
-			try {
-				planItem = KsapFrameworkServiceLocator.getAcademicPlanService().getPlanItem(planItemId,
-						KsapFrameworkServiceLocator.getContext().getContextInfo());
-			} catch (DoesNotExistException e) {
-				LOG.warn(String.format("Plan item %s does not exist", planItemId), e);
-			} catch (InvalidParameterException e) {
-				LOG.warn(String.format("Invalid plan item ID %s", planItemId), e);
-			} catch (MissingParameterException e) {
-				throw new IllegalStateException("LP lookup failure", e);
-			} catch (OperationFailedException e) {
-				throw new IllegalStateException("LP lookup failure", e);
-            } catch (PermissionDeniedException e) {
-                throw new IllegalStateException("LP lookup permission failure", e);
-            }
+			planItem = KsapFrameworkServiceLocator.getPlanHelper().getPlanItem(planItemId);
         }
 		return planItem;
 	}
@@ -219,23 +198,12 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 	@Override
 	public List<PlanItem> getExistingPlanItems() {
 		if (existingPlanItems == null) {
-			LearningPlan plan = getLearningPlan();
 			PlanItem planItem = getPlanItem();
 			if (planItem != null || courseId != null)
-				try {
-					existingPlanItems = Collections.<PlanItem> unmodifiableList(KsapFrameworkServiceLocator
-							.getAcademicPlanService().getPlanItemsInPlanByRefObjectIdByRefObjectType(plan.getId(),
-									planItem == null ? courseId : planItem.getRefObjectId(), PlanConstants.COURSE_TYPE,
-									KsapFrameworkServiceLocator.getContext().getContextInfo()));
-				} catch (InvalidParameterException e) {
-					throw new IllegalArgumentException("LP lookup error", e);
-				} catch (MissingParameterException e) {
-					throw new IllegalArgumentException("LP lookup error", e);
-				} catch (OperationFailedException e) {
-					throw new IllegalStateException("LP lookup error", e);
-                } catch (PermissionDeniedException e) {
-                    throw new IllegalStateException("LP lookup permission failure", e);
-                }
+				existingPlanItems = KsapFrameworkServiceLocator.getPlanHelper()
+						.loadStudentsPlanItemsForCourse(
+								planItem == null ? courseId : planItem
+										.getRefObjectId());
         }
 		return existingPlanItems;
 	}
