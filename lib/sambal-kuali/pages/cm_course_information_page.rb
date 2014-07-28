@@ -16,8 +16,10 @@ class CmCourseInformation < BasePage
 
 #CROSS LIST SECTION
   element(:course_listing_section_collapsed) { |b| b.img(id: /^KS-CrossListingEtcDisclosure-Section/, alt: 'collapse') }
-  action(:expand_course_listing_section) { |b| b.a(id: 'KS-CrossListingEtcDisclosure-Section_toggle').span(class: 'uif-headerText-span').click; b.add_version_code_button.wait_until_present }
-  element(:collapse_course_listing_section) { |b| b.div(id: 'KS-CrossListingEtcDisclosure-Section_disclosureContent') }
+  #action(:expand_course_listing_section) { |b| b.a(id: 'KS-CrossListingEtcDisclosure-Section_toggle').span(class: 'uif-headerText-span').click; b.add_version_code_button.wait_until_present }
+  action(:expand_course_listing_section) { |b| b.a(id: 'CM-Proposal-Course-CourseInfo-CrossListingEtcDisclosure-Section_toggle').span(class: 'uif-headerText-span').click; b.add_version_code_button.wait_until_present }
+  #element(:collapse_course_listing_section) { |b| b.div(id: 'KS-CrossListingEtcDisclosure-Section_disclosureContent') }
+  element(:collapse_course_listing_section) { |b| b.div(id: 'CM-Proposal-Course-CourseInfo-CrossListingEtcDisclosure-Section_disclosureContent') }
 
   #CROSS LISTED COURSES
   action(:cross_listed_course_subject) { |cross_list_course_level, b| b.text_field(id: "subjectArea_line#{cross_list_course_level-1}_control") }

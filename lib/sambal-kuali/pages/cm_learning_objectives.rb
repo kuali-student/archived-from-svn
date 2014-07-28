@@ -12,7 +12,7 @@ class CmLearningObjectives < BasePage
 
   action(:objective_detail) { |objective_level,b| b.text_field(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_control") }
   action(:search_for_lo) { |objective_level,b| b.a(id: "KS-LoDisplayInfoWrapper-descr_line#{objective_level-1}_quickfinder_act") }
-  action(:delete_learning_objective) { |objective_level, b| b.a(id: "LearningObjectives-Icon-Delete_line#{objective_level-1}").click ; b.loading_wait }
+  action(:delete_learning_objective) { |objective_level, b| b.a(id: "CM-Proposal-Course-LearningObjectives-Icon-delete_line#{objective_level-1}").click ; b.loading_wait }
 
 #  action(:category_detail) { |category_level,b| b.text_field(id: "KS-LearningObjective-Category_line#{category_level-1}_add_control") }
   action(:category_detail) { |objective_level,category_level,b| b.div(id: "learning_objective_section_#{objective_level-1}").text_field(id: "KS-LearningObjective-Category_line#{category_level-1}_add_control") }
@@ -24,9 +24,9 @@ class CmLearningObjectives < BasePage
   action(:delete_category) { |objective_level,category_level,b| b.a(id: "KS-LearningObjective-Category-Delete_line#{objective_level-1}_line#{category_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
 
   #organize LO
-  action(:move_up_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-MoveUp_line#{lo_level-1}").click; b.loading_wait }
-  action(:move_down_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-MoveDown_line#{lo_level-1}").click; b.loading_wait }
-  action(:outdent_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-DecreaseIndent_line#{lo_level-1}").click; b.loading_wait }
-  action(:indent_lo) { |lo_level,b| b.a(id: "LearningObjectives-Icon-IncreaseIndent_line#{lo_level-1}").click; b.loading_wait }
+  action(:move_up_lo) { |lo_level,b| b.a(id: "CM-Proposal-Course-LearningObjectives-Icon-MoveUp_line#{lo_level-1}").click; b.loading_wait }
+  action(:move_down_lo) { |lo_level,b| b.a(id: "CM-Proposal-Course-LearningObjectives-Icon-MoveDown_line#{lo_level-1}").click; b.loading_wait }
+  action(:outdent_lo) { |lo_level,b| b.a(id: "CM-Proposal-Course-LearningObjectives-Icon-decreaseIndent_line#{lo_level-1}").click; b.loading_wait }
+  action(:indent_lo) { |lo_level,b| b.a(id: "CM-Proposal-Course-LearningObjectives-Icon-IncreaseIndent_line#{lo_level-1}").click; b.loading_wait }
 
 end
