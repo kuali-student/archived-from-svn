@@ -43,6 +43,10 @@ Then(/^the status of course proposal has not changed$/) do
   on CmReviewProposal do |review|
     #TODO need to add validation for whats missing
     review.proposal_status.should include "Saved"
+    review.review_proposal_error.should include "This proposal is incomplete"
+    review.curriculum_oversight_error_state.should be_true
+    review.outcome_error_state.should be_true
+
   end
 
 end
@@ -78,4 +82,8 @@ end
 
 Then(/^I submit the course proposal$/) do
     @course_proposal.submit_proposal
+end
+
+Then(/^I submit the incomplete course proposal$/) do
+  @course_proposal.submit_incomplete_proposal
 end

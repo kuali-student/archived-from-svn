@@ -1,3 +1,4 @@
+@draft
 Feature: GT.Route Credit Course Proposal
 
   Scenario: RP1.1 Create a course proposal with required for submit fields and submit as Faculty
@@ -17,7 +18,7 @@ Feature: GT.Route Credit Course Proposal
   Scenario: RP1.3 Create a course proposal without all the required for submit fields and submit
     Given I am logged in as Faculty
     When I do not complete all the required for submit fields on the course proposal
-    When I submit the course proposal
+    When I submit the incomplete course proposal
     Then the status of course proposal has not changed
 
   Scenario: RP1.4 Partially create a course proposal as Faculty and complete proposal and submit as CS

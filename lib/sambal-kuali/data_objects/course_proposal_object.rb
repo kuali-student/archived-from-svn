@@ -441,6 +441,11 @@ class CmCourseProposalObject < DataFactory
     on(CmReviewProposal).submit_confirmation
   end
 
+  def submit_incomplete_proposal
+    on(CmCourseInformation).review_proposal
+    on(CmReviewProposal).submit_proposal
+  end
+
 
   #-----
   private

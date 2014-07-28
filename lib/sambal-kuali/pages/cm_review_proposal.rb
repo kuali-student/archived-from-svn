@@ -33,6 +33,7 @@ class CmReviewProposal < BasePage
   action(:edit_governance) { |b| b.a(id: "Governance-Review-Edit-link").click }
   value(:campus_locations_review) { |b| b.textarea(id: 'governanceSection_campusLocations_control').text }
   value(:curriculum_oversight_review) { |b| b.textarea(id: 'governanceSection_curriculumOversightAsString_control').text }
+  element(:curriculum_oversight_error_state) { |b| b.textarea(id: "governanceSection_curriculumOversightAsString", class: /hasError/) }
   value(:administering_org_review) { |b| b.textarea(id: 'governanceSection_administeringOrganization_control').text }
 
 
@@ -51,6 +52,7 @@ class CmReviewProposal < BasePage
   value(:outcome_level_review) { |outcome_level,b| b.div(id: "course_review_outcome_details").header(id: /line#{outcome_level-1}/).span(class: "uif-headerText-span").text }
   value(:outcome_type_review) { |outcome_level,b| b.div(id: "course_review_outcome_details").div(id: /line#{outcome_level-1}/, data_label: "Type").text }
   value(:outcome_credit_review) { |outcome_level,b| b.div(id: "course_review_outcome_details").div(id: /line#{outcome_level-1}/, data_label: "Credit Value").text }
+  element(:outcome_error_state) { |b| b.div(data_label: "Outcomes", class: /hasError/) }
 
   #LEARNING OBJECTIVES
   value(:lo_terms_review) { |lo_review,b| b.textarea(id: "learningObjectivesSection_learningObjectives_line#{lo_review-1}_control").text }
