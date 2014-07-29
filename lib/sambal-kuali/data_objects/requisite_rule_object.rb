@@ -156,7 +156,7 @@ class CmRequisiteRuleObject < DataFactory
         page.adv_plain_text_description.fit search_text
       end
       page.course_search
-      page.select_result(index)
+      page.select_row(index)
     end
   end
 

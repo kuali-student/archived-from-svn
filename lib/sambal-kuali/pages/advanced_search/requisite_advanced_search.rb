@@ -13,8 +13,9 @@ class CmRequisiteAdvancedSearchPage < BasePage
   element(:adv_plain_text_description) { |b| b.frm.text_field(name: 'lookupCriteria[description]') }
 
   action(:search_return_value) { |title_return_value, b| b.frm.link(title: 'return value ='+"#{title_return_value}").click }
-  action(:course_search) { |b| b.frm.button(id: "button_search").click; b.loading_wait; sleep 2 }
-  action(:select_result) { |index, b| b.frm.a(id: /.*_line#{index}/).click}
+  action(:course_search) { |b| b.frm.button(id: "button_search").click; b.loading_wait;}
+  element(:searched_row) { |index, b| b.frm.a(id: /.*_line#{index}/)}
+  action(:select_result) { |index, b| b.searched_row(index).click}
   element(:results_table) { |b| b.frm.table(id: "uLookupResults_layout")}
 
   def return_value(search_text)
@@ -37,6 +38,7 @@ class CmRequisiteAdvancedSearchPage < BasePage
   end
 
   def select_row(index)
-    row_by_index(index).select_link(text:"Select").click;
+    searched_row(index).wait_until_present(60)
+    select_result(index);
   end
 end
