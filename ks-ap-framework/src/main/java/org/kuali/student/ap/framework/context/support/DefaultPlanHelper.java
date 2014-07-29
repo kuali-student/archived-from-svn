@@ -25,6 +25,7 @@ import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlaceholderResolver;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.PlanHelper;
+import org.kuali.student.ap.framework.context.TermHelper;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
@@ -523,8 +524,21 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<Term> getPlannerCalendarTerms(Term startTerm) {
+		TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
+		
+		if (startTerm == null) {
+			startTerm = termHelper.getCurrentTerm();
+		}
+		
+		if (startTerm == null) {
+			List<Term> pterms = termHelper.getPlanningTerms();
+			if (pterms != null && !pterms.isEmpty())
+				startTerm = pterms.get(0);
+		}
+
 		Calendar c = Calendar.getInstance();
-		Date startDate = startTerm.getStartDate();
+		Date startDate = startTerm == null ? KsapHelperUtil.getCurrentDate()
+				: startTerm.getStartDate();
 
 		// Check that start term is before the current date, in not use current
 		// date as start term

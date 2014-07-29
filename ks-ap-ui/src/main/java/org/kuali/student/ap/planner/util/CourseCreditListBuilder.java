@@ -24,7 +24,7 @@ import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.krad.uif.control.UifKeyValuesFinderBase;
 import org.kuali.rice.krad.uif.view.ViewModel;
 import org.kuali.student.ap.coursesearch.CreditsFormatter;
-import org.kuali.student.ap.planner.form.PlannerFormImpl;
+import org.kuali.student.ap.planner.PlannerForm;
 
 public class CourseCreditListBuilder extends UifKeyValuesFinderBase {
 
@@ -71,7 +71,7 @@ public class CourseCreditListBuilder extends UifKeyValuesFinderBase {
      * @return The Range of credits from the Course
      */
     protected CreditsFormatter.Range getRange(ViewModel model) {
-        PlannerFormImpl form = (PlannerFormImpl)model;
+        PlannerForm form = (PlannerForm)model;
         return CreditsFormatter.getRange(form.getCourse());
     }
 }
