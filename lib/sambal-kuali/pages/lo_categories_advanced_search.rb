@@ -10,13 +10,13 @@ class CmLOAdvancedSearchPage < BasePage
 
 
   #Select Categories popup
-  element(:type_select_all_link) {|b| b.frm.a(id: 'Lo-type-selection-select-all-link') }
-  element(:type_clear_all_link)  {|b|b.frm.a(id: 'Lo-type-selection-deselect-all-link')}
-  element(:category_filter_input) {|b|b.frm.text_field(id: 'LoCategory-Category-Filter-Input_control') }
+  element(:type_select_all_link) {|b| b.frm.a(id: 'CM-Proposal-Course-LoCategory-SelectAll') }
+  element(:type_clear_all_link)  {|b|b.frm.a(id: 'CM-Proposal-Course-LoCategoryDeselectAll')}
+  element(:category_filter_input) {|b|b.frm.text_field(id: 'CM-Proposal-Course-LoCategory-Filter-Input_control') }
 
 
-  element(:add_categories_button) { |b| b.frm.button(id: 'KSCM-AddCategoryButton')}
-  action(:add_categories) { |b| b.frm.button(id: 'KSCM-AddCategoryButton').click; b.loading_wait }
+  element(:add_categories_button) { |b| b.frm.button(id: 'CM-Proposal-Course-LoCategory-AddCategory')}
+  action(:add_categories) { |b| b.frm.button(id: 'CM-Proposal-Course-LoCategory-AddCategory').click; b.loading_wait }
 
 
   element(:lookup_result_table) { |b| b.frm.table(id: "uLookupResults_layout") }

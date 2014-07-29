@@ -18,9 +18,9 @@ class CmFindLearningObjectivesPage < BasePage
 
   #type of search
   element(:search_type) { |b| b.frm.select_list(id: "searchByCriteria_control") }
-  element(:learning_objective_text) { |b| b.frm.text_field(id: "searchByField_control") }
-  action(:show_learning_objectives) {|b|b.frm.button(id: 'show_learning_objectives_button').click; b.loading_wait }
-  element(:add_learning_objectives_button) {|b|b.frm.button(id: 'KS-AddLo-Button')}
+  element(:learning_objective_text) { |b| b.frm.text_field(id: "CM-Proposal-Course-Lo-SearchByName_control") }
+  action(:show_learning_objectives) {|b|b.frm.button(id: 'CM-Proposal-Course-Lo-Show').click; b.loading_wait }
+  element(:add_learning_objectives_button) {|b|b.frm.button(id: 'CM-Proposal-Course-AddLo')}
 
   SELECT_COLUMN = 0
   #The popup search result table is used for learning objectives or categories because the table id is the same for two tables
@@ -30,7 +30,7 @@ class CmFindLearningObjectivesPage < BasePage
 
   #Find Learning Objectives popup
 
-  action(:add_learning_objectives) {|b|b.frm.button(id: 'KS-AddLo-Button').click; b.loading_wait}
+  action(:add_learning_objectives) {|b|b.frm.button(id: 'CM-Proposal-Course-AddLo').click; b.loading_wait}
 
   def row_by_index(index)
     lookup_result_table.rows(index)

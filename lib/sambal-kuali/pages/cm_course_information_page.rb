@@ -9,9 +9,9 @@ class CmCourseInformation < BasePage
   element(:course_title) { |b| b.text_field(name: 'document.newMaintainableObject.dataObject.courseInfo.courseTitle') }
   element(:course_title_error_state) { |b| b.text_field(name: 'document.newMaintainableObject.dataObject.courseInfo.courseTitle', class: 'uif-textControl required validChar-document.newMaintainableObject.dataObject.courseInfo.courseTitle0 error') }
 
-  element(:transcript_course_title) {|b| b.text_field(id: 'KS-TranscriptTitle_control') }
-  element(:subject_code) { |b| b.text_field(id: 'KS-SubjectArea-Field_control') }
-  element(:course_number) { |b| b.text_field(id: 'KS-CourseNumberSuffix-Field_control') }
+  element(:transcript_course_title) {|b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-TranscriptTitle_control') }
+  element(:subject_code) { |b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-SubjectCode_control') }
+  element(:course_number) { |b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-CourseNumSuffix_control') }
   action(:cancel) { |b| b.a(id: 'ucancel').click; b.loading_wait }
 
 #CROSS LIST SECTION
@@ -22,30 +22,30 @@ class CmCourseInformation < BasePage
   element(:collapse_course_listing_section) { |b| b.div(id: 'CM-Proposal-Course-CourseInfo-CrossListingEtcDisclosure-Section_disclosureContent') }
 
   #CROSS LISTED COURSES
-  action(:cross_listed_course_subject) { |cross_list_course_level, b| b.text_field(id: "subjectArea_line#{cross_list_course_level-1}_control") }
-  action(:cross_listed_course_number) { |cross_list_course_level, b| b.text_field(id: "courseNumberSuffix_line#{cross_list_course_level-1}_control") }
-  action(:add_cross_listed_course) { |b| b.button(id: 'addCrosslistedCourse').click; b.loading_wait }
-  action(:delete_cross_listed_course) { |cross_list_course_level,b| b.a(id: "delete_crosslistedcourse_line#{cross_list_course_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
+  action(:cross_listed_course_subject) { |cross_list_course_level, b| b.text_field(id: "CM-Proposal-Course-CourseInfo-CrossList-SubjectCode_line#{cross_list_course_level-1}_control") }
+  action(:cross_listed_course_number) { |cross_list_course_level, b| b.text_field(id: "CM-Proposal-Course-CourseInfo-CrossList-CourseNumSuffix_line#{cross_list_course_level-1}_control") }
+  action(:add_cross_listed_course) { |b| b.button(id: 'CM-Proposal-Course-CourseInfo-AddCrossList').click; b.loading_wait }
+  action(:delete_cross_listed_course) { |cross_list_course_level,b| b.a(id: "CM-Proposal-Course-CourseInfo-CrossList-Delete_line#{cross_list_course_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
 
   #JOINTLY OFFERED COURSES
-  element(:add_jointly_offered_course) { |b| b.button(id: 'addJointlyOfferedCourse').click; b.loading_wait }
-  element(:jointly_offered_course) { | joint_offered_course_level,b| b.text_field(id: "KS-CourseCode-Field_line#{joint_offered_course_level-1}_control") }
-  action(:jointly_offered_quick_find) { |joint_offered_course_level, b| b.a(id: "KS-CourseCode-Field_line#{joint_offered_course_level-1}_quickfinder_act").click }
-  action(:delete_jointly_offered_course) { |joint_offered_course_level, b| b.a(id: "delete_jointofferedcourse_line#{joint_offered_course_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
+  element(:add_jointly_offered_course) { |b| b.button(id: 'CM-Proposal-Course-CourseInfo-AddJointlyOffered').click; b.loading_wait }
+  element(:jointly_offered_course) { | joint_offered_course_level,b| b.text_field(id: "CM-Proposal-Course-CourseInfo-JointOffer-CourseCode_line#{joint_offered_course_level-1}_control") }
+  action(:jointly_offered_quick_find) { |joint_offered_course_level, b| b.a(id: "CM-Proposal-Course-CourseInfo-JointOffer-CourseCode_line#{joint_offered_course_level-1}_quickfinder_act").click }
+  action(:delete_jointly_offered_course) { |joint_offered_course_level, b| b.a(id: "CM-Proposal-Course-CourseInfo-JointOffer-Delete_line#{joint_offered_course_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
   ##ADVANCED SEARCH
 
   #VERSION CODES
-  element(:add_version_code_button) { |b| b.button(id: 'addVersionCode') }
+  element(:add_version_code_button) { |b| b.button(id: 'CM-Proposal-Course-CourseInfo-AddVersionCode') }
   action(:add_version_code) { |b| b.add_version_code_button.click; b.loading_wait }
-  action(:version_code_code) { |version_code_level, b| b.text_field(id: "variationCode_line#{version_code_level-1}_control") }
-  action(:version_code_title) { |version_code_level, b| b.text_field(id: "variationTitle_line#{version_code_level-1}_control") }
-  action(:delete_version_code) { |version_code_level, b| b.a(id: "delete_versioncode_line#{version_code_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait  }
+  action(:version_code_code) { |version_code_level, b| b.text_field(id: "CM-Proposal-Course-CourseInfo-VariationCode_line#{version_code_level-1}_control") }
+  action(:version_code_title) { |version_code_level, b| b.text_field(id: "CM-Proposal-Course-CourseInfo-VariationTitle_line#{version_code_level-1}_control") }
+  action(:delete_version_code) { |version_code_level, b| b.a(id: "CM-Proposal-Course-CourseInfo-VersionCode-Delete_line#{version_code_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait  }
 
 
   #INSTRUCTORS
-  element(:instructor_name) { |instructor_level,b| b.text_field(id: "KS-Instructor-displayName_line#{instructor_level-1}_control") }
-  action(:add_instructor) {|b| b.button(id: 'addInstructor').click; b.loading_wait }
-  action(:delete_instructor) { |instructor_level,b| b.a(id: "delete_instructor_line#{instructor_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
+  element(:instructor_name) { |instructor_level,b| b.text_field(id: "CM-Proposal-Course-CourseInfo-Instructor-Name_line#{instructor_level-1}_control") }
+  action(:add_instructor) {|b| b.button(id: 'CM-Proposal-Course-CourseInfo-AddInstructor').click; b.loading_wait }
+  action(:delete_instructor) { |instructor_level,b| b.a(id: "CM-Proposal-Course-CourseInfo-Instructor-Delete_line#{instructor_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
 
 #DESCRIPTION AND RATIONALE
   element(:description_rationale) { |b| b.text_field(name: /courseInfo.descr.plain$/) }

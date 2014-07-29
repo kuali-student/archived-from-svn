@@ -18,10 +18,10 @@ class CmRequisiteRules < BasePage
   action(:del_btn) { |b| b.button(:text => /Delete/).when_present.click;  b.loading.wait_while_present}
   action(:add_line_btn) { |b| b.button(:id=>/KRMS-ApprovedCourseStackedCollectionGroup_.*add/).when_present.click;  b.loading.wait_while_present}
   action(:delete_line_btn) { |b| b.button(:text => /delete/).when_present.click;  b.loading.wait_while_present}
-  action(:update_rule_btn) { |b| b.button(id: "Course-UpdateRule-Button").when_present.click; b.loading.wait_while_present(60)}
+  action(:update_rule_btn) { |b| b.button(id: "CM-Proposal-Course-Requisites-UpdateRule-Button").when_present.click; b.loading.wait_while_present(60)}
 
   element(:right_btn_element) { |b| b.button(:text => /Move In/) }
-  element(:cancel_update_link) { |b| b.a(id: "Course-CancelRule-Button")}
+  element(:cancel_update_link) { |b| b.a(id: "CM-Proposal-Course-Requisites-CancelRule-Button")}
   action(:cancel) { |b| b.cancel_update_link.when_present.click}
 
   #Add Rule Section

@@ -1,3 +1,11 @@
+REQUISITE_TYPE_PREREQUISITE = "Student Eligibility & Prerequisite"
+REQUISITE_TYPE_CO_REQUISITE  = "Corequisite"
+REQUISITE_TYPE_RECOMMENDED_PREPARATION = "Recommended Preparation"
+REQUISITE_TYPE_ANTI_REQUISITE = "Antirequisite"
+REQUISITE_TYPE_REPEATABLE_FOR_CREDIT = "Repeatable for Credit"
+REQUISITE_TYPE_RESTRICTS_CREDITS = "Course that Restricts Credits"
+
+
 When(/^I create a basic course proposal with two basic Eligibility requisites$/) do
   steps %{Given I am logged in as Faculty}
 
@@ -10,7 +18,7 @@ When(/^I create a basic course proposal with two basic Eligibility requisites$/)
                             :proposal_title => random_alphanums(10,'test basic proposal title '),
                             :course_title => random_alphanums(10,'test basic course title '),
                             :course_requisite_list => [requisite_obj1]
-  sleep 1
+  sleep 3
 end
 
 When(/^I create a basic course proposal with Recommended Preparation rule with multiple variables including course set$/) do
@@ -43,9 +51,9 @@ Then(/^I should see the the basic Eligibility requisites on the course proposal$
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Student Eligibility & Prerequisite"
-          page.prerequisites_operator_and_rules.should include requisite.left_group_node.complete_rule_text
-          page.prerequisites_operator_and_rules.should include requisite.right_group_node.complete_rule_text
-          page.prerequisites_operator_and_rules.should include requisite.logic_operator
+          page.prerequisites_operators_and_rules.should include requisite.left_group_node.complete_rule_text
+          page.prerequisites_operators_and_rules.should include requisite.right_group_node.complete_rule_text
+          page.prerequisites_operators_and_rules.should include requisite.logic_operator
         else
           raise "No requisite rule section defined!"
       end
@@ -63,7 +71,7 @@ Then(/^I should see the multiple variable requisite on the course proposal$/) do
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Recommended Preparation"
-          saved_rules = page.preparation_operator_and_rules
+          saved_rules = page.preparation_operators_and_rules
           saved_rules.should include requisite.left_group_node.complete_rule_text
           saved_rules.should include("BSCI201")
           saved_rules.should include("BSCI202")
@@ -106,9 +114,9 @@ Then(/^I should see updated requisite details on the course proposal$/) do
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Student Eligibility & Prerequisite"
-          page.prerequisites_operator_and_rules.should include requisite.left_group_node.complete_rule_text
-          page.prerequisites_operator_and_rules.should include requisite.right_group_node.complete_rule_text
-          page.prerequisites_operator_and_rules.should include requisite.logic_operator
+          page.prerequisites_operators_and_rules.should include requisite.left_group_node.complete_rule_text
+          page.prerequisites_operators_and_rules.should include requisite.right_group_node.complete_rule_text
+          page.prerequisites_operators_and_rules.should include requisite.logic_operator
         else
           raise "No requisite rule section defined!"
       end
@@ -121,22 +129,27 @@ Then(/^I should no longer see with requisite details on the course proposal$/) d
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
     on CmReviewProposal do |page|
-      $requisite_type = requisite.requisite_type
-      case $requisite_type
-        when "Student Eligibility & Prerequisite"
-          page.prerequisites_operator_and_rules.should == ""
-        when "Corequisite"
-          page.corequisite_operator_and_rules.should == ""
-        when "Recommended Preparation"
-          page.preparation_operator_and_rules.should == ""
-        when "Antirequisite"
-          page.antirequisite_operator_and_rules.should == ""
-        when "Repeatable for Credit"
-          page.restrictsCredits_operator_and_rules.should == ""
-        when "Course that Restricts Credits"
-          page.repeatableForCredit_operator_and_rules.should == ""
-        else
-          raise "No requisite rule section defined!"
+      requisite_type = requisite.requisite_type
+      begin
+        case requisite_type
+          when REQUISITE_TYPE_PREREQUISITE # "Student Eligibility & Prerequisite"
+            page.prerequisites_operators_and_rules.should == ""
+          when REQUISITE_TYPE_CO_REQUISITE #"Corequisite"
+            page.corequisite_operators_and_rules.should == ""
+          when REQUISITE_TYPE_RECOMMENDED_PREPARATION #"Recommended Preparation"
+            page.preparation_operators_and_rules.should == ""
+          when REQUISITE_TYPE_ANTI_REQUISITE #"Antirequisite"
+            page.antirequisite_operators_and_rules.should == ""
+          when REQUISITE_TYPE_REPEATABLE_FOR_CREDIT #"Repeatable for Credit"
+            page.repeatableForCredit_operators_and_rules.should == ""
+          when REQUISITE_TYPE_RESTRICTS_CREDITS #"Course that Restricts Credits"
+            page.restrictsCredits_operators_and_rules.should == ""
+          else
+            raise "No requisite rule section defined!"
+        end
+      rescue Exception => e
+        #element should not present
+        e.message.should include "unable to locate element"
       end
     end
   end

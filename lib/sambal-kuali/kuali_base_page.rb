@@ -76,7 +76,7 @@ class BasePage < PageFactory
       action(:saving_wait) { |b| b.saving.wait_while_present }
       action(:save_progress) { |b| b.button(text: "Save Progress").click }
       action(:cancel_action) { |b| b.link(text: "Cancel").click; b.loading.wait_while_present }
-      element(:review_proposal_element) { |b| b.a(id: "course_details_review_proposal_link") }
+      element(:review_proposal_element) { |b| b.a(id: "CM-Proposal-Course-ReviewProposalLink") }
       action(:review_proposal) { |b| b.review_proposal_element.click; b.loading_wait }
 
       element(:save_continue) { |b| b.button(id: 'usave') }
@@ -128,8 +128,8 @@ class BasePage < PageFactory
       value(:page_validation_header) { |b| b.div(id: "CM-Proposal-Course-Create-Page_messages").h3(id: "pageValidationHeader").text }
       value(:review_proposal_error) { |b| b.p(id: "ReviewProposal-Error-Message").text }
 
-      element(:comments_link) {|b|b.a(id: "CourseView-LinkGroup-Comments")}
-      element(:decisions_link) {|b|b.a(id: "CourseView-LinkGroup-Decisions")}
+      element(:comments_link) {|b|b.a(id: "CM-Proposal-Course-LinkGroup-Comments")}
+      element(:decisions_link) {|b|b.a(id: "CM-Proposal-Course-LinkGroup-Decisions")}
       action(:load_comments) { |b| b.comments_link.click }
       action(:load_decisions) { |b| b.decisions_link.click }
 

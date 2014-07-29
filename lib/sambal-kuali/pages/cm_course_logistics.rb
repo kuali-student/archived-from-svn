@@ -10,8 +10,8 @@ class CmCourseLogistics < BasePage
   element(:term_summer) { |b| b.checkbox(value: 'kuali.atp.type.Summer') }
 
 #DURATION COUNT
-  element(:duration_count_type) { |b| b.select_list(id: "KS-DurationTypeDropDown_control") }
-  element(:duration_count_count) { |b| b.text_field(id: "KS-DurationTimeQuantity-Field_control") }
+  element(:duration_count_type) { |b| b.select_list(id: "CM-Proposal-Course-Logistics-DurationType_control") }
+  element(:duration_count_count) { |b| b.text_field(id: "CM-Proposal-Course-Logistics-DurationCount_control") }
 
 #GRADE ASSESMENTS
 
@@ -34,20 +34,20 @@ class CmCourseLogistics < BasePage
   element(:final_exam_rationale) { |b| b.text_field(name: 'document.newMaintainableObject.dataObject.finalExamRationale') }
 
 #OUTCOME
-  action(:add_outcome) {|b| b.button(id: 'outcome-addline').click; b.loading_wait }
-  action(:outcome_type) { |outcome_level, b| b.select_list(id: "typeKey_line#{outcome_level}_control" ) }
-  action(:credit_value) { |outcome_level, b| b.text_field(id: "creditValue_line#{outcome_level}_control") }
-  action(:delete_outcome) { |outcome_level,b| b.a(id: "delete_outcome_line#{outcome_level}").i(class: "ks-fontello-icon-cancel").click }
+  action(:add_outcome) {|b| b.button(id: 'CM-Proposal-Course-Logistics-AddOutcome').click; b.loading_wait }
+  action(:outcome_type) { |outcome_level, b| b.select_list(id: "CM-Proposal-Course-Logistics-Outcome-Type_line#{outcome_level}_control" ) }
+  action(:credit_value) { |outcome_level, b| b.text_field(id: "CM-Proposal-Course-Logistics-Outcome-Credit_line#{outcome_level}_control") }
+  action(:delete_outcome) { |outcome_level,b| b.a(id: "CM-Proposal-Course-Logistics-Outcome-Delete_line#{outcome_level}").i(class: "ks-fontello-icon-cancel").click }
 
 
 #COURSE FORMAT(S)
   action(:add_additional_format) { |b| b.button(id: /CourseFormats-Widgets_add$/).click; b.adding_line_wait }
-  action(:add_activity) { |b| b.button(id: 'activity-addline_line0').click; b.loading_wait }
+  action(:add_activity) { |b| b.button(id: 'CM-Proposal-Course-Logistics-AddActivity_line0').click; b.loading_wait }
   action(:type) { |format_level,activity_level,b| b.select_list(name: "document.newMaintainableObject.dataObject.formats[#{format_level-1}].activities[#{activity_level-1}].typeKey") }
   element(:contacted_hours) { |format_level,activity_level,b| b.text_field(id: /line#{format_level-1}_line#{activity_level-1}_control/, name: /contactHours.unitQuantity$/) }
   element(:contact_frequency) { |format_level,activity_level,b| b.select_list(id: /line#{format_level-1}_line#{activity_level-1}_control/, name: /contactHours.unitTypeKey$/) }
-  action(:duration_count) { |format_level,activity_level,b| b.text_field(id: "KS-Logistics-Format-DurationTimeQuantity-Field_line#{format_level-1}_line#{activity_level-1}_control") }
-  action(:duration_type) { |format_level,activity_level,b| b.select_list(id: "KS-Logistics-Format-DurationTypeDropDown_line#{format_level-1}_line#{activity_level-1}_control") }
+  action(:duration_count) { |format_level,activity_level,b| b.text_field(id: "CM-Proposal-Course-Logistics-Format-DurationCount_line#{format_level-1}_line#{activity_level-1}_control") }
+  action(:duration_type) { |format_level,activity_level,b| b.select_list(id: "CM-Proposal-Course-Logistics-Format-DurationType_line#{format_level-1}_line#{activity_level-1}_control") }
   action(:class_size) { |format_level,activity_level,b| b.text_field(id:/line#{format_level-1}_line#{activity_level-1}_control/, name: /defaultEnrollmentEstimate$/) }
 
   #ADDED COURSE FORMATS

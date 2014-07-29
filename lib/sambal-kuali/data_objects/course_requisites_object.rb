@@ -44,17 +44,17 @@ class CmCourseRequisite < DataFactory
   def create
     view
     case @requisite_type
-      when "Student Eligibility & Prerequisite"
+      when REQUISITE_TYPE_PREREQUISITE #"Student Eligibility & Prerequisite"
         adding_rule_student_eligibility
-      when "Corequisite"
+      when REQUISITE_TYPE_CO_REQUISITE #"Corequisite"
         adding_rule_corequisite
-      when "Recommended Preparation"
+      when REQUISITE_TYPE_RECOMMENDED_PREPARATION #"Recommended Preparation"
         adding_rule_recommended_preparation_rule
-      when "Antirequisite"
+      when REQUISITE_TYPE_ANTI_REQUISITE #"Antirequisite"
         adding_rule_antirequisite
-      when "Repeatable for Credit"
+      when REQUISITE_TYPE_REPEATABLE_FOR_CREDIT #"Repeatable for Credit"
         adding_rule_repeatable_for_credit
-      when "Course that Restricts Credits"
+      when REQUISITE_TYPE_RESTRICTS_CREDITS #"Course that Restricts Credits"
         adding_course_that_restricts_credits
       else
         raise "No requisite rule section defined!"
@@ -86,11 +86,8 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       sleep 3
       #STUDENT ELIGIBILITY #A,G,M,S,Y,AE
-      begin
-        page.edit_rule_student_eligibility
-      rescue Exception => e
-        page.edit_rule('AE')
-      end
+      page.edit_rule_student_eligibility
+
       opts[:left_group_node].edit :rule_level => '0', :requisite_level => '0', :operator => opts[:logic_operator] unless opts[:left_group_node].nil?
       opts[:right_group_node].edit :rule_level => '2', :requisite_level => '0', :operator => opts[:logic_operator] unless opts[:right_group_node].nil?
       update_adding_rules
@@ -102,11 +99,7 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       sleep 3
       #STUDENT ELIGIBILITY #A,G,M,S
-      begin
-        page.add_rule_student_eligibility
-      rescue Exception => e
-        page.add_rule('AE')
-      end
+      page.add_rule_student_eligibility
 
       unless @rule_list.nil?
         @rule_list.each do |rule|
@@ -121,11 +114,8 @@ class CmCourseRequisite < DataFactory
     on CmCourseRequisitesPage do |page|
       page.expand_all_rule_sections
       #recommended_preparation C,I,O,U
-      begin
-        page.add_rule_recommended_prep
-      rescue Exception => e
-        page.add_rule('AA')
-      end
+      page.add_rule_recommended_prep
+
       @rule_list.each do |rule|
         rule.create
       end
@@ -145,11 +135,7 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       sleep 3
       #corequisite: B,H,N,T,Z,AF
-      begin
-        page.add_rule_corequisite
-      rescue Exception => e
-        page.add_rule('AF')
-      end
+      page.add_rule_corequisite
 
       unless @rule_list.nil?
         @rule_list.each do |rule|
@@ -165,11 +151,7 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       sleep 3
       #antirequisite: D,J,P,V,AB
-      begin
-        page.add_rule_antirequisite
-      rescue Exception => e
-        page.add_rule('AB')
-      end
+      page.add_rule_antirequisite
 
       unless @rule_list.nil?
         @rule_list.each do |rule|
@@ -185,11 +167,7 @@ class CmCourseRequisite < DataFactory
       page.expand_all_rule_sections
       sleep 2
       #repeatable_for_credit: E,K,Q,W,AC
-      begin
-        page.add_rule_repeatable_for_credit
-      rescue Exception => e
-        page.add_rule('AC')
-      end
+      page.add_rule_repeatable_for_credit
 
       unless @rule_list.nil?
         @rule_list.each do |rule|
@@ -205,11 +183,7 @@ class CmCourseRequisite < DataFactory
         page.expand_all_rule_sections
         sleep 2
         #restricts_credits: F,L,R,X, AD
-        begin
-          page.add_rule_restricts_credits
-        rescue Exception => e
-          page.add_rule('AD')
-        end
+        page.add_rule_restricts_credits
 
         unless @rule_list.nil?
           @rule_list.each do |rule|
