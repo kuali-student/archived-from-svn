@@ -6,13 +6,14 @@ class CmRequisiteAdvancedSearchPage < BasePage
     self.iframe(class: "fancybox-iframe")
   end
 
+  action(:loading_wait) {|b| b.frm.image(alt: "Loading...").wait_while_present }
 
   element(:search_course_title) { |b| b.frm.text_field(name: 'lookupCriteria[title]') }
   element(:search_course_code) { |b| b.frm.text_field(name: 'lookupCriteria[code]') }
   element(:adv_plain_text_description) { |b| b.frm.text_field(name: 'lookupCriteria[description]') }
 
   action(:search_return_value) { |title_return_value, b| b.frm.link(title: 'return value ='+"#{title_return_value}").click }
-  action(:course_search) { |b| b.frm.button(id: "button_search").click }
+  action(:course_search) { |b| b.frm.button(id: "button_search").click; b.loading_wait; sleep 2 }
   action(:select_result) { |index, b| b.frm.a(id: /.*_line#{index}/).click}
   element(:results_table) { |b| b.frm.table(id: "uLookupResults_layout")}
 

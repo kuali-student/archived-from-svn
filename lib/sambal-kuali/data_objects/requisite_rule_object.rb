@@ -156,7 +156,6 @@ class CmRequisiteRuleObject < DataFactory
         page.adv_plain_text_description.fit search_text
       end
       page.course_search
-      sleep 5
       page.select_result(index)
     end
   end
