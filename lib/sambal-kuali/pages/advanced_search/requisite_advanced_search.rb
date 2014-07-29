@@ -20,12 +20,7 @@ class CmRequisiteAdvancedSearchPage < BasePage
   def return_value(search_text)
     target_row(search_text).wait_until_present(60)
     target_row(search_text).link(text: "Select").wait_until_present(60)
-    begin
-      target_row(search_text).link(text: "Select").click
-    rescue Timeout::Error => e
-      puts "rescued target_row dept lookup"
-    end
-    #loading.wait_while_present
+    target_row(search_text).link(text: "Select").click
   end
 
   def target_row(search_text)
