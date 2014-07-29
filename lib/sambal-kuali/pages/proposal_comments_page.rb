@@ -2,6 +2,7 @@ class CmProposalComments < BasePage
 
   wrapper_elements
   cm_elements
+  expected_element :close
 
   def frm
     self.iframe(class: "fancybox-iframe")
@@ -16,7 +17,8 @@ class CmProposalComments < BasePage
   element(:comment_header_id_text) {|index, b|b.frm.header(id: "CM-Proposal-Course-Comment-Header_line#{index}").text}
 
   action(:add_comment) { |b| b.frm.button(text: 'Add Comment').click; b.loading_wait }
-  action(:close_dialog) { |b| b.frm.button(id: 'CM-Proposal-Course-CommentsLightBoxContents-cancel').click; b.loading_wait}
+  element(:close) { |b| b.frm.button(id: 'CM-Proposal-Course-CommentsLightBoxContents-cancel') }
+  action(:close_dialog) { |b| b.close.click; b.loading_wait}
   action(:close_comment_dialog) { |b| b.frm.a(title: "Close").click }
 
   action(:save_edited_comment) { |index,b| b.frm.button(id: "CM-Proposal-Course-Comment-Save_line#{index}").click; b.loading_wait }
