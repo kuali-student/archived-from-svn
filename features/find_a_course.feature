@@ -21,11 +21,10 @@ Feature: GT.Find a Course
     When I perform an invalid search for Courses
     Then a message indicating no matching records is displayed.
 
-  @draft
   Scenario: FC1.5 Display a course using Course view
     Given I am logged in as Faculty
     When I view the details of a course using Find a Course
-    Then I can view all the details of the course on course review
+    Then I can view all the details of the course
 
 
 

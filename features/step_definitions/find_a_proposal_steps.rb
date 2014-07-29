@@ -93,7 +93,7 @@ end
 
 
 
-Then(/^I can view all the details of the course on course review$/) do
+Then(/^I can view all the details of the course$/) do
     on CmReviewProposal do |review|
       #COURSE INFORMATION
       review.course_title_review.should include @course.course_title
