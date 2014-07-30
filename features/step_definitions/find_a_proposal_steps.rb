@@ -61,7 +61,7 @@ end
 When(/^I view the details of a course using Find a Course$/) do
   outcome = (make CmOutcomeObject, :outcome_level => 1, :outcome_type => "Fixed", :credit_value => 3)
 
-  format = (make CmFormatsObject,   :format_level => 1,
+  format = (make CmFormatsObject,  :format_level => 1,
                                    :activity_level => 1,
                                    :type => "Lecture",
                                    :contacted_hours => 3,
@@ -84,7 +84,9 @@ When(/^I view the details of a course using Find a Course$/) do
                                  :outcome_list => [outcome],
                                  :format_list => [format],
                                  :start_term => "Fall 2007",
-                                 :pilot_course => "No"
+                                 :pilot_course => "No",
+                                 :course_state => "Active"
+
 
 
   @course.view_course
@@ -95,6 +97,7 @@ end
 
 Then(/^I can view all the details of the course$/) do
     on CmReviewProposal do |review|
+      review.course_state_review.capitalize.should include @course.course_state
       #COURSE INFORMATION
       review.course_title_review.should include @course.course_title
       review.transcript_course_title.should include @course.transcript_course_title

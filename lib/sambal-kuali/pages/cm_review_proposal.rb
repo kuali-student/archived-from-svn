@@ -112,4 +112,7 @@ class CmReviewProposal < BasePage
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
   value(:proposal_status) { |b| b.div(id: "KS-CourseView-LinkGroup").div(data_label: "Proposal Status").text }
+
+  #COURSE STATUS
+  value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
 end

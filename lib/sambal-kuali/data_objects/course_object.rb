@@ -24,7 +24,8 @@ class CmCourseObject < DataFactory
                 :format_list,
                 # ACTIVE DATES
                 :start_term,
-                :pilot_course
+                :pilot_course,
+                :course_state
 
 
 
