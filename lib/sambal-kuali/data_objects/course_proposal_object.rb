@@ -451,7 +451,7 @@ class CmCourseProposalObject < DataFactory
     begin
       on(CmReviewProposal).submit_proposal
     rescue Exception => e
-      #element should is disabled
+      #element should be disabled
       (e.message.include? "object is disabled").should == true
     end
   end
