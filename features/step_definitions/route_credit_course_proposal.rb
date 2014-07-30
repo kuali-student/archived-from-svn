@@ -37,6 +37,10 @@ When(/^I do not complete all the required for submit fields on the course propos
                                                     :submit_fields => [submit_fields]
 end
 
+Then(/^I cannot submit the incomplete course proposal$/) do
+  @course_proposal.submit_button_disabled
+end
+
 Then(/^the status of course proposal has not changed$/) do
   #@course_proposal.review_proposal_action
 

@@ -446,6 +446,15 @@ class CmCourseProposalObject < DataFactory
     on(CmReviewProposal).submit_proposal
   end
 
+  def submit_button_disabled
+    on(CmCourseInformation).review_proposal
+    begin
+      on(CmReviewProposal).submit_proposal
+    rescue Exception => e
+      #element should is disabled
+      (e.message.include? "object is disabled").should == true
+    end
+  end
 
   #-----
   private
