@@ -499,7 +499,7 @@ limitations under the License.
         </property>
         
         <property name="quickfinder">
-	       	<bean parent="Uif-QuickFinder">
+	       	<bean parent="Uif-QuickFinder" p:returnByScript="false">
 	       	
 		        <property name="dataObjectClassName"
         		          value="org.kuali.student.lum.lu.ui.krms.dto.TestSetInfo"/>
@@ -513,7 +513,7 @@ limitations under the License.
         		          p:methodToCall="performLookup"/>
 		        </property>
         		<property name="lightBox">
-		            <bean parent="Uif-LightBox" p:lookupReturnByScript="false"/>
+		            <bean parent="Uif-LightBox"/>
         		</property>
         	</bean>
         </property>

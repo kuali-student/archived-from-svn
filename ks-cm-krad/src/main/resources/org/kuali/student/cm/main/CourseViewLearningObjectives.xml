@@ -96,7 +96,7 @@
                         </bean>
                     </property>
                     <property name="quickfinder">
-                        <bean parent="Uif-QuickFinder" p:lightBox.lookupReturnByScript="true">
+                        <bean parent="Uif-QuickFinder" p:returnByScript="true">
                             <property name="dataObjectClassName" value="org.kuali.student.cm.course.form.LoDisplayInfoWrapper"/>
                             <property name="quickfinderAction">
                                 <bean parent="Uif-ActionLink" p:actionLabel="Search for Learning Objectives" p:methodToCall="performLookup"/>
@@ -162,7 +162,7 @@
                                                 </bean>
                                             </property>
                                             <property name="quickfinder">
-                                                <bean parent="Uif-QuickFinder">
+                                                <bean parent="Uif-QuickFinder" p:returnByScript="false" >
                                                     <property name="autoSearch" value="true" />
                                                     <property name="quickfinderAction">
                                                         <bean parent="Uif-ActionLink">
@@ -176,7 +176,7 @@
                                                         </bean>
                                                     </property>
                                                     <property name="lightBox">
-                                                        <bean parent="Uif-LightBox" p:lookupReturnByScript="false" />
+                                                        <bean parent="Uif-LightBox" />
                                                     </property>
                                                     <property name="dataObjectClassName"
                                                         value="org.kuali.student.cm.course.form.LoCategoryInfoWrapper" />

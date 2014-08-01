@@ -16,14 +16,12 @@
 package org.kuali.student.cm.course.controller;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.kew.api.KewApiConstants;
-import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.kim.api.KimConstants;
 import org.kuali.rice.kim.api.identity.IdentityService;
 import org.kuali.rice.kim.api.identity.entity.Entity;
@@ -31,7 +29,6 @@ import org.kuali.rice.kim.api.identity.name.EntityNameContract;
 import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.UifParameters;
-import org.kuali.rice.krad.util.ErrorMessage;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.web.controller.MethodAccessible;
@@ -40,23 +37,13 @@ import org.kuali.rice.krad.web.form.MaintenanceDocumentForm;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.cm.common.util.CurriculumManagementConstants;
 import org.kuali.student.cm.common.util.CurriculumManagementConstants.CourseViewSections;
-import org.kuali.student.cm.course.form.CluInstructorInfoWrapper;
-import org.kuali.student.cm.course.form.CollaboratorWrapper;
-import org.kuali.student.cm.course.form.CourseCreateUnitsContentOwner;
-import org.kuali.student.cm.course.form.CourseInfoWrapper;
-import org.kuali.student.cm.course.form.LoDisplayInfoWrapper;
-import org.kuali.student.cm.course.form.LoDisplayWrapperModel;
-import org.kuali.student.cm.course.form.RecentlyViewedDocsUtil;
-import org.kuali.student.cm.course.form.ResultValuesGroupInfoWrapper;
-import org.kuali.student.cm.course.form.SupportingDocumentInfoWrapper;
+import org.kuali.student.cm.course.form.*;
 import org.kuali.student.cm.course.service.CourseInfoMaintainable;
+import org.kuali.student.cm.course.service.CourseMaintenanceDocumentControllerService;
 import org.kuali.student.cm.course.util.CourseProposalUtil;
-import org.kuali.student.common.uif.util.GrowlIcon;
-import org.kuali.student.common.uif.util.KSUifUtils;
 import org.kuali.student.common.uif.util.KSViewAttributeValueReader;
 import org.kuali.student.common.util.security.ContextUtils;
 import org.kuali.student.r1.core.subjectcode.service.SubjectCodeService;
-import org.kuali.student.r2.common.constants.CommonServiceConstants;
 import org.kuali.student.r2.common.dto.DtoConstants.DtoState;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.util.date.DateFormatters;
@@ -88,6 +75,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -131,7 +120,10 @@ public class CourseController extends CourseRuleEditorController {
     @Override
     protected MaintenanceDocumentForm createInitialForm() {
         MaintenanceDocumentForm form = new MaintenanceDocumentForm();
-        String useReviewProcessParam = form.getRequest().getParameter(URL_PARAM_USE_CURRICULUM_REVIEW);
+        HttpServletRequest curRequest =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String useReviewProcessParam = curRequest.getParameter(URL_PARAM_USE_CURRICULUM_REVIEW);
+
         // only do the manually setup of the MaintenanceDocumentForm fields if the URL_PARAM_USE_CURRICULUM_REVIEW param was passed in from initial view
         if (StringUtils.isNotBlank(useReviewProcessParam)) {
             Boolean isUseReviewProcess = new Boolean(useReviewProcessParam);
@@ -153,50 +145,6 @@ public class CourseController extends CourseRuleEditorController {
      */
     protected CourseInfoWrapper getCourseInfoWrapper(DocumentFormBase form) {
         return ((CourseInfoWrapper) ((MaintenanceDocumentForm) form).getDocument().getNewMaintainableObject().getDataObject());
-    }
-
-    /**
-     * Overridden because we needed a point at which the form is loaded with the document before we can initialize some
-     * form fields. This method is used for when a new document is created.
-     *
-     * @param form - form instance that contains the doc type parameter and where
-     *             the new document instance should be set
-     */
-    @Override
-    protected void createDocument(DocumentFormBase form) throws WorkflowException {
-        super.createDocument(form);
-        // at this point we have the document type name set on the form so we use it to update the Course specific fields
-        updateCourseForm(form);
-    }
-
-    /**
-     * Overridden because we needed a point at which the form is loaded with the document before we can initialize some
-     * form fields. This method is used for loading an existing document.
-     *
-     * @param form - form instance that contains the doc id parameter and where
-     *             the retrieved document instance should be set
-     */
-    @Override
-    protected void loadDocument(DocumentFormBase form) throws WorkflowException {
-        super.loadDocument(form);
-        // at this point we have the document type name set on the form so we use it to update the Course specific fields
-        updateCourseForm(form);
-    }
-
-    /**
-     * Currently updates the MaintenanceDocumentForm to set the 'useReviewProcess' property based on the document type name. If
-     * the document type name is CurriculumManagementConstants#DocumentTypeNames#CourseProposal#COURSE_CREATE_ADMIN or
-     * CurriculumManagementConstants#DocumentTypeNames#CourseProposal#COURSE_MODIFY_ADMIN then set 'useReviewProcss' to
-     * false
-     *
-     * @param form the DocumentFormBase object to update
-     */
-    protected void updateCourseForm(DocumentFormBase form) {
-        CourseInfoWrapper wrapper = getCourseInfoWrapper(form);
-        wrapper.getUiHelper()
-                .setUseReviewProcess(!ArrayUtils.contains(CurriculumManagementConstants.DocumentTypeNames.ADMIN_DOC_TYPE_NAMES, form.getDocTypeName()));
-        wrapper.getUiHelper()
-                .setCurriculumSpecialistUser(CourseProposalUtil.isUserCurriculumSpecialist());
     }
 
     /**
@@ -432,26 +380,7 @@ public class CourseController extends CourseRuleEditorController {
     }
 
     public void performWorkflowActionSuper(DocumentFormBase form, UifConstants.WorkflowAction action) {
-        super.performWorkflowAction(form, action);
-    }
-
-    /**
-     * Here we move the success messages displayed in UI from header to growl.
-     *
-     * @param form
-     * @param action
-     */
-    @Override
-    protected void performWorkflowAction(DocumentFormBase form, UifConstants.WorkflowAction action) {
-        CourseControllerTransactionHelper helper = GlobalResourceLoader.getService(new QName(CommonServiceConstants.REF_OBJECT_URI_GLOBAL_PREFIX + "courseControllerTransactionHelper", CourseControllerTransactionHelper.class.getSimpleName()));
-        helper.performWorkflowActionSuper(form, action, this);
-        List<ErrorMessage> infoMessages = GlobalVariables.getMessageMap().getInfoMessagesForProperty(KRADConstants.GLOBAL_MESSAGES);
-        if (infoMessages != null) {
-            for (ErrorMessage message : infoMessages) {
-                KSUifUtils.addGrowlMessageIcon(GrowlIcon.SUCCESS, message.getErrorKey(), message.getMessageParameters());
-            }
-            GlobalVariables.getMessageMap().removeAllInfoMessagesForProperty(KRADConstants.GLOBAL_MESSAGES);
-        }
+        this.getControllerService().performWorkflowAction(form, action);
     }
 
     /**
@@ -496,8 +425,12 @@ public class CourseController extends CourseRuleEditorController {
 
     @Override
     @RequestMapping(params = "methodToCall=blanketApprove")
-    public ModelAndView blanketApprove(@ModelAttribute("KualiForm") DocumentFormBase form) throws Exception {
-        saveProposal((MaintenanceDocumentForm) form);
+    public ModelAndView blanketApprove(@ModelAttribute("KualiForm") DocumentFormBase form) {
+        try {
+            saveProposal((MaintenanceDocumentForm) form);
+        } catch (Exception e) {
+            LOG.warn("Unable to save proposal: " + form.getDocId(), e);
+        }
         return super.blanketApprove(form);
     }
 
@@ -933,4 +866,16 @@ public class CourseController extends CourseRuleEditorController {
 
         return typeService;
     }
+
+    @Override
+    protected CourseMaintenanceDocumentControllerService getControllerService() {
+        return GlobalResourceLoader.getService("courseMaintenanceDocumentControllerService");
+    }
+
+/*    @Override
+    @Autowired
+    @Qualifier("courseMaintenanceDocumentControllerService")
+    public void setControllerService(ControllerService controllerService) {
+        super.setControllerService(controllerService);
+    }*/
 }
