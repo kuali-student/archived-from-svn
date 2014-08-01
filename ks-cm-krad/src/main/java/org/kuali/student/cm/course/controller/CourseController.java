@@ -869,13 +869,7 @@ public class CourseController extends CourseRuleEditorController {
 
     @Override
     protected CourseMaintenanceDocumentControllerService getControllerService() {
-        return GlobalResourceLoader.getService("courseMaintenanceDocumentControllerService");
+        return GlobalResourceLoader.getService(DocumentServiceConstants.COURSE_MAINTENANCE_SERVICE);
     }
 
-/*    @Override
-    @Autowired
-    @Qualifier("courseMaintenanceDocumentControllerService")
-    public void setControllerService(ControllerService controllerService) {
-        super.setControllerService(controllerService);
-    }*/
 }
