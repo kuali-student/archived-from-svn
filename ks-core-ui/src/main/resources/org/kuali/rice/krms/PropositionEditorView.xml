@@ -135,7 +135,7 @@ limitations under the License.
     <bean id="KRMS-StackedCollectionLayout-WithBoxItems" parent="Uif-StackedCollectionLayout-WithBoxItems"
           p:style="width: 620px" p:additionalCssClasses="krms-stackedCollectionLayout"
           class="org.kuali.student.core.krms.TreeNodeStackedLayoutManager">
-        <property name="actionsInLineGroup" value="true"/>
+        <property name="renderLineActionsInLineGroup" value="true"/>
         <property name="lineGroupPrototype">
             <bean parent="KRMS-CollectionGridItem"/>
         </property>

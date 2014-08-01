@@ -132,7 +132,6 @@ limitations under the License.
             </list>
         </property>
         <property name="applyAlternatingRowStyles" value="false"/>
-        <property name="renderAlternatingHeaderColumns" value="false"/>
         <property name="generateAutoSequence" value="true"/>
         <property name="richTable">
             <bean parent="KS-Uif-PagedRichTable">
