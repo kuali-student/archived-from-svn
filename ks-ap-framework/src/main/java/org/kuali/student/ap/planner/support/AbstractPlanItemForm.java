@@ -108,16 +108,19 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 
 	@Override
 	public boolean isPlanning() {
+		String termId = getTermId();
 		return termId != null && KsapFrameworkServiceLocator.getTermHelper().isPlanning(termId);
 	}
 
 	@Override
 	public boolean isOfficial() {
+		String termId = getTermId();
 		return termId != null && KsapFrameworkServiceLocator.getTermHelper().isOfficial(termId);
 	}
 
 	@Override
 	public Term getTerm() {
+		String termId = getTermId();
 		return term == null && termId != null ? term = KsapFrameworkServiceLocator.getTermHelper().getTerm(termId)
 				: term;
 	}
