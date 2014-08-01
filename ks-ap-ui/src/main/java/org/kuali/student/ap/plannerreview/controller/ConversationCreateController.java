@@ -1,38 +1,19 @@
 package org.kuali.student.ap.plannerreview.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.namespace.QName;
-
 import org.kuali.rice.core.api.resourceloader.GlobalResourceLoader;
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.form.UifFormBase;
+import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.service.AcademicPlanService;
-import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.coursesearch.service.impl.CourseDetailsInquiryHelperImpl;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.TermHelper;
 import org.kuali.student.ap.framework.context.YearTerm;
-import org.kuali.student.ap.plannerreview.dto.AcademicYearInfo;
-import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
-import org.kuali.student.ap.plannerreview.dto.CourseInfo;
-import org.kuali.student.ap.plannerreview.dto.CourseTypeInfo;
-import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewRequestInfo;
-import org.kuali.student.ap.plannerreview.dto.LearningPlanReviewTermInfo;
-import org.kuali.student.ap.plannerreview.dto.PlanTermInfo;
+import org.kuali.student.ap.plannerreview.dto.*;
 import org.kuali.student.ap.plannerreview.form.ConversationCreateForm;
 import org.kuali.student.ap.plannerreview.infc.ConversationAdvisor;
 import org.kuali.student.ap.plannerreview.infc.LearningPlanReviewTerm;
@@ -41,11 +22,7 @@ import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.myplan.plan.dataobject.PlanItemDataObject;
 import org.kuali.student.myplan.plan.dataobject.PlannedCourseDataObject;
 import org.kuali.student.r2.common.dto.RichTextInfo;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.exceptions.*;
 import org.kuali.student.r2.common.infc.RichText;
 import org.kuali.student.r2.core.acal.dto.AcademicCalendarInfo;
 import org.kuali.student.r2.core.acal.service.AcademicCalendarService;
@@ -57,6 +34,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/reviewCreate")
@@ -117,7 +101,9 @@ public class ConversationCreateController extends ConversationControllerBase {
 
 	@RequestMapping(params = "methodToCall=send")
 	public ModelAndView submit(
-			@ModelAttribute("KualiForm") ConversationCreateForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ConversationCreateForm form,
+			BindingResult result, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 
 		if (!result.hasErrors()) {
 			LearningPlanReviewRequestInfo lprr = new LearningPlanReviewRequestInfo();
@@ -233,7 +219,7 @@ public class ConversationCreateController extends ConversationControllerBase {
 		String viewId = CREATE_FORM;
 
 		form.setViewId(viewId);
-		form.setView(super.getViewService().getViewById(viewId));
+		form.setView(KRADServiceLocatorWeb.getViewService().getViewById(viewId));
 		return getModelAndView(form);
 	}
 

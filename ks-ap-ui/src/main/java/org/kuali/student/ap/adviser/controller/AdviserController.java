@@ -23,13 +23,14 @@ import org.kuali.rice.kim.api.identity.PersonService;
 import org.kuali.rice.kim.api.permission.PermissionService;
 import org.kuali.rice.kim.api.services.KimApiServiceLocator;
 import org.kuali.rice.krad.UserSession;
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.service.AcademicPlanService;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.framework.context.PlanConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
@@ -109,7 +109,7 @@ public class AdviserController extends UifControllerBase {
     public String doGet(@ModelAttribute("KualiForm") UifFormBase form) {
         UserSession session = GlobalVariables.getUserSession();
         clearSession(session);
-        form.setView(getViewService().getViewById("PlannedCourses-FormView"));
+        form.setView(KRADServiceLocatorWeb.getViewService().getViewById("PlannedCourses-FormView"));
         form.setRequestRedirected(true);
         GlobalVariables.getMessageMap().putErrorForSectionId(PlanConstants.PLAN_PAGE_ID, PlanConstants.ERROR_KEY_NO_STUDENT_PROXY_ID);
 
@@ -120,7 +120,7 @@ public class AdviserController extends UifControllerBase {
     public String get(@ModelAttribute("KualiForm") UifFormBase form) {
         UserSession session = GlobalVariables.getUserSession();
         clearSession(session);
-        form.setView(getViewService().getViewById("PlannedCourses-FormView"));
+        form.setView(KRADServiceLocatorWeb.getViewService().getViewById("PlannedCourses-FormView"));
         form.setRequestRedirected(true);
         GlobalVariables.getMessageMap().putErrorForSectionId(PlanConstants.PLAN_PAGE_ID, PlanConstants.ERROR_KEY_NO_STUDENT_PROXY_ID);
 
@@ -137,7 +137,7 @@ public class AdviserController extends UifControllerBase {
      */
     @RequestMapping(value = "/advise/{studentId}", method = RequestMethod.GET)
     public String get(@PathVariable("studentId") String studentId, @ModelAttribute("KualiForm") UifFormBase form) {
-        form.setView(getViewService().getViewById("PlannedCourses-FormView"));
+        form.setView(KRADServiceLocatorWeb.getViewService().getViewById("PlannedCourses-FormView"));
         form.setRequestRedirected(true);
         LearningPlanInfo plan = null;
         try {

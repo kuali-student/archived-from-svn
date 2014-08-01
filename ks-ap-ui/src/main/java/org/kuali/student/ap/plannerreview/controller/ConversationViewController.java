@@ -1,13 +1,14 @@
 package org.kuali.student.ap.plannerreview.controller;
 
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.plannerreview.infc.Conversation;
-import org.kuali.student.ap.plannerreview.infc.ConversationComment;
-import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.ap.plannerreview.dto.ConversationAdvisorInfo;
 import org.kuali.student.ap.plannerreview.dto.ConversationCommentInfo;
 import org.kuali.student.ap.plannerreview.dto.ConversationDateCommentInfo;
 import org.kuali.student.ap.plannerreview.form.ConversationViewForm;
+import org.kuali.student.ap.plannerreview.infc.Conversation;
+import org.kuali.student.ap.plannerreview.infc.ConversationComment;
+import org.kuali.student.ap.plannerreview.util.ConversationConstants;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.infc.RichText;
@@ -24,11 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -45,7 +42,9 @@ public class ConversationViewController  extends ConversationControllerBase {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") ConversationViewForm form) throws IOException {
+	public ModelAndView get(@ModelAttribute("KualiForm") ConversationViewForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		super.start(form);
 		try {
 			initialize(form);
@@ -56,13 +55,15 @@ public class ConversationViewController  extends ConversationControllerBase {
 		}
 		LOG.debug("CONVO_FORM: {}", form);
 		form.setViewId(CONVO_FORM);
-		form.setView(super.getViewService().getViewById(CONVO_FORM));
+		form.setView(KRADServiceLocatorWeb.getViewService().getViewById(CONVO_FORM));
 		return getModelAndView(form);
 	}
 	
 	@RequestMapping(params = "methodToCall=send")
 	public ModelAndView submit(
-			@ModelAttribute("KualiForm") ConversationViewForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ConversationViewForm form,
+			BindingResult result, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 		
 		if (!result.hasErrors()) {
 			RichText richMessage = new RichTextInfo(form.getNewComment(), form.getNewComment());

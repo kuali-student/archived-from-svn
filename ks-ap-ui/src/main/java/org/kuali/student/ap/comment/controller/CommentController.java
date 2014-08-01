@@ -15,16 +15,6 @@
  */
 package org.kuali.student.ap.comment.controller;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.namespace.QName;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.kuali.rice.core.api.config.property.ConfigContext;
@@ -35,12 +25,12 @@ import org.kuali.rice.krad.exception.InvalidAddressException;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.comment.CommentConstants;
 import org.kuali.student.ap.comment.dataobject.CommentDataObject;
 import org.kuali.student.ap.comment.dataobject.MessageDataObject;
 import org.kuali.student.ap.comment.form.CommentForm;
 import org.kuali.student.ap.comment.service.CommentQueryHelper;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.myplan.service.MyPlanMailService;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
@@ -53,6 +43,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.QName;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 @Controller
 @RequestMapping(value = "/comment")
@@ -253,7 +252,7 @@ public class CommentController extends UifControllerBase {
 		GlobalVariables.getMessageMap().clearErrorMessages();
 		form.setPageId(CommentConstants.COMMENT_RESPONSE_PAGE);
 
-		return start(form, httprequest, httpresponse);
+		return start(form);
 	}
 
 	@RequestMapping(params = "methodToCall=addMessage")
@@ -387,7 +386,7 @@ public class CommentController extends UifControllerBase {
 					CommentConstants.ERROR_KEY_NOTIFICATION_FAILED);
 		}
 		GlobalVariables.getMessageMap().clearErrorMessages();
-		return start(form, httprequest, httpresponse);
+		return start(form);
 	}
 
 	/**

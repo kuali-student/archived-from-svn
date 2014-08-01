@@ -1,9 +1,14 @@
 package org.kuali.student.ap.schedulebuilder.controller;
 
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
+import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
+import org.kuali.student.ap.academicplan.infc.LearningPlan;
+import org.kuali.student.ap.academicplan.infc.PlanItem;
+import org.kuali.student.ap.academicplan.service.AcademicPlanService;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.planner.support.PlanItemControllerHelper;
@@ -13,22 +18,11 @@ import org.kuali.student.ap.schedulebuilder.ShoppingCartRequest;
 import org.kuali.student.ap.schedulebuilder.ShoppingCartStrategy;
 import org.kuali.student.ap.schedulebuilder.infc.CourseOption;
 import org.kuali.student.ap.schedulebuilder.infc.PossibleScheduleOption;
-import org.kuali.student.r2.common.exceptions.VersionMismatchException;
-import org.kuali.student.r2.core.acal.infc.Term;
-import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
-import org.kuali.student.ap.academicplan.infc.LearningPlan;
-import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.ap.academicplan.service.AcademicPlanService;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.ContextInfo;
-import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
-import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.exceptions.*;
 import org.kuali.student.r2.common.infc.Attribute;
+import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.lum.course.infc.Course;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -58,10 +52,13 @@ public class ShoppingCartController extends UifControllerBase {
 	private static final String SB_REMOVE_PAGE = "sb_cart_remove_page";
 
 	private ModelAndView startPlannerDialog(
-			@ModelAttribute("KualiForm") ShoppingCartForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ShoppingCartForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 		super.start((UifFormBase) form);
 
-		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form);
+		PlanItem planItem = PlanItemControllerHelper.getValidatedPlanItem(form,
+				request, response);
 		if (planItem == null)
 			return null;
 
@@ -83,7 +80,7 @@ public class ShoppingCartController extends UifControllerBase {
 		UifFormBase uifForm = (UifFormBase) form;
 		uifForm.setJumpToId("popupForm");
 		uifForm.setViewId(SB_CART_FORM);
-		uifForm.setView(super.getViewService().getViewById(SB_CART_FORM));
+		uifForm.setView(KRADServiceLocatorWeb.getViewService().getViewById(SB_CART_FORM));
 		return getModelAndView(uifForm);
 	}
 
@@ -96,9 +93,12 @@ public class ShoppingCartController extends UifControllerBase {
 	@RequestMapping(params = "pageId="
 			+ SB_ADD_FROM_SB)
 	public ModelAndView startAddFromScheduleBuild(
-			@ModelAttribute("KualiForm") ShoppingCartForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ShoppingCartForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 
-		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form);
+		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(form, request,
+				response);
 		if (plan == null)
 			return null;
 
@@ -140,38 +140,44 @@ public class ShoppingCartController extends UifControllerBase {
 
 		UifFormBase uifForm = (UifFormBase) form;
 		uifForm.setViewId(SB_CART_FORM);
-		uifForm.setView(super.getViewService().getViewById(SB_CART_FORM));
+		uifForm.setView(KRADServiceLocatorWeb.getViewService().getViewById(SB_CART_FORM));
 		return getModelAndView(uifForm);
 	}
 
 	@RequestMapping(params = "pageId="
 			+ SB_ADD_FROM_PLAN_PAGE)
 	public ModelAndView startAddFromPlan(
-			@ModelAttribute("KualiForm") ShoppingCartForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ShoppingCartForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 		// Add to the cart, we expect that item type is PLANNED
 		// This will set courseOption.selected, and subsequently
 		// shoppingCartRequest.addToCart, to true.
 		form.setExpectedPlanItemCategory(AcademicPlanServiceConstants.ItemCategory.PLANNED);
-		return startPlannerDialog(form);
+		return startPlannerDialog(form, request, response);
 	}
 
 	@RequestMapping(params = "pageId="
 			+ SB_REMOVE_PAGE)
 	public ModelAndView startRemove(
-			@ModelAttribute("KualiForm") ShoppingCartForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ShoppingCartForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 		// Remove from the cart, we expect that item type is CART
 		// This will set courseOption.selected, and subsequently
 		// shoppingCartRequest.addToCart, to false.
 		form.setExpectedPlanItemCategory(AcademicPlanServiceConstants.ItemCategory.CART);
-		return startPlannerDialog(form);
+		return startPlannerDialog(form, request, response);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processRequests(
-			@ModelAttribute("KualiForm") ShoppingCartForm form) throws IOException, ServletException {
+			@ModelAttribute("KualiForm") ShoppingCartForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 
 		LearningPlan plan = PlanItemControllerHelper.getAuthorizedLearningPlan(
-				form);
+				form, request, response);
 		if (plan == null)
 			return null;
 

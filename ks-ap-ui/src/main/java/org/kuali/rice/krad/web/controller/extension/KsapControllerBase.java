@@ -1,6 +1,7 @@
 package org.kuali.rice.krad.web.controller.extension;
 
 import org.apache.commons.lang.StringUtils;
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.uif.UifConstants;
 import org.kuali.rice.krad.uif.view.View;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
@@ -37,8 +38,8 @@ public abstract class KsapControllerBase extends UifControllerBase {
      * @return ModelAndView object with the contained form
      */
     @Override
-    protected ModelAndView getUIFModelAndViewWithInit(UifFormBase form, String viewId) {
-        View view = getViewService().getViewById(viewId);
+    protected ModelAndView getModelAndViewWithInit(UifFormBase form, String viewId) {
+        View view = KRADServiceLocatorWeb.getViewService().getViewById(viewId);
 
         Assert.notNull(view, "View not found with id: " + viewId);
 

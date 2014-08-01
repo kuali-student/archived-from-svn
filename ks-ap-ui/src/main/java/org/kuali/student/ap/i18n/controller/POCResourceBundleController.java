@@ -1,5 +1,6 @@
 package org.kuali.student.ap.i18n.controller;
 
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.web.controller.MethodAccessible;
 import org.kuali.rice.krad.web.controller.extension.KsapControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -54,7 +53,7 @@ public class POCResourceBundleController extends KsapControllerBase {
         super.start(form);
 
         form.setViewId(RB_FORM);
-        form.setView(super.getViewService().getViewById(RB_FORM));
+        form.setView(KRADServiceLocatorWeb.getViewService().getViewById(RB_FORM));
         ((POCResourceBundleFormImpl)form).setLocale(getLocaleFromContext());
 
         return getModelAndView(form);

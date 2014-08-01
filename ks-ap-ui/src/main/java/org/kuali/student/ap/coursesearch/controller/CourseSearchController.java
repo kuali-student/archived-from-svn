@@ -23,6 +23,7 @@ import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.core.api.util.KeyValue;
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.coursesearch.CourseSearchForm;
@@ -40,11 +41,7 @@ import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
+import org.kuali.student.r2.common.exceptions.*;
 import org.kuali.student.r2.core.search.dto.SearchRequestInfo;
 import org.kuali.student.r2.core.search.infc.SearchResult;
 import org.kuali.student.r2.core.search.infc.SearchResultRow;
@@ -62,15 +59,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -1018,7 +1008,9 @@ public class CourseSearchController extends UifControllerBase {
 
 	@RequestMapping(value = "/course/{courseCd}", method = RequestMethod.GET)
 	public String get(@PathVariable("courseCd") String courseCd,
-			@ModelAttribute("KualiForm") CourseSearchForm form) throws IOException {
+			@ModelAttribute("KualiForm") CourseSearchForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
 		String number = "";
 		String subject = "";
@@ -1094,7 +1086,7 @@ public class CourseSearchController extends UifControllerBase {
 	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form) {
 		super.start(form);
 		form.setViewId("CourseSearch-FormView");
-		form.setView(super.getViewService()
+		form.setView(KRADServiceLocatorWeb.getViewService()
 				.getViewById("CourseSearch-FormView"));
 		return getModelAndView(form);
 	}

@@ -6,8 +6,8 @@ import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.schedulebuilder.form.ReservedTimeForm;
 import org.kuali.student.ap.planner.util.PlanEventUtils;
+import org.kuali.student.ap.schedulebuilder.form.ReservedTimeForm;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.common.util.date.KSDateTimeFormatter;
@@ -38,7 +38,8 @@ public class ReservedTimeController extends UifControllerBase {
 	private static final String FORM = "ScheduleBuild-ReservedTime-FormView";
 	private static final String CREATE_PAGE = "sb_create_reserved_time_page";
 
-	private static boolean authorize(ReservedTimeForm form)
+	private static boolean authorize(ReservedTimeForm form,
+			HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		try {
 			KsapFrameworkServiceLocator.getScheduleBuildStrategy()
@@ -60,12 +61,14 @@ public class ReservedTimeController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=startDialog")
 	public ModelAndView startDialog(
-			@ModelAttribute("KualiForm") ReservedTimeForm form) throws IOException, ServletException {
-		if (!authorize(form))
+			@ModelAttribute("KualiForm") ReservedTimeForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		if (!authorize(form, request, response))
 			return null;
 		super.start(form);
 		form.setViewId(FORM);
-		form.setView(super.getViewService().getViewById(FORM));
+		form.setView(KRADServiceLocatorWeb.getViewService().getViewById(FORM));
 		return getModelAndView(form);
 	}
 
@@ -73,8 +76,10 @@ public class ReservedTimeController extends UifControllerBase {
 			"methodToCall=createReservedTime",
 			"view.currentPageId=" + CREATE_PAGE })
 	public ModelAndView postCreate(
-			@ModelAttribute("KualiForm") ReservedTimeForm form) throws IOException, ServletException {
-		if (!authorize(form))
+			@ModelAttribute("KualiForm") ReservedTimeForm form,
+			BindingResult result, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		if (!authorize(form, request, response))
 			return null;
 
 		if (result.hasErrors()) {

@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.kuali.rice.krad.UserSession;
+import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.web.controller.UifControllerBase;
 import org.kuali.rice.krad.web.form.UifFormBase;
@@ -11,11 +12,7 @@ import org.kuali.student.ap.common.infc.HasUniqueId;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
 import org.kuali.student.ap.schedulebuilder.ScheduleBuildForm;
 import org.kuali.student.ap.schedulebuilder.ShoppingCartForm;
-import org.kuali.student.ap.schedulebuilder.infc.ActivityOption;
-import org.kuali.student.ap.schedulebuilder.infc.ClassMeetingTime;
-import org.kuali.student.ap.schedulebuilder.infc.PossibleScheduleOption;
-import org.kuali.student.ap.schedulebuilder.infc.ReservedTime;
-import org.kuali.student.ap.schedulebuilder.infc.ScheduleBuildEvent;
+import org.kuali.student.ap.schedulebuilder.infc.*;
 import org.kuali.student.r2.common.util.date.DateFormatters;
 import org.kuali.student.r2.common.util.date.KSDateTimeFormatter;
 import org.kuali.student.r2.core.acal.infc.Term;
@@ -34,14 +31,7 @@ import javax.json.JsonWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/sb")
@@ -60,7 +50,9 @@ public class ScheduleBuildController extends UifControllerBase {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form) throws IOException {
+	public ModelAndView get(@ModelAttribute("KualiForm") UifFormBase form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		super.start(form);
 
 		ScheduleBuildForm sbform = (ScheduleBuildForm) form;
@@ -85,7 +77,7 @@ public class ScheduleBuildController extends UifControllerBase {
 		}
 
 		form.setViewId(SB_FORM);
-		form.setView(super.getViewService().getViewById(SB_FORM));
+		form.setView(KRADServiceLocatorWeb.getViewService().getViewById(SB_FORM));
 		return getModelAndView(form);
 	}
 
@@ -361,7 +353,9 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=build")
 	public ModelAndView build(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
 		form.buildSchedules();
 
@@ -522,7 +516,9 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=save")
 	public ModelAndView saveSchedule(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
 		JsonObjectBuilder json = Json.createObjectBuilder();
 
@@ -583,7 +579,9 @@ public class ScheduleBuildController extends UifControllerBase {
 
 	@RequestMapping(params = "methodToCall=remove")
 	public ModelAndView removeSchedule(
-			@ModelAttribute("KualiForm") ScheduleBuildForm form) throws IOException {
+			@ModelAttribute("KualiForm") ScheduleBuildForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 
 		form.removeSchedule();
 
