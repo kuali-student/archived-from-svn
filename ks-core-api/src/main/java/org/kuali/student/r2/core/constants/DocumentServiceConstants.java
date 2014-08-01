@@ -19,4 +19,6 @@ public class DocumentServiceConstants {
     public static final String REF_OBJECT_URI_DOCUMENT = NAMESPACE + "/" + DocumentInfo.class.getSimpleName();
     public static final String REF_OBJECT_URI_DOCUMENT_REF_DOC_RELATION = NAMESPACE + "/" + RefDocRelationInfo.class.getSimpleName();
 
+    public static final String COURSE_MAINTENANCE_SERVICE = "courseMaintenanceDocumentControllerService";
+
 }
