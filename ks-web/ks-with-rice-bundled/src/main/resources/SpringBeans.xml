@@ -64,7 +64,22 @@
 	
 	<!-- for diagnostic purposes to see which profiles are active -->
 	<bean class="org.kuali.student.common.spring.DisplayActiveProfiles" />
-
+<!--
+    <bean id="maintenanceDocumentService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+          <property name="serviceName" value="maintenanceDocumentService"/>
+        </bean>
+    <bean id="documentDictionaryService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+          <property name="serviceName" value="documentDictionaryService"/>
+        </bean>
+    <bean id="dataObjectAuthorizationService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+          <property name="serviceName" value="dataObjectAuthorizationService"/>
+        </bean>
+    <bean id="dataObjectService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+          <property name="serviceName" value="dataObjectService"/>
+        </bean>
+    <bean id="legacyDataAdapter" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+          <property name="serviceName" value="legacyDataAdapter"/>
+        </bean>-->
 
 <beans profile="ks-core">
 
