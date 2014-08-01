@@ -23,14 +23,14 @@ import org.kuali.student.enrollment.class2.grading.service.GradingViewHelperServ
 import org.kuali.student.enrollment.class2.grading.util.GradingConstants;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +39,12 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/grading")
 public class GradingController extends UifControllerBase {
+    @Override
     protected UifFormBase createInitialForm() {
-        if (StringUtils.equals(httpServletRequest.getParameter("viewId"), "StudentGradeView")) {
+        HttpServletRequest curRequest =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+        if (StringUtils.equals(curRequest.getParameter("viewId"), "StudentGradeView")) {
             return new StudentGradeForm();
         } else {
             return new GradingForm();

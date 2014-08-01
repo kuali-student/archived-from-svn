@@ -69,7 +69,7 @@
                         <bean parent="KS-Uif-TextControl" p:size="25"/>
                     </property>
                     <property name="quickfinder">
-                        <bean parent="Uif-QuickFinder" p:dataObjectClassName="org.kuali.student.r2.core.hold.dto.HoldIssueInfo">
+                        <bean parent="Uif-QuickFinder" p:returnByScript="false" p:dataObjectClassName="org.kuali.student.r2.core.hold.dto.HoldIssueInfo">
                             <property name="fieldConversions">
                                 <map>
                                     <entry key="id" value="holdIssueId"/>
@@ -80,7 +80,7 @@
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
                             <property name="lightBox">
-                                <bean parent="Uif-LightBox" p:lookupReturnByScript="false"/>
+                                <bean parent="Uif-LightBox"/>
                             </property>
                         </bean>
                     </property>
@@ -92,7 +92,7 @@
                         <bean parent="KS-Uif-TextControl" p:size="25"/>
                     </property>
                     <property name="quickfinder">
-                        <bean parent="Uif-QuickFinder">
+                        <bean parent="Uif-QuickFinder"  p:returnByScript="false">
                             <property name="dataObjectClassName" value="org.kuali.student.r2.core.acal.dto.AcalEventInfo"/>
                             <property name="fieldConversions">
                                 <map>
@@ -104,7 +104,7 @@
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
                             <property name="lightBox">
-                                <bean parent="Uif-LightBox" p:lookupReturnByScript="false"/>
+                                <bean parent="Uif-LightBox"/>
                             </property>
                         </bean>
                     </property>
@@ -115,7 +115,7 @@
                         <bean parent="KS-Uif-TextControl" p:size="25"/>
                     </property>
                     <property name="quickfinder">
-                        <bean parent="Uif-QuickFinder">
+                        <bean parent="Uif-QuickFinder" p:returnByScript="false">
                             <property name="dataObjectClassName" value="org.kuali.student.r2.core.process.dto.ProcessInfo"/>
                             <property name="fieldConversions">
                                 <map>
@@ -126,7 +126,7 @@
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
                             <property name="lightBox">
-                                <bean parent="Uif-LightBox" p:lookupReturnByScript="false"/>
+                                <bean parent="Uif-LightBox"/>
                             </property>
                         </bean>
                     </property>

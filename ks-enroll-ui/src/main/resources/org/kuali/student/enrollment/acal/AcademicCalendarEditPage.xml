@@ -552,7 +552,7 @@ limitations under the License.
                 </bean>
             </list>
         </property>
-        <property name="layoutManager.actionsInLineGroup" value="true"/>
+        <property name="layoutManager.renderLineActionsInLineGroup" value="true"/>
         <property name="addLineActions">
             <list>
                 <bean parent="Uif-AddLineAction-SecondaryButton" p:actionLabel="Add Holiday Calendar"

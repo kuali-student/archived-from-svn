@@ -1,7 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     <!--
      Copyright 2007-2009 The Kuali Foundation
 
@@ -433,7 +433,7 @@
                         </bean>
                     </property>
                     <property name="quickfinder">
-                        <bean parent="Uif-QuickFinder">
+                        <bean parent="Uif-QuickFinder" p:returnByScript="false">
                             <property name="dataObjectClassName" value="org.kuali.student.r2.lum.course.dto.CourseInfo"/>
                             <property name="viewName" value="CourseInfoByTermLookupView"/>
                             <property name="fieldConversions">
@@ -452,7 +452,7 @@
                                       p:evaluateDisabledOnKeyUp="true" />
                             </property>
                             <property name="lightBox">
-                                <bean parent="Uif-LightBox" p:lookupReturnByScript="false"/>
+                                <bean parent="Uif-LightBox"/>
                             </property>
                         </bean>
                     </property>
