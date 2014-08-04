@@ -32,7 +32,9 @@ class CmCourseProposalObject < DataFactory
         :blank_proposal,
         :create_basic_proposal,
         :create_optional_fields,
-        :curriculum_review_process
+        :curriculum_review_process,
+        :copy_from_course,
+        :course_to_be_copied
 
 
 
@@ -47,6 +49,7 @@ class CmCourseProposalObject < DataFactory
         blank_proposal:             false,
         create_basic_proposal:      false,
         create_optional_fields:     false,
+        copy_from_course:           false,
         save_proposal:              true,
         defer_save:                 false
     }
@@ -70,6 +73,14 @@ class CmCourseProposalObject < DataFactory
       create_course_continue
       create_course_proposal_required unless @blank_proposal
       determine_save_action unless @defer_save
+    elsif @copy_from_course
+      create_proposal_by_copy_course unless @course_to_be_copied.nil?
+      on CmCourseInformation do |page|
+        page.course_information unless page.current_page('Course Information').exists?
+        fill_out page, :proposal_title, :course_title
+      end
+
+      determine_save_action
     end
 
   end
@@ -106,6 +117,15 @@ class CmCourseProposalObject < DataFactory
      optional.create
     end
 
+  end
+
+  def create_proposal_by_copy_course
+    on CmCreateCourseStart do |create|
+      create.copy_approved_course.click
+      create.cm_proposal_copy_course_code_field.fit @course_to_be_copied.course_code
+      create.loading_wait
+      create.continue
+    end
   end
 
   def delete_requisite (opts={})

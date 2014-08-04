@@ -1045,6 +1045,115 @@ When /^I complete all fields on the course proposal with advanced search$/ do
 
 end
 
+#create proposal from copy a course as faculty
+When(/^I find an approved Course and select copy$/) do
+  generate_course_object_for_copy
+
+  @course.search_for_course
+
+  @course_proposal = create CmCourseProposalObject, :copy_from_course => true, :course_to_be_copied => @course,
+                            :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
+                            :course_title => "copied " + @course.course_title
+end
+
+Then(/^I should see a course proposal with a modified course title$/) do
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+
+end
+
+Then(/^I should see all the copied details on the Review Proposal page$/) do
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+    #COURSE PROPOSAL INFO
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+
+    #COPIED COURSE DATA
+    page.transcript_course_title.should == @course.transcript_course_title
+    page.subject_code_review.should == @course.subject_code
+    page.course_number_review.should == @course.course_number
+    page.description_review.should == @course.description
+
+    #GOVERNANCE SECTION
+    page.curriculum_oversight_review.should == @course.curriculum_oversight unless @course.curriculum_oversight.nil?
+    page.campus_locations_review.should == @course.campus_location unless @course.campus_location.nil?
+
+    #COURSE LOGISTICS SECTION
+    #ASSESSMENT SCALE
+    page.assessment_scale_review.should == @course.assessment_scale
+    page.audit_review.should == @course.audit
+    page.pass_fail_transcript_review.should == @course.pass_fail_transcript_grade
+
+    #FINAL EXAM
+    page.final_exam_status_review.should == @course.final_exam_status unless @course.final_exam_status.nil?
+
+    #FIXED OUTCOME
+    page.outcome_type_review(1).should == @course.outcome_list[0].outcome_type unless @course.outcome_list[0].outcome_type.nil?
+    page.outcome_credit_review(1) == @course.outcome_list[0].credit_value unless @course.outcome_list[0].credit_value.nil?
+
+    #ACTIVITY FORMAT
+    page.activity_level_review(1).should == "Format #{@course.format_list[0].format_level}"
+    page.activity_type_review(1).should include @course.format_list[0].type unless @course.format_list[0].type.nil?
+    page.activity_contact_hours_frequency_review(1).should include @course.format_list[0].contacted_hours unless @course.format_list[0].contacted_hours.nil?
+    page.activity_duration_type_count_review(1).should include @course.format_list[0].duration_type unless @course.format_list[0].duration_type.nil?
+    page.activity_duration_type_count_review(1).should include @course.format_list[0].duration_count unless @course.format_list[0].duration_count.nil?
+    page.activity_class_size_review(1).should == @course.format_list[0].class_size unless @course.format_list[0].class_size.nil?
+
+    #Learning Objectives
+    @course.learning_objective_list
+
+
+    #Course Requisites
+    course_requisite = @course.course_requisite_list[0]
+    requisite_group = course_requisite.left_group_node
+
+    course_requisite.requisite_type.should ==  "Enrollment Eligibility"
+    proposal_rules = page.preparation_operators_and_rules
+    proposal_rules.should include requisite_group.left_group_node.complete_rule_text
+    proposal_rules.should include requisite_group.right_group_node.complete_rule_text
+    proposal_rules.should include requisite_group.logic_operator
+
+    proposal_rules.should include course_requisite.right_group_node.complete_rule_text
+    proposal_rules.should include course_requisite.logic_operator
+
+    #ACTIVE DATES SECTION
+    page.start_term_review.should == @course.start_term unless @course.start_term.nil?
+
+  end
+end
+
+#create proposal from copy a course as cs
+When(/^I create a course proposal from a copy of an approved course$/) do
+  generate_course_object_for_copy
+
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
+                            :copy_from_course => true, :course_to_be_copied => @course,
+                            :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
+                            :course_title => "copied " + @course.course_title,
+                            :curriculum_review_process => "Yes"
+end
+
+Then(/^I should see a new course proposal with a modified course title$/) do
+   # can be verified at the review page
+end
+
+When(/^I create a course admin proposal from a copy of an approved course$/) do
+  generate_course_object_for_copy
+
+  @course_proposal = create CmCourseProposalObject, :copy_from_course => true, :course_to_be_copied => @course,
+                            :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
+                            :course_title => "copied " + @course.course_title
+end
+
+
+Then(/^I should see a new course admin proposal with a modified course title$/) do
+  # can be verified at the review page
+end
 
 #-----
 # S5
@@ -1180,3 +1289,48 @@ When /^I complete all fields on the course proposal with auto\-lookup$/ do
 end
 =end
 
+def generate_course_object_for_copy
+  outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
+  format = (make CmFormatsObject,  :format_level => 0,
+                 :activity_level => 0,
+                 :type => "Lecture",
+                 :contacted_hours => 3,
+                 :contact_frequency => "week",
+                 :duration_count => nil,
+                 :duration_type => nil,
+                 :class_size => 0 )
+  rule1 = (make CmRequisiteRuleObject, :rule => "Free Form Text",
+                :complete_rule_text => "Must have completed coursework in advanced calculus")
+  rule2 = (make CmRequisiteRuleObject, :logic_operator => "AND", :rule => "Must have successfully completed all courses from <courses>",
+                :complete_rule_text => "Must have successfully completed all courses from (PHYS410, PHYS411)")
+  rule3 = (make CmRequisiteRuleObject, :rule => "Free Form Text",
+                :complete_rule_text => "Students who have taken courses with similar or comparable course content may contact the department")
+
+  rule_group = make CmRequisiteRuleGroupObject, :left_rule => rule1, :right_rule => rule2, :logic_operator => "AND"
+
+  requisite_obj = (make CmCourseRequisite, :left_group_node => rule_group, :right_group_node => rule3,
+                        :requisite_type => "Student Eligibility & Prerequisite",
+                        :logic_operator => "AND", :rule_list => [(rule1), (rule2), (rule3)])
+
+  @course = make CmCourseObject, :search_term => "PHYS604", :course_code => "PHYS604",
+                 :subject_code => "PHYS", :course_number => "604",
+                 :course_title => "Methods of Mathematical Physics", :transcript_course_title => "METHODS MATH PHYS",
+                 :description => "Ordinary and partial differential equations of physics, boundary value problems, Fourier series, Green's functions, complex variables and contour integration.",
+                 # GOVERNANCE
+                 :campus_location => "North",
+                 :curriculum_oversight => "CMNS-Physics",
+                 # COURSE LOGISTICS
+                 :assessment_scale => "Letter",
+                 :audit => "Yes",
+                 :pass_fail_transcript_grade => "No",
+                 :final_exam_status => "Standard Final Exam",
+                 :outcome_list => [outcome1],
+                 :format_list => [format],
+                 #Course Requisites
+                 :course_requisite_list => [requisite_obj],
+
+                 # ACTIVE DATES
+                 :start_term => "Spring 1980",
+                 :pilot_course => "No",
+                 :course_state => "ACTIVE"
+end

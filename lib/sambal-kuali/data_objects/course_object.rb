@@ -9,6 +9,8 @@ class CmCourseObject < DataFactory
   attr_accessor :course_code,
                 :search_term,
                 # COURSE INFORMATION
+                :subject_code,
+                :course_number,
                 :course_title,
                 :transcript_course_title,
                 :description,
@@ -22,6 +24,10 @@ class CmCourseObject < DataFactory
                 :final_exam_status,
                 :outcome_list,
                 :format_list,
+                #Learning Objectives
+                :learning_objective_list,
+                #Course Requisites
+                :course_requisite_list,
                 # ACTIVE DATES
                 :start_term,
                 :pilot_course,
