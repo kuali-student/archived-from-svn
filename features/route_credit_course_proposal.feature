@@ -1,5 +1,5 @@
 @nightly
-Feature: GT.Route Credit Course Proposal
+Feature: GT.Submit Credit Course Proposal
 
   Scenario: RP1.1 Create a course proposal with required for submit fields and submit as Faculty
     Given I am logged in as Faculty
