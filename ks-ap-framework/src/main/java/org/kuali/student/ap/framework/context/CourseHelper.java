@@ -8,6 +8,7 @@ import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingDisplayIn
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
+import org.kuali.student.r2.core.scheduling.dto.ScheduleInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.infc.Course;
 
@@ -40,6 +41,15 @@ public interface CourseHelper {
 	 * @return list of activity offerings
 	 */
 	List<ActivityOfferingInfo> getActivityOfferings(String courseId);
+
+	/**
+	 * Gets a list of schedules for an activity offering.
+	 * 
+	 * @param aoId
+	 *            activity offering ID
+	 * @return list of schedules
+	 */
+	List<ScheduleInfo> getSchedules(String aoId);
 
     /**
      * Get the list of ActivityOfferingDisplayInfo objects for the given courseId and term

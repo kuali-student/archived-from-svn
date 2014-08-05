@@ -24,6 +24,7 @@ import org.kuali.student.r2.common.exceptions.OperationFailedException;
 import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.util.constants.LuiServiceConstants;
 import org.kuali.student.r2.core.acal.infc.Term;
+import org.kuali.student.r2.core.scheduling.dto.ScheduleInfo;
 import org.kuali.student.r2.core.versionmanagement.dto.VersionDisplayInfo;
 import org.kuali.student.r2.lum.course.dto.CourseInfo;
 import org.kuali.student.r2.lum.course.infc.Course;
@@ -314,7 +315,13 @@ public class DefaultCourseHelper implements CourseHelper, Serializable {
 
 	@Override
 	public List<ActivityOfferingInfo> getActivityOfferings(String courseId) {
-		// TODO: Implement for KS. Current supported via IU override for iGPS 2.0.
+		// TODO: Implement for KS. Currently supported via IU override for iGPS 2.0.
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<ScheduleInfo> getSchedules(String aoId) {
+		// TODO: Implement for KS. Currently supported via IU override for iGPS 2.0.
 		throw new UnsupportedOperationException();
 	}
 
