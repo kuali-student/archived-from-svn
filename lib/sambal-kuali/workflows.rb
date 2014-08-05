@@ -65,6 +65,15 @@ module Workflows
     end
   end
 
+  def determine_reviewer(subject_code)
+    case subject_code
+      when "ENGL"
+        log_in 'carol','carol'
+      when "CHEM"
+        log_in 'carl','carl'
+     end
+  end
+
   def log_in(user, pwd)
     current_user = ""
 
