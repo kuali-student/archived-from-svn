@@ -128,10 +128,10 @@ class BasePage < PageFactory
       value(:page_validation_header) { |b| b.div(id: "CM-Proposal-Course-Create-Page_messages").h3(id: "pageValidationHeader").text }
       value(:review_proposal_error) { |b| b.p(id: "CM-Proposal-Review-Error-Message").text }
 
-      element(:comments_link) {|b|b.a(id: "CM-Proposal-Course-LinkGroup-Comments")}
-      element(:decisions_link) {|b|b.a(id: "CM-Proposal-Course-LinkGroup-Decisions")}
-      action(:load_comments) { |b| b.comments_link.click }
-      action(:load_decisions) { |b| b.decisions_link.click }
+      element(:comments_link) {|b|b.a(title: "Comments")}
+      element(:decisions_link) {|b|b.a(title: "Decisions")}
+      action(:load_comments) { |b| b.a(title: "Comments").i(class: "ks-fontello-icon-comment" ).click }
+      action(:load_decisions) { |b| b.a(title: "Decisions").i(class: "ks-fontello-icon-hammer" ).click }
 
     end
 

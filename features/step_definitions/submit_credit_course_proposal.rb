@@ -91,3 +91,31 @@ end
 Then(/^I submit the incomplete course proposal$/) do
   @course_proposal.submit_incomplete_proposal
 end
+
+Given(/^there is a proposal enroute with a decision$/) do
+  #Create the enroute proposal
+  steps %{Given I am logged in as Faculty}
+  steps %{When I complete the required for submit fields on the course proposal}
+  #Add approve this proposal
+  #for testing just add some comments
+  @course_proposal.load_comments_action
+  @comment_add = create CmCommentsObject
+  @comment_add2 = create CmCommentsObject, :commentText => random_alphanums(10,'test proposal comment 2 '), :index => 1
+
+  @comment_add.close_comment_dialog
+end
+
+Then(/^I should see the decisions on the course proposal$/) do
+  @decision1 = make CmDecisionsObject
+  @decision2 = make CmDecisionsObject
+  @course_proposal.edit_proposal_action
+  @course_proposal.load_decisions_action
+  @decision1.show_decision(1)
+  @decision2.show_decision(2)
+  #need modify this follow verification statements to final approve
+  @decision1.Decision.should == "General"
+#  @decision1.Date.should == Date.today.to_s
+  @decision1.Actor.should == "fred"
+#  @decision1.Rationale == "test proposal comment kkkRc24cvy"
+
+end

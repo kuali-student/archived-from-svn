@@ -26,3 +26,9 @@ Feature: GT.Submit Credit Course Proposal
     Then I submit the course proposal
     And I perform a full search for the course proposal
     Then I can see updated status of the course proposal
+
+@WIP
+  Scenario: RP2.x Authorized user can view routing decisions
+    Given there is a proposal enroute with a decision
+    When I perform a full search for the course proposal
+    Then I should see the decisions on the course proposal
