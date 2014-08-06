@@ -16,7 +16,7 @@ Given(/^I have a course proposal with approve fields partially completed created
   @course_proposal.submit_proposal
 end
 
-When(/^I am logged in as (.*?)$/) do |reviewer|
+When(/^I am logged in as a (.*?)$/) do |reviewer|
   determine_reviewer(@course_proposal.submit_fields[0].subject_code)
 end
 
