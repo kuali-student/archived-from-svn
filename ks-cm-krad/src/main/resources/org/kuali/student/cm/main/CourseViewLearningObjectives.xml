@@ -175,9 +175,7 @@
                                                             </property>
                                                         </bean>
                                                     </property>
-                                                    <property name="lightBox">
-                                                        <bean parent="Uif-LightBox" />
-                                                    </property>
+                                                    <property name="openInDialog" value="true"/>
                                                     <property name="dataObjectClassName"
                                                         value="org.kuali.student.cm.course.form.LoCategoryInfoWrapper" />
                                                     <property name="fieldConversions">

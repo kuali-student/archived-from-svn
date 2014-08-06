@@ -59,7 +59,7 @@
         <property name="propertyName" value="loCategories" />
         <property name="layoutManager.renderSequenceField" value="false" />
         <property name="layoutManager.richTable.render" value="false" />
-        <property name="addViaLightBox" value="true"/>
+        <property name="addWithDialog" value="true"/>
         <!--        rice 2.5 upgrade - Uif-AddViaLightBoxAction bean no longer present
         <property name="addViaLightBoxAction">
             <bean parent="Uif-AddViaLightBoxAction" p:actionLabel="Create" />
