@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+                    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
         >
     <!--
     Copyright 2007-2009 The Kuali Foundation
@@ -88,9 +88,9 @@
             </list>
         </property>
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
-        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
+        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInDialog}"/>-->
         <property name="onLoadScript"
-                  value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
+                  value="@{#form.renderedInDialog ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
 
@@ -123,9 +123,9 @@
         <property name="help"><null/></property>
 
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
-        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
+        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInDialog}"/>-->
         <property name="onLoadScript"
-                  value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
+                  value="@{#form.renderedInDialog ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
         <property name="rangeFieldGroupPrototype">
             <null/>
         </property>
@@ -160,8 +160,8 @@
                                 <list>
                                     <bean id="button_search" parent="Uif-PrimaryActionButton" p:methodToCall="search" p:actionLabel="Search"/>
                                     <bean parent="Uif-ActionLink" p:actionLabel="Cancel"
-                                          p:render="@{#form.renderedInLightBox}"
-                                          p:onClickScript="e.preventDefault();closeLightbox();return false;"
+                                          p:render="@{#form.renderedInDialog}"
+                                          p:onClickScript="e.preventDefault();closeIframeDialog();return false;"
                                           p:additionalCssClasses="cancel_link"/>
                                 </list>
                             </property>
@@ -184,9 +184,9 @@
         <!--</property>-->
 
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
-        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
+        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInDialog}"/>-->
         <property name="onLoadScript"
-                  value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
+                  value="@{#form.renderedInDialog ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
     <bean id="KS-Uif-HeaderOne-Empty" parent="Uif-HeaderOne">
@@ -226,9 +226,9 @@
 
 
         <!-- Need Krad Fix to work see KULRICE-9578, work around inplace-->
-        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInLightBox}"/>-->
+        <!--<property name="page.breadcrumbOptions.renderHomewardPathBreadcrumbs" value="@{!#form.renderedInDialog}"/>-->
         <property name="onLoadScript"
-                  value="@{#form.renderedInLightBox ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
+                  value="@{#form.renderedInDialog ? 'jQuery(&quot;#Uif-BreadcrumbWrapper&quot;).remove();' : ''}"/>
     </bean>
 
 
@@ -374,9 +374,7 @@
 
     <!--Note by bonnie: Not used in any code -->
     <bean id="KS-Uif-Link-DisplayInLightBox" parent="Uif-Link">
-        <property name="lightBox">
-            <bean parent="Uif-LightBox"/>
-        </property>
+        <property name="openInDialog" value="true"/>
         <property name="target" value="_blank"/>
     </bean>
 

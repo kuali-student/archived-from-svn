@@ -13,27 +13,16 @@ import org.kuali.student.r1.core.subjectcode.model.SubjectCodeJoinOrg;
 import org.kuali.student.r1.core.subjectcode.service.SubjectCodeService;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.exceptions.*;
-import org.kuali.student.r2.core.search.dto.*;
-import org.kuali.student.r2.core.search.dto.SearchParamInfo;
-import org.kuali.student.r2.core.search.dto.SearchResultInfo;
-import org.kuali.student.r2.core.search.service.SearchManager;
 import org.kuali.student.r2.core.class1.type.dto.TypeInfo;
 import org.kuali.student.r2.core.organization.service.OrganizationService;
+import org.kuali.student.r2.core.search.dto.*;
+import org.kuali.student.r2.core.search.service.SearchManager;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.xml.namespace.QName;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class SubjectCodeServiceImpl 
@@ -84,11 +73,7 @@ public class SubjectCodeServiceImpl
 		
     	if(cachingEnabled){
     		//Get From Cache
-            try {
-                return searchCache.get(searchRequest.toString());
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
+            return searchCache.getIfPresent(searchRequest.toString());
 		}
 		
 		//Do searches

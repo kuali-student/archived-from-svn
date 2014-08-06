@@ -25,7 +25,6 @@ import org.kuali.rice.krad.uif.UifParameters;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.rice.krad.util.KRADUtils;
-import org.kuali.rice.krad.web.controller.UifControllerHelper;
 import org.kuali.rice.krad.web.controller.UifHandlerExceptionResolver;
 import org.kuali.rice.krad.web.form.DocumentFormBase;
 import org.kuali.rice.krad.web.form.IncidentReportForm;
@@ -119,9 +118,9 @@ public class KsHandlerExceptionResolver extends UifHandlerExceptionResolver {
         // Set the ajax return type
         incidentReportForm.setAjaxReturnType(UifConstants.AjaxReturnTypes.UPDATEVIEW.getKey());
 
-        ModelAndView modelAndView = UifControllerHelper.getUIFModelAndView(incidentReportForm, "page2");
+        ModelAndView modelAndView = getModelAndViewService().getModelAndView(incidentReportForm, "page2");
         try {
-            UifControllerHelper.prepareView(request, modelAndView);
+            getModelAndViewService().prepareView(request, modelAndView);
         } catch (Exception e) {
             LOG.error("An error stopped the incident form from loading", e);
         }

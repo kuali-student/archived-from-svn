@@ -35,9 +35,7 @@
         <property name="linkText" value="Kuali Foundation in a Lightbox"/>
         <property name="href" value="http://www.kuali.org"/>
         <property name="target" value="_blank"/>
-        <property name="lightBox">
-            <bean parent="Uif-LightBox"/>
-        </property>
+        <property name="openInDialog" value="true"/>
     </bean>
 
     <bean parent="Uif-LinkGroup"  id="KS-KitchenSink-Links-Group">

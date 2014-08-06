@@ -63,6 +63,8 @@
                 <value>plugins/tooltip/ks.jquery.bubblepopup.v2.3.1.js</value>
                 <value>krad/scripts/krad.variables.js</value>
                 <value>krad/scripts/krad.utility.js</value>
+                <value>krad/scripts/krad.document.js</value>
+                <value>krad/scripts/krad.edit.js</value>
                 <value>krad/scripts/krad.initialize.js</value>
                 <value>krad/scripts/krad.focusJump.js</value>
                 <value>krad/scripts/krad.request.js</value>

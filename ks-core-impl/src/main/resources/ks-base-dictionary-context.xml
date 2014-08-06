@@ -84,16 +84,10 @@
 
     <bean id="customEditorConfigurer"
           class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-        <property name="customEditors">
-            <map>
-                <entry key="org.kuali.student.r1.common.dictionary.dto.DataType">
-                    <bean
-                            class="org.kuali.student.common.util.spring.SimpleEnumPropertyEditor">
-                        <constructor-arg
-                                value="org.kuali.student.r1.common.dictionary.dto.DataType" />
-                    </bean>
-                </entry>
-            </map>
+        <property name="propertyEditorRegistrars">
+            <list>
+                <bean class="org.kuali.student.common.util.spring.SimpleEnumPropertyEditorRegistrar"/>
+            </list>
         </property>
     </bean>
 
