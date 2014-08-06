@@ -13,6 +13,6 @@ class CmCreateCourseStart < BasePage
   element(:copy_approved_course) { |b| b.radio(value: 'copyApprovedCourse') }
   element(:copy_proposed_course) { |b| b.radio(value: 'copyProposedCourse') }
 
-  element(:cm_proposal_copy_course_code_field) {|b|b.text_field(id: "CM-CopyCourse-CourseCode_control")}
+  element(:cm_proposal_copy_course_code_field) {|b|b.text_field(id: "CM-Proposal-Course-Create-Start-CopyFromCourse_control")}
 
 end #class

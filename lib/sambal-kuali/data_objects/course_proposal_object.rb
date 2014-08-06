@@ -34,8 +34,8 @@ class CmCourseProposalObject < DataFactory
         :create_optional_fields,
         :curriculum_review_process,
         :copy_from_course,
-        :course_to_be_copied
-
+        :course_to_be_copied,
+        :use_view_course
 
 
   def initialize(browser, opts={})
@@ -50,6 +50,7 @@ class CmCourseProposalObject < DataFactory
         create_basic_proposal:      false,
         create_optional_fields:     false,
         copy_from_course:           false,
+        use_view_course:            false,
         save_proposal:              true,
         defer_save:                 false
     }
@@ -62,25 +63,36 @@ class CmCourseProposalObject < DataFactory
 
 
   def create
-    navigate_rice_to_cm_home
-    navigate_to_create_course_proposal
-    set_curriculum_review
+    if (@use_view_course)
+      create_proposal_through_view_course
+    else
+      navigate_rice_to_cm_home
+      navigate_to_create_course_proposal
+      set_curriculum_review
 
-    if @create_optional_fields
-      create_course_continue
-      create_proposal_optional
-    elsif @create_new_proposal
-      create_course_continue
-      create_course_proposal_required unless @blank_proposal
-      determine_save_action unless @defer_save
-    elsif @copy_from_course
-      create_proposal_by_copy_course unless @course_to_be_copied.nil?
-      on CmCourseInformation do |page|
-        page.course_information unless page.current_page('Course Information').exists?
-        fill_out page, :proposal_title, :course_title
+      if @create_optional_fields
+        create_course_continue
+        create_proposal_optional
+      elsif @create_new_proposal
+        create_course_continue
+        create_course_proposal_required unless @blank_proposal
+        determine_save_action unless @defer_save
+      elsif @copy_from_course
+        create_proposal_by_copy_course unless @course_to_be_copied.nil?
+        on CmCourseInformation do |page|
+          page.course_information unless page.current_page('Course Information').exists?
+          fill_out page, :proposal_title, :course_title
+        end
+        #fill the critical fields to be able to save the proposal
+        on CmCourseLogistics do |page|
+          page.course_logistics unless page.current_page('Course Logistics').exists?
+          page.contact_frequency(1,1).pick! "per week"
+          page.loading_wait
+        end
+
+        determine_save_action
       end
 
-      determine_save_action
     end
 
   end
@@ -119,10 +131,24 @@ class CmCourseProposalObject < DataFactory
 
   end
 
+  def create_proposal_through_view_course
+    on CmReviewProposal do |review|
+      review.copy_proposal
+      review.loading_wait
+    end
+    on CmCourseInformation do |page|
+      page.course_information unless page.current_page('Course Information').exists?
+      fill_out page, :proposal_title, :course_title
+    end
+
+    determine_save_action
+  end
+
   def create_proposal_by_copy_course
     on CmCreateCourseStart do |create|
       create.copy_approved_course.click
-      create.cm_proposal_copy_course_code_field.fit @course_to_be_copied.course_code
+      create.cm_proposal_copy_course_code_field.set @course_to_be_copied.course_code
+      sleep 5
       create.loading_wait
       create.continue
     end

@@ -130,8 +130,10 @@ class BasePage < PageFactory
 
       element(:comments_link) {|b|b.a(title: "Comments")}
       element(:decisions_link) {|b|b.a(title: "Decisions")}
+      element(:copy_proposal_icon) {|b|b.a(title: "Copy to New Proposal")}
       action(:load_comments) { |b| b.a(title: "Comments").i(class: "ks-fontello-icon-comment" ).click }
       action(:load_decisions) { |b| b.a(title: "Decisions").i(class: "ks-fontello-icon-hammer" ).click }
+      action(:copy_proposal) {|b|b.a(title: "Copy to New Proposal").i(class: "ks-fontello-icon-docs" ).click}
 
     end
 
