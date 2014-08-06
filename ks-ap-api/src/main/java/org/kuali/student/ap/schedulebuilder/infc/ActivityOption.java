@@ -18,7 +18,8 @@ import java.util.List;
  * @author Mark Fyffe <mwfyffe@indiana.edu>
  * @version 1.1
  */
-public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Comparable<ActivityOption>, Serializable {
+public interface ActivityOption extends ScheduleBuildOption, HasUniqueId,
+		Comparable<ActivityOption>, Serializable {
 
 	/**
 	 * Get the unique ID of the course option this activity refers to.
@@ -99,7 +100,7 @@ public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Compar
 	 * @return True if the course is locked in.
 	 */
 	boolean isCourseLockedIn();
-	
+
 	/**
 	 * Determine if this option represents a primary activity offering.
 	 * 
@@ -151,6 +152,13 @@ public interface ActivityOption extends ScheduleBuildOption, HasUniqueId, Compar
 	 * @return True if permission is required for the class.
 	 */
 	boolean isRequiresPermission();
+
+	/**
+	 * Get additional notes related to this activity option.
+	 * 
+	 * @return Additional notes related to this activity option.
+	 */
+	List<String> getNotes();
 
 	/**
 	 * Get the class meeting times for the activity offering.

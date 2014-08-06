@@ -1,17 +1,19 @@
 package org.kuali.student.ap.schedulebuilder.dto;
 
-import org.kuali.student.ap.schedulebuilder.infc.ActivityOption;
-import org.kuali.student.ap.schedulebuilder.infc.ClassMeetingTime;
-import org.kuali.student.ap.schedulebuilder.infc.SecondaryActivityOptions;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
+
+import org.kuali.student.ap.schedulebuilder.infc.ActivityOption;
+import org.kuali.student.ap.schedulebuilder.infc.ClassMeetingTime;
+import org.kuali.student.ap.schedulebuilder.infc.SecondaryActivityOptions;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ActivityOptionInfo", propOrder = { "parentUniqueId",
@@ -19,7 +21,7 @@ import java.util.List;
 		"activityTypeDescription", "courseOfferingCode", "registrationCode",
 		"academicSessionDescr", "activityName", "courseLockedIn", "enrollmentGroup",
 		"closed", "openSeats", "totalSeats", "requiresPermission", "primary",
-		"minCredits", "maxCredits", "secondaryOptions", "classMeetingTimes" })
+		"minCredits", "maxCredits", "notes", "secondaryOptions", "classMeetingTimes" })
 public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		ActivityOption {
 
@@ -83,6 +85,9 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 	private BigDecimal maxCredits;
 
 	@XmlElement
+	private List<String> notes;
+	
+	@XmlElement
 	public List<SecondaryActivityOptionsInfo> secondaryOptions;
 
 	@XmlElement
@@ -112,6 +117,8 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 		primary = copy.isPrimary();
 		minCredits = copy.getMinCredits();
 		maxCredits = copy.getMaxCredits();
+		List<String> copyNotes = copy.getNotes();
+		notes = copyNotes == null ? null : new ArrayList<String>(copyNotes);
 		setSecondaryOptions(copy.getSecondaryOptions());
 		setClassMeetingTimes(copy.getClassMeetingTimes());
 	}
@@ -276,6 +283,15 @@ public class ActivityOptionInfo extends ScheduleBuildOptionInfo implements
 
 	public void setMaxCredits(BigDecimal maxCredits) {
 		this.maxCredits = maxCredits;
+	}
+
+	@Override
+	public List<String> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<String> notes) {
+		this.notes = notes;
 	}
 
 	@Override
