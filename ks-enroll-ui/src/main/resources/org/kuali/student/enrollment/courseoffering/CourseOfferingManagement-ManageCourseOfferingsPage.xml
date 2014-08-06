@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!--
@@ -94,9 +94,9 @@
           p:onDocumentReadyScript="addCheckboxToColumnHeader(1, 'KS-CourseOfferingManagement-CourseOfferingListSection', &quot;handleToolbar('KS-CourseOfferingManagement-CourseOfferingListSection',['enableApproveButton', 'enableDeleteButton'], ['KS-CourseOfferingManagement-ToolBar-Approve-CO', 'KS-CourseOfferingManagement-ToolBar-Delete-CO'] )&quot;), addActionColumn(@{#parent.readOnly}, 'KS-CourseOfferingManagement-CourseOfferingListSection');">
         <property name="collectionObjectClass" value="org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingListSectionWrapper" />
         <property name="propertyName" value="courseOfferingResultList" />
-        <property name="collectionLookup">
+<!--        <property name="collectionLookup">
             <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
+        </property>-->
         <property name="layoutManager.renderSequenceField" value="false" />
         <property name="layoutManager.applyDefaultCellWidths" value="false" />
         <property name="layoutManager.applyAlternatingRowStyles" value="false" />

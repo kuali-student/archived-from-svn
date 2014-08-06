@@ -79,9 +79,7 @@
                             <property name="quickfinderAction">
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
-                            <property name="lightBox">
-                                <bean parent="Uif-LightBox"/>
-                            </property>
+                            <property name="openInDialog" value="true"/>
                         </bean>
                     </property>
                 </bean>
@@ -103,9 +101,7 @@
                             <property name="quickfinderAction">
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
-                            <property name="lightBox">
-                                <bean parent="Uif-LightBox"/>
-                            </property>
+                            <property name="openInDialog" value="true"/>
                         </bean>
                     </property>
                 </bean>
@@ -125,9 +121,7 @@
                             <property name="quickfinderAction">
                                 <bean parent="Uif-ActionLink" p:actionLabel="Advanced Search" p:style="display:block" p:methodToCall="performLookup"/>
                             </property>
-                            <property name="lightBox">
-                                <bean parent="Uif-LightBox"/>
-                            </property>
+                            <property name="openInDialog" value="true"/>
                         </bean>
                     </property>
                 </bean>

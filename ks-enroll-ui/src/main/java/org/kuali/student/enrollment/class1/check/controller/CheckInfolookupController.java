@@ -25,13 +25,10 @@ import org.kuali.rice.krad.uif.util.ObjectPropertyUtils;
 import org.kuali.rice.krad.util.KRADConstants;
 import org.kuali.student.common.uif.view.KSLookupView;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Properties;
 /**
@@ -49,7 +46,7 @@ public class CheckInfolookupController extends LookupController {
          */
         @RequestMapping(params = "methodToCall=search")
         public ModelAndView search(@ModelAttribute("KualiForm") LookupForm lookupForm) {
-            lookupForm.setRenderedInLightBox(true);
+            lookupForm.setRenderedInDialog(true);
             ModelAndView modelAndView = super.search(lookupForm);
 
             if(lookupForm.getView() instanceof KSLookupView){

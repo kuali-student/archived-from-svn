@@ -26,13 +26,10 @@ import org.kuali.student.enrollment.class2.courseoffering.dto.CourseOfferingEdit
 import org.kuali.student.enrollment.class2.courseoffering.util.CourseOfferingConstants;
 import org.kuali.student.r2.core.class1.search.CourseOfferingManagementSearchImpl;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -55,7 +52,7 @@ public class CourseOfferingEditController extends CourseOfferingBaseController {
     @Override
     public ModelAndView setupMaintenanceEdit(@ModelAttribute("KualiForm") MaintenanceDocumentForm form) {
 
-        setupMaintenanceEdit(form);
+        super.setupMaintenanceEdit(form);
 
         // check view authorization
         // TODO: this needs to be invoked for each request

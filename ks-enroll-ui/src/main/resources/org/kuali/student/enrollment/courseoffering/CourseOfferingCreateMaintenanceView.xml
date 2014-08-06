@@ -451,9 +451,7 @@
                                 <bean parent="Uif-ActionLink" p:actionLabel="Find a Course" p:style="display:block" p:methodToCall="performLookup" p:disabled="@{#dp.targetTermCode eq null}"
                                       p:evaluateDisabledOnKeyUp="true" />
                             </property>
-                            <property name="lightBox">
-                                <bean parent="Uif-LightBox"/>
-                            </property>
+                            <property name="openInDialog" value="true"/>
                         </bean>
                     </property>
                     <property name="suggest">

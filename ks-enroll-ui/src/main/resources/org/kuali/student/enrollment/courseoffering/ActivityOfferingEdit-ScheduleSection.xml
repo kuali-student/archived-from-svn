@@ -287,16 +287,18 @@
                         <bean parent="Uif-QuickFinderByScript">
                             <!-- Tried using this syntax ... lightBox.templateOptions ... set the callback, but even with 'merge'
                                  set the other options were overwritten. -->
+                            <property name="openInDialog" value="true"/>
+<!--                        TODO Unsure of equivalence after dialog changeover
                             <property name="lightBox">
                                 <bean parent="Uif-LightBox">
                                     <property name="templateOptions">
                                         <map merge="true">
-                                            <!-- When the lightbox closes trigger a blur event on the room number text field to clear any field validation messages -->
+                                            &lt;!&ndash; When the lightbox closes trigger a blur event on the room number text field to clear any field validation messages &ndash;&gt;
                                             <entry key="beforeClose" value="function () {jQuery(&quot;#rdl_room_control&quot;).trigger(&quot;blur&quot;);}"/>
                                         </map>
                                     </property>
                                 </bean>
-                            </property>
+                            </property>-->
 
                             <property name="dataObjectClassName" value="org.kuali.student.r2.core.room.dto.RoomInfo"/>
                             <property name="autoSearch" value="true"/>
