@@ -476,6 +476,22 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
+  def approve_proposal
+    on CmReviewProposal do |approve|
+       approve.review_approve
+       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
+    end
+    on CmReviewProposal do |approve|
+      approve.confirmation_approve
+      #TODO remove after bug fix KSCM-2536
+      approve.loading_wait
+      approve.alert.cancel if approve.alert.exists?
+      approve.loading_wait
+   end
+  end
+
+
+
   #-----
   private
   #-----

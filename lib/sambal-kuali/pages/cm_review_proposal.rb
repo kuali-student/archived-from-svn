@@ -113,6 +113,13 @@ class CmReviewProposal < BasePage
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
   value(:proposal_status) { |b| b.div(id: "KS-CourseView-LinkGroup").div(data_label: "Proposal Status").text }
 
+  #APPROVE
+  element(:approve_button) { |b| b.button(text: "Approve") }
+  action(:review_approve) { |b| b.approve_button.click; b.loading_wait }
+  element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
+  action(:confirmation_approve) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
+
+
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
 end

@@ -46,6 +46,7 @@ module Workflows
   def determine_save_action
     on CmCourseInformation do |create|
       create.save_progress if create.logged_in_user.downcase == "alice"
+      create.save_progress if create.logged_in_user.downcase == "martha"
       create.save_and_continue if create.logged_in_user.downcase == "fred"
     end
   end
@@ -68,9 +69,11 @@ module Workflows
   def determine_reviewer(subject_code)
     case subject_code
       when "ENGL"
-        log_in 'carol','carol'
+        #log_in 'carol','carol'
+        log_in 'martha','martha'
       when "CHEM"
-        log_in 'carl','carl'
+        #log_in 'carl','carl'
+        log_in 'martha','martha'
      end
   end
 

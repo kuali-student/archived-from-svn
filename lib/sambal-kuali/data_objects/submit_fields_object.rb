@@ -7,7 +7,6 @@ class CmSubmitFieldsObject < DataFactory
   include Utilities
 
   attr_accessor :subject_code,
-                :course_number,
                 :description_rationale,
                 :proposal_rationale,
                 :curriculum_oversight,
@@ -35,7 +34,6 @@ class CmSubmitFieldsObject < DataFactory
         subject_code:           "MATH",
         description_rationale:  random_alphanums(20, 'test description rationale '),
         proposal_rationale:     random_alphanums(20, 'test proposal rationale '),
-        course_number:          "123",
         #GOVERNANCE
         curriculum_oversight:   '::random::',
         #COURSE LOGISTICS
