@@ -42,9 +42,7 @@
                                             <property name="title" value="Print your entire academic plan"/>
                                             <property name="href"
                                                       value="../kr-krad/lookup?methodToCall=search&amp;viewId=FullPlannedCourses-LookupView"/>
-                                            <property name="lightBox">
-                                                <bean parent="Uif-LightBox" p:width="90%"/>
-                                            </property>
+                                            <property name="openInDialog" value="true"/>
                                         </bean>
                                     </list>
                                 </property>
