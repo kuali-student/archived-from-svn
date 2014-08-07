@@ -170,7 +170,7 @@ And /^I can review the required fields on the (.*?)$/ do |proposal_type|
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Admin Proposal)" if proposal_type == "admin proposal"
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Proposal)" if proposal_type == "course proposal"
     page.subject_code_review.should == @course_proposal.submit_fields[0].subject_code
-    page.course_number_review.should == @course_proposal.submit_fields[0].course_number
+    page.course_number_review.should == @course_proposal.approve_fields[0].course_number
     page.description_review.should == @course_proposal.submit_fields[0].description_rationale
     page.proposal_rationale_review.should == @course_proposal.submit_fields[0].proposal_rationale
 

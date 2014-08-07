@@ -90,7 +90,7 @@ Then /^I should see data in required fields for the (.*?)$/ do |proposal_type|
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Proposal)" if proposal_type == "course proposal"
     page.transcript_course_title.value.should == @course_proposal.approve_fields[0].transcript_course_title
     page.subject_code.value.should == @course_proposal.submit_fields[0].subject_code
-    page.course_number.value.should == @course_proposal.submit_fields[0].course_number
+    page.course_number.value.should == @course_proposal.approve_fields[0].course_number
     page.description_rationale.value.should == @course_proposal.submit_fields[0].description_rationale
     page.proposal_rationale.value.should == @course_proposal.submit_fields[0].proposal_rationale
   end
