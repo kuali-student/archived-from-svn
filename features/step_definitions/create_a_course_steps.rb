@@ -1216,7 +1216,12 @@ When(/^I create a course proposal from a copy of an approved course$/) do
 end
 
 Then(/^I should see a new course proposal with a modified course title$/) do
-   # can be verified at the review page
+  on(CmCourseInformation).course_information
+
+  on CmCourseInformation do |page|
+    page.proposal_title.value.should == @course_proposal.proposal_title
+    page.course_title.value.should == @course_proposal.course_title
+  end
 end
 
 When(/^I create a course admin proposal from a copy of an approved course$/) do
@@ -1265,7 +1270,28 @@ end
 
 
 Then(/^I should see a new course admin proposal with a modified course title$/) do
-  # can be verified at the review page
+  on(CmCourseInformation).course_information
+
+  on CmCourseInformation do |page|
+    page.proposal_title.value.should == @course_proposal.proposal_title
+    page.course_title.value.should == @course_proposal.course_title
+  end
+end
+
+When (/^I create a course proposal from a copy of a proposed course$/) do
+
+end
+
+Then (/^I should see a new course proposal with modified titles$/) do
+
+end
+
+When (/^I create a course admin proposal from a copy of a proposed course$/) do
+
+end
+
+Then (/^I should see a new course admin proposal with modified titles$/) do
+
 end
 
 #-----
