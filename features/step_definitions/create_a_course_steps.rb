@@ -1119,7 +1119,7 @@ When(/^I find an approved Course and select copy$/) do
 
   @course.view_course
 
-  @course_proposal = create CmCourseProposalObject,
+  @course_proposal = create CmCourseProposalObject, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copied " + @course.course_title,
                             :use_view_course => true
@@ -1184,7 +1184,7 @@ Then(/^I should see all the copied details on the Review Proposal page$/) do
 
     #Learning Objectives
     if (@course.learning_objective_list.nil? == false && @course.learning_objective_list.length > 0)
-      page.learning_objectives_review(0).should include @course.learning_objective_list[0].learning_objective_text
+      page.learning_objectives_review(1).should include @course.learning_objective_list[0].learning_objective_text
     end
 
     #Course Requisites
