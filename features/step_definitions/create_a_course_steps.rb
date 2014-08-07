@@ -1168,19 +1168,18 @@ Then(/^I should see all the copied details on the Review Proposal page$/) do
 
     #ACTIVITY FORMAT
     if (@course.format_list.nil? == false && @course.format_list.length > 0)
-      page.activity_level_review(1).should == "Format #{@course.format_list[0].format_level}"
-      page.activity_type_review(1).should include @course.format_list[0].type unless @course.format_list[0].type.nil?
-      page.activity_contact_hours_frequency_review(1).should include @course.format_list[0].contacted_hours.to_s unless @course.format_list[0].contacted_hours.nil?
-      page.activity_contact_hours_frequency_review(1).should include @course.format_list[0].contact_frequency unless @course.format_list[0].contacted_hours.nil?
+      num_formats = @course.format_list.length
+      for i in 1..num_formats
+        k = @course.format_list[i-1].format_level
+        j = @course.format_list[i-1].activity_level
+        page.activity_level_review(k).should == "Format #{@course.format_list[i-1].format_level}"
+        page.activity_type_review(j).should include @course.format_list[i-1].type unless @course.format_list[i-1].type.nil?
+        page.activity_contact_hours_frequency_review(j).should include @course.format_list[i-1].contacted_hours.to_s unless @course.format_list[i-1].contacted_hours.nil?
+        page.activity_contact_hours_frequency_review(j).should include @course.format_list[i-1].contact_frequency unless @course.format_list[i-1].contacted_hours.nil?
 
-      page.activity_class_size_review(1).should == @course.format_list[0].class_size.to_s unless @course.format_list[0].class_size.nil?
-
-      # page.activity_level_review(2).should == "Format #{@course.format_list[1].format_level}"
-      # page.activity_type_review(2).should include @course.format_list[1].type unless @course.format_list[1].type.nil?
-      # page.activity_contact_hours_frequency_review(2).should include @course.format_list[1].contacted_hours unless @course.format_list[1].contacted_hours.nil?
-      # page.activity_class_size_review(2).should == @course.format_list[1].class_size unless @course.format_list[1].class_size.nil?
-
-    end
+        page.activity_class_size_review(1).should == @course.format_list[i-1].class_size.to_s unless @course.format_list[i-1].class_size.nil?
+      end
+     end
 
     #Learning Objectives
     if (@course.learning_objective_list.nil? == false && @course.learning_objective_list.length > 0)
