@@ -148,9 +148,10 @@ Then(/^the course proposal is successfully approved$/) do
   end
 end
 
-Then(/^I see successful approve messaging$/)
+Then(/^I see successful approve messaging$/) do
 on CmReviewProposal do |review|
   review.growl_text.should == "Document was successfully approved"
+end
 end
 
 And(/^the new course is Active$/) do
