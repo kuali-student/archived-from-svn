@@ -1132,7 +1132,7 @@ Then(/^I should see a course proposal with a modified course title$/) do
 
 end
 
-Then(/^I should see all the copied details on the Review Proposal page$/) do
+Then(/^I should see all the copied details of the course on the Review Proposal page$/) do
   navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
@@ -1160,26 +1160,26 @@ Then(/^I should see all the copied details on the Review Proposal page$/) do
     #FINAL EXAM
     page.final_exam_status_review.should == @course.final_exam_status unless @course.final_exam_status.nil?
 
-    #FIXED OUTCOME
-    # if (@course.outcome_list.nil? == false && @course.outcome_list.length > 0)
-    #   page.outcome_type_review(1).should == @course.outcome_list[0].outcome_type unless @course.outcome_list[0].outcome_type.nil?
-    #   page.outcome_credit_review(1) == @course.outcome_list[0].credit_value unless @course.outcome_list[0].credit_value.nil?
-    # end
+    #NO OUTCOME
+    #page.outcome_empty_text.nil? == false
+
 
     #ACTIVITY FORMAT
-    if (@course.format_list.nil? == false && @course.format_list.length > 0)
-      num_formats = @course.format_list.length
+    if (@course.approve_fields[0].format_list.nil? == false && @course.approve_fields[0].format_list.length > 0)
+      num_formats = @course.approve_fields[0].format_list.length
       for i in 1..num_formats
-        k = @course.format_list[i-1].format_level
-        j = @course.format_list[i-1].activity_level
-        page.activity_level_review(k).should == "Format #{@course.format_list[i-1].format_level}"
-        page.activity_type_review(j).should include @course.format_list[i-1].type unless @course.format_list[i-1].type.nil?
-        page.activity_contact_hours_frequency_review(j).should include @course.format_list[i-1].contacted_hours.to_s unless @course.format_list[i-1].contacted_hours.nil?
-        page.activity_contact_hours_frequency_review(j).should include @course.format_list[i-1].contact_frequency unless @course.format_list[i-1].contacted_hours.nil?
-
-        page.activity_class_size_review(1).should == @course.format_list[i-1].class_size.to_s unless @course.format_list[i-1].class_size.nil?
+        k = @course.approve_fields[0].format_list[i-1].format_level
+        j = @course.approve_fields[0].format_list[i-1].activity_level
+        page.activity_level_review(k).should == "Format #{@course.approve_fields[0].format_list[i-1].format_level}"
+        page.activity_type_review(j).should include "#{@course.approve_fields[0].format_list[i-1].type}".gsub(/\s+/, "") unless @course.approve_fields[0].format_list[i-1].type.nil?
+        page.activity_type_review(j).should include "ExperientialLearningOROther" if @course.approve_fields[0].format_list[i-1].type == "Experiential Learning/Other"
+        page.activity_contact_hours_frequency_review(j).should include "#{@course.approve_fields[0].format_list[i-1].contacted_hours}"
+        page.activity_contact_hours_frequency_review(j).should include "#{@course.approve_fields[0].format_list[i-1].contact_frequency}"
+        page.activity_duration_type_count_review(j).should include "#{@course.approve_fields[0].format_list[i-1].duration_type}"
+        page.activity_duration_type_count_review(j).should include "#{@course.approve_fields[0].format_list[i-1].duration_count}"
+        page.activity_class_size_review(j).should == "#{@course.approve_fields[0].format_list[i-1].class_size}"
       end
-     end
+    end
 
     #Learning Objectives
     if (@course.learning_objective_list.nil? == false && @course.learning_objective_list.length > 0)
@@ -1201,6 +1201,9 @@ Then(/^I should see all the copied details on the Review Proposal page$/) do
       proposal_rules.should include course_requisite.logic_operator
     end
 
+    #ACTIVE DATES SECTION
+    #page.start_term_review.should == ""
+
   end
 end
 
@@ -1211,7 +1214,7 @@ When(/^I create a course proposal from a copy of an approved course$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
-                            :course_title => "copied " + @course.course_title,
+                            :course_title => "copy of " + @course.course_title,
                             :curriculum_review_process => "Yes"
 end
 
@@ -1265,7 +1268,7 @@ When(/^I create a course admin proposal from a copy of an approved course$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
-                            :course_title => "copied " + @course.course_title
+                            :course_title => "copy of " + @course.course_title
 end
 
 
@@ -1279,19 +1282,143 @@ Then(/^I should see a new course admin proposal with a modified course title$/) 
 end
 
 When (/^I create a course proposal from a copy of a proposed course$/) do
-
+  steps %{Given I am logged in as Curriculum Specialist}
+  # navigate_rice_to_cm_home
+  # @course_proposal.search(@course_proposal.proposal_title)
+  # @course_proposal.review_proposal_action
+  @orig_course_proposal = @course_proposal
+  @course_proposal = create CmCourseProposalObject, :copy_from_proposal => "Yes", :proposal_to_be_copied => @orig_course_proposal,
+                                :proposal_title => "copy of #{random_alphanums(10,'proposal title')}" + @course_proposal.course_title,
+                                :course_title => "copy of " + @course_proposal.course_title,
+                                :curriculum_review_process => "Yes", :create_new_proposal => false
 end
 
 Then (/^I should see a new course proposal with modified titles$/) do
+  on(CmCourseInformation).course_information
 
+  on CmCourseInformation do |page|
+    page.proposal_title.value.should == @course_proposal.proposal_title
+    page.course_title.value.should == @course_proposal.course_title
+  end
 end
 
 When (/^I create a course admin proposal from a copy of a proposed course$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
+  @orig_course_proposal = @course_proposal
+  @course_proposal = create CmCourseProposalObject, :copy_from_proposal => "Yes", :proposal_to_be_copied => @orig_course_proposal,
+                            :proposal_title => "copy of #{random_alphanums(10,'admin proposal title')}" + @course_proposal.proposal_title,
+                            :course_title => "copy of " + @course_proposal.course_title, :create_new_proposal => false
 
 end
 
 Then (/^I should see a new course admin proposal with modified titles$/) do
+  on(CmCourseInformation).course_information
 
+  on CmCourseInformation do |page|
+    page.proposal_title.value.should == @course_proposal.proposal_title
+    page.course_title.value.should == @course_proposal.course_title
+  end
+end
+
+Given (/^I have a course admin proposal created as Alice$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
+  steps %{When I complete the required fields on the course admin proposal}
+
+end
+
+When (/^I find a proposed course and select copy$/) do
+  steps %{Given I am logged in as Faculty}
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+
+  @orig_course_proposal = @course_proposal
+
+  @course_proposal = create CmCourseProposalObject,
+                            :proposal_title => "copy of #{random_alphanums(10,'proposal title')}" + @course_proposal.course_title,
+                            :course_title => "copy of " + @course_proposal.course_title,
+                            :use_view_course => true
+end
+
+And (/^I should see all the copied details of the proposal on the Review Proposal page$/) do
+  navigate_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposal do |page|
+    #COURSE PROPOSAL INFO
+    page.proposal_title_review.should == @course_proposal.proposal_title
+    page.course_title_review.should == @course_proposal.course_title
+
+    #COURSE INFORMATION SECTION
+    page.transcript_course_title.should == @orig_course_proposal.approve_fields[0].transcript_course_title unless @orig_course_proposal.approve_fields[0].transcript_course_title.nil?
+    page.subject_code_review.should == "#{@orig_course_proposal.submit_fields[0].subject_code}"
+    page.course_number_review.should == "#{@orig_course_proposal.approve_fields[0].course_number}"
+    page.description_review.should == "#{@orig_course_proposal.submit_fields[0].description_rationale}"
+    page.proposal_rationale_review.should == ""
+
+    #GOVERNANCE SECTION
+    page.curriculum_oversight_review.should == ""
+
+    #COURSE LOGISTICS SECTION
+    #ASSESSMENT SCALE
+    page.assessment_scale_review.should == plus_minus if @orig_course_proposal.submit_fields[0].assessment_a_f == :set
+    page.assessment_scale_review.should == completed_notation if @orig_course_proposal.submit_fields[0].assessment_notation == :set
+    page.assessment_scale_review.should == letter if @orig_course_proposal.submit_fields[0].assessment_letter == :set
+    page.assessment_scale_review.should == pass_fail if @orig_course_proposal.submit_fields[0].assessment_pass_fail == :set
+    page.assessment_scale_review.should == percentage if @orig_course_proposal.submit_fields[0].assessment_percentage == :set
+    page.assessment_scale_review.should == satisfactory if @orig_course_proposal.submit_fields[0].assessment_satisfactory == :set
+
+    #FINAL EXAM
+    page.final_exam_status_review.should == standard_exam unless @orig_course_proposal.submit_fields[0].exam_standard.nil?
+    page.final_exam_status_review.should == alternate_exam unless @orig_course_proposal.submit_fields[0].exam_alternate.nil?
+    page.final_exam_status_review.should == no_exam unless @orig_course_proposal.submit_fields[0].exam_none.nil?
+    page.final_exam_rationale_review.should == @orig_course_proposal.submit_fields[0].final_exam_rationale unless @orig_course_proposal.submit_fields[0].exam_standard == :set
+
+    #NO OUTCOME
+    page.outcome_empty_text.nil? == false
+
+    #ACTIVITY FORMAT
+    if (@orig_course_proposal.approve_fields[0].format_list.nil? == false && @orig_course_proposal.approve_fields[0].format_list.length > 0)
+      num_formats = @orig_course_proposal.approve_fields[0].format_list.length
+      for i in 1..num_formats
+        k = @orig_course_proposal.approve_fields[0].format_list[i-1].format_level
+        j = @orig_course_proposal.approve_fields[0].format_list[i-1].activity_level
+        page.activity_level_review(k).should == "Format #{@orig_course_proposal.approve_fields[0].format_list[i-1].format_level}"
+        page.activity_type_review(j).should include "#{@orig_course_proposal.approve_fields[0].format_list[i-1].type}".gsub(/\s+/, "") unless @orig_course_proposal.approve_fields[0].format_list[i-1].type.nil?
+        page.activity_type_review(j).should include "ExperientialLearningOROther" if @orig_course_proposal.approve_fields[0].format_list[i-1].type == "Experiential Learning/Other"
+        page.activity_contact_hours_frequency_review(j).should include "#{@orig_course_proposal.approve_fields[0].format_list[i-1].contacted_hours}"
+        page.activity_contact_hours_frequency_review(j).should include "#{@orig_course_proposal.approve_fields[0].format_list[i-1].contact_frequency}"
+        page.activity_duration_type_count_review(j).should include "#{@orig_course_proposal.approve_fields[0].format_list[i-1].duration_type}"
+        page.activity_duration_type_count_review(j).should include "#{@orig_course_proposal.approve_fields[0].format_list[i-1].duration_count}"
+        page.activity_class_size_review(j).should == "#{@orig_course_proposal.approve_fields[0].format_list[i-1].class_size}"
+      end
+    end
+
+    #Learning Objectives
+    if (@orig_course_proposal.learning_objective_list.nil? == false && @orig_course_proposal.learning_objective_list.length > 0)
+      page.learning_objectives_review(1).should include @orig_course_proposal.learning_objective_list[0].learning_objective_text
+    end
+
+    #Course Requisites
+    if (@orig_course_proposal.course_requisite_list.nil? == false && @orig_course_proposal.course_requisite_list.length > 0)
+      course_requisite = @orig_course_proposal.course_requisite_list[0]
+      requisite_group = course_requisite.left_group_node
+
+      course_requisite.requisite_type.should == "Student Eligibility & Prerequisite"
+      proposal_rules = page.prerequisites_operators_and_rules
+      proposal_rules.should include requisite_group.left_rule.complete_rule_text
+      proposal_rules.should include requisite_group.right_rule.complete_rule_text
+      proposal_rules.should include requisite_group.logic_operator
+
+      proposal_rules.should include course_requisite.right_group_node.complete_rule_text
+      proposal_rules.should include course_requisite.logic_operator
+    end
+
+    #ACTIVE DATES SECTION
+    #page.start_term_review.should == ""
+
+  end
 end
 
 #-----

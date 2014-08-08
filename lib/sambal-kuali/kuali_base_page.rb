@@ -133,7 +133,7 @@ class BasePage < PageFactory
 
       element(:comments_link) {|b|b.div(id: "CM-Proposal-Course-Create-RightHeader").a(title: "Comments")}
       element(:decisions_link) {|b|b.div(id: "CM-Proposal-Course-Create-RightHeader").a(title: "Decisions")}
-      element(:copy_proposal_icon) {|b|b.div(id: "CM-Proposal-Course-Create-RightHeader").a(title: "Copy to New Proposal")}
+      element(:copy_proposal_icon) {|b|b.a(title: "Copy to New Proposal")}
       action(:load_comments) { |b| b.comments_link.i(class: "ks-fontello-icon-comment" ).click }
       action(:load_decisions) { |b| b.decisions_link.i(class: "ks-fontello-icon-hammer" ).click }
       action(:copy_proposal) {|b|b.copy_proposal_icon.i(class: "ks-fontello-icon-docs" ).click}

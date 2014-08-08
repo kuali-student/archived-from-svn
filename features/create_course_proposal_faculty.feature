@@ -15,4 +15,11 @@ Feature: GT.Create a Course Proposal as Faculty
   Scenario: CC6.3 Copy a Course to a new Course Proposal
     When I find an approved Course and select copy
     Then I should see a new course proposal with a modified course title
-    And I should see all the copied details on the Review Proposal page
+    And I should see all the copied details of the course on the Review Proposal page
+
+  @draft
+  Scenario: CC7.3 Copy a Proposed Course to a new Course Proposal
+    Given I have a course admin proposal created as Alice
+    When I find a proposed course and select copy
+    Then I should see a new course proposal with modified titles
+    And I should see all the copied details of the proposal on the Review Proposal page

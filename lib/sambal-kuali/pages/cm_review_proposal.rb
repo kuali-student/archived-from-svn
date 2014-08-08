@@ -55,6 +55,8 @@ class CmReviewProposal < BasePage
   value(:outcome_credit_review) { |outcome_level,b| b.div(id: "CM-ViewCourseView-Outcome-Details").div(id: /line#{outcome_level-1}/, data_label: "Credit Value").text }
   element(:outcome_error_state) { |b| b.div(data_label: "Outcomes", class: /hasError/) }
 
+  element(:outcome_empty_text) { |b| b.textarea(name: /.*courseLogisticsSection.emptyStringOutcomes/) }
+
   #LEARNING OBJECTIVES
   value(:lo_terms_review) { |lo_review,b| b.textarea(id: "learningObjectivesSection_learningObjectives_line#{lo_review-1}_control").text }
   value(:learning_objectives_summary_review) { |b| b.div(id: "course_review_learning_objectives").text }

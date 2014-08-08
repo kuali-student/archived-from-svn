@@ -35,7 +35,9 @@ class CmCourseProposalObject < DataFactory
         :curriculum_review_process,
         :copy_from_course,
         :course_to_be_copied,
-        :use_view_course
+        :proposal_to_be_copied,
+        :use_view_course,
+        :copy_from_proposal
 
 
   def initialize(browser, opts={})
@@ -50,6 +52,9 @@ class CmCourseProposalObject < DataFactory
         create_basic_proposal:      false,
         create_optional_fields:     false,
         copy_from_course:           false,
+        copy_from_proposal:         false,
+        course_to_be_copied:        nil,
+        proposal_to_be_copied:      nil,
         use_view_course:            false,
         save_proposal:              true,
         defer_save:                 false
@@ -95,10 +100,15 @@ class CmCourseProposalObject < DataFactory
         end
 
         determine_save_action
+      elsif @copy_from_proposal
+        create_proposal_by_copy_proposal unless @proposal_to_be_copied.nil?
+        on CmCourseInformation do |page|
+          page.course_information unless page.current_page('Course Information').exists?
+          fill_out page, :proposal_title, :course_title
+        end
+        determine_save_action
       end
-
     end
-
   end
 
 
@@ -145,14 +155,16 @@ class CmCourseProposalObject < DataFactory
       fill_out page, :proposal_title, :course_title
     end
     #fill the critical fields to be able to save the proposal
-    on CmCourseLogistics do |page|
-      num_formats = @course_to_be_copied.format_list.length
-      for i in 1..num_formats
-        k = @course_to_be_copied.format_list[i-1].format_level
-        j = @course_to_be_copied.format_list[i-1].activity_level
-        page.course_logistics unless page.current_page('Course Logistics').exists?
-        page.contact_frequency(k, j).pick! "per week"
-        page.loading_wait
+    unless @course_to_be_copied.nil?
+      on CmCourseLogistics do |page|
+        num_formats = @course_to_be_copied.format_list.length
+        for i in 1..num_formats
+          k = @course_to_be_copied.format_list[i-1].format_level
+          j = @course_to_be_copied.format_list[i-1].activity_level
+          page.course_logistics unless page.current_page('Course Logistics').exists?
+          page.contact_frequency(k, j).pick! "per week"
+          page.loading_wait
+        end
       end
     end
 
@@ -163,6 +175,16 @@ class CmCourseProposalObject < DataFactory
     on CmCreateCourseStart do |create|
       create.copy_approved_course.click
       create.cm_proposal_copy_course_code_field.set @course_to_be_copied.course_code
+      sleep 5
+      create.loading_wait
+      create.continue
+    end
+  end
+
+  def create_proposal_by_copy_proposal
+    on CmCreateCourseStart do |create|
+      create.copy_proposed_course.click
+      create.cm_proposal_copy_proposal_title_field.set @proposal_to_be_copied.proposal_title
       sleep 5
       create.loading_wait
       create.continue

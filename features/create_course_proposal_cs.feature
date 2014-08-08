@@ -37,10 +37,24 @@ Then I should receive an error message about the proposal title and course title
 Scenario: CC6.1 Create Course Proposal from Approved Course
 When I create a course proposal from a copy of an approved course
 Then I should see a new course proposal with a modified course title
-And I should see all the copied details on the Review Proposal page
+And I should see all the copied details of the course on the Review Proposal page
 
 @wip
 Scenario: CC6.2 Create Course Admin Proposal from Approved Course
 When I create a course admin proposal from a copy of an approved course
 Then I should see a new course admin proposal with a modified course title
-And I should see all the copied details on the Review Proposal page
+And I should see all the copied details of the course on the Review Proposal page
+
+@draft
+Scenario: CC7.1 Create Course Proposal from Proposed Course
+Given I have a course proposal created as Faculty
+When I create a course proposal from a copy of a proposed course
+Then I should see a new course proposal with modified titles
+And I should see all the copied details of the proposal on the Review Proposal page
+
+@draft
+Scenario: CC7.2 Create Course Admin Proposal from Proposed Course
+Given I have a course proposal created as Faculty
+When I create a course admin proposal from a copy of a proposed course
+Then I should see a new course admin proposal with modified titles
+And I should see all the copied details of the proposal on the Review Proposal page
