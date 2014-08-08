@@ -519,11 +519,11 @@ class CmCourseProposalObject < DataFactory
 
   def approve_proposal
     on CmReviewProposal do |approve|
-       approve.review_approve
+       approve.review_approval
        approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
     end
     on CmReviewProposal do |approve|
-      approve.confirmation_approve
+      approve.confirmation_approval
       #TODO remove after bug fix KSCM-2536
       approve.loading_wait
       approve.alert.cancel if approve.alert.exists?
