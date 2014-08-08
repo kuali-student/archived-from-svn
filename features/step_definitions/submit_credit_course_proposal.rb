@@ -99,12 +99,14 @@ Given(/^there is a proposal enroute with a decision$/) do
 end
 
 Then(/^I should see the decisions on the course proposal$/) do
-  @decision1 = make CmDecisionsObject
   @course_proposal.review_proposal_action
   @course_proposal.load_decisions_action
-  @decision1.show_decision(1)
-  @decision1.Decision.should == "Approved"
-  @decision1.Actor.should == "carl"
-  @decision1.Rationale.should include "test decision rationale"
+  on CmDecisions do |page|
+    decision_text = page.row_by_index(1)
+    contents = decision_text.split(' ',5)
+    contents[0].should == "Approved"
+    contents[2].should == "carl"
+    contents[4].should include "test decision rationale"
+  end
 
 end

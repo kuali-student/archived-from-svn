@@ -6,7 +6,7 @@ class CmDecisionsObject < DataFactory
   include Workflows
   include Utilities
 
-  attr_accessor  :decisionText,
+  attr_accessor  :decision_text,
                  :Decision,
                  :Date,
                  :Actor,
@@ -17,15 +17,15 @@ class CmDecisionsObject < DataFactory
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        decisionText: random_alphanums(10,'test proposal decision '),
+        decision_text: random_alphanums(10,'test proposal decision '),
     }
     set_options(defaults.merge(opts))
   end
 
   def show_decision (row)
     on CmDecisions do |page|
-      decisionText = page.row_by_index(row)
-      contents = decisionText.split(' ',5)
+      decision_row_text = page.row_by_index(row)
+      contents = decision_row_text.split(' ',5)
       @Decision = contents[0]
       @Date = contents[1]
       @Actor = contents[2]
