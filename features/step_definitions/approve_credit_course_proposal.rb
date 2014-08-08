@@ -168,3 +168,47 @@ And(/^the new course is Active$/) do
     course_review.description_review.should include @course.description
   end
 end
+
+
+Given(/^I have a credit course proposal with approve fields partially completed created as (.*?)/) do |author|
+  log_in author,author
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}",
+                                                                             :transcript_course_title => nil,
+                                                                             :campus_location => nil)]
+
+end
+
+
+When(/^I approve and activate the proposal$/) do
+  @course_proposal.approve_activate_proposal
+end
+
+
+Then(/^missing fields are highlighted and proposal cannot be approved or activated$/) do
+ on CmCourseInformation do |proposal|
+   #add code to validate that approve and activate is disabled
+   #add code to validate the missing fields error message
+ end
+end
+
+
+Given(/^I have a credit course proposal with approve fields completed created as (.*?)/) do |author|
+  log_in author,author
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
+
+
+end
+
+Then(/^the proposal is successfully approved$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |proposal|
+    proposal.proposal_status.should == "Approved"
+  end
+end

@@ -38,3 +38,17 @@ Feature: Approve Course Proposal
     |author|department_approver|college_approver|
     |fred  |carol              |earl            |
     |alice |carol              |earl            |
+
+  #what's pending: Approve and Activate is disabled even after entering all fields.
+  Scenario: RP2.4 Create a Credit Course Admin Create Proposal as Alice without all required for approve fields and attempt to Approve and Activate
+    When I have a credit course proposal with approve fields partially completed created as alice
+    Then missing fields are highlighted and proposal cannot be approved or activated
+
+  #what's pending: Approve and Activate is disabled even after entering all fields.
+  Scenario: RP2.4 Create a Credit Course Admin Create Proposal as Alice without all required for approve fields and attempt to Approve and Activate
+    Given I have a credit course proposal with approve fields completed created as alice
+    When I approve and activate the proposal
+    Then the proposal is successfully approved
+    And the new course is Active
+
+

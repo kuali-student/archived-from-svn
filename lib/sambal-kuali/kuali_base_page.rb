@@ -75,6 +75,9 @@ class BasePage < PageFactory
       action(:deleting_line_wait) { |b| b.deleting_line.wait_while_present }
       action(:saving_wait) { |b| b.saving.wait_while_present }
       action(:save_progress) { |b| b.button(text: "Save Progress").click }
+      element(:approve_and_activate_button) { |b| b.button(text: "Approve and Activate") }
+      element(:approve_and_activate_disabled) { |b| b.button(text: "Approve and Activate", class: /disabled/) }
+      action(:approve_and_activate) { |b| b.approve_and_activate_button.click }
       action(:cancel_action) { |b| b.link(text: "Cancel").click; b.loading.wait_while_present }
       element(:review_proposal_element) { |b| b.a(id: "CM-Proposal-Course-ReviewProposalLink") }
       action(:review_proposal) { |b| b.review_proposal_element.click; b.loading_wait }

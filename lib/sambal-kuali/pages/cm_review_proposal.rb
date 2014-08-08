@@ -121,7 +121,6 @@ class CmReviewProposal < BasePage
   element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
   action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
 
-
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
 end

@@ -531,6 +531,12 @@ class CmCourseProposalObject < DataFactory
    end
   end
 
+  def approve_activate_proposal
+    on CmCourseInformation do |activate|
+      activate.approve_and_activate
+    end
+  end
+
 
 
   #-----
