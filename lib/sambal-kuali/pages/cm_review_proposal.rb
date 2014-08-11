@@ -4,7 +4,6 @@ class CmReviewProposal < BasePage
   cm_elements
 
   action(:submit) { |b| b.button(text: 'Submit').click; b.loading_wait }
-  action(:blanket_approve) { |b| b.button(text: 'Blanket Approve').click }
   action(:edit_course_information) { |b| b.a(id: "CM-Proposal-Review-CourseInfo-Edit-Link").click }
   element(:review_proposal_header) { |b| b.div(id: "CM-Proposal-Course-Create-Header").p(class: "uif-viewHeader-supportTitle").text }
 
@@ -124,7 +123,7 @@ class CmReviewProposal < BasePage
   action(:review_approval) { |b| b.approve_button.click; b.loading_wait }
   element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
   action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
-
+  action(:blanket_approve) { |b| b.button(text: "Blanket Approve").click; b.loading_wait }
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
 end

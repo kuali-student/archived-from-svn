@@ -219,10 +219,92 @@ end
 
 Then(/^the proposal is successfully approved$/) do
   steps %{Given I am logged in as Curriculum Specialist}
-  navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
     proposal.proposal_status.should == "Approved"
+  end
+end
+
+
+Given(/^I have a course proposal with submit fields submitted by (.*?)$/) do |proposal_author|
+  log_in proposal_author,proposal_author
+
+  if proposal_author == "fred"
+
+    @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
+                                                                                :course_number => nil,
+                                                                                :campus_location => nil,
+                                                                                :format_list => nil)]
+
+
+  elsif proposal_author == "alice"
+    @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
+                              :curriculum_review_process => "Yes",
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
+                                                        :course_number => nil,
+                                                        :campus_location => nil,
+                                                        :format_list => nil)]
+
+
+  end
+  puts "Proposal Title: #{@course_proposal.proposal_title}"
+  puts "Course Title: #{@course_proposal.course_title}"
+  @course_proposal.submit_proposal
+
+end
+
+
+When(/^I attempt to blanket approve the course proposal as Curriculum Specialist$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  @course_proposal.blanket_approve
+
+end
+
+
+And(/^I cannot blanket approve the incomplete proposal$/) do
+  on CmReviewProposal page do |review|
+    review.transcript_course_title_error.exists?.should be_true
+    review.course_number_review_error_state.exists?.should be_true
+    review.activity_format_error.exists?.should be_true
+    review.proposal_status == "Enroute"
+  end
+end
+
+
+When(/^I edit the course proposal as CS$/) do
+   @course_proposal.edit :defer_save => true
+
+
+   @course_proposal.approve_fields[0].edit :transcript_course_title => random_alphanums(5,'test transcript '),
+                                           :course_number => "#{(900..999).to_a.sample}",
+                                           :defer_save => true
+
+   @course_proposal.approve_fields[0].add_format :format => (make CmFormatsObject, :format_level=> 1,
+                                                                  :activity_level => 1,
+                                                                  :type => '::random::',
+                                                                  :contacted_hours => (1..9).to_a.sample,
+                                                                  :contact_frequency => '::random::',
+                                                                  :duration_count => (1..9).to_a.sample,
+                                                                  :duration_type => '::random::',
+                                                                  :class_size => (1..9).to_a.sample)
+
+
+end
+
+Then(/^I can blanket approve the course proposal$/) do
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  @course_proposal.blanket_approve
+  on CmReviewProposal do |review|
+    review.growl_text.should include "Document has been successfully approved"
+    review.proposal_status == "Approved"
   end
 end

@@ -557,6 +557,12 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
+  def blanket_approve
+    on CmReviewProposal do |proposal|
+      proposal.blanket_approve
+    end
+  end
+
 
 
   #-----
