@@ -97,4 +97,22 @@ class CmApproveFieldsObject < DataFactory
     set(@new_sample_campus, :set) unless pass_in_an_array.nil?
   end
 
+  def add_format (opts)
+    defaults = {
+        format_level: 1,
+        activity_level: 1,
+        type: '::random::',
+        contacted_hours: (1..9).to_a.sample,
+        contact_frequency: '::random::',
+        duration_count: (1..9).to_a.sample,
+        duration_type: '::random::',
+        class_size: (1..9).to_a.sample,
+        defer_save: false
+    }
+    options = defaults.merge(opts)
+    options[:format].create
+    @format_list << options[:format]
+    determine_save_action
+  end
+
 end

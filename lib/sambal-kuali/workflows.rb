@@ -47,6 +47,7 @@ module Workflows
     on CmCourseInformation do |create|
       create.save_progress if create.logged_in_user.downcase == "alice"
       create.save_progress if create.logged_in_user.downcase == "martha"
+      create.save_progress if create.logged_in_user.downcase == "carol"
       create.save_and_continue if create.logged_in_user.downcase == "fred"
     end
   end

@@ -1,4 +1,4 @@
-Given(/^I have a course proposal with approve fields partially completed created as (.*?)$/) do |proposal_author|
+Given(/^I have a course proposal with approve fields partially completed submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author, proposal_author
 
   if proposal_author == "fred"
@@ -28,7 +28,7 @@ And(/^I attempt to approve the course proposal as (.*?)$/) do |reviewer|
 
 end
 
-And(/^I review the proposal as (.*?)$/) do |reviewer|
+And(/^I review the course proposal as (.*?)$/) do |reviewer|
   log_in reviewer,reviewer
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
@@ -55,7 +55,7 @@ end
 
 
 And(/^I approve the course proposal as (.*?)$/) do |reviewer|
-  log_in reviewer, reviewer
+
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
@@ -70,7 +70,7 @@ Then(/^I cannot approve the incomplete proposal$/) do
     end
 end
 
-Given(/^I have a course proposal with approve fields created as (.*?)$/) do |proposal_author|
+Given(/^I have a course proposal with approve fields submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author, proposal_author
 
   if proposal_author == "fred"
@@ -92,20 +92,20 @@ end
 
 
 
-Given(/^I have a partial completed course proposal created as (.*?)$/) do |proposal_author|
+Given(/^I have a course proposal with some approve fields missing submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author,proposal_author
 
   if proposal_author == "fred"
 
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                              :approve_fields => [(make CmApproveFieldsObject, :course_number => nil)]
+                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil, :format_list => [])]
 
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
                               :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                              :approve_fields => [(make CmApproveFieldsObject, :course_number => nil)]
+                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil, :format_list => [])]
   end
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
@@ -115,11 +115,21 @@ Given(/^I have a partial completed course proposal created as (.*?)$/) do |propo
 end
 
 
-And(/^I complete the missing fields on the proposal and approve as (.*?)$/) do
+And(/^I complete the missing fields on the proposal and approve as (.*?)$/) do |reviewer|
 
   @course_proposal.edit :defer_save => true
-  @course_proposal.approve_fields[0].edit :course_number => "#{(900..999).to_a.sample}",
-                                          :defer_save => false
+  @course_proposal.approve_fields[0].edit :transcript_course_title => random_alphanums(5,'test transcript '),
+                                          :defer_save => true
+
+  @course_proposal.approve_fields[0].add_format :format => (make CmFormatsObject, :format_level=> 1,
+                                                                                  :activity_level => 1,
+                                                                                  :type => '::random::',
+                                                                                  :contacted_hours => (1..9).to_a.sample,
+                                                                                  :contact_frequency => '::random::',
+                                                                                  :duration_count => (1..9).to_a.sample,
+                                                                                  :duration_type => '::random::',
+                                                                                  :class_size => (1..9).to_a.sample)
+
 
   on(CmCourseInformation).review_proposal
   @course_proposal.approve_proposal
@@ -128,21 +138,22 @@ end
 
 Then(/^missing fields are highlighted and proposal cannot be approved$/) do
     on CmReviewProposal do |review_proposal|
-      review_proposal.course_number_review_error_state.exists?.should be_true
-      review_proposal.approve_button_disabled.exists?.should be_true
+      review_proposal.transcript_course_title_error.exists?.should be_true
+      review_proposal.activity_format_error.exists?.should be_true
     end
 end
 
-And(/^I approve the completed course proposal$/) do
-
-end
 
 
 Then(/^the course proposal is successfully approved$/) do
+  on CmReviewProposal do |review|
+    review.growl_text.should include "Document was successfully approved"
+  end
   steps %{Given I am logged in as Curriculum Specialist}
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
+
   on CmReviewProposal do |review|
     review.proposal_status.should include "Approved"
   end

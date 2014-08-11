@@ -36,8 +36,8 @@ class CmFormatsObject < DataFactory
 
   def create
     on CmCourseLogistics do |page|
-      page.type(@format_level,@activity_level).pick! @type
       page.course_logistics unless page.current_page('Course Logistics').exists?
+      page.type(@format_level,@activity_level).pick! @type
       sleep 1 # to allow to drop down selection to catch up
       page.contacted_hours(@format_level,@activity_level).fit @contacted_hours
       page.contact_frequency(@format_level,@activity_level).pick! @contact_frequency

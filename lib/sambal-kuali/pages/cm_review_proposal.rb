@@ -12,6 +12,7 @@ class CmReviewProposal < BasePage
   element(:proposal_title_element) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Proposal-Name_control") }
   value(:proposal_title_review) { |b| b.proposal_title_element.text }
   value(:transcript_course_title) { |b| b.textarea(name: /transcriptTitle/).text}
+  element(:transcript_course_title_error) { |b| b.div(data_label: "Transcript Course Title", class: /hasError/ ) }
   value(:course_title_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Course-Title_control").text }
   value(:subject_code_review) { |b| b.textarea(id:"CM-ViewCourseView-CourseInfo-Subject-Area_control").text }
   value(:course_number_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffix_control").text }
@@ -90,6 +91,7 @@ class CmReviewProposal < BasePage
   value(:activity_contact_hours_frequency_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Contact Hours").text }
   value(:activity_duration_type_count_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Duration").text }
   value(:activity_class_size_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Anticipated Class Size").text }
+  element(:activity_format_error) { |b|b.div(id: "emptyStringFormats", class: /hasError/) }
 
   # ACTIVE DATES REVIEW FIELDS
   action(:edit_active_dates) { |b| b.a(id: 'ActiveDates-Review-Edit-link').click }

@@ -489,6 +489,8 @@ class CmCourseProposalObject < DataFactory
     determine_save_action
   end
 
+
+
   def add_author (opts)
     defaults = {
 
@@ -546,10 +548,6 @@ class CmCourseProposalObject < DataFactory
     end
     on CmReviewProposal do |approve|
       approve.confirmation_approval
-      #TODO remove after bug fix KSCM-2536
-      approve.loading_wait
-      approve.alert.cancel if approve.alert.exists?
-      approve.loading_wait
    end
   end
 
