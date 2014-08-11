@@ -175,7 +175,7 @@ class CmCourseProposalObject < DataFactory
     on CmCreateCourseStart do |create|
       create.copy_approved_course.click
       create.cm_proposal_copy_course_code_field.set @course_to_be_copied.course_code
-      sleep 5
+      create.auto_lookup @course_to_be_copied.course_code
       create.loading_wait
       create.continue
     end
@@ -185,7 +185,7 @@ class CmCourseProposalObject < DataFactory
     on CmCreateCourseStart do |create|
       create.copy_proposed_course.click
       create.cm_proposal_copy_proposal_title_field.set @proposal_to_be_copied.proposal_title
-      sleep 5
+      create.auto_lookup @proposal_to_be_copied.proposal_title
       create.loading_wait
       create.continue
     end
