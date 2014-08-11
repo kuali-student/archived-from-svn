@@ -85,8 +85,10 @@ class CmReviewProposal < BasePage
 
   #ACTIVITY FORMATS
   element(:activity_format_review_section) { |b| b.div(id:"CM-ViewCourseView-Format-Details") }
+  value(:format_level_review) { |format_level, b| b.activity_format_review_section.header(id: /.*_line#{format_level-1}/).h5(class: "course_detail_subsection_header").span(class: "uif-headerText-span").text }
   value(:activity_level_review) { |activity_level, b| b.activity_format_review_section.header(id: /line#{activity_level-1}/).span(class: "uif-headerText-span").text }
   value(:activity_type_review)  { |activity_level, b| b.activity_format_review_section.header(id: /line#{activity_level-1}_line#{activity_level-1}/).span(class: "uif-headerText-span").text }
+  value(:activity_type)  { |format_level, activity_level, b| b.activity_format_review_section.header(id: /line#{format_level-1}_line#{activity_level-1}/).span(class: "uif-headerText-span").text }
   value(:activity_contact_hours_frequency_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Contact Hours").text }
   value(:activity_duration_type_count_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Duration").text }
   value(:activity_class_size_review) { |activity_level, b| b.activity_format_review_section.table(id: /line#{activity_level-1}/).div(data_label: "Anticipated Class Size").text }

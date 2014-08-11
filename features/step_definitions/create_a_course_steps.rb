@@ -1149,7 +1149,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
 #    page.description_review.should == @course.description
 
     #GOVERNANCE SECTION
-    page.curriculum_oversight_error_state.nill? == false
+    page.curriculum_oversight_error_state.nil? == false
     page.campus_locations_review.should == @course.campus_location unless @course.campus_location.nil?
 
     #COURSE LOGISTICS SECTION
@@ -1167,9 +1167,9 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     #ACTIVITY FORMAT
     if (@course.format_list.nil? == false )
       @course.format_list.each do |format|
-        page.activity_level_review(format.format_level).should == "Format #{format.format_level}"
-        page.activity_type_review(format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
-        page.activity_type_review(format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
+        page.format_level_review(format.format_level).should == "Format #{format.format_level}"
+        page.activity_type(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
+        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contacted_hours}"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contact_frequency}"
         page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_type}"
@@ -1378,9 +1378,9 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
     #ACTIVITY FORMAT
     if (@orig_course_proposal.approve_fields[0].format_list.nil? == false)
       @orig_course_proposal.approve_fields[0].format_list.each do |format|
-        page.activity_level_review(format.format_level).should == "Format #{format.format_level}"
-        page.activity_type_review(format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
-        page.activity_type_review(format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
+        page.format_level_review(format.format_level).should == "Format #{format.format_level}"
+        page.activity_type(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
+        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contacted_hours}"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contact_frequency}"
         page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_type}"
