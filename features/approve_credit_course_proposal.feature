@@ -27,6 +27,7 @@ Feature: Approve Course Proposal
 
 
 # what's pending: when department approver approves, decision rationale does not pop-up / successful approve messaging not in place - KSCM-1806
+  #KSCM-2571 (Approve button appears when it should not)
   Scenario Outline: RP2.3 Reviewer can edit a submitted proposal with additional details and then approve
     Given I have a course proposal with some approve fields missing submitted by <author>
     When I review the course proposal as <department_approver>
@@ -39,14 +40,14 @@ Feature: Approve Course Proposal
     |fred  |carol              |earl            |
     |alice |carol              |earl            |
 
-  #what's pending: Approve and Activate is disabled even after entering all fields.
-  Scenario: RP.4 Create a Credit Course Admin Create Proposal as Alice without all required for approve fields and attempt to Approve and Activate
-    When I have a credit course proposal with approve fields partially completed created as alice
+  #what's pending: We see a validation message only for missing transcript title. No validation message is displayed for campus location.
+  Scenario: RP3.1 CS is unable to Approve and Activate an incomplete course proposal
+    When I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist
     Then missing fields are highlighted and proposal cannot be approved or activated
 
-  #what's pending: Approve and Activate is disabled even after entering all fields.
-  Scenario: RP2.4 Create a Credit Course Admin Create Proposal as Alice without all required for approve fields and attempt to Approve and Activate
-    Given I have a credit course proposal with approve fields completed created as alice
+  #what's pending: Approve and Activate does not work and expects a final exam rationale even when standard is selected
+  Scenario: RP3.2 CS can successfully Approve and Activate a complete admin proposal
+    Given I have a credit course admin proposal with approve fields completed created as Curriculum Specialist
     When I approve and activate the proposal
     Then the proposal is successfully approved
     And the new course is Active

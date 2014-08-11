@@ -181,14 +181,15 @@ And(/^the new course is Active$/) do
 end
 
 
-Given(/^I have a credit course proposal with approve fields partially completed created as (.*?)/) do |author|
-  log_in author,author
+When(/^I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                             :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}",
                                                                              :transcript_course_title => nil,
                                                                              :campus_location => nil)]
 
+  puts @course_proposal.proposal_title
 end
 
 
@@ -199,14 +200,16 @@ end
 
 Then(/^missing fields are highlighted and proposal cannot be approved or activated$/) do
  on CmCourseInformation do |proposal|
-   #add code to validate that approve and activate is disabled
-   #add code to validate the missing fields error message
+   proposal.course_information unless proposal.current_page('Course Information').exists?
+   proposal.transcript_course_title_error.exists?.should be_true
+   proposal.page_validation_header.should include "Transcript Course Title"
+   #TODO missing Campus location does not come up.
  end
 end
 
 
-Given(/^I have a credit course proposal with approve fields completed created as (.*?)/) do |author|
-  log_in author,author
+Given(/^I have a credit course admin proposal with approve fields completed created as Curriculum Specialist$/) do
+  steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                             :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
