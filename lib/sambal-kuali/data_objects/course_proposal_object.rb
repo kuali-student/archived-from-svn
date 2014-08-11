@@ -88,16 +88,6 @@ class CmCourseProposalObject < DataFactory
           page.course_information unless page.current_page('Course Information').exists?
           fill_out page, :proposal_title, :course_title
         end
-        #fill the critical fields to be able to save the proposal
-        on CmCourseLogistics do |page|
-          num_formats = @course_to_be_copied.format_list.length
-          for i in 1..num_formats
-            j = @course_to_be_copied.format_list[i-1].activity_level
-            page.course_logistics unless page.current_page('Course Logistics').exists?
-            page.contact_frequency(j, i).pick! "per week"
-            page.loading_wait
-          end
-        end
 
         determine_save_action
       elsif @copy_from_proposal
@@ -153,19 +143,6 @@ class CmCourseProposalObject < DataFactory
     on CmCourseInformation do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :proposal_title, :course_title
-    end
-    #fill the critical fields to be able to save the proposal
-    unless @course_to_be_copied.nil?
-      on CmCourseLogistics do |page|
-        num_formats = @course_to_be_copied.format_list.length
-        for i in 1..num_formats
-          k = @course_to_be_copied.format_list[i-1].format_level
-          j = @course_to_be_copied.format_list[i-1].activity_level
-          page.course_logistics unless page.current_page('Course Logistics').exists?
-          page.contact_frequency(k, j).pick! "per week"
-          page.loading_wait
-        end
-      end
     end
 
     determine_save_action
