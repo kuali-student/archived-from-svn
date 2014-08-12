@@ -23,7 +23,7 @@ Feature: Approve Course Proposal
   Examples:
     |author|department_approver|division_approver|college_approver|senate_committee_approver|publication_office_approver|
     |fred  |carl               |edna             |erin            |martha                   |alice                      |
-    #|alice |carl               |edna             |erin            |martha                   |alice                      |
+    |alice |carl               |edna             |erin            |martha                   |alice                      |
 
 
 # what's pending:  successful approve messaging not in place - KSCM-1806
