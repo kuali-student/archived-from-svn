@@ -15,7 +15,7 @@ class CmReviewProposal < BasePage
   value(:course_title_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Course-Title_control").text }
   value(:subject_code_review) { |b| b.textarea(id:"CM-ViewCourseView-CourseInfo-Subject-Area_control").text }
   value(:course_number_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffix_control").text }
-  element(:course_number_review_error_state) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffix_control", class: /hasError/) }
+  element(:course_number_review_error_state) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffix", class: /hasError/) }
   value(:cross_listed_courses_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CrossListings_control").text }
   value(:jointly_offered_courses_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-JointlyOfferedCourses_control").text }
   value(:version_codes_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Version-Codes_control" ).text}
@@ -33,6 +33,7 @@ class CmReviewProposal < BasePage
   # GOVERNANCE REVIEW FIELDS
   action(:edit_governance) { |b| b.a(id: "CM-ViewCourseView-Logistics-Edit-Link").click }
   value(:campus_locations_review) { |b| b.textarea(id: 'CM-ViewCourseView-Governance-CampusLocations_control').text }
+  element(:campus_locations_error) { |b| b.div(id:"CM-ViewCourseView-Governance-CampusLocations", class: /hasError/) }
   value(:curriculum_oversight_review) { |b| b.textarea(id: 'CM-ViewCourseView-Governance-CurriculumOversight_control').text }
   element(:curriculum_oversight_error_state) { |b| b.textarea(id: "CM-ViewCourseView-Governance-CurriculumOversight", class: /hasError/) }
   value(:administering_org_review) { |b| b.textarea(id: 'CM-ViewCourseView-Governance-AdministeringOrganization_control').text }
@@ -124,6 +125,7 @@ class CmReviewProposal < BasePage
   element(:approve_button_disabled) { |b| b.button(text: "Approve", class: /disabled/) }
   action(:review_approval) { |b| b.approve_button.click; b.loading_wait }
   element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
+  element(:blanket_approve_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-BlanketApprove-Dialog-Explanation_control") }
   action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
   action(:blanket_approve) { |b| b.button(text: "Blanket Approve").click; b.loading_wait }
   #COURSE STATUS

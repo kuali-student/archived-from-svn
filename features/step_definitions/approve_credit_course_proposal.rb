@@ -237,7 +237,7 @@ Given(/^I have a course proposal with submit fields submitted by (.*?)$/) do |pr
                               :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
                                                                                 :course_number => nil,
                                                                                 :campus_location => nil,
-                                                                                :format_list => nil)]
+                                                                                :format_list => [])]
 
 
   elsif proposal_author == "alice"
@@ -247,7 +247,7 @@ Given(/^I have a course proposal with submit fields submitted by (.*?)$/) do |pr
                               :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
                                                         :course_number => nil,
                                                         :campus_location => nil,
-                                                        :format_list => nil)]
+                                                        :format_list => [])]
 
 
   end
@@ -269,9 +269,10 @@ end
 
 
 And(/^I cannot blanket approve the incomplete proposal$/) do
-  on CmReviewProposal page do |review|
+  on CmReviewProposal do |review|
     review.transcript_course_title_error.exists?.should be_true
     review.course_number_review_error_state.exists?.should be_true
+    review.campus_locations_error.exists?.should be_true
     review.activity_format_error.exists?.should be_true
     review.proposal_status == "Enroute"
   end
@@ -286,6 +287,9 @@ When(/^I edit the course proposal as CS$/) do
                                            :course_number => "#{(900..999).to_a.sample}",
                                            :defer_save => true
 
+   @course_proposal.approve_fields[0].add_campus
+
+
    @course_proposal.approve_fields[0].add_format :format => (make CmFormatsObject, :format_level=> 1,
                                                                   :activity_level => 1,
                                                                   :type => '::random::',
@@ -299,12 +303,13 @@ When(/^I edit the course proposal as CS$/) do
 end
 
 Then(/^I can blanket approve the course proposal$/) do
-  navigate_rice_to_cm_home
+  navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   @course_proposal.blanket_approve
+  @course_proposal.blanket_approve_with_rationale
+
   on CmReviewProposal do |review|
-    review.growl_text.should include "Document has been successfully approved"
-    review.proposal_status == "Approved"
+    review.growl_text.should include "Document was successfully approved"
   end
 end

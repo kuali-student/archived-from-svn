@@ -540,6 +540,14 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
+  def blanket_approve_with_rationale
+    on CmReviewProposal do |proposal|
+      proposal.blanket_approve
+      proposal.blanket_approve_rationale.set random_alphanums(10,'test blanked approve rationale ')
+      proposal.confirmation_approval
+    end
+  end
+
 
 
   #-----

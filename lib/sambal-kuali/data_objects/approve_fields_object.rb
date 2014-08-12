@@ -84,6 +84,14 @@ class CmApproveFieldsObject < DataFactory
     set_options(opts)
   end
 
+  def add_campus
+    on CmGovernance do |page|
+      page.governance unless page.current_page('Governance').exists?
+      page.location_all.set
+    end
+    determine_save_action
+  end
+
 
   def random_campus(pass_in_an_array)
     @sample_campus = pass_in_an_array.sample unless pass_in_an_array.nil?
