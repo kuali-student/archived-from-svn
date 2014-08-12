@@ -1051,7 +1051,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format21 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 1,
-                  :type => "Discussion",
+                  :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1060,7 +1060,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format22 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 2,
-                  :type => "Lecture",
+                  :type => "Discussion",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1136,10 +1136,8 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     page.course_title_review.should == @course_proposal.course_title
 
     #COPIED COURSE DATA
-#    page.transcript_course_title.should == @course.transcript_course_title unless @course.transcript_course_title.nil?
     page.subject_code_review.should == @course.subject_code
     page.course_number_review.should == @course_proposal.approve_fields[0].course_number
-#    page.description_review.should == @course.description
 
     #GOVERNANCE SECTION
     page.curriculum_oversight_error_state.nil? == false
@@ -1344,7 +1342,6 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
     page.course_title_review.should == @course_proposal.course_title
 
     #COURSE INFORMATION SECTION
-#    page.transcript_course_title.should == @orig_course_proposal.approve_fields[0].transcript_course_title unless @orig_course_proposal.approve_fields[0].transcript_course_title.nil?
     page.subject_code_review.should == "#{@orig_course_proposal.submit_fields[0].subject_code}"
     page.course_number_review.should == "#{@orig_course_proposal.approve_fields[0].course_number}"
     page.description_review.should == "#{@orig_course_proposal.submit_fields[0].description_rationale}"
