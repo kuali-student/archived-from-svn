@@ -1114,7 +1114,8 @@ When(/^I find an approved Course and select copy$/) do
   @course_proposal = create CmCourseProposalObject, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copied " + @course.course_title,
-                            :use_view_course => true
+                            :use_view_course => true,
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
 end
 
 Then(/^I should see a course proposal with a modified course title$/) do
@@ -1137,7 +1138,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     #COPIED COURSE DATA
     page.transcript_course_title.should == @course.transcript_course_title unless @course.transcript_course_title.nil?
     page.subject_code_review.should == @course.subject_code
-    page.course_number_review.should == @course.course_number
+    page.course_number_review.should == @course_proposal.approve_fields[0].course_number
     page.description_review.should == @course.description unless @course.description.nil?
 
     #GOVERNANCE SECTION
@@ -1204,7 +1205,8 @@ When(/^I create a course proposal from a copy of an approved course$/) do
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copy of " + @course.course_title,
-                            :curriculum_review_process => "Yes"
+                            :curriculum_review_process => "Yes",
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
 end
 
 Then(/^I should see a new course proposal with a modified course title$/) do
@@ -1257,7 +1259,8 @@ When(/^I create a course admin proposal from a copy of an approved course$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
-                            :course_title => "copy of " + @course.course_title
+                            :course_title => "copy of " + @course.course_title,
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
 end
 
 

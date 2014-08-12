@@ -87,6 +87,7 @@ class CmCourseProposalObject < DataFactory
         on CmCourseInformation do |page|
           page.course_information unless page.current_page('Course Information').exists?
           fill_out page, :proposal_title, :course_title
+          page.course_number.fit @approve_fields[0].course_number
         end
 
         determine_save_action
@@ -143,6 +144,7 @@ class CmCourseProposalObject < DataFactory
     on CmCourseInformation do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :proposal_title, :course_title
+      page.course_number.fit @approve_fields[0].course_number
     end
 
     determine_save_action
