@@ -42,14 +42,6 @@ Then /^I should see CM Home$/ do
 end
 
 
-Then /^I should see data in the proposal title on course information$/ do
-  on CmCourseInformation do |page|
-    page.course_information
-    page.proposal_title.value.should == @course_proposal.proposal_title
-    #TODO:: add in validation for assessment_scale
-  end
-end
-
 And /^I should see data in the course title on course information$/ do
   on CmCourseInformation do |page|
     page.course_information

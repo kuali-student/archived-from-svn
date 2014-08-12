@@ -35,27 +35,8 @@ And(/^I review the course proposal as (.*?)$/) do |reviewer|
   @course_proposal.review_proposal_action
 end
 
-
-
-
-
-=begin
-And(/^I attempt to approve or acknowledge the course proposal as (.*?)$/) do
-  log_in reviewer,reviewer
-  navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
-end
-=end
-
-
-Then(/^I cannot approve or acknowledge the incomplete proposal$/) do
-  @course_proposal.review_proposal_action
-  #TODO Add validation to check that Approve is disabled.
-end
-
-
 And(/^I approve the course proposal as (.*?)$/) do |reviewer|
-
+  log_in reviewer, reviewer
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
@@ -168,15 +149,15 @@ end
 And(/^the new course is Active$/) do
   steps %{Given I am logged in as Faculty}
   @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                  :course_state => "Active"
-  @course.search_for_course
   @course.view_course
   on CmReviewProposal do |course_review|
-    course_review.course_state_review.capitalize.should include @course.course_state #has a bug KSCM-2564
+    course_review.course_state_review.capitalize.should include @course.course_state
     #COURSE INFORMATION
-    course_review.course_title_review.should include @course.course_title
+    course_review.course_title_review.should include "#{@course.course_title}"
     "#{course_review.subject_code_review}""#{course_review.course_number_review}".should include @course.course_code
-    course_review.description_review.should include @course.description
+    course_review.description_review.should include "#{@course.description}"
   end
 end
 
@@ -190,6 +171,7 @@ When(/^I have a credit course admin proposal with approve fields partially compl
                                                                              :campus_location => nil)]
 
   puts @course_proposal.proposal_title
+  @course_proposal.approve_activate_proposal
 end
 
 
@@ -202,8 +184,9 @@ Then(/^missing fields are highlighted and proposal cannot be approved or activat
  on CmCourseInformation do |proposal|
    proposal.course_information unless proposal.current_page('Course Information').exists?
    proposal.transcript_course_title_error.exists?.should be_true
-   proposal.page_validation_header.should include "Transcript Course Title"
-   #TODO missing Campus location does not come up.
+   proposal.page_validation_text.should include "Transcript Course Title"
+   proposal.page_validation_text.should include "Campus Location"
+   #TODO Add validation for Campus Location
  end
 end
 
@@ -211,18 +194,20 @@ end
 Given(/^I have a credit course admin proposal with approve fields completed created as Curriculum Specialist$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
+                                                     :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
                             :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
 
-
+  puts "Proposal Title: #{@course_proposal.proposal_title}"
 end
 
 Then(/^the proposal is successfully approved$/) do
   steps %{Given I am logged in as Curriculum Specialist}
+  navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
-    proposal.proposal_status.should == "Approved"
+    proposal.proposal_status.should include "Approved"
   end
 end
 

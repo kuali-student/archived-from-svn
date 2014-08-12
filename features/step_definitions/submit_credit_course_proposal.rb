@@ -41,19 +41,6 @@ Then(/^I cannot submit the incomplete course proposal$/) do
   @course_proposal.submit_button_disabled
 end
 
-Then(/^the status of course proposal has not changed$/) do
-  #@course_proposal.review_proposal_action
-
-  on CmReviewProposal do |review|
-    #TODO need to add validation for whats missing
-    review.proposal_status.should include "Saved"
-    review.review_proposal_error.should include "This proposal is incomplete"
-    review.curriculum_oversight_error_state.should be_true
-    review.outcome_error_state.should be_true
-
-  end
-
-end
 
 Given(/^I have a partially completed course proposal created as Faculty$/) do
   steps %{Given I am logged in as Faculty}

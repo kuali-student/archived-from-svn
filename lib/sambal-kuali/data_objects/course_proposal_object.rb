@@ -522,29 +522,31 @@ class CmCourseProposalObject < DataFactory
     on CmReviewProposal do |approve|
        approve.review_approval
        approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
-    end
-    on CmReviewProposal do |approve|
-      approve.confirmation_approval
+       approve.confirmation_approval
+       sleep 30 # to avoid workflow exceptions
    end
   end
 
   def approve_activate_proposal
     on CmCourseInformation do |activate|
       activate.approve_and_activate
+      sleep 30 # to avoid workflow exceptions
     end
   end
 
   def blanket_approve
     on CmReviewProposal do |proposal|
       proposal.blanket_approve
+      sleep 30 # to avoid workflow exceptions
     end
   end
 
   def blanket_approve_with_rationale
     on CmReviewProposal do |proposal|
       proposal.blanket_approve
-      proposal.blanket_approve_rationale.set random_alphanums(10,'test blanked approve rationale ')
+      proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
       proposal.confirmation_approval
+      sleep 30 # to avoid workflow exceptions
     end
   end
 

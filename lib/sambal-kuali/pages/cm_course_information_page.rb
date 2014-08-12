@@ -10,7 +10,7 @@ class CmCourseInformation < BasePage
   element(:course_title_error_state) { |b| b.text_field(name: 'document.newMaintainableObject.dataObject.courseInfo.courseTitle', class: 'uif-textControl required validChar-document.newMaintainableObject.dataObject.courseInfo.courseTitle0 error') }
 
   element(:transcript_course_title) {|b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-TranscriptTitle_control') }
-  element(:transcript_course_title_error) {|b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-TranscriptTitle', class: /hasError/) }
+  element(:transcript_course_title_error) {|b| b.div(id: 'CM-Proposal-Course-CourseInfo-TranscriptTitle', class: /hasError/) }
   element(:subject_code) { |b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-SubjectCode_control') }
   element(:course_number) { |b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-CourseNumSuffix_control') }
   action(:cancel) { |b| b.a(id: 'ucancel').click; b.loading_wait }
