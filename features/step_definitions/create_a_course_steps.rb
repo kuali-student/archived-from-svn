@@ -293,8 +293,8 @@ And /^I should see the updated data on the Review proposal page$/ do
 
     #ACTIVITY FORMAT
     page.activity_level_review(1).should == "Format 1"
-    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
-    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
+    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
     page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"
@@ -357,8 +357,8 @@ And /^I should see updated data on the Review proposal page$/ do
 
     #ACTIVITY FORMAT
     page.activity_level_review(1).should == "Format #{@course_proposal.approve_fields[0].format_list[0].format_level}"
-    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
-    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
+    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
     page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"
@@ -1051,7 +1051,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format21 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 1,
-                  :type => "Lecture",
+                  :type => "Discussion",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1060,7 +1060,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format22 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 2,
-                  :type => "Discussion",
+                  :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1135,10 +1135,10 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     page.course_title_review.should == @course_proposal.course_title
 
     #COPIED COURSE DATA
-#    page.transcript_course_title.should == @course.transcript_course_title
+    page.transcript_course_title.should == @course.transcript_course_title unless @course.transcript_course_title.nil?
     page.subject_code_review.should == @course.subject_code
     page.course_number_review.should == @course.course_number
-#    page.description_review.should == @course.description
+    page.description_review.should == @course.description unless @course.description.nil?
 
     #GOVERNANCE SECTION
     page.curriculum_oversight_error_state.nil? == false
@@ -1146,7 +1146,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
 
     #COURSE LOGISTICS SECTION
     #ASSESSMENT SCALE
-  #  page.assessment_scale_review.should == @course.assessment_scale # app is wrong
+    page.assessment_scale_review.should == @course.assessment_scale unless @course.assessment_scale.nil?
     page.audit_review.should == @course.audit
     page.pass_fail_transcript_review.should == @course.pass_fail_transcript_grade
 
@@ -1161,7 +1161,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
       @course.format_list.each do |format|
         page.format_level_review(format.format_level).should == "Format #{format.format_level}"
         page.activity_type(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
-        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
+        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "ExperientialLearningOROther"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contacted_hours}"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contact_frequency}"
         page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_type}"
@@ -1372,7 +1372,7 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
       @orig_course_proposal.approve_fields[0].format_list.each do |format|
         page.format_level_review(format.format_level).should == "Format #{format.format_level}"
         page.activity_type(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type.nil?
-        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
+        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "ExperientialLearningOROther"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contacted_hours}"
         page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contact_frequency}"
         page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_type}"
@@ -1402,7 +1402,7 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
     end
 
     #ACTIVE DATES SECTION
-    #page.start_term_review.should == ""
+    page.start_term_review.should == ""
 
   end
 end
