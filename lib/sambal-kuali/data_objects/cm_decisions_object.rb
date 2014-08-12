@@ -7,10 +7,10 @@ class CmDecisionsObject < DataFactory
   include Utilities
 
   attr_accessor  :decision_text,
-                 :Decision,
-                 :Date,
-                 :Actor,
-                 :Rationale
+                 :decision,
+                 :date,
+                 :actor,
+                 :rationale
 
 
 
@@ -26,10 +26,10 @@ class CmDecisionsObject < DataFactory
     on CmDecisions do |page|
       decision_row_text = page.row_by_index(row)
       contents = decision_row_text.split(' ',5)
-      @Decision = contents[0]
-      @Date = contents[1]
-      @Actor = contents[2]
-      @Rationale = contents[4]
+      @decision = contents[0]
+      @date = contents[1]
+      @actor = contents[2]
+      @rationale = contents[4]
     end
   end
 
