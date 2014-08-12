@@ -126,8 +126,14 @@ class CmReviewProposal < BasePage
   action(:review_approval) { |b| b.approve_button.click; b.loading_wait }
   element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
   element(:blanket_approve_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-BlanketApprove-Dialog-Explanation_control") }
+  element(:return_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-ReturnToPrevious-Dialog-Explanation_control") }
   action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
   action(:blanket_approve) { |b| b.button(text: "Blanket Approve").click; b.loading_wait }
+  element(:review_button) { |b| b.button(text: "Return") }
+  action(:review_return) { |b| b.review_button.click; b.loading_wait  }
+  action(:confirm_return) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Return").click }
+  element(:return_to_node_list) { |b| b.div(class: "fancybox-inner").select_list(id: "CM-ReturnToPrevious-Dialog-NodeNamesDropdown_control") }
+
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
 end

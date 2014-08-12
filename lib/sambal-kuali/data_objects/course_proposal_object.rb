@@ -550,6 +550,17 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
+  def return_proposal(return_level)
+    on CmReviewProposal do |proposal|
+      proposal.review_return
+      proposal.return_to_node_list.select(return_level)
+      proposal.return_rationale.wait_until_present
+      proposal.return_rationale.set random_alphanums(10,'test return rationale ')
+      proposal.confirm_return
+      sleep 30 # to avoid workflow exceptions
+    end
+  end
+
 
 
   #-----

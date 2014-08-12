@@ -1,6 +1,6 @@
 @draft
 Feature: Approve Course Proposal
-# what's pending: approve button is not disabled when approving at department chair - KSCM-1596/ Prasanna's Fix KSCM-1806
+
   Scenario Outline: RP2.1 Submit a course proposal without all required for approve fields and verify that Reviewer cannot Approve
     Given I have a course proposal with approve fields partially completed submitted by <author>
     When I attempt to approve the course proposal as <department_chair>
@@ -51,7 +51,7 @@ Feature: Approve Course Proposal
     Then the proposal is successfully approved
     And the new course is Active
 
-
+  @draft
   Scenario Outline: RP4.1 CS can edit a submitted course proposal and can blanket approve
     Given I have a course proposal with submit fields submitted by <author>
     When I attempt to blanket approve the course proposal as Curriculum Specialist
