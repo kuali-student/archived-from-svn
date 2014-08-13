@@ -192,7 +192,7 @@
                 <value>themes/ksapboot/scripts/plan/planner.js</value>
                 <value>themes/ksapboot/scripts/ksap.widgets.js</value>
                 <value>plugins/jquery-popover/jquery.popover.js</value>
-                <value>themes/bootstrap/scripts/bootstrap.js</value>
+<!--                <value>themes/bootstrap/scripts/bootstrap.js</value>-->
             </list>
         </property>
     </bean>
