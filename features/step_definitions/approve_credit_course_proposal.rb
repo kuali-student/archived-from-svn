@@ -142,7 +142,7 @@ end
 
 Then(/^I see successful approve messaging$/) do
 on CmReviewProposal do |review|
-  review.growl_text.should == "Document was successfully approved"
+  review.growl_text.should include "Document was successfully approved"
 end
 end
 
@@ -288,4 +288,8 @@ Then(/^I can blanket approve the course proposal$/) do
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   @course_proposal.blanket_approve_with_rationale
+  on CmReviewProposal do |review|
+    review.growl_text.should include "Document was successfully approved"
+  end
+  sleep 30 # to avoid workflow exceptions
 end

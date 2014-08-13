@@ -548,7 +548,6 @@ class CmCourseProposalObject < DataFactory
       proposal.blanket_approve
       proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
       proposal.confirmation_approval
-      sleep 30 # to avoid workflow exceptions
     end
   end
 
