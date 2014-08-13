@@ -65,9 +65,6 @@
         <property name="headerText" value="Configured Properties"/>
         <property name="readOnly" value="true"/>
         <property name="collectionObjectClass" value="org.kuali.rice.core.api.util.ConcreteKeyValue"/>
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
         <property name="layoutManager.renderSequenceField" value="false" />
         <property name="layoutManager.applyDefaultCellWidths" value="true" />
         <property name="layoutManager.richTable.templateOptions">
