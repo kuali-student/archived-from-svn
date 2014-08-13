@@ -21,7 +21,7 @@ class CmApproveFieldsObject < DataFactory
     @browser = browser
     defaults = {
         transcript_course_title:    random_alphanums(5,'test transcript'),
-        course_number:              "#{(100..999).to_a.sample}",
+        course_number:              "#{(100..899).to_a.sample}",
         #GOVERNANCE
         campus_location: [:location_all, :location_extended, :location_north, :location_south],
         #COURSE LOGISTICS

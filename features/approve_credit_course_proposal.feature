@@ -39,7 +39,7 @@ Feature: Approve Course Proposal
     |fred  |carol              |earl            |
     |alice |carol              |earl            |
 
-  #what's pending: We see a validation message only for missing transcript title. No validation message is displayed for campus location.
+
   Scenario: RP3.1 CS is unable to Approve and Activate an incomplete course proposal
     When I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist
     Then missing fields are highlighted and proposal cannot be approved or activated
