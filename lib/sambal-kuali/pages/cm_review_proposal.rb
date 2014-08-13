@@ -131,6 +131,8 @@ class CmReviewProposal < BasePage
   element(:blanket_approve_button) { |b| b.button(text: "Blanket Approve") }
   element(:blanket_approve_disabled) { |b| b.button(text: "Blanket Approve", class: /disabled/)}
   action(:blanket_approve) { |b| b.blanket_approve_button.click; b.loading_wait }
+  element(:resubmit_button) { |b| b.button(text: "Re-submit") }
+  action(:resubmit) { |b| b.resubit_button.click; b.loading_wait}
 
   element(:review_button) { |b| b.button(text: "Return to Previous") }
   action(:review_return) { |b| b.review_button.click; b.loading_wait  }

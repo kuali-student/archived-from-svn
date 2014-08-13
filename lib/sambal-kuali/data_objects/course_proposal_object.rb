@@ -558,7 +558,12 @@ class CmCourseProposalObject < DataFactory
       proposal.return_rationale.wait_until_present
       proposal.return_rationale.set random_alphanums(10,'test return rationale ')
       proposal.confirm_return
-      sleep 30 # to avoid workflow exceptions
+    end
+  end
+
+  def resubmit_proposal
+    on CmReviewProposal do |proposal|
+      proposal.resubmit
     end
   end
 

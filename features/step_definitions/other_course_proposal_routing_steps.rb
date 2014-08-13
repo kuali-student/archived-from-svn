@@ -20,6 +20,7 @@ Given(/^I have a course proposal with submit and approve fields submitted by (.*
 end
 
 And(/^I return the course proposal to (.*?) as (.*?)$/) do |return_level, reviewer|
+  sleep 30 #to avoid workflow exceptions
   log_in reviewer, reviewer
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
@@ -29,5 +30,9 @@ end
 
 
 Then(/^I can resubmit the course proposal as fred$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.proposal_status.should include "Enroute"
+    review.resubmit_proposal
+  end
+
 end
