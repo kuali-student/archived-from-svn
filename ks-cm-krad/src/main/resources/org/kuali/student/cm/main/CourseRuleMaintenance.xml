@@ -201,9 +201,6 @@ limitations under the License.
     <bean id="KS-ListItems-SubGroup" parent="Uif-TableCollectionGroup" p:style="width: 550px; padding: 0;" p:renderAddLine="false">
         <property name="collectionObjectClass" value="org.kuali.student.lum.lu.ui.krms.dto.CluCore" />
         <property name="propertyName" value="clus" />
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
         <property name="layoutManager">
             <ref bean="KS-SimpleTableCollectionLayout"/>
         </property>

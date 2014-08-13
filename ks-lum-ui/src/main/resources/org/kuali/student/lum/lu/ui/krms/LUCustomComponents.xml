@@ -198,10 +198,7 @@ limitations under the License.
                 <value>name</value>
             </list>
         </property>
-        <!-- Replace with other bean for the multi select search-->
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:render="false"/>
-        </property>
+        <!-- Add in this property for the multi select search-->
         <!--property name="collectionLookup">
             <bean parent="KRMS-CourseSet-QuickFinder" p:multipleValuesSelect="false">
                 <property name="quickfinderAction">
@@ -274,10 +271,7 @@ limitations under the License.
                 <value>code</value>
             </list>
         </property>
-        <!-- Replace with other bean for the multi select search-->
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:render="false"/>
-        </property>
+        <!-- Add in this property for the multi select search-->
         <!--property name="collectionLookup">
             <bean parent="KRMS-ApprovedCourses-QuickFinder" p:multipleValuesSelect="false">
                 <property name="quickfinderAction">
@@ -407,10 +401,6 @@ limitations under the License.
                       p:style="width: 450px; margin: 0px;"/>
             </list>
         </property>
-        <!-- Replace with other bean for the multi select search-->
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:render="false"/>
-        </property>
         <property name="lineActions">
             <list>
                 <bean parent="KS-Uif-ActionLink" p:actionLabel="View" p:methodToCall="viewCourseRange"
@@ -440,9 +430,6 @@ limitations under the License.
         <property name="collectionObjectClass" value="org.kuali.student.lum.lu.ui.krms.dto.CluInformation"/>
         <property name="propertyName" value="clusInRange"/>
         <property name="renderLineActions" value="false"/>
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
         <property name="layoutManager.renderSequenceField" value="false"/>
         <property name="layoutManager.applyDefaultCellWidths" value="false"/>
         <property name="layoutManager.applyAlternatingRowStyles" value="false"/>
@@ -828,9 +815,6 @@ limitations under the License.
 
                 </bean>
             </list>
-        </property>
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:render="false"/>
         </property>
     </bean>
 
