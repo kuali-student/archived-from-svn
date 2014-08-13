@@ -36,7 +36,6 @@
         <property name="minScriptFile" value="themes/ksboot/scripts/ksboot.@{#ConfigProperties['project.version']}.min.js"/>
         <property name="minScriptSourceFiles">
             <list merge="true">
-                <value>themes/ksboot/scripts/bootstrap.js</value>
                 <value>themes/ksboot/scripts/enroll.js</value>
                 <value>krad/scripts/ks.krad.override.js</value>
                 <value>themes/ksboot/scripts/krad.request.js</value>

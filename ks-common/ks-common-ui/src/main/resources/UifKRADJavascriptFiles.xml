@@ -32,6 +32,7 @@
                 <value>plugins/fancybox/jquery.fancybox.css</value>
                 <value>plugins/prettify/prettify.css</value>
                 <value>plugins/tooltip/ks.jquery.bubblepopup.v2.3.1.css</value>
+                <value>plugins/bootstrap-accessibility/bootstrap-accessibility.css</value>
             </list>
         </property>
         <property name="minScriptSourceFiles">
@@ -61,6 +62,8 @@
                 <value>plugins/prettify/prettify.js</value>
                 <value>plugins/easydrag/jquery.easydrag.js</value>
                 <value>plugins/tooltip/ks.jquery.bubblepopup.v2.3.1.js</value>
+                <value>themes/bootstrap/scripts/bootstrap.js</value>
+                <value>plugins/bootstrap-accessibility/bootstrap-accessibility.js</value>
                 <value>krad/scripts/krad.variables.js</value>
                 <value>krad/scripts/krad.utility.js</value>
                 <value>krad/scripts/krad.document.js</value>
