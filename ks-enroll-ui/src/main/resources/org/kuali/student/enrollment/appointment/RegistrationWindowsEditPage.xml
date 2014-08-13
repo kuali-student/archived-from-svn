@@ -122,9 +122,6 @@
         <!-- used for custom line separators -->
 
         <!--<property name="layoutManager.sequencePropertyName" value="name" />-->
-        <property name="collectionLookup" >
-            <null/>
-        </property>
 
         <property name="items">
             <list>

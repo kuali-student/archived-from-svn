@@ -21,9 +21,6 @@
         <property name="propertyName" value="rgResultList" />
         <property name="headerText" value="Registration Groups (@{rgResultList.size()})"/>
         <!--<property name="instructionalText" value="@{#line.clusterNameForDisplay}" />-->
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
         <property name="layoutManager.renderSequenceField" value="false" />
         <property name="validationMessages" ref="KS-ValidationMessages-Off"/>
         <property name="layoutManager.applyDefaultCellWidths" value="false" />

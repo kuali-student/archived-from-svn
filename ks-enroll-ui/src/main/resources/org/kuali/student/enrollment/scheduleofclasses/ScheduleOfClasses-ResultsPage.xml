@@ -361,9 +361,6 @@
                 </property>
             </bean>
         </property>
-        <property name="collectionLookup">
-            <bean parent="Uif-CollectionQuickFinder" p:quickfinderAction.render="false" />
-        </property>
         <property name="disclosure.defaultOpen" value="false"/>
         <property name="style" value="padding-left: 30px;"/>
         <property name="layoutManager.richTable.templateOptions">
