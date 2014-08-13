@@ -51,13 +51,15 @@ Feature: Approve Course Proposal
     Then the proposal is successfully approved
     And the new course is Active
 
-  @draft
+
   Scenario Outline: RP4.1 CS can edit a submitted course proposal and can blanket approve
-    Given I have a course proposal with submit fields submitted by <author>
+    Given I have an incomplete course proposal with submit fields submitted by <author>
     When I attempt to blanket approve the course proposal as Curriculum Specialist
     Then I cannot blanket approve the incomplete proposal
     When I edit the course proposal as CS
     Then I can blanket approve the course proposal
+    And the proposal is successfully approved
+    And the new course is Active
   Examples:
     |author|
     |fred  |

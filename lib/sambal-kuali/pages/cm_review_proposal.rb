@@ -128,7 +128,10 @@ class CmReviewProposal < BasePage
   element(:blanket_approve_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-BlanketApprove-Dialog-Explanation_control") }
   element(:return_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-ReturnToPrevious-Dialog-Explanation_control") }
   action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click }
-  action(:blanket_approve) { |b| b.button(text: "Blanket Approve").click; b.loading_wait }
+  element(:blanket_approve_button) { |b| b.button(text: "Blanket Approve") }
+  element(:blanket_approve_disabled) { |b| b.button(text: "Blanket Approve", class: /disabled/)}
+  action(:blanket_approve) { |b| b.blanket_approve_button.click; b.loading_wait }
+
   element(:review_button) { |b| b.button(text: "Return") }
   action(:review_return) { |b| b.review_button.click; b.loading_wait  }
   action(:confirm_return) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Return").click }

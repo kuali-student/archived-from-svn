@@ -209,7 +209,7 @@ Then(/^the proposal is successfully approved$/) do
 end
 
 
-Given(/^I have a course proposal with submit fields submitted by (.*?)$/) do |proposal_author|
+Given(/^I have an incomplete course proposal with submit fields submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author,proposal_author
 
   if proposal_author == "fred"
@@ -245,8 +245,6 @@ When(/^I attempt to blanket approve the course proposal as Curriculum Specialist
   navigate_rice_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
-  @course_proposal.blanket_approve
-
 end
 
 
@@ -256,7 +254,8 @@ And(/^I cannot blanket approve the incomplete proposal$/) do
     review.course_number_review_error_state.exists?.should be_true
     review.campus_locations_error.exists?.should be_true
     review.activity_format_error.exists?.should be_true
-    review.proposal_status == "Enroute"
+    review.proposal_status.should include "Enroute"
+    review.blanket_approve_disabled.exists?.should be_true
   end
 end
 
@@ -288,10 +287,5 @@ Then(/^I can blanket approve the course proposal$/) do
   navigate_to_cm_home
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
-  @course_proposal.blanket_approve
   @course_proposal.blanket_approve_with_rationale
-
-  on CmReviewProposal do |review|
-    review.growl_text.should include "Document was successfully approved"
-  end
 end
