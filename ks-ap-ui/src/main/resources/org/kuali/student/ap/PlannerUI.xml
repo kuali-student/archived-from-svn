@@ -538,8 +538,6 @@
                 </bean>
             </list>
         </property>
-        <property name="collectionLookup.render" value="false" />
-        <property name="collectionLookup.quickfinderAction.render" value="false" />
     </bean>
 
     <bean id="planner_completed_collection" parent="planner_completed_collection-parent"/>
