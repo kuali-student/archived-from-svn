@@ -182,10 +182,12 @@ end
 
 
 Then(/^missing fields are highlighted and proposal cannot be approved or activated$/) do
- on CmReviewProposal do |proposal|
-   proposal.transcript_course_title_error.exists?.should be_true
-   proposal.campus_locations_error.exists?.should be_true
- end
+  on CmCourseInformation do |proposal|
+    proposal.course_information unless proposal.current_page('Course Information').exists?
+    proposal.transcript_course_title_error.exists?.should be_true
+    proposal.page_validation_text.should include "Transcript Course Title"
+    proposal.page_validation_text.should include "Campus Location"
+  end
 end
 
 
