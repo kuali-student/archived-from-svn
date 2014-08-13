@@ -37,7 +37,8 @@ class CmCourseProposalObject < DataFactory
         :course_to_be_copied,
         :proposal_to_be_copied,
         :use_view_course,
-        :copy_from_proposal
+        :copy_from_proposal,
+        :approval_confirmation_text
 
 
   def initialize(browser, opts={})
@@ -525,7 +526,6 @@ class CmCourseProposalObject < DataFactory
        approve.review_approval
        approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
        approve.confirmation_approval
-       sleep 30 # to avoid workflow exceptions
    end
   end
 

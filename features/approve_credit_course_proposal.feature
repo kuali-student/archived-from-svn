@@ -1,7 +1,7 @@
-@draft
+@nightly
 Feature: Approve Course Proposal
 
-  Scenario Outline: RP2.1 Submit a course proposal without all required for approve fields and verify that Reviewer cannot Approve
+ Scenario Outline: RP2.1 Submit a course proposal without all required for approve fields and verify that Reviewer cannot Approve
     Given I have a course proposal with approve fields partially completed submitted by <author>
     When I attempt to approve the course proposal as <department_chair>
     Then I cannot approve the incomplete proposal
@@ -10,7 +10,7 @@ Feature: Approve Course Proposal
     |fred  |carol           |
     |alice |carol           |
 
-#what's pending: success growl does not appear after approval.
+
  Scenario Outline: RP2.2 Submit a course proposal with all required for approve fields and verify reviewer can approve
     Given I have a course proposal with approve fields submitted by <author>
     When I approve the course proposal as <department_approver>
@@ -26,8 +26,7 @@ Feature: Approve Course Proposal
     |alice |carl               |edna             |erin            |martha                   |alice                      |
 
 
-# what's pending:  successful approve messaging not in place - KSCM-1806
-  Scenario Outline: RP2.3 Reviewer can edit a submitted proposal with additional details and then approve
+ Scenario Outline: RP2.3 Reviewer can edit a submitted proposal with additional details and then approve
     Given I have a course proposal with some approve fields missing submitted by <author>
     When I review the course proposal as <department_approver>
     Then missing fields are highlighted and proposal cannot be approved
@@ -35,24 +34,22 @@ Feature: Approve Course Proposal
     And I approve the course proposal as <college_approver>
     Then I see successful approve messaging
   Examples:
-    |author|department_approver|college_approver|
-    |fred  |carol              |earl            |
-    |alice |carol              |earl            |
+     |author|department_approver|college_approver|
+     |fred  |carol              |earl            |
+     |alice |carol              |earl            |
 
 
-  Scenario: RP3.1 CS is unable to Approve and Activate an incomplete course proposal
+ Scenario: RP3.1 CS is unable to Approve and Activate an incomplete course proposal
     When I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist
     Then missing fields are highlighted and proposal cannot be approved or activated
 
-
-  Scenario: RP3.2 CS can successfully Approve and Activate a complete admin proposal
+ Scenario: RP3.2 CS can successfully Approve and Activate a complete admin proposal
     Given I have a credit course admin proposal with approve fields completed created as Curriculum Specialist
     When I approve and activate the proposal
     Then the proposal is successfully approved
     And the new course is Active
 
-
-  Scenario Outline: RP4.1 CS can edit a submitted course proposal and can blanket approve
+ Scenario Outline: RP4.1 CS can edit a submitted course proposal and can blanket approve
     Given I have an incomplete course proposal with submit fields submitted by <author>
     When I attempt to blanket approve the course proposal as Curriculum Specialist
     Then I cannot blanket approve the incomplete proposal
@@ -63,5 +60,5 @@ Feature: Approve Course Proposal
   Examples:
     |author|
     |fred  |
-    |alice|
+    |alice |
 

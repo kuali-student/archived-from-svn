@@ -38,6 +38,7 @@ end
 And(/^I approve the course proposal as (.*?)$/) do |reviewer|
   log_in reviewer, reviewer
   navigate_rice_to_cm_home
+  sleep 30 # to avoid workflow exceptions
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   @course_proposal.approve_proposal
@@ -141,9 +142,9 @@ Then(/^the course proposal is successfully approved$/) do
 end
 
 Then(/^I see successful approve messaging$/) do
-on CmReviewProposal do |review|
-  review.growl_text.should include "Document was successfully approved"
-end
+  on CmReviewProposal do |review|
+    review.growl_text.should include "Document was successfully approved"
+  end
 end
 
 And(/^the new course is Active$/) do
@@ -183,7 +184,7 @@ end
 Then(/^missing fields are highlighted and proposal cannot be approved or activated$/) do
  on CmReviewProposal do |proposal|
    proposal.transcript_course_title_error.exists?.should be_true
-   #TODO Missing Campus Location not highlighted on review proposal
+   proposal.campus_locations_error.exists?.should be_true
  end
 end
 

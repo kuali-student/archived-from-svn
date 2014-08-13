@@ -132,7 +132,7 @@ class CmReviewProposal < BasePage
   element(:blanket_approve_disabled) { |b| b.button(text: "Blanket Approve", class: /disabled/)}
   action(:blanket_approve) { |b| b.blanket_approve_button.click; b.loading_wait }
 
-  element(:review_button) { |b| b.button(text: "Return") }
+  element(:review_button) { |b| b.button(text: "Return to Previous") }
   action(:review_return) { |b| b.review_button.click; b.loading_wait  }
   action(:confirm_return) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Return").click }
   element(:return_to_node_list) { |b| b.div(class: "fancybox-inner").select_list(id: "CM-ReturnToPrevious-Dialog-NodeNamesDropdown_control") }
