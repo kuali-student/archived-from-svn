@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.kuali.student</groupId>
 		<artifactId>student</artifactId>
-		<version>0.8.1-iu-d16</version>
+		<version>0.8.1-iu-d17</version>
 	</parent>
 
 	<groupId>org.kuali.student.ap</groupId>
 	<artifactId>ks-ap</artifactId>
-	<version>0.8.1-iu-d16</version>
+	<version>0.8.1-iu-d17</version>
 	<packaging>pom</packaging>
 	<name>KSAP</name>
 	<description>Kuali Student Academic Planning Module</description>

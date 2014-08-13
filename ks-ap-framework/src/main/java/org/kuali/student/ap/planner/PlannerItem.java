@@ -58,7 +58,7 @@ public class PlannerItem implements
 
 	public PlannerItem(StudentCourseRecordInfo completedRecord) {
 		uniqueId = UUID.randomUUID().toString();
-		termId = completedRecord.getTermName();
+		termId = completedRecord.getTermId();
 		campusCode = completedRecord.getAttributeValue("campusCode");
 		
 		courseCode = completedRecord.getCourseCode();
