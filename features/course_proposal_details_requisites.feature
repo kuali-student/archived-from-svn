@@ -1,5 +1,5 @@
 @nightly
-Feature: Course Proposal Details_Requisites
+Feature: GT.Course Proposal Details_Requisites
 
   Scenario: CC13.1 Add a single and 0 variable Eligibility requisite to a Course Proposal
     When I create a basic course proposal with two basic Eligibility requisites

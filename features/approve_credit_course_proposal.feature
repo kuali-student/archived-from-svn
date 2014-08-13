@@ -1,5 +1,5 @@
 @nightly
-Feature: Approve Course Proposal
+Feature: GT.Approve Course Proposal
 
  Scenario Outline: RP2.1 Submit a course proposal without all required for approve fields and verify that Reviewer cannot Approve
     Given I have a course proposal with approve fields partially completed submitted by <author>

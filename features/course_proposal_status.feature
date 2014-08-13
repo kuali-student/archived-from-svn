@@ -1,5 +1,5 @@
 @wip
-Feature: View status of Course Propsoal
+Feature: GT.View status of Course Propsoal
   As a user I should be able to see the status of a course proposal being one of these states:
   Saved, Active, Enroute, Cancelled, or Approved
 

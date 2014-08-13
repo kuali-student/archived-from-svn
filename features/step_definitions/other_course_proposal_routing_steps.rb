@@ -29,10 +29,15 @@ And(/^I return the course proposal to (.*?) as (.*?)$/) do |return_level, review
 end
 
 
-Then(/^I can resubmit the course proposal as fred$/) do
+Then(/^I can resubmit the course proposal as (.*?)$/) do |author|
+  sleep 30 #to avoid workflow exceptions
+  log_in author,author
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  @course_proposal.resubmit_proposal
   on CmReviewProposal do |review|
     review.proposal_status.should include "Enroute"
-    review.resubmit_proposal
   end
 
 end

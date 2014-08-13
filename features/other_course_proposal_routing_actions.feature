@@ -1,5 +1,5 @@
-@draft
-Feature: Other Course Proposal Routing Actions
+@nightly
+Feature: GT.Other Course Proposal Routing Actions
 
   Scenario Outline: RP6.1 Reviewers can return a course proposal to previous workflow node
     Given I have a course proposal with submit and approve fields submitted by <author>
@@ -10,4 +10,4 @@ Feature: Other Course Proposal Routing Actions
   Examples:
       |author|department_approver|division_approver|
       |fred  |carl               |edna             |
-      #|alice |carl              |edna             |
+      |alice |carl               |edna             |

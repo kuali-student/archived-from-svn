@@ -564,6 +564,8 @@ class CmCourseProposalObject < DataFactory
   def resubmit_proposal
     on CmReviewProposal do |proposal|
       proposal.resubmit
+      proposal.decision_rationale.set random_alphanums(10,'test resubmit rationale ')
+      proposal.confirmation_approval
     end
   end
 
