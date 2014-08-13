@@ -36,9 +36,9 @@ And(/^I review the course proposal as (.*?)$/) do |reviewer|
 end
 
 And(/^I approve the course proposal as (.*?)$/) do |reviewer|
+  sleep 30 # to avoid workflow exceptions
   log_in reviewer, reviewer
   navigate_rice_to_cm_home
-  sleep 30 # to avoid workflow exceptions
   @course_proposal.search(@course_proposal.proposal_title)
   @course_proposal.review_proposal_action
   @course_proposal.approve_proposal
