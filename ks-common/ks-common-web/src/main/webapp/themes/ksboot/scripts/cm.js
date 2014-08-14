@@ -2,7 +2,7 @@
  * SCRIPT METHODS USED BY MULTIPLE .JS FILES
  */
 
-var tabPanelId = "#course_tabs_tabs";
+var tabPanelId = "#course_tabs";
 var activateTabEventNamespace = "leftNavActiveTab";
 var leftNavPositioningEventNamespace = "leftNavPositioning";
 
@@ -98,8 +98,16 @@ var previousAnchorBottom = 0;
  * sticky header.
  */
 function fixLeftNavElementPositioning(initial) {
+    var tabList = jQuery("#course_tabs_tabList");
+
+    if (initial) {
+        tabList.css("position", "fixed");
+        var tabListWidth = tabList.outerWidth();
+        jQuery("#course_tabs > .tab-content").css("margin-left", tabListWidth + "px");
+    }
+
     //  Get the position of the element that the nav components need to align under.
-    var anchorElement = jQuery("#KS-CourseView > header.uif-viewHeader-contentWrapper");
+    var anchorElement = jQuery("#KS-CourseView > header");
     if (anchorElement.length == 0) {
         console.error('Unable to find an anchor element. Nav elements were not positioned correctly.');
         return;
@@ -228,14 +236,14 @@ function initializeForCurriculumSpecialist(currentSectionId) {
     jQuery("div[data-type='TabWrapper']").addClass('never_hide');
 
     //  Register a handler for tab clicks.
-    jQuery(tabPanelId).on("tabsactivate",
-        function (event, ui) {
-            //  Checking the event type to make sure it's a click.
-            if (typeof event.originalEvent.originalEvent !== 'undefined'
-                && event.originalEvent.originalEvent.type == "click") {
-                //  Scroll to the section corresponding to the clicked tab.
-                scrollToSection("#" + ui.newPanel.attr('id').replace('_tab', ''), true);
+    jQuery(tabPanelId + " [role='tab']").on("click",
+        function (event) {
+            if (!event.target) {
+                return;
             }
+            //  Scroll to the section corresponding to the clicked tab.
+            scrollToSection("#" + jQuery(event.target).attr('id').replace('_tab', ''), true);
+
         }
     );
 
@@ -267,11 +275,12 @@ function handleActiveTabOnWindowScroll() {
      * When the window is scrolled, once a tab has a "focus point" in the window select/activate it.
      * This will cause the 'tabsactivate' handler above to get called.
      */
-    jQuery("div[data-type='TabWrapper']").each(function () {
+    jQuery("div[role='tabpanel']").each(function () {
         var tab = this;
         if (isOnFocusPoint(tab) && focusedTab !== tab) {
             focusedTab = tab;
-            jQuery(tabPanelId).tabs("select", "#" + tab.id);
+            var tabLinkId = tab.id.replace('_tabPanel', '') + "_tab";
+            jQuery("#" + tabLinkId).tab("show");
             return false;
         }
     });
