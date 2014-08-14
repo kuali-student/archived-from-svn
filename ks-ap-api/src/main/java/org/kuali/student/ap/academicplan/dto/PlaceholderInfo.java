@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.kuali.student.ap.academicplan.infc.Placeholder;
+import org.kuali.student.r2.common.infc.Attribute;
 import org.w3c.dom.Element;
 
 
@@ -21,7 +22,7 @@ import org.w3c.dom.Element;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PlaceholderInfo", propOrder = { "id", "typeKey", "exclusion", "parm1", "parm2", "parm3",  "_futureElements"})
+@XmlType(name = "PlaceholderInfo", propOrder = { "id", "typeKey", "exclusion", "parm1", "parm2", "parm3", "parm4", "notes", "_futureElements"})
 public class PlaceholderInfo implements Placeholder {
 
 	@XmlAttribute
@@ -44,6 +45,10 @@ public class PlaceholderInfo implements Placeholder {
 	
 	@XmlAttribute
     private String parm4;
+	
+	@XmlAttribute
+    private String notes;
+	
 	
     @XmlAnyElement
     private List<Element> _futureElements;
@@ -114,7 +119,17 @@ public class PlaceholderInfo implements Placeholder {
 	public void setParm4(String parm4) {
 		this.parm4 = parm4;
 	}
+	
 
+	@Override
+	public String getNotes() {
+		return this.notes;
+	}
+	
+	public void setNotes(String notes){
+		this.notes = notes;
+	}
+	
 	public List<Element> get_futureElements() {
 		return _futureElements;
 	}
@@ -123,7 +138,6 @@ public class PlaceholderInfo implements Placeholder {
 	public void set_futureElements(List<Element> _futureElements) {
 		this._futureElements = _futureElements;
 	}
-
 
    
 }
