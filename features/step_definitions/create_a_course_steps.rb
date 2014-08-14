@@ -293,8 +293,8 @@ And /^I should see the updated data on the Review proposal page$/ do
 
     #ACTIVITY FORMAT
     page.activity_level_review(1).should == "Format 1"
-    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
-    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
+    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
     page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"
@@ -357,8 +357,8 @@ And /^I should see updated data on the Review proposal page$/ do
 
     #ACTIVITY FORMAT
     page.activity_level_review(1).should == "Format #{@course_proposal.approve_fields[0].format_list[0].format_level}"
-    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
-    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "ExperientialLearningOROther"
+    page.activity_type_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+    page.activity_type_review(1).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
     page.activity_contact_hours_frequency_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
     page.activity_duration_type_count_review(1).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"

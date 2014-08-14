@@ -80,9 +80,9 @@ Then(/^I submit the incomplete course proposal$/) do
 end
 
 Given(/^there is a proposal enroute with a decision$/) do
-  steps %{Given I have a course proposal with approve fields created as fred}
+  steps %{Given I have a course proposal with approve fields submitted by fred}
   steps %{When I approve the course proposal as carl}
-  @course_proposal.search(@course_proposal.proposal_title)
+  sleep 30 #TODO to avoid workflow exceptions
 end
 
 Then(/^I should see the decisions on the course proposal$/) do
