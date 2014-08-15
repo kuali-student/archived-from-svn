@@ -22,6 +22,8 @@ import org.kuali.student.enrollment.courseseatcount.dto.CourseSeatCountInfo;
 import org.kuali.student.enrollment.courseseatcount.service.CourseSeatCountService;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:courseoffering-subscription-service-test.xml"})
 public class CourseOfferingSubscriptionServiceTest {
+    private static final Logger log = LoggerFactory.getLogger(CourseOfferingSubscriptionServiceTest.class);
 
     @Resource
     CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator;
@@ -64,11 +67,11 @@ public class CourseOfferingSubscriptionServiceTest {
     }
 
     @Test
-    public void testCourseOfferingSubscriptionService() throws Exception {
+    public void testCallbackIfAoIsUpdated() throws Exception {
+
         courseOfferingSubscriptionServiceDecorator.subscribeToActivityOfferings(SubscriptionActionEnum.UPDATE,
                 courseOfferingCallbackService,
                 contextInfo);
-
 
         String formatId = "1";
         String courseId = "1";
@@ -128,6 +131,7 @@ public class CourseOfferingSubscriptionServiceTest {
         courseSeatCountService.createCourseSeatCount(courseSeatCountTypeKey, courseSeatCountInfo, contextInfo);
 
         createdAo.setMaximumEnrollment(30);
+        log.info("changing activityOffering " + createdAo.getId() + " maximumEnrollment to " +  createdAo.getMaximumEnrollment());
 
         courseOfferingSubscriptionServiceDecorator.updateActivityOffering(
                 createdAo.getId(),

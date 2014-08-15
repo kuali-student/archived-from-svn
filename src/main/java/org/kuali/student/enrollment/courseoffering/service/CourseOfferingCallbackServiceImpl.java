@@ -65,6 +65,9 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
                         courseSeatCountService.getCourseSeatCountByActivityOffering(activityOfferingId, contextInfo);
 
                 if(courseSeatCountInfo.getSeats() != activityOfferingInfo.getMaximumEnrollment()) {
+                    log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
+                            + " to " + activityOfferingInfo.getMaximumEnrollment()
+                            + " for activityOffering " + activityOfferingId);
                     courseSeatCountInfo.setSeats(activityOfferingInfo.getMaximumEnrollment());
                     courseSeatCountService.updateCourseSeatCount(courseSeatCountInfo.getId(), courseSeatCountInfo, contextInfo);
                 }
