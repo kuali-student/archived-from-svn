@@ -1,12 +1,12 @@
 # module = ks-api branch Path = enrollment/ks-api/branches/rice-2.4-mx-upgrade revision = 69620
 ks-api::enrollment_ks-api_branches_rice-2.4-mx-upgrade::046eb65118ef2e39be77d81e486d6af6d6903345
 # module = ks-core branch Path = enrollment/ks-core/branches/rice-2.4-mx-upgrade revision = 69620
-ks-core::enrollment_ks-core_branches_rice-2.4-mx-upgrade::e39073684c1d273e27e696dbcc1c779c55501c60
+ks-core::enrollment_ks-core_branches_rice-2.4-mx-upgrade::fb2619f969ca5b944a0a7610a701a52d871b3fa6
 # module = ks-lum branch Path = enrollment/ks-lum/branches/rice-2.4-mx-upgrade revision = 69620
-ks-lum::enrollment_ks-lum_branches_rice-2.4-mx-upgrade::97c9f57ed363290d23bb4dee8282502ee001c97f
+ks-lum::enrollment_ks-lum_branches_rice-2.4-mx-upgrade::eb85a165ae3de0443a17a4e6581a16f1ba6862e6
 # module = ks-enroll branch Path = enrollment/ks-enroll/branches/rice-2.4-mx-upgrade revision = 69620
-ks-enroll::enrollment_ks-enroll_branches_rice-2.4-mx-upgrade::e6d32b6813395eff98590e83f1131fcb116b63b7
+ks-enroll::enrollment_ks-enroll_branches_rice-2.4-mx-upgrade::20c001cfc7c4a71cd000d6353beed6d2dbaee418
 # module = ks-ap branch Path = enrollment/ks-ap/branches/rice-2.4-mx-upgrade revision = 69620
-ks-ap::enrollment_ks-ap_branches_rice-2.4-mx-upgrade::3c4242512c6477240efe25bf177b9da316a3c1ad
+ks-ap::enrollment_ks-ap_branches_rice-2.4-mx-upgrade::dbaddd99ae7da40200b487cfa52273595a5b819e
 # module = ks-deployments branch Path = enrollment/ks-deployments/branches/rice-2.4-mx-upgrade revision = 69620
 ks-deployments::enrollment_ks-deployments_branches_rice-2.4-mx-upgrade::1499b59baaa4ce642eaee722d3b8f967f77f1f17
