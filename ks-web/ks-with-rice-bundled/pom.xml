@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.kuali.student.web</groupId>
         <artifactId>ks-web</artifactId>
-        <version>2.1.1-FR2-M1-SNAPSHOT</version>
+        <version>2.1.1-FR2-M1-build-857</version>
     </parent>
     <properties>
         <ks.gwt.module.org>org.kuali.student.core.organization.ui.OrgEntry</ks.gwt.module.org>
@@ -273,7 +273,7 @@
             <artifactId>ks-ap-deployment-resources</artifactId>
             <version>${ks.ap.version}</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.kuali.student.fa</groupId>
             <artifactId>ks-fa-deployment-resources</artifactId>
             <version>${ks.fa.version}</version>
@@ -385,7 +385,7 @@
             <type>war</type>
         </dependency>
         <!-- start ks-fa dependencies -->
-         <dependency>
+        <dependency>
             <groupId>org.kuali.student.fa</groupId>
             <artifactId>ks-fa-api</artifactId>
             <version>${ks.fa.version}</version>
