@@ -42,6 +42,14 @@ public interface CourseHelper {
 	 */
 	List<ActivityOfferingInfo> getActivityOfferings(String courseId);
 
+    /**
+     * Gets an activity offering by ID.
+     *
+     * @param aoId
+     * @return
+     */
+	ActivityOfferingInfo getActivityOfferingInfo(String aoId);
+	
 	/**
 	 * Gets a list of schedules for an activity offering.
 	 * 

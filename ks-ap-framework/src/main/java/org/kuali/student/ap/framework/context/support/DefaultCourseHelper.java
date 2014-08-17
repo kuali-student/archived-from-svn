@@ -320,6 +320,12 @@ public class DefaultCourseHelper implements CourseHelper, Serializable {
 	}
 
 	@Override
+	public ActivityOfferingInfo getActivityOfferingInfo(String aoId) {
+		// TODO: Implement for KS. Currently supported via IU override for iGPS 2.0.
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public List<ScheduleInfo> getSchedules(String aoId) {
 		// TODO: Implement for KS. Currently supported via IU override for iGPS 2.0.
 		throw new UnsupportedOperationException();
