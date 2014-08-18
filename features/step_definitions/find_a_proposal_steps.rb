@@ -116,11 +116,11 @@ Then(/^I can view all the details of the course$/) do
       review.outcome_type_review(1).should include @course.outcome_list[0].outcome_type
       review.outcome_credit_review(1).should include "#{@course.outcome_list[0].credit_value}"
       #FORMATS
-      review.activity_level_review(1).should include "#{@course.format_list[0].activity_level}"
-      review.activity_type_review(1).should include @course.format_list[0].type
-      review.activity_contact_hours_frequency_review(1).should include "#{@course.format_list[0].contacted_hours}"
-      review.activity_contact_hours_frequency_review(1).should include @course.format_list[0].contact_frequency
-      review.activity_class_size_review(1).should include "#{@course.format_list[0].class_size}"
+      review.activity_level_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course.format_list[0].activity_level}"
+      review.activity_type_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include @course.format_list[0].type
+      review.activity_contact_hours_frequency_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course.format_list[0].contacted_hours}"
+      review.activity_contact_hours_frequency_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include @course.format_list[0].contact_frequency
+      review.activity_class_size_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course.format_list[0].class_size}"
 
     end
 end
