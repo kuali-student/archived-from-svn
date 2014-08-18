@@ -24,6 +24,7 @@ import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.util.constants.CourseOfferingSetServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,13 +44,19 @@ public class CourseOfferingSubscriptionServiceTest {
     private static final Logger log = LoggerFactory.getLogger(CourseOfferingSubscriptionServiceTest.class);
 
     @Resource
-    CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator;
-
-    @Resource
     CourseOfferingCallbackService courseOfferingCallbackService;
 
     @Resource
+    CourseOfferingService courseOfferingService;
+
+    @Resource
+    CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator;
+
+    @Resource
     CourseSeatCountService courseSeatCountService;
+
+    @Autowired
+    CourseOfferingSubscriptionAdvice courseOfferingSubscriptionAdvice;
 
     private ContextInfo contextInfo;
     private String principalId = "123";
@@ -69,9 +76,11 @@ public class CourseOfferingSubscriptionServiceTest {
     @Test
     public void testCallbackIfAoIsUpdated() throws Exception {
 
+        // client subscribes to AO update events; CourseSeatCountService or CWL service would do this
         courseOfferingSubscriptionServiceDecorator.subscribeToActivityOfferings(SubscriptionActionEnum.UPDATE,
                 courseOfferingCallbackService,
                 contextInfo);
+
 
         String formatId = "1";
         String courseId = "1";
@@ -87,7 +96,8 @@ public class CourseOfferingSubscriptionServiceTest {
         CourseOfferingInfo courseOfferingInfo = new CourseOfferingInfo();
         courseOfferingInfo.setTypeKey(courseOfferingTypeKey);
 
-        CourseOfferingInfo createdCo = courseOfferingSubscriptionServiceDecorator.createCourseOffering(
+        // On the CO side, a courseOffering is created
+        CourseOfferingInfo createdCo = courseOfferingService.createCourseOffering(
                 courseId,
                 termId,
                 courseOfferingTypeKey,
@@ -107,7 +117,8 @@ public class CourseOfferingSubscriptionServiceTest {
         formatOffering.setCourseOfferingId(createdCo.getId());
         formatOffering.setFormatId(formatId);
 
-        FormatOfferingInfo createdFo = courseOfferingSubscriptionServiceDecorator.createFormatOffering(
+        // On the CO side, a formatOffering is created
+        FormatOfferingInfo createdFo = courseOfferingService.createFormatOffering(
                 createdCo.getId(),
                 formatId,
                 formatOfferingTypeKey,
@@ -116,7 +127,8 @@ public class CourseOfferingSubscriptionServiceTest {
 
         activityOffering.setFormatOfferingId(createdFo.getId());
 
-        ActivityOfferingInfo createdAo = courseOfferingSubscriptionServiceDecorator.createActivityOffering(
+        // On the CO side, an activityOffering is created
+        ActivityOfferingInfo createdAo = courseOfferingService.createActivityOffering(
                 createdFo.getId(),
                 activityId,
                 activityOfferingTypeKey,
@@ -128,23 +140,25 @@ public class CourseOfferingSubscriptionServiceTest {
         courseSeatCountInfo.setActivityOfferingId(createdAo.getId());
         courseSeatCountInfo.setTypeKey(courseSeatCountTypeKey);
 
+        // On the CO side, an courseSeatCount is created
         courseSeatCountService.createCourseSeatCount(courseSeatCountTypeKey, courseSeatCountInfo, contextInfo);
 
         createdAo.setMaximumEnrollment(30);
         log.info("changing activityOffering " + createdAo.getId() + " maximumEnrollment to " +  createdAo.getMaximumEnrollment());
 
-        courseOfferingSubscriptionServiceDecorator.updateActivityOffering(
+        // On the CO side, an activityOffering is updated
+        courseOfferingService.updateActivityOffering(
                 createdAo.getId(),
                 createdAo,
                 contextInfo);
     }
 
-    public CourseOfferingSubscriptionServiceDecorator getCourseOfferingSubscriptionService() {
-        return courseOfferingSubscriptionServiceDecorator;
+    public CourseOfferingSubscriptionAdvice getCourseOfferingSubscriptionAdvice() {
+        return courseOfferingSubscriptionAdvice;
     }
 
-    public void setCourseOfferingSubscriptionServiceDecorator(CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator) {
-        this.courseOfferingSubscriptionServiceDecorator = courseOfferingSubscriptionServiceDecorator;
+    public void setCourseOfferingSubscriptionAdvice(CourseOfferingSubscriptionAdvice courseOfferingSubscriptionAdvice) {
+        this.courseOfferingSubscriptionAdvice = courseOfferingSubscriptionAdvice;
     }
 
     public CourseOfferingCallbackService getCourseOfferingCallbackService() {
@@ -153,5 +167,21 @@ public class CourseOfferingSubscriptionServiceTest {
 
     public void setCourseOfferingCallbackService(CourseOfferingCallbackService courseOfferingCallbackService) {
         this.courseOfferingCallbackService = courseOfferingCallbackService;
+    }
+
+    public CourseOfferingService getCourseOfferingService() {
+        return courseOfferingService;
+    }
+
+    public void setCourseOfferingService(CourseOfferingService courseOfferingService) {
+        this.courseOfferingService = courseOfferingService;
+    }
+
+    public CourseOfferingSubscriptionServiceDecorator getCourseOfferingSubscriptionServiceDecorator() {
+        return courseOfferingSubscriptionServiceDecorator;
+    }
+
+    public void setCourseOfferingSubscriptionServiceDecorator(CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator) {
+        this.courseOfferingSubscriptionServiceDecorator = courseOfferingSubscriptionServiceDecorator;
     }
 }

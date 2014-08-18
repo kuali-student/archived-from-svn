@@ -12,7 +12,7 @@
        Callback POC
     </description>
     <url>http://maven.apache.org</url>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kuali.student.api.version>2.0.0-services-M9-SNAPSHOT</kuali.student.api.version>
@@ -22,6 +22,7 @@
         <activemq.version>5.9.0</activemq.version>
         <apache.camel.version>2.12.2</apache.camel.version>
         <servlet.api.version>2.5</servlet.api.version>
+        <aspectj.version>1.7.3</aspectj.version>
     </properties>
 
     <dependencies>
@@ -96,6 +97,11 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jaxb</artifactId>
             <version>${apache.camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
     </dependencies>
 </project>
