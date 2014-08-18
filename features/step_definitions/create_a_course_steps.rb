@@ -292,7 +292,7 @@ And /^I should see the updated data on the Review proposal page$/ do
     page.outcome_credit_review(3) == "#{@course_proposal.submit_fields[0].outcome_list[2].credit_value}" unless @course_proposal.submit_fields[0].outcome_list[2].credit_value.nil?
 
     #ACTIVITY FORMAT
-    page.format_level_review(@course_proposal.approve_fields[0].format_list[0].format_level).should == "Format 1"
+    page.format_level_review(@course_proposal.approve_fields[0].format_list[0].format_level).should include "#{@course_proposal.approve_fields[0].format_list[0].format_level}"
     page.activity_type_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
     page.activity_type_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
     page.activity_contact_hours_frequency_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
