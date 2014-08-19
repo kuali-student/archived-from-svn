@@ -1272,6 +1272,7 @@ Then(/^I should see a new course admin proposal with a modified course title$/) 
 end
 
 When (/^I create a course proposal from a copy of a proposed course$/) do
+  sleep 30 #TODO workaround to avoid delay exceptions
   steps %{Given I am logged in as Curriculum Specialist}
   # navigate_rice_to_cm_home
   # @course_proposal.search(@course_proposal.proposal_title)
@@ -1293,6 +1294,7 @@ Then (/^I should see a new course proposal with modified titles$/) do
 end
 
 When (/^I create a course admin proposal from a copy of a proposed course$/) do
+  sleep 30 #TODO workaround to avoid delay exceptions
   steps %{Given I am logged in as Curriculum Specialist}
   @orig_course_proposal = @course_proposal
   @course_proposal = create CmCourseProposalObject, :copy_from_proposal => "Yes", :proposal_to_be_copied => @orig_course_proposal,
