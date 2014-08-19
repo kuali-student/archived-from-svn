@@ -89,9 +89,9 @@ class CmReviewProposal < BasePage
   value(:format_level_review) { |format_level, b| b.activity_format_review_section.section(id: /line#{format_level-1}$/,data_parent: "CM-ViewCourseView-Format-Details").header(id: /line#{format_level-1}$/).span(class: "uif-headerText-span").text }
   value(:activity_level_review) { |format_level,activity_level, b| b.activity_format_review_section.section(id:/line#{format_level-1}_line#{activity_level-1}$/).header(id: /line#{format_level-1}_line#{activity_level-1}$/).span(class: "uif-headerText-span").text }
   value(:activity_type_review)  { |format_level,activity_level, b| b.activity_format_review_section.section(id:/line#{format_level-1}_line#{activity_level-1}$/).header(id: /line#{format_level-1}_line#{activity_level-1}$/).span(class: "uif-headerText-span").text }
-  value(:activity_contact_hours_frequency_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: "activity_contactHours_line#{format_level-1}_line#{activity_level-1}_control").text }
-  value(:activity_duration_type_count_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: "activity_durationCount_line#{format_level-1}_line#{activity_level-1}_control").text }
-  value(:activity_class_size_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: "activity_anticipatedClassSize_line#{format_level-1}_line#{activity_level-1}_control").text }
+  value(:activity_contact_hours_frequency_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: /activity_contactHours.*\_line#{format_level-1}_line#{activity_level-1}_control/).text }
+  value(:activity_duration_type_count_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: /activity_durationCount.*\_line#{format_level-1}_line#{activity_level-1}_control/).text }
+  value(:activity_class_size_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: /activity_anticipatedClassSize.*\_line#{format_level-1}_line#{activity_level-1}_control/).text }
   element(:activity_format_error) { |b|b.div(id: "emptyStringFormats", class: /hasError/) }
 
   # ACTIVE DATES REVIEW FIELDS

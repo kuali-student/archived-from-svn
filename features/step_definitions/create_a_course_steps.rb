@@ -1372,13 +1372,13 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
     if (@orig_course_proposal.approve_fields[0].format_list.nil? == false)
       @orig_course_proposal.approve_fields[0].format_list.each do |format|
         page.format_level_review(format.format_level).should == "Format #{format.format_level}"
-        page.activity_type(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type == "Experiential Learning/Other"
-        page.activity_type(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
-        page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contacted_hours}"
-        page.activity_contact_hours_frequency_review(format.activity_level).should include "#{format.contact_frequency}"
-        page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_type}"
-        page.activity_duration_type_count_review(format.activity_level).should include "#{format.duration_count}"
-        page.activity_class_size_review(format.activity_level).should == "#{format.class_size}"
+        page.activity_type_review(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type == "Experiential Learning/Other"
+        page.activity_type_review(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
+        page.activity_contact_hours_frequency_review(format.format_level, format.activity_level).should include "#{format.contacted_hours}"
+        page.activity_contact_hours_frequency_review(format.format_level, format.activity_level).should include "#{format.contact_frequency}"
+        page.activity_duration_type_count_review(format.format_level, format.activity_level).should include "#{format.duration_type}"
+        page.activity_duration_type_count_review(format.format_level, format.activity_level).should include "#{format.duration_count}"
+        page.activity_class_size_review(format.format_level, format.activity_level).should == "#{format.class_size}"
       end
     end
 
