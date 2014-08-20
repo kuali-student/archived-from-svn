@@ -4092,12 +4092,12 @@
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>true</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
+            <assertions>false</assertions>
+            <subresults>false</subresults>
             <responseData>false</responseData>
             <samplerData>false</samplerData>
-            <xml>false</xml>
-            <fieldNames>true</fieldNames>
+            <xml>true</xml>
+            <fieldNames>false</fieldNames>
             <responseHeaders>false</responseHeaders>
             <requestHeaders>false</requestHeaders>
             <responseDataOnError>false</responseDataOnError>
@@ -4112,7 +4112,7 @@
             <idleTime>true</idleTime>
           </value>
         </objProp>
-        <stringProp name="filename">${__P(WORKSPACE)}/reports/svc_course_offering.csv</stringProp>
+        <stringProp name="filename">${__P(WORKSPACE)}/reports/svc_course_offering.jtl</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
