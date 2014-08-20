@@ -22,3 +22,10 @@ Feature: GT.Course Proposal Details_Requisites
     When I delete the requisite details on the course proposal
     And I perform a full search for the course proposal
     Then I should no longer see with requisite details on the course proposal
+
+  @draft
+  Scenario: CC13.5 Edit requisites on a Course Proposal using Edit Rule Logic
+    Given I have a course proposal with requisite details
+    When I update the requisite details on the course proposal using Edit Rule Logic
+    And I perform a full search for the course proposal
+    Then I should see updated requisite details on course proposal

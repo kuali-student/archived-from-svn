@@ -20,6 +20,8 @@ class CmCourseRequisite < DataFactory
   attr_accessor :requisite_type,
                 :left_group_node,
                 :right_group_node,
+                :third_group_node,
+                :rule_logic_text,
                 :logic_operator,
                 :rule_list
 
@@ -64,6 +66,17 @@ class CmCourseRequisite < DataFactory
 
   def edit (opts={})
     view
+    if opts[:rule_logic_text] != nil
+      on(CmCourseRequisitesPage).edit_rule_student_eligibility
+      on CmRequisiteRules do |rule|
+        rule.edit_rule_logic_action
+        rule.rule_logic_text.wait_until_present
+        rule.rule_logic_text.set opts[:rule_logic_text]
+        rule.rule_logic_preview
+        rule.update_rule_btn
+      end
+    end
+
     if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
       edit_rule_student_eligibility :logic_operator => opts[:logic_operator],
                                     :left_group_node => opts[:left_group_node],

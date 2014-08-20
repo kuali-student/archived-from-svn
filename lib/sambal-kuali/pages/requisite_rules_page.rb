@@ -79,4 +79,10 @@ class CmRequisiteRules < BasePage
   element(:select_rule_operator) {|level1, level2, b|b.select(:id => "prop_compoundOpCode_node_#{level2}_parent_node_#{level1}_parent_root_control")}
   element(:rule_element_link) {|level, b|b.div(:id => /.*_node_#{level}_parent_node_0_parent_root/)}
 
+# EDIT RULE LOGIC
+  element(:edit_rule_logic_tab) { |b| b.link(text: "Edit Rule Logic") }
+  action(:edit_rule_logic_action) { |b| b.edit_rule_logic_tab.click; b.loading_wait }
+  element(:rule_logic_text) { |b| b.textarea(id: "logicArea_control") }
+  action(:rule_logic_preview) { |b| b.button(id: "KRMS-LogicPreview-Button").when_present.click; b.loading_wait  }
+
 end
