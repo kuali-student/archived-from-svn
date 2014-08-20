@@ -210,6 +210,7 @@ Then(/^I should see updated requisite details on course proposal$/) do
         else
           raise "No requisite rule section defined!"
       end
+      page.prerequisites_operators_and_rules.should match /#{requisite.left_group_node.complete_rule_text}.*#{requisite.right_group_node.complete_rule_text}.*#{requisite.third_group_node.complete_rule_text}/m
     end
   end
 end
