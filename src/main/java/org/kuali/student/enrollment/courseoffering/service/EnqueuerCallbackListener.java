@@ -11,11 +11,12 @@
  */
 package org.kuali.student.enrollment.courseoffering.service;
 
-import org.apache.activemq.command.ActiveMQObjectMessage;
+
+import org.apache.activemq.command.ActiveMQMapMessage;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.JMSException;
-import javax.jms.ObjectMessage;
+import javax.jms.MapMessage;
 
 /**
  *
@@ -25,15 +26,35 @@ public class EnqueuerCallbackListener {
 
     private JmsTemplate jmsTemplate;
 
-    public boolean updateCallback (String offeringId) {
+    public static final String EVENT_QUEUE = "org.kuali.student.enrollment.courseOffering.eventQueue";
+
+    public static final String EVENT_QUEUE_MESSAGE_OFFERING_ID = "offeringId";
+
+    public static final String EVENT_QUEUE_MESSAGE_METHOD_NAME = "methodName";
+
+
+
+    public boolean updateCallback (String offeringId, String methodName) {
         try {
-            ObjectMessage objectMessage = new ActiveMQObjectMessage();
-            objectMessage.setObject(offeringId);
-//            jmsTemplate.convertAndSend("org.kuali.student.enrollment.courseOffering.eventQueue", objectMessage);
+
+            MapMessage mapMessage = new ActiveMQMapMessage();
+            mapMessage.setString(EVENT_QUEUE_MESSAGE_OFFERING_ID,offeringId);
+            mapMessage.setString(EVENT_QUEUE_MESSAGE_METHOD_NAME,methodName);
+            jmsTemplate.convertAndSend(EVENT_QUEUE,mapMessage);
+
         } catch (JMSException e) {
             throw new RuntimeException("Error submitting notification.", e);
         }
 
         return true;
     }
+
+
+
+
+
+
+
+
+
 }
