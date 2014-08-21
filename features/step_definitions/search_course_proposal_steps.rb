@@ -48,23 +48,23 @@ end
 
 When /^I perform a full search for the course proposal$/ do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
 end
 
 
 When /^I perform a search for the course proposal$/ do
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
 end
 
 And /^I perform a complete search for the course proposal$/ do
   navigate_rice_to_cm_home
-  @course_proposal_faculty.search(@course_proposal_faculty.proposal_title)
+  @course_proposal_faculty.search
 end
 
 And /^I perform a complete search for the course admin proposal$/ do
   navigate_rice_to_cm_home
-  @course_proposal_cs.search(@course_proposal_cs.proposal_title)
+  @course_proposal_cs.search
 end
 
 Then /^I should see my proposal listed in the search result$/ do
@@ -85,7 +85,7 @@ And /^I perform a partial search for Course Proposals$/ do
   navigate_rice_to_cm_home
   #using part of the text that is common across both test proposals
   search_text = @course_proposal_cs.proposal_title.slice(6,15)
-  @course_proposal_cs.search(search_text)
+  @course_proposal_cs.partial_search(search_text)
 end
 
 

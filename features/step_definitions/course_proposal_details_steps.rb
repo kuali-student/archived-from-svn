@@ -18,7 +18,7 @@ end
 
 And(/^I perform a search for the course proposal with given proposal ID$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   on FindProposalPage do |page|
     page.review_proposal_action_link(@course_proposal.proposal_title)
     page.loading_wait
@@ -76,7 +76,7 @@ end
 
 When(/^I update the Optional Other details on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   @course_proposal.optional_fields[0].instructor_list[0].delete :instructor_level => 1, :defer_save => true
@@ -139,7 +139,7 @@ end
 
 When(/^I delete Optional\-Other details on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   @course_proposal.optional_fields[0].instructor_list[0].delete :instructor_level => 1, :defer_save => true
@@ -301,7 +301,7 @@ end
 
 When(/^I update the author and collaborator details on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
   @course_proposal.author_list[0].delete :author_level => 1, :defer_save => true
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
@@ -332,7 +332,7 @@ end
 
 When(/^I delete the author and collaborator details on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
   @course_proposal.author_list[0].delete :author_level => 1, :defer_save => true
   @course_proposal.author_list[1].delete :author_level => 1
@@ -390,7 +390,7 @@ end
 
 When(/^I update the Supporting Documents on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   # Delete 1st Supporting Doc [0]
@@ -420,7 +420,7 @@ end
 
 When(/^I delete the Supporting Documents on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   @course_proposal.supporting_doc_list[0].delete :document_level => 1, :defer_save => true

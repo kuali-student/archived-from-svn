@@ -138,6 +138,10 @@ class CmReviewProposal < BasePage
   element(:return_to_node_list) { |b| b.div(class: "fancybox-inner").select_list(id: "CM-ReturnToPrevious-Dialog-NodeNamesDropdown_control") }
   element(:fyi_button) { |b| b.button(text: "FYI") }
   action(:fyi_review) { |b| b.fyi_button.click; b.loading_wait }
+  element(:acknowledge_button) { |b| b.button(text: "Acknowledge") }
+  action(:acknowledge) { |b| b.acknowledge_button.click; b.loading_wait }
+  action(:confirmation_acknowledge) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Acknowledge").click; b.loading_wait }
+  element(:acknowledge_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Acknowledge-Dialog-Explanation_control") }
 
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }

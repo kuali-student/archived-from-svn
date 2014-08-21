@@ -311,7 +311,7 @@ end
 
 And /^I should see updated data on the Review proposal page$/ do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
@@ -467,7 +467,7 @@ end
 
 When(/^I update Alternate Identifier details on the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
   @course_proposal.cross_listed_course_list[0].delete :cross_list_course_count => 1,:defer_save => true
   @course_proposal.cross_listed_course_list[1].edit :auto_lookup => true,
@@ -528,7 +528,7 @@ end
 
 When(/^I delete alternate identifier details to the course proposal$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   @course_proposal.cross_listed_course_list[0].delete :cross_list_course_count => 1, :defer_save => true
@@ -1120,14 +1120,14 @@ end
 
 Then(/^I should see a course proposal with a modified course title$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
 end
 
 Then(/^I should see all the copied details of the course on the Review Proposal page$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|
@@ -1321,7 +1321,7 @@ end
 When (/^I find a proposed course and select copy$/) do
   steps %{Given I am logged in as Faculty}
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
   @orig_course_proposal = @course_proposal
@@ -1335,7 +1335,7 @@ end
 
 And (/^I should see all the copied details of the proposal on the Review Proposal page$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |page|

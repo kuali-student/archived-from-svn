@@ -58,7 +58,7 @@ end
 When(/^I enter remaining fields on the partially created course proposal as Curriculum Specialist$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
 
   @course_proposal.edit :defer_save => true
 

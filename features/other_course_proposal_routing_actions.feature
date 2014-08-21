@@ -30,3 +30,27 @@ Feature: GT.Other Course Proposal Routing Actions
   Examples:
       |author|division_member|
       |fred  |eric           |
+
+#Acknowledge KSCM-2604
+@draft
+  Scenario Outline: RP7.3 Node Chairs can Acknowledge a proposal that has been Blanket Approved when they haven't already approved
+    Given I have a course proposal Blanket Approved by <blanket_approver>
+    When I Acknowledge the course proposal as a <division_chair>
+    Then I can see an Acknowledge decision
+  Examples:
+      |blanket_approver|division_chair|
+      |alice           |edna          |
+
+#Acknowledge KSCM-2604
+@draft
+  Scenario Outline: RP7.4 Node chairs cannot Acknowledge Blanket Approved proposals if they already approved
+    Given I have a course proposal Approved by <department_chair>
+    When I Blanket Approve the proposal as <blanket_approver>
+    And I Acknowledge the course proposal as a <senate_reviewer>
+    Then I can see the Acknowledge decisions
+    And Acknowledge decision is not displayed for <department_chair>
+
+  Examples:
+      |department_chair|blanket_approver|senate_reviewer|
+      |carol           |alice           | martha        |
+

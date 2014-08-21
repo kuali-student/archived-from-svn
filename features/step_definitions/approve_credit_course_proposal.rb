@@ -24,14 +24,14 @@ end
 And(/^I attempt to approve the course proposal as (.*?)$/) do |reviewer|
   log_in reviewer,reviewer
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
 
 end
 
 And(/^I review the course proposal as (.*?)$/) do |reviewer|
   log_in reviewer,reviewer
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 end
 
@@ -39,7 +39,7 @@ And(/^I approve the course proposal as (.*?)$/) do |approver|
   sleep 30 # to avoid workflow exceptions
   log_in approver, approver
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
   @course_proposal.approve_proposal
 end
@@ -133,7 +133,7 @@ Then(/^the course proposal is successfully approved$/) do
   end
   steps %{Given I am logged in as Curriculum Specialist}
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |review|
@@ -204,7 +204,7 @@ end
 Then(/^the proposal is successfully approved$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
     proposal.proposal_status.should include "Approved"
@@ -246,7 +246,7 @@ end
 When(/^I attempt to blanket approve the course proposal as Curriculum Specialist$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   navigate_rice_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.review_proposal_action
 end
 
@@ -287,9 +287,6 @@ When(/^I edit the course proposal as CS$/) do
 end
 
 Then(/^I can blanket approve the course proposal$/) do
-  navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
-  @course_proposal.review_proposal_action
   @course_proposal.blanket_approve_with_rationale
   on CmReviewProposal do |review|
     review.growl_text.should include "Document was successfully approved"

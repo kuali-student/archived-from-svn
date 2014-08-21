@@ -85,7 +85,7 @@ end
 
 When(/^I edit the Learning Objectives$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
   #Edit LO1
@@ -191,7 +191,7 @@ end
 
 When(/^I delete the Learning Objectives$/) do
   navigate_to_cm_home
-  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.search
   @course_proposal.edit_proposal_action
 
 

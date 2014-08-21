@@ -386,15 +386,23 @@ class CmCourseProposalObject < DataFactory
   end
 
 
-
-  def search(search_text)
+  def search
     navigate_to_find_course_proposal
        on FindProposalPage do |page|
           page.name.wait_until_present
-          page.name.set search_text
+          page.name.set @proposal_title
           page.find_a_proposal
        end
 
+  end
+
+  def partial_search(search_text)
+    navigate_to_find_course_proposal
+    on FindProposalPage do |page|
+      page.name.wait_until_present
+      page.name.set search_text
+      page.find_a_proposal
+    end
   end
 
   def load_comments_action
@@ -544,6 +552,9 @@ class CmCourseProposalObject < DataFactory
   end
 
   def blanket_approve_with_rationale
+    navigate_rice_to_cm_home
+    search
+    review_proposal_action
     on CmReviewProposal do |proposal|
       proposal.blanket_approve
       proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
@@ -572,6 +583,17 @@ class CmCourseProposalObject < DataFactory
  def fyi_review
    on CmReviewProposal do |proposal|
      proposal.fyi_review
+   end
+ end
+
+ def acknowledge
+   navigate_rice_to_cm_home
+   search
+   review_proposal_action
+   on CmReviewProposal do |proposal|
+     proposal.acknowledge
+     proposal.acknowledge_rationale.set random_alphanums(10,'test acknowledge rationale ')
+     proposal.confirmation_acknowledge
    end
  end
 
