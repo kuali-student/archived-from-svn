@@ -569,7 +569,11 @@ class CmCourseProposalObject < DataFactory
     end
   end
 
-
+ def fyi_review
+   on CmReviewProposal do |proposal|
+     proposal.fyi_review
+   end
+ end
 
   #-----
   private

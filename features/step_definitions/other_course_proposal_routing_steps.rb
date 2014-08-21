@@ -41,3 +41,39 @@ Then(/^I can resubmit the course proposal as (.*?)$/) do |author|
   end
 
 end
+
+When(/^I FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
+  log_in fyi_reviewer, fyi_reviewer
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  @course_proposal.fyi_review
+end
+
+Then(/^I can FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
+  log_in fyi_reviewer, fyi_reviewer
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |proposal|
+    proposal.fyi_button.exists?.should be_true
+  end
+  @course_proposal.fyi_review
+end
+
+When(/^I find the course proposal as a (.*?)$/) do |fyi_reviewer|
+  log_in fyi_reviewer, fyi_reviewer
+  navigate_rice_to_cm_home
+  @course_proposal.search(@course_proposal.proposal_title)
+  review_proposal_action
+end
+
+Then(/^I do not have the option to FYI the proposal$/) do
+    on CmReviewProposal do |proposal|
+      begin
+        proposal.fyi_button.exists?.should be_false
+      rescue
+        #means that the button was not found
+      end
+    end
+end
