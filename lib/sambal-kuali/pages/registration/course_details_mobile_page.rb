@@ -38,11 +38,14 @@ class CourseDetailsMobilePage < RegisterForCourseBase
   # selected messages
   element(:selected_message) { |b| b.div(id: "one_ao_selected") }
 
+  # tabs
+  element(:tab) { |ao_type,tab_name,b| b.div(id: "#{ao_type}_tab_#{tab_name}") }
+  action(:select_tab) { |ao_type,tab_name,b| b.tab(ao_type,tab_name).click }
+
   # activities
-  element(:results_table) { |activity_type,b| b.table(id: "#{activity_type}_search_results_table") }
-  element(:table_row) { |activity_type, ao_code, b| b.results_table(activity_type).row(id: "course_detail_row_#{ao_code}") }
   element(:select_box) { |ao_code, b| b.div(id: "select_#{ao_code}") }
   action(:toggle_ao_select) { |ao_code, b| b.select_box(ao_code).click }
+  element(:details) { |ao_code,tab,b| b.span(id: "detail_#{ao_code}_#{tab}").text }
 
   # Detail AO table column indexes
   AO_DAYS = 0

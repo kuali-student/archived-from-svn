@@ -70,6 +70,20 @@ Feature: REG.Course Search Mobile
     * I remove the course from my registration cart on the search page
     * I log out from student registration
 
+  #KSENROLL-14475
+  Scenario Outline: CR 19.3 - Test functioning of tabs to view various aspects of AO details
+    When I search for a course with "BSCI330" text option
+    Then courses containing "BSCI330" course code appear
+    And I can view the details of the BSCI330 course
+    When I choose the <tab> tab for <ao_type>
+    Then I see <expected> in the <tab> details for activity offering "<ao_code>"
+  Examples:
+    | tab       | ao_type | ao_code | expected                                      |
+    | time      | Lecture | Y       | Tu 6:30-9:30pm                                |
+    | instr     | Lecture | Y       | TERRI RAYMOND                                 |
+    | seatsLoc  | Lecture | Y       | PLS 1140 48/48                                |
+    | all       | Lecture | Y       | Tu 6:30-9:30pm TERRI RAYMOND PLS 1140 48/48   |
+
   #KSENROLL-14161
   Scenario: CR 19.13 - Student is notified that course search selection is already in registration cart
     Given I have added a CHEM course to my registration cart

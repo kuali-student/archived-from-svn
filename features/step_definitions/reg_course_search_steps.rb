@@ -174,3 +174,23 @@ Then /^I remove the course from my registration cart on the search page$/ do
     @reg_request.remove_from_cart_on_search
   end
 end
+
+When /^I choose the (\w+) tab for (\w+)$/ do |tab,ao_type|
+  @course_search_result.select_tab :ao_type=>ao_type, :tab=>tab
+end
+
+Then /^I see (.*) in the (\w+) details for activity offering "(\w+)"$/ do |expected, tab, ao_code|
+  on CourseDetailsMobilePage do |page|
+    results = case tab
+                when "time" then
+                  "#{page.details(ao_code, 'days')} #{page.details(ao_code, 'time')}"
+                when "instr" then
+                  "#{page.details(ao_code, 'instructor')}"
+                when "seatsLoc" then
+                  "#{page.details(ao_code, 'location')} #{page.details(ao_code, 'seatsOpen')}"
+                when "all" then
+                  "#{page.details(ao_code, 'days')} #{page.details(ao_code, 'time')} #{page.details(ao_code, 'instructor')} #{page.details(ao_code, 'location')} #{page.details(ao_code, 'seatsOpen')}"
+              end
+    results.should == expected
+  end
+end

@@ -66,6 +66,14 @@ class CourseSearch < DataFactory
     end
   end
 
+  def select_tab opts={}
+    return nil if opts[:ao_type].nil? || opts[:tab].nil? || (@browser.window.size.width > 640)
+    on CourseDetailsMobilePage do |page|
+      page.details_heading(opts[:ao_type]).wait_until_present
+      page.select_tab opts[:ao_type],opts[:tab]
+    end
+  end
+
   def edit opts={}
     edit_course_level opts
     edit_course_code opts
