@@ -253,11 +253,8 @@ class ManageCourseOfferings < BasePage
   end
 
   def cluster_deselect_all_aos(cluster_private_name = :default_cluster)
-    #TODO - revert if KSENROLL-7434 fixed
-    #target_cluster(cluster_private_name).table.row.checkbox.set
-    #target_cluster(cluster_private_name).table.row.checkbox.clear
-    code_list = codes_list(cluster_private_name)
-    deselect_aos(code_list, cluster_private_name)
+    target_cluster(cluster_private_name).table.row.checkbox.set
+    target_cluster(cluster_private_name).table.row.checkbox.clear
   end
 
   def codes_list(cluster_private_name = :default_cluster)
