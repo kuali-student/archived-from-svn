@@ -188,5 +188,11 @@ Then(/^the course proposal is successfully rejected$/) do
 end
 
 Then(/^I do not have the option to Reject the proposal$/) do
-
+   on CmReviewProposal do |page|
+    begin
+      page.reject_button.exists?.should be_false
+    rescue
+      # rescue means that the button was not found
+    end
+  end
 end
