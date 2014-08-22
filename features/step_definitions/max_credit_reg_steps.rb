@@ -40,6 +40,10 @@ When /^I add courses to my registration cart that would exceed the summer term c
   term_code = "201205"
   term_descr = "Summer I 2012"
 
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(term_code)
+
   # currently the cart processes in reverse order. so, if we want to get a max credit
   # error on WMST496M, it needs to be added first so that it's processed last
   course_options = (make CourseOptions, :credit_option => "2.5")
