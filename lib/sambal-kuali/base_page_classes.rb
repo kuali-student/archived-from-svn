@@ -199,6 +199,7 @@ module CalendarStickyFooter
   def delete_draft
     acal_sticky_footer_div.link(text: "Delete").click
     loading.wait_while_present
+    sleep 2 #no growl message shown here
   end
 end
 
