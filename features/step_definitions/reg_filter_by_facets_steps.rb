@@ -7,64 +7,118 @@ end
 
 
 And /^I narrow the search results to courses with available seats$/ do
-  on(CourseSearchPage).select_facet("avail_seats")
+  # mobile
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.select_facet("avail_seats")
+      @seats_avail_courses = page.seats_avail_count_number
+      page.toggle_show_facets
+    end
+  else
+    # large format
+    on CourseSearchPage do |page|
+      page.select_facet("avail_seats")
+      @seats_avail_courses = page.seats_avail_count_number
+    end
+  end
 end
 
 
 And(/^I narrow the search results by a specific course prefix$/) do
   @course_search_result.edit :course_prefix => "ENGL"
-  on(CourseSearchPage).select_facet("course_prefix",@course_search_result.course_prefix)
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.select_facet("course_prefix",@course_search_result.course_prefix)
+      page.toggle_show_facets
+    end
+  else
+    # large format
+    on(CourseSearchPage).select_facet("course_prefix",@course_search_result.course_prefix)
+  end
 end
 
 
 
-
 Then /^I should see only courses with available seats$/ do
-  on CourseSearchPage do |page|
-    # compare count displayed in the facet with actual rows displayed
-    seats_avail_courses = page.seats_avail_count_number
-    # add 1 because first table row is the header
-    page.results_table.rows.length.should == seats_avail_courses + 1
+    # compare count displayed in the facet with actual rows displayed; add 1 because first table row is the header
+    if @browser.window.size.width <= 640
+      on CourseSearchMobilePage do |page|
+        page.all_results(CourseSearchMobilePage::COURSE_CODE).length.should == @seats_avail_courses + 1
+      end
+    else
+      on CourseSearchPage do |page|
+        page.results_table.rows.length.should == @seats_avail_courses + 1
+      end
+    end
 
     #page.results_table.rows[1..-1].each do |row|   Implement when details view is fully built
     #  page.row_result_link(row).click
     #  page.seats_avail.should be_true
     #  page.back_to_search_results
     #end
-  end
 end
 
 
 Then(/^I should see only courses with the specific course prefix$/) do
-
-  on CourseSearchPage do |page|
-    page.results_table.rows[1..-1].each do |row|
-      page.course_prefix_by_row(row).should match /#{@course_search_result.course_code}/
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
+        course_code.slice(0,4).should == "#{@course_search_result.course_prefix}"
+      end
+    end
+  else
+    on CourseSearchPage do |page|
+      page.results_table.rows[1..-1].each do |row|
+        page.course_prefix_by_row(row).should == "#{@course_search_result.course_prefix}"
+      end
     end
   end
-
-
 end
 
 
 And(/^I narrow the search results by a specific course level$/) do
   @course_search_result.edit :course_level=>"400"
-  on(CourseSearchPage).select_facet("course_level",@course_search_result.course_level)
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.select_facet("course_level",@course_search_result.course_level)
+      page.toggle_show_facets
+    end
+    # large format
+  else
+    on(CourseSearchPage).select_facet("course_level",@course_search_result.course_level)
+  end
 end
 
 Then /^I should see only courses with the specific course level and the specific course prefix$/ do
-  on CourseSearchPage do |page|
-    page.results_table.rows[1..-1].each do |row|
-      page.courseLevel(row).should match /#{@course_search_result.course_level.slice(0,1)}/
-      page.course_prefix_by_row(row).should match /#{@course_search_result.course_code}/
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
+        course_code.slice(4,1).should == "#{@course_search_result.course_level.slice(0,1)}"
+        course_code.slice(0,4).should == "#{@course_search_result.course_prefix}"
+      end
+    end
+  else
+    on CourseSearchPage do |page|
+      page.results_table.rows[1..-1].each do |row|
+        page.courseLevel(row).should == "#{@course_search_result.course_level.slice(0,1)}"
+        page.course_prefix_by_row(row).should == "#{@course_search_result.course_prefix}"
+      end
     end
   end
 end
 
 Then(/^I should see only courses with the specific course level$/) do
-  on CourseSearchPage do |page|
-    page.results_table.rows[1..-1].each do |row|
-      page.courseLevel(row).should match /#{@course_search_result.course_level.slice(0,1)}/
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
+        course_code.slice(4,1).should == "#{@course_search_result.course_level.slice(0,1)}"
+      end
+    end
+  else
+    on CourseSearchPage do |page|
+      page.results_table.rows[1..-1].each do |row|
+        page.courseLevel(row).should == "#{@course_search_result.course_level.slice(0,1)}"
+      end
     end
   end
 end
