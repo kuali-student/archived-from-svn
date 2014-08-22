@@ -440,4 +440,22 @@ class WaitlistRoster < DataFactory
   def inspect
     "\nWaitlist Roster -- term: #{@term_code}, course: #{@course_code}, reg group: #{@reg_group_code}\nentries: #{@waitlist_entries}"
   end
+
+end
+class RegRestUtility < DataFactory
+  def initialize(browser, opts={})
+    @browser = browser
+
+  end
+
+
+  def clear_cart_and_schedule (term_code)
+    on RegistrationRestCallPage do |page|
+      page.clearSchedule term_code
+    end
+    on RegistrationCartRestCallPage do |page|
+      page.clearCart term_code
+    end
+  end
+
 end

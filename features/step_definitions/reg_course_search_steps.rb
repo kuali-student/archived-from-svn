@@ -123,6 +123,11 @@ Then /^I can see the selected section has been added to my cart$/ do
 end
 
 Given /^I have added a CHEM course to my registration cart$/ do
+
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule("201208")
+
   @reg_request = make RegistrationRequest, :term_descr=>"Fall 2012",
                       :course_code=>"CHEM241",
                       :reg_group_code=>"1014"

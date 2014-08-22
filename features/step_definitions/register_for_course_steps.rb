@@ -470,3 +470,12 @@ And /^I elect to keep the failed course in my cart$/ do
     page.keep_in_cart(@reg_request.course_code,@reg_request.reg_group_code)
   end
 end
+
+Given /^my schedule and cart are empty$/ do
+  on RegistrationRestCallPage do |page|
+    page.clearSchedule @term_code
+  end
+  on RegistrationCartRestCallPage do |page|
+    page.clearCart @term_code
+  end
+end

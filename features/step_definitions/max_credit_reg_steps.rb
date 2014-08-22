@@ -5,6 +5,11 @@ When /^I add courses to my registration cart that would exceed the spring term c
   reg_group_code = "1001"
   term_code = "201101"
   term_descr = "Spring 2011"
+
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(term_code)
+
   for i in (0..5)
     @reg_request_engl = make RegistrationRequest, :student_id=>"student2",
                              :term_code=>term_code,

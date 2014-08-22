@@ -66,6 +66,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   element(:sort_selector) { |column,b| b.i(id: "sort_selector_#{column}") }
   action(:sort_results_by) { |column,b| b.sort_selector(column).click }
   element(:course_code_result_link) { |course_code,b| b.tr(id: "course_detail_row_#{course_code}").td(index: 0).span }
+  element(:course_code_result_row) { |course_code,b| b.tr(id: "course_detail_row_#{course_code}") }
   element(:row_result_link) { |result_row,b| result_row.td(index: 0).span }
 
   # Pagination
@@ -246,6 +247,11 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
         return ""
       end
     end
+  end
+
+  #click on a row to go to details view
+  def select_course(course_code)
+    course_code_result_row(course_code).click
   end
 
   # Get number of data table rows safely
