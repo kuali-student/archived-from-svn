@@ -612,6 +612,18 @@ class CmCourseProposalObject < DataFactory
    end
  end
 
+ def reject_with_rationale
+   navigate_rice_to_cm_home
+   search
+   review_proposal_action
+   on CmReviewProposal do |proposal|
+     proposal.reject
+     proposal.reject_rationale.set random_alphanums(10,'test reject rationale ')
+     proposal.confirmation_reject
+   end
+ end
+
+
   #-----
   private
   #-----

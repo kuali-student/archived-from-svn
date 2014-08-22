@@ -125,9 +125,6 @@ Given(/^I have a course proposal Approved by (.*?)$/) do |department_chair|
   sleep 30 #TODO Find a better way to avoid workflow exceptions
 
   log_in department_chair, department_chair
-  navigate_rice_to_cm_home
-  @course_proposal.search
-  @course_proposal.review_proposal_action
   @course_proposal.approve_proposal
   sleep 30 #TODO Find a better way to avoid workflow exceptions
 end
@@ -171,5 +168,25 @@ And(/^Acknowledge decision is not displayed for (.*?)$/) do |department_approver
         # rescue means that the button was not found
       end
     end
+
+end
+
+
+
+When(/^I reject the course proposal as (.*?)$/) do |college_level_approver|
+    log_in college_level_approver, college_level_approver
+    @course_proposal.reject_with_rationale
+end
+
+Then(/^the course proposal is successfully rejected$/) do
+  return_to_cm_home
+  @course_proposal.search
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |proposal|
+    proposal.proposal_status.should include "Rejected"
+  end
+end
+
+Then(/^I do not have the option to Reject the proposal$/) do
 
 end

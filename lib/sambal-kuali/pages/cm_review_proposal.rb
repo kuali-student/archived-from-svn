@@ -113,7 +113,7 @@ class CmReviewProposal < BasePage
   value(:supporting_docs_review) { |b| b.div(id: "CM-Proposal-Review-SupportingDocuments-Section").text }
   element(:empty_supporting_docs_review) { |b| b.textarea(id: " ")}
 
-  #SUBMIT
+  #SUBMITCmReviewProposal
   element(:submit_button) { |b| b.button(text: "Submit")}
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
@@ -142,6 +142,11 @@ class CmReviewProposal < BasePage
   action(:acknowledge) { |b| b.acknowledge_button.click; b.loading_wait }
   action(:confirmation_acknowledge) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Acknowledge").click; b.loading_wait }
   element(:acknowledge_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Acknowledge-Dialog-Explanation_control") }
+  element(:reject_button) {|b| b.button(text: "Reject")}
+  action(:reject) { |b| b.reject_button.click; b.loading_wait }
+  element(:reject_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Reject-Dialog-Explanation_control") }
+  action(:confirmation_reject) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Reject").click; b.loading_wait }
+
 
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }

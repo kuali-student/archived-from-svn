@@ -54,3 +54,22 @@ Feature: GT.Other Course Proposal Routing Actions
       |department_chair|blanket_approver|senate_reviewer|
       |carol           |alice           | martha        |
 
+#Reject KSCM-2598
+@draft
+  Scenario Outline: RP7.6 Node chairs can Reject a proposal
+    Given I have a course proposal Approved by <department_chair>
+    When I reject the course proposal as <college_level_approver>
+    Then the course proposal is successfully rejected
+  Examples:
+    |department_chair|college_level_approver|
+    |carol           |earl                  |
+
+#Reject KSCM-2598
+@draft
+  Scenario Outline: RP7.7 Node members cannot reject a proposal that is not in their node
+    Given I have a course proposal with submit and approve fields submitted by <author>
+    When I find the course proposal as a <division_member>
+    Then I do not have the option to Reject the proposal
+  Examples:
+    |author|division_member|
+    |fred  |eric           |
