@@ -14,19 +14,19 @@ class CourseSearchMobilePage < RegisterForCourseBase
   element(:course_input_button) { |b| b.button(id: "searchSubmit") }
   action(:begin_course_search) { |b| b.course_input_button.click}
 
-  # Facets
-  element(:show_facets_toggle) { |b| b.div(id: "showFacetsToggle")}
-  action(:toggle_show_facets) { |b| b.show_facets_toggle.link.click }
-  element(:show_facets) { |b| b.span(id: "showFacets")}
-  element(:seats_avail_facet_div){ |b| b.div(id: "search_facet_seatsAvailable") }
-  element(:clear_seats_avail_facet) { |b| b.div(id: "search_facet_clear_seatsAvailable") }
-
   def search_for_a_course(course)
     course_input.set course
     begin_course_search
   end
 
   # Facets
+  #element(:show_facets_toggle) { |b| b.div(id: "showFacetsToggle")}
+  element(:show_facets_toggle) { |b| b.div(class: "kscr-SearchFacets-toggle")}
+  action(:toggle_show_facets) { |b| b.show_facets_toggle.link.click }
+  #element(:show_facets) { |b| b.span(id: "showFacets")}
+  element(:show_facets) { |b| b.span(class: "kscr-SearchFacets-toggle-label")}
+  element(:seats_avail_facet_div){ |b| b.div(id: "search_facet_seatsAvailable") }
+  element(:clear_seats_avail_facet) { |b| b.div(id: "search_facet_clear_seatsAvailable") }
   element(:seats_avail_toggle) { |b| b.li(id: "search_facet_seatsAvailable_option_Seatsavailable") }
   action(:toggle_seats_avail) { |b| b.seats_avail_toggle.click }
   element(:seats_avail_count) { |b| b.seats_avail_toggle.span(index: 1).text }
@@ -102,6 +102,26 @@ class CourseSearchMobilePage < RegisterForCourseBase
         clear_prefix_facet.wait_until_present
     end
     sleep 1
+  end
+
+  def clear_facet(facet_type,facet_value=nil)
+    show_facets_toggle.wait_until_present
+    toggle_show_facets if show_facets.visible?
+    seats_avail_facet_div.wait_until_present
+    case facet_type
+      when "avail_seats" then
+        toggle_seats_avail if seats_avail_toggle.attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
+        clear_seats_avail_facet.wait_while_present
+      when "credit" then
+        toggle_credits(facet_value) if credits_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
+        clear_credit_facet.wait_while_present
+      when "course_level" then
+        toggle_course_level(facet_value) if course_level_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
+        clear_level_facet.wait_while_present
+      when "course_prefix" then
+        toggle_course_prefix(facet_value) if course_prefix_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
+        clear_prefix_facet.wait_while_present
+    end
   end
 
 end

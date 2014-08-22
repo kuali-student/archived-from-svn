@@ -40,10 +40,10 @@ end
 
 
 Then /^I should see only courses with available seats$/ do
-    # compare count displayed in the facet with actual rows displayed; add 1 because first table row is the header
+    # compare count displayed in the facet with actual rows displayed; add 1 for table because first row is the header
     if @browser.window.size.width <= 640
       on CourseSearchMobilePage do |page|
-        page.all_results(CourseSearchMobilePage::COURSE_CODE).length.should == @seats_avail_courses + 1
+        page.all_results(CourseSearchMobilePage::COURSE_CODE).length.should == @seats_avail_courses
       end
     else
       on CourseSearchPage do |page|
@@ -131,21 +131,37 @@ When /^I narrow the search results using any facet$/ do
                                :course_level=> '300'
   @course_search_result.search :navigate=>true
   sleep 1
-  on CourseSearchPage do |page|
-    @search_results_before_facet_selection=page.results_table.text
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      @search_results_before_facet_selection=page.all_results(CourseSearchMobilePage::COURSE_CODE)
+      page.select_facet("course_level",@course_search_result.course_level)
+      page.toggle_show_facets
+    end
+  else
+    on CourseSearchPage do |page|
+      @search_results_before_facet_selection=page.results_table.text
+      page.select_facet("course_level",@course_search_result.course_level)
+    end
   end
-  on(CourseSearchPage).select_facet("course_level",@course_search_result.course_level)
 end
 
 
 
 And(/^I undo the filtering performed using the specified facet$/) do
-  on CourseSearchPage do |page|
-    page.clear_facet("course_level",@course_search_result.course_level)
-    sleep 2
-    @search_results_after_clearing=page.results_table.text
+  if @browser.window.size.width <= 640
+    on CourseSearchMobilePage do |page|
+      page.clear_facet("course_level",@course_search_result.course_level)
+      page.toggle_show_facets
+      sleep 4
+      @search_results_after_clearing=page.all_results(CourseSearchMobilePage::COURSE_CODE)
+    end
+  else
+    on CourseSearchPage do |page|
+      page.clear_facet("course_level",@course_search_result.course_level)
+      sleep 2
+      @search_results_after_clearing=page.results_table.text
+    end
   end
-
 end
 
 Then /^I should see the courses in the search results without any filtering being applied$/ do
