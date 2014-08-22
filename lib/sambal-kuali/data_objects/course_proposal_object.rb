@@ -530,9 +530,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def approve_proposal
-    navigate_rice_to_cm_home
-    search
-    review_proposal_action
+    navigate_to_review
     approve
   end
 
@@ -560,9 +558,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def blanket_approve_with_rationale
-    navigate_rice_to_cm_home
-    search
-    review_proposal_action
+    navigate_to_review
     on CmReviewProposal do |proposal|
       proposal.blanket_approve
       proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
@@ -589,9 +585,7 @@ class CmCourseProposalObject < DataFactory
   end
 
  def fyi_navigate_review
-   navigate_rice_to_cm_home
-   search
-   review_proposal_action
+   navigate_to_review
    fyi_review
  end
 
@@ -602,9 +596,7 @@ class CmCourseProposalObject < DataFactory
  end
 
  def acknowledge
-   navigate_rice_to_cm_home
-   search
-   review_proposal_action
+   navigate_to_review
    on CmReviewProposal do |proposal|
      proposal.acknowledge
      proposal.acknowledge_rationale.set random_alphanums(10,'test acknowledge rationale ')
@@ -613,15 +605,30 @@ class CmCourseProposalObject < DataFactory
  end
 
  def reject_with_rationale
-   navigate_rice_to_cm_home
-   search
-   review_proposal_action
+   navigate_to_review
    on CmReviewProposal do |proposal|
      proposal.reject
      proposal.reject_rationale.set random_alphanums(10,'test reject rationale ')
      proposal.confirmation_reject
    end
  end
+
+ def navigate_to_review
+   navigate_rice_to_cm_home
+   search
+   review_proposal_action
+ end
+  
+  
+  def withdraw_proposal
+    navigate_to_functional_home
+    navigate_to_review
+    on CmReviewProposal do |proposal|
+      proposal.withdraw
+      proposal.withdraw_rationale.set random_alphanums(10,'test withdraw rationale ')
+      proposal.confirmation_withdraw
+    end
+  end
 
 
   #-----

@@ -146,6 +146,11 @@ class CmReviewProposal < BasePage
   action(:reject) { |b| b.reject_button.click; b.loading_wait }
   element(:reject_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Reject-Dialog-Explanation_control") }
   action(:confirmation_reject) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Reject").click; b.loading_wait }
+  #WITHDRAW
+  element(:withdraw_button) {|b|b.button(text: "Withdraw") }
+  action(:withdraw) {|b| b.withdraw_button.click; b.loading_wait }
+  element(:withdraw_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Withdraw-Dialog-Explanation_control") }
+  action(:confirmation_withdraw) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Withdraw").click; b.loading_wait }
 
 
   #COURSE STATUS
