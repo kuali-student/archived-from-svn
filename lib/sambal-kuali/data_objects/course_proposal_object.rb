@@ -530,12 +530,20 @@ class CmCourseProposalObject < DataFactory
   end
 
   def approve_proposal
-    on CmReviewProposal do |approve|
-       approve.review_approval
-       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
-       approve.confirmation_approval
-   end
+    navigate_rice_to_cm_home
+    search
+    review_proposal_action
+    approve
   end
+
+  def approve
+    on CmReviewProposal do |approve|
+      approve.review_approval
+      approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
+      approve.confirmation_approval
+    end
+  end
+
 
   def approve_activate_proposal
     on CmCourseInformation do |activate|
@@ -579,6 +587,13 @@ class CmCourseProposalObject < DataFactory
       proposal.confirmation_approval
     end
   end
+
+ def fyi_navigate_review
+   navigate_rice_to_cm_home
+   search
+   review_proposal_action
+   fyi_review
+ end
 
  def fyi_review
    on CmReviewProposal do |proposal|

@@ -16,7 +16,7 @@ Feature: GT.Other Course Proposal Routing Actions
   Scenario Outline: RP7.1 Node members can FYI a proposal
     Given I have a course proposal with submit and approve fields submitted by <author>
     When I FYI the course proposal as a <department_member>
-    And I approve the course proposal as a <department_approver>
+    And I approve the course proposal as <department_approver>
     Then I can FYI the course proposal as a <division_member>
   Examples:
       |author|department_member|department_approver|division_member|

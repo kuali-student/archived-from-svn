@@ -38,9 +38,7 @@ end
 And(/^I approve the course proposal as (.*?)$/) do |approver|
   sleep 30 # to avoid workflow exceptions
   log_in approver, approver
-  navigate_rice_to_cm_home
-  @course_proposal.search
-  @course_proposal.review_proposal_action
+
   @course_proposal.approve_proposal
 end
 
@@ -114,7 +112,7 @@ And(/^I complete the missing fields on the proposal and approve as (.*?)$/) do |
 
 
   on(CmCourseInformation).review_proposal
-  @course_proposal.approve_proposal
+  @course_proposal.approve
 
 end
 

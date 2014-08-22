@@ -44,10 +44,8 @@ end
 
 When(/^I FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
   log_in fyi_reviewer, fyi_reviewer
-  navigate_rice_to_cm_home
-  @course_proposal.search
-  @course_proposal.review_proposal_action
-  @course_proposal.fyi_review
+
+  @course_proposal.fyi_navigate_review
 end
 
 Then(/^I can FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
@@ -65,7 +63,7 @@ When(/^I find the course proposal as a (.*?)$/) do |fyi_reviewer|
   log_in fyi_reviewer, fyi_reviewer
   navigate_rice_to_cm_home
   @course_proposal.search
-  review_proposal_action
+  @course_proposal.review_proposal_action
 end
 
 Then(/^I do not have the option to FYI the proposal$/) do
