@@ -1,5 +1,6 @@
 package org.kuali.student.ap.academicplan.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,7 +10,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.kuali.student.ap.academicplan.infc.Placeholder;
-import org.kuali.student.r2.common.infc.Attribute;
 import org.w3c.dom.Element;
 
 
@@ -23,7 +23,9 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PlaceholderInfo", propOrder = { "id", "typeKey", "exclusion", "parm1", "parm2", "parm3", "parm4", "notes", "_futureElements"})
-public class PlaceholderInfo implements Placeholder {
+public class PlaceholderInfo implements Placeholder, Serializable {
+
+	private static final long serialVersionUID = -525615078543375885L;
 
 	@XmlAttribute
     private String id;
