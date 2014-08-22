@@ -22,6 +22,7 @@ class CmAuthCollaboratorObject < DataFactory
     defaults = {
         :name => "CLIVE",
         :permission => "View",
+        :action_required => "FYI",
         :author_notation => :set,
         :author_level => 1,
         :auto_lookup => true,
@@ -37,6 +38,7 @@ class CmAuthCollaboratorObject < DataFactory
       page.add_person unless page.author_name(@author_level).exists?
       page.author_name(@author_level).set @name
       page.auto_lookup @name if @auto_lookup
+      page.action_required(@author_level).pick! @action_required
       page.author_permission(@author_level).pick! @permission
       page.author_notation(@author_level).fit @author_notation
     end

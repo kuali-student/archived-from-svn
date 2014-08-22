@@ -264,8 +264,8 @@ end
 When(/^I create a basic course proposal with authors and collaborators$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                     :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
-                                                                     (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear, :defer_save => true),
-                                                                     (make CmAuthCollaboratorObject, :name => "CHURCH", :author_level => 3, :permission => "Edit, Comments, View", :author_notation => :clear)
+                                                                     (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comment, View", :author_notation => :clear, :defer_save => true),
+                                                                     (make CmAuthCollaboratorObject, :name => "CHURCH", :author_level => 3, :permission => "Edit, Comment, View", :author_notation => :clear)
                                                                      ],
                                                     :defer_save => true
 end
@@ -281,8 +281,8 @@ Then(/^I should see author and collaborator details on the course proposal$/) do
       @course_proposal.author_list.each do |author|
           page.author_name_review(@course_proposal.author_list[collection_index].author_level).should include author.name
           page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "View" if author.permission == "View"
-          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comments, View"
-          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comments, View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comment, View"
+          page.author_permission_review(@course_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comment, View"
           page.action_request_review(@course_proposal.author_list[collection_index].author_level).should == "FYI"
           collection_index += 1
       end
@@ -293,7 +293,7 @@ Then(/^I should see author and collaborator details on the course proposal$/) do
 Given(/^have a basic course proposal with authors and collaborators$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
-                                             (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comments, View", :author_notation => :clear),
+                                             (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comment, View", :author_notation => :clear),
 
                             ],
                             :defer_save => true
