@@ -27,7 +27,7 @@ class AdminCommentObject < DataFactory
     created_by = ''
     created_date = ''
     on AdminComments do |page|
-      page.new_comment_field.set @text
+      page.new_comment_field.send_keys @text
       page.add_comment
     end
     on AdminComments do |page| #synch to page again
@@ -58,8 +58,8 @@ class AdminCommentObject < DataFactory
       on AdminComments do |page|
         comment_index = page.comment_index_by_text(@text)
         page.edit_comment_element(comment_index).click
-        page.comment_text_editor(comment_index).clear
-        page.comment_text_editor(comment_index).set options[:text]
+        page.comment_text_editor(comment_index).send_keys [:control, 'a'], :delete
+        page.comment_text_editor(comment_index).send_keys options[:text]
       end
     end
 

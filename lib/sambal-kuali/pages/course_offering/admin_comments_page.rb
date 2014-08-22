@@ -8,7 +8,7 @@ class AdminComments < BasePage
     self.iframe(class: "fancybox-iframe")
   end
 
-  element(:new_comment_field) { |b| b.frm.textarea(id: 'KS-NewCommentField_control') }
+  element(:new_comment_field) { |b| b.frm.iframe(id: 'KS-NewCommentField_control_ifr').body }
   element(:add_comment_element) { |b| b.frm.button(text: 'Add Comment') } #TODO: static id
   element(:add_comment) { |b| b.add_comment_element.click; b.loading.wait_while_present; sleep 1 }
 
@@ -38,7 +38,7 @@ class AdminComments < BasePage
   value(:comment_text){ |comment_index,b| b.frm.div(id: "KS-CommentField_UI_ID_line#{comment_index}").text }
   value(:comment_created_by){ |comment_index,b| b.frm.p(id: "creator-name-id_line#{comment_index}").text }
   value(:comment_created_date){ |comment_index,b| b.frm.p(id: "creator-date-id_line#{comment_index}").text }
-  action(:comment_text_editor){ |comment_index,b| b.frm.textarea(id: "KS-CommentField_ID_line#{comment_index}_control") }
+  action(:comment_text_editor){ |comment_index,b| b.frm.iframe(id: "KS-CommentField_ID_line#{comment_index}_control_ifr").body }
 
   action(:comment_save_edit){ |comment_index,b| b.frm.button(id: "KS-CommentSaveAction_ID_line#{comment_index}") }
   action(:comment_cancel_edit){ |comment_index,b| b.frm.button(id: "KS-CommentCancelAction_ID_line#{comment_index}") }
