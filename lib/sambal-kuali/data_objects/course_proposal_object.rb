@@ -363,8 +363,15 @@ class CmCourseProposalObject < DataFactory
 
   def cancel_course_proposal
      on CmCourseInformation do |page|
-       page.cancel
+       page.cancel_action
      end
+  end
+
+  def cancel_proposal_document
+    on CmCourseInformation do |page|
+      page.cancel_proposal
+      page.confirm_cancel_proposal
+    end
   end
 
   def set_curriculum_review

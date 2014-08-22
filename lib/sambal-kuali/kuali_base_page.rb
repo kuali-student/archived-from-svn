@@ -78,7 +78,10 @@ class BasePage < PageFactory
       element(:approve_and_activate_button) { |b| b.button(text: "Approve and Activate") }
       element(:approve_and_activate_disabled) { |b| b.button(text: "Approve and Activate", class: /disabled/) }
       action(:approve_and_activate) { |b| b.approve_and_activate_button.click }
-      action(:cancel_action) { |b| b.link(text: "Cancel").click; b.loading.wait_while_present }
+      action(:cancel_action) { |b| b.link(id: "CM-Proposal-Course-View-Cancel").click; b.loading.wait_while_present }
+      element(:cancel_proposal_button) { |b| b.div(id: "CM-Proposal-Course-Create-RightHeader").link(title: "Cancel Proposal").i(class: "ks-fontello-icon-block-1") }
+      action(:cancel_proposal) { |b| b.cancel_proposal_button.click; b.loading.wait_while_present }
+      action(:confirm_cancel_proposal) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Confirm").click; b.loading.wait_while_present }
       element(:review_proposal_element) { |b| b.a(id: "CM-Proposal-Course-ReviewProposalLink") }
       action(:review_proposal) { |b| b.review_proposal_element.click; b.loading_wait }
 

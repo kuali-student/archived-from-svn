@@ -43,3 +43,46 @@ Then(/^I cannot cancel the proposal as (.*?)$/) do  |faculty|
   end
 
 end
+
+
+And(/^I have a basic credit course proposal created$/) do
+  @course_proposal = create CmCourseProposalObject, :create_new_proposal => false, :create_basic_propsal => true,
+                            :proposal_title => random_alphanums(10,'test basic proposal title '),
+                            :course_title => random_alphanums(10,'test basic course title ')
+  @course_proposal.create_course_continue
+  @course_proposal.create_basic_proposal
+end
+
+
+When(/^I Cancel Proposal$/) do
+  @course_proposal.cancel_proposal_document
+end
+
+
+Then(/^can see the proposal has been cancelled$/) do
+  return_to_cm_home
+  @course_proposal.search
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |proposal|
+    proposal.proposal_status.should include "Cancelled"
+  end
+end
+
+
+Given(/^I have a credit course proposal submitted as Faculty$/) do
+  steps %{Given I have a proposal submitted as Faculty}
+end
+
+Then(/^I cannot cancel the proposal$/) do
+  return_to_cm_home
+  @course_proposal.search
+  @course_proposal.review_proposal_action
+  on CmReviewProposal do |proposal|
+    begin
+      proposal.cancel_proposal_button.exists?.should be_false
+    rescue
+      #means the button was not found
+    end
+  end
+
+end
