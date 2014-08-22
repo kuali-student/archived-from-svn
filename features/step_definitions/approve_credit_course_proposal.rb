@@ -285,6 +285,7 @@ When(/^I edit the course proposal as CS$/) do
 end
 
 Then(/^I can blanket approve the course proposal$/) do
+  navigate_to_functional_home
   @course_proposal.blanket_approve_with_rationale
   on CmReviewProposal do |review|
     review.growl_text.should include "Document was successfully approved"
