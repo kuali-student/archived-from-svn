@@ -151,6 +151,7 @@ public class CourseOfferingSubscriptionServiceTest {
                 createdAo.getId(),
                 createdAo,
                 contextInfo);
+        Thread.currentThread().sleep(5000);
     }
 
     public CourseOfferingSubscriptionAdvice getCourseOfferingSubscriptionAdvice() {

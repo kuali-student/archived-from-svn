@@ -7,24 +7,28 @@
           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
        xmlns:aop="http://www.springframework.org/schema/aop">
 
-    <bean id="courseOfferingSubscriptionServiceDecorator" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionServiceDecorator">
-        <property name="nextDecorator" ref="courseOfferingServiceMapImpl"/>
-    </bean>
+    <import resource="classpath:mq-context.xml" />
 
     <bean id="courseOfferingService" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingServiceMapImpl" />
+
+    <bean id="courseOfferingSubscriptionServiceDecorator" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionServiceDecorator">
+        <property name="nextDecorator" ref="courseOfferingService"/>
+    </bean>
+
     <bean id="courseOfferingCallbackService" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackServiceImpl">
         <property name="courseSeatCountService" ref="courseSeatCountService"/>
-        <property name="courseOfferingService" ref="courseOfferingServiceMapImpl"/>
+        <property name="courseOfferingService" ref="courseOfferingService"/>
     </bean>
 
     <bean id="courseSeatCountService" class="org.kuali.student.enrollment.courseseatcount.service.CourseSeatCountServiceImpl">
     </bean>
 
-
-    <bean id="courseOfferingServiceMapImpl" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingServiceMapImpl">
+    <bean id="enqueuerCallbackListener" class="org.kuali.student.enrollment.courseoffering.service.EnqueuerCallbackListener">
+        <property name="jmsTemplate" ref="jmsTemplate"/>
     </bean>
 
-    <bean id="enqueuerCallbackListener" class="org.kuali.student.enrollment.courseoffering.service.EnqueuerCallbackListener">
+    <bean id="dequeuerCallbackListener" class="org.kuali.student.enrollment.courseoffering.service.DequeuerCallbackListener">
+        <property name="courseOfferingCallbackService" ref="courseOfferingCallbackService"/>
     </bean>
 
     <bean id="subscriptionAspect" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionAdvice">
@@ -33,7 +37,7 @@
 
     <aop:config proxy-target-class="true">
         <aop:aspect ref="subscriptionAspect">
-            <aop:pointcut id="coCrud" expression="execution(* org.kuali.student.enrollment.courseoffering.service.CourseOfferingService.*(..))" />
+            <aop:pointcut id="coCrud" expression="execution(* org.kuali.student.enrollment.courseoffering.service.CourseOfferingService.updateActivityOffering(..))" />
             <aop:around pointcut-ref="coCrud" method="fireCallbacks" />
         </aop:aspect>
     </aop:config>

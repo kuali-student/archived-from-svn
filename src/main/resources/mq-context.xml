@@ -43,18 +43,6 @@
         <constructor-arg ref="connectionFactory" />
     </bean>
 
-
-    <jms:listener-container concurrency="1" >
-        <jms:listener id="coCallbackListener" destination="org.kuali.student.enrollment.courseOffering.eventQueue" ref="courseOfferingCallbackListener" />
-    </jms:listener-container>
-
-
-
-
-    <bean id="courseOfferingCallbackListener" class="org.kuali.student.enrollment.courseoffering.service.EnqueuerCallbackListener">
-
-    </bean>
-
     <bean id="jmsConfig"
           class="org.apache.camel.component.jms.JmsConfiguration">
         <property name="connectionFactory" ref="connectionFactory"/>
@@ -64,6 +52,15 @@
     <bean id="activemq"
           class="org.apache.activemq.camel.component.ActiveMQComponent">
         <property name="configuration" ref="jmsConfig"/>
+    </bean>
+
+    <jms:listener-container concurrency="1" >
+        <jms:listener destination="org.kuali.student.enrollment.courseoffering.eventQueue"
+                      ref="dequeuerCallbackListener" />
+    </jms:listener-container>
+
+    <bean id="dequeuerCallbackListener" class="org.kuali.student.enrollment.courseoffering.service.DequeuerCallbackListener">
+
     </bean>
 
 

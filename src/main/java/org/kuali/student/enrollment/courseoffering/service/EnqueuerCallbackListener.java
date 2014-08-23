@@ -26,7 +26,7 @@ public class EnqueuerCallbackListener {
 
     private JmsTemplate jmsTemplate;
 
-    public static final String EVENT_QUEUE = "org.kuali.student.enrollment.courseOffering.eventQueue";
+    public static final String EVENT_QUEUE = "org.kuali.student.enrollment.courseoffering.eventQueue";
 
     public static final String EVENT_QUEUE_MESSAGE_OFFERING_ID = "offeringId";
 
@@ -38,9 +38,9 @@ public class EnqueuerCallbackListener {
         try {
 
             MapMessage mapMessage = new ActiveMQMapMessage();
-            mapMessage.setString(EVENT_QUEUE_MESSAGE_OFFERING_ID,offeringId);
-            mapMessage.setString(EVENT_QUEUE_MESSAGE_METHOD_NAME,methodName);
-            jmsTemplate.convertAndSend(EVENT_QUEUE,mapMessage);
+            mapMessage.setStringProperty(EVENT_QUEUE_MESSAGE_OFFERING_ID, offeringId);
+            mapMessage.setStringProperty(EVENT_QUEUE_MESSAGE_METHOD_NAME, methodName);
+            jmsTemplate.convertAndSend(EVENT_QUEUE, mapMessage);
 
         } catch (JMSException e) {
             throw new RuntimeException("Error submitting notification.", e);
@@ -49,12 +49,12 @@ public class EnqueuerCallbackListener {
         return true;
     }
 
+    protected JmsTemplate getJmsTemplate() {
+        return jmsTemplate;
+    }
 
-
-
-
-
-
-
+    public void setJmsTemplate(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
+    }
 
 }

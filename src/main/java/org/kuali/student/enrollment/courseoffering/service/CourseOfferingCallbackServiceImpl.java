@@ -18,7 +18,10 @@ import java.util.List;
 public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallbackService {
     private static final Logger log = LoggerFactory.getLogger(CourseOfferingCallbackServiceImpl.class);
 
+    @Resource
     CourseSeatCountService courseSeatCountService;
+
+    @Resource
     CourseOfferingService courseOfferingService;
 
     @Override
