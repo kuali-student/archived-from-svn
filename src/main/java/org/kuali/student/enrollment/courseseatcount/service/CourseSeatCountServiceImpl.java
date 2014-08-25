@@ -4,6 +4,7 @@ import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.staxutils.StaxUtils;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.student.common.UUIDHelper;
+import org.kuali.student.enrollment.academicrecord.service.SubscriptionActionEnum;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackNamespaceConstants;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackService;
 import org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType;
@@ -71,7 +72,7 @@ public class CourseSeatCountServiceImpl implements CourseSeatCountService {
             CoSubscriptionPortType port = ss.getSOAPPort();
 
             log.info("CourseSeatCountService subscribing to AO updates");
-            port.subscribeToActivityOfferings(ref);
+            port.subscribeToActivityOfferings(SubscriptionActionEnum.UPDATE, ref, new ContextInfo());
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

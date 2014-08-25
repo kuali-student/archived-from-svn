@@ -30,7 +30,9 @@
         <wsdl:part element="tns:callback_message" name="return_message"/>
     </wsdl:message>
     <wsdl:message name="subscribe_to_aos">
+        <wsdl:part element="tns:SubscribeToActivityOfferings" name="callback_action"/>
         <wsdl:part element="tns:SubscribeToActivityOfferings" name="callback_object"/>
+        <wsdl:part element="tns:SubscribeToActivityOfferings" name="callback_context"/>
     </wsdl:message>
     <wsdl:message name="returnMessage">
         <wsdl:part element="tns:returnType" name="the_return"/>

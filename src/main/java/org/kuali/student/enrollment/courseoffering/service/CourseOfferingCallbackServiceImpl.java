@@ -60,40 +60,7 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
         statusInfo.setSuccess(true);
         return statusInfo;
     }
-/*
-    @Override
-    public String updateActivityOfferings(@WebParam(partName = "return_message",
-                                                    name = "callback_message",
-                                                    targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
-                                                    String returnMessage) {
 
-        log.info("callback received notification for updateActivityOfferings event ");
-//        for(String activityOfferingId : activityOfferingIds) {
-        String activityOfferingId = returnMessage.replace('[', ' ').replace(']', ' ').trim();
-        ContextInfo contextInfo = new ContextInfo();
-
-            log.info("updated activityOfferingId: " + activityOfferingId);
-            try {
-                ActivityOfferingInfo activityOfferingInfo = courseOfferingService.getActivityOffering(activityOfferingId, contextInfo);
-                CourseSeatCountInfo courseSeatCountInfo =
-                        courseSeatCountService.getCourseSeatCountByActivityOffering(activityOfferingId, contextInfo);
-
-                if(courseSeatCountInfo.getSeats().equals(activityOfferingInfo.getMaximumEnrollment())) {
-                    log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
-                            + " to " + activityOfferingInfo.getMaximumEnrollment()
-                            + " for activityOffering " + activityOfferingId);
-                    courseSeatCountInfo.setSeats(activityOfferingInfo.getMaximumEnrollment());
-                    courseSeatCountService.updateCourseSeatCount(courseSeatCountInfo.getId(), courseSeatCountInfo, contextInfo);
-                }
-            } catch(Exception e) {
-                log.error("Exception occurred in callback", e);
-            }
-//        }
-        StatusInfo statusInfo = new StatusInfo();
-        statusInfo.setSuccess(true);
-        return "success";
-    }
-*/
     @Override
     public StatusInfo updateActivityOfferings(@WebParam(partName = "return_message", name = "callback_message",
                                                         targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)

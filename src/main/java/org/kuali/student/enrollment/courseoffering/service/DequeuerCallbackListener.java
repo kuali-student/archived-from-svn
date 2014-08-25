@@ -12,6 +12,7 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.kuali.student.enrollment.academicrecord.service.SubscriptionActionEnum;
+import org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -32,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.jws.WebParam;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.WebServiceFeature;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
@@ -44,7 +46,7 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
         portName = "SOAPPort",
         targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE,
         endpointInterface = "org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType")
-public class DequeuerCallbackListener implements CourseOfferingSubscriptionService, MessageListener {
+public class DequeuerCallbackListener implements CourseOfferingSubscriptionService, CoSubscriptionPortType, MessageListener {
     private static final Logger log = LoggerFactory.getLogger(DequeuerCallbackListener.class);
 
     @Resource
@@ -95,14 +97,20 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
         throw new OperationFailedException("operation has not been implemented");
     }
 
-    public String subscribeToActivityOfferings(W3CEndpointReference callbackObject) {
+    @Override
+    public String subscribeToActivityOfferings(
+            SubscriptionActionEnum action,
+            W3CEndpointReference callbackObject,
+            ContextInfo contextInfo) {
         WebServiceFeature[] wfs = new WebServiceFeature[] {};
         CourseOfferingCallbackService port = callbackObject.getPort(CourseOfferingCallbackService.class, wfs);
 
-        String id = UUID.randomUUID().toString();
-        Selector selector = new Selector(SubscriptionActionEnum.UPDATE, port);
-        callbacks.put(id, selector);
-        log.info("CourseOfferingCallbackService added to CourseOfferingSubscriptionService subscriber list");
+        String id = null;
+        try {
+            id = subscribeToActivityOfferings(action, port, new ContextInfo());
+        } catch(Exception e) {
+            log.error("Exception occurred at subscribeToActivityOfferings ", e);
+        }
         return id;
     }
 
@@ -115,7 +123,11 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
             MissingParameterException,
             OperationFailedException,
             PermissionDeniedException {
-        throw new OperationFailedException("operation has not been implemented");
+        String id = UUID.randomUUID().toString();
+        Selector selector = new Selector(action, courseOfferingCallbackService);
+        callbacks.put(id, selector);
+        log.info("CourseOfferingCallbackService added to CourseOfferingSubscriptionService subscriber list");
+        return id;
     }
 
     @Override
@@ -268,14 +280,9 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
             String offeringId = message.getStringProperty(EnqueuerCallbackListener.EVENT_QUEUE_MESSAGE_OFFERING_ID);
 
             if("updateActivityOffering".equals(methodName)) {
-//                String id = info.getId();
                 Selector target = new Selector(SubscriptionActionEnum.UPDATE, null);
-//                target.code = info.getCourseCode();
                 target.offeringId = offeringId;
-//                target.offeringTypeKey = info.getTypeKey();
-//                target.termId = info.getTermId();
                 this.fireSelectedCallbacks(target, offeringId);
-//                courseOfferingCallbackService.updateActivityOfferings(Arrays.asList(new String[] { offeringId }), new ContextInfo());
             } else {
                 log.warn(methodName + " not supported");
             }
