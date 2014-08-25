@@ -12,7 +12,7 @@ Feature: GT.Other Course Proposal Routing Actions
       |fred  |carl               |edna             |
       |alice |carl               |edna             |
 
-@draft
+@nightly
   Scenario Outline: RP7.1 Node members can FYI a proposal
     Given I have a course proposal with submit and approve fields submitted by <author>
     When I FYI the course proposal as a <department_member>
@@ -22,7 +22,7 @@ Feature: GT.Other Course Proposal Routing Actions
       |author|department_member|department_approver|division_member|
       |fred  |fred             |carl               |eric           |
 
-@draft
+@nightly
   Scenario Outline: RP7.2 Node members cannot FYI a proposal that isn't in their node
     Given I have a course proposal with submit and approve fields submitted by <author>
     When I find the course proposal as a <division_member>
