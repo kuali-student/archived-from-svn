@@ -1,5 +1,7 @@
 package org.kuali.student.enrollment.courseoffering.service.cxf;
 
+import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackNamespaceConstants;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -15,22 +17,22 @@ import java.net.URL;
  * 
  */
 @WebServiceClient(name = "SOAPService", 
-                  wsdlLocation = "file:/Users/jonrcook/intellij/sandbox/callback-poc/src/main/resources/basic_callback.wsdl",
-                  targetNamespace = "http://apache.org/callback")
+                  wsdlLocation = "file:/src/main/resources/basic_callback.wsdl",
+                  targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
 public class SOAPService extends Service {
 
     public final static URL WSDL_LOCATION;
 
-    public final static QName SERVICE = new QName("http://apache.org/callback", "SOAPService");
-    public final static QName SOAPPort = new QName("http://apache.org/callback", "SOAPPort");
+    public final static QName SERVICE = new QName(CourseOfferingCallbackNamespaceConstants.NAMESPACE, "SOAPService");
+    public final static QName SOAPPort = new QName(CourseOfferingCallbackNamespaceConstants.NAMESPACE, "SOAPPort");
     static {
         URL url = null;
         try {
-            url = new URL("file:/Users/jonrcook/intellij/sandbox/callback-poc/src/main/resources/basic_callback.wsdl");
+            url = new URL("file:/src/main/resources/basic_callback.wsdl");
         } catch (MalformedURLException e) {
             java.util.logging.Logger.getLogger(SOAPService.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "file:/Users/jonrcook/intellij/sandbox/callback-poc/src/main/resources/basic_callback.wsdl");
+                     "Can not initialize the default wsdl from {0}", "file:/src/main/resources/basic_callback.wsdl");
         }
         WSDL_LOCATION = url;
     }

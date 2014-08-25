@@ -16,10 +16,6 @@
 
     <bean id="courseOfferingService" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingServiceMapImpl" />
 
-    <bean id="courseOfferingSubscriptionServiceDecorator" class="org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionServiceDecorator">
-        <property name="nextDecorator" ref="courseOfferingService"/>
-    </bean>
-
     <bean id="courseSeatCountService" class="org.kuali.student.enrollment.courseseatcount.service.CourseSeatCountServiceImpl" init-method="init">
         <property name="courseOfferingCallbackService" ref="courseOfferingCallbackService"/>
     </bean>
@@ -38,7 +34,7 @@
 
     <aop:config proxy-target-class="true">
         <aop:aspect ref="subscriptionAspect">
-            <aop:pointcut id="coCrud" expression="execution(* org.kuali.student.enrollment.courseoffering.service.CourseOfferingService.updateActivityOffering(..))" />
+            <aop:pointcut id="coCrud" expression="execution(* org.kuali.student.enrollment.courseoffering.service.CourseOfferingService.*(..))" />
             <aop:after-returning pointcut-ref="coCrud" method="broadcast" />
         </aop:aspect>
     </aop:config>

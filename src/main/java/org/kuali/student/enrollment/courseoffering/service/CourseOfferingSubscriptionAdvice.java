@@ -28,7 +28,7 @@ public class CourseOfferingSubscriptionAdvice {
         try {
             Object[] args = joinPoint.getArgs();
             Object id = args[0];
-            enqueuerCallbackListener.updateCallback(id.toString(),
+            enqueuerCallbackListener.updateCallbacks(id.toString(),
                                                     joinPoint.getSignature().getName());
         } catch (Throwable e) {
             throw new RuntimeException(e);

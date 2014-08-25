@@ -12,7 +12,6 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.kuali.student.enrollment.academicrecord.service.SubscriptionActionEnum;
-import org.kuali.student.enrollment.courseoffering.service.cxf.CoCallbackPortType;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -43,7 +42,7 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
  */
 @javax.jws.WebService(serviceName = "SOAPService",
         portName = "SOAPPort",
-        targetNamespace = "http://apache.org/callback",
+        targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE,
         endpointInterface = "org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType")
 public class DequeuerCallbackListener implements CourseOfferingSubscriptionService, MessageListener {
     private static final Logger log = LoggerFactory.getLogger(DequeuerCallbackListener.class);
@@ -62,9 +61,9 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
         String code;
         String offeringTypeKey;
         SubscriptionActionEnum action;
-        CoCallbackPortType callback;
+        CourseOfferingCallbackService callback;
 
-        public Selector(SubscriptionActionEnum action, CoCallbackPortType callback) {
+        public Selector(SubscriptionActionEnum action, CourseOfferingCallbackService callback) {
             this.action = action;
             this.callback = callback;
         }
@@ -98,12 +97,12 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
 
     public String subscribeToActivityOfferings(W3CEndpointReference callbackObject) {
         WebServiceFeature[] wfs = new WebServiceFeature[] {};
-        CoCallbackPortType port = callbackObject.getPort(CoCallbackPortType.class, wfs);
+        CourseOfferingCallbackService port = callbackObject.getPort(CourseOfferingCallbackService.class, wfs);
 
         String id = UUID.randomUUID().toString();
         Selector selector = new Selector(SubscriptionActionEnum.UPDATE, port);
         callbacks.put(id, selector);
-        log.info(port.getClass() + " added to CourseOfferingSubscriptionService subscriber list");
+        log.info("CourseOfferingCallbackService added to CourseOfferingSubscriptionService subscriber list");
         return id;
     }
 
@@ -212,12 +211,12 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
         }
     }
 
-    protected void callCallback(CoCallbackPortType callback,
+    protected void callCallback(CourseOfferingCallbackService callback,
                                 SubscriptionActionEnum action,
                                 String id) {
         switch (action) {
             case UPDATE:
-                callback.updateActivityOfferings(Arrays.asList(id).toString());
+                callback.updateActivityOfferings(Arrays.asList(new String[] {id}), new ContextInfo());
                 break;
             default:
                 throw new RuntimeException("operation has not been implemented");

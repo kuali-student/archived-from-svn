@@ -25,16 +25,11 @@ import javax.jms.MapMessage;
 public class EnqueuerCallbackListener {
 
     private JmsTemplate jmsTemplate;
-
     public static final String EVENT_QUEUE = "org.kuali.student.enrollment.courseoffering.eventQueue";
-
     public static final String EVENT_QUEUE_MESSAGE_OFFERING_ID = "offeringId";
-
     public static final String EVENT_QUEUE_MESSAGE_METHOD_NAME = "methodName";
 
-
-
-    public boolean updateCallback (String offeringId, String methodName) {
+    public boolean updateCallbacks (String offeringId, String methodName) {
         try {
 
             MapMessage mapMessage = new ActiveMQMapMessage();

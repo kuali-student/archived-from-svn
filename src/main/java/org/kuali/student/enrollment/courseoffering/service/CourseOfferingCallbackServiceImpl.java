@@ -1,7 +1,6 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
-import org.kuali.student.enrollment.courseoffering.service.cxf.CoCallbackPortType;
 import org.kuali.student.enrollment.courseseatcount.dto.CourseSeatCountInfo;
 import org.kuali.student.enrollment.courseseatcount.service.CourseSeatCountService;
 import org.kuali.student.r2.common.dto.ContextInfo;
@@ -16,11 +15,11 @@ import java.util.List;
 /**
  * @author Kuali Student Team
  */
-@javax.jws.WebService(serviceName = "CoCallbackService",
-        portName = "COCallbackPort",
-        endpointInterface = "org.kuali.student.enrollment.courseoffering.service.cxf.CoCallbackPortType",
+@javax.jws.WebService(serviceName = "CourseOfferingCallbackService",
+        portName = "CourseOfferingCallbackService",
+        endpointInterface = "org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackService",
         targetNamespace = "http://localhost/callback")
-public class CourseOfferingCallbackServiceImpl implements CoCallbackPortType,  CourseOfferingCallbackService {
+public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallbackService {
     private static final Logger log = LoggerFactory.getLogger(CourseOfferingCallbackServiceImpl.class);
 
     @Resource
@@ -61,11 +60,11 @@ public class CourseOfferingCallbackServiceImpl implements CoCallbackPortType,  C
         statusInfo.setSuccess(true);
         return statusInfo;
     }
-
+/*
     @Override
     public String updateActivityOfferings(@WebParam(partName = "return_message",
                                                     name = "callback_message",
-                                                    targetNamespace = "http://apache.org/callback")
+                                                    targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
                                                     String returnMessage) {
 
         log.info("callback received notification for updateActivityOfferings event ");
@@ -94,9 +93,13 @@ public class CourseOfferingCallbackServiceImpl implements CoCallbackPortType,  C
         statusInfo.setSuccess(true);
         return "success";
     }
-
+*/
     @Override
-    public StatusInfo updateActivityOfferings(List<String> activityOfferingIds, ContextInfo contextInfo) {
+    public StatusInfo updateActivityOfferings(@WebParam(partName = "return_message", name = "callback_message",
+                                                        targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
+                                                        List<String> activityOfferingIds,
+                                              @WebParam(name = "contextInfo")ContextInfo contextInfo) {
+
         log.info("callback received notification for updateActivityOfferings event ");
         for(String activityOfferingId : activityOfferingIds) {
             log.info("updated activityOfferingId: " + activityOfferingId);

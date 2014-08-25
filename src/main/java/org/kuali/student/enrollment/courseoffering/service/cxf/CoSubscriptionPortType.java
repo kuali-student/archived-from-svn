@@ -1,5 +1,7 @@
 package org.kuali.student.enrollment.courseoffering.service.cxf;
 
+import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackNamespaceConstants;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -13,15 +15,15 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * Generated source version: 2.7.12
  * 
  */
-@WebService(targetNamespace = "http://apache.org/callback", name = "CoSubscriptionPortType")
+@WebService(targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE, name = "CoSubscriptionPortType")
 @XmlSeeAlso({ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface CoSubscriptionPortType {
 
-    @WebResult(name = "returnType", targetNamespace = "http://apache.org/callback", partName = "the_return")
+    @WebResult(name = "returnType", targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE, partName = "the_return")
     @WebMethod(operationName = "SubscribeToActivityOfferings")
     public String subscribeToActivityOfferings(
-            @WebParam(partName = "callback_object", name = "SubscribeToActivityOfferings", targetNamespace = "http://apache.org/callback")
+            @WebParam(partName = "callback_object", name = "SubscribeToActivityOfferings", targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
             javax.xml.ws.wsaddressing.W3CEndpointReference callbackObject
     );
 }

@@ -45,8 +45,6 @@ public class CourseOfferingSubscriptionServiceTest {
     @Resource
     CourseOfferingService courseOfferingService;
     @Resource
-    CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator;
-    @Resource
     CourseSeatCountService courseSeatCountService;
     @Autowired
     CourseOfferingSubscriptionAdvice courseOfferingSubscriptionAdvice;
@@ -139,7 +137,7 @@ public class CourseOfferingSubscriptionServiceTest {
                 createdAo,
                 contextInfo);
         log.info("testCallbackIfAoIsUpdated waiting for ActiveMq to finish processing tests...");
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         log.info("testCallbackIfAoIsUpdated finished waiting for ActiveMq to finish processing tests...");
     }
 
@@ -165,13 +163,5 @@ public class CourseOfferingSubscriptionServiceTest {
 
     public void setCourseOfferingService(CourseOfferingService courseOfferingService) {
         this.courseOfferingService = courseOfferingService;
-    }
-
-    public CourseOfferingSubscriptionServiceDecorator getCourseOfferingSubscriptionServiceDecorator() {
-        return courseOfferingSubscriptionServiceDecorator;
-    }
-
-    public void setCourseOfferingSubscriptionServiceDecorator(CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator) {
-        this.courseOfferingSubscriptionServiceDecorator = courseOfferingSubscriptionServiceDecorator;
     }
 }

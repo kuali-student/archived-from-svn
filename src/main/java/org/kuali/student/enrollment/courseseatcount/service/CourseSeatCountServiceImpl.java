@@ -4,6 +4,7 @@ import org.apache.cxf.helpers.DOMUtils;
 import org.apache.cxf.staxutils.StaxUtils;
 import org.kuali.rice.core.api.criteria.QueryByCriteria;
 import org.kuali.student.common.UUIDHelper;
+import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackNamespaceConstants;
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackService;
 import org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType;
 import org.kuali.student.enrollment.courseoffering.service.cxf.SOAPService;
@@ -45,13 +46,13 @@ public class CourseSeatCountServiceImpl implements CourseSeatCountService {
     private static final Logger log = LoggerFactory.getLogger(CourseSeatCountServiceImpl.class);
     private Map<String, CourseSeatCountInfo> courseSeatCountMap = new LinkedHashMap<String, CourseSeatCountInfo>();
     private static final QName SERVICE_NAME
-            = new QName("http://apache.org/callback", "SOAPService");
+            = new QName(CourseOfferingCallbackNamespaceConstants.NAMESPACE, "SOAPService");
 
     CourseOfferingCallbackService courseOfferingCallbackService;
 
     public void init() {
 
-        String address = "http://localhost:9005/CallbackContext/COCallbackPort";
+        String address = "http://localhost:9005/CallbackContext/CourseOfferingCallbackService";
         Endpoint callbackEndpoint = Endpoint.publish(address, courseOfferingCallbackService);
         log.info("CourseSeatCountService published courseOfferingCallbackService UpdateActivityOfferings at address: " + address);
 
@@ -64,22 +65,14 @@ public class CourseSeatCountServiceImpl implements CourseSeatCountService {
 
             W3CEndpointReference ref = (W3CEndpointReference) callbackEndpoint.getEndpointReference(referenceParameters);
 
-            URL wsdlURL;
-            File wsdlFile = new File("/Users/jonrcook/intellij/sandbox/callback-poc/src/main/resources/basic_callback.wsdl");
-            if (wsdlFile.exists()) {
-                wsdlURL = wsdlFile.toURI().toURL();
-            } else {
-                wsdlURL = new URL("basic_callback.wsdl");
-            }
+            URL wsdlURL = this.getClass().getResource("/basic_callback.wsdl");
 
             SOAPService ss = new SOAPService(wsdlURL, SERVICE_NAME);
             CoSubscriptionPortType port = ss.getSOAPPort();
 
             log.info("CourseSeatCountService subscribing to AO updates");
             port.subscribeToActivityOfferings(ref);
-        } catch(XMLStreamException e) {
-            throw new RuntimeException(e);
-        } catch(MalformedURLException e) {
+        } catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
