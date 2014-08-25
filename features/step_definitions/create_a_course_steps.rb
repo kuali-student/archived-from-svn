@@ -1042,24 +1042,24 @@ When(/^I find an approved Course and select copy$/) do
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format11 = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
-                 :type => "Discussion",
+                 :type => "Lecture",
                  :contacted_hours => 3,
                  :contact_frequency => "per week",
                  :duration_count => nil,
                  :duration_type => nil,
                  :class_size => 0 )
 
-  format12 = (make CmFormatsObject,  :format_level => 1,
-                  :activity_level => 2,
-                  :type => "Lecture",
+  format21 = (make CmFormatsObject,  :format_level => 2,
+                  :activity_level => 1,
+                  :type => "Discussion",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
                   :duration_type => nil,
                   :class_size => 0 )
 
-  format21 = (make CmFormatsObject,  :format_level => 2,
-                  :activity_level => 1,
+  format22 = (make CmFormatsObject,  :format_level => 2,
+                  :activity_level => 2,
                   :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
@@ -1102,7 +1102,7 @@ When(/^I find an approved Course and select copy$/) do
                  :pass_fail_transcript_grade => "Yes",
                  :final_exam_status => "Standard Final Exam",
                  :outcome_list => [outcome1],
-                 :format_list => [format11, format12, format21],
+                 :format_list => [format11, format21, format22],
                  :learning_objective_list => [learn_obj2],
                  # ACTIVE DATES
                  :start_term => "Winter 2010",
