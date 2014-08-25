@@ -240,7 +240,7 @@ Then(/^I should see Learning Objective and category details on the course propos
     lo_list.each do |lo|
       page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
         lo.category_list.each do |cat|
-          page.learning_objectives_review(lo.display_level).should include cat.category_name
+          page.learning_objectives_review(lo.display_level).downcase.should include cat.category_name.downcase
         end
     end
   end
