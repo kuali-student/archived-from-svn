@@ -59,7 +59,9 @@ class CoursePlannerPage < BasePage
   element(:view_more_details) {|b|b.a(id:"bookmark_widget_footer")}
   element(:course_interm) {|term,code,b|b.div(id:"kuali-atp-#{term}_planned_#{code}_code")}
 
-
+  element(:academic_planner_header) {|b|b.div(class:"uif-messageField ksap-plan-header ks-plan-Header-headline uif-boxLayoutHorizontalItem")}
+  element(:academic_planner_label) {|b|b.div(class:"uif-message uif-boxLayoutHorizontalItem")}
+  element(:planner_courses_detail_list){ |b|b.div(id:"planner_courses_detail_list")}
   #action(:course_page_click) {|b| b.div(id:"applicationNavigation").a(text:"Find Courses").click}
 
 end

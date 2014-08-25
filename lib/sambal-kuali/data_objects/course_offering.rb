@@ -109,12 +109,59 @@ class CourseSearchResults < DataFactory
   end
 
 
+  def remove_code_from_planned_backup
+
+
+    on CoursePlannerPage do |page|
+
+      begin
+        #page.course_planner_header.wait_until_present
+        page.planner_courses_detail_list.wait_until_present
+        # page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code) != nil?
+        # puts page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code)
+        # page.course_code_term_click(@course_search_result.planned_term, @course_search_result.course_code)
+        page.course_code_term(@planned_term, @course_code) != nil?
+        puts page.course_code_term(@planned_term, @course_code)
+        page.course_code_term_click(@planned_term, @course_code)
+        page.course_code_delete_click
+        page.delete_course.wait_until_present
+        page.delete_course_click
+        page.refresh
+      rescue
+        #means that course was NOT found, BUT be careful as the rescue will hide errors if they occur in cleanup steps
+      end
+
+
+      begin
+        #page.course_planner_header.wait_until_present
+        page.planner_courses_detail_list.wait_until_present
+        # page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code) != nil?
+        # puts page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)
+        # page.course_code_term_click_backup(@course_search_result.planned_term, @course_search_result.course_code)
+        page.course_code_term_backup(@planned_term, @course_code) != nil?
+        puts page.course_code_term_backup(@planned_term, @course_code)
+        page.course_code_term_click_backup(@planned_term, @course_code)
+
+      page.course_code_delete_click
+        page.delete_course.wait_until_present
+        page.delete_course_click
+        page.refresh
+
+
+      rescue
+        #   puts "the rescuer"
+        #means that course was NOT found, BUT be careful as the rescue will hide errors if they occur in cleanup steps
+      end
+    end
+
+  end
+
   def remove_course_from_plan_or_backup
     on CoursePlannerPage do |page|
 
       begin
         #page.course_planner_header.wait_until_present
-        sleep 5
+        page.planner_courses_detail_list.wait_until_present
         page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code) != nil?
         puts page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code)
         page.course_code_term_click(@course_search_result.planned_term, @course_search_result.course_code)
@@ -129,7 +176,7 @@ class CourseSearchResults < DataFactory
 
       begin
         #page.course_planner_header.wait_until_present
-        sleep 5
+        page.planner_courses_detail_list.wait_until_present
         if   page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code) != nil?
           puts page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)
           page.course_code_term_click_backup(@course_search_result.planned_term, @course_search_result.course_code)

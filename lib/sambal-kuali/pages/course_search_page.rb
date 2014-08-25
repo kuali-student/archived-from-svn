@@ -58,6 +58,7 @@ class CourseSearch < BasePage
   element(:clear_credit_facet) { |b| b.div(id:"facet_credits_disclosureContent").li(class:"all") }
   element(:clear_level_facet) { |b| b.div(id:"facet_level_disclosureContent").li(class:"all") }
   element(:clear_courseprefix_facet) { |b| b.div(id:"facet_curriculum_disclosureContent").li(class:"all") }
+  element(:course_search_results_facets) {|b|b.div(id:"course_search_results_facets")}
 
 
   #facets
