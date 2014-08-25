@@ -54,6 +54,7 @@ class CmCommentsObject < DataFactory
 
   def close_comment_dialog()
     on CmProposalComments do |page|
+      page.close.wait_until_present(60)
       page.close_dialog
       page.loading_wait
     end
