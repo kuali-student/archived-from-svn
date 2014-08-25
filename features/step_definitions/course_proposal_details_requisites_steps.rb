@@ -191,6 +191,7 @@ end
 When(/^I update the requisite details on the course proposal using Edit Rule Logic$/) do
   @course.course_requisite_list[0].edit :requisite_type => "Student Eligibility & Prerequisite", :rule_logic_text => "(A AND C) OR B"
   @course.determine_save_action
+  sleep 30 #TODO to avoid occasional edit requisite failures.
 end
 
 
