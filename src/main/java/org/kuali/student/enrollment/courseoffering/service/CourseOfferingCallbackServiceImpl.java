@@ -1,6 +1,7 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
+import org.kuali.student.enrollment.courseoffering.service.cxf.CoCallbackPortType;
 import org.kuali.student.enrollment.courseseatcount.dto.CourseSeatCountInfo;
 import org.kuali.student.enrollment.courseseatcount.service.CourseSeatCountService;
 import org.kuali.student.r2.common.dto.ContextInfo;
@@ -15,7 +16,11 @@ import java.util.List;
 /**
  * @author Kuali Student Team
  */
-public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallbackService {
+@javax.jws.WebService(serviceName = "CoCallbackService",
+        portName = "COCallbackPort",
+        endpointInterface = "org.kuali.student.enrollment.courseoffering.service.cxf.CoCallbackPortType",
+        targetNamespace = "http://localhost/callback")
+public class CourseOfferingCallbackServiceImpl implements CoCallbackPortType,  CourseOfferingCallbackService {
     private static final Logger log = LoggerFactory.getLogger(CourseOfferingCallbackServiceImpl.class);
 
     @Resource
@@ -58,6 +63,39 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
     }
 
     @Override
+    public String updateActivityOfferings(@WebParam(partName = "return_message",
+                                                    name = "callback_message",
+                                                    targetNamespace = "http://apache.org/callback")
+                                                    String returnMessage) {
+
+        log.info("callback received notification for updateActivityOfferings event ");
+//        for(String activityOfferingId : activityOfferingIds) {
+        String activityOfferingId = returnMessage.replace('[', ' ').replace(']', ' ').trim();
+        ContextInfo contextInfo = new ContextInfo();
+
+            log.info("updated activityOfferingId: " + activityOfferingId);
+            try {
+                ActivityOfferingInfo activityOfferingInfo = courseOfferingService.getActivityOffering(activityOfferingId, contextInfo);
+                CourseSeatCountInfo courseSeatCountInfo =
+                        courseSeatCountService.getCourseSeatCountByActivityOffering(activityOfferingId, contextInfo);
+
+                if(courseSeatCountInfo.getSeats().equals(activityOfferingInfo.getMaximumEnrollment())) {
+                    log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
+                            + " to " + activityOfferingInfo.getMaximumEnrollment()
+                            + " for activityOffering " + activityOfferingId);
+                    courseSeatCountInfo.setSeats(activityOfferingInfo.getMaximumEnrollment());
+                    courseSeatCountService.updateCourseSeatCount(courseSeatCountInfo.getId(), courseSeatCountInfo, contextInfo);
+                }
+            } catch(Exception e) {
+                log.error("Exception occurred in callback", e);
+            }
+//        }
+        StatusInfo statusInfo = new StatusInfo();
+        statusInfo.setSuccess(true);
+        return "success";
+    }
+
+    @Override
     public StatusInfo updateActivityOfferings(List<String> activityOfferingIds, ContextInfo contextInfo) {
         log.info("callback received notification for updateActivityOfferings event ");
         for(String activityOfferingId : activityOfferingIds) {
@@ -67,7 +105,7 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
                 CourseSeatCountInfo courseSeatCountInfo =
                         courseSeatCountService.getCourseSeatCountByActivityOffering(activityOfferingId, contextInfo);
 
-                if(courseSeatCountInfo.getSeats() != activityOfferingInfo.getMaximumEnrollment()) {
+                if(courseSeatCountInfo.getSeats().equals(activityOfferingInfo.getMaximumEnrollment())) {
                     log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
                             + " to " + activityOfferingInfo.getMaximumEnrollment()
                             + " for activityOffering " + activityOfferingId);

@@ -14,7 +14,6 @@ package org.kuali.student.enrollment.courseoffering.service;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kuali.student.enrollment.academicrecord.service.SubscriptionActionEnum;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.CourseOfferingInfo;
 import org.kuali.student.enrollment.courseoffering.dto.FormatOfferingInfo;
@@ -33,8 +32,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * @author Kuali Student Team
  */
@@ -45,21 +42,17 @@ public class CourseOfferingSubscriptionServiceTest {
 
     @Resource
     CourseOfferingCallbackService courseOfferingCallbackService;
-
     @Resource
     CourseOfferingService courseOfferingService;
-
     @Resource
     CourseOfferingSubscriptionServiceDecorator courseOfferingSubscriptionServiceDecorator;
-
     @Resource
     CourseSeatCountService courseSeatCountService;
-
     @Autowired
     CourseOfferingSubscriptionAdvice courseOfferingSubscriptionAdvice;
 
     private ContextInfo contextInfo;
-    private String principalId = "123";
+    private String principalId;
 
     @org.junit.Before
     public void setUp() {
@@ -76,16 +69,10 @@ public class CourseOfferingSubscriptionServiceTest {
     @Test
     public void testCallbackIfAoIsUpdated() throws Exception {
 
-        // client subscribes to AO update events; CourseSeatCountService or CWL service would do this
-        courseOfferingSubscriptionServiceDecorator.subscribeToActivityOfferings(SubscriptionActionEnum.UPDATE,
-                courseOfferingCallbackService,
-                contextInfo);
-
-
-        String formatId = "1";
-        String courseId = "1";
-        String activityId = "1";
-        String termId = "1";
+        String formatId = "formatId1";
+        String courseId = "courseId1";
+        String activityId = "activityId1";
+        String termId = "termId1";
         String activityOfferingTypeKey = "kuali.lui.type.activity.offering.lecture";
         String courseOfferingTypeKey = "course.offering.type";
         String courseSeatCountTypeKey = "course.seat.count.type";
@@ -140,7 +127,7 @@ public class CourseOfferingSubscriptionServiceTest {
         courseSeatCountInfo.setActivityOfferingId(createdAo.getId());
         courseSeatCountInfo.setTypeKey(courseSeatCountTypeKey);
 
-        // On the CO side, an courseSeatCount is created
+        // On the CO side, a courseSeatCount is created
         courseSeatCountService.createCourseSeatCount(courseSeatCountTypeKey, courseSeatCountInfo, contextInfo);
 
         createdAo.setMaximumEnrollment(30);
@@ -151,7 +138,9 @@ public class CourseOfferingSubscriptionServiceTest {
                 createdAo.getId(),
                 createdAo,
                 contextInfo);
-        Thread.currentThread().sleep(5000);
+        log.info("testCallbackIfAoIsUpdated waiting for ActiveMq to finish processing tests...");
+        Thread.sleep(5000);
+        log.info("testCallbackIfAoIsUpdated finished waiting for ActiveMq to finish processing tests...");
     }
 
     public CourseOfferingSubscriptionAdvice getCourseOfferingSubscriptionAdvice() {

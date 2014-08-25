@@ -11,9 +11,9 @@
  */
 package org.kuali.student.enrollment.courseoffering.service;
 
+import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
  * @author Kuali Student Team
@@ -24,15 +24,12 @@ public class CourseOfferingSubscriptionAdvice {
 
     EnqueuerCallbackListener enqueuerCallbackListener;
 
-    public Object fireCallbacks(ProceedingJoinPoint joinPoint) {
+    public void broadcast(JoinPoint joinPoint) {
         try {
-            Object result = joinPoint.proceed(); // go ahead and do your business
-
             Object[] args = joinPoint.getArgs();
             Object id = args[0];
             enqueuerCallbackListener.updateCallback(id.toString(),
                                                     joinPoint.getSignature().getName());
-            return result;
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
