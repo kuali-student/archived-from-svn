@@ -227,7 +227,6 @@ Then(/^I should be able to add the course with Multiple Activity Offerings to my
     sleep 5
     page.add_to_button_enabled.enabled?.should==true
     page.add_to_button_enabled.click
-    page.activity_offering_code()
     codescription_add_plan_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
     courseterm_add_plan_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
     formatlist_add_plan_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
@@ -290,12 +289,14 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
     course_code=@course_search_result.course_code
     page.lecture_lab_discussion.exists?.should==true
     page.lecture.exists?.should==true
-    page.lecture_lab_discussion.click
+    #click on lecture_lab_discussion
+    #page.lecture_lab_discussion.click
     page.ao_lecture(course_code).exists?.should==true
     page.ao_discussion(course_code).exists?.should==true
     page.ao_lecture(course_code).exists?.should==true
 
-
+    page.add_to_button_enabled.click
+    sleep 5
 
      codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
      courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
@@ -319,13 +320,13 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
     activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
 
 
-    #Validation for discussion
-    page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_code}/
-    page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_instructor}/
-    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_days}/
-    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_2.activity_offering_time
-    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_location}/
-    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_seats}/
+    #Validation for Lab
+    page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_code}/
+    page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_instructor}/
+    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_days}/
+    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_3.activity_offering_time
+    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_location}/
+    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_seats}/
 
 
     codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
@@ -335,12 +336,12 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
     activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
 
     #Validation for Lab
-    page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_code}/
-    page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_instructor}/
-    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_days}/
-    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_3.activity_offering_time
-    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_location}/
-    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_seats}/
+    page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_code}/
+    page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_instructor}/
+    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_days}/
+    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_2.activity_offering_time
+    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_location}/
+    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_seats}/
     page.add_to_button_enabled.click
     #Validation for Lecture after planned
     page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
@@ -385,7 +386,7 @@ end
 And(/^I select the format offerings$/) do
 
   on CourseSectionPage do |page|
-    page.add_to_button_disabled.wait_until_present
+  page.lecture_lab_discussion.click
   end
   codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
   courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
@@ -394,37 +395,37 @@ And(/^I select the format offerings$/) do
   activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
 
 
-  #Validation for Lecture
-  page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_code}/
-  page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_instructor}/
-  page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_days}/
-  page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_1.activity_offering_time
-  page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_location}/
-  page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_seats}/
-
-  codescription_fo_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-  courseterm_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-  formatlist_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
-  formatoffering_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-  activityoffering_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
-  codescription_fo_level_1= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-  courseterm_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-  formatlist_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
-  formatoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-  activityoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
-  codescription_fo_level_2= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-  courseterm_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-  formatlist_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
-  formatoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[2].fo_format_level}"
-  activityoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+  # #Validation for Lecture
+  # page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_code}/
+  # page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_instructor}/
+  # page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_days}/
+  # page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_1.activity_offering_time
+  # page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_location}/
+  # page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_seats}/
+  #
+  # codescription_fo_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+  # courseterm_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+  # formatlist_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
+  # formatoffering_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
+  # activityoffering_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+  #
+   codescription_fo_level_1= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+   courseterm_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+   formatlist_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
+   formatoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
+   activityoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+  #
+   codescription_fo_level_2= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+   courseterm_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+   formatlist_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
+   formatoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[2].fo_format_level}"
+   activityoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
 
   on CourseSectionPage do |page|
     page.add_to_button_disabled.exists?.should==true
     page.activityoffering_checkbox(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).click
-    page.activityoffering_checkbox(codescription_level_1,courseterm_level_1,formatlist_level_1,formatoffering_level_1,activityoffering_level_1).click
-    page.activityoffering_checkbox(codescription_level_2,courseterm_level_2,formatlist_level_2,formatoffering_level_2,activityoffering_level_2).click
+    page.activityoffering_checkbox(codescription_fo_level_1,courseterm_fo_level_1,formatlist_fo_level_1,formatoffering_fo_level_1,activityoffering_fo_level_1).click
+    page.activityoffering_checkbox(codescription_fo_level_2,courseterm_fo_level_2,formatlist_fo_level_2,formatoffering_fo_level_2,activityoffering_fo_level_2).click
   end
 
 

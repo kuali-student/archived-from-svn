@@ -196,13 +196,13 @@ And(/^I select the activity offerings$/) do
   description_co_term_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
   description_formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
   description_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[1].ao_activityoffering_level}"
+  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
 
   on CourseSectionPage do |page|
     page.add_to_button_disabled.exists?.should==true
     page.activityoffering_checkbox(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).click
     #sleep 10
-    page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level)
+    #page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
     page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
    # sleep 10
   end
