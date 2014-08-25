@@ -1042,15 +1042,15 @@ When(/^I find an approved Course and select copy$/) do
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format11 = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
-                 :type => "Lecture",
+                 :type => "Discussion",
                  :contacted_hours => 3,
                  :contact_frequency => "per week",
                  :duration_count => nil,
                  :duration_type => nil,
                  :class_size => 0 )
 
-  format21 = (make CmFormatsObject,  :format_level => 2,
-                  :activity_level => 1,
+  format12 = (make CmFormatsObject,  :format_level => 1,
+                  :activity_level => 2,
                   :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
@@ -1058,9 +1058,9 @@ When(/^I find an approved Course and select copy$/) do
                   :duration_type => nil,
                   :class_size => 0 )
 
-  format22 = (make CmFormatsObject,  :format_level => 2,
-                  :activity_level => 2,
-                  :type => "Discussion",
+  format21 = (make CmFormatsObject,  :format_level => 2,
+                  :activity_level => 1,
+                  :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1102,7 +1102,7 @@ When(/^I find an approved Course and select copy$/) do
                  :pass_fail_transcript_grade => "Yes",
                  :final_exam_status => "Standard Final Exam",
                  :outcome_list => [outcome1],
-                 :format_list => [format11, format21, format22],
+                 :format_list => [format11, format12, format21],
                  :learning_objective_list => [learn_obj2],
                  # ACTIVE DATES
                  :start_term => "Winter 2010",
@@ -1111,11 +1111,16 @@ When(/^I find an approved Course and select copy$/) do
 
   @course.view_course
 
+  sleep 10 #TODO to avoid Format Offering sorting issues.
+
   @course_proposal = create CmCourseProposalObject, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copied " + @course.course_title,
                             :use_view_course => true,
                             :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+
+  sleep 30 #TODO to avoid Format Offering sorting issues.
+
 end
 
 Then(/^I should see a course proposal with a modified course title$/) do
