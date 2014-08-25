@@ -39,6 +39,7 @@ class CmAuthCollaboratorObject < DataFactory
       page.author_name(@author_level).set @name
       page.auto_lookup @name if @auto_lookup
       page.action_required(@author_level).pick! @action_required
+      page.loading_wait
       page.author_permission(@author_level).pick! @permission
       page.author_notation(@author_level).fit @author_notation
     end
