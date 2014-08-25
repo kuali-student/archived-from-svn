@@ -20,9 +20,8 @@ class CourseSearchMobilePage < RegisterForCourseBase
   end
 
   # Facets
-  #element(:show_facets_toggle) { |b| b.div(id: "showFacetsToggle")}
-  element(:show_facets_toggle) { |b| b.div(class: "kscr-SearchFacets-toggle")}
-  action(:toggle_show_facets) { |b| b.show_facets_toggle.link.click }
+  element(:show_facets_toggle) { |b| b.link(id: "show_facets_toggle")}
+  action(:toggle_show_facets) { |b| b.show_facets_toggle.click }
   #element(:show_facets) { |b| b.span(id: "showFacets")}
   element(:show_facets) { |b| b.span(class: "kscr-SearchFacets-toggle-label")}
   element(:seats_avail_facet_div){ |b| b.div(id: "search_facet_seatsAvailable") }
