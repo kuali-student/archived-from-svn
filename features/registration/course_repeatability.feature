@@ -7,11 +7,14 @@ Feature: REG.Course Repeatability
             previously attempted and received a specific mark
 
   Background:
-    Given I am logged in as a Student
+    Given I am using a mobile screen size
 
 #KSENROLL-14505
-  Scenario: CR 18.1 Ensure student cannot register for course more than twice.
-    When I attempt to register for a course that I have already taken twice
+  Scenario: CR 18.1 Ensure student cannot register for course more than the maximum allowable number of times.
+    Given I log in to student registration as R.JOANL
+    When I attempt to register for a course that I have already taken the maximum allowable number of times
+    Then there is a message indicating that registration failed
+    And there is a message indicating that I have taken the course the maximum allowable number of times
 
 #KSENROLL-14506
   Scenario: CR 18.2 Ensure students cannot repeat a course in which they have received a specific mark
