@@ -58,6 +58,7 @@ class AdminCommentObject < DataFactory
       on AdminComments do |page|
         comment_index = page.comment_index_by_text(@text)
         page.edit_comment_element(comment_index).click
+        page.comment_text_editor(comment_index).wait_until_present
         page.comment_text_editor(comment_index).send_keys [:control, 'a'], :delete
         page.comment_text_editor(comment_index).send_keys options[:text]
       end
