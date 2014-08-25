@@ -303,18 +303,6 @@ Then /^the student is registered for the course$/ do
   end
 end
 
-Then /^the student's registered courses credit total for the term should be updated$/ do
-  on AdminRegistration do |page|
-    @updated_credits = 0
-    page.registered_courses_rows.each do |row|
-      @updated_credits += page.get_registered_course_credits(row).to_i
-    end
-    @updated_credits.equal?(@total_credits).should be_false
-
-    page.student_info_go  #Needed to leave the browser in a clean state
-  end
-end
-
 When /^I attempt to register a student for a course that failed eligibility$/ do
   @admin_reg = create AdminRegistrationData, :term_code=> "201401", :student_id => "ks-2040"
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
@@ -350,6 +338,18 @@ When /^I register a student for a course$/ do
                                                              :confirm_registration => true)
 end
 
+Then /^the student's registered courses credit total for the term should be updated$/ do
+  on AdminRegistration do |page|
+    @updated_credits = 0
+    page.registered_courses_rows.each do |row|
+      @updated_credits += page.get_registered_course_credits(row).to_i
+    end
+    @updated_credits.equal?(@total_credits).should be_false
+
+    page.student_info_go  #Needed to leave the browser in a clean state
+  end
+end
+
 When /^I open the term for registration in the Academic Calendar$/ do
   @calendar = make AcademicCalendar, :year => "2014", :name => "2014-2015 Academic Calendar"
 
@@ -373,59 +373,10 @@ And /^I attempt to load a Term by valid Term Id for a student with no Registered
   @admin_reg = create AdminRegistrationData, :student_id => "KS-10296", :term_code => "201405"
 end
 
-Then /^no failed Term eligibility check or warning message is displayed$/ do
+Then /^no failed term eligibility warning message is displayed$/ do
   on AdminRegistration do |page|
     page.loading.wait_while_present
-    page.confirm_term_popup_section.visible?.should be_false
     page.change_term_warning_message.exists?.should be_false
-    page.admin_registration_reg_for_section.visible?.should be_true
-  end
-end
-
-When /^I attempt to load a Term by valid Term Id for student with Registered or Wait-listed courses$/ do
-  @admin_reg = create AdminRegistrationData, :term_code => "201400"
-end
-
-Then /^the Term confirmation does not occur$/ do
-  on AdminRegistration do |page|
-    page.confirm_term_popup_section.visible?.should == false
-  end
-end
-
-And /^a warning message confirming that the term is not open is displayed$/ do
-  on AdminRegistration do |page|
-    page.change_term_warning_message.visible?.should == true
-    page.admin_registration_reg_for_section.visible?.should == true
-  end
-end
-
-Then /^the Term confirmation does occur$/ do
-  on AdminRegistration do |page|
-    page.change_term_input.set "201200"
-    page.change_term_go
-    page.loading.wait_while_present
-    page.confirm_term_popup_section.visible?.should == true
-    page.confirm_term_continue
-
-    page.student_info_go  #Needed to leave the browser in a clean state
-  end
-end
-
-When /^I decide not to continue with the selected term$/ do
-  on AdminRegistration do |page|
-    page.change_term_input.set "201200"
-    page.change_term_go
-    page.loading.wait_while_present
-    page.confirm_term_popup_section.visible?.should == true
-    page.confirm_term_cancel
-    page.loading.wait_while_present
-  end
-end
-
-Then /^only the term eligibility warning message is displayed$/ do
-  on AdminRegistration do |page|
-    page.get_change_term_warning_message.should match /Registration for #{page.get_change_term_info_message} is not currently open/
-    page.course_addline_btn.exists?.should == false
 
     page.student_info_go  #Needed to leave the browser in a clean state
   end
@@ -441,9 +392,13 @@ When /^I decide to continue with the selected term$/ do
   end
 end
 
+When /^I attempt to load a Term by valid Term Id for student with Registered or Wait-listed courses$/ do
+  @admin_reg = create AdminRegistrationData, :term_code => "201401", :term_description => "Spring 2014"
+end
+
 Then /^a warning message along with the Registered and Wait-listed courses are displayed$/ do
   on AdminRegistration do |page|
-    page.change_term_warning_message.visible?.should == true
+    page.change_term_warning_message.text.should match /Registration for #{@admin_reg.term_description} is not currently open/
     page.admin_registration_reg_for_section.visible?.should == true
 
     page.student_info_go  #Needed to leave the browser in a clean state

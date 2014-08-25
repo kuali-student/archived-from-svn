@@ -99,29 +99,14 @@ Feature: REG.Admin Registration
     Then I should be able to select additional courses for the student
 
 #KSENROLL-13716
-  Scenario: CR22.12.1 Verify that failed Term eligibility warning Message display and no dialog for student with registered or Wait-listed courses
+  Scenario: CR22.12.1 Verify that the registration tab and warning message are displayed even if the term failed the eligibility check
     When I attempt to load a Term by valid Term Id for student with Registered or Wait-listed courses
-    Then the Term confirmation does not occur
-    And a warning message confirming that the term is not open is displayed
-
-  Scenario: CR22.12.2 Verify that failed Term eligibility check dialog and warning Message display for student with no registered or Wait-listed courses
-    When I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses
-    Then the Term confirmation does occur
-
-  Scenario: CR22.12.3 Verify that the rest of the registration page do not show if failed Term eligibility dialog  response is cancel
-    When I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses
-    And I decide not to continue with the selected term
-    Then only the term eligibility warning message is displayed
-
-  Scenario: CR22.12.4 Verify that the registration tabs shows if failed Term eligibility dialog  response is continue
-    When I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses
-    And I decide to continue with the selected term
     Then a warning message along with the Registered and Wait-listed courses are displayed
 
-  Scenario: CR22.12.5 Verify that Term eligibility check passes for open registration term
+  Scenario: CR22.12.2 Verify that the term eligibility check passes for a term that is open for registration
     When I open the term for registration in the Academic Calendar
     And I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses
-    Then no failed Term eligibility check or warning message is displayed
+    Then no failed term eligibility warning message is displayed
 
 #KSENROLL-13720
   @wip

@@ -6,7 +6,8 @@ class AdminRegistrationData < DataFactory
   include Workflows
 
   attr_accessor :student_id, :term_code, :course_section_codes,
-                :term_description, :confirm_term_selection
+                :term_description
+  # , :confirm_term_selection
 
   def initialize(browser, opts={})
     @browser = browser
@@ -15,7 +16,6 @@ class AdminRegistrationData < DataFactory
         :student_id => "ks-2094",
         :term_code => nil,
         :term_description => nil,
-        :confirm_term_selection => true,
         :course_section_codes => collection('ARCourseSection')
     }
 
@@ -38,11 +38,6 @@ class AdminRegistrationData < DataFactory
       if @term_code != nil
         page.change_term_input.set @term_code
         page.change_term_go
-        
-        page.loading.wait_while_present
-        if page.confirm_term_popup_section.visible? and @confirm_term_selection
-          page.confirm_term_continue
-        end
       end
     end
   end
