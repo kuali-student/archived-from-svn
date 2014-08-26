@@ -42,7 +42,7 @@ class CourseDetailPage < BasePage
 
   element(:term_cdp) { |b| b.select(id:"planner_term_input_control")}
   element(:add_to_plan_notes_cdp) { |b| b.text_field(name:"courseNote") }
-  action (:add_to_plan_button_cdp) { |b| b.frm.button(id:"u1iyq7jo").click}
+  action (:add_to_plan_button_cdp) { |b| b.frm.button(id:"submit_dialog_button").click}
 
   element(:backup_checkbox_cdp) { |b|b.checkbox(id:"unmlz_control")}
 end
