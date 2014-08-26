@@ -1,4 +1,4 @@
-@wip @red_team
+@nightly @red_team
 
 Feature: REG.Course Repeatability
   CR 18.1 - As an administrator, I want to prevent a student from registering for a course if they have
@@ -15,9 +15,16 @@ Feature: REG.Course Repeatability
     When I attempt to register for a course that I have already taken the maximum allowable number of times
     Then there is a message indicating that registration failed
     And there is a message indicating that I have taken the course the maximum allowable number of times
+    When I view my schedule
+    Then the course is not present in my schedule
 
 #KSENROLL-14506
   Scenario: CR 18.2 Ensure students cannot repeat a course in which they have received a specific mark
-    When I attempt to register for a course that I have received a mark of I in
+    Given I log in to student registration as R.JODYB
+    When I attempt to register for a course in which I have received a mark of I
+    Then there is a message indicating that registration failed
+    Then there is a message indicating a course with grade I cannot be retaken
+    When I view my schedule
+    Then the course is not present in my schedule
 
 

@@ -483,8 +483,8 @@ end
 
 When /^I attempt to register for a course that I have already taken the maximum allowable number of times$/ do
   @reg_request = make RegistrationRequest, :student_id=>"R.JOANL",
-                      :term_code=> "201208",
-                      :term_descr=> "Fall 2012",
+                      :term_code=> "201108",
+                      :term_descr=> "Fall 2011",
                       :course_code=>"PHYS260",
                       :reg_group_code=>"1001",
                       :course_options => (make CourseOptions, :grading_option => "Letter"),
@@ -500,3 +500,24 @@ And /^there is a message indicating that I have taken the course the maximum all
     page_status.should =~ /#{@reg_request.course_code} has already been taken (\w+)\.(\s*)Courses cannot be attempted more than/i
   end
 end
+
+Then /^there is a message indicating a course with grade I cannot be retaken$/ do
+  on RegistrationCart do |page|
+    page_status = page.result_status(@reg_request.course_code, @reg_request.reg_group_code)
+    page_status.should =~ /#{@reg_request.course_code}/i
+    page_status.should =~ /Cannot repeat a course with a mark of 'I'/i
+  end
+end
+
+Then /^I attempt to register for a course in which I have received a mark of I$/ do
+  @reg_request = make RegistrationRequest, :student_id=>"R.JODYB",
+                      :term_code=> "201108",
+                      :term_descr=> "Fall 2011",
+                      :course_code=>"HIST352",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter"),
+                      :course_has_options=> true
+  @reg_request.create
+  @reg_request.register
+end
+
