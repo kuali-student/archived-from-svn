@@ -5,19 +5,20 @@ When /^I add courses to my registration cart that would exceed the spring term c
   reg_group_code = "1001"
   term_code = "201101"
   term_descr = "Spring 2011"
+  reg_group_code = "1001"
+  @reg_request_engl = make RegistrationRequest, :student_id=>"student2",
+                           :term_code=>term_code,
+                           :term_descr=>term_descr,
+                           :reg_group_code=>reg_group_code
 
   # Clear cart and schedule
   @restResponse = make RegRestUtility
   @restResponse.clear_cart_and_schedule(term_code)
 
-  for i in (0..5)
-    @reg_request_engl = make RegistrationRequest, :student_id=>"student2",
-                             :term_code=>term_code,
-                             :term_descr=>term_descr,
-                             :course_code=>"ENGL301",
-                             :reg_group_code=>reg_group_code
+  # add six 3-credit courses to the reg cart
+  ["ENGL202","ENGL211","ENGL212","ENGL221","ENGL222","ENGL245"].each do |course_code|
+    @reg_request_engl.edit :course_code=>course_code
     @reg_request_engl.create
-    reg_group_code.next!
   end
   # Register for the first six separately, per dev recommendation TODO: register for all at once
   @reg_request_engl.register
@@ -36,7 +37,7 @@ When /^I add courses to my registration cart that would exceed the summer term c
   # Summer credit limit is 8
   # TODO: first make sure user's schedule is clear (using REST call in KSENROLL-13175)
   # then add two 3-credit courses and one 2.5-credit (last one added to cart should fail)
-  reg_group_code = "1003"
+  reg_group_code = "1001"
   term_code = "201205"
   term_descr = "Summer I 2012"
 
@@ -51,18 +52,20 @@ When /^I add courses to my registration cart that would exceed the summer term c
                       :term_code=>term_code,
                       :term_descr=>term_descr,
                       :course_code=>"WMST469M",
-                      :reg_group_code=>"1001", :course_options => course_options, :modify_course_options => true
+                      :reg_group_code=>reg_group_code,
+                      :course_options => course_options,
+                      :modify_course_options => true
   @reg_request.create
 
   # now add the 2 remaining items to the cart.
-  for i in (0..1)
-    reg_group_code.next!
-    @reg_request_engl = make RegistrationRequest, :student_id=>"student2",
-                             :term_code=>term_code,
-                             :term_descr=>term_descr,
-                             :course_code=>"ENGL101",
-                             :reg_group_code=>reg_group_code,
-                             :course_has_options=>false
+  @reg_request_engl = make RegistrationRequest, :student_id=>"student2",
+                           :term_code=>term_code,
+                           :term_descr=>term_descr,
+                           :reg_group_code=>reg_group_code,
+                           :course_options=>course_options
+
+  ["ENGL206","ENGL245"].each do |course_code|
+    @reg_request_engl.edit :course_code=>course_code
     @reg_request_engl.create
   end
 end

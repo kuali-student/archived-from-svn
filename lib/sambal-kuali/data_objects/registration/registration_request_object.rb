@@ -125,18 +125,18 @@ class RegistrationRequest < DataFactory
     "Registration Request\nID: #{@student_id}, Term: #{@term_descr}, Course: #{@course_code}, Reg group: #{@reg_group_code}, Credits: #{@course_options.credit_option}, Grading: #{@course_options.grading_option}"
   end
   def edit opts={}
-    options = defaults.merge(opts)
-    edit_student_id options
-    edit_term_code options
-    edit_term_descr options
-    edit_course_code options
-    edit_reg_group options
+    edit_student_id opts
+    edit_term_code opts
+    edit_term_descr opts
+    edit_course_code opts
+    edit_reg_group opts
   end
 
   def edit_student_id opts={}
     if opts[:student_id].nil?
       return nil
     end
+    update_options opts
   end
   private :edit_student_id
 
@@ -144,6 +144,7 @@ class RegistrationRequest < DataFactory
     if opts[:term_code].nil?
       return nil
     end
+    update_options opts
   end
   private :edit_term_code
 
@@ -151,13 +152,15 @@ class RegistrationRequest < DataFactory
     if opts[:term_descr].nil?
       return nil
     end
+    update_options opts
   end
   private :edit_term_descr
 
   def edit_course_code opts={}
-    if opts[:term_code].nil?
+    if opts[:course_code].nil?
       return nil
     end
+    update_options opts
   end
   private :edit_course_code
 
@@ -165,6 +168,7 @@ class RegistrationRequest < DataFactory
     if opts[:reg_group_code].nil?
       return nil
     end
+    update_options opts
   end
   private :edit_reg_group
 
