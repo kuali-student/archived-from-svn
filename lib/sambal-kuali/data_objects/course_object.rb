@@ -65,6 +65,18 @@ class CmCourseObject < DataFactory
     end
   end
 
+  def print_course
+    on CmReviewProposal do |page|
+      page.print_action
+    end
+  end
+
+  def export_course
+    on CmReviewProposal do |page|
+      page.export_action
+    end
+  end
+
 end
 
 

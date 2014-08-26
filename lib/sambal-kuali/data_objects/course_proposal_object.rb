@@ -638,6 +638,18 @@ class CmCourseProposalObject < DataFactory
   end
 
 
+  def export_proposal
+     on CmCourseInformation do |page|
+       page.export_action
+     end
+  end
+
+  def print_proposal
+    on CmCourseInformation do |page|
+      page.print_action
+    end
+  end
+
   #-----
   private
   #-----
