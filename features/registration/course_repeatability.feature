@@ -23,7 +23,7 @@ Feature: REG.Course Repeatability
     Given I log in to student registration as R.JODYB
     When I attempt to register for a course in which I have received a mark of I
     Then there is a message indicating that registration failed
-    Then there is a message indicating a course with grade I cannot be retaken
+    And there is a message indicating a course with grade I cannot be retaken
     When I view my schedule
     Then the course is not present in my schedule
 

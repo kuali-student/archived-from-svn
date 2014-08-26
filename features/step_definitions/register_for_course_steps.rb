@@ -483,8 +483,8 @@ end
 
 When /^I attempt to register for a course that I have already taken the maximum allowable number of times$/ do
   @reg_request = make RegistrationRequest, :student_id=>"R.JOANL",
-                      :term_code=> "201108",
-                      :term_descr=> "Fall 2011",
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
                       :course_code=>"PHYS260",
                       :reg_group_code=>"1001",
                       :course_options => (make CourseOptions, :grading_option => "Letter"),
@@ -511,8 +511,8 @@ end
 
 Then /^I attempt to register for a course in which I have received a mark of I$/ do
   @reg_request = make RegistrationRequest, :student_id=>"R.JODYB",
-                      :term_code=> "201108",
-                      :term_descr=> "Fall 2011",
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
                       :course_code=>"HIST352",
                       :reg_group_code=>"1001",
                       :course_options => (make CourseOptions, :grading_option => "Letter"),
