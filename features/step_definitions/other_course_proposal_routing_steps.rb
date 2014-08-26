@@ -50,6 +50,7 @@ end
 
 Then(/^I can FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
   log_in fyi_reviewer, fyi_reviewer
+  sleep 30 # TODO find a better way to avoid workflow exceptions
   navigate_rice_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action

@@ -544,6 +544,7 @@ class CmCourseProposalObject < DataFactory
   def approve
     on CmReviewProposal do |approve|
       approve.review_approval
+      approve.decision_rationale.wait_until_present
       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
       approve.confirmation_approval
     end
