@@ -8,6 +8,9 @@ When /^I search for a course on course search page$/ do
                               :subject=>"English"
  @course_section_object=make CourseSectionObject
  @course_search_result.course_search
+ on CourseSearch do |page|
+   page.course_search_results_facets.wait_until_present
+ end
 end
 
 When /^I search for a certain course on course search page$/ do
@@ -29,6 +32,9 @@ When /^I search for a certain course on course search page$/ do
                                        :activity_offering_location=>"TWS 0221",
                                        :activity_offering_additional_details=>" "
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -58,6 +64,9 @@ When(/^I search for course which has format offerings on the course search page$
                                          :activity_offering_location=>'CHM 1360',
                                          :activity_offering_seats =>'18/18'
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -80,6 +89,7 @@ end
 
 And(/^I navigate to the Course Section Details page$/) do
   @course_search_result.navigate_course_detail_page
+  sleep 50
   on CourseSectionPage do |page|
   page.course_termlist.wait_until_present(120)
   end
@@ -168,6 +178,9 @@ When(/^I search for a course with Multiple Activity Offerings$/) do
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -196,15 +209,11 @@ And(/^I select the activity offerings$/) do
   description_co_term_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
   description_formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
   description_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[1].ao_activityoffering_level}"
 
   on CourseSectionPage do |page|
     page.add_to_button_disabled.exists?.should==true
     page.activityoffering_checkbox(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).click
-    #sleep 10
-    #page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
-    page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
-   # sleep 10
   end
 
 end
@@ -214,6 +223,9 @@ When(/^I search for a course with Single Activity Offering$/) do
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then(/^I should be able to see an option to add the course to my plan$/) do
@@ -237,6 +249,9 @@ When(/^I search for a course with website and restrictions link$/) do
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then(/^I should be able to see the website and restriction links for the course$/) do
@@ -259,6 +274,9 @@ When(/^I search for a course with variable credits$/) do
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 

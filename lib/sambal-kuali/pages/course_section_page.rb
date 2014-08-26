@@ -28,7 +28,7 @@ class CourseSectionPage < BasePage
   element(:activityoffering_checkbox){|coursedesc_level,courseterm_level,formatlist_level,fo_level,ao_level,b|b.checkbox(id:"select_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}_line#{ao_level}_control")}
   element(:add_to_button_enabled) {|b|b.button(class:"btn btn-primary btn btn-primary uif-boxLayoutHorizontalItem")}
   element(:add_to_button_disabled) {|b|b.button(id:/addButton/,class:"btn btn-primary btn btn-primary uif-boxLayoutHorizontalItem disabled")}
-  element(:add_to_plan_link) {|b|b.a(id:/addLink/,index:1)}
+  element(:add_to_plan_link) {|b|b.a(id:/addLink/)}
 #  action(:lecture_lab_discussion) { |course_code,b| b.div(id: /#{course_code}_formatOfferingOptions/).radio(index:0) }
 #  action(:lecture) { |course_code,b| b.div(id: /#{course_code}_formatOfferingOptions/).radio(index:1) }
   element(:lecture_lab_discussion) {|b|b.radio(label:"Lecture + Lab + Discussion")}
@@ -39,11 +39,11 @@ class CourseSectionPage < BasePage
   element(:course_termlist) {|b|b.div(id:"course-term-list")}
   element(:term_credit) {|term_credit,b|b.a(id:/#{term_credit}_section_toggle/)}
   element(:course_variable_credit) {|course_variable_credit,course_code,b|b.a(id:/#{course_variable_credit}_#{course_code}_section_toggle/)}
-  element(:actual_course_code) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"code_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
-  element(:actual_course_instructor) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"code_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
-  element(:actual_course_days) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"days_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
-  element(:actual_course_time) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"time_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
-  element(:actual_course_location) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"location_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
-  element(:actual_course_seatsopen) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"location_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}")}
+  value(:actual_course_code) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"code_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  value(:actual_course_instructor) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"instructor_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  value(:actual_course_days) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"days_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  value(:actual_course_time) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"time_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  value(:actual_course_location) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"location_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  value(:actual_course_seatsopen) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"seats_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
   end
 

@@ -34,6 +34,12 @@ When(/^I bookmark a course$/) do
 
   @course_search_result = make CourseSearchResults,:course_code => "ENGL201"
   @course_search_result.course_search
+
+  #debug code
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+
   #Search for a course
   @course_search_result.navigate_course_detail_page
 

@@ -64,6 +64,9 @@ end
 When(/^I search for a course\(CM\) from course search$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -108,6 +111,9 @@ When(/^I navigate to the Course Section Details$/) do
   #navigate to course search
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 
   #navigate to planner page
   on CourseSearch do |page|
@@ -162,6 +168,9 @@ end
 When(/^I search for a course\(CM\)$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -188,10 +197,37 @@ end
 
 
 When(/^I search for a course with Single Activity Offerings$/) do
-  @course_search_result = make CourseSearchResults, :course_code => "WMST348"
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "WMST348"
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  #To remove the course from planner
+  on CourseSearch do |page|
+    page.plan_page_click
+  end
+  on CoursePlannerPage do |page|
+    page.planner_courses_detail_list.wait_until_present
+  end
+
+  #delete an existing course
+  @course_search_result.remove_code_from_planned_backup
+  #navigate to course search
+
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "WMST348"
+  navigate_to_course_search_home
+
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+  #navigate to course details page
+  on CourseSearch  do |page|
+    page.course_code_result_link(@course_search_result.course_code).click
+  end
+  # @course_search_result.navigate_course_detail_page
+  on CourseSectionPage do |page|
+    page.course_termlist.wait_until_present(500)
+  end
+
 end
 
 Then(/^I should be able to add the course to my plan$/) do
@@ -202,23 +238,84 @@ Then(/^I should be able to add the course to my plan$/) do
     singleao_add_plan_co_term_level="#{@course_search_list.course_offering_description_list[0].course_term_list[0].courseterm_level}"
     singleao_add_plan_formatlist_level="#{@course_search_list.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
     singleao_add_plan_fo_level="#{@course_search_list.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
-    singleao_add_plan_ao_level="#{@course_search_list.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[1].ao_activityoffering_level}"
+    singleao_add_plan_ao_level="#{@course_search_list.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+    @plannedcode=page.activity_offering_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+    puts @plannedcode
+    @plannedinstructor=page.activity_offering_instructor(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+    @planneddays=page.activity_offering_days(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+    @plannedtime=page.activity_offering_time(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+    @plannedlocation=page.activity_offering_location(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+    @plannedseats=page.activity_offering_seats(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level)
+
     page.add_to_plan_link.exists?.should==true
-    page.add_to_pan_link.click
-    page.activity_offering_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
-    page.activity_offering_instructor(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_instructor(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
-    page.activity_offering_days(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_days(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
-    page.activity_offering_time(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_time(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
-    page.activity_offering_location(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_location(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
-    page.activity_offering_seats(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level,singleao_add_plan_ao_level).should==page.actual_course_seatsopen(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    page.add_to_plan_link.click
+    sleep 5
+    navigate_to_course_planner_home
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+    end
+    @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring",:planned_term=>"2014Summer1", :course_code => "WMST348"
+    navigate_to_course_search_home
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    #navigate to course details page
+    on CourseSearch  do |page|
+      page.course_code_result_link(@course_search_result.course_code).click
+    end
+    # @course_search_result.navigate_course_detail_page
+    on CourseSectionPage do |page|
+      page.course_termlist.wait_until_present(500)
+    end
+    puts page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @plannedcode.should==page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    puts page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @plannedinstructor.should==page.actual_course_instructor(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @planneddays.should==page.actual_course_days(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @plannedtime.should==page.actual_course_time(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @plannedlocation.should==page.actual_course_location(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
+    @plannedseats.should==page.actual_course_seatsopen(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
   end
 end
 
 When(/^I search for the course with Multiple Activity Offerings$/) do
-  @course_search_result = make CourseSearchResults, :course_code => "CHEM231"
+  @course_search_result = make CourseSearchResults, :planned_term=>"2014Summer1", :course_code => "CHEM231", :term=>"Spring 2014"
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+
+  #To remove the course from planner
+  on CourseSearch do |page|
+    page.plan_page_click
+  end
+  on CoursePlannerPage do |page|
+    page.planner_courses_detail_list.wait_until_present
+  end
+
+  #delete an existing course
+  @course_search_result.remove_code_from_planned_backup
+  #navigate to course search
+
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "CHEM231", :term=>"Spring 2014"
+  navigate_to_course_search_home
+
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+  #navigate to course details page
+  on CourseSearch  do |page|
+    page.course_code_result_link(@course_search_result.course_code).click
+  end
+  # @course_search_result.navigate_course_detail_page
+
+  sleep 30
+  on CourseSectionPage do |page|
+    page.course_termlist.wait_until_present(200000)
+  end
+
 end
 
 
@@ -239,24 +336,41 @@ Then(/^I should be able to add the course with Multiple Activity Offerings to my
     description_add_plan_formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
     description_add_plan_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
     description_add_plan_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[1].ao_activityoffering_level}"
-    page.activity_offering_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_seats(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==actual_course_seatsopen(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
 
-    page.activity_offering_code(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_code(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-    page.activity_offering_instructor(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_instructor(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-    page.activity_offering_days(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_days(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-    page.activity_offering_time(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_time(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-    page.activity_offering_location(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_location(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-    page.activity_offering_seats(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level,description_add_plan_ao_level).should==actual_course_seatsopen(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level)
-  end
+    #Code for refresh
+
+    navigate_to_course_planner_home
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+    end
+    @course_search_result = make CourseSearchResults, :planned_term=>"2014Spring", :course_code => "CHEM231", :term=>"Spring 2014"
+    navigate_to_course_search_home
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    #navigate to course details page
+    on CourseSearch  do |page|
+      page.course_code_result_link(@course_search_result.course_code).click
+    end
+    # @course_search_result.navigate_course_detail_page
+    sleep 50
+    on CourseSectionPage do |page|
+      page.course_termlist.wait_until_present(500)
+    end
+
+    #Code for refresh
+    page.activity_offering_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.activity_offering_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.activity_offering_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.activity_offering_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.activity_offering_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.activity_offering_seats(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_seatsopen(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+ end
 end
 
 When(/^I search for the course with Multiple Format Offerings$/) do
-  @course_search_result = make CourseSearchResults, :course_code => "CHEM237"
+  @course_search_result = make CourseSearchResults, :course_code => "CHEM237",:planned_term=>"2014Spring", :term=>"Spring 2014"
+
   @course_activityoffering_object_1=make CourseActivityOfferingObject,
                                          :activity_offering_code => 'A',
                                          :activity_offering_days =>'MWF',
@@ -281,6 +395,36 @@ When(/^I search for the course with Multiple Format Offerings$/) do
                                          :activity_offering_location=>'CHM 1360',
                                          :activity_offering_seats =>'18/18'
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+  #To remove the course from planner
+  on CourseSearch do |page|
+    page.plan_page_click
+  end
+  on CoursePlannerPage do |page|
+    page.planner_courses_detail_list.wait_until_present
+  end
+
+  #delete an existing course
+  @course_search_result.remove_code_from_planned_backup
+  #navigate to course search
+
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "CHEM237", :term=>"Spring 2014"
+  navigate_to_course_search_home
+
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+  #navigate to course details page
+  on CourseSearch  do |page|
+    page.course_code_result_link(@course_search_result.course_code).click
+  end
+ # @course_search_result.navigate_course_detail_page
+  on CourseSectionPage do |page|
+    page.course_termlist.wait_until_present(120)
+  end
+  #To remove the course from planner
 end
 
 
@@ -295,6 +439,15 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
     page.ao_discussion(course_code).exists?.should==true
     page.ao_lecture(course_code).exists?.should==true
 
+    @code1=page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+    @instructor1=page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+    @days1=page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+    @time1=page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+    @location1=page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+    @seats1=page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level)
+
+
+    sleep 5
     page.add_to_button_enabled.click
     sleep 5
 
@@ -303,6 +456,28 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
      formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
      formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
      activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+    #Code for refresh
+
+    navigate_to_course_planner_home
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+    end
+    @course_search_result = make CourseSearchResults, :planned_term=>"2014Spring", :course_code => "CHEM237", :term=>"Spring 2014"
+    navigate_to_course_search_home
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    #navigate to course details page
+    on CourseSearch  do |page|
+      page.course_code_result_link(@course_search_result.course_code).click
+    end
+    # @course_search_result.navigate_course_detail_page
+    sleep 50
+    on CourseSectionPage do |page|
+      page.course_termlist.wait_until_present(500)
+    end
+
+    #Code for refresh
 
 
     #Validation for Lecture
@@ -342,14 +517,13 @@ Then(/^I should be able to add the course with Multiple Format Offerings to my p
     page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_2.activity_offering_time
     page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_location}/
     page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_seats}/
-    page.add_to_button_enabled.click
     #Validation for Lecture after planned
-    page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
-    page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
-    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
-    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
-    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
-    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==actual_course_seatsopen(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    @code1.should==page.actual_course_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    @instructor1.should==page.actual_course_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==page.actual_course_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==page.actual_course_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==page.actual_course_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
+    page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should==page.actual_course_seatsopen(codescription_level,courseterm_level,formatlist_level,formatoffering_level)
 
     codescription_fo_level_1= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
     courseterm_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"

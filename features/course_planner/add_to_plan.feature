@@ -56,7 +56,6 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
   Scenario: PL 1.0.5 Add Course Offering(Single Activity) to a term in my plan
 
     When I search for a course with Single Activity Offerings
-    And I navigate to the Course Section Details page
     Then I should be able to add the course to my plan
 
 
@@ -66,7 +65,6 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
   Scenario: PL 1.0.6 Add Course Offering(Multiple Activity) to a term in my plan
 
     When I search for the course with Multiple Activity Offerings
-    And I navigate to the Course Section Details page
     And I select the activity offerings
     Then I should be able to add the course with Multiple Activity Offerings to my plan
 
@@ -76,12 +74,6 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
   Scenario: PL 1.0.7 Add Course Offering(Multiple Activity) to a term in my plan
 
     When I search for the course with Multiple Format Offerings
-    And I navigate to the Course Section Details page
     And I select the format offerings
     Then I should be able to add the course with Multiple Format Offerings to my plan
 
-
-  Scenario: PL 1.0.8 Add unlimited courses(5) to my plan
-
-    When I search for courses
-    Then I should be able to add 6 courses to my plan

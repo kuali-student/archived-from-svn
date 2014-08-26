@@ -1,12 +1,18 @@
 When /^I search for a course$/ do
   @course_search_result = make CourseSearchResults
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
 When /^I search for a course with "(.*?)" text option$/ do |text|
   @course_search_result = make CourseSearchResults
   @course_search_result.course_search(text)
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then /^the course "(.*?)" appear in the search results$/ do |test_condition|
@@ -33,6 +39,9 @@ end
 When /^I search for a "(.*?)" "(.*?)" by "(.*?)"$/ do |course_status,course, term_selection|
   @course_search_result = make CourseSearchResults, :course_code => course, :term_select => term_selection
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -42,6 +51,9 @@ end
 When /^I search for a course on the course search page$/ do
   @course_search_result = make CourseSearchResults, :course_code => "ENGL2"
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -67,12 +79,18 @@ end
 When /^I search for a course on the course search page with course title$/ do
   @course_search_result = make CourseSearchResults, :search_text => "eng"
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
 When /^I search for a course with one word"(.*?)" text option$/ do |text|
   @course_search_result = make CourseSearchResults, :search_text => text
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then /^course title or course description containing "(.*?)"text option "(.*?)" appear$/ do |text,condition|
@@ -91,6 +109,9 @@ end
 When /^I search for a course with multi word"(.*?)" text option$/ do |text|
   @course_search_result = make CourseSearchResults, :search_text => text, :term_select => "All"
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 
 end
 
@@ -113,6 +134,9 @@ end
 When /^I search for a course with "(.*?)" level option$/ do |level|
   @course_search_result = make CourseSearchResults
   @course_search_result.course_search(level)
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then /^only "(.*?)" level courses "(.*?)" be displayed$/ do |text, condition|
@@ -132,7 +156,7 @@ When /^I choose to see "(.*?)" records per page$/ do |per_page|
   on CourseSearch do |page|
     page.course_search_results_select.select per_page
     #Sleep for X seconds to wait for the js to process the change
-    sleep(2)
+    sleep(6)
     page.course_search_results_select.value.should == per_page
   end
 end
@@ -169,6 +193,9 @@ end
 When /^I search for "(.*?)"$/ do |text|
   @course_search_result = make CourseSearchResults, :search_text => text
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -183,6 +210,9 @@ end
 And /^I search for a course on course search$/ do
   @course_search_result = make CourseSearchResults, :course_code => "General"
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 
@@ -238,6 +268,9 @@ end
 When /^I search for a course with "(.*?)" option$/ do |text|
   @course_search_result = make CourseSearchResults, :search_text => text
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 Then /^the "(.*?)" and courses matching at least one "(.*?)" are returned$/ do |expected_courses, expected_component|
@@ -256,6 +289,9 @@ end
 When /^I search for a "(.*?)" having divisions and levels with space in the search text$/ do |text|
   @course_search_result = make CourseSearchResults, :search_text => text
   @course_search_result.course_search_with_search_text
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
 end
 
 

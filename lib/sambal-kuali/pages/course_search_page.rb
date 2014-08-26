@@ -31,7 +31,7 @@ class CourseSearch < BasePage
 
   element(:result_pagination) {|b| b.div(id:"course_search_results_paginate")}
   element(:results_list_previous_enabled) { |b| b.a(id: "course_search_results_previous")}
-  element(:results_list_previous_click) { |b| b.results_list_previous_enabled.click }
+  element(:results_list_previous_click) { |b| b.results_list_previous_enabled.click;b.loading.wait_while_present }
   element(:results_list_previous_disabled) { |b| b.a(class:"previous paginate_button paginate_button_disabled",id:"course_search_results_previous")}
   #previous paginate_button paginate_button_disabled
 

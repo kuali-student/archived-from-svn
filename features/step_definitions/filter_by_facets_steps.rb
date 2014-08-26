@@ -10,6 +10,10 @@ When(/^I search for courses in the Course Search Page$/) do
                                :course_prefix=>'ENGL'
 
   @course_search_result.course_search
+
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
   @course_search_result.clear_facets
 end
 
@@ -109,6 +113,9 @@ When(/^I narrow the search results in the course search page using any facet$/) 
                           :course_level=> '3',
                           :course_prefix=>'ENGL'
   @course_search_result.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
   @course_search_result.clear_facets
   sleep 1
   on CourseSearch do |page|
