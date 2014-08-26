@@ -158,12 +158,12 @@ function initialize_schema() {
   # replace non alpha-numeric characters with underscore (_) in schema name
   if [ $SNAPSHOT -eq 0 ]
   then
-    SANITIZED_SCHEMA="${SCHEMA_PREFIX}${ARTIFACT_PREFIX//[^a-zA-z0-9]/_}_${BUILD_NUMBER}"
+    SANITIZED_SCHEMA="${SCHEMA_PREFIX}NIGHTLY"
   else
     SANITIZED_SCHEMA="${SCHEMA_PREFIX}SNAPSHOT"
   fi
 
-  # do some substitutions (note: schema name has been uppercased)
+  # do some substitutions (note: schema name has been uppercased using ^^)
   sed -i.bak \
     -e "s#\${public.url}#http://localhost:8080#g" \
     -e "s#\${jdbc.url}#jdbc:oracle:thin:@oracle.ks.kuali.org:1521:ORACLE#g" \
