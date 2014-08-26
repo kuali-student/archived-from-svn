@@ -24,7 +24,7 @@ ARTIFACT_PREFIX="2.1.1-FR2-M1"
 SCHEMA_PREFIX="KSAFT_"
 
 # tomcat variables
-TOMCAT_VERSION=8.0.9
+TOMCAT_VERSION=8.0.11
 export CATALINA_HOME=${WORKSPACE}/tomcat
 export CATALINA_OPTS="-Xms512m -Xmx4g -XX:MaxPermSize=512m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -Xloggc:${WORKSPACE}/tomcat/logs/heap.log -XX:HeapDumpPath=${WORKSPACE}/tomcat/logs -XX:+HeapDumpOnOutOfMemoryError"
 export CATALINA_PID=$(mktemp --suffix .ksaft.catalina 2>/dev/null || mktemp -t .ksaft.catalina)
@@ -202,7 +202,7 @@ function download_tomcat() {
     http://archive.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 
   # stop building if md5sum does not match
-  echo "82140943a894d582e5b34eff79b8c776  /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz" | \
+  echo "4d935c0c20c590e20f8f4b6185fde2a3  /tmp/apache-tomcat-$TOMCAT_VERSION.tar.gz" | \
     md5sum -c -
   echo "${FUNCNAME[0]}: downloaded tomcat $TOMCAT_VERSION."
 }
