@@ -117,7 +117,8 @@ class CmReviewProposal < BasePage
   element(:submit_button) { |b| b.button(text: "Submit")}
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
-  value(:proposal_status) { |b| b.div(id: "KS-CourseView-LinkGroup").div(data_label: "Proposal Status").text }
+  element(:proposal_status_element) { |b| b.div(id: "CM-Proposal-Header-Right-Group-Status") }
+  value(:proposal_status) { |b| b.proposal_status_element.text.downcase }
 
   #APPROVE
   element(:approve_button) { |b| b.button(text: "Approve") }
