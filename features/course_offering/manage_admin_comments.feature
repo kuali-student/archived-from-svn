@@ -19,8 +19,8 @@ Feature: CO.Manage Admin Comments
 
   CO 27.9 As an Administrator I want to have appropriate authorization to add or edit comments
 
-#  CO 27.10 As an Administrator I want to be able to include rich text formatting in administrative comments on Course Offerings and Activity
-#  Offerings so that I can draw attention to text or include actionable urls and email addresses
+  CO 27.10 As an Administrator I want to be able to include rich text formatting in administrative comments on Course Offerings and Activity
+  Offerings so that I can draw attention to text or include actionable urls and email addresses
 
   Scenario: CO 27.1.1 Verify successful add of admin comment to a course offering
     Given I am logged in as a Schedule Coordinator
@@ -112,34 +112,24 @@ Feature: CO.Manage Admin Comments
     And I am not able to delete the comments for the activity offering
     And I am not able to create new comments for the activity offering
 
-#  @draft @not_implemented
-#  Scenario: CO27.10.1 Verify user can include url and email hyperlinks in new admin comments on course and activity offerings
-#    Given I am logged in as a Schedule Coordinator
-#    And I manage comments for a course offering
-#    When I add a new comment with a url or email hyperlink and select Add Comment
-#    Then the comment is saved with a working hyperlink
-#    And can be viewed immediately along with the created by userid and creation date
-#
-#  @draft @not_implemented
-#  Scenario: CO27.10.2 Verify user can include url and email hyperlinks in existing admin comments on course and activity offerings
-#    Given I am logged in as a Schedule Coordinator
-#    And I manage comments for an activity offering with an existing comment
-#    When I add a url or email hyperlink and select Add Comment
-#    Then the comment is saved with a working hyperlink
-#    And can be viewed immediately along with the created by userid and creation date
-#
-#  @draft @not_implemented
-#  Scenario: CO27.10.3 Verify user can include typography elements such as underlining, bolding, and italics in new admin comments on course and activity offerings
-#    Given I am logged in as a Schedule Coordinator
-#    And I manage comments for a course offering
-#    When I add a new comment with underlining, bolding and italics and select Add Comment
-#    Then the comment is saved with the typography elements displayed
-#    And can be viewed immediately along with the created by userid and creation date
-#
-#  @draft @not_implemented
-#  Scenario: CO27.10.4 Verify user can include typography elements such as underlining, bolding, and italics in existing admin comments on course and activity offerings
-#    Given I am logged in as a Schedule Coordinator
-#    And I manage comments for an activity offering with an existing comment
-#    When I add underlining, bolding and italics to the comment and select Add Comment
-#    Then the comment is saved with the typography elements displayed
-#    And can be viewed immediately along with the created by userid and creation date
+  Scenario: CO27.10.1 Verify user can include url and email hyperlinks in new admin comments on course and activity offerings
+    Given I am logged in as a Schedule Coordinator
+    When I add a new comment which includes a url hyperlink to a course offering
+    Then the course offering comment is saved with a working hyperlink
+
+  Scenario: CO27.10.2 Verify user can include url and email hyperlinks in existing admin comments on course and activity offerings
+    Given I am logged in as a Schedule Coordinator
+    And I manage comments for an activity offering with existing comments
+    When I edit a comment and add a url hyperlink
+    Then the activity offering comment is saved with a working hyperlink
+
+  Scenario: CO27.10.3 Verify user can include typography elements such as underlining, bolding, and italics in new admin comments on course and activity offerings
+    Given I am logged in as a Schedule Coordinator
+    When I add a new comment with formatted (bold) text to a course offering
+    Then the course offering comment is saved with the typography elements displayed
+
+  Scenario: CO27.10.4 Verify user can include typography elements such as underlining, bolding, and italics in existing admin comments on course and activity offerings
+    Given I am logged in as a Schedule Coordinator
+    And I manage comments for an activity offering with existing comments
+    When I edit a comment and format (bold) some of the text
+    Then the activity offering comment is saved with the typography elements displayed

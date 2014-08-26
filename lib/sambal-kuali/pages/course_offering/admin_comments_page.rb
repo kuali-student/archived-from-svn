@@ -30,15 +30,25 @@ class AdminComments < BasePage
   def comment_index_by_text (comment_text)
     comments_list.each do |div|
       page_comment_text = div.div(id: /^KS-CommentField_UI_ID_line\d+$/).text
-      return div.id[/\d+$/] if page_comment_text == comment_text
+      return div.id[/\d+$/] if page_comment_text =~ /#{comment_text}/
     end
     -1
   end
 
-  value(:comment_text){ |comment_index,b| b.frm.div(id: "KS-CommentField_UI_ID_line#{comment_index}").text }
+  action(:comment_element){ |comment_index,b| b.frm.div(id: "KS-CommentField_UI_ID_line#{comment_index}") }
+  value(:comment_text){ |comment_index,b| b.frm.comment_element(comment_index).text }
+  element(:comment_hyperlink){ |comment_index,b| b.frm.comment_element(comment_index).link }
   value(:comment_created_by){ |comment_index,b| b.frm.p(id: "creator-name-id_line#{comment_index}").text }
   value(:comment_created_date){ |comment_index,b| b.frm.p(id: "creator-date-id_line#{comment_index}").text }
   action(:comment_text_editor){ |comment_index,b| b.frm.iframe(id: "KS-CommentField_ID_line#{comment_index}_control_ifr").body }
+
+  element(:url_entry_dialog){ |b| b.frm.div(id: /mceu/,class: /mce-floatpanel/) }
+  element (:url_entry){ |b| b.url_entry_dialog.text_field(index: 0) }
+  element (:url_text){ |b| b.url_entry_dialog.text_field(index: 1) }
+  element (:url_title){ |b| b.url_entry_dialog.text_field(index: 2) }
+  #element (:url_target){ |b| b.frm.button(id: 'mceu_93-open') }
+  element(:url_entry_save){ |b| b.url_entry_dialog.div(class: /mce-primary/).button }
+  element(:url_entry_cancel){ |b| b.url_entry_dialog.button(index: 2) }
 
   action(:comment_save_edit){ |comment_index,b| b.frm.button(id: "KS-CommentSaveAction_ID_line#{comment_index}") }
   action(:comment_cancel_edit){ |comment_index,b| b.frm.button(id: "KS-CommentCancelAction_ID_line#{comment_index}") }

@@ -332,3 +332,64 @@ end
 And(/^I manage existing comments for an activity offering outside my admin org$/) do
   @activity_offering.manage_comments
 end
+
+When(/^I add a new comment which includes a url hyperlink to a course offering$/) do
+  @course_offering = (make CourseOffering, :course=>"CHEM481").copy
+  @course_offering.add_admin_comment :comment_obj => (make AdminCommentObject, :hyperlinked_text => 'http://en.wikipedia.org/wiki/Kuali')
+end
+
+Then(/^the course offering comment is saved with a working hyperlink$/) do
+  @course_offering.manage_comments
+  comment = @course_offering.admin_comments_list[0]
+  on AdminComments do |page|
+    comment_index = page.comment_index_by_text(comment.text)
+    page.comment_hyperlink(comment_index).text.should == comment.hyperlinked_text
+    page.comment_hyperlink(comment_index).href.should == comment.hyperlinked_text
+    page.close
+  end
+end
+
+Then(/^the activity offering comment is saved with a working hyperlink$/) do
+  @course_offering.get_ao_obj_by_code('A').manage_comments
+  comment = @course_offering.get_ao_obj_by_code('A').admin_comments_list[0]
+  on AdminComments do |page|
+    comment_index = page.comment_index_by_text(comment.text)
+    page.comment_hyperlink(comment_index).text.should == comment.hyperlinked_text
+    page.comment_hyperlink(comment_index).href.should == comment.hyperlinked_text
+    page.close
+  end
+  on(ManageCourseOfferings).co_comments_link_count.should == @course_offering.admin_comments_list.length
+end
+
+When(/^I edit a comment and add a url hyperlink$/) do
+  @course_offering.get_ao_obj_by_code('A').admin_comments_list[0].edit :hyperlinked_text => 'http://accounting.ucdavis.edu/projects/ucdkuali/'
+end
+
+When(/^I add a new comment with formatted \(bold\) text to a course offering$/) do
+  @course_offering = (make CourseOffering, :course=>"CHEM481").copy
+  @course_offering.add_admin_comment :comment_obj => (make AdminCommentObject, :bold_text => 'to boldly go')
+end
+
+Then(/^the course offering comment is saved with the typography elements displayed$/) do
+  @course_offering.manage_comments
+  comment = @course_offering.admin_comments_list[0]
+  on AdminComments do |page|
+    comment_index = page.comment_index_by_text(comment.text)
+    page.comment_element(comment_index).p.strong.text.should == comment.bold_text #strong = bold
+    page.close
+  end
+end
+
+When(/^I edit a comment and format \(bold\) some of the text$/) do
+  @course_offering.get_ao_obj_by_code('A').admin_comments_list[0].edit :bold_text => 'to go boldly'
+end
+
+Then(/^the activity offering comment is saved with the typography elements displayed$/) do
+  @course_offering.get_ao_obj_by_code('A').manage_comments
+  comment = @course_offering.get_ao_obj_by_code('A').admin_comments_list[0]
+  on AdminComments do |page|
+    comment_index = page.comment_index_by_text(comment.text)
+    page.comment_element(comment_index).p.strong.text.should == comment.bold_text #strong = bold
+    page.close
+  end
+end
