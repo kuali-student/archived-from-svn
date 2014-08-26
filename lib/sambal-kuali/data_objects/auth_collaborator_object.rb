@@ -44,7 +44,7 @@ class CmAuthCollaboratorObject < DataFactory
       page.loading_wait
       sleep 3 #to avoid occassional failures caused by delay in select list population.
       page.author_permission(@author_level).pick! @permission
-      page.author_notation(@author_level).fit @author_notation
+      page.author_notation(@author_level).fit @author_notation if @author_notation == :set
     end
     determine_save_action unless @defer_save
   end
