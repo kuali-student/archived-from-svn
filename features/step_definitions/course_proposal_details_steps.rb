@@ -290,7 +290,7 @@ Then(/^I should see author and collaborator details on the course proposal$/) do
   end
 
 
-Given(/^have a basic course proposal with authors and collaborators$/) do
+Given(/^I have a basic course proposal with authors and collaborators$/) do
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :author_list => [(make CmAuthCollaboratorObject, :defer_save => true ),
                                              (make CmAuthCollaboratorObject, :name => "AVILA", :author_level => 2, :permission => "Comment, View", :author_notation => :clear),

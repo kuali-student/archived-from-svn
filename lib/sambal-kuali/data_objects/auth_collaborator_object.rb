@@ -7,6 +7,7 @@ class CmAuthCollaboratorObject < DataFactory
   include Utilities
 
   attr_accessor  :name,
+                 :look_value,
                  :permission,
                  :action_required,
                  :author_notation,
@@ -36,7 +37,8 @@ class CmAuthCollaboratorObject < DataFactory
     on CmAuthorsCollaborators do |page|
       page.authors_collaborators unless page.current_page('Authors & Collaborators').exists?
       page.add_person unless page.author_name(@author_level).exists?
-      page.author_name(@author_level).set @name
+      page.author_name(@author_level).set @lookup_value unless @lookup_value.nil?
+      page.author_name(@author_level).set @name if @lookup_value.nil?
       page.auto_lookup @name if @auto_lookup
       page.action_required(@author_level).pick! @action_required
       page.loading_wait
