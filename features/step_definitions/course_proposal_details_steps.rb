@@ -307,6 +307,7 @@ When(/^I update the author and collaborator details on the course proposal$/) do
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
                                                              :name => "SMITH",
                                                              :author_notation => :clear,
+                                                             :permission => "Comment, View",
                                                              :author_level => 2,
                                                              :auto_lookup => true)
 end
@@ -321,8 +322,8 @@ Then(/^I should see updated author and collaborator details on the course propos
     begin
       page.author_name_review(collection_index).should include @course_proposal.author_list[collection_index].name
       page.author_permission_review(collection_index).should include "View" if @course_proposal.author_list[collection_index].permission == "View"
-      page.author_permission_review(collection_index).should include "Comment, View" if @course_proposal.author_list[collection_index].permission == "Comments, View"
-      page.author_permission_review(collection_index).should include "Edit, Comment, View" if @course_proposal.author_list[collection_index].permission == "Edit, Comments, View"
+      page.author_permission_review(collection_index).should include "Comment, View" if @course_proposal.author_list[collection_index].permission == "Comment, View"
+      page.author_permission_review(collection_index).should include "Edit, Comment, View" if @course_proposal.author_list[collection_index].permission == "Edit, Comment, View"
       page.action_request_review(collection_index).should == "FYI"
       collection_index += 1
     end until collection_index == 2

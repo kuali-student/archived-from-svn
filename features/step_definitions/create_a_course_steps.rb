@@ -889,8 +889,8 @@ Then /^I should see data in all non required fields for the course proposal$/ do
 
     on CmAuthorsCollaborators do |page|
     page.authors_collaborators
-    page.added_author_information('edit').should be_present if @course_proposal.author_permission == 'Edit, Comments, View'
-    page.added_author_information('comment').should be_present if @course_proposal.author_permission == 'Comments, View'
+    page.added_author_information('edit').should be_present if @course_proposal.author_permission == 'Edit, Comment, View'
+    page.added_author_information('comment').should be_present if @course_proposal.author_permission == 'Comment, View'
     page.added_author_information('view').should be_present if @course_proposal.author_permission == 'View'
 
     page.added_author_information('fyi').should be_present if @course_proposal.action_request == 'FYI'
