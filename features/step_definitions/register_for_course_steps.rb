@@ -497,7 +497,7 @@ And /^there is a message indicating that I have taken the course the maximum all
   on RegistrationCart do |page|
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page_status = page.result_status(@reg_request.course_code,@reg_request.reg_group_code)
-    page_status.should =~ /#{@reg_request.course_code} has already been taken (\w+)\.(\s*)Courses cannot be attempted more than/i
+    page_status.should =~ /#{@reg_request.course_code} has already been taken (\w+)\.(\s*)Courses cannot be repeated more than/i
   end
 end
 
