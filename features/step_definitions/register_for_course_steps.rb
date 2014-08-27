@@ -503,9 +503,19 @@ end
 
 Then /^there is a message indicating a course with grade I cannot be retaken$/ do
   on RegistrationCart do |page|
+    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page_status = page.result_status(@reg_request.course_code, @reg_request.reg_group_code)
     page_status.should =~ /#{@reg_request.course_code}/i
     page_status.should =~ /Cannot repeat a course with a mark of 'I'/i
+  end
+end
+
+Then /^there is a message indicating this is the last allowable repeat$/ do
+  on RegistrationCart do |page|
+    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
+    page_status = page.result_status(@reg_request.course_code, @reg_request.reg_group_code)
+    page_status.should =~ /This will be your second attempt of #{@reg_request.course_code}/i
+    page_status.should =~ /This course cannot be attempted more than twice/i
   end
 end
 
@@ -519,5 +529,18 @@ Then /^I attempt to register for a course in which I have received a mark of I$/
                       :course_has_options=> true
   @reg_request.create
   @reg_request.register
+end
+
+When /^I register for a course for the second time$/ do
+  @reg_request = make RegistrationRequest, :student_id=>"R.JOER",
+                      :term_code=> "201108",
+                      :term_descr=> "Fall 2011",
+                      :course_code=>"BSCI105",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter"),
+                      :course_has_options=> true
+  @reg_request.create
+  @reg_request.register
+
 end
 
