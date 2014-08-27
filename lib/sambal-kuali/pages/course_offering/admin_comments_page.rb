@@ -36,8 +36,8 @@ class AdminComments < BasePage
   end
 
   action(:comment_element){ |comment_index,b| b.frm.div(id: "KS-CommentField_UI_ID_line#{comment_index}") }
-  value(:comment_text){ |comment_index,b| b.frm.comment_element(comment_index).text }
-  element(:comment_hyperlink){ |comment_index,b| b.frm.comment_element(comment_index).link }
+  value(:comment_text){ |comment_index,b| b.comment_element(comment_index).text }
+  element(:comment_hyperlink){ |comment_index,b| b.comment_element(comment_index).link }
   value(:comment_created_by){ |comment_index,b| b.frm.p(id: "creator-name-id_line#{comment_index}").text }
   value(:comment_created_date){ |comment_index,b| b.frm.p(id: "creator-date-id_line#{comment_index}").text }
   action(:comment_text_editor){ |comment_index,b| b.frm.iframe(id: "KS-CommentField_ID_line#{comment_index}_control_ifr").body }
