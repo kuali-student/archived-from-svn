@@ -61,6 +61,7 @@ class CourseSearch < DataFactory
 
     page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
     on page_class do |page|
+      page.select_box(opts[:ao_code]).wait_until_present
       page.toggle_ao_select(opts[:ao_code])
       wait_until { page.details_heading(opts[:ao_type]).text =~ /Selected/i }
     end
