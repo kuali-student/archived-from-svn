@@ -18,7 +18,7 @@ import java.util.List;
 @javax.jws.WebService(serviceName = "CourseOfferingCallbackService",
         portName = "CourseOfferingCallbackService",
         endpointInterface = "org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackService",
-        targetNamespace = "http://localhost/callback")
+        targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE)
 public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallbackService {
     private static final Logger log = LoggerFactory.getLogger(CourseOfferingCallbackServiceImpl.class);
 
