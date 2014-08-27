@@ -73,7 +73,9 @@ class CmCourseRequisite < DataFactory
         rule.rule_logic_text.wait_until_present
         rule.rule_logic_text.set opts[:rule_logic_text]
         rule.rule_logic_preview
+        sleep 5 #TO avoid random edit failures.
         rule.update_rule_btn
+        sleep 5 #TO avoid random edit failures.
       end
     end
 
