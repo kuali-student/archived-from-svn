@@ -96,7 +96,7 @@ class CourseSearch < BasePage
   element(:add_to_plan_credit) { |b| b.text_field(name:"courseCredit")}
   action (:add_to_plan_button) { |b| b.frm.button(id:"submit_dialog_button").click}
   #element(:term) { |b| b.frm.div(id:"course_add_course_page").select(name:"termId") }
-  element(:backup_checkbox) { |b|b.checkbox(id:"unmlz_control")}
+  element(:backup_checkbox) { |b|b.checkbox(id:/control/)}
   element(:term) { |b| b.select(id:"planner_term_input_control")}
   element(:add_to_plan_popover) { |b|b.form(id:"popupForm")}
   #star icon for bookmarks

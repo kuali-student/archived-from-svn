@@ -44,6 +44,6 @@ class CourseDetailPage < BasePage
   element(:add_to_plan_notes_cdp) { |b| b.text_field(name:"courseNote") }
   action (:add_to_plan_button_cdp) { |b| b.frm.button(id:"submit_dialog_button").click}
 
-  element(:backup_checkbox_cdp) { |b|b.checkbox(id:"unmlz_control")}
+  element(:backup_checkbox_cdp) { |b|b.checkbox(id:"u11ka58i_control",class:"uif-checkboxControl valid")}
 end
 

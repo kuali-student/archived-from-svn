@@ -30,14 +30,6 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
 
 
   @nightly
-  Scenario: PL 1.0.4 Add course(CM) from CDP top to Backup section
-
-    When I navigate to the Course Section Details
-    And I add the course(CM) from the CDP details page to the Backup section
-    Then the course should be there in the Backup section of the planner
-
-
-  @nightly
 
   Scenario: PL 3.0.5 Add Course Offering(Single Activity) to a term in my plan
 
@@ -45,14 +37,6 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
     Then I should be able to add the course to my plan
 
 
-  @nightly
-
-
-  Scenario: PL 3.0.6 Add Course Offering(Multiple Activity) to a term in my plan
-
-    When I search for the course with Multiple Activity Offerings
-    And I select the activity offerings
-    Then I should be able to add the course with Multiple Activity Offerings to my plan
 
 
   @nightly

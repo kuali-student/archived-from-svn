@@ -181,6 +181,7 @@ And(/^I add the course\(CM\) from the CDP details page to the Backup section$/) 
     page.term_cdp.wait_until_present
     page.term_cdp.select @course_search_result.term
     page.add_to_plan_notes_cdp.set @course_search_result.notes
+    sleep 5
     page.backup_checkbox_cdp.set
     page.add_to_plan_button_cdp
   end
