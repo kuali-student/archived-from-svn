@@ -156,7 +156,7 @@ end
 
 Then(/^(.*?) can no longer edit the proposal$/) do |fyi_edit_collaborator|
   on CmReviewProposal do |page|
-    page.proposal_status.should include "Enroute"
+    page.proposal_status.should include "enroute"
     begin
       page.edit_course_information.should_not exist
     rescue

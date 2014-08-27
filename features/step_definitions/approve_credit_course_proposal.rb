@@ -135,7 +135,7 @@ Then(/^the course proposal is successfully approved$/) do
   @course_proposal.review_proposal_action
 
   on CmReviewProposal do |review|
-    review.proposal_status.should include "Approved"
+    review.proposal_status.should include "approved"
   end
 end
 
@@ -205,7 +205,7 @@ Then(/^the proposal is successfully approved$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
-    proposal.proposal_status.should include "Approved"
+    proposal.proposal_status.should include "approved"
   end
 end
 
@@ -255,7 +255,7 @@ And(/^I cannot blanket approve the incomplete proposal$/) do
     review.course_number_review_error_state.exists?.should be_true
     review.campus_locations_error.exists?.should be_true
     review.activity_format_error.exists?.should be_true
-    review.proposal_status.should include "Enroute"
+    review.proposal_status.should include "enroute"
     review.blanket_approve_disabled.exists?.should be_true
   end
 end

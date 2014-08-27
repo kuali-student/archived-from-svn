@@ -19,7 +19,7 @@ Then(/^can see the proposal has been Withdrawn$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
-    proposal.proposal_status.should include "Withdrawn"
+    proposal.proposal_status.should include "withdrawn"
   end
 end
 
@@ -64,7 +64,7 @@ Then(/^can see the proposal has been cancelled$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
-    proposal.proposal_status.should include "Cancelled"
+    proposal.proposal_status.should include "cancelled"
   end
 end
 

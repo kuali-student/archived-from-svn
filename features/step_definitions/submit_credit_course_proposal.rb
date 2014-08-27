@@ -23,7 +23,7 @@ Then(/^I can see updated status of the course proposal$/) do
   @course_proposal.review_proposal_action
   
   on CmReviewProposal do |review|
-    review.proposal_status.should include "Enroute"
+    review.proposal_status.should include "enroute"
   end
 
 end

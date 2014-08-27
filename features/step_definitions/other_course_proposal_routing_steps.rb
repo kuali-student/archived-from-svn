@@ -37,7 +37,7 @@ Then(/^I can resubmit the course proposal as (.*?)$/) do |author|
   @course_proposal.review_proposal_action
   @course_proposal.resubmit_proposal
   on CmReviewProposal do |review|
-    review.proposal_status.should include "Enroute"
+    review.proposal_status.should include "enroute"
   end
 
 end
@@ -184,7 +184,7 @@ Then(/^the course proposal is successfully rejected$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   on CmReviewProposal do |proposal|
-    proposal.proposal_status.should include "Rejected"
+    proposal.proposal_status.should include "rejected"
   end
 end
 
