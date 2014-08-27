@@ -21,7 +21,7 @@ Background:
     And I perform a full search for the course proposal
     Then I should no longer see author and collaborator details on the course proposal
 
-  @draft
+
   Scenario Outline: 14.4 Collaborators have correct access to a draft course proposal as set by author
     Given I have a proposal with collaborators submitted as <author>
     Then <FYIViewCollaborator> can FYI the proposal

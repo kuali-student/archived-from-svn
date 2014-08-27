@@ -12,6 +12,32 @@ Given(/^I have a proposal with collaborators submitted as (.*?)$/) do |author|
 
   puts @course_proposal.proposal_title
 
+  @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
+                                              :name => "edna",
+                                              :lookup_value => "employee",
+                                              :permission => "View",
+                                              :author_notation => :clear,
+                                              :author_level => 1,
+                                              :auto_lookup => true,
+                                              :defer_save => true)
+
+  @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
+                                              :name => "eric",
+                                              :lookup_value => "employee",
+                                              :permission => "Comment, View",
+                                              :author_notation => :clear,
+                                              :author_level => 2,
+                                              :auto_lookup => true,
+                                              :defer_save => true)
+
+  @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
+                                              :name => "earl",
+                                              :lookup_value => "employee",
+                                              :permission => "Edit, Comment, View",
+                                              :author_notation => :clear,
+                                              :author_level => 3,
+                                              :auto_lookup => true)
+
 end
 
 
@@ -155,6 +181,8 @@ end
 
 
 Then(/^(.*?) can no longer edit the proposal$/) do |fyi_edit_collaborator|
+  navigate_to_functional_home
+  @course_proposal.navigate_to_review
   on CmReviewProposal do |page|
     page.proposal_status.should include "enroute"
     begin
