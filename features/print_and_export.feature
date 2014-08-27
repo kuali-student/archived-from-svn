@@ -1,4 +1,4 @@
-@draft
+@nightly
 Feature: GT.Print and Export
 
   Scenario:PE1.1 Authors can Print and Export Draft Course Proposals

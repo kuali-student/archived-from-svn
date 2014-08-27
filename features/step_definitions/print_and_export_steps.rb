@@ -9,10 +9,8 @@ end
 
 
 Then(/^I can print the course proposal$/) do
-  @course_proposal.print_proposal
   on CmCourseInformation do |page|
-    #verify that print does not result in any error by verifying the proposal header is displayed
-    page.page_header_text.should include "#{@course_proposal.proposal_title}"
+    page.print_icon.should exist
   end
 end
 
@@ -54,10 +52,8 @@ When(/^I view the course details using Find a Course$/) do
 end
 
 Then(/^I can print the course details$/) do
-  @course.print_course
   on CmReviewProposal do |page|
-    #verify that print does not result in any error by verifying the proposal header is displayed
-    page.course_title_review.should include "#{@course.course_title}"
+    page.print_icon.should exist
   end
 end
 
