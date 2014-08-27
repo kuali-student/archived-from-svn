@@ -144,11 +144,8 @@ class BasePage < PageFactory
       # Export
       element(:export_icon) {|b|b.a(title: "Export").i(class: "ks-fontello-icon-export" )}
       action(:export_action) {|b|b.export_icon.click }
-      element(:export_dialog) { |b| b.div(class: "fancybox-inner").span(class: "uif-headerText-span",text: "Export Document")}
-      element(:export_option_pdf) { |b| b.div(class: "fancybox-inner").input(type: "radio", value: "PDF")}
-      element(:export_option_doc) { |b| b.div(class: "fancybox-inner").input(type: "radio", value: "DOC")}
-      element(:export_confirm_button) { |b| b.div(class: "fancybox-inner").button(text: "Export")}
-      action(:export_close_dialog) { |b| b.a(class: 'fancybox-item fancybox-close').click; b.export_confirm_button.wait_while_present }
+      element(:export_as_pdf_link) { |b| b.a(id: "CM-ExportAction-PDF")}
+      element(:export_as_doc_link) { |b| b.a(id: "CM-ExportAction-DOC")}
 
       #Print
       element(:print_icon) {|b|b.a(title: "Print").i(class: "ks-fontello-icon-print")}

@@ -15,14 +15,11 @@ Then(/^I can print the course proposal$/) do
 end
 
 And(/^export the course proposal$/) do
-  @course_proposal.export_proposal # pop-up appears
+  @course_proposal.export_proposal # make the export popover appear
   on CmCourseInformation do |page|
-    #verify that popup and other elements appear
-    page.export_dialog.wait_until_present
-    page.export_option_pdf.exists?.should be_true
-    page.export_option_doc.exists?.should be_true
-    page.export_confirm_button.exists?.should be_true
-    page.export_close_dialog
+    # verify that the action links exist.
+    page.export_as_pdf_link.should exist
+    page.export_as_doc_link.should exist
   end
 end
 
@@ -58,13 +55,10 @@ Then(/^I can print the course details$/) do
 end
 
 And(/^export the course details$/) do
-  @course.export_course # pop-up appears
+  @course.export_course #  make the export popover appear
   on CmReviewProposal do |page|
-    #verify that popup and other elements appear
-    page.export_dialog.wait_until_present
-    page.export_option_pdf.exists?.should be_true
-    page.export_option_doc.exists?.should be_true
-    page.export_confirm_button.exists?.should be_true
-    page.export_close_dialog
+    # verify that the action links in the export popover exist.
+    page.export_as_pdf_link.should exist
+    page.export_as_doc_link.should exist
   end
 end
