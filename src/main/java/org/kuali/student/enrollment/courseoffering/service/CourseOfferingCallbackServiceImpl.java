@@ -75,13 +75,10 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
                 CourseSeatCountInfo courseSeatCountInfo =
                         courseSeatCountService.getCourseSeatCountByActivityOffering(activityOfferingId, contextInfo);
 
-                if(courseSeatCountInfo.getSeats().equals(activityOfferingInfo.getMaximumEnrollment())) {
-                    log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
-                            + " to " + activityOfferingInfo.getMaximumEnrollment()
-                            + " for activityOffering " + activityOfferingId);
-                    courseSeatCountInfo.setSeats(activityOfferingInfo.getMaximumEnrollment());
-                    courseSeatCountService.updateCourseSeatCount(courseSeatCountInfo.getId(), courseSeatCountInfo, contextInfo);
-                }
+                handleMaxEnrollmentChange(activityOfferingInfo, courseSeatCountInfo, contextInfo);
+                handleAoReinstated(activityOfferingInfo, contextInfo);
+                handleNewAoOffering(activityOfferingInfo, contextInfo);
+
             } catch(Exception e) {
                 log.error("Exception occurred in callback", e);
             }
@@ -90,6 +87,36 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
         statusInfo.setSuccess(true);
         return statusInfo;
     }
+
+    protected void handleMaxEnrollmentChange(ActivityOfferingInfo activityOfferingInfo,
+                                       CourseSeatCountInfo courseSeatCountInfo,
+                                       ContextInfo contextInfo) throws Exception {
+
+        if(!courseSeatCountInfo.getSeats().equals(activityOfferingInfo.getMaximumEnrollment())) {
+            log.info("updating courseSeatCountInfo.seats from " + courseSeatCountInfo.getSeats()
+                    + " to " + activityOfferingInfo.getMaximumEnrollment()
+                    + " for activityOffering " + activityOfferingInfo.getId());
+            courseSeatCountInfo.setSeats(activityOfferingInfo.getMaximumEnrollment());
+            courseSeatCountService.updateCourseSeatCount(courseSeatCountInfo.getId(), courseSeatCountInfo, contextInfo);
+        }
+    }
+
+    protected void handleAoReinstated(ActivityOfferingInfo activityOfferingInfo,
+                                       ContextInfo contextInfo) throws Exception {
+
+        // if AO state changed from Suspended to Offered (reinstated), trigger CourseWaitList processing
+
+        return;
+    }
+
+    protected void handleNewAoOffering(ActivityOfferingInfo activityOfferingInfo,
+                                       ContextInfo contextInfo) throws Exception {
+
+        // or if new AO becomes offered, trigger CourseWaitList processing
+
+        return;
+    }
+
 
     @Override
     public StatusInfo deleteActivityOfferings(List<String> activityOfferingIds, ContextInfo contextInfo) {
