@@ -1051,7 +1051,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format21 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 1,
-                  :type => "Discussion",
+                  :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1059,13 +1059,13 @@ When(/^I find an approved Course and select copy$/) do
                   :class_size => 0 )
 
   format22 = (make CmFormatsObject,  :format_level => 2,
-                  :activity_level => 2,
-                  :type => "Lecture",
-                  :contacted_hours => 3,
-                  :contact_frequency => "per week",
-                  :duration_count => nil,
-                  :duration_type => nil,
-                  :class_size => 0 )
+                   :activity_level => 2,
+                   :type => "Discussion",
+                   :contacted_hours => 3,
+                   :contact_frequency => "per week",
+                   :duration_count => nil,
+                   :duration_type => nil,
+                   :class_size => 0 )
 
   lo2_cat1 = (make CmLoCategoryObject,:category_name => "Writing - Skill",
                    :category_level => 1,
