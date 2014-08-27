@@ -188,7 +188,7 @@ end
 Then(/^I should be able to see an option to add multiple offerings to my plan$/) do
 on CourseSectionPage do |page|
   sleep 5
-  page.add_to_button_enabled.enabled?.should==true
+  page.add_to_button_disabled.exists?.should==true
 end
 end
 
@@ -213,9 +213,7 @@ And(/^I select the activity offerings$/) do
 
   on CourseSectionPage do |page|
     page.add_to_button_disabled.exists?.should==true
-    page.activityoffering_checkbox(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).click
-    page.activityoffering_checkbox(0,0,0,1,0).click
-  end
+    end
 
 end
 

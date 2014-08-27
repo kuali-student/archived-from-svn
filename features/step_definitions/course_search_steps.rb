@@ -39,9 +39,6 @@ end
 When /^I search for a "(.*?)" "(.*?)" by "(.*?)"$/ do |course_status,course, term_selection|
   @course_search_result = make CourseSearchResults, :course_code => course, :term_select => term_selection
   @course_search_result.course_search
-  on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
-  end
 end
 
 

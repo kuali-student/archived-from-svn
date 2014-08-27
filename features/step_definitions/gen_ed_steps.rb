@@ -53,6 +53,9 @@ When(/^I search for  courses in the Course Search Page$/) do
                                :gened_code=>"DSSP",
                                :gened_course=>"General Education: Scholarship in Practice"
  @course_search_results.course_search
+ on CourseSearch do |page|
+   page.course_search_results_facets.wait_until_present
+ end
 
 
 end

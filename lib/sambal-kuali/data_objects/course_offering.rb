@@ -257,6 +257,7 @@ class CourseSearchResults < DataFactory
   def set_search_entry
     on CourseSearch do |page|
       page.search_for_course.set @course_code
+      sleep 5
       page.search
     end
   end
