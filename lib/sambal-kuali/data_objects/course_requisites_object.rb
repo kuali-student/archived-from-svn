@@ -76,6 +76,7 @@ class CmCourseRequisite < DataFactory
         sleep 5 #TO avoid random edit failures.
         rule.update_rule_btn
         sleep 5 #TO avoid random edit failures.
+      on(CmCourseInformation).save_progress
       end
     end
 
