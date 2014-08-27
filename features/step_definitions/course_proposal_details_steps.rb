@@ -303,11 +303,11 @@ When(/^I update the author and collaborator details on the course proposal$/) do
   navigate_to_cm_home
   @course_proposal.search
   @course_proposal.edit_proposal_action
-  @course_proposal.author_list[0].delete :author_level => 1, :defer_save => true
+  @course_proposal.author_list[0].delete :author_level => 1
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
                                                              :name => "SMITH",
                                                              :author_notation => :clear,
-                                                             :permission => "Comment, View",
+                                                             :permission => "View",
                                                              :author_level => 2,
                                                              :auto_lookup => true)
 end

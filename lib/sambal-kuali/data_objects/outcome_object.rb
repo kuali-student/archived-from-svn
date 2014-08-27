@@ -29,7 +29,7 @@ class CmOutcomeObject < DataFactory
       page.add_outcome unless page.outcome_type(@outcome_level).exists?
       page.outcome_type(@outcome_level).wait_until_present
       page.outcome_type(@outcome_level).pick! @outcome_type
-      page.loading_wait
+      page.loading_extended_wait
       page.credit_value(@outcome_level).wait_until_present
       page.credit_value(@outcome_level).set @credit_value
     end

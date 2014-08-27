@@ -42,8 +42,8 @@ class CmAuthCollaboratorObject < DataFactory
       page.auto_lookup @name if @auto_lookup
       page.action_required(@author_level).pick! @action_required
       page.loading_wait
-      sleep 3 #to avoid occassional failures caused by delay in select list population.
-      page.author_permission(@author_level).pick! @permission
+      page.author_permission(@author_level).wait_until_present
+      page.author_permission(@author_level).select @permission
       page.author_notation(@author_level).fit @author_notation if @author_notation == :set
     end
     determine_save_action unless @defer_save
