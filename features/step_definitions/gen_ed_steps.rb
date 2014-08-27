@@ -72,7 +72,12 @@ end
                                 :subject=>"English",
                                 :gened_code=>"DSHU",
                                 :gened_course=>"General Education: Humanities"
-  @course_search_results.initial_bookmark_state_set
-  @course_search_results.set_search_entry
+
+  @course_search_results.course_search
+  on CourseSearch do |page|
+    page.course_search_results_facets.wait_until_present
+  end
+
+  @course_search_results.initial_bookmark_state_clear
 
 end

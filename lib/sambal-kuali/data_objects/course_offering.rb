@@ -587,7 +587,7 @@ class CourseSearchResults < DataFactory
   end
 
   def initial_bookmark_state_clear
-    course_search
+#    course_search
     on CourseSearch do |page|
       page.clear_star_bookmark if page.star_bookmark_on.exists?
     end
