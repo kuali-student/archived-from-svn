@@ -42,6 +42,11 @@ class StudentSchedule < RegisterForCourseBase
   element(:confirm_remove_waitlist_button) { |course_code,reg_group_code,b| b.button(id: "removeWaitlist_#{course_code}_#{reg_group_code}") }
   element(:cancel_remove_waitlist_button) { |course_code,reg_group_code,b| b.button(id: "removeWaitlistCancel_#{course_code}_#{reg_group_code}") }
 
+  #Grid elements
+  element(:gridElement) { |course_code,b| b.div(id: "course_calendar_course_#{course_code}_item0") }
+  element(:scheduleToggleToGrid) { |b| b.a(id: "scheduleToggleToGrid") }
+  action(:toggleScheduleToGrid) { |b| b.scheduleToggleToGrid().click }
+
   def self.prefix(status)
     return (status==STATUS_SCHEDULE)?"":PREFIX_WAITLIST
   end

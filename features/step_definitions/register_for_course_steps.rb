@@ -1,4 +1,4 @@
-When /^I add an? (\w+) course offering to my registration cart$/ do |subj|
+When /^I add an? (\w+) course offering to my (empty)? registration cart$/ do |subj,empty|
 
   # Get original counts before adding course to cart
   if subj=="WMST" || subj=="BSCI2"
@@ -144,6 +144,12 @@ When /^I add an? (\w+) course offering to my registration cart$/ do |subj|
       credit_option = "3.0"
       course_has_options = true
   end
+  if empty
+      # Clear cart and schedule
+      @restResponse = make RegRestUtility
+      @restResponse.clear_cart_and_schedule(term_code)
+
+  end
 
   course_options = (make CourseOptions, :credit_option => credit_option)
   @reg_request = make RegistrationRequest, :student_id=>"student",
@@ -207,6 +213,20 @@ Then /^the course is (present|not present) in my cart$/  do |presence|
     end
   end
 end
+
+Then /^the course is (present|not present) in my grid as a (inCart|registered|waitlisted) item/  do |presence,gridType|
+  sleep 1
+  on StudentSchedule do |page|
+    if presence == "present"
+      sleep 2
+      page.gridElement(@reg_request.course_code).attribute_value("class").should include  "kscr-CourseCalendar-courseBlock--#{@gridType}"
+    else
+      sleep 2
+      page.gridElement(@reg_request.course_code).attribute_value("class").should_not include  "kscr-CourseCalendar-courseBlock--#{@gridType}"
+    end
+  end
+end
+
 
 Then /^the course is present in my cart, with the updated options$/  do
   on RegistrationCart do |page|

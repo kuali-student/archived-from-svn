@@ -1,8 +1,10 @@
-Given /^I am using a (mobile|tablet) screen size$/ do |deviceType|
+Given /^I am using a (mobile|tablet|large) screen size$/ do |deviceType|
   if deviceType=="mobile"
     @browser.window.resize_to(320, 568)
   elsif deviceType=="tablet"
     @browser.window.resize_to(600, 1024)
+  elsif deviceType=="large"
+    @browser.window.resize_to(1440, 864)
   end
   #@browser.goto "#{$test_site}/kscr-poc/index.jsp"
 end
