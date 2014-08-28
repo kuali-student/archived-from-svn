@@ -5,17 +5,15 @@ class AdminRegistrationData < DataFactory
   include StringFactory
   include Workflows
 
-  attr_accessor :student_id, :term_code, :course_section_codes,
-                :term_description
-  # , :confirm_term_selection
+  attr_accessor :student_id, :term_code, :term_description, :course_section_codes
 
   def initialize(browser, opts={})
     @browser = browser
 
     defaults = {
         :student_id => "ks-2094",
-        :term_code => nil,
-        :term_description => nil,
+        :term_code => "201401",
+        :term_description => "Spring 2014",
         :course_section_codes => collection('ARCourseSection')
     }
 
@@ -32,13 +30,9 @@ class AdminRegistrationData < DataFactory
     search
 
     on AdminRegistration do |page|
-      page.student_info_input.set @student_id
-      page.student_info_go
-
-      if @term_code != nil
-        page.change_term_input.set @term_code
-        page.change_term_go
-      end
+      page.student_id_input.set @student_id
+      page.term_code_input.set @term_code
+      page.student_term_go
     end
   end
 

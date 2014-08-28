@@ -17,6 +17,10 @@ class Enrollment < BasePage
   action(:manage_course_offerings) { |p| p.frm.link(text: "Manage Course Offerings").click }
   action(:schedule_of_classes) { |p| p.frm.link(text: "Schedule of Classes").click }
 
+  #Course Registration
+  action(:student_reg) { |b| b.link(text: "Student Registration").click }
+  action(:admin_reg) { |b| b.link(text: "Admin Registration").click }
+
   #Calendars
   action(:search_for_calendar_or_term) { |p| p.frm.link(text: "Search for Calendar or Term").click }
   action(:create_academic_calendar) { |p| p.frm.link(text: "Create Academic Calendar").click }

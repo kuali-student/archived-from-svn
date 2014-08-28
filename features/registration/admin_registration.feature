@@ -21,37 +21,35 @@ Feature: REG.Admin Registration
   Background:
     Given I am logged in as admin
 
-#KSENROLL-13422
-  Scenario: CR22.1.1 Verify that valid student is entered
-    When I attempt to load a student by valid student Id
-    Then student basic information and change term section is displayed
+#KSENROLL-13422\#KSENROLL-13424
+  Scenario: CR22.1.1\CR22.2.1 Verify that course section is displayed after valid student and term is entered
+    When I attempt to load a student by valid student Id and term code
+    Then the student information and term description is displayed
+    And I am able to enter a course code for registration
 
+#KSENROLL-13422
   Scenario: CR22.1.2 Verify error message when entering invalid student
     When I attempt to load a student by invalid student Id
-    Then a validation error message displayed stating "Invalid student Id."
+    Then a validation error message is displayed stating "Invalid student Id"
 
 #KSENROLL-13424
-  Scenario: CR22.2.1 Verify that valid term is entered
-    When I attempt to load a Term by valid term Id
-    Then term description is displayed
-
   Scenario: CR22.2.2 Verify error message when entering invalid term
     When I attempt to load a Term by invalid term Id
-    Then error message is displayed stating "Change Term: No term defined for code:"
+    Then an error message is displayed stating "Term: No term defined for code:"
 
   Scenario: CR22.2.3 Verify error message when no term is entered
     When I attempt to load a Term without entering a term Id
-    Then a required error message is displayed stating "Change Term: Term is required."
+    Then a required error message is displayed stating "Term: Term is required"
 
 #KSENROLL-13425
   Scenario: CR22.3.1 Verify registered courses are populated and the correct credit count is shown
     When I attempt to load a Term by valid term Id
-    Then registered courses are populated
+    Then the registered courses are populated
     And the total number of credits for registered courses are displayed
 
   Scenario: CR22.3.2 Verify registered courses are populated for student with no registered courses
     When I attempt to load a Term by valid term Id for student with no registered courses
-    Then registered courses are not populated
+    Then the registered courses are not populated
 
   Scenario: CR22.3.3 Verify registered courses are populated and default sort order is by course code
     When I attempt to load a Term by valid term Id
@@ -60,12 +58,12 @@ Feature: REG.Admin Registration
 #KSENROLL-13426
   Scenario: CR22.4.1 Verify waitlisted courses are populated and the correct credit count is shown
     When I attempt to load a Term by valid term Id for student with waitlisted courses
-    Then waitlisted courses are populated
+    Then the waitlisted courses are populated
     And the total number of credits for waitlisted courses are displayed
 
   Scenario: CR22.4.2 Verify no waitlisted courses are populated for student who is not on a waitlist
     When I attempt to load a Term by valid term Id
-    Then waitlisted courses are not populated
+    Then the waitlisted courses are not populated
 
   Scenario: CR22.4.3 Verify waitlisted courses are populated and default sort order is by course code
     When I attempt to load a Term by valid term Id for student with waitlisted courses
@@ -109,7 +107,6 @@ Feature: REG.Admin Registration
     Then no failed term eligibility warning message is displayed
 
 #KSENROLL-13720
-  @wip
   Scenario: CR22.15.1 Verify I am able to add and then remove multiple courses for a student when registering
     When I select the course that a student will be registered for
     And I select additional courses to be registered for

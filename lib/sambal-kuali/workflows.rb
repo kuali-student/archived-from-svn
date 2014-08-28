@@ -104,7 +104,7 @@ module Workflows
   end
 
   def go_to_admin_registration
-    visit KSMaintenancePortal do |page|
+    visit Enrollment do |page|
       page.admin_reg
     end
   end

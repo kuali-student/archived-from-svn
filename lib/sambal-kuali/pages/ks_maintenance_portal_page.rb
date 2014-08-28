@@ -58,7 +58,7 @@ class KSMaintenancePortal < BasePage
   action(:krms_edit_agenda) { |b| b.link(text: "Edit Agenda").click }
   action(:krms_manage_co_agendas) { |b| b.link(text: "Manage Course Offering Agendas").click}
 
- #course Reg link
+ #Course Registration
   action(:admin_reg) { |b| b.link(text: "Admin Registration").click }
 
   #Holds Manage link
