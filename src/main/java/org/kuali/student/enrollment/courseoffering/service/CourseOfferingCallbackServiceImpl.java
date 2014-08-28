@@ -29,7 +29,7 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
     CourseOfferingService courseOfferingService;
 
     @Override
-    public StatusInfo newCourseOfferings(List<String> courseOfferingIds, ContextInfo contextInfo) {
+    public StatusInfo createCourseOfferings(List<String> courseOfferingIds, ContextInfo contextInfo) {
 
         StatusInfo statusInfo = new StatusInfo();
         statusInfo.setSuccess(true);
@@ -55,7 +55,7 @@ public class CourseOfferingCallbackServiceImpl implements CourseOfferingCallback
     }
 
     @Override
-    public StatusInfo newActivityOfferings(List<String> activityOfferingIds, ContextInfo contextInfo) {
+    public StatusInfo createActivityOfferings(List<String> activityOfferingIds, ContextInfo contextInfo) {
         StatusInfo statusInfo = new StatusInfo();
         statusInfo.setSuccess(true);
         return statusInfo;
