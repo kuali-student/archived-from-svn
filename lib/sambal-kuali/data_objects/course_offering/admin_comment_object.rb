@@ -75,7 +75,8 @@ class AdminCommentObject < DataFactory
 
     if options[:text] != nil
       on AdminComments do |page|
-        page.comment_text_editor(comment_index).send_keys [:control, 'a'], :delete
+
+        page.comment_text_editor(comment_index).send_keys ' '
         page.comment_text_editor(comment_index).send_keys options[:text]
       end
     end
@@ -105,7 +106,9 @@ class AdminCommentObject < DataFactory
         page.comment_save_edit(comment_index).click
         page.frm.image(alt: "Loading...").wait_while_present #in this case 'loading' icon is in iframe
         sleep 1
+        pre_edit_text = @text
         set_options(options)
+        @text = "#{pre_edit_text} #{@text}"
       end
       on AdminComments do |page|
         comment_index = page.comment_index_by_text(@text)
