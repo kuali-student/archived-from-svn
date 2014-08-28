@@ -1,4 +1,4 @@
-When /^I add an? (\w+) course offering to my (empty)? registration cart$/ do |subj,empty|
+When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |subj,empty|
 
   # Get original counts before adding course to cart
   if subj=="WMST" || subj=="BSCI2"
@@ -214,15 +214,15 @@ Then /^the course is (present|not present) in my cart$/  do |presence|
   end
 end
 
-Then /^the course is (present|not present) in my grid as a (inCart|registered|waitlisted) item/  do |presence,gridType|
+Then /^the course is (present|not present) in my grid as an? (inCart|registered|waitlisted) item/  do |presence,gridType|
   sleep 1
   on StudentSchedule do |page|
     if presence == "present"
       sleep 2
-      page.gridElement(@reg_request.course_code).attribute_value("class").should include  "kscr-CourseCalendar-courseBlock--#{@gridType}"
+      page.gridElement(@reg_request.course_code).attribute_value("class").should include  "kscr-CourseCalendar-courseBlock--#{gridType}"
     else
       sleep 2
-      page.gridElement(@reg_request.course_code).attribute_value("class").should_not include  "kscr-CourseCalendar-courseBlock--#{@gridType}"
+      page.gridElement(@reg_request.course_code).attribute_value("class").should_not include  "kscr-CourseCalendar-courseBlock--#{gridType}"
     end
   end
 end

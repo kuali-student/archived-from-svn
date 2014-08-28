@@ -98,13 +98,13 @@ Feature: REG.Register for course
     Then the number of credits I am registered for is correctly updated in my schedule after the drop
 
   #KSENROLL-14552
-  Scenario: CR 4.2 As a student, I want to view the meeting times of my courses in a grid structure so that I can more easily construct a schedule
+  Scenario: CR 4.2 Verify grid displays courses correctly depending on their status
     When I add a HIST course offering to my empty registration cart
-    Given I am using a large screen size
-    Then the course is present in my grid as a inCart item
-    Given I am using a mobile screen size
+    And I am using a large screen size
+    Then the course is present in my grid as an inCart item
+    When I am using a mobile screen size
     And I register for the course
     Then there is a message indicating successful registration
     When I view my schedule
-    Given I am using a large screen size
+    And I am using a large screen size
     Then the course is present in my grid as a registered item
