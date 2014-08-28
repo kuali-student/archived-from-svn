@@ -297,6 +297,14 @@ When /^I view my schedule$/ do
   end
 end
 
+When /^I go to my schedule$/ do
+  visit RegistrationCart do |page|
+    page.menu
+    page.schedule_link.wait_until_present
+    page.schedule_link.click
+  end
+end
+
 And /^the course is (present|not present) in my schedule$/ do |presence|
   sleep 1
   on StudentSchedule do |page|
@@ -562,5 +570,17 @@ When /^I register for a course for the second time$/ do
   @reg_request.create
   @reg_request.register
 
+end
+
+When /^I register for a course that is secondary alias of a cross-listed course$/ do
+  @reg_request = make RegistrationRequest,
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"WMST453",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter"),
+                      :course_has_options=> true
+  @reg_request.create
+  @reg_request.register
 end
 

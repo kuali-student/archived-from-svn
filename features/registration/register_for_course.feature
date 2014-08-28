@@ -60,6 +60,15 @@ Feature: REG.Register for course
     Then I undo the drop action
     And the course is present in my cart
 
+#KSENROLL-14553
+  Scenario: CR 1.11 Ensure cross-listed course code persists after registration
+    When I register for a course that is secondary alias of a cross-listed course
+    Then the course is present in my schedule
+    When I log out
+    And I am logged in as a Student
+    And I go to my schedule
+    Then the course is present in my schedule
+
   #KSENROLL-12064
   Scenario: CR 5.1 I want to change the parameters for my registered courses so that I take the course with my preferred options.
     Given I have registered for a course having multiple credit options
