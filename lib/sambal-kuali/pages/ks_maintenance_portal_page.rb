@@ -60,4 +60,7 @@ class KSMaintenancePortal < BasePage
 
  #course Reg link
   action(:admin_reg) { |b| b.link(text: "Admin Registration").click }
+
+  #Holds Manage link
+  action(:manage_hold_catalog) { |b| b.link(text: "Manage Hold Catalog").click }
 end

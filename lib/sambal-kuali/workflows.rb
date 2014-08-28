@@ -109,6 +109,12 @@ module Workflows
     end
   end
 
+  def go_to_manage_hold_catalog
+    visit KSMaintenancePortal do |page|
+      page.manage_hold_catalog
+    end
+  end
+
 
   def log_in(user, pwd)
     current_user = ""
