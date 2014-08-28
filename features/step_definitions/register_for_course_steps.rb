@@ -542,7 +542,7 @@ Then /^there is a message indicating this is the last allowable repeat$/ do
   on RegistrationCart do |page|
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page_status = page.result_status(@reg_request.course_code, @reg_request.reg_group_code)
-    page_status.should =~ /This will be your second attempt of #{@reg_request.course_code}/i
+    page_status.should =~ /This will be your 2nd attempt of #{@reg_request.course_code}/i
     page_status.should =~ /This course cannot be attempted more than twice/i
   end
 end
