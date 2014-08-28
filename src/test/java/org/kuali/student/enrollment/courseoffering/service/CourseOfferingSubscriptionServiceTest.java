@@ -12,6 +12,7 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
@@ -139,6 +140,10 @@ public class CourseOfferingSubscriptionServiceTest {
         log.info("testCallbackIfAoIsUpdated waiting for ActiveMq to finish processing tests...");
         Thread.sleep(1000);
         log.info("testCallbackIfAoIsUpdated finished waiting for ActiveMq to finish processing tests...");
+        CourseSeatCountInfo courseSeatCountInfoCheck =
+                courseSeatCountService.getCourseSeatCountByActivityOffering(createdAo.getId(), contextInfo);
+
+        Assert.assertTrue(createdAo.getMaximumEnrollment().equals(courseSeatCountInfoCheck.getSeats()));
     }
 
     public CourseOfferingSubscriptionAdvice getCourseOfferingSubscriptionAdvice() {
