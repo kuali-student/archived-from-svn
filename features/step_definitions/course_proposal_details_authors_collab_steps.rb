@@ -14,7 +14,7 @@ Given(/^I have a proposal with collaborators submitted as (.*?)$/) do |author|
 
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
                                               :name => "edna",
-                                              :lookup_value => "employee",
+                                              :lookup_value => "Employee",
                                               :permission => "View",
                                               :author_notation => :clear,
                                               :author_level => 1,
@@ -23,7 +23,7 @@ Given(/^I have a proposal with collaborators submitted as (.*?)$/) do |author|
 
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
                                               :name => "eric",
-                                              :lookup_value => "employee",
+                                              :lookup_value => "Employee",
                                               :permission => "Comment, View",
                                               :author_notation => :clear,
                                               :author_level => 2,
@@ -32,7 +32,7 @@ Given(/^I have a proposal with collaborators submitted as (.*?)$/) do |author|
 
   @course_proposal.add_author :author =>(make CmAuthCollaboratorObject,
                                               :name => "earl",
-                                              :lookup_value => "employee",
+                                              :lookup_value => "Employee",
                                               :permission => "Edit, Comment, View",
                                               :author_notation => :clear,
                                               :author_level => 3,
