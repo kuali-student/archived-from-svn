@@ -80,10 +80,12 @@ class CmCourseRequisite < DataFactory
       end
     end
 
+    if opts[:rule_logic_text].nil?
     if opts[:requisite_type] == REQUISITE_TYPE_PREREQUISITE
       edit_rule_student_eligibility :logic_operator => opts[:logic_operator],
                                     :left_group_node => opts[:left_group_node],
                                     :right_group_node => opts[:right_group_node]
+    end
     end
     set_options(opts)
   end
