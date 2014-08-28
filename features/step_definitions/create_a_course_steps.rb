@@ -1051,7 +1051,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format21 = (make CmFormatsObject,  :format_level => 2,
                   :activity_level => 1,
-                  :type => "Lecture",
+                  :type => "Discussion",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
                   :duration_count => nil,
@@ -1060,7 +1060,7 @@ When(/^I find an approved Course and select copy$/) do
 
   format22 = (make CmFormatsObject,  :format_level => 2,
                    :activity_level => 2,
-                   :type => "Discussion",
+                   :type => "Lecture",
                    :contacted_hours => 3,
                    :contact_frequency => "per week",
                    :duration_count => nil,
