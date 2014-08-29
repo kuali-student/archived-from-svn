@@ -43,6 +43,19 @@ class CreateHold < BasePage
   action(:create_or_edit_hold_own_org_find) { |b| b.create_or_edit_hold_own_org_find_icon.when_present.click}
 
 
+  element(:create_or_edit_hold_own_org_contact) { |b| b.create_or_edit_hold_org_section.text_field(id: /holdIssueOwnOrgContact/)}
+  element(:create_or_edit_hold_own_org_address) { |b| b.create_or_edit_hold_org_section.text_field(id: /holdIssueOwnOrgAddress/)}
+
+  element(:create_or_edit_hold_first_applied_date) { |b| b.create_or_edit_hold_term_section.text_field(id: /holdFirstAppliedDate/)}
+  element(:create_or_edit_hold_last_applied_date) { |b| b.create_or_edit_hold_term_section.text_field(id: /holdLastAppliedDate/)}
+
+  element(:create_or_edit_hold_term_based) { |b| b.create_or_edit_hold_term_section.text_field(id: /holdTermBased/)}
+  element(:create_or_edit_hold_first_term) { |b| b.create_or_edit_hold_term_section.text_field(id: /holdFirstAppTerm/)}
+  element(:create_or_edit_hold_last_term) { |b| b.create_or_edit_hold_term_section.text_field(id: /holdLastAppTerm/)}
+  element(:create_or_edit_hold_history) { |b| b.create_or_edit_hold_term_section.text_field(id: /hold_History/)}
+
+   #Auth Org Table
+  #element(:create_or_edit_hold_auth_org_find_icon) { |b| b.create_or_edit_hold_auth_org_table.a(id: /holdIssueOwnOrg_quickfinder_act/)}
 
   ######################################################################################################################
   ###                                             Create/Edit Hold Buttons                                           ###
@@ -52,7 +65,7 @@ class CreateHold < BasePage
 
   element(:create_or_edit_hold_add_org_btn) { |b| b.create_or_edit_hold_page.button(id: "KS-CreateHold-AuthorizationSection_Add")}
   action(:create_or_edit_hold_add_org){ |b| b.create_or_edit_hold_add_org_btn.when_present.click}
-  #element(:create_or_edit_hold_auth_org_find_icon) { |b| b.create_or_edit_hold_auth_org_section.a(id: /holdIssueOwnOrg_quickfinder_act/)}
+  element(:create_or_edit_hold_auth_org_table) { |b| b.create_or_edit_hold_auth_org_section.table}
 
   ######################################################################################################################
   ###                                             Create/Edit Hold Org Popup                                         ###
@@ -60,5 +73,6 @@ class CreateHold < BasePage
   element(:create_or_edit_hold_org_popup) { |b| b.frm_popup.div(id: "organizationInfoLookupView")}
   element(:create_or_edit_hold_org_popup_search_btn){ |b| b.create_or_edit_hold_org_popup.button(id: "button_search")}
   action(:create_or_edit_hold_org_popup_search){ |b| b.create_or_edit_hold_org_popup_search_btn.when_present.click}
+
 
 end
