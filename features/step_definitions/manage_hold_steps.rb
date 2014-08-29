@@ -20,23 +20,18 @@ Then(/^no search results are displayed$/) do
   end
 end
 
-And(/^I edit that hold by adding an owning organization$/) do
+And(/^I edit that hold by adding a hold code as well as an owning organization$/) do
   on ManageHold do |page|
     page.loading.wait_while_present
     @manage_hold.edit
-    page.create_or_edit_hold_own_org_find
-    page.create_or_edit_hold_org_popup_search
-    page.create_or_edit_hold_org_popup_table_select(1)
-    page.create_or_edit_hold_save
+    page.create_edit_hold_org_find
+    page.create_edit_hold_popup_search
+    page.create_edit_hold_popup_table_select(1)
+    page.create_edit_hold_code_input.set "AAI01"
+    page.create_edit_hold_save
   end
 end
 
-And(/^I edit that hold by changing the hold authorization$/) do
-  on ManageHold do |page|
-    page.loading.wait_while_present
-    @manage_hold.edit
-    page.create_or_edit_hold_add_org
-    page.create_or_edit_hold_name_input.set("New Hold Authorization")
-    page.create_or_edit_hold_save
-  end
+Then(/^the hold is displayed in the catalog with the updated code and organization$/) do
+  on(ManageHold).get_hold_code_and_org("AAI01","Lesbian, Gay, Bi, & Trans Prog").nil?.should be_false
 end

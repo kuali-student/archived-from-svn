@@ -63,6 +63,17 @@ class ManageHold < BasePage
     return nil
   end
 
+  def get_hold_code_and_org (hold_code, hold_org)
+    if manage_hold_results_table.exists?
+      manage_hold_results_table.rows[1..-1].each do |row|
+        if ((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) || (row.cells[OWNING_ORG].text=~ /#{Regexp.escape(hold_org)}/))
+          return row
+        end
+      end
+    end
+    return nil
+  end
+
   def get_hold_rows
     array = []
     if manage_hold_results_table.exists?
@@ -83,30 +94,38 @@ class ManageHold < BasePage
   ######################################################################################################################
   ###                                               Create/Edit Hold Section                                         ###
   ######################################################################################################################
-  element(:create_or_edit_hold_page) { |b| b.main(id: "KS-Hold-Create-Page")}
-  element(:create_or_edit_hold_section) { |b| b.create_or_edit_hold_page.section(id: "KS-CreateHold-HoldSection")}
-  element(:create_or_edit_hold_org_section) { |b| b.create_or_edit_hold_page.div(id: "KS-CreateHold-OrgSection")}
+  element(:create_edit_hold_page) { |b| b.main(id: "KS-Hold-Create-Page")}
+  element(:create_edit_hold_section) { |b| b.create_edit_hold_page.section(id: "KS-CreateHold-HoldSection")}
+  element(:create_edit_hold_org_section) { |b| b.create_edit_hold_page.div(id: "KS-CreateHold-OrgSection")}
 
   ######################################################################################################################
   ###                                           Create/Edit Hold Input Fields                                        ###
   ######################################################################################################################
-  element(:create_or_edit_hold_own_org_find_icon) { |b| b.create_or_edit_hold_org_section.a(id: /holdIssueOwnOrg_quickfinder_act/)}
-  action(:create_or_edit_hold_own_org_find) { |b| b.create_or_edit_hold_own_org_find_icon.when_present.click}
+  element(:create_edit_hold_code_input) { |b| b.create_edit_hold_section.text_field(id: /holdIssueCode/)}
+
+  element(:create_edit_hold_org_find_icon) { |b| b.create_edit_hold_org_section.a(id: /holdIssueOwnOrg_quickfinder_act/)}
+  action(:create_edit_hold_org_find) { |b| b.create_edit_hold_org_find_icon.when_present.click}
 
   ######################################################################################################################
   ###                                             Create/Edit Hold Buttons                                           ###
   ######################################################################################################################
-  element(:create_or_edit_hold_save_btn) { |b| b.create_or_edit_hold_page.button(id: "saveHoldButton")}
-  action(:create_or_edit_hold_save){ |b| b.create_or_edit_hold_save_btn.when_present.click}
+  element(:create_edit_hold_save_btn) { |b| b.create_edit_hold_page.button(id: "saveHoldButton")}
+  action(:create_edit_hold_save){ |b| b.create_edit_hold_save_btn.when_present.click}
 
-  element(:create_or_edit_hold_add_org_btn) { |b| b.create_or_edit_hold_page.button(id: "KS-CreateHold-AuthorizationSection_Add")}
-  action(:create_or_edit_hold_add_org){ |b| b.create_or_edit_hold_add_org_btn.when_present.click}
+  element(:create_edit_hold_add_org_btn) { |b| b.create_edit_hold_page.button(id: "KS-CreateHold-AuthorizationSection_Add")}
+  action(:create_edit_hold_add_org){ |b| b.create_edit_hold_add_org_btn.when_present.click}
 
   ######################################################################################################################
   ###                                             Create/Edit Hold Org Popup                                         ###
   ######################################################################################################################
-  element(:create_or_edit_hold_org_popup) { |b| b.frm_popup.div(id: "organizationInfoLookupView")}
-  element(:create_or_edit_hold_org_popup_search_btn){ |b| b.create_or_edit_hold_org_popup.button(id: "button_search")}
-  action(:create_or_edit_hold_org_popup_search){ |b| b.create_or_edit_hold_org_popup_search_btn.when_present.click}
+  element(:create_edit_hold_popup) { |b| b.frm_popup.div(id: "organizationInfoLookupView")}
+  element(:create_edit_hold_popup_search_btn){ |b| b.create_edit_hold_popup.button(id: "button_search")}
+  action(:create_edit_hold_popup_search){ |b| b.create_edit_hold_popup_search_btn.when_present.click}
+
+  element(:create_edit_hold_popup_table_section) { |b| b.create_edit_hold_popup.section(id: "uLookupResults")}
+  element(:create_edit_hold_popup_table){ |b| b.loading.wait_while_present; b.create_edit_hold_popup_table_section.table}
+
+  element(:create_edit_hold_popup_table_select_btn) { |index, b| b.create_edit_hold_popup_table.rows[index].a( text: /Select/)}
+  action(:create_edit_hold_popup_table_select){ |index, b| b.create_edit_hold_popup_table_select_btn(index).when_present.click}
 
 end
