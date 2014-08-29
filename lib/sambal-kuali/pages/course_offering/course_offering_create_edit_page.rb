@@ -144,9 +144,16 @@ class CourseOfferingCreateEdit < BasePage
     delivery_format_row(format).cells[FINAL_EXAM_ACTIVITY_COLUMN].select().select(final_exam_activity)
   end
 
-  def delivery_format_row(format)
+  def delivery_format_row(format_str)
+    transpose_format = nil #eg ordering can be Lecture/Lab or Lab/Lecture
+    if format_str.index('/') != nil
+        formats = format_str.split('/')
+        transpose_format = "#{formats[1]}/#{formats[0]}"
+    end
     delivery_formats_table.rows[1..-1].each do |row|
-      return row if row.cells[FORMAT_COLUMN].text == format
+      return row if row.cells[FORMAT_COLUMN].text == format_str
+
+      return row if transpose_format != nil && row.cells[FORMAT_COLUMN].text == transpose_format
     end
     return nil
   end
