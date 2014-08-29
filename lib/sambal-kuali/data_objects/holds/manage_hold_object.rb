@@ -39,4 +39,10 @@ class ManageHoldData < DataFactory
     end
   end
 
+  def edit
+    on ManageHold do |page|
+      page.edit_hold @hold_name
+    end
+  end
+
 end
