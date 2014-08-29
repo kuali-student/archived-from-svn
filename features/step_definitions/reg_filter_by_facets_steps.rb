@@ -8,7 +8,7 @@ end
 
 And /^I narrow the search results to courses with available seats$/ do
   # mobile
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.select_facet("avail_seats")
       @seats_avail_courses = page.seats_avail_count_number
@@ -26,7 +26,7 @@ end
 
 And(/^I narrow the search results by a specific course prefix$/) do
   @course_search_result.edit :course_prefix => "ENGL"
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.select_facet("course_prefix",@course_search_result.course_prefix)
       page.toggle_show_facets
@@ -41,7 +41,7 @@ end
 
 Then /^I should see only courses with available seats$/ do
     # compare count displayed in the facet with actual rows displayed; add 1 for table because first row is the header
-    if @browser.window.size.width <= 640
+    if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
       on CourseSearchMobilePage do |page|
         page.all_results(CourseSearchMobilePage::COURSE_CODE).length.should == @seats_avail_courses
       end
@@ -60,7 +60,7 @@ end
 
 
 Then(/^I should see only courses with the specific course prefix$/) do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
         course_code.slice(0,4).should == "#{@course_search_result.course_prefix}"
@@ -78,7 +78,7 @@ end
 
 And(/^I narrow the search results by a specific course level$/) do
   @course_search_result.edit :course_level=>"400"
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.select_facet("course_level",@course_search_result.course_level)
       page.toggle_show_facets
@@ -90,7 +90,7 @@ And(/^I narrow the search results by a specific course level$/) do
 end
 
 Then /^I should see only courses with the specific course level and the specific course prefix$/ do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
         course_code.slice(4,1).should == "#{@course_search_result.course_level.slice(0,1)}"
@@ -108,7 +108,7 @@ Then /^I should see only courses with the specific course level and the specific
 end
 
 Then(/^I should see only courses with the specific course level$/) do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
         course_code.slice(4,1).should == "#{@course_search_result.course_level.slice(0,1)}"
@@ -131,7 +131,7 @@ When /^I narrow the search results using any facet$/ do
                                :course_level=> '300'
   @course_search_result.search :navigate=>true
   sleep 1
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       @search_results_before_facet_selection=page.all_results(CourseSearchMobilePage::COURSE_CODE)
       page.select_facet("course_level",@course_search_result.course_level)
@@ -148,7 +148,7 @@ end
 
 
 And(/^I undo the filtering performed using the specified facet$/) do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.clear_facet("course_level",@course_search_result.course_level)
       page.toggle_show_facets

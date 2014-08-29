@@ -21,6 +21,7 @@ class RegistrationRequest < DataFactory
   #boolean - - generally set using options hash true/false
   attr_reader   :course_has_options
   attr_reader   :modify_course_options
+
   CONTEXT_NEW_ITEM = "newItem"
   CONTEXT_CART = "cart"
   STATUS_SCHEDULE = "schedule"
@@ -301,7 +302,7 @@ class RegistrationRequest < DataFactory
   end
 
   def add_to_cart_from_search_details
-    page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
+    page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? CourseDetailsMobilePage : CourseDetailsPage
     on page_class do |page|
       page.add_to_cart
       if @course_has_options

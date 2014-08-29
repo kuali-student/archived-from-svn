@@ -5,7 +5,7 @@ end
 
 Then /^courses containing "(.*?)" course codes? appear$/ do |expected|
   # mobile
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.all_results(CourseSearchMobilePage::COURSE_CODE).each do |course_code|
         course_code.should =~ /#{expected}/
@@ -23,7 +23,7 @@ Then /^courses containing "(.*?)" course codes? appear$/ do |expected|
 end
 
 Then /^"(.*?)" course codes? appears?$/ do |expected|
-  if @browser.window.size.width <= 640    # this step only implemented for mobile at present
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH    # this step only implemented for mobile at present
     on CourseSearchMobilePage do |page|
       ((page.all_results(CourseSearchMobilePage::COURSE_CODE) - expected.split(", ")).empty?).should == true
     end
@@ -31,7 +31,7 @@ Then /^"(.*?)" course codes? appears?$/ do |expected|
 end
 
 Then /^courses containing "(.*?)" subject codes? appear$/ do |expected|
-  if @browser.window.size.width <= 640    # this step only implemented for mobile at present
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH    # this step only implemented for mobile at present
     on CourseSearchMobilePage do |page|
       ((page.all_subject_codes - expected.split(", ")).empty?).should == true
     end
@@ -72,8 +72,8 @@ Then /^the credits should be sorted in descending order$/ do
 end
 
 Then /^I can view the details of the (\w+) course$/ do |course_code|
-  search_page_class = (@browser.window.size.width <= 640) ? CourseSearchMobilePage : CourseSearchPage
-  details_page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
+  search_page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? CourseSearchMobilePage : CourseSearchPage
+  details_page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? CourseDetailsMobilePage : CourseDetailsPage
     on(search_page_class).select_course(course_code)
     on details_page_class do |page|
       page.details_course_description_div(course_code).wait_until_present
@@ -91,7 +91,7 @@ When /^I select a lecture and lab$/ do
 end
 
 Then /^I should see only the selected lecture and lab$/ do
-  page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
+  page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? CourseDetailsMobilePage : CourseDetailsPage
 
   on page_class do |page|
     page.selected_message.text.should match /Section(\s*)#{@course_search_result.selected_section}(\s*)/i
@@ -108,7 +108,7 @@ When /^I add the selected lecture and lab to my registration cart$/ do
 end
 
 Then /^I can see the selected section has been added to my cart$/ do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on(CourseDetailsMobilePage).mobile_go_to_cart
     on RegistrationCart do |page|
       page.course_code(@reg_request.course_code,@reg_request.reg_group_code).visible?.should be_true
@@ -131,7 +131,7 @@ Given /^I have added a CHEM course to my registration cart$/ do
   @reg_request = make RegistrationRequest, :term_descr=>"Fall 2012",
                       :course_code=>"CHEM241",
                       :reg_group_code=>"1014"
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     @reg_request.create
   else
     @reg_request.create_from_search
@@ -146,7 +146,7 @@ end
 
 And /^I select the same lecture and discussion as in the course$/ do
   sleep 2
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on(CourseSearchMobilePage).select_course(@course_search_result.search_string)
     on(CourseDetailsMobilePage).details_heading("Discussion").wait_until_present
     @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"O"
@@ -165,7 +165,7 @@ And /^I select the same lecture and discussion as in the course$/ do
 end
 
 Then /^the Add to Cart option should change to a notice that the course is in my cart$/ do
-  page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
+  page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? CourseDetailsMobilePage : CourseDetailsPage
   on page_class do |page|
     page.add_to_cart_button.present?.should == false
     page.in_cart_button.visible?.should == true
@@ -173,7 +173,7 @@ Then /^the Add to Cart option should change to a notice that the course is in my
 end
 
 Then /^I remove the course from my registration cart on the search page$/ do
-  if @browser.window.size.width <= 640
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     @reg_request.remove_from_cart :navigate_to_page=>true
   else
     @reg_request.remove_from_cart_on_search

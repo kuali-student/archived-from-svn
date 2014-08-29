@@ -12,6 +12,10 @@ class CourseSearch < DataFactory
               :course_level,
               :selected_section
 
+  MOBILE_BROWSER_WIDTH = 640
+  # For some unknown reason, the dimensions in some browser objects are 2x what
+  # we set them to.  We set mobile width = 320, so check for <= 640
+
   def initialize(browser, opts={})
     @browser = browser
 
@@ -41,9 +45,7 @@ class CourseSearch < DataFactory
 
     # Check to see whether we're in mobile or large format, and branch accordingly
     browser_size = @browser.window.size
-    page_class = (browser_size.width <= 640) ? CourseSearchMobilePage : CourseSearchPage
-    # For some unknown reason, the dimensions in the browser object are 2x what
-    # we set them to.  We set mobile width = 320, so check for <= 640
+    page_class = (browser_size.width <= MOBILE_BROWSER_WIDTH) ? CourseSearchMobilePage : CourseSearchPage
     if options[:navigate]
       visit page_class
     end
@@ -59,7 +61,7 @@ class CourseSearch < DataFactory
   def select_ao opts={}
     return nil if opts[:ao_type].nil? || opts[:ao_code].nil?
 
-    page_class = (@browser.window.size.width <= 640) ? CourseDetailsMobilePage : CourseDetailsPage
+    page_class = (@browser.window.size.width <= MOBILE_BROWSER_WIDTH) ? CourseDetailsMobilePage : CourseDetailsPage
     on page_class do |page|
       page.select_box(opts[:ao_code]).wait_until_present
       page.toggle_ao_select(opts[:ao_code])
@@ -68,7 +70,7 @@ class CourseSearch < DataFactory
   end
 
   def select_tab opts={}
-    return nil if opts[:ao_type].nil? || opts[:tab].nil? || (@browser.window.size.width > 640)
+    return nil if opts[:ao_type].nil? || opts[:tab].nil? || (@browser.window.size.width > MOBILE_BROWSER_WIDTH)
     on CourseDetailsMobilePage do |page|
       page.details_heading(opts[:ao_type]).wait_until_present
       page.select_tab opts[:ao_type],opts[:tab]
