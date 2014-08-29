@@ -45,4 +45,10 @@ class ManageHoldData < DataFactory
     end
   end
 
+  def add
+    on ManageHold do |page|
+      page.add_hold
+    end
+  end
+
 end
