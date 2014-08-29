@@ -145,21 +145,20 @@ class CourseOfferingCreateEdit < BasePage
   end
 
   def delivery_format_row(format_str)
-    transpose_format = nil #eg ordering can be Lecture/Lab or Lab/Lecture
-    if format_str.index('/') != nil
-        formats = format_str.split('/')
-        transpose_format = "#{formats[1]}/#{formats[0]}"
-    end
     delivery_formats_table.rows[1..-1].each do |row|
       return row if row.cells[FORMAT_COLUMN].text == format_str
-
-      return row if transpose_format != nil && row.cells[FORMAT_COLUMN].text == transpose_format
     end
     return nil
   end
 
   def delete_delivery_format(format)
-    delivery_format_row(format).cells[ACTIONS_COLUMN].i(class: "ks-fontello-icon-cancel").click
+    format_row = delivery_format_row(format)
+    if format_row.nil? && format.index('/') != nil
+      formats = format.split('/')
+      transpose_format = "#{formats[1]}/#{formats[0]}"
+      format_row = delivery_format_row(transpose_format)
+    end
+    format_row.cells[ACTIONS_COLUMN].i(class: "ks-fontello-icon-cancel").click
   end
 
   def select_random_option(sel_list)
