@@ -1042,15 +1042,15 @@ When(/^I find an approved Course and select copy$/) do
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format11 = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
-                 :type => "Lecture",
+                 :type => "Discussion",
                  :contacted_hours => 3,
                  :contact_frequency => "per week",
                  :duration_count => nil,
                  :duration_type => nil,
                  :class_size => 0 )
 
-  format21 = (make CmFormatsObject,  :format_level => 2,
-                  :activity_level => 1,
+  format21 = (make CmFormatsObject,  :format_level => 1,
+                  :activity_level => 2,
                   :type => "Lecture",
                   :contacted_hours => 3,
                   :contact_frequency => "per week",
@@ -1059,8 +1059,8 @@ When(/^I find an approved Course and select copy$/) do
                   :class_size => 0 )
 
   format22 = (make CmFormatsObject,  :format_level => 2,
-                   :activity_level => 2,
-                   :type => "Discussion",
+                   :activity_level => 1,
+                   :type => "Lecture",
                    :contacted_hours => 3,
                    :contact_frequency => "per week",
                    :duration_count => nil,
