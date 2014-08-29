@@ -133,7 +133,7 @@ end
 Then /^the course description is displayed$/ do
   on AdminRegistration do |page|
     page.course_addline_btn.focus
-    page.loading.wait_while_present
+    page.wait_until(60) { page.course_description_message(1).visible? }
     page.get_course_description_message(1).should == @admin_reg.course_section_codes[0].description
 
     page.student_term_go
