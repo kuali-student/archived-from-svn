@@ -542,13 +542,18 @@ class KeyDateGroupObject < DataFactory
       page.open_term_section @parent_term.term_type
 
       #only create if not already there
-      if page.key_date_group_div(@parent_term.term_type, @key_date_group_type).nil? then
+      if page.key_date_group_div(@parent_term.term_type, @key_date_group_type).nil?
         @term_index = page.term_index_by_term_type @parent_term.term_type
         page.key_date_group_dropdown(@term_index).select @key_date_group_type
         page.loading.wait_while_present
 
         page.key_date_group_add @term_index
         page.adding.wait_while_present
+
+        wait_until{ page.key_date_group_div(@parent_term.term_type, @key_date_group_type) != nil}
+        key_date_group_index = page.key_date_group_index @parent_term.term_type, @key_date_group_type
+
+        wait_until {page.key_date_dropdown_addline(@term_index, key_date_group_index).present?}
       end
 
       @key_dates.each do |key_date|
@@ -630,7 +635,7 @@ class KeyDateObject < DataFactory
         @term_index = page.term_index_by_term_type @parent_term.term_type
         key_date_group_index = page.key_date_group_index @parent_term.term_type, @parent_key_date_group.key_date_group_type
 
-        if !page.key_date_dropdown_addline(@term_index, key_date_group_index).exists?
+        if !page.key_date_dropdown_addline(@term_index, key_date_group_index).present?
           page.key_date_button( @term_index, key_date_group_index).click
           sleep 1 #wait til new row
           page.key_date_dropdown_addline(@term_index, key_date_group_index).wait_until_present
