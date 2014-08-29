@@ -1160,17 +1160,37 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     #NO OUTCOME
     page.outcome_empty_text.nil? == false
 
-    #ACTIVITY FORMAT
-    if (@course.format_list.nil? == false )
-      @course.format_list.each do |format|
-        page.format_level_review(format.format_level).should == "Format #{format.format_level}"
-        page.activity_type_review(format.format_level, format.activity_level).should include "#{format.type}".gsub(/\s+/, "") unless format.type == "Experiential Learning/Other"
-        page.activity_type_review(format.format_level, format.activity_level).should include "ExperientialLearningOROther" if format.type == "Experiential Learning/Other"
-        page.activity_contact_hours_frequency_review(format.format_level,format.activity_level).should include "#{format.contacted_hours}"
-        page.activity_contact_hours_frequency_review(format.format_level,format.activity_level).should include "#{format.contact_frequency}"
-        page.activity_duration_type_count_review(format.format_level,format.activity_level).should include "#{format.duration_type}"
-        page.activity_duration_type_count_review(format.format_level,format.activity_level).should include "#{format.duration_count}"
-        page.activity_class_size_review(format.format_level,format.activity_level).should == "#{format.class_size}"
+    #ACTIVITY FORMAT needs to ignore format and activity orders because we have no control on the order of formats and activities are created.
+    if (@course.format_list.nil? == false)
+      length = @course.format_list.length
+      num_formats = page.activity_format_review_section.text.scan(/Format/).length
+      num_activities = page.activity_format_review_section.text.scan(/Activity/).length
+      length.should == num_activities
+
+      for format_level in 1..num_formats do
+        page.format_level_review(format_level).should == "Format #{format_level}"
+        #number of activities for this format
+        num = page.activities_in_format_section(format_level).text.scan(/Activity/).length
+        for activity_level in 1..num do
+          if page.activity_type_review(format_level, activity_level).include? "Lecture"
+            format = get_activity_from_format_list @course.format_list, "Lecture"
+            page.activity_type_review(format_level, activity_level).should include "#{format.type}".gsub(/\s+/, "")
+          elsif page.activity_type_review(format_level, activity_level).include? "Discussion"
+            format = get_activity_from_format_list @course.format_list, "Discussion"
+            page.activity_type_review(format_level, activity_level).should include "#{format.type}".gsub(/\s+/, "")
+
+          else page.activity_type_review(format_level, activity_level).include? "Experiential Learning/Other"
+            format = get_activity_from_format_list @course.format_list, "Experiential Learning/Other"
+            page.activity_type_review(format_level, activity_level).should include "ExperientialLearningOROther"
+          end
+          page.activity_contact_hours_frequency_review(format_level, activity_level).should include "#{format.contacted_hours}"
+          page.activity_contact_hours_frequency_review(format_level, activity_level).should include "#{format.contact_frequency}"
+          page.activity_duration_type_count_review(format_level, activity_level).should include "#{format.duration_type}"
+          page.activity_duration_type_count_review(format_level, activity_level).should include "#{format.duration_count}"
+          page.activity_class_size_review(format_level, activity_level).should == "#{format.class_size}"
+          activity_level +=1
+        end
+        format_level +=1
       end
     end
 
@@ -1593,4 +1613,12 @@ def generate_course_object_for_copy
                  :start_term => "Spring 1980",
                  :pilot_course => "No",
                  :course_state => "ACTIVE"
+end
+
+def get_activity_from_format_list (format_list, activity_type)
+  format_list.each do |format|
+    if format.type == activity_type
+      return format
+    end
+  end
 end

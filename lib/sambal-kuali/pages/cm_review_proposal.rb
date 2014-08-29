@@ -93,6 +93,7 @@ class CmReviewProposal < BasePage
   value(:activity_duration_type_count_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: /activity_durationCount.*\_line#{format_level-1}_line#{activity_level-1}_control/).text }
   value(:activity_class_size_review) { |format_level,activity_level, b| b.activity_format_review_section.textarea(id: /activity_anticipatedClassSize.*\_line#{format_level-1}_line#{activity_level-1}_control/).text }
   element(:activity_format_error) { |b|b.div(id: "emptyStringFormats", class: /hasError/) }
+  element(:activities_in_format_section)  { |format_level, b| b.activity_format_review_section.section(id: /line#{format_level-1}$/,data_parent: "CM-ViewCourseView-Format-Details") }
 
   # ACTIVE DATES REVIEW FIELDS
   action(:edit_active_dates) { |b| b.a(id: 'ActiveDates-Review-Edit-link').click }
