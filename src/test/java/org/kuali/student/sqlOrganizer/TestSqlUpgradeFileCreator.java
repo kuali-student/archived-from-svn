@@ -50,6 +50,7 @@ public class TestSqlUpgradeFileCreator {
         modules.add(DatabaseModule.RICE);
         modules.add(DatabaseModule.KSCORE);
         modules.add(DatabaseModule.KSCM);
+        modules.add(DatabaseModule.KSAP);
         modules.add(DatabaseModule.KSENR);
         String ouptupFileName = "M7.to.FR1.upgrade.script.sql";
         String organizedSqlPath = DirManipulationUtils.getTargetDir(TestSqlUpgradeFileCreator.class);

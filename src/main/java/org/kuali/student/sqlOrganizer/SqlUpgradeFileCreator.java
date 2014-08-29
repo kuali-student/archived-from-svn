@@ -85,6 +85,7 @@ public class SqlUpgradeFileCreator {
             modules.add(DatabaseModule.KSCORE);
             modules.add(DatabaseModule.KSCM);
             modules.add(DatabaseModule.KSENR);
+            modules.add(DatabaseModule.KSAP);
             config = new UpgradeCreationConfig(milestones, dataTypes, modules, "RC1.Student." + type.toString() + ".upgrade.sql", organizedSqlPath);
             createSqlUpgradeFile(config);
         }

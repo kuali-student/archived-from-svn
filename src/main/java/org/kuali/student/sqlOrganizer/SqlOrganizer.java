@@ -34,9 +34,11 @@ public class SqlOrganizer {
     public String subProject;
     public String module;
     public List<String> unparsableStmts;
-    private static final String PROJECT_PATH = "C:\\data\\development\\intellijProjects\\enr-aggregate";
 
-    public static final String OUTPUT_DIR_PATH = "C:\\data\\development\\sql-organizer-output\\";
+    // TODO: convert to config
+    private static final String PROJECT_PATH = "C:\\data\\development\\intellijProjects\\enr-aggregate";
+    public static final String OUTPUT_DIR_PATH = "C:\\data\\development\\sql-organizer-output-enrfr2-m1\\";
+
     private static final Pattern CREATE_SEQ_PATTERN = Pattern.compile("\\s*(create|CREATE)\\s*(sequence|SEQUENCE)\\s*(\\w*)");
     private static final Pattern DROP_SEQ_PATTERN = Pattern.compile("\\s*(drop|DROP)\\s*(sequence|SEQUENCE)\\s*(\\w*)");
     private static final Pattern NDX_RENAME_PATTERN = Pattern.compile("\\s*(alter|ALTER)\\s*(index|INDEX)\\s*(\\w*)\\s*(rename|RENAME)\\s*(to|TO)\\s*(\\w*)");
@@ -79,6 +81,7 @@ public class SqlOrganizer {
         organizeRiceProcessFiles();
         organizeCoreProcessFiles();
         organizeLumProcessFiles();
+        organizeAPProcessFiles();
         organizeEnrollProcessFiles();
     }
 
@@ -90,6 +93,12 @@ public class SqlOrganizer {
 
     public void organizeLumProcessFiles() throws IOException {
         subProject = "ks-lum";
+        module = subProject + "-sql";
+        organizeProcessFiles(PROJECT_PATH);
+    }
+
+    public void organizeAPProcessFiles() throws IOException {
+        subProject = "ks-ap";
         module = subProject + "-sql";
         organizeProcessFiles(PROJECT_PATH);
     }
@@ -111,7 +120,7 @@ public class SqlOrganizer {
         // TODO: move to configuration
         String resourceListingFile =  modulePath + "\\target\\classes\\META-INF\\org\\kuali\\student\\" + module + "\\oracle\\other.resources";
 
-
+        System.out.println("reading file list from " + resourceListingFile);
         BufferedReader br = new BufferedReader(new FileReader(resourceListingFile));
         String sqlFile;
         while ((sqlFile = br.readLine()) != null) {
@@ -222,15 +231,13 @@ public class SqlOrganizer {
             //write the additional files
             List<String> descriptors = splitFile(statementBuckets, milestone, filename);
 
-            if (descriptors.size() > 1) {
-                fileReport.append("Type:Module mappings: ");
-                for (String descriptor : descriptors) {
-                    fileReport.append(descriptor.toString() + " ");
-                }
-                fileReport.append("\n");
-                System.out.print(fileReport.toString());
-                printedHeader = true;
+            fileReport.append("Type:Module mappings: ");
+            for (String descriptor : descriptors) {
+                fileReport.append(descriptor.toString() + " ");
             }
+            fileReport.append("\n");
+            System.out.print(fileReport.toString());
+            printedHeader = true;
         }
         if (printedHeader) {
             System.out.println("");
@@ -379,6 +386,10 @@ public class SqlOrganizer {
 
     private boolean isCMTable(String table) {
         return (table.startsWith("KSLU") || table.startsWith("KSLO"));
+    }
+
+    private boolean isAPTable(String table) {
+        return (table.startsWith("KSPL"));
     }
 
     private boolean isEnrTable(String table) {

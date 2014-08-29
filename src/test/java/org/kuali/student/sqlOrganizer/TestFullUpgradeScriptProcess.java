@@ -22,8 +22,7 @@ public class TestFullUpgradeScriptProcess {
         sqlOrganizer.organizeAggregateFiles();
 
         List<String> milestones = new ArrayList<String>();
-        milestones.add("M8");
-        milestones.add("RC1");
+        milestones.add("06-FR2-M1");
         List<DatabaseDataType> dataTypes = new ArrayList<DatabaseDataType>();
         dataTypes.add(DatabaseDataType.STRUCTURE);
         dataTypes.add(DatabaseDataType.BOOTSTRAP);
@@ -32,8 +31,9 @@ public class TestFullUpgradeScriptProcess {
         modules.add(DatabaseModule.RICE);
         modules.add(DatabaseModule.KSCORE);
         modules.add(DatabaseModule.KSCM);
+        modules.add(DatabaseModule.KSAP);
         modules.add(DatabaseModule.KSENR);
-        String ouptupFileName = "M7.to.FR1.upgrade.script.sql";
+        String ouptupFileName = "FR1.to.FR2-M1.upgrade.script.sql";
         String organizedSqlPath = SqlOrganizer.OUTPUT_DIR_PATH;
 
         UpgradeCreationConfig config = new UpgradeCreationConfig(milestones, dataTypes, modules, ouptupFileName, organizedSqlPath);

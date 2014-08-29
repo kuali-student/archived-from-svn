@@ -17,6 +17,9 @@ public class TestConfigEncoding {
         testEncryption("2013-04-23-KRMS-temp-fix-krms-sequences.sql");
         testEncryption("BOOTSTRAP");
         testEncryption("REFERENCE");
+        testEncryption("STRUCTURE");
+        testEncryption("MANUAL");
+
     }
 
 

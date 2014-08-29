@@ -15,6 +15,7 @@ public enum DatabaseModule {
     // ENUM(module.endsWith)
     RICE("Rice", "rice-sql"),
     KSCORE("KS Core", "core-sql"),
+    KSAP("KS Academic Planning", "ap-sql"),
     KSCM("KS Curriculum Managment", "lum-sql"),
     KSENR("KS Enrollment", "enroll-sql"),
     EXCEPTION("UNKNOWN", "exception-sql");
