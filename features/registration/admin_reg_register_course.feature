@@ -28,17 +28,10 @@ Feature: REG.Register Course on Admin Registration
     And I register the student for a course with a time conflict
     Then multiple failed eligibility messages appear
 
-  Scenario: CR22.16.2 Verify the course does not display after denying the course for registration
-    When I attempt to register the student for a course with a time conflict
-    Then a message indicating failed eligibility for course registration appears
-    And I deny the course for registration
-    And the student is not registered for the course
-
-  Scenario: CR22.16.3 Verify the course displays after allowing the course for registration
+  Scenario: CR22.16.2 Verify that the course displays even though the course failed eligibility for registration
     When I want to register a student for a course with a time conflict
     Then a message indicating failed eligibility for course registration appears
-    And I allow the course for registration
-    And the student is registered for the course
+    But the student is still registered for the course
 
 #KSENROLL-13715
   Scenario: CR22.17.1 Verify the course displays when course eligibility passed for registration
@@ -46,15 +39,10 @@ Feature: REG.Register Course on Admin Registration
     Then a message indicating the course has been successfully registered appears
     And the student is registered for the course
 
-  Scenario: CR22.17.2 Verify the course does not display when course eligibility failed for registration
-    When I attempt to register a student for a course that failed eligibility
-    Then a message indicating failed eligibility for course registration appears
-    And the student is not registered for the course
-
-  Scenario: CR22.17.3 Verify the registration date is displayed as float over if the effective date has been changed
+  Scenario: CR22.17.2 Verify the registration date is displayed as float over if the effective date has been changed
     When I change the effective date of a course before confirming registration
     Then the registration date is displayed as a float-over message
 
-  Scenario: CR22.17.4 Verify the credit total for the term updates after registering a course
+  Scenario: CR22.17.3 Verify the credit total for the term updates after registering a course
     When I register a student for a course
     Then the student's registered courses credit total for the term should be updated

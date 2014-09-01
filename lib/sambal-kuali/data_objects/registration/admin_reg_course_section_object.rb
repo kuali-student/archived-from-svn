@@ -63,9 +63,7 @@ class ARCourseSectionObject < DataFactory
 
   def confirm_registration opts = {}
     defaults = {
-        :confirm_registration => true,
-        :allow_registration => true,
-        :deny_registration => true
+        :confirm_registration => true
     }
     options = defaults.merge(opts)
 
@@ -74,17 +72,17 @@ class ARCourseSectionObject < DataFactory
     on AdminRegistration do |page|
       page.loading.wait_while_present
       if options[:confirm_course_credits] != nil and page.set_confirm_course_credits(@course_code).exists?
-        page.set_confirm_course_credits(@course_code).select options[:confirm_course_credits]
+        page.set_confirm_course_credits(@course_code, @section).select options[:confirm_course_credits]
         @requested_credits = options[:confirm_course_credits]
       end
 
       if options[:confirm_course_reg_options] != nil and page.set_confirm_course_reg_options(@course_code).exists?
-        page.set_confirm_course_reg_options(@course_code).select options[:confirm_course_reg_options]
+        page.set_confirm_course_reg_options(@course_code, @section).select options[:confirm_course_reg_options]
         @requested_reg_options = options[:confirm_course_reg_options]
       end
 
       if options[:confirm_course_effective_date] != nil
-        page.set_confirm_course_effective_date(@course_code).set options[:confirm_course_effective_date]
+        page.set_confirm_course_effective_date(@course_code, @section).set options[:confirm_course_effective_date]
         @requested_effective_date = options[:confirm_course_effective_date]
       end
 
@@ -92,13 +90,6 @@ class ARCourseSectionObject < DataFactory
         page.confirm_registration
       else
         page.cancel_registration
-      end
-      page.loading.wait_while_present
-
-      if options[:allow_registration] and page.confirm_registration_issue_btn.exists?
-        page.confirm_registration_issue
-      elsif !options[:allow_registration] and options[:deny_registration] and page.deny_registration_issue_btn.exists?
-        page.deny_registration_issue
       end
       page.loading.wait_while_present
 

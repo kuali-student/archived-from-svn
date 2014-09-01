@@ -124,14 +124,12 @@ class AdminRegistration < BasePage
   #################################################################
   element(:registration_issues_section) { |b| b.frm.div(id: "KS-AdminRegistration-Results")}
   element(:registration_issues_table) { |b| b.registration_issues_section.table}
-  element(:results_success_row) { |b| b.registration_issues_table.row(class: "alert-success")}
   element(:results_warning_row) { |b| b.registration_issues_table.row(class: "alert-warning")}
 
   element(:dismiss_results_btn) { |b| b.registration_results_success.i(class: "ks-fontello-icon-cancel")}
   action(:dismiss_results){ |b| b.loading.wait_while_present; b.dismiss_results_btn.click}
 
-  element(:get_results_success) { |b| b.loading.wait_while_present; b.results_success_row.div(class: "uif-horizontalBoxGroup clearfix").text}
-  element(:get_results_warning) { |b| b.loading.wait_while_present; b.results_warning_row.div(class: "uif-horizontalBoxGroup clearfix").text}
+  value(:get_results_warning) { |b| b.loading.wait_while_present; b.results_warning_row.div(class: "uif-horizontalBoxGroup clearfix").text}
 
   #################################################################
   ### Register Courses Table
@@ -199,6 +197,14 @@ class AdminRegistration < BasePage
     return nil
   end
 
+  def calculate_registered_credits
+    credits = 0
+    registered_courses_rows.each do |row|
+      credits += get_registered_course_credits(row).to_i
+    end
+    return credits
+  end
+
   #################################################################
   ### Wait listed Courses Table
   #################################################################
@@ -237,27 +243,29 @@ class AdminRegistration < BasePage
   element(:confirm_registration_dialog) { |b| b.frm.section(id: "registerConfirmDialog")}
   element(:confirm_registration_table) { |b| b.confirm_registration_dialog.div(id: "KS-AdminRegistration-DialogCollection").table}
 
-  element(:confirm_course_credits) { |code, b| b.get_confirm_registration_row(code).cells[POPUP_CREDITS]}
-  element(:set_confirm_course_credits){ |code, b| b.confirm_course_credits(code).select()}
-  value(:get_confirm_course_credits){ |code, b| b.confirm_course_credits(code).text}
-  element(:confirm_course_reg_options) { |code, b| b.get_confirm_registration_row(code).cells[POPUP_REG_OPTIONS]}
-  element(:set_confirm_course_reg_options){ |code, b| b.confirm_course_reg_options(code).select()}
-  value(:get_confirm_course_reg_options){ |code, b| b.confirm_course_reg_options(code).text}
-  element(:confirm_course_effective_date) { |code, b| b.get_confirm_registration_row(code).cells[POPUP_REG_EFFECTIVE_DATE]}
-  element(:set_confirm_course_effective_date){ |code, b| b.confirm_course_effective_date(code).text_field()}
-  value(:get_confirm_course_effective_date){ |code, b| b.confirm_course_effective_date(code).text_field().value}
+  element(:confirm_course_credits) { |code, section, b| b.get_confirm_registration_row(code, section).cells[POPUP_CREDITS]}
+  element(:set_confirm_course_credits){ |code, section, b| b.confirm_course_credits(code, section).select()}
+  value(:get_confirm_course_credits){ |code, section, b| b.confirm_course_credits(code, section).text}
+  element(:confirm_course_reg_options) { |code, section, b| b.get_confirm_registration_row(code, section).cells[POPUP_REG_OPTIONS]}
+  element(:set_confirm_course_reg_options){ |code, section, b| b.confirm_course_reg_options(code, section).select()}
+  value(:get_confirm_course_reg_options){ |code, section, b| b.confirm_course_reg_options(code, section).text}
+  element(:confirm_course_effective_date) { |code, section, b| b.get_confirm_registration_row(code, section).cells[POPUP_REG_EFFECTIVE_DATE]}
+  element(:set_confirm_course_effective_date){ |code, section, b| b.confirm_course_effective_date(code, section).text_field()}
+  value(:get_confirm_course_effective_date){ |code, section, b| b.confirm_course_effective_date(code, section).text_field().value}
 
   element(:confirm_registration_btn) { |b| b.confirm_registration_dialog.button(id: "confirmRegistrationButton")}
   action(:confirm_registration){ |b| b.loading.wait_while_present; b.confirm_registration_btn.click}
   element(:cancel_registration_link) { |b| b.confirm_registration_dialog.a(id: "cancelRegistrationLink")}
   action(:cancel_registration){ |b| b.loading.wait_while_present; b.cancel_registration_link.click}
 
-  def get_confirm_registration_row(text)
+  def get_confirm_registration_row(code, section)
+    loading.wait_while_present
     if confirm_registration_table.exists?
-      confirm_registration_table.rows[1..-1].each do |row|
-        return row if row.text =~ /#{Regexp.escape(text)}/
+      confirm_registration_table.rows(text: /#{code}/).each do |row|
+        return row if row.text =~ /#{section}/
       end
     end
+    return nil
   end
 
   #################################################################
