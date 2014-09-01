@@ -28,6 +28,7 @@ Feature: REG.Register Course on Admin Registration
     And I register the student for a course with a time conflict
     Then multiple failed eligibility messages appear
 
+  @smoke_test
   Scenario: CR22.16.2 Verify that the course displays even though the course failed eligibility for registration
     When I want to register a student for a course with a time conflict
     Then a message indicating failed eligibility for course registration appears

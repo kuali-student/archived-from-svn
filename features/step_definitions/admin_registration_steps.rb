@@ -588,11 +588,6 @@ When /^I attempt to drop a registered course$/ do
                                                              :section=> "1001", :register => true,
                                                              :confirm_registration => true ,
                                                              :course_default_effective_date => tomorrow[:date_w_slashes])
-  on AdminRegistration do |page|
-    # page.confirm_registration_issue
-    page.loading.wait_while_present
-    page.dismiss_registration_result
-  end
 
   @admin_reg.course_section_codes[0].delete_course :confirm_drop => true, :effective_date => tomorrow[:date_w_slashes]
 end
@@ -603,8 +598,8 @@ end
 
 Then /^a message appears indicating that the course has been successfully dropped$/ do
   on AdminRegistration do |page|
-    page.get_registration_results_success.should match /Course was successfully dropped/
-    page.dismiss_registration_result
+    puts page.html
+    page.growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
 
     page.student_term_go
   end
