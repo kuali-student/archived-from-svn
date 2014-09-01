@@ -13,10 +13,10 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
 
 
   @nightly
-  Scenario: PL 1.0.2 Add course(CM) from CDP top to Planned section
+  Scenario: PL 1.0.2 Add course(CM) from Course Details Page top to Planned section
 
     When I navigate to the Course Section Details
-    And I add the course(CM) from the CDP details page
+    And I add the course(CM) from the Course details page
     Then the course should be there in the Planner
 
 
@@ -25,7 +25,7 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
   Scenario: PL 1.0.3 Add course (CM) from Search to Backup section
 
     When I search for a course(CM)
-    And I add the course(CM) from Search to the Backup section for a sepcific term
+    And I add the course(CM) from Search to the Backup section for a specific term
     Then the course should be there in the backup section of the planner
 
 

@@ -95,7 +95,7 @@ Then(/^the course should be there in the Planner$/) do
 end
 
 
-And(/^I add the course\(CM\) from the CDP details page$/) do
+And(/^I add the course\(CM\) from the Course details page$/) do
   on CourseDetailPage do |page|
     page.add_to_plan.click
     page.term_cdp.wait_until_present
@@ -142,7 +142,7 @@ end
 
 
 
-And(/^I add the course\(CM\) from Search to the Backup section for a sepcific term$/) do
+And(/^I add the course\(CM\) from Search to the Backup section for a specific term$/) do
   on CourseSearch do |page|
     page.plan_page_click
   end
