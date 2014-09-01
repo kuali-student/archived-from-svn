@@ -521,10 +521,7 @@ When /^I attempt to edit a registered course$/ do
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL304",
                                                              :section=> "1001", :register => true,
                                                              :confirm_registration => true)
-  on(AdminRegistration).dismiss_registration_result
-end
 
-Then /^I save the edited course with no effective date$/ do
   @admin_reg.course_section_codes[0].edit_course :edit_course_effective_date => " "
 end
 
@@ -538,7 +535,12 @@ Then /^a message appears indicating that the effective date is required$/ do
   end
 end
 
-Then /^I save the changes made to Registration Options and Effective Date$/ do
+When /^I attempt to edit the registered course$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2070", :term_code=> "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL304",
+                                                             :section=> "1001", :register => true,
+                                                             :confirm_registration => true)
+
   @admin_reg.course_section_codes[0].edit_course :edit_course_effective_date => in_a_week[:date_w_slashes],
                                                  :edit_course_reg_options => "Audit"
 end
@@ -546,9 +548,7 @@ end
 Then /^a message appears indicating that the course has been updated successfully$/ do
   on AdminRegistration do |page|
     page.loading.wait_while_present
-    page.confirm_registration_issue
-    page.loading.wait_while_present
-    page.get_registration_results_success.should match /Course was successfully updated/
+    page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
 
     page.student_term_go
   end
@@ -663,10 +663,7 @@ When /^I edit a registered course by changing the Registration Options$/ do
                                                              :section=> "1001", :register => true,
                                                              :confirm_registration => true)
 
-  on AdminRegistration do |page|
-    page.loading.wait_while_present
-    page.dismiss_registration_result
-  end
+  @admin_reg.course_section_codes[0].edit_course :edit_course_reg_options => "Pass/Fail"
 end
 
 And /^I save the changes made to Registration Options$/ do
@@ -676,9 +673,9 @@ end
 Then /^the registered course is updated with the new Registration Options$/ do
   on AdminRegistration do |page|
     page.loading.wait_while_present
-    page.get_registration_results_success.should match /Course was successfully updated/
+    page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
 
-    row = page.get_registered_course("#{ @admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})")
+    row = page.get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})")
     page.get_registered_course_reg_options(row).should match /#{@admin_reg.course_section_codes[0].requested_reg_options}/
 
     page.student_term_go
@@ -698,7 +695,7 @@ When /^I edit a registered course by assigning more credits than the allowed max
                                                           :confirm_course_credits => @admin_reg.course_section_codes[1].requested_credits
 end
 
-And /^I save the changes made to course credits$/ do
+And /^I edit the initial course's credits$/ do
   @admin_reg.course_section_codes[0].edit_course :edit_course_credits => "6.0"
 end
 
