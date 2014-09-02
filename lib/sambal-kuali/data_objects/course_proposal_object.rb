@@ -517,10 +517,11 @@ class CmCourseProposalObject < DataFactory
 
   def submit_proposal
     on(CmCourseInformation).review_proposal
-    sleep 2
+    sleep 1
     on(CmReviewProposal).submit_proposal
     sleep 1
     on(CmReviewProposal).submit_confirmation
+    sleep 2
   end
 
   def submit_incomplete_proposal
