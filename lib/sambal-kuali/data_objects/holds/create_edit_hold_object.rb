@@ -38,10 +38,6 @@ class CreateEditHoldData < DataFactory
     set_options(options)
   end
 
-  def search
-    go_to_manage_hold_catalog
-  end
-
   def create
      search
      add
@@ -57,8 +53,13 @@ class CreateEditHoldData < DataFactory
       page.hold_org_popup_search
       page.hold_org_popup_table_select(1)
 
-      #page.create_or_edit_hold_save
+      page.hold_save
     end
+  end
+
+
+  def search
+    go_to_manage_hold_catalog
   end
 
   def add

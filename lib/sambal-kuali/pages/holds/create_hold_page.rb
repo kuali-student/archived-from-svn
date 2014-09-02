@@ -7,7 +7,7 @@ class CreateHold < BasePage
   element(:frm_popup) { |b| b.iframe(:class=>"fancybox-iframe")}
 
   ######################################################################################################################
-  ###                                            Create/Edit Hold Constants                                               ###
+  ###                                   Create/Edit Hold Constants                                          ###
   ######################################################################################################################
   HOLD_NAME     = 0
   HOLD_CODE     = 1
@@ -26,11 +26,15 @@ class CreateHold < BasePage
 
 
   ######################################################################################################################
-  element(:hold_page) { |b| b.main(id: "KS-Hold-Create-Page")}
+  ###                                   Create/Edit Hold Org Page/Section Constants                                  ###
+  ######################################################################################################################
+  element(:hold_page) { |b| b.frm.main(id: "KS-Hold-Create-Page")}
   element(:hold_section) { |b| b.hold_page.section(id: "KS-CreateHold-HoldSection")}
-  element(:hold_org_section) { |b| b.hold_page.div(id: "KS-CreateHold-OrgSection")}
+  element(:hold_org_section) { |b| b.frm.div(id: "KS-CreateHold-OrgSection")}
   element(:hold_term_section) { |b| b.hold_page.div(id: "KS-CreateHold-TermSection")}
   element(:hold_auth_org_section) { |b| b.hold_page.div(id: "KS-CreateHold-AuthorizationSection")}
+  element(:hold_duplicate_error_message) { |b| b.frm.div(id: "KS-CreateHold-HoldSection_messages")}
+  value(:get_hold_duplicate_error_message){ |b| b.loading.wait_while_present; b.hold_duplicate_error_message.text}
 
   ######################################################################################################################
   ###                                           Create/Edit Hold Input Fields                                        ###
