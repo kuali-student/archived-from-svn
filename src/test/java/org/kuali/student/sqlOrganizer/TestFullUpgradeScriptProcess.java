@@ -17,8 +17,7 @@ public class TestFullUpgradeScriptProcess {
 
     @Test
     public void testUpgradeProcess() throws IOException {
-        SqlOrganizer sqlOrganizer = new SqlOrganizer();
-        sqlOrganizer.init();
+        SqlOrganizer sqlOrganizer = TestSqlOrganizer.getTestSqlOrganizer();
         sqlOrganizer.organizeAggregateFiles();
 
         List<String> milestones = new ArrayList<String>();
@@ -34,7 +33,7 @@ public class TestFullUpgradeScriptProcess {
         modules.add(DatabaseModule.KSAP);
         modules.add(DatabaseModule.KSENR);
         String ouptupFileName = "FR1.to.FR2-M1.upgrade.script.sql";
-        String organizedSqlPath = SqlOrganizer.OUTPUT_DIR_PATH;
+        String organizedSqlPath = sqlOrganizer.getOutputDirPath();
 
         UpgradeCreationConfig config = new UpgradeCreationConfig(milestones, dataTypes, modules, ouptupFileName, organizedSqlPath);
         SqlUpgradeFileCreator.createSqlUpgradeFile(config);

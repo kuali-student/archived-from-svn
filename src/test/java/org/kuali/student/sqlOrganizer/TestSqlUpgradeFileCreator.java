@@ -35,7 +35,7 @@ public class TestSqlUpgradeFileCreator {
 
     @Test
     public void testCreateAllSqlUpgradeFiles() {
-        SqlUpgradeFileCreator.createAllSqlUpgradeFiles(SqlOrganizer.OUTPUT_DIR_PATH);
+        SqlUpgradeFileCreator.createAllSqlUpgradeFiles(TestSqlOrganizer.getTestOutputDirPath());
     }
 
     public static UpgradeCreationConfig getTestConfig() {
