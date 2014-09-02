@@ -38,10 +38,18 @@ Scenario: PL 1.0.1 Add course(CM) from Search to Planned section
 
 
 
+  @nightly
+
+  Scenario: PL 3.0.6 Add Course Offering(Multiple Activity) to a term in my plan
+
+    When I search for the course with Multiple Activity Offerings
+    And I select the activity offerings
+    Then I should be able to add the course with Multiple Activity Offerings to my plan
+
 
   @nightly
 
-  Scenario: PL 3.0.7 Add Course Offering(Multiple Activity) to a term in my plan
+  Scenario: PL 3.0.7 Add Course Offering(Multiple Format) to a term in my plan
 
     When I search for the course with Multiple Format Offerings
     And I select the format offerings

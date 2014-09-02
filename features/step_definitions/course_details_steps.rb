@@ -197,23 +197,25 @@ end
 And(/^I select the activity offerings$/) do
   on CourseSectionPage do |page|
   page.add_to_button_disabled.wait_until_present
-  end
+
   codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
   courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
   formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
   formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
   activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
+  page.activityoffering_checkbox(codescription_level,codescription_level,formatlist_level,formatoffering_level,activityoffering_level).click
 
   description_codescription_level= "#{@course_search_result.course_offering_description_list[0].courseofferingdescription_level}"
   description_co_term_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
   description_formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
   description_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[1].ao_activityoffering_level}"
-
+  description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+  page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
   on CourseSectionPage do |page|
     page.add_to_button_disabled.exists?.should==true
-    end
+  end
+
+  end
 
 end
 

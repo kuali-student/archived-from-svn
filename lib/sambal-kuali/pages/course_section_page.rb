@@ -45,5 +45,7 @@ class CourseSectionPage < BasePage
   value(:actual_course_time) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"time_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
   value(:actual_course_location) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"location_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
   value(:actual_course_seatsopen) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"seats_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
+  element(:ksap_loader) {|b|b.div(class:"kasp-loader")}
+
   end
 
