@@ -214,7 +214,7 @@ Then /^the course is (present|not present) in my cart$/  do |presence|
   end
 end
 
-Then /^the course is (present|not present) in my grid as an? (inCart|registered|waitlisted) item/  do |presence,gridType|
+Then /^the course is (present|not present) in my grid as an? (inCart|registered|waitlisted) item$/  do |presence,gridType|
   sleep 1
   on StudentSchedule do |page|
     if presence == "present"

@@ -45,7 +45,7 @@ class StudentSchedule < RegisterForCourseBase
   #Grid elements
   element(:gridElement) { |course_code,b| b.div(id: "course_calendar_course_#{course_code}_item0") }
   element(:scheduleToggleToGrid) { |b| b.a(id: "scheduleToggleToGrid") }
-  action(:toggleScheduleToGrid) { |b| b.scheduleToggleToGrid().click }
+  action(:toggleScheduleToGrid) { |b| b.scheduleToggleToGrid.click }
 
   def self.prefix(status)
     return (status==STATUS_SCHEDULE)?"":PREFIX_WAITLIST
