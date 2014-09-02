@@ -210,9 +210,8 @@ Then(/^I should see updated requisite details on course proposal$/) do
         else
           raise "No requisite rule section defined!"
       end
-      sleep 4
-      page.prerequisites_operators_and_rules.should include requisite.left_group_node.complete_rule_text + "\n" + requisite.right_group_node.logic_operator + "\n" + requisite.right_group_node.complete_rule_text
-      page.prerequisites_operators_and_rules.should include requisite.right_group_node.complete_rule_text + "\n" + requisite.third_group_node.logic_operator + "\n" + requisite.third_group_node.complete_rule_text
+      #The ADD logic should be in the requisites
+      page.prerequisites_operators_and_rules.should include requisite.left_group_node.complete_rule_text + "\n" + requisite.right_group_node.logic_operator + "\n"
     end
   end
 end
