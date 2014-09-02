@@ -44,13 +44,26 @@ class CreateEditHoldData < DataFactory
 
   def create
      search
+     add
 
-    on CreateEditHoldData do |page|
-      page.create_or_edit_hold_name.set @hold_name
-      page.create_or_edit_code_input.set @hold_code
-      page.create_or_edit_hold_category.select @hold_category
-      page.create_or_edit_hold_descr_input.set @hold_description
-      page.create_or_edit_hold_save
+    on CreateHold do |page|
+      page.loading.wait_while_present
+      page.hold_name.set @hold_name
+      page.code_input.set @hold_code
+      page.hold_category.select @hold_category
+      page.hold_descr_input.set @hold_description
+      page.hold_own_org_find
+      page.loading.wait_while_present
+      page.hold_org_popup_search
+      page.hold_org_popup_table_select(1)
+
+      #page.create_or_edit_hold_save
+    end
+  end
+
+  def add
+    on ManageHold do |page|
+      page.add_hold
     end
   end
 

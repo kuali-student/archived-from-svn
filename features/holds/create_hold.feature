@@ -11,8 +11,8 @@ Feature: Holds.Manage Hold
   @draft
   Scenario: Hold 1.1.1 Verify that a hold is created and added to the catalog of holds
     When I create a hold by completing the required information needed
-    Then a message indicating that the hold has been successfully created is displayed
-    And the hold exists in the hold catalog
+#    Then a message indicating that the hold has been successfully created is displayed
+#    And the hold exists in the hold catalog
 
   @draft
   Scenario: Hold 1.1.2 Verify that a duplicate check message is displayed when creating a duplicate hold entry

@@ -45,7 +45,7 @@ class ManageHold < BasePage
   ######################################################################################################################
   element(:manage_hold_show_btn) { |b| b.manage_hold_section.button(id: "show_button")}
   action(:manage_hold_show){ |b| b.manage_hold_show_btn.when_present.click}
-  action(:add_hold) { |b| b.manage_hold_section.a( text: "Add").click; b.loading.wait_while_present}
+  action(:add_hold) { |b| b.manage_hold_section.a( text: "Add Hold").click; b.loading.wait_while_present}
   ######################################################################################################################
   ###                                      Manage Hold Results Table                                                 ###
   ######################################################################################################################
