@@ -63,7 +63,8 @@ class ARCourseSectionObject < DataFactory
 
   def confirm_registration opts = {}
     defaults = {
-        :confirm_registration => true
+        :confirm_registration => true,
+        :dismiss_result => true
     }
     options = defaults.merge(opts)
 
@@ -93,6 +94,11 @@ class ARCourseSectionObject < DataFactory
       end
       page.loading.wait_while_present
 
+      page.wait_until { page.course_register_btn.visible? }
+
+      if page.growl_div.present? and options[:dismiss_result]
+        page.growl_div.div(class: "jGrowl-close").click
+      end
     end
   end
 

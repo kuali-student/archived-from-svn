@@ -169,7 +169,7 @@ Then /^the section code should appear on the confirm registration dialog$/ do
   on AdminRegistration do |page|
     page.course_register
     page.loading.wait_while_present
-    page.get_confirm_registration_row("#{@admin_reg.course_section_codes[0].course_code} (#{@admin_reg.course_section_codes[0].section})").nil?.should be_false
+    page.get_confirm_registration_row(@admin_reg.course_section_codes[0].course_code, @admin_reg.course_section_codes[0].section).nil?.should be_false
     page.cancel_registration
 
     page.student_term_go
@@ -310,8 +310,8 @@ end
 When /^I register a student for a course that passed eligibility$/ do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2074"
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "CHEM241",
-                                                             :section=> "1001", :register => true,
-                                                             :confirm_registration => true)
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :dismiss_result => false
 end
 
 Then /^a message indicating the course has been successfully registered appears$/ do
@@ -598,7 +598,6 @@ end
 
 Then /^a message appears indicating that the course has been successfully dropped$/ do
   on AdminRegistration do |page|
-    puts page.html
     page.growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
 
     page.student_term_go
