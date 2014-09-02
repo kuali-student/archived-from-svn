@@ -564,6 +564,7 @@ Then /^I attempt to register for a course in which I have received a mark of I$/
 end
 
 When /^I register for a course for the second time$/ do
+  steps %{Given I log in to student registration as R.JOER}
   @reg_request = make RegistrationRequest, :student_id=>"R.JOER",
                       :term_code=> "201108",
                       :term_descr=> "Fall 2011",
@@ -571,6 +572,10 @@ When /^I register for a course for the second time$/ do
                       :reg_group_code=>"1001",
                       :course_options => (make CourseOptions, :grading_option => "Letter"),
                       :course_has_options=> true
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(@reg_request.term_code)
+
   @reg_request.create
   @reg_request.register
 

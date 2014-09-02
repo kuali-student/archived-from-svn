@@ -30,7 +30,6 @@ Feature: REG.Course Repeatability
 
 #KSENROLL-14508
   Scenario: CR 18.3 Ensure student gets a warning when repeating course for the last allowable time
-    Given I log in to student registration as R.JOER
     When I register for a course for the second time
     Then there is a message indicating this is the last allowable repeat
     When I view my schedule
