@@ -22,7 +22,6 @@ Feature: REG.Course Repeatability
 
 #KSENROLL-14506
   Scenario: CR 18.2 Ensure students cannot repeat a course in which they have received a specific mark
-    Given I log in to student registration as R.JODYB
     When I attempt to register for a course in which I have received a mark of I
     Then there is a message indicating that registration failed
     And there is a message indicating a course with grade I cannot be retaken

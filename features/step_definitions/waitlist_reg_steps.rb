@@ -19,9 +19,9 @@ end
 
 Then /^there is a message indicating that registration failed$/  do
   on RegistrationCart do |page|
-    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     sleep 1
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).text.should match /failed/i
   end
 end

@@ -245,8 +245,9 @@ end
 
 Then /^there is a message indicating successful registration$/ do
   on RegistrationCart do |page|
+    sleep 2
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
-    sleep 1
+    page.course_code_message(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.course_code_message(@reg_request.course_code,@reg_request.reg_group_code).text.should include "Success"
   end
 end
@@ -550,6 +551,7 @@ Then /^there is a message indicating this is the last allowable repeat$/ do
 end
 
 Then /^I attempt to register for a course in which I have received a mark of I$/ do
+  steps %{Given I log in to student registration as R.JODYB}
   @reg_request = make RegistrationRequest, :student_id=>"R.JODYB",
                       :term_code=> "201208",
                       :term_descr=> "Fall 2012",
