@@ -29,7 +29,6 @@ class ManageHoldData < DataFactory
 
   def create
     search
-
     on ManageHold do |page|
       page.manage_hold_name_input.set @hold_name
       page.manage_hold_code_input.set @hold_code
