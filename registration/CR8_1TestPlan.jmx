@@ -1789,31 +1789,26 @@
               <stringProp name="DEFAULT">broken</stringProp>
             </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Failed Item" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1840209931">kuali.lpr.trans.item.state.failed</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">20</intProp>
-              <stringProp name="Assertion.scope">all</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Failed State" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1589694598">kuali.lpr.trans.state.failed</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">20</intProp>
-              <stringProp name="Assertion.scope">all</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
             <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="regGroupId" enabled="true">
               <stringProp name="VAR">regGroupId</stringProp>
               <stringProp name="JSONPATH">$responseItemResults[0].newLuiId</stringProp>
               <stringProp name="DEFAULT">broken</stringProp>
             </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+              <stringProp name="BeanShellAssertion.query">String response = new String(ResponseData);
+
+if ((response.contains(&quot;kuali.lpr.trans.item.state.failed&quot;) &amp;&amp; response.contains(&quot;kuali.lpr.trans.message.waitlist.available&quot;)) || (response.contains(&quot;kuali.lpr.trans.item.state.succeeded&quot;)) ) {
+    Failure = false;
+} 
+else {
+    Failure = true;
+    FailureMessage = &quot;Specified conditions were not met&quot;;
+}</stringProp>
+              <stringProp name="BeanShellAssertion.filename"></stringProp>
+              <stringProp name="BeanShellAssertion.parameters"></stringProp>
+              <boolProp name="BeanShellAssertion.resetInterpreter">true</boolProp>
+            </BeanShellAssertion>
             <hashTree/>
           </hashTree>
         </hashTree>
