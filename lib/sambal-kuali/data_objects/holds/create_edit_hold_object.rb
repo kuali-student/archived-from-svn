@@ -8,9 +8,7 @@ class CreateEditHoldData < DataFactory
   attr_accessor :parent, :owing_org, :org_contact,
                 :contact_address, :first_applied_date,
                 :last_applied_date, :term_based, :first_term,
-                :last_term,:hold_history,
-                :auth_org, :auth_org_name,
-                :auth_apply_hold, :auth_expire_hold
+                :last_term,:hold_history
 
 
   def initialize(browser, opts={})
@@ -26,7 +24,8 @@ class CreateEditHoldData < DataFactory
         :term_based => false,
         :first_term => nil,
         :last_term => nil,
-        :hold_history => false
+        :hold_history => false,
+        :defer_save => true
     }
 
     options = defaults.merge(opts)
@@ -46,11 +45,12 @@ class CreateEditHoldData < DataFactory
       page.hold_descr_input.set @parent.hold_description
       page.hold_own_org_find
       page.loading.wait_while_present
-      page.hold_org_popup_search
-      page.hold_org_popup_table_select(1)
-
+      page.hold_popup_search
+      page.hold_popup_table_select(1)
+      if(@defer_save)
       page.hold_save
+      end
     end
   end
 
-end
+  end

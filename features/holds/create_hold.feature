@@ -22,7 +22,10 @@ Feature: HOLD.Create Hold
   #KSENROLL-14526
   @draft
   Scenario: Hold 1.2.1 Verify that a hold is created and added to the catalog of holds after adding an organization for apply and another for expire
-    When I attempt to create a hold by completing the required information needed
-    And I save the hold after adding an organization for apply as well as expire
-    Then a message indicating that the hold has been successfully created is displayed
-    And the hold exists in the hold catalog
+    When I create a hold with authorizing organization for apply as well as expire
+    Then the hold is displayed in the catalog with the created authorizations
+
+  @draft
+  Scenario: Hold 1.2.2 Verify that authorizing organization permission message is displayed after adding authorizing organization without apply and expire permission
+    When I create a hold with authorizing organization without apply and expire permission
+    Then a permission message is displayed
