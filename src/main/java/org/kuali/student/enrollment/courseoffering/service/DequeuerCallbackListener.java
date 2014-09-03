@@ -12,7 +12,6 @@
 package org.kuali.student.enrollment.courseoffering.service;
 
 import org.kuali.student.enrollment.academicrecord.service.SubscriptionActionEnum;
-import org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType;
 import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.StatusInfo;
 import org.kuali.student.r2.common.exceptions.DoesNotExistException;
@@ -45,14 +44,22 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 @javax.jws.WebService(serviceName = "SOAPService",
         portName = "SOAPPort",
         targetNamespace = CourseOfferingCallbackNamespaceConstants.NAMESPACE,
-        endpointInterface = "org.kuali.student.enrollment.courseoffering.service.cxf.CoSubscriptionPortType")
-public class DequeuerCallbackListener implements CourseOfferingSubscriptionService, CoSubscriptionPortType, MessageListener {
+        endpointInterface = "org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionService")
+public class DequeuerCallbackListener implements CourseOfferingSubscriptionService, MessageListener {
     private static final Logger log = LoggerFactory.getLogger(DequeuerCallbackListener.class);
 
     @Resource
     CourseOfferingCallbackService courseOfferingCallbackService;
 
     public DequeuerCallbackListener() {
+        super();
+    }
+
+    public DequeuerCallbackListener(CourseOfferingCallbackService courseOfferingCallbackService) {
+        this.courseOfferingCallbackService = courseOfferingCallbackService;
+    }
+
+    public void initSubscription() {
         Endpoint.publish("http://localhost:9000/SoapContext/SoapPort", this);
         log.info("DequeuerCallbackListener published itself as a subscription endpoint");
     }
@@ -74,26 +81,19 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
             = new LinkedHashMap<String, Selector>();
 
     @Override
-    public String subscribeToCourseOfferings(
-            SubscriptionActionEnum action,
-            CourseOfferingCallbackService courseOfferingCallbackService,
-            ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToCourseOfferings(SubscriptionActionEnum action, W3CEndpointReference callbackObject,
+                                             ContextInfo contextInfo) throws InvalidParameterException,
+            MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
     public String subscribeToCourseOfferingsByIds(SubscriptionActionEnum action,
                                                   List<String> courseOfferingIds,
-                                                  CourseOfferingCallbackService courseOfferingCallbackService,
-                                                  ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+                                                  W3CEndpointReference callbackObject,
+                                                  ContextInfo contextInfo)
+            throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
+
         throw new OperationFailedException("operation has not been implemented");
     }
 
@@ -107,7 +107,11 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
 
         String id = null;
         try {
-            id = subscribeToActivityOfferings(action, port, new ContextInfo());
+            id = UUID.randomUUID().toString();
+            Selector selector = new Selector(action, port);
+            callbacks.put(id, selector);
+            log.info("CourseOfferingCallbackService added to CourseOfferingSubscriptionService subscriber list");
+            return id;
         } catch(Exception e) {
             log.error("Exception occurred at subscribeToActivityOfferings ", e);
         }
@@ -115,90 +119,32 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
     }
 
     @Override
-    public String subscribeToActivityOfferings(
-            SubscriptionActionEnum action,
-            CourseOfferingCallbackService courseOfferingCallbackService,
-            ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
-        String id = UUID.randomUUID().toString();
-        Selector selector = new Selector(action, courseOfferingCallbackService);
-        callbacks.put(id, selector);
-        log.info("CourseOfferingCallbackService added to CourseOfferingSubscriptionService subscriber list");
-        return id;
-    }
-
-    @Override
-    public String subscribeToActivityOfferingsByTerm(
-            SubscriptionActionEnum action,
-            String termId,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToActivityOfferingsByTerm(@WebParam(partName = "callback_action", name = "SubscribeToActivityOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_term_id", name = "SubscribeToActivityOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String termId, @WebParam(partName = "callback_object", name = "SubscribeToActivityOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToActivityOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
-    public String subscribeToActivityOfferingsByActivity(
-            SubscriptionActionEnum action,
-            String activityCode,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToActivityOfferingsByActivity(@WebParam(partName = "callback_action", name = "SubscribeToActivityOfferingsByActivity", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_activity_id", name = "SubscribeToActivityOfferingsByActivity", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String activityId, @WebParam(partName = "callback_object", name = "SubscribeToActivityOfferingsByActivity", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToActivityOfferingsByActivity", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
-    public String subscribeToActivityOfferingsByType(
-            SubscriptionActionEnum action,
-            String activityOfferingTypeKey,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToActivityOfferingsByType(@WebParam(partName = "callback_action", name = "SubscribeToActivityOfferingsByType", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_activity_type_key", name = "SubscribeToActivityOfferingsByType", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String activityOfferingTypeKey, @WebParam(partName = "callback_object", name = "SubscribeToActivityOfferingsByType", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToActivityOfferingsByType", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
-    public String subscribeToCourseOfferingsByTerm(
-            SubscriptionActionEnum action,
-            String termId,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToCourseOfferingsByTerm(@WebParam(partName = "callback_action", name = "SubscribeToCourseOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_term_id", name = "SubscribeToCourseOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String termId, @WebParam(partName = "callback_object", name = "SubscribeToCourseOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToCourseOfferingsByTerm", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
-    public String subscribeToCourseOfferingsByCourse(
-            SubscriptionActionEnum action,
-            String courseCode,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToCourseOfferingsByCourse(@WebParam(partName = "callback_action", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_course_id", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String courseId, @WebParam(partName = "callback_object", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
     @Override
-    public String subscribeToCourseOfferingsByType(
-            SubscriptionActionEnum action,
-            String courseOfferingTypeKey,
-            CourseOfferingCallbackService courseOfferingCallbackService, ContextInfo contextInfo) throws
-            InvalidParameterException,
-            MissingParameterException,
-            OperationFailedException,
-            PermissionDeniedException {
+    public String subscribeToCourseOfferingsByType(@WebParam(partName = "callback_action", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") SubscriptionActionEnum action, @WebParam(partName = "callback_course_offering_type_key", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") String courseOfferingTypeKey, @WebParam(partName = "callback_object", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") W3CEndpointReference callbackObject, @WebParam(partName = "callback_context", name = "SubscribeToCourseOfferingsByCourse", targetNamespace = "http://student.kuali.org/wsdl/courseOfferingCallbackService") ContextInfo contextInfo) throws InvalidParameterException, MissingParameterException, OperationFailedException, PermissionDeniedException {
         throw new OperationFailedException("operation has not been implemented");
     }
 
@@ -289,13 +235,5 @@ public class DequeuerCallbackListener implements CourseOfferingSubscriptionServi
         } catch(JMSException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public CourseOfferingCallbackService getCourseOfferingCallbackService() {
-        return courseOfferingCallbackService;
-    }
-
-    public void setCourseOfferingCallbackService(CourseOfferingCallbackService courseOfferingCallbackService) {
-        this.courseOfferingCallbackService = courseOfferingCallbackService;
     }
 }

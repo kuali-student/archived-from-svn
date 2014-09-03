@@ -1,6 +1,7 @@
 package org.kuali.student.enrollment.courseoffering.service.cxf;
 
 import org.kuali.student.enrollment.courseoffering.service.CourseOfferingCallbackNamespaceConstants;
+import org.kuali.student.enrollment.courseoffering.service.CourseOfferingSubscriptionService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -53,11 +54,11 @@ public class SOAPService extends Service {
     /**
      *
      * @return
-     *     returns CoSubscriptionPortType
+     *     returns CourseOfferingSubscriptionService
      */
     @WebEndpoint(name = "SOAPPort")
-    public CoSubscriptionPortType getSOAPPort() {
-        return super.getPort(SOAPPort, CoSubscriptionPortType.class);
+    public CourseOfferingSubscriptionService getSOAPPort() {
+        return super.getPort(SOAPPort, CourseOfferingSubscriptionService.class);
     }
 
     /**
@@ -65,11 +66,11 @@ public class SOAPService extends Service {
      * @param features
      *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
-     *     returns CoSubscriptionPortType
+     *     returns CourseOfferingSubscriptionService
      */
     @WebEndpoint(name = "SOAPPort")
-    public CoSubscriptionPortType getSOAPPort(WebServiceFeature... features) {
-        return super.getPort(SOAPPort, CoSubscriptionPortType.class, features);
+    public CourseOfferingSubscriptionService getSOAPPort(WebServiceFeature... features) {
+        return super.getPort(SOAPPort, CourseOfferingSubscriptionService.class, features);
     }
 
 }

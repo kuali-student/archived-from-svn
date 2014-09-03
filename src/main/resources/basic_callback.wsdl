@@ -43,7 +43,7 @@
             <wsdl:output message="tns:returnMessage" name="UpdateActivityOfferingsResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:portType name="CoSubscriptionPortType">
+    <wsdl:portType name="CourseOfferingSubscriptionService">
         <wsdl:operation name="SubscribeToActivityOfferings">
             <wsdl:input message="tns:subscribe_to_aos" name="SubscribeToActivityOfferingsRequest"/>
             <wsdl:output message="tns:returnMessage" name="SubscribeToActivityOfferingsResponse"/>
@@ -61,7 +61,7 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="CoSubscriptionPortType_SOAPBinding" type="tns:CoSubscriptionPortType">
+    <wsdl:binding name="CourseOfferingSubscriptionService_SOAPBinding" type="tns:CourseOfferingSubscriptionService">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="SubscribeToActivityOfferings">
             <soap:operation soapAction="" style="document"/>
@@ -79,7 +79,7 @@
         </wsdl:port>
     </wsdl:service>
     <wsdl:service name="SOAPService">
-        <wsdl:port binding="tns:CoSubscriptionPortType_SOAPBinding" name="SOAPPort">
+        <wsdl:port binding="tns:CourseOfferingSubscriptionService_SOAPBinding" name="SOAPPort">
             <soap:address location="http://localhost:9000/SoapContext/SoapPort"/>
         </wsdl:port>
     </wsdl:service>

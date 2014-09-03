@@ -49,6 +49,8 @@ public class CourseOfferingSubscriptionServiceTest {
     CourseSeatCountService courseSeatCountService;
     @Autowired
     CourseOfferingSubscriptionAdvice courseOfferingSubscriptionAdvice;
+    @Resource
+    DequeuerCallbackListener dequeuerCallbackListener;
 
     private ContextInfo contextInfo;
     private String principalId;
@@ -67,7 +69,6 @@ public class CourseOfferingSubscriptionServiceTest {
 
     @Test
     public void testCallbackIfAoIsUpdated() throws Exception {
-
         String formatId = "formatId1";
         String courseId = "courseId1";
         String activityId = "activityId1";
@@ -143,7 +144,7 @@ public class CourseOfferingSubscriptionServiceTest {
         CourseSeatCountInfo courseSeatCountInfoCheck =
                 courseSeatCountService.getCourseSeatCountByActivityOffering(createdAo.getId(), contextInfo);
 
-        Assert.assertTrue(createdAo.getMaximumEnrollment().equals(courseSeatCountInfoCheck.getSeats()));
+        Assert.assertEquals("SeatCount.seats does not match ActivityOffering.maximumEnrollment", createdAo.getMaximumEnrollment(), courseSeatCountInfoCheck.getSeats());
     }
 
     public CourseOfferingSubscriptionAdvice getCourseOfferingSubscriptionAdvice() {
@@ -168,5 +169,21 @@ public class CourseOfferingSubscriptionServiceTest {
 
     public void setCourseOfferingService(CourseOfferingService courseOfferingService) {
         this.courseOfferingService = courseOfferingService;
+    }
+
+    public DequeuerCallbackListener getDequeuerCallbackListener() {
+        return dequeuerCallbackListener;
+    }
+
+    public void setDequeuerCallbackListener(DequeuerCallbackListener dequeuerCallbackListener) {
+        this.dequeuerCallbackListener = dequeuerCallbackListener;
+    }
+
+    public CourseSeatCountService getCourseSeatCountService() {
+        return courseSeatCountService;
+    }
+
+    public void setCourseSeatCountService(CourseSeatCountService courseSeatCountService) {
+        this.courseSeatCountService = courseSeatCountService;
     }
 }
