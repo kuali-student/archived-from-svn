@@ -20,6 +20,8 @@ public class TestConfigEncoding {
         testEncryption("STRUCTURE");
         testEncryption("MANUAL");
 
+        Assert.assertEquals("MjAxMy0xMS0yNS1LUklNLXVwZGF0ZS1maW5hbC1leGFtLXBlcm1pc3Npb25zLnNxbA==", InsecureStringEncoder.encode("2013-11-25-KRIM-update-final-exam-permissions.sql"));
+        Assert.assertEquals(InsecureStringEncoder.decode("MjAxMy0xMS0yNS1LUklNLXVwZGF0ZS1maW5hbC1leGFtLXBlcm1pc3Npb25zLnNxbA=="), "2013-11-25-KRIM-update-final-exam-permissions.sql");
     }
 
 
