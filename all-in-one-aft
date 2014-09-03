@@ -384,7 +384,7 @@ function run_non_enr_afts() {
   chmod 777 $WORKSPACE/cleanup_test_processes.sh
   $WORKSPACE/cleanup_test_processes.sh
   cucumber TEST_SITE='http://localhost:8080' \
-    FIREFOX_PATH=/usr/bin/firefox14 \
+    FIREFOX_PATH=/usr/bin/firefox27 \
     --profile headless \
     --format pretty \
     --format json \
