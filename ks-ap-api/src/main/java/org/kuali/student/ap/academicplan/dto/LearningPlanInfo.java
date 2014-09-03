@@ -14,6 +14,8 @@
  */
 package org.kuali.student.ap.academicplan.dto;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.kuali.student.ap.academicplan.infc.DegreeMapAssociation;
 import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.r2.common.dto.IdEntityInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
@@ -38,8 +41,9 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LearningPlanInfo", propOrder = { "studentId", "id", "typeKey",
-		"stateKey", "shared", "programId", "effectiveDate", "expirationDate",
-		"name", "descr", "meta", "attributes", "_futureElements" })
+		"degreeMapAssociationInfos", "stateKey", "shared", "programId",
+		"effectiveDate", "expirationDate", "name", "descr", "meta",
+		"attributes", "_futureElements" })
 public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 
 	private static final long serialVersionUID = -754256998953998213L;
@@ -59,6 +63,9 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 	@XmlAttribute
 	private Date expirationDate;
 
+	@XmlElement
+	private List<DegreeMapAssociationInfo> degreeMapAssociationInfos;
+
 	@XmlAnyElement
 	private List<Element> _futureElements;
 
@@ -74,6 +81,16 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 			this.setDescr((null != plan.getDescr()) ? new RichTextInfo(plan
 					.getDescr()) : null);
 			this.setShared(plan.getShared());
+
+			List<? extends DegreeMapAssociation> assocs = plan
+					.getDegreeMapAssociations();
+			if (assocs != null) {
+				List<DegreeMapAssociationInfo> assocInfos = new ArrayList<DegreeMapAssociationInfo>(
+						assocs.size());
+				for (DegreeMapAssociation assoc : assocs)
+					assocInfos.add(new DegreeMapAssociationInfo(assoc));
+				this.setDegreeMapAssociationInfos(assocInfos);
+			}
 		}
 	}
 
@@ -94,7 +111,7 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 	public void setShared(Boolean shared) {
 		this.shared = shared;
 	}
-	
+
 	public String getProgramId() {
 		return programId;
 	}
@@ -117,6 +134,22 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	@Override
+	public List<DegreeMapAssociation> getDegreeMapAssociations() {
+		return degreeMapAssociationInfos == null ? null
+				: Collections
+						.<DegreeMapAssociation> unmodifiableList(degreeMapAssociationInfos);
+	}
+
+	public List<DegreeMapAssociationInfo> getDegreeMapAssociationInfos() {
+		return degreeMapAssociationInfos;
+	}
+
+	public void setDegreeMapAssociationInfos(
+			List<DegreeMapAssociationInfo> degreeMapAssociationInfos) {
+		this.degreeMapAssociationInfos = degreeMapAssociationInfos;
 	}
 
 }

@@ -16,6 +16,7 @@ package org.kuali.student.ap.academicplan.dto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,6 +26,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
+import org.kuali.student.ap.academicplan.infc.DegreeMapRequirement;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.IdEntityInfo;
@@ -41,121 +43,155 @@ import org.w3c.dom.Element;
  * @version 1.0 (Dev)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PlanItemInfo", propOrder = {"refObjectId", "refObjectType", "learningPlanId", "planTermIds", "id",
-        "credit", "category", "typeKey", "stateKey", "name", "descr", "meta", "attributes", "_futureElements"})
+@XmlType(name = "PlanItemInfo", propOrder = { "refObjectId", "refObjectType",
+		"learningPlanId", "planTermIds", "id", "credit", "category",
+		"degreeMapRequirementInfos", "typeKey", "stateKey", "name", "descr",
+		"meta", "attributes", "_futureElements" })
 public class PlanItemInfo extends IdEntityInfo implements PlanItem {
 
- 	private static final long serialVersionUID = 7795677206429530520L;
+	private static final long serialVersionUID = 7795677206429530520L;
 
-    @XmlElement
-    private String refObjectId;
+	@XmlElement
+	private String refObjectId;
 
-    @XmlElement
-    private String refObjectType;
+	@XmlElement
+	private String refObjectType;
 
-    @XmlElement
-    private String learningPlanId;
+	@XmlElement
+	private String learningPlanId;
 
-    @XmlElement
-    private List<String> planTermIds;
+	@XmlElement
+	private List<String> planTermIds;
 
-    @XmlElement
-    private BigDecimal credit;
+	@XmlElement
+	private BigDecimal credit;
 
-    @XmlElement
-    private AcademicPlanServiceConstants.ItemCategory category;
+	@XmlElement
+	private AcademicPlanServiceConstants.ItemCategory category;
 
-    @XmlAnyElement
-    private List<Element> _futureElements;
+	@XmlElement
+	private List<DegreeMapRequirementInfo> degreeMapRequirementInfos;
 
-    public PlanItemInfo() {
-        this.planTermIds = new ArrayList<String>();
-    }
+	@XmlAnyElement
+	private List<Element> _futureElements;
 
-    public PlanItemInfo(PlanItem item) {
-        copy(item);
-    }
+	public PlanItemInfo() {
+		this.planTermIds = new ArrayList<String>();
+	}
 
-    public void copy(PlanItem item) {
-        if(null != item) {
-            this.setId(item.getId());
-            this.setName(item.getName());
+	public PlanItemInfo(PlanItem item) {
+		copy(item);
+	}
+
+	public void copy(PlanItem item) {
+		if (null != item) {
+			this.setId(item.getId());
+			this.setName(item.getName());
 			this.setTypeKey(item.getTypeKey());
 			this.setStateKey(item.getStateKey());
-            this.refObjectId = item.getRefObjectId();
-            this.refObjectType = item.getRefObjectType();
-            this.learningPlanId = item.getLearningPlanId();
+			this.refObjectId = item.getRefObjectId();
+			this.refObjectType = item.getRefObjectType();
+			this.learningPlanId = item.getLearningPlanId();
 			this.credit = item.getCredits();
-            this.category = item.getCategory();
+			this.category = item.getCategory();
 
 			List<String> planTermIds = item.getPlanTermIds();
 			if (null != planTermIds) {
 				this.planTermIds = new ArrayList<String>(planTermIds);
-            }
+			}
 
-            this.setDescr((null != item.getDescr()) ? new RichTextInfo(item.getDescr()) : null);
-            
-            Meta meta = item.getMeta();
-            if (meta != null)
-            	this.setMeta(new MetaInfo(meta));
+			this.setDescr((null != item.getDescr()) ? new RichTextInfo(item
+					.getDescr()) : null);
+
+			Meta meta = item.getMeta();
+			if (meta != null)
+				this.setMeta(new MetaInfo(meta));
 
 			List<? extends Attribute> attrs = item.getAttributes();
 			if (attrs != null) {
-				List<AttributeInfo> attrInfos = new ArrayList<AttributeInfo>(attrs.size());
+				List<AttributeInfo> attrInfos = new ArrayList<AttributeInfo>(
+						attrs.size());
 				for (Attribute attr : attrs) {
 					attrInfos.add(new AttributeInfo(attr));
 				}
 				this.setAttributes(attrInfos);
 			}
-        }
-    }
 
-    public String getRefObjectId() {
-        return refObjectId;
-    }
+			List<? extends DegreeMapRequirement> reqs = item
+					.getDegreeMapRequirements();
+			if (reqs != null) {
+				List<DegreeMapRequirementInfo> reqInfos = new ArrayList<DegreeMapRequirementInfo>(
+						reqs.size());
+				for (DegreeMapRequirement req : reqs) {
+					reqInfos.add(new DegreeMapRequirementInfo(req));
+				}
+				this.setDegreeMapRequirementInfos(reqInfos);
+			}
+		}
+	}
 
-    public void setRefObjectId(String refObjectId) {
-        this.refObjectId = refObjectId;
-    }
+	public String getRefObjectId() {
+		return refObjectId;
+	}
 
-    public String getRefObjectType() {
-        return refObjectType;
-    }
+	public void setRefObjectId(String refObjectId) {
+		this.refObjectId = refObjectId;
+	}
 
-    public void setRefObjectType(String refObjectType) {
-        this.refObjectType = refObjectType;
-    }
+	public String getRefObjectType() {
+		return refObjectType;
+	}
 
-    public String getLearningPlanId() {
-        return learningPlanId;
-    }
+	public void setRefObjectType(String refObjectType) {
+		this.refObjectType = refObjectType;
+	}
 
-    public void setLearningPlanId(String learningPlanId) {
-        this.learningPlanId = learningPlanId;
-    }
+	public String getLearningPlanId() {
+		return learningPlanId;
+	}
 
-    public List<String> getPlanTermIds() {
-        return planTermIds;
-    }
+	public void setLearningPlanId(String learningPlanId) {
+		this.learningPlanId = learningPlanId;
+	}
 
-    public void setPlanTermIds(List<String> planTermIds) {
-        this.planTermIds = planTermIds;
-    }
+	public List<String> getPlanTermIds() {
+		return planTermIds;
+	}
 
-     public BigDecimal getCredits() {
-        return credit;
-    }
+	public void setPlanTermIds(List<String> planTermIds) {
+		this.planTermIds = planTermIds;
+	}
 
-    public void setCredit(BigDecimal credit) {
-         this.credit = credit;
-    }
+	public BigDecimal getCredits() {
+		return credit;
+	}
 
-    public AcademicPlanServiceConstants.ItemCategory getCategory() {
-        return this.category;
-    }
+	public void setCredit(BigDecimal credit) {
+		this.credit = credit;
+	}
 
-    public void setCategory(AcademicPlanServiceConstants.ItemCategory  category) {
-        this.category=category;
-    }
+	public AcademicPlanServiceConstants.ItemCategory getCategory() {
+		return this.category;
+	}
+
+	public void setCategory(AcademicPlanServiceConstants.ItemCategory category) {
+		this.category = category;
+	}
+
+	@Override
+	public List<DegreeMapRequirement> getDegreeMapRequirements() {
+		return degreeMapRequirementInfos == null ? null
+				: Collections
+						.<DegreeMapRequirement> unmodifiableList(degreeMapRequirementInfos);
+	}
+
+	public List<DegreeMapRequirementInfo> getDegreeMapRequirementInfos() {
+		return degreeMapRequirementInfos;
+	}
+
+	public void setDegreeMapRequirementInfos(
+			List<DegreeMapRequirementInfo> degreeMapRequirementInfos) {
+		this.degreeMapRequirementInfos = degreeMapRequirementInfos;
+	}
 
 }

@@ -21,37 +21,49 @@ import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.r2.common.infc.IdEntity;
 
 /**
- * A single plan item. Plan items can link to different entities in the system based on the refObjectType.
+ * A single plan item. Plan items can link to different entities in the system
+ * based on the refObjectType.
  *
- * @author Kuali Student Team  (ks-collab@kuali.org)
+ * @author Kuali Student Team (ks-collab@kuali.org)
  * @version 1.0 (Dev)
  */
 public interface PlanItem extends IdEntity, TypedObjectReference {
 
-    /**
-     * Time Periods for which the item is planned for
-     * @name  Time Periods ATPIds
-     */
-    public List<String> getPlanTermIds();
+	/**
+	 * Time Periods for which the item is planned for
+	 * 
+	 * @name Time Periods ATPIds
+	 */
+	public List<String> getPlanTermIds();
 
-    /**
-     * Containing learning plan
-     * @name Learning Plan Id
-     * @required
-     */
-    public String getLearningPlanId();
+	/**
+	 * Containing learning plan
+	 * 
+	 * @name Learning Plan Id
+	 * @required
+	 */
+	public String getLearningPlanId();
 
-    /**
-    * The plan credits
-    * @name The number of credits
-    */
-    public BigDecimal getCredits();
+	/**
+	 * The plan credits
+	 * 
+	 * @name The number of credits
+	 */
+	public BigDecimal getCredits();
 
-    /**
-     * Category of item:  BOOKMARKED, BACKUP, PLANNED, CART,...
-     * @required
-     * @name Item Category
-     */
-    public AcademicPlanServiceConstants.ItemCategory getCategory();
+	/**
+	 * Category of item: BOOKMARKED, BACKUP, PLANNED, CART,...
+	 * 
+	 * @required
+	 * @name Item Category
+	 */
+	public AcademicPlanServiceConstants.ItemCategory getCategory();
+
+	/**
+	 * Get a list of degree map requirements associated with this plan item.
+	 * 
+	 * @return list of degree map requirements
+	 */
+	public List<DegreeMapRequirement> getDegreeMapRequirements();
 
 }

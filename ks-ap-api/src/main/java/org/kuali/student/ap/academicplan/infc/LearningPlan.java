@@ -15,6 +15,7 @@
 package org.kuali.student.ap.academicplan.infc;
 
 import java.util.Date;
+import java.util.List;
 
 import org.kuali.student.r2.common.infc.IdEntity;
 
@@ -53,5 +54,12 @@ public interface LearningPlan extends IdEntity {
      * @name expirationDate
      */
     public Date getExpirationDate();
+    
+	/**
+	 * Get a list of degree maps associated with this learning plan.
+	 * 
+	 * @return list of degree maps
+	 */
+	public List<DegreeMapAssociation> getDegreeMapAssociations();
 
 }

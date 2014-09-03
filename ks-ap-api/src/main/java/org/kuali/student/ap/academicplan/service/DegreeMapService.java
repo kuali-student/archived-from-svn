@@ -46,6 +46,12 @@ public interface DegreeMapService {
 			throws DoesNotExistException, InvalidParameterException,
 			MissingParameterException, OperationFailedException;
 
+	public List<DegreeMapRequirementInfo> getRequirementsByPlanItem(
+			@WebParam(name = "planItemId") String planItemId,
+			@WebParam(name = "context") ContextInfo context)
+			throws DoesNotExistException, InvalidParameterException,
+			MissingParameterException, OperationFailedException;
+
 	public DegreeMapRequirementInfo getRequirement(
 			@WebParam(name = "requirementId") String requirementId,
 			@WebParam(name = "context") ContextInfo context)
