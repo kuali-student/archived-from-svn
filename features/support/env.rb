@@ -37,6 +37,8 @@ Before do
     puts "debug  env.rb [#{$env_no}] - creating new browser"
     browser = get_browser_connection
     puts "debug  env.rb [#{$env_no}] - browser.nil? #{browser.nil?}"
+  else
+    browser.window.resize_to(1440, 864) if browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
   end
   @browser = browser
 end
