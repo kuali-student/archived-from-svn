@@ -33,7 +33,8 @@ public class SqlOrganizer {
 
     public String subProject;
     public String module;
-    public List<String> unparsableStmts;
+    // file, list of unparsable statements
+    public Map<String,List<String>> unparsableStmts;
     private String projectPath;
     private String outputDirPath;
     private Map<DatabaseDataType, Set<String>> dataTypeTableSets;
@@ -52,7 +53,7 @@ public class SqlOrganizer {
 
     // TODO: convert to config
     public void init(Map<DatabaseDataType, Set<String>> dataTypeTableSets, String project_path, String output_dir_path) {
-        this.unparsableStmts = new ArrayList<String>();
+        this.unparsableStmts = new HashMap<String,List<String>>();
         this.setDataTypeTableSets(dataTypeTableSets);
         this.setOutputDirPath(output_dir_path);
         this.setProjectPath(project_path);
@@ -60,14 +61,21 @@ public class SqlOrganizer {
     }
 
     public void printSummary() {
+        int count = 0;
         if (this.unparsableStmts.size() > 0) {
             System.out.println("\n\nUnparsable Statements");
             StringBuilder sbStmts = new StringBuilder();
-            for (String stmt : this.unparsableStmts) {
-                sbStmts.append(stmt + "\n/\n");
+            for (String file: this.unparsableStmts.keySet()) {
+                sbStmts.append("---------- filename: " + file + " -------------");
+                List<String> stmts = this.unparsableStmts.get(file);
+                count += stmts.size();
+                for (String stmt : stmts) {
+                    sbStmts.append(stmt + "\n/\n");
+                }
             }
             System.out.println(sbStmts);
-            System.out.println("\nNumber of Unparsable Statements: " + this.unparsableStmts.size());
+            System.out.println("\nNumber of Files with parse errors: " + this.unparsableStmts.size());
+            System.out.println("\nNumber of parse errors: " + count);
         }
 
     }
@@ -183,6 +191,7 @@ public class SqlOrganizer {
         Map<DatabaseModule, List<String>> locationMap = new HashMap<DatabaseModule, List<String>>();
         SqlReader sqlReader = getSqlReader();
         BufferedReader reader = LocationUtils.getBufferedReader(sqlFile);
+        // based on project i.e. ks-enroll-sql
         DatabaseModule defaultModule = getDatabaseModule();
         StringBuilder fileReport = new StringBuilder();
         boolean printedHeader = false;
@@ -218,7 +227,7 @@ public class SqlOrganizer {
                 boolean wrongModule = false;
                 String cleanStmt = cleanStmt(statement);
 
-                StatementInfo statementInfo = getStatementInfoForStatement(cleanStmt);
+                StatementInfo statementInfo = getStatementInfoForStatement(sqlFile, cleanStmt);
 
                 DatabaseDataType dataType = getDataType(statementInfo);
                 DatabaseModule module = getModule(statementInfo.getTableNames(), defaultModule);
@@ -491,7 +500,7 @@ public class SqlOrganizer {
     }
 
 
-    public StatementInfo getStatementInfoForStatement(String statement){
+    public StatementInfo getStatementInfoForStatement(String sqlFile, String statement){
         StatementType statementType = null;
         List<String> tableNames = null;
         SQLParser parser = new SQLParser();
@@ -543,11 +552,11 @@ public class SqlOrganizer {
                 }
             }
             if (tableNames.size() > 0) {
-                this.unparsableStmts.add(statement);
+                addUnparsableStmt(sqlFile, statement);
                 //System.out.println("found non-ansi statement: " + statement + "\nusing objects:" + tableNames );
             } else {
                 //System.out.println("Error parsing statement: " + statement);
-                this.unparsableStmts.add(statement);
+                addUnparsableStmt(sqlFile, statement);
                 tableNames.add("EXCEPTION");
                 //System.out.println(e);  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -555,6 +564,17 @@ public class SqlOrganizer {
 
         StatementInfo statementInfo = new StatementInfo(tableNames, statementType);
         return statementInfo;
+    }
+
+    private void addUnparsableStmt(String sqlFile, String statement) {
+        List<String> stmts;
+        if(!this.unparsableStmts.containsKey(sqlFile)) {
+            stmts = new ArrayList<String>();
+        } else {
+            stmts = this.unparsableStmts.get(sqlFile);
+        }
+        stmts.add(statement);
+        this.unparsableStmts.put(sqlFile,stmts);
     }
 
 
