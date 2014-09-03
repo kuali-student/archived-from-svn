@@ -192,20 +192,20 @@ When /^I edit a course offering$/ do
 end
 
 When /^I add an entry to the personnel section$/ do
-  personnel = make PersonnelObject, :id=> "admin", :affiliation =>"Instructor"
+  personnel = make PersonnelObject, :id=> "1100", :affiliation =>"Instructor"
 
   @course_offering.add_affiliated_person :personnel => personnel, :start_edit => false
 end
 
 When /^I edit the personnel entry$/ do
-  @course_offering.affiliated_person_list[0].edit :id=> "A.EVER", :affiliation =>"Teaching Assistant", :name => 'ABBOTT, EVE'
+  @course_offering.affiliated_person_list[0].edit :id=> "KS-12052", :affiliation =>"Teaching Assistant", :name => 'ABBOTT, EVE'
 end
 
 Then /^after I update the course offering the new personnel is present$/ do
   @course_offering.manage
   @course_offering.edit :defer_save => true
   on CourseOfferingCreateEdit do |page|
-    page.personnel_id.value.should == "admin"
+    page.personnel_id.value.should == "1100"
     page.personnel_name.value.should == "admin, admin"
     page.personnel_affiliation.value.should == "kuali.lpr.type.instructor.main"
   end
@@ -215,7 +215,7 @@ Then /^the personnel entry is successfully updated$/ do
   @course_offering.manage
   @course_offering.edit :defer_save => true
   on CourseOfferingCreateEdit do |page|
-    page.personnel_id.value.should == "A.EVER"
+    page.personnel_id.value.should == "KS-12052"
     page.personnel_name.value.should == "ABBOTT, EVE"
     page.personnel_affiliation.value.should == "kuali.lpr.type.instructor.assistant"
   end

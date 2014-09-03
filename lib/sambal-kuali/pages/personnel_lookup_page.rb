@@ -41,6 +41,7 @@ class PersonnelLookup < BasePage
         return r
       end
     end
+    nil
   end
 
   def change_results_page(page_number)
