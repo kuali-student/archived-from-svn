@@ -5,8 +5,7 @@ class CreateEditHoldData < DataFactory
   include StringFactory
   include Workflows
 
-  attr_accessor :hold_name, :hold_code, :hold_category,
-                :hold_description, :owing_org, :org_contact,
+  attr_accessor :parent, :owing_org, :org_contact,
                 :contact_address, :first_applied_date,
                 :last_applied_date, :term_based, :first_term,
                 :last_term,:hold_history,
@@ -18,10 +17,7 @@ class CreateEditHoldData < DataFactory
     @browser = browser
 
     defaults = {
-        :hold_name => nil,
-        :hold_code => nil,
-        :hold_category => "",
-        :hold_description => nil,
+        :parent => nil,
         :owing_org => nil,
         :org_contact => nil,
         :contact_address => nil,
@@ -39,32 +35,21 @@ class CreateEditHoldData < DataFactory
   end
 
   def create
-     search
-     add
+    @parent.search
+    @parent.add
 
     on CreateHold do |page|
       page.loading.wait_while_present
-      page.hold_name.set @hold_name
-      page.code_input.set @hold_code
-      page.hold_category.select @hold_category
-      page.hold_descr_input.set @hold_description
+      page.hold_category.select @parent.hold_category
+      page.hold_name.set @parent.hold_name
+      page.code_input.set @parent.hold_code
+      page.hold_descr_input.set @parent.hold_description
       page.hold_own_org_find
       page.loading.wait_while_present
       page.hold_org_popup_search
       page.hold_org_popup_table_select(1)
 
       page.hold_save
-    end
-  end
-
-
-  def search
-    go_to_manage_hold_catalog
-  end
-
-  def add
-    on ManageHold do |page|
-      page.add_hold
     end
   end
 
