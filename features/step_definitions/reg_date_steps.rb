@@ -22,6 +22,24 @@ Then /^there is a message indicating that the registration period is not open$/ 
   end
 end
 
+Then /^there is a message indicating that the registration period is not open yet$/ do
+  on RegistrationCart do |page|
+    sleep 1
+    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /First day of Registration is not until 8\/28\/2012/i
+  end
+end
+
+Then /^there is a message indicating that the registration period is over$/ do
+  on RegistrationCart do |page|
+    sleep 1
+    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /Last day of Registration was 9\/05\/2012/i
+  end
+end
+
 When /^I attempt to display my registration cart during pre-registration$/ do
   # the user for this test (student7) is assigned a current time that falls within pre-registration period
   visit RegistrationCart do |page|

@@ -20,13 +20,13 @@ Feature: REG.Registration Date Check
     When I attempt to display my registration cart during pre-registration
     Then I can add and remove courses from my cart
     When I attempt to register for the course
-    Then there is a message indicating that the registration period is not open
+    Then there is a message indicating that the registration period is not open yet
 
   #KSENROLL-13256
   Scenario: CR 12.2 Verify registration for courses in sub-terms with different reg periods
     Given I log in to student registration as E.STEVENJ
     And I attempt to register for a course in a subterm whose registration period is closed
-    Then there is a message indicating that the registration period is not open
+    Then there is a message indicating that the registration period is over
     When I attempt to register for a course in a subterm whose registration period is open
     Then there is a message indicating successful registration
 
