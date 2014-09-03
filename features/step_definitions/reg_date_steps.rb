@@ -13,30 +13,17 @@ And /^I attempt to register for a course in a subterm whose registration period 
   @reg_request.register
 end
 
-Then /^there is a message indicating that the registration period is not open$/ do
+Then /^there is a message indicating that the registration period is (not open|not open yet|over)$/ do |period_status|
+  error_message = case period_status
+                    when "not open" then "Registration is not currently open"
+                    when "not open yet" then "First day of Registration is not until 8\/28\/2012"
+                    when "over" then "Last day of Registration was 9\/05\/2012"
+                  end
   on RegistrationCart do |page|
     sleep 1
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
     page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /Registration is not currently open/i
-  end
-end
-
-Then /^there is a message indicating that the registration period is not open yet$/ do
-  on RegistrationCart do |page|
-    sleep 1
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
-    page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /First day of Registration is not until 8\/28\/2012/i
-  end
-end
-
-Then /^there is a message indicating that the registration period is over$/ do
-  on RegistrationCart do |page|
-    sleep 1
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
-    page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /Last day of Registration was 9\/05\/2012/i
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should =~ /#{error_message}/i
   end
 end
 
