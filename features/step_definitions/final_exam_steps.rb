@@ -1865,7 +1865,8 @@ end
 
 When /^I edit the Course Offering to use a Standard Exam that is AO-Driven$/ do
   @course_offering.edit :final_exam_type => "Standard Final Exam", :final_exam_driver => "Final Exam Per Activity Offering",
-                        :use_final_exam_matrix => true
+                        :use_final_exam_matrix => true, :defer_save => true
+  @course_offering.delivery_format_list[0].edit :final_exam_activity => "Lecture", :start_edit => false
 end
 
 Given /^I create a Course Offering from catalog with an Alternate Exam that has an AO with RSI data not found on the matrix in a term with a defined final exam period$/ do
