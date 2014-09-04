@@ -71,7 +71,7 @@ end
 
 
 
-And(/^I add the course\(CM\) from Search to the Planned section for a sepcific term$/) do
+And(/^I add the course\(CM\) from Search to the Planned section for a specific term$/) do
   on CourseSearch do |page|
     page.plan_page_click
 
@@ -131,7 +131,7 @@ When(/^I navigate to the Course Section Details$/) do
   navigate_to_course_search_home
 
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
+    page.course_search_results_facets.wait_until_present(200000)
   end
   #navigate to course details page
   @course_search_result.navigate_course_detail_page
@@ -147,7 +147,7 @@ And(/^I add the course\(CM\) from Search to the Backup section for a specific te
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-     page.planner_courses_detail_list.wait_until_present
+     page.planner_courses_detail_list.wait_until_present(200000)
   end
   @course_search_result.remove_code_from_planned_backup
   navigate_to_course_search_home
@@ -160,7 +160,7 @@ end
 Then(/^the course should be there in the backup section of the planner$/) do
   navigate_to_course_planner_home
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(200000)
     page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
@@ -169,7 +169,7 @@ When(/^I search for a course\(CM\)$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
+    page.course_search_results_facets.wait_until_present(200000)
   end
 end
 
@@ -191,7 +191,7 @@ Then(/^the course should be there in the Backup section of the planner$/) do
   navigate_to_course_planner_home
 
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(200000)
     page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
@@ -207,7 +207,7 @@ When(/^I search for a course with Single Activity Offerings$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(200000)
   end
 
   #delete an existing course
@@ -226,6 +226,7 @@ When(/^I search for a course with Single Activity Offerings$/) do
   end
   # @course_search_result.navigate_course_detail_page
   on CourseSectionPage do |page|
+    page.ksap_loader.wait_while_present(200000)
     page.course_termlist.wait_until_present(500)
   end
 
@@ -266,6 +267,7 @@ Then(/^I should be able to add the course to my plan$/) do
     end
     # @course_search_result.navigate_course_detail_page
     on CourseSectionPage do |page|
+      page.ksap_loader.wait_while_present(200000)
       page.course_termlist.wait_until_present(500)
     end
     puts page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
@@ -284,6 +286,22 @@ When(/^I search for the course with Multiple Activity Offerings$/) do
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
   @course_search_result.course_search
+
+  @course_activityoffering_object_4=make CourseActivityOfferingObject,
+                                         :activity_offering_code => 'A',
+                                         :activity_offering_days =>'MTWHF',
+                                         :activity_offering_instructor => 'SUMMERS, RICHARD',
+                                         :activity_offering_time => '08:00 AM - 09:20 AM',
+                                         :activity_offering_location=>'CHM 1407',
+                                         :activity_offering_seats =>'156/156'
+
+  @course_activityoffering_object_5=make CourseActivityOfferingObject,
+                                         :activity_offering_code => 'B',
+                                         :activity_offering_days =>'TH',
+                                         :activity_offering_instructor => 'RODRIQUEZ, NICHOLAS',
+                                         :activity_offering_time => '10:00 AM - 11:20 AM',
+                                         :activity_offering_location=>'HBK 0115',
+                                         :activity_offering_seats =>'28/28'
   on CourseSearch do |page|
     page.course_search_results_facets.wait_until_present
   end
@@ -293,7 +311,8 @@ When(/^I search for the course with Multiple Activity Offerings$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.ksap_loader_planner.wait_while_present(20000)
+    page.planner_courses_detail_list.wait_until_present(20000)
   end
 
   #delete an existing course
@@ -312,8 +331,9 @@ When(/^I search for the course with Multiple Activity Offerings$/) do
   end
   # @course_search_result.navigate_course_detail_page
 
-  sleep 30
+
   on CourseSectionPage do |page|
+    page.ksap_loader.wait_while_present(200000)
     page.course_termlist.wait_until_present(200000)
   end
 
@@ -342,30 +362,40 @@ Then(/^I should be able to add the course with Multiple Activity Offerings to my
 
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(20000)
     end
-    @course_search_result = make CourseSearchResults, :planned_term=>"2014Spring", :course_code => "CHEM231", :term=>"Spring 2014"
+    @course_search_result = make CourseSearchResults, :planned_term=>"2014Summer1", :course_code => "CHEM231", :term=>"Spring 2014"
     navigate_to_course_search_home
     on CourseSearch do |page|
-      page.course_search_results_facets.wait_until_present
+      page.course_search_results_facets.wait_until_present(2000)
     end
     #navigate to course details page
     on CourseSearch  do |page|
       page.course_code_result_link(@course_search_result.course_code).click
     end
     # @course_search_result.navigate_course_detail_page
-    sleep 50
+
     on CourseSectionPage do |page|
+      page.ksap_loader.wait_while_present(20000)
       page.course_termlist.wait_until_present(500)
     end
 
     #Code for refresh
-    page.activity_offering_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
-    page.activity_offering_seats(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level,activityoffering_add_plan_level).should==page.actual_course_seatsopen(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level)
+    page.actual_course_code(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_code}/
+
+    page.actual_course_instructor(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_instructor}/
+    page.actual_course_days(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_days}/
+    page.actual_course_time(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_time}/
+    page.actual_course_location(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_location}/
+    page.actual_course_seatsopen(codescription_add_plan_level,courseterm_add_plan_level,formatlist_add_plan_level,formatoffering_add_plan_level).should match /#{@course_activityoffering_object_4.activity_offering_seats}/
+
+    page.actual_course_code(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_code}/
+
+    page.actual_course_instructor(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_instructor}/
+    page.actual_course_days(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_days}/
+    page.actual_course_time(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_time}/
+    page.actual_course_location(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_location}/
+    page.actual_course_seatsopen(description_add_plan_codescription_level,description_add_plan_co_term_level,description_add_plan_formatlist_level,description_add_plan_fo_level).should match /#{@course_activityoffering_object_5.activity_offering_seats}/
  end
 end
 
@@ -404,7 +434,7 @@ When(/^I search for the course with Multiple Format Offerings$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(20000)
   end
 
   #delete an existing course
@@ -415,7 +445,7 @@ When(/^I search for the course with Multiple Format Offerings$/) do
   navigate_to_course_search_home
 
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
+    page.course_search_results_facets.wait_until_present(2000)
   end
   #navigate to course details page
   on CourseSearch  do |page|
@@ -424,7 +454,7 @@ When(/^I search for the course with Multiple Format Offerings$/) do
  # @course_search_result.navigate_course_detail_page
 
   on CourseSectionPage do |page|
-    page.ksap_loader.wait_while_present
+    page.ksap_loader.wait_while_present(20000)
     page.course_termlist.wait_until_present(120)
   end
   #To remove the course from planner
