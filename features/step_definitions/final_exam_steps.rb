@@ -346,7 +346,7 @@ When /^I add two new AOs to the CO and then create a copy of the CO$/ do
   @add_ao_one = @course_offering.create_ao :ao_obj => (make ActivityOfferingObject, :format => "Lecture Only")
   @add_ao_two = @course_offering.create_ao :ao_obj => (make ActivityOfferingObject, :format => "Lecture Only")
 
-  @create_co = @course_offering.create_from_existing :target_term=> @course_offering.term
+  @create_co = @course_offering.copy
 
   on(ManageCourseOfferings).view_exam_offerings
 end
