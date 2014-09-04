@@ -18,8 +18,7 @@ Given I am logged in as a Student
 
 
   Scenario:Verify that  I am able to see an option to add Multiple Activity Offerings to my Plan
-    When I search for a course with Multiple Activity Offerings
-    And I navigate to the Course Section Details page
+    When I search for the course with Multiple Activity Offerings
     And I select the activity offerings
     Then I should be able to see an option to add multiple offerings to my plan
 

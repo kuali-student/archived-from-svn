@@ -89,7 +89,7 @@ end
 
 And(/^I navigate to the Course Section Details page$/) do
   @course_search_result.navigate_course_detail_page
-  sleep 50
+
   on CourseSectionPage do |page|
   page.course_termlist.wait_until_present(120)
   end
@@ -216,6 +216,8 @@ And(/^I select the activity offerings$/) do
   end
 
   end
+
+
 
 end
 
