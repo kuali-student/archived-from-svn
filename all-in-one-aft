@@ -96,6 +96,9 @@ function svn_export() {
       repo_root=$(svn info $1 | \
         awk '/Repository Root/ {print $3}')
 
+      # obtain information about the individual repos pointed to by the
+      # externals
+
       # externals is an associatve array
       declare -A externals
       # use process substition to read values from command
