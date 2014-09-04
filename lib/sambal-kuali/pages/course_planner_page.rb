@@ -16,8 +16,8 @@ class CoursePlannerPage < BasePage
   element(:course_code_text) { |b| b.frm.text_field(name: "courseCd") }
   element(:credit) { |b| b.frm.text_field(name: "courseCredit") }
   element(:notes) { |b| b.frm.text_field(name: "courseNote") }
-  action(:course_code_term) { |term,code,b| b.div(id:"kuali-atp-#{term}_planned_#{code}_code").p(class: "uif-message").text }
-  action(:course_code_term_click) { |term,code,b| b.div(id:"kuali-atp-#{term}_planned_#{code}_code").p(class: "uif-message").click }
+  action(:course_code_term) { |term,code,b| b.div(id:"kuali-atp-#{term}_courses_#{code}_code").p(class: "uif-message").text }
+  action(:course_code_term_click) { |term,code,b| b.div(id:"kuali-atp-#{term}_courses_#{code}_code").p(class: "uif-message").click }
 
   #action(:course_code_term_backup) { |term,code,b| b.div(id:"kuali-atp-#{term}_backup_#{code}_code").p(class: "uif-message").text }
   action(:course_code_term_backup) { |term,code,b| b.div(id:"kuali-atp-#{term}_backup_#{code}_code").p(class: "uif-message").text }
@@ -63,6 +63,7 @@ class CoursePlannerPage < BasePage
   element(:academic_planner_label) {|b|b.div(class:"uif-message uif-boxLayoutHorizontalItem")}
   element(:planner_courses_detail_list){ |b|b.div(id:"planner_courses_detail_list")}
   #action(:course_page_click) {|b| b.div(id:"applicationNavigation").a(text:"Find Courses").click}
+  element(:ksap_loader_planner) {|b|b.div(class:"kasp-loader")}
 
 end
 
