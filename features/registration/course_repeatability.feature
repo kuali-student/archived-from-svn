@@ -35,4 +35,8 @@ Feature: REG.Course Repeatability
     When I view my schedule
     Then the course is present in my schedule
 
-
+#KSENROLL-14509
+  Scenario: CR 18.4 Allow students to repeat certain courses without checking repeatability rules
+    When I register for a course that is not subject to repeatability rules for the third time
+    Then there is a message indicating successful registration
+    And I do not receive a warning message

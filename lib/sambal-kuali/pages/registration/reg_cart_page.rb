@@ -44,7 +44,8 @@ class RegistrationCart < RegisterForCourseBase
   element(:reason_message) { |course_code,reg_group_code,b| b.span(id: "reason_message_#{course_code}_#{reg_group_code}").text }
   element(:undo_remove_link) { |b| b.button(id: "userMessageInvoke") }
   action(:undo_remove) { |b| b.undo_remove_link.click }
-  element(:result_status) { |course_code,reg_group_code,b| b.div(id: "result_status_#{course_code}_#{reg_group_code}").text }
+  element(:result_status_div) { |course_code,reg_group_code,b| b.div(id: "result_status_#{course_code}_#{reg_group_code}") }
+  element(:result_status) { |course_code,reg_group_code,b| b.result_status_div(course_code,reg_group_code,b).text }
   element(:waitlist_status) { |course_code,reg_group_code,b| b.span(id: "waitlisted_#{course_code}_#{reg_group_code}") }
   element(:waitlist_message) { |course_code,reg_group_code,b| b.div(id: "waitlisted_message_#{course_code}_#{reg_group_code}").text }
   element(:add_to_waitlist_button) { |course_code,reg_group_code,b| b.button(id: "waitlist_#{course_code}_#{reg_group_code}") }
