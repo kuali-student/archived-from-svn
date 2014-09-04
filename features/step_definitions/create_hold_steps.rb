@@ -1,29 +1,26 @@
 When(/^I create a hold by completing the required information needed$/) do
-  @manage_hold = make ManageHoldData, :hold_name => "Academic Advising Issue 88", :hold_code => "AAI88",
-                     :hold_description => "AFT Tests Create", :hold_category => "Academic Advising Issue"
-  @create_hold_data = create CreateEditHoldData, :parent => @manage_hold
+  @hold = create HoldIssueData
 end
 
-
 And(/^the hold exists in the hold catalog$/) do
-  @manage_hold.create
+  @hold.manage
   on ManageHold do |page|
     page.loading.wait_while_present
-    page.get_hold_name_and_description(@manage_hold.hold_name, @manage_hold.hold_description).nil?.should be_false
+    page.get_hold_name_and_description(@hold.name, @hold.description).nil?.should be_false
   end
 end
 
 When(/^I attempt to create a duplicate hold entry$/) do
-  @manage_hold = make ManageHoldData, :hold_name => "Academic Advising Issue (Duplicate)", :hold_code => "AAI99",
-                      :hold_category => "Academic Advising Issue", :hold_description => "AFT Test Duplicate"
-  @create_hold_data_duplicate = create CreateEditHoldData, :parent => @manage_hold
+  @hold = create HoldIssueData, :name => "Academic Advising Issue (Duplicate)", :code => "AAI99",
+                      :category => "Academic Advising Issue"
 
-  @create_hold_data_duplicate.create
+  @hold.create
 end
 
 Then(/^a duplicate check message is displayed$/) do
-  on(CreateHold).get_hold_duplicate_error_message.should match /Hold Code: Hold Code already exists/
+  on(CreateHold).get_duplicate_error_message.should match /Hold Code: Hold Code already exists/
 end
+
 When(/^I create a hold with authorizing organization for apply as well as expire$/) do
   @manage_hold = make ManageHoldData, :hold_name =>"Academic Advising Issue 89" ,  :hold_code=>"Acad89", :hold_category=>"Academic Advising Issue" , :hold_description=>"AFT Tests Create", :defer_save=>false
   @create_hold_data = create CreateEditHoldData, :parent => @manage_hold
@@ -58,7 +55,6 @@ Then(/^the hold is displayed in the catalog with the created authorizations$/) d
 
 end
 
-
 When(/^I create a hold with authorizing organization without apply and expire permission$/) do
   @manage_hold = make ManageHoldData, :hold_name =>"Academic Advising Issue 90" ,  :hold_code=>"Acad90", :hold_category=>"Academic Advising Issue" , :hold_description=>"AFT Tests Create", :defer_save=>false
   @create_hold_data = create CreateEditHoldData, :parent => @manage_hold
@@ -83,4 +79,3 @@ Then(/^a permission message is displayed$/) do
     result_error.should match /At least one permission must be selected for each organization./
   end
 end
-
