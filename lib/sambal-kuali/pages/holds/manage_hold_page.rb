@@ -29,8 +29,8 @@ class ManageHold < BasePage
   ######################################################################################################################
   ###                                            Manage Hold Section                                                 ###
   ######################################################################################################################
-  element(:manage_hold_page) { |b| b.main(id: "KS-Hold-SearchInput-Page")}
-  element(:manage_hold_section) { |b| b.manage_hold_page.div(id: "KS-Hold-CriteriaSection")}
+  element(:manage_hold_page) { |b| b.main(id: "KS-HoldIssue-SearchInput-Page")}
+  element(:manage_hold_section) { |b| b.manage_hold_page.div(id: "KS-HoldIssue-CriteriaSection")}
 
   ######################################################################################################################
   ###                                       Manage Hold Input Fields                                                 ###
@@ -50,7 +50,7 @@ class ManageHold < BasePage
   ######################################################################################################################
   ###                                      Manage Hold Results Table                                                 ###
   ######################################################################################################################
-  element(:manage_hold_results) { |b| b.manage_hold_page.div( id: "KS-HoldSearch-Results")}
+  element(:manage_hold_results) { |b| b.manage_hold_page.div( id: "KS-HoldIssue-SearchResults")}
   element(:manage_hold_results_table) { |b| b.manage_hold_results.table}
 
   def get_hold_name_and_description (hold_name, hold_descr)
