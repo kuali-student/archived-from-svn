@@ -115,6 +115,12 @@ module Workflows
     end
   end
 
+  def go_to_manage_applied_hold
+    visit Enrollment do |page|
+      page.manage_applied_hold
+    end
+  end
+
 
   def log_in(user, pwd)
     current_user = ""

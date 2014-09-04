@@ -20,6 +20,7 @@ class Enrollment < BasePage
   #Course Registration
   action(:student_reg) { |b| b.link(text: "Student Registration").click }
   action(:admin_reg) { |b| b.link(text: "Admin Registration").click }
+  action(:manage_applied_hold) { |b| b.link(text: "Manage Applied Holds").click }
 
   #Calendars
   action(:search_for_calendar_or_term) { |p| p.frm.link(text: "Search for Calendar or Term").click }
