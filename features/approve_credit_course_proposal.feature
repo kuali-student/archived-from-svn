@@ -43,7 +43,8 @@ Feature: GT.Approve Course Proposal
     When I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist
     Then missing fields are highlighted and proposal cannot be approved or activated
 
- Scenario: RP3.2 CS can successfully Approve and Activate a complete admin proposal
+@smoke_test
+  Scenario: RP3.2 CS can successfully Approve and Activate a complete admin proposal
     Given I have a credit course admin proposal with approve fields completed created as Curriculum Specialist
     When I approve and activate the proposal
     Then the proposal is successfully approved
