@@ -1145,7 +1145,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     page.course_number_review.should == @course_proposal.approve_fields[0].course_number
 
     #GOVERNANCE SECTION
-    page.curriculum_oversight_error_state.nil? == false
+    (page.curriculum_oversight_error_state.nil? == false).should == true
     page.campus_locations_review.should == @course.campus_location unless @course.campus_location.nil?
 
     #COURSE LOGISTICS SECTION
@@ -1158,7 +1158,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
     page.final_exam_status_review.should == @course.final_exam_status unless @course.final_exam_status.nil?
 
     #NO OUTCOME
-    page.outcome_empty_text.nil? == false
+    (page.outcome_empty_text.nil? == false).should == true
 
     #ACTIVITY FORMAT needs to ignore format and activity orders because we have no control on the order of formats and activities are created.
     if (@course.format_list.nil? == false)
@@ -1393,7 +1393,7 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
     page.final_exam_rationale_review.should == @orig_course_proposal.submit_fields[0].final_exam_rationale unless @orig_course_proposal.submit_fields[0].exam_standard == :set
 
     #NO OUTCOME
-    page.outcome_empty_text.nil? == false
+    (page.outcome_empty_text.nil? == false).should == true
 
     #ACTIVITY FORMAT
     if (@orig_course_proposal.approve_fields[0].format_list.nil? == false)

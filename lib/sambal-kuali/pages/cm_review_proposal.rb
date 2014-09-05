@@ -118,7 +118,7 @@ class CmReviewProposal < BasePage
   element(:submit_button) { |b| b.button(text: "Submit")}
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
-  element(:proposal_status_element) { |b| b.div(id: "CM-Proposal-Header-Right-Group-Status") }
+  element(:proposal_status_element) { |b| b.div(id: "CM-ViewCourse-View-Right-Header-Group-Status") }
   value(:proposal_status) { |b| b.proposal_status_element.text.downcase }
 
   #APPROVE
@@ -157,4 +157,63 @@ class CmReviewProposal < BasePage
 
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }
+
+  #highlighted line
+  # jQuery('#CM-ViewCourseView-CourseInfo-Course-Titlever1').parent().parent().attr('class') ==
+  # "cm-compare-highlighter"
+  # use this to check the style
+  # course_title_ver1_review.style 'background-color' is should == rgb(252, 248, 227) or #fcf8e3
+
+  element(:not_current_version_section) {|b|b.div(id: "CM-ViewCourse-View-Course-NotCurentVersionSection")}
+  #Course Version History Compare
+  #Course information Section
+
+  element(:course_title_ver1_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Course-Titlever1") }
+  element(:transcript_course_ver1_title) { |b| b.div(id: /.*ver1/, class: "uif-inputField cm_readonly_input")}
+  element(:subject_code_ver1_review) { |b| b.label(id:"CM-ViewCourseView-CourseInfo-Subject-Areaver1_label") }
+  element(:course_number_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixver1_label") }
+  element(:cross_listed_courses_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-CrossListingsver1_label") }
+  element(:jointly_offered_courses_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-JointlyOfferedCoursesver1_label") }
+  element(:version_codes_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-Version-Codesver1_label" )}
+  element(:instructors_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-CourseInfo-Instructorsver1_label') }
+  element(:description_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-Descrver1_label") }
+
+  # GOVERNANCE REVIEW FIELDS
+  element(:campus_locations_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Governance-CampusLocationsver1_label') }
+  element(:curriculum_oversight_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Governance-CurriculumOversightver1_label') }
+  element(:administering_org_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Governance-AdministeringOrganizationver1_label') }
+
+
+  # LOGISTICS REVIEW FIELDS
+  element(:terms_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Logistics-Termsver1_label') }
+  element(:duration_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Logistics-DurationTypever1_label') }
+  element (:audit_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Logistics-Auditver1_label') }
+  element(:pass_fail_transcript_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-Logistics-PassFailver1_label') }
+
+
+  element(:assessment_scale_ver1_review) { |b| b.label(id: "CM-ViewCourseView-Logistics-GradingOptionsver1_label")  }
+  element(:final_exam_status_ver1_review) { |b| b.label(id: "CM-ViewCourseView-Logistics-FinalExamStatusver1_label") }
+
+  element(:outcome_ver1_review) { |b| b.label(id: "CM-ViewCourse-View-Course-OutcomeSectionver1_label") }
+  element(:activity_format_ver1_review_section) { |b| b.label(id:"CM-ViewCourse-View-Course-FormatSectionver1_label") }
+
+  #LEARNING OBJECTIVES
+
+  #COURSE REQUISITES
+  #Student Eligibility & Prerequisite
+  #Corequisite
+
+  #ACTIVITY FORMATS
+
+  # ACTIVE DATES REVIEW FIELDS
+  element(:start_term_ver1_review) { |b| b.label(id: "CM-ViewCourseView-ActiveDates-StartTermver1_label") }
+  value(:end_term_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-ActiveDates-EndTermver1_label') }
+  value(:pilot_course_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-ActiveDates-PilotCoursever1_label') }
+
+  # FINANCIAL FEES
+
+  #AUTHORS & COLLABORATORS
+
+  #SUPPORTING DOCS
+
 end
