@@ -23,9 +23,3 @@ Feature: Holds.Manage Hold
     When I search for a hold with a valid hold name and description phrase
     And I edit that hold by adding a hold code as well as an owning organization
     Then the hold is displayed in the catalog with the updated code and organization
-
-  @draft
-  Scenario: Hold 1.5.2 Verify that a hold updates after editing the hold authorization
-    When I search for a hold with a valid hold code
-    And I edit that hold by changing the hold authorization
-    Then the hold is displayed in the catalog with the updated authorization
