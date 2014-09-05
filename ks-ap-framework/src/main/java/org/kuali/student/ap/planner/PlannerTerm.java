@@ -25,6 +25,7 @@ public class PlannerTerm implements HasUniqueId, Serializable, Comparable<Planne
 	private boolean official;
 	private boolean inProgress;
 	private boolean cartAvailable;
+	private boolean buildAvailable;
 	private boolean completed;
 
 	private List<PlannerItem> plannedList;
@@ -61,6 +62,8 @@ public class PlannerTerm implements HasUniqueId, Serializable, Comparable<Planne
 		completed = termHelper.isCompleted(termId);
 		cartAvailable = KsapFrameworkServiceLocator.getShoppingCartStrategy()
 				.isCartAvailable(termId, null);
+		buildAvailable = KsapFrameworkServiceLocator.getScheduleBuildStrategy()
+				.isBuildAvailable(termId, null);
 
 		Date now = KsapHelperUtil.getCurrentDate();
 		inProgress = !now.before(term.getStartDate())
@@ -113,6 +116,14 @@ public class PlannerTerm implements HasUniqueId, Serializable, Comparable<Planne
 
 	public void setCartAvailable(boolean cartAvailable) {
 		this.cartAvailable = cartAvailable;
+	}
+
+	public boolean isBuildAvailable() {
+		return buildAvailable;
+	}
+
+	public void setBuildAvailable(boolean buildAvailable) {
+		this.buildAvailable = buildAvailable;
 	}
 
 	public String getTermId() {
