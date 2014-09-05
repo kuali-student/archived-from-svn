@@ -9,12 +9,10 @@ Feature: HOLD.Create Hold
     Given I am logged in as admin
 
 #KSENROLL-14522
-  @pending
   Scenario: HOLD1.1.1 Verify that a hold is created and added to the catalog of holds
     When I create a hold by completing the required information needed
     Then the hold exists in the hold catalog
 
-  @pending
   Scenario: HOLD1.1.2 Verify that a duplicate check message is displayed when creating a duplicate hold entry
     When I attempt to create a duplicate hold entry
     Then a duplicate check message is displayed
