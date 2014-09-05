@@ -47,7 +47,7 @@ Usage: $ME
         URL for AFT code
         default is http://mirror.svn.kuali.org/repos/student/test/functional-automation/sambal/trunk
     --aft_style Type of AFT to run
-        Valid values are enr, ksap, cm
+        Valid values are enr, ksap, cm, smoke
         default is enr
     --artifact_prefix <prefix of artifact version>
         e.g., 2.1.1-FR2-M1 or 2.1.0-FR1, etc.
@@ -95,6 +95,9 @@ function svn_export() {
     if [ $SNAPSHOT -ne 0 ]; then
       repo_root=$(svn info $1 | \
         awk '/Repository Root/ {print $3}')
+
+      # obtain information about the individual repos pointed to by the
+      # externals
 
       # externals is an associatve array
       declare -A externals
@@ -367,6 +370,14 @@ function run_enr_afts() {
     --firefox=27
 }
 
+function run_smoke_afts() {
+  ${WORKSPACE}/jenkinscucumber \
+    http://localhost:8080 \
+    headless_smoke_test_data \
+    headless_smoke_test \
+    --firefox=27
+}
+
 function run_non_enr_afts() {
   set -x
   gem install --no-rdoc --no-ri bundler
@@ -375,7 +386,7 @@ function run_non_enr_afts() {
   chmod 777 $WORKSPACE/cleanup_test_processes.sh
   $WORKSPACE/cleanup_test_processes.sh
   cucumber TEST_SITE='http://localhost:8080' \
-    FIREFOX_PATH=/usr/bin/firefox14 \
+    FIREFOX_PATH=/usr/bin/firefox27 \
     --profile headless \
     --format pretty \
     --format json \
@@ -395,6 +406,7 @@ function run_afts() {
     enr)  run_enr_afts;;
     cm)   run_non_enr_afts;;
     ksap) run_non_enr_afts;;
+    smoke)  run_smoke_afts;;
     *)
       echo "Invalid AFT_STYLE '${AFT_STYLE}'"
       usage
@@ -489,7 +501,7 @@ function process_args {
       --aft_style)
         AFT_STYLE=$2
         case $AFT_STYLE in
-          enr|ksap|cm)
+          enr|ksap|cm|smoke)
             # valid options
             ;;
           *)
