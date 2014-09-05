@@ -37,5 +37,22 @@ class ManageAppliedHold < BasePage
   element(:manage_applied_hold_show_btn) { |b| b.manage_applied_hold_section.button(id: "show_button")}
   action(:manage_applied_hold_show){ |b| b.manage_applied_hold_show_btn.when_present.click}
 
+  ################################################################
+  ### Applied Holds Table
+  #################################################################
+  element(:applied_hold_results_section_section) { |b| b.manage_applied_hold_page.div( id: "KS-AppliedHold-SearchResults")}
+  element(:applied_holds_table) { |b| b.applied_hold_results_section_section.table}
 
+  def applied_holds_results_rows
+    array = []
+
+    loading.wait_while_present
+    if applied_holds_table.exists?
+      applied_holds_table.rows().each do |row|
+        array << row
+      end
+    end
+
+    return array
+  end
 end
