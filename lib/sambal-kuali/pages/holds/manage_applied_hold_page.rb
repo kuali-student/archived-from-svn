@@ -8,7 +8,7 @@ class ManageAppliedHold < BasePage
 
 
   ######################################################################################################################
-  ###                                            Manage Hold Constants                                               ###
+  ###                                            Manage Applied Hold Constants                                       ###
   ######################################################################################################################
   APPLIED_HOLD  = 0
   HOLD_CODE     = 1
@@ -23,16 +23,23 @@ class ManageAppliedHold < BasePage
   ######################################################################################################################
   ###                                            Manage Applied Hold Section                                         ###
   ######################################################################################################################
+  element(:manage_applied_hold_view) { |b| b.frm.div(id: "KS-AppliedHoldManagementView")}
+  element(:banner_section) { |b| b.manage_applied_hold_view.div(class: "container-fluid uif-viewHeader ks-unified-header uif-sticky")}
+  element(:header_section) { |b| b.manage_applied_hold_view.h1(class: "uif-headerText")}
+  value(:get_student_info) { |b| b.loading.wait_while_present; b.header_section.text}
+
   element(:manage_applied_hold_page) { |b| b.main(id: "KS-AppliedHold-SearchInput-Page")}
   element(:manage_applied_hold_section) { |b| b.manage_applied_hold_page.div(id: "KS-AppliedHold-CriteriaSection")}
 
+  element(:student_term_section) { |b| b.frm.div(id: "KS-AdminRegistration-StudentAndTermSection")}
+
   ######################################################################################################################
-  ###                                       Manage Hold Input Fields                                                 ###
+  ###                                       Manage Applied Hold Input Fields                                         ###
   ######################################################################################################################
   element(:manage_applied_hold_studentid_input) { |b| b.loading.wait_while_present; b.manage_applied_hold_section.text_field(id:"studentIdField_control")}
 
   ######################################################################################################################
-  ###                                            Manage Hold Buttons                                                 ###
+  ###                                            Manage Applied Hold Buttons                                         ###
   ######################################################################################################################
   element(:manage_applied_hold_show_btn) { |b| b.manage_applied_hold_section.button(id: "show_button")}
   action(:manage_applied_hold_show){ |b| b.manage_applied_hold_show_btn.when_present.click}
@@ -54,5 +61,21 @@ class ManageAppliedHold < BasePage
     end
 
     return array
+  end
+
+
+  ################################################################
+  ### Applied Holds error Methods
+  #################################################################
+
+  element(:student_term_error_messages) { |b| b.manage_applied_hold_section.div(class: "alert alert-danger")}
+
+  def get_student_term_error_msg( section)
+    student_term_error_messages.lis().each do |msg|
+      if msg.attribute_value('data-messageitemfor') =~ /studentIdField/ and section == "student"
+        return msg.text
+      end
+    end
+    return nil
   end
 end

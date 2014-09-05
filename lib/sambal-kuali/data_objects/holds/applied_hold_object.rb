@@ -1,4 +1,4 @@
-class ManageAppliedHoldData < DataFactory
+class AppliedHoldData < DataFactory
 
   include Foundry
   include DateFactory

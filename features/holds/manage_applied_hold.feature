@@ -7,19 +7,19 @@ Feature: Holds.Manage Hold
     Given I am logged in as admin
 
   #KSENROLL-14582
-  @draft
-  Scenario: Hold2.1.1 Verify that applied hold is displayed after valid student is entered
+  @pending
+  Scenario: Hold2.1.1 Verify that student info is displayed after valid student is entered
     When I attempt to load a student by valid student Id
-#    Then the student information is displayed
+    Then the student information is displayed
 
   #KSENROLL-14582
-  @draft
+  @pending
   Scenario: Hold2.1.2 Verify error message when entering invalid student
-    When I attempt to load a student by invalid student Id
-    Then a validation error message is displayed stating "Invalid student Id"
+    When I attempt to load a student by invalid studentId
+    Then a validation error is displayed stating "Student ID: Invalid student Id."
 
   #KSENROLL-14586
-  @draft
+  @pending
   Scenario: Hold2.2.1 Verify that applied holds are displayed after a valid student is entered
     When I attempt to load a student by valid student Id
     Then the applied hold information is displayed
