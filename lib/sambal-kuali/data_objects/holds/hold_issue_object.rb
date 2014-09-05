@@ -1,22 +1,23 @@
-class HoldIssueData < DataFactory
+class HoldIssueObject < DataFactory
 
   include Foundry
   include DateFactory
   include StringFactory
   include Workflows
 
-  attr_accessor :name, :code, :category,
+  attr_accessor :name, :code, :category, :auth_org, :suffix,
                 :description, :owing_org, :org_contact,
                 :contact_address, :first_applied_date,
                 :last_applied_date, :term_based, :first_term,
-                :last_term, :hold_history
+                :last_term, :hold_history, :authorising_orgs
 
   def initialize(browser, opts={})
     @browser = browser
 
     defaults = {
-        :name => "Academic Advising Issue 88",
-        :code => "AAI88",
+        :name => "Academic Advising Issue",
+        :code => "AAI",
+        :suffix => nil,
         :category => "Academic Advising Issue",
         :description => random_alphanums(50),
         :owing_org => nil,
@@ -27,6 +28,7 @@ class HoldIssueData < DataFactory
         :term_based => false,
         :first_term => nil,
         :last_term => nil,
+        :authorising_orgs =>  collection('HIAuthorisingOrg'),
         :hold_history => false,
         :defer_save => false
     }
@@ -34,6 +36,10 @@ class HoldIssueData < DataFactory
     options = defaults.merge(opts)
 
     set_options(options)
+
+    @suffix = rand(999) if @suffix == nil
+    @name = "#{@name} #{@suffix}"
+    @code = "#{@code.upcase}#{@suffix}"
   end
 
   def search
@@ -48,6 +54,7 @@ class HoldIssueData < DataFactory
       page.manage_hold_code_input.set @code
       page.manage_hold_category_select.select @category
       page.manage_hold_descr_input.set @description
+
       page.manage_hold_show
     end
   end
@@ -68,14 +75,25 @@ class HoldIssueData < DataFactory
       page.descr_input.set @description
       page.find_owning_org @owning_org
 
+      @authorising_orgs.each do |auth_org|
+        auth_org.parent = self
+        auth_org.create
+      end
+
       page.save if !@defer_save
     end
   end
 
   def edit
     on ManageHold do |page|
-      page.edit_hold @hold_name
+      page.edit_hold @name
     end
+  end
+
+  def add_authorising_org opts
+    opts[:auth_org_obj].parent = self
+    opts[:auth_org_obj].create
+    @authorising_orgs << opts[:auth_org_obj]
   end
 
 end

@@ -99,8 +99,7 @@ class ManageHold < BasePage
   def edit_hold (hold_code)
     loading.wait_while_present
     wait_until { manage_hold_results_table.row(text: /#{hold_code}/).present? }
-    actions = manage_hold_results_table.row(text: /#{hold_code}/).cells[ACTIONS]
-    actions.a(id: /manageHoldEditLink_line\d+/).click
+    manage_hold_results_table.row(text: /#{hold_code}/).a(id: /manageHoldEditLink_line\d+/).click
   end
 
   ######################################################################################################################

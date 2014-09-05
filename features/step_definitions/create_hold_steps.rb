@@ -1,5 +1,5 @@
 When(/^I create a hold by completing the required information needed$/) do
-  @hold = create HoldIssueData
+  @hold = create HoldIssueObject, :suffix => "88"
 end
 
 And(/^the hold exists in the hold catalog$/) do
@@ -11,7 +11,7 @@ And(/^the hold exists in the hold catalog$/) do
 end
 
 When(/^I attempt to create a duplicate hold entry$/) do
-  @hold = create HoldIssueData, :name => "Academic Advising Issue (Duplicate)", :code => "AAI99",
+  @hold = create HoldIssueObject, :name => "Academic Advising Issue (Duplicate)", :code => "AAI", :suffix => "99",
                       :category => "Academic Advising Issue"
 
   @hold.create
@@ -22,60 +22,38 @@ Then(/^a duplicate check message is displayed$/) do
 end
 
 When(/^I create a hold with authorizing organization for apply as well as expire$/) do
-  @manage_hold = make ManageHoldData, :hold_name =>"Academic Advising Issue 89" ,  :hold_code=>"Acad89", :hold_category=>"Academic Advising Issue" , :hold_description=>"AFT Tests Create", :defer_save=>false
-  @create_hold_data = create CreateEditHoldData, :parent => @manage_hold
-  on CreateHold do |page|
-    page.hold_add_org
-    page.hold_auth_find_btn(1)
-    page.loading.wait_while_present
-    page.hold_popup_search
-    page.hold_popup_table_select(2)
-    page.hold_auth_apply(1)
-    page.hold_add_org
-    page.hold_auth_find_btn(2)
-    page.loading.wait_while_present
-    page.hold_popup_search
-    page.hold_popup_table_select(3)
-    page.hold_auth_expire(2)
-    page.hold_save
-  end
+  auth_orgs = []
+  auth_orgs << (make HIAuthorisingOrgObject, :auth_org => "Graduate Studies", :auth_expire => false)
+  auth_orgs << (make HIAuthorisingOrgObject, :auth_org => "Ctr Study & Resp to Terrorism", :auth_apply => false)
+  @hold = create HoldIssueObject, :name => "Academic Advising Issue", :code => "Acad",
+                 :category => "Academic Advising Issue", :authorising_orgs => auth_orgs
 end
 
 Then(/^the hold is displayed in the catalog with the created authorizations$/) do
-  @manage_hold = create ManageHoldData, :hold_name=> "Academic Advising Issue 89", :hold_code=> "Acad89"
+  @hold.manage
   on ManageHold do |page|
     page.loading.wait_while_present
-    @manage_hold.edit
-
+    page.get_hold_name_and_description(@hold.name, @hold.description).nil?.should be_false
   end
+
+  @hold.edit
   on CreateHold do |page|
-    page.auth_org_rows("Graduate Studies").nil?.should be_false
-    page.auth_org_rows("Ctr Study & Resp to Terrorism").nil?.should be_false
+    page.auth_org_rows(@hold.authorising_orgs[0].auth_org).nil?.should be_false
+    page.auth_org_rows(@hold.authorising_orgs[1].auth_org).nil?.should be_false
   end
 
 end
 
 When(/^I create a hold with authorizing organization without apply and expire permission$/) do
-  @manage_hold = make ManageHoldData, :hold_name =>"Academic Advising Issue 90" ,  :hold_code=>"Acad90", :hold_category=>"Academic Advising Issue" , :hold_description=>"AFT Tests Create", :defer_save=>false
-  @create_hold_data = create CreateEditHoldData, :parent => @manage_hold
-  on CreateHold do |page|
-    page.hold_add_org
-    page.hold_auth_find_btn(1)
-    page.loading.wait_while_present
-    page.hold_popup_search
-    page.hold_popup_table_select(2)
-    page.hold_add_org
-    page.hold_auth_find_btn(2)
-    page.loading.wait_while_present
-    page.hold_popup_search
-    page.hold_popup_table_select(3)
-    page.hold_save
-  end
+  auth_orgs = []
+  auth_orgs << (make HIAuthorisingOrgObject, :auth_org => "Graduate Studies", :auth_expire => false, :auth_apply => false)
+  @hold = create HoldIssueObject, :name => "Academic Advising Issue", :code => "Acad",
+                      :category => "Academic Advising Issue", :authorising_orgs => auth_orgs
 end
 
-Then(/^a permission message is displayed$/) do
+Then(/^a permission error message is displayed$/) do
   on CreateHold do |page|
-    result_error = page.get_hold_error_message
-    result_error.should match /At least one permission must be selected for each organization./
+    result_error = page.get_error_message
+    result_error.should match /At least one permission must be selected for each organization/
   end
 end

@@ -1,4 +1,4 @@
-@blue_team
+@nightly @blue_team
 Feature: HOLD.Create Hold
   Hold 1.1 As an admin I want to create the general information for a hold so that the hold can be added to the catalog of holds
 
@@ -17,13 +17,13 @@ Feature: HOLD.Create Hold
     When I attempt to create a duplicate hold entry
     Then a duplicate check message is displayed
 
-  #KSENROLL-14526
-  @draft
+#KSENROLL-14526
+  @pending
   Scenario: Hold 1.2.1 Verify that a hold is created and added to the catalog of holds after adding an organization for apply and another for expire
     When I create a hold with authorizing organization for apply as well as expire
     Then the hold is displayed in the catalog with the created authorizations
 
-  @draft
+  @pending
   Scenario: Hold 1.2.2 Verify that authorizing organization permission message is displayed after adding authorizing organization without apply and expire permission
     When I create a hold with authorizing organization without apply and expire permission
-    Then a permission message is displayed
+    Then a permission error message is displayed
