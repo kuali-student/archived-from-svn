@@ -254,7 +254,7 @@ Then(/^I should be able to add the course to my plan$/) do
     sleep 5
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(500)
     end
     @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring",:planned_term=>"2014Summer1", :course_code => "WMST348"
     navigate_to_course_search_home
