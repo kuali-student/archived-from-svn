@@ -189,8 +189,8 @@ class RegistrationRequest < DataFactory
 
   def remove_from_cart_on_search
     on CourseSearchPage do |page|
-      page.course_code(@course_code,@reg_group_code).wait_until_present
-      page.show_course_details @course_code,@reg_group_code
+      page.course_code(@course_code,@reg_group_code,STATUS_SCHEDULE).wait_until_present
+      page.show_course_details @course_code,@reg_group_code,STATUS_SCHEDULE
       page.remove_course_button(@course_code,@reg_group_code).wait_until_present
       page.remove_course_from_cart @course_code,@reg_group_code
     end
@@ -222,7 +222,8 @@ class RegistrationRequest < DataFactory
         page.save_edits @course_code, @reg_group_code, options[:context]
       end
     elsif options[:context]==STATUS_SCHEDULE || options[:context]==STATUS_WAITLIST then
-      on StudentSchedule do |page|
+      page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? StudentSchedule : CourseSearchPage
+      on page_class do |page|
         page.course_code(@course_code,@reg_group_code,options[:context]).wait_until_present
         sleep 1
         page.show_course_details(@course_code,@reg_group_code,options[:context])

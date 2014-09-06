@@ -2,6 +2,10 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
 
   page_url "#{$test_site}/registration/#/myCart"
 
+  STATUS_SCHEDULE = "schedule"
+  STATUS_WAITLIST = "waitlist"
+  PREFIX_WAITLIST = "waitlist_"
+
   def go_to_results_page (search_string)
     new_url = "#{$test_site}/registration/index.jsp#/search/#{search_string}"
     @browser.goto new_url
@@ -23,16 +27,18 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   action(:add_to_cart) { |b| b.submit_button.click }
 
   # Course cards
-  element(:remove_course_button) { |course_code,reg_group_code,b| b.button(id: "remove_#{course_code}_#{reg_group_code}") }
-  element(:course_code) { |course_code,reg_group_code,b| b.span(id: "course_code_#{course_code}_#{reg_group_code}") }
+  element(:remove_course_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}remove_#{course_code}_#{reg_group_code}") }
+  element(:course_code) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_code_#{course_code}_#{reg_group_code}") }
+  element(:edit_course_options_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}edit_#{course_code}_#{reg_group_code}") }
+  action(:edit_course_options) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.edit_course_options_button(course_code,reg_group_code,status).click }
 
 # EDIT COURSE OPTIONS DIALOG
 #   context = newItem or cart
   element(:credits_selection_div) { |course_code,reg_group_code,context,b| b.div(id:"#{context}_credits_#{course_code}_#{reg_group_code}") }
-  element(:credit_options_more) { |course_code,reg_group_code,context,b| b.div(id: "#{context}_credits_#{course_code}_#{reg_group_code}_more") }
-  action(:more_credit_options) { |course_code,reg_group_code,context,b| b.credit_options_more(course_code,reg_group_code,context).click }
-  element(:credits_selection) { |course_code,reg_group_code,credits,context,b| b.i(id: "#{context}_credits_#{course_code}_#{reg_group_code}_#{credits}") }
-  action(:select_credit_count) { |course_code,reg_group_code,credits,context,b| b.credits_selection(course_code,reg_group_code,credits,context).click }
+  element(:credit_options_more) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{status}_credits_#{course_code}_#{reg_group_code}_more") }
+  action(:more_credit_options) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.credit_options_more(course_code,reg_group_code,status).click }
+  element(:credit_option_selection) { |course_code,reg_group_code,status=STATUS_SCHEDULE,credits,b| b.i(id: "#{status}_credits_#{course_code}_#{reg_group_code}_#{credits}") }
+  action(:select_credit_option) { |course_code,reg_group_code,status=STATUS_SCHEDULE,credits,b| b.credit_option_selection(course_code,reg_group_code,status,credits).click}
   element(:grading_audit) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Audit") }
   element(:grading_letter) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Letter") }
   element(:grading_pass_fail) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Pass/Fail") }
@@ -86,6 +92,10 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   # Details view
   element(:back_to_search_results) { |b| b.a(id: "returnToSearch") }
   element(:course_description) { |b| b.div(id: "courseDescription").text }
+
+  def self.prefix(status)
+    return (status==STATUS_SCHEDULE)?"":PREFIX_WAITLIST
+  end
 
   # Results table column indexes
   COURSE_SEATS_INDICATOR = 0
@@ -164,11 +174,30 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
     end
   end
 
-  def show_course_details(course_code, reg_group_code)
-    sleep 1
-    toggle_course_details(course_code,reg_group_code) unless remove_course_button(course_code,reg_group_code).visible?
+  def show_course_details(course_code, reg_group_code, course_status=STATUS_SCHEDULE)
+    sleep 2
+    toggle_course_details(course_code, reg_group_code, course_status) unless remove_course_button(course_code, reg_group_code, course_status).visible?
   end
-  
+
+  def select_credits(course_code, reg_group_code, credits, status=STATUS_SCHEDULE)
+    # Firefox workaround
+    toggle_course_details course_code,reg_group_code,status
+    sleep 1
+    show_course_details course_code,reg_group_code,status
+    sleep 1
+
+    more_credit_options(course_code, reg_group_code, status) if credit_options_more(course_code, reg_group_code, status).visible?
+    select_credit_option(course_code, reg_group_code, status, credits)
+  end
+
+  def select_grading(course_code, reg_group_code, grading_option, status=STATUS_SCHEDULE)
+    case grading_option
+      when "Audit" then grading_audit(course_code,reg_group_code,status).click
+      when "Letter" then grading_letter(course_code,reg_group_code,status).click
+      when "Pass/Fail" then grading_pass_fail(course_code,reg_group_code,status).click
+    end
+  end
+
   def sort_results opts={}
     return nil if opts[:sort_key].nil?
     column = case opts[:sort_key]
@@ -189,11 +218,12 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   end
 
   def remove_course_from_cart(course_code, reg_group_code)
-    remove_course_button(course_code,reg_group_code).click
+    remove_course_button(course_code,reg_group_code,STATUS_SCHEDULE).click
   end
 
-  def toggle_course_details(course_code, reg_group_code)
-    course_code(course_code,reg_group_code).click
+  def toggle_course_details(course_code, reg_group_code, course_status=STATUS_SCHEDULE)
+    course_code(course_code,reg_group_code,course_status).wait_until_present
+    course_code(course_code,reg_group_code,course_status).click
   end
 
 
