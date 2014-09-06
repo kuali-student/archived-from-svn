@@ -1,4 +1,4 @@
-@nightly
+@wip
 Feature: BT.Add to plan view
 
   Background:
