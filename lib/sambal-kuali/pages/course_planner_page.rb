@@ -47,7 +47,6 @@ class CoursePlannerPage < BasePage
 
 
   #60 - Verify the course code availability in my plan
-
   action(:course_code_term_myplan_click) { |b| b.course_code_term_myplan.click}
   action(:info_icon) { |term,code,b| b.img(id:"kuali-atp-#{term}_planned_#{code}_courseNote")}
   element(:view_course_summary) {|b| b.td(class:"jquerybubblepopup-innerHtml").a(class:"uif-actionLink uif-boxLayoutVerticalItem clearfix")}
@@ -58,12 +57,32 @@ class CoursePlannerPage < BasePage
   element(:bookmark_gutter) {|b|b.div(id:"bookmark_summary")}
   element(:view_more_details) {|b|b.a(id:"bookmark_widget_footer")}
   element(:course_interm) {|term,code,b|b.div(id:"kuali-atp-#{term}_planned_#{code}_code")}
-
   element(:academic_planner_header) {|b|b.div(class:"uif-messageField ksap-plan-header ks-plan-Header-headline uif-boxLayoutHorizontalItem")}
   element(:academic_planner_label) {|b|b.div(class:"uif-message uif-boxLayoutHorizontalItem")}
   element(:planner_courses_detail_list){ |b|b.div(id:"planner_courses_detail_list")}
   #action(:course_page_click) {|b| b.div(id:"applicationNavigation").a(text:"Find Courses").click}
   element(:ksap_loader_planner) {|b|b.div(class:"kasp-loader")}
+  element(:ksap) {|b|b.div(id:"applicationLogo")}
+  element(:plan) {|b|b.a(href:"planner?methodToCall=start&viewId=Planner-FormView")}
+  element(:find_courses) {|b|b.a(href:"course?methodToCall=start&viewId=CourseSearch-FormView&resetForm=true")}
+  action(:find_courses_click) {|b|b.find_courses.click}
+  element(:bookmarks) {|b|b.div(id:"applicationHeader").span(id:"Ksap-Header-Bookmark-Count-Label")}
+  element(:academic_year_2014_2015) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
+  element(:right_arrow) {|b|b.div(id:"planner_courses_detail").a(id:"next_year_button")}
+  action(:right_arrow_click) {|b|b.right_arrow.click}
+  element(:academic_year_2015_2016) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
+  element(:left_arrow) {|b|b.div(id:"planner_courses_detail").a(id:"previous_year_button")}
+  element(:print) {|b|b.div(id:"planner_courses_detail").a(title:"Print")}
+  element(:spring_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Spring 2014")}
+  element(:summer_1_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Summer I 2014")}
+  element(:fall_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Fall 2014")}
+  element(:winter_2015) {|b|b.div(id:"planner_courses_detail_list").span(text:"Winter 2015")}
+  element(:course_registered_term) {|term,b|b.div(id:/kuali-atp-#{term}_cart.*/)}
+  element(:course_planned_term) {|term,b|b.div(id:/kuali-atp-#{term}_courses.*/)}
+  element(:course_backup_term) {|term,b|b.div(id:/kuali-atp-#{term}_backup.*/)}
+  element(:credit_tally) {|b|b.div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
+
+
 
 end
 
