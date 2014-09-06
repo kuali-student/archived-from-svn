@@ -61,7 +61,7 @@ end
 #New steps
 
 
-When(/^I search for a course\(CM\) from course search$/) do
+When(/^I search for a course in the course search page$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
@@ -71,7 +71,7 @@ end
 
 
 
-And(/^I add the course\(CM\) from Search to the Planned section for a specific term$/) do
+And(/^I add the course from search to the planned section for a specific term$/) do
   on CourseSearch do |page|
     page.plan_page_click
 
@@ -85,7 +85,7 @@ And(/^I add the course\(CM\) from Search to the Planned section for a specific t
 end
 end
 
-Then(/^the course should be there in the Planner$/) do
+Then(/^the course should be there in the planner$/) do
   navigate_to_course_planner_home
 
   on CoursePlannerPage do |page|
@@ -95,7 +95,7 @@ Then(/^the course should be there in the Planner$/) do
 end
 
 
-And(/^I add the course\(CM\) from the Course details page$/) do
+And(/^I add the course from the course details page$/) do
   on CourseDetailPage do |page|
     page.add_to_plan.click
     page.term_cdp.wait_until_present
@@ -107,7 +107,7 @@ end
 
 
 
-When(/^I navigate to the Course Section Details$/) do
+When(/^I navigate to the course section details$/) do
   #navigate to course search
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
@@ -142,7 +142,7 @@ end
 
 
 
-And(/^I add the course\(CM\) from Search to the Backup section for a specific term$/) do
+And(/^I add the course from search to the backup section for a specific term$/) do
   on CourseSearch do |page|
     page.plan_page_click
   end
@@ -165,7 +165,7 @@ Then(/^the course should be there in the backup section of the planner$/) do
   end
 end
 
-When(/^I search for a course\(CM\)$/) do
+When(/^I search for a specific course$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
@@ -197,7 +197,7 @@ Then(/^the course should be there in the Backup section of the planner$/) do
 end
 
 
-When(/^I search for a course with Single Activity Offerings$/) do
+When(/^I search for a course with single activity offerings$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "WMST348"
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
@@ -281,7 +281,7 @@ Then(/^I should be able to add the course to my plan$/) do
   end
 end
 
-When(/^I search for the course with Multiple Activity Offerings$/) do
+When(/^I add a course with multiple activity offerings to my plan$/) do
   @course_search_result = make CourseSearchResults, :planned_term=>"2014Summer1", :course_code => "CHEM231", :term=>"Spring 2014"
   @course_section_object=make CourseSectionObject
   @course_search_list=make CourseSearchResults
@@ -340,7 +340,7 @@ When(/^I search for the course with Multiple Activity Offerings$/) do
 end
 
 
-Then(/^I should be able to add the course with Multiple Activity Offerings to my plan$/) do
+Then(/^I should be able to add the course with multiple activity offerings to my plan$/) do
   on CourseSectionPage do |page|
     sleep 5
     page.add_to_button_enabled.enabled?.should==true
@@ -399,7 +399,7 @@ Then(/^I should be able to add the course with Multiple Activity Offerings to my
  end
 end
 
-When(/^I search for the course with Multiple Format Offerings$/) do
+When(/^I add a course with multiple format offerings to my plan$/) do
   @course_search_result = make CourseSearchResults, :course_code => "CHEM237",:planned_term=>"2014Spring", :term=>"Spring 2014"
 
   @course_activityoffering_object_1=make CourseActivityOfferingObject,
@@ -461,7 +461,7 @@ When(/^I search for the course with Multiple Format Offerings$/) do
 end
 
 
-Then(/^I should be able to add the course with Multiple Format Offerings to my plan$/) do
+Then(/^I should be able to add the course with multiple format offerings to my plan$/) do
   on CourseSectionPage do |page|
     course_code=@course_search_result.course_code
     page.lecture_lab_discussion.exists?.should==true
