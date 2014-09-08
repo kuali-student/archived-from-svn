@@ -162,7 +162,9 @@ class CmReviewProposal < BasePage
   # jQuery('#CM-ViewCourseView-CourseInfo-Course-Titlever1').parent().parent().attr('class') ==
   # "cm-compare-highlighter"
   # use this to check the style
-  # course_title_ver1_review.style 'background-color' is should == rgb(252, 248, 227) or #fcf8e3
+
+  element(:course_version1_number_review) { |b| b.div(id: "CM-ViewCourse-VersionNamever1") }
+  element(:course_version2_number_review)  { |b| b.div(id: "CM-ViewCourse-VersionNamever2") }
 
   element(:not_current_version_section) {|b|b.div(id: "CM-ViewCourse-View-Course-NotCurentVersionSection")}
   action(:view_course_current_version) { |b| b.a(id: "CM-ViewCourse-View-Course-CurentVersion-Link").click }

@@ -206,9 +206,8 @@ end
 Then(/^I can view both sets of the version details$/) do
   sleep 2
   on CmReviewProposal do |review|
-    #When the version tiles are completed we will check the version titles
-    # review.course_header_ver1.should == "2"
-    # review.course_header_ver2.should == "1"
+    review.course_version1_number_review.text.should == "Version 2 (current version)"
+    review.course_version2_number_review.text.should == "Version 1"
 
     review.course_title_ver1_review.text.should == @course.course_title
     review.course_title_ver2_review.text.should == "The Ancient World"
@@ -225,6 +224,7 @@ end
 
 And(/^I can clearly see the data differences$/) do
   on CmReviewProposal do |review|
+    review.course_version1_number_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
     review.course_title_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
     review.transcript_course_ver1_title.parent.parent.attribute_value("class") == "cm-compare-highlighter"
     review.start_term_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
