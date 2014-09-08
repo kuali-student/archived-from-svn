@@ -202,7 +202,7 @@ Then /^the course is (present|not present) in my cart$/  do |presence|
   on RegistrationCart do |page|
     if presence == "present"
       sleep 2
-      page.course_title(@reg_request.course_code, @reg_request.reg_group_code).should_not be_nil
+      page.course_code(@reg_request.course_code, @reg_request.reg_group_code).should_not be_nil
     else
       sleep 1
       course_code_text = "#{@reg_request.course_code}(#{@reg_request.reg_group_code})"
@@ -328,10 +328,10 @@ And /^I? ?can view the details of my selection in the registration cart$/ do
       page.grading_option_badge(@reg_request.course_code, @reg_request.reg_group_code).wait_until_present
       page.grading_option(@reg_request.course_code, @reg_request.reg_group_code).should include "#{@reg_request.course_options.grading_option}"
     end
-    page.ao_type(@reg_request.course_code, @reg_request.reg_group_code,0).should include "Discussion"
-    page.course_schedule(@reg_request.course_code, @reg_request.reg_group_code,0,0).should match /Tu 8:00-8:50am(\s+)CHM 0128/i
-    page.ao_type(@reg_request.course_code, @reg_request.reg_group_code,1).should include "Lecture"
-    page.course_schedule(@reg_request.course_code, @reg_request.reg_group_code,1,0).should match /MWF 8:00-8:50am(\s+)HJP 0226/i
+    page.ao_type(@reg_request.course_code, @reg_request.reg_group_code,0).should include "Lecture"
+    page.course_schedule(@reg_request.course_code, @reg_request.reg_group_code,0,0).should match /MWF 8:00-8:50am(\s+)HJP 0226/i
+    page.ao_type(@reg_request.course_code, @reg_request.reg_group_code,1).should include "Discussion"
+    page.course_schedule(@reg_request.course_code, @reg_request.reg_group_code,1,0).should match /Tu 8:00-8:50am(\s+)CHM 0128/i
   end
 end
 
