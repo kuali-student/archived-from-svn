@@ -49,6 +49,15 @@ public interface TermHelper {
 	Term getTerm(String atpId);
 
 	/**
+	 * Look up a term by ATP ID.
+	 * 
+	 * @param atpId
+	 *            The ATP ID for the term.
+	 * @return The term corresponding to the given ATP ID.
+	 */
+	Term getTerm(String atpId, String effectiveTermId);
+
+	/**
 	 * Look up a year/term by ATP ID.
 	 * 
 	 * @param atpId

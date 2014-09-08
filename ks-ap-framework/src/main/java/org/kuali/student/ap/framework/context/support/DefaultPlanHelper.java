@@ -22,6 +22,7 @@ import org.kuali.student.ap.academicplan.infc.PlaceholderInstance;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
 import org.kuali.student.ap.academicplan.infc.TypedObjectReference;
 import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.framework.context.CourseHelper;
 import org.kuali.student.ap.framework.context.PlaceholderResolver;
 import org.kuali.student.ap.framework.context.PlanConstants;
 import org.kuali.student.ap.framework.context.PlanHelper;
@@ -29,6 +30,7 @@ import org.kuali.student.ap.framework.context.TermHelper;
 import org.kuali.student.ap.framework.util.KsapHelperUtil;
 import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
+import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.r2.common.dto.AttributeInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
@@ -525,11 +527,11 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	@Override
 	public List<Term> getPlannerCalendarTerms(Term startTerm) {
 		TermHelper termHelper = KsapFrameworkServiceLocator.getTermHelper();
-		
+
 		if (startTerm == null) {
 			startTerm = termHelper.getCurrentTerm();
 		}
-		
+
 		if (startTerm == null) {
 			List<Term> pterms = termHelper.getPlanningTerms();
 			if (pterms != null && !pterms.isEmpty())
@@ -642,6 +644,31 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 	public boolean isEncompassed(TypedObjectReference inner,
 			TypedObjectReference outer) {
 		throw new UnsupportedOperationException("TODO");
+	}
+
+	@Override
+	public Set<String> getCourseIds(TypedObjectReference ref) {
+		PlanHelper planHelper = KsapFrameworkServiceLocator.getPlanHelper();
+		CourseHelper courseHelper = KsapFrameworkServiceLocator
+				.getCourseHelper();
+		switch (ref.getRefObjectType()) {
+		case PlanConstants.REF_TYPE_ACTIVITY_OFFERING:
+			ActivityOfferingInfo ao = courseHelper.getActivityOfferingInfo(ref
+					.getRefObjectId());
+			return Collections.singleton(ao.getAttributeValue("courseId"));
+		case PlanConstants.REF_TYPE_COURSE:
+			return Collections.singleton(ref.getRefObjectId());
+		case PlanConstants.REF_TYPE_PLACEHOLDER:
+			return planHelper.getCourseIdsForPlaceHolder(planHelper
+					.getPlaceHolder(ref));
+		case PlanConstants.REF_TYPE_PLACEHOLDER_INSTANCE:
+			return planHelper.getCourseIds(planHelper
+					.getPlaceHolderInstance(ref));
+		case PlanConstants.REF_TYPE_DEGREE_MAP_REQUIREMENT:
+			return planHelper.getCourseIds(planHelper.getRequirement(ref));
+		default:
+			return Collections.emptySet();
+		}
 	}
 
 	@Override

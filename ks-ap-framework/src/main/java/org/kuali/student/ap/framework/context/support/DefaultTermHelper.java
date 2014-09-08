@@ -230,6 +230,12 @@ public class DefaultTermHelper implements TermHelper {
 	}
 
 	@Override
+	public Term getTerm(String atpId, String effectiveTermId) {
+		LOG.warn("TODO: effective term is only supported for iGPS");
+		return getTerm(atpId);
+	}
+
+	@Override
 	public Term getTerm(String atpId) {
 		TermMarker tm = getTermMarker();
 		Term rv = tm.termMap.get(atpId);

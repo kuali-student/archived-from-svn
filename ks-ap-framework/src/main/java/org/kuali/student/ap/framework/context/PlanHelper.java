@@ -187,6 +187,14 @@ public interface PlanHelper {
 	List<PlanItem> loadStudentsPlanItemsForCourse(String courseId);
 
 	/**
+	 * Get a set of possible course IDs for a TypedOjbectReference
+	 * 
+	 * @param ref
+	 * @return list of course IDs
+	 */
+	Set<String> getCourseIds(TypedObjectReference ref);
+
+	/**
 	 * Get the course from a TypedOjbectReference
 	 * 
 	 * @param ref
@@ -209,7 +217,6 @@ public interface PlanHelper {
 	 * @return placeholder instance or null if the reference is not for a
 	 *         placeholder instance.
 	 */
-
 	PlaceholderInstance getPlaceHolderInstance(TypedObjectReference ref);
 
 	/**
