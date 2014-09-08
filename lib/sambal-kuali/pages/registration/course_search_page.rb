@@ -117,7 +117,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
 
   def course_desc_link_by_course (course_code)
     row = target_result_row_by_course (course_code)
-    row.cells[COURSE_DESC].link
+    return row
   end
 
   def course_prefix_by_row(row)
