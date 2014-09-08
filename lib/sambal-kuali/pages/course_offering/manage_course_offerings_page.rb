@@ -97,18 +97,6 @@ class ManageCourseOfferings < BasePage
   element(:move_ao_button) { |b| b.move_ao_cluster_popup_div.button(text: "Move") }
   action(:complete_move_ao) { |b| b.move_ao_button.click; b.loading.wait_while_present }
 
-  #def approve_co_confirm
-  #  approve_co_popup_div.checkbox(index: 0).click
-  #  loading.wait_while_present(180)
-  #  wait_until jgrowl.include? "The selected course offering was successfully approved"
-  #end
-
-  #def approve_co_cancel
-  #  puts "exists? #{approve_co_popup_div.checkbox(index: 1).exists?}"
-  #  approve_co_popup_div.checkbox(index: 1).click
-  #  loading.wait_while_present(180)
-  #end
-
   element(:activity_offering_results_div) { |b| b.frm.div(id: "KS-CourseOfferingManagement-AOClustersCollection") }
 
   def activity_offering_results_table(cluster_private_name = :default_cluster)
@@ -217,7 +205,7 @@ class ManageCourseOfferings < BasePage
 
 
   def ao_comments_link(code,cluster_private_name = :default_cluster)
-    target_row(code, cluster_private_name).a(class: /ks-fontello-icon-comment/)
+    target_row(code, cluster_private_name).i(class: /ks-fontello-icon-comment/).parent
   end
 
   def ao_comments_link_count(code,cluster_private_name = :default_cluster)
@@ -278,7 +266,6 @@ class ManageCourseOfferings < BasePage
     if cluster_list_div.exists?
       div_list = cluster_list_div.divs(class: "uif-collectionItem uif-boxCollectionItem clearfix")
     end
-    #puts "div list #{div_list.length}"
     div_list
   end
 
@@ -317,13 +304,6 @@ class ManageCourseOfferings < BasePage
   def cluster_div_name_text(cluster_div)
     cluster_div.span().text()
   end
-
-  #def cluster_published_name(cluster_div_element)     No longer on the page
-  #  tmp_text = cluster_div_element.fieldset.label.text[/\([^()]*\)/].gsub(/[()]/, "")
-  #  #target_cluster(private_name).span().text[/(?<=\()\S+(?=\))/] #get the text between parenthesis
-  #  #full_name = cluster_list_item_div(private_name).span().text()
-  #  #full_name.slice(full_name.index('(')+1..-2)
-  #end
 
   def remove_cluster_link(private_name)
     target_cluster(private_name).link(text: /Delete/)
