@@ -274,7 +274,6 @@ class RegistrationRequest < DataFactory
       page.remove_course @course_code,@reg_group_code,status
       # wait for confirmation message
       page.user_message_div(status).wait_until_present
-      page.wait_until { page.user_message(status).include?(expected_user_message) }
     end
   end
 

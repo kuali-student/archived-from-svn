@@ -95,7 +95,7 @@ Feature: REG.Register for course
   #KSENROLL-12353
   Scenario: I want my registration cart and schedule to accurately reflect the number of courses and credits I am registered for so that I can be aware of my credit load.
     Given I log in to student registration as student1
-    When I add a WMST course offering to my registration cart
+    When I add a WMST course offering to my empty registration cart
     Then I can view the number of courses and credits I am registered for in my registration cart
     When I add a BSCI2 course offering to my registration cart
     Then I can view the number of courses and credits I am registered for in my registration cart
