@@ -150,6 +150,10 @@ class BasePage < PageFactory
       #Print
       element(:print_icon) {|b|b.a(title: "Print").i(class: "ks-fontello-icon-print")}
 
+      #Retire
+      element(:retire_proposal_link) { |b| b.a(id: "CM-Proposal-Course-LinkGroup-RetireCourse") }
+      action(:retire_proposal) { |b| b.retire_proposal_link.click; b.loading_wait }
+
       #Version
       element(:cs_modify_button) {|b|b.button(id: "CM-VersionHistory-ModifyButton-CurriculumSpecialist")}
       element(:faculty_modify_button) {|b|b.button(id: "CM-VersionHistory-ModifyButton-Faculty")}
