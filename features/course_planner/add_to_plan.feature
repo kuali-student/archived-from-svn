@@ -30,12 +30,10 @@ Feature: BT.Add note to planner
     Scenario: PL 3.0.6 Add Course Offering(Multiple Activity) to a term in my plan
 
       When I add a course with multiple activity offerings to my plan
-      And I select the activity offerings
-      Then I should be able to add the course with multiple activity offerings to my plan
+      Then the multiple activity offerings course should be successfully added to my plan
 
   Scenario: PL 3.0.7 Add Course Offering(Multiple Format) to a term in my plan
 
     When I add a course with multiple format offerings to my plan
-    And I select the format offerings
-    Then I should be able to add the course with multiple format offerings to my plan
+    Then the multiple format offerings course should be successfully added to my plan
 

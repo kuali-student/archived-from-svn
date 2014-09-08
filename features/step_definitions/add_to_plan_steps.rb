@@ -337,10 +337,37 @@ When(/^I add a course with multiple activity offerings to my plan$/) do
     page.course_termlist.wait_until_present(200000)
   end
 
+
+  #add activity offerings clubbed
+
+  on CourseSectionPage do |page|
+    page.add_to_button_disabled.wait_until_present
+
+    codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+    courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+    formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
+    formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
+    activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+    page.activityoffering_checkbox(codescription_level,codescription_level,formatlist_level,formatoffering_level,activityoffering_level).click
+
+    description_codescription_level= "#{@course_search_result.course_offering_description_list[0].courseofferingdescription_level}"
+    description_co_term_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+    description_formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].formatlist_level}"
+    description_fo_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
+    description_ao_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+    page.activityoffering_checkbox(description_codescription_level,description_co_term_level,description_formatlist_level,description_fo_level,description_ao_level).click
+    on CourseSectionPage do |page|
+      page.add_to_button_disabled.exists?.should==true
+    end
+
+  end
+
+
+
 end
 
 
-Then(/^I should be able to add the course with multiple activity offerings to my plan$/) do
+Then(/^the multiple activity offerings course should be successfully added to my plan$/) do
   on CourseSectionPage do |page|
     sleep 5
     page.add_to_button_enabled.enabled?.should==true
@@ -458,10 +485,45 @@ When(/^I add a course with multiple format offerings to my plan$/) do
     page.course_termlist.wait_until_present(120)
   end
   #To remove the course from planner
+
+  #add format offerings
+
+  on CourseSectionPage do |page|
+    page.lecture_lab_discussion.click
+    sleep 3
+  end
+  codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+  courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+  formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
+  formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
+  activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+
+  codescription_fo_level_1= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+  courseterm_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+  formatlist_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
+  formatoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
+  activityoffering_fo_level_1="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+
+  codescription_fo_level_2= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
+  courseterm_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
+  formatlist_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
+  formatoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[2].fo_format_level}"
+  activityoffering_fo_level_2="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
+
+  on CourseSectionPage do |page|
+    page.add_to_button_disabled.exists?.should==true
+    page.activityoffering_checkbox(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).click
+    page.activityoffering_checkbox(codescription_fo_level_1,courseterm_fo_level_1,formatlist_fo_level_1,formatoffering_fo_level_1,activityoffering_fo_level_1).click
+    page.activityoffering_checkbox(codescription_fo_level_2,courseterm_fo_level_2,formatlist_fo_level_2,formatoffering_fo_level_2,activityoffering_fo_level_2).click
+  end
+
+
+
+
 end
 
 
-Then(/^I should be able to add the course with multiple format offerings to my plan$/) do
+Then(/^the multiple format offerings course should be successfully added to my plan$/) do
   on CourseSectionPage do |page|
     course_code=@course_search_result.course_code
     page.lecture_lab_discussion.exists?.should==true
