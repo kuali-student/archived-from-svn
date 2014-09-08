@@ -27,3 +27,9 @@ Given /^I am logged in as admin with locale: (.*)$/ do |locale|
 
   log_in "admin", "admin"
 end
+
+
+
+Given(/^I am logged in as a student with privilege$/) do
+  log_in "b.nanal", "b.nanal"
+end
