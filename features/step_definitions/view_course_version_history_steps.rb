@@ -206,6 +206,10 @@ end
 Then(/^I can view both sets of the version details$/) do
   sleep 2
   on CmReviewProposal do |review|
+    #When the version tiles are completed we will check the version titles
+    # review.course_header_ver1.should == "2"
+    # review.course_header_ver2.should == "1"
+
     review.course_title_ver1_review.text.should == @course.course_title
     review.course_title_ver2_review.text.should == "The Ancient World"
 

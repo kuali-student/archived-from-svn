@@ -1,4 +1,4 @@
-@nightly
+@wip
 Feature: GT.View Course Version History
 
   Background:
