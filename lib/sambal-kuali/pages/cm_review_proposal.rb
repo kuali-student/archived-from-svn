@@ -165,11 +165,21 @@ class CmReviewProposal < BasePage
   # course_title_ver1_review.style 'background-color' is should == rgb(252, 248, 227) or #fcf8e3
 
   element(:not_current_version_section) {|b|b.div(id: "CM-ViewCourse-View-Course-NotCurentVersionSection")}
+  action(:view_course_current_version) { |b| b.a(id: "CM-ViewCourse-View-Course-CurentVersion-Link").click }
+
   #Course Version History Compare
   #Course information Section
 
   element(:course_title_ver1_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Course-Titlever1") }
-  element(:transcript_course_ver1_title) { |b| b.div(id: /.*ver1/, class: "uif-inputField cm_readonly_input")}
+  element(:course_title_ver2_review)  { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Course-Titlever2") }
+
+  element(:transcript_course_ver1_title) { |b| b.div(id: /.*ver1/, data_label: "Transcript Course Title")}
+  element(:transcript_course_ver2_title) { |b| b.div(id: /.*ver2/, data_label: "Transcript Course Title")}
+  element(:subject_code_ver1) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Subject-Areaver1")}
+  element(:subject_code_ver2) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Subject-Areaver2")}
+  element(:course_number_ver1) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixver1") }
+  element(:course_number_ver2) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixver2") }
+
   element(:subject_code_ver1_review) { |b| b.label(id:"CM-ViewCourseView-CourseInfo-Subject-Areaver1_label") }
   element(:course_number_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixver1_label") }
   element(:cross_listed_courses_ver1_review) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-CrossListingsver1_label") }

@@ -119,42 +119,111 @@ end
 Then(/^I can view the current course version details$/) do
   on CmReviewProposal do |review|
     review.not_current_version_section.present?.should == false
+    review.course_title_review.should == @course.course_title
+    review.transcript_course_title.should == @course.transcript_course_title
+    review.subject_code_review.should == @course.subject_code
+    review.course_number_review.should == @course.course_number
   end
 end
 
 Then(/^I cannot select more than two versions$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmCourseVersionHistoryPage do |page|
+    #select 4 versions
+    page.select_version_by_index(0)
+    page.select_version_by_index(1)
+    page.select_version_by_index(2)
+    page.select_version_by_index(3)
+    #but only 2 versions are selected
+    checked = 0;
+    for i in 0..4
+      if(page.version_history_checkbox(i).set?)
+        checked +=1
+      end
+    end
+    checked.should == 2
+  end
 end
 
 And(/^I cannot Show versions without any versions selected$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmCourseVersionHistoryPage do |page|
+    #clear out all the selections
+    for i in 0..4
+      page.deselect_version_by_index(i)
+    end
+    (page.review_versions_button.disabled?).should == true
+  end
 end
 
 When(/^I cancel out of the version history table$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmCourseVersionHistoryPage do |page|
+      page.close_history_view
+      if(page.alert.exists?)
+        page.alert.ok
+      end
+  end
 end
 
 When(/^I select a single non\-current version$/) do
   @course.view_course
-
+  on CmReviewProposal do |review|
+    review.lookup_version_history
+  end
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(1)
+    page.show_versions
+    sleep 2
+  end
 end
 
 Then(/^I can view the non\-current course version details$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.not_current_version_section.present?.should == true
+    review.course_title_review.should == "The Ancient World"
+    review.transcript_course_title.should == "HIST120IENT WORLD"
+    review.subject_code_review.should == @course.subject_code
+    review.course_number_review.should == @course.course_number
+  end
 end
 
 When(/^I select to view the current version$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.view_course_current_version
+  end
 end
 
 When(/^I select two versions of a course$/) do
-  pending # express the regexp above with the code you wish you had
+  @course.view_course
+  on CmReviewProposal do |review|
+    review.lookup_version_history
+  end
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(0)
+    page.select_version_by_index(1)
+    page.show_versions
+  end
 end
 
 Then(/^I can view both sets of the version details$/) do
-  pending # express the regexp above with the code you wish you had
+  sleep 2
+  on CmReviewProposal do |review|
+    review.course_title_ver1_review.text.should == @course.course_title
+    review.course_title_ver2_review.text.should == "The Ancient World"
+
+    review.transcript_course_ver1_title.text.should == @course.transcript_course_title
+    review.transcript_course_ver2_title.text.should == "HIST120IENT WORLD"
+
+    review.subject_code_ver1.text.should == @course.subject_code
+    review.subject_code_ver2.text.should == @course.subject_code
+    review.course_number_ver1.text.should == @course.course_number
+    review.course_number_ver2.text.should == @course.course_number
+  end
 end
 
 And(/^I can clearly see the data differences$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.course_title_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
+    review.transcript_course_ver1_title.parent.parent.attribute_value("class") == "cm-compare-highlighter"
+    review.start_term_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
+    review.end_term_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
+    end
 end
