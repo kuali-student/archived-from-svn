@@ -19,45 +19,43 @@ end
 
 Then(/^the relavent features of the page should be displayed$/) do
   on CoursePlannerPage do |page|
-    page.ksap.exists?.should==true
-    page.find_courses.exists?.should==true
-    page.plan.exists?.should==true
-    page.bookmarks.exists?.should==true
-    page.academic_year_2014_2015.exists?.should==true
-    page.right_arrow.wait_until_present
-    page.right_arrow.exists?.should==true
-    page.academic_year_2015_2016.exists?.should==true
-    page.left_arrow.wait_until_present
-    page.left_arrow.exists?.should==true
-    page.print.exists?.should==true
-    page.spring_2014.wait_until_present
-    page.spring_2014.exists?.should==true
-    page.summer_1_2014.exists?.should==true
-    page.fall_2014.exists?.should==true
-    page.winter_2015.exists?.should==true
-    page.course_registered_term(@course_search_result.planned_term).exists?.should==true
-    page.course_planned_term(@course_search_result.planned_term).exists?.should==true
-    page.course_backup_term(@course_search_result.planned_term).exists?.should==true
+   page.ksap.exists?.should==true
+   page.find_courses.exists?.should==true
+   page.plan.exists?.should==true
+   page.bookmarks.exists?.should==true
+   page.academic_year_2014_2015.exists?.should==true
+   page.right_arrow.wait_until_present
+   page.right_arrow.exists?.should==true
+   page.academic_year_2015_2016.exists?.should==true
+   page.left_arrow.wait_until_present
+   page.left_arrow.exists?.should==true
+   page.print.exists?.should==true
+   page.spring_2014.wait_until_present
+   page.spring_2014.exists?.should==true
+   page.summer_1_2014.exists?.should==true
+   page.fall_2014.exists?.should==true
+   page.winter_2015.exists?.should==true
+   page.course_registered_term(@course_search_result.planned_term).exists?.should==true
+   page.course_planned_term(@course_search_result.planned_term).exists?.should==true
+   page.course_backup_term(@course_search_result.planned_term).exists?.should==true
     end
 end
 
 Then(/^I should be able to see the View more details link in the bookmark section$/) do
   on CourseSectionPage do |page|
-    page.plan_link_coursesection_click
-    page.ksap_loader.wait_while_present(70000)
+   page.plan_link_coursesection_click
+   page.ksap_loader.wait_while_present(70000)
   end
 
   on CoursePlannerPage do |page|
-    page.ksap_loader_planner.wait_while_present(3000)
-    page.planner_courses_detail_list.wait_until_present(20000)
-    page.view_more_details.exists?.should==true
+   page.ksap_loader_planner.wait_while_present(3000)
+   page.planner_courses_detail_list.wait_until_present(20000)
+   page.view_more_details.exists?.should==true
   end
 end
 
-
 Then(/^the credit tally should exist on the credit line$/) do
   on CoursePlannerPage do |page|
-    page.credit_tally.exists?.should==true
+   page.credit_tally.exists?.should==true
   end
-
 end
