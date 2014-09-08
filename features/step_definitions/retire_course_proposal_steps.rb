@@ -69,3 +69,38 @@ And(/^the course status is retired$/) do
     course_review.course_state_review.should include @course.course_state
   end
 end
+
+
+When(/^I create a proposal to retire with missing required for save fields$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+
+Then(/^I should receive an error message about the missing fields$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+
+
+And(/^I add the missing fields and review the proposal to retire$/) do
+pending # express the regexp above with the code you wish you had
+end
+
+
+
+
+Then(/^missing for submit fields are highlighted and proposal cannot be submitted$/) do
+pending # express the regexp above with the code you wish you had
+end
+
+
+
+
+And(/^I add the missing for submit fields and submit$/) do
+pending # express the regexp above with the code you wish you had
+end
+
+
+Then(/^the proposal to retire is submitted successfully$/) do
+pending # express the regexp above with the code you wish you had
+end

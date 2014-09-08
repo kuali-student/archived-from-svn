@@ -14,3 +14,13 @@ Scenario: Verify that a proposal to retire and course can be submitted successfu
 
 
 
+Scenario: Create a retire proposal with incomplete fields,complete missing fields and submit as Faculty
+  Given I have an active course
+  When I create a proposal to retire with missing required for save fields
+  Then I should receive an error message about the missing fields
+  And I add the missing fields and review the proposal to retire
+  Then missing for submit fields are highlighted and proposal cannot be submitted
+  And I add the missing for submit fields and submit
+  Then the proposal to retire is submitted successfully
+
+
