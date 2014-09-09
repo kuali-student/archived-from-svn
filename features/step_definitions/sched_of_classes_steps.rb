@@ -69,7 +69,7 @@ Then /^a list of course offerings with that course offering code is displayed$/ 
 end
 
 When /^I search for course offerings by instructor$/ do
-  @schedule_of_classes = make ScheduleOfClasses, :type_of_search => "Instructor", :instructor_principal_name => "B.JOHND", :instructor_long_name => "BRITT, JOHN", :exp_course_list => ["BSCI399","CHEM241","ENGL390","HIST708"]
+  @schedule_of_classes = make ScheduleOfClasses, :type_of_search => "Instructor", :instructor_principal_name => "KS-8658", :instructor_long_name => "BRITT, JOHN", :exp_course_list => ["BSCI399","CHEM241","ENGL390","HIST708"]
   @schedule_of_classes.display
 end
 
