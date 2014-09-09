@@ -7,6 +7,8 @@ Feature: REG.Course Repeatability
             previously attempted and received a specific mark
   CR 18.3 - As an administrator I want to warn a student when registering for a course if attempted previously
             so that they know this is the last allowed attempt
+  CR 18.4 - As an administrator I want to exclude repeatable courses from the repeatability
+            check so students can register for the course, repeatedly
 
   Background:
     Given I am using a mobile screen size

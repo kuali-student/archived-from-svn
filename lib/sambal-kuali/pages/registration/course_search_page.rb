@@ -35,6 +35,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   action(:edit_course_options) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.edit_course_options_button(course_code,reg_group_code,status).click }
 
   element(:reason_message_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_status_message_#{course_code}_#{reg_group_code}") }
+  action(:close_reason_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.reason_message_div(course_code,reg_group_code,status).span(class: "kscr-Card-statusRemove").a.click }
   element(:reason_message_heading) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_heading_#{course_code}_#{reg_group_code}") }
   element(:reason_message_span) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_message_#{course_code}_#{reg_group_code}_0") }
   # the _0 above represents a message index of 0

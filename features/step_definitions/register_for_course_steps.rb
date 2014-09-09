@@ -205,11 +205,16 @@ When /^I attempt to edit the credits for one of the courses so my credit total e
 end
 
 When /^I attempt to edit the grading method for the course$/ do
+  visit CourseSearchPage
   @reg_request.edit_course_options :grading_option => "Audit",
                                    :context => "schedule"
 end
 
 When /^I attempt to edit the credits for the course$/ do
+  #close the previous message
+  on CourseSearchPage do |page|
+    page.close_reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule")
+  end
   @reg_request.edit_course_options :credit_option => "1.5",
                                    :context => "schedule"
 end
