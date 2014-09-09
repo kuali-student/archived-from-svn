@@ -214,6 +214,12 @@ class CmReviewProposal < BasePage
   element(:outcome_ver1_review) { |b| b.label(id: "CM-ViewCourse-View-Course-OutcomeSectionver1_label") }
   element(:activity_format_ver1_review_section) { |b| b.label(id:"CM-ViewCourse-View-Course-FormatSectionver1_label") }
 
+  value(:course_version_number_diff_highlighter) { |b| b.course_version1_number_review.parent.parent.attribute_value("class")}
+  value(:course_title_version_diff_highlighter) {|b|b.course_title_ver1_review.parent.parent.attribute_value("class") }
+  value(:transcript_course_title_diff_highlighter) {|b|b.transcript_course_ver1_title.parent.parent.attribute_value("class") }
+  value(:start_term_version_diff_highlighter) {|b|b.start_term_ver1_review.parent.parent.attribute_value("class") }
+  value(:end_term_version_diff_highlighter) {|b|b.end_term_ver1_review.parent.parent.attribute_value("class") }
+
   #LEARNING OBJECTIVES
 
   #COURSE REQUISITES

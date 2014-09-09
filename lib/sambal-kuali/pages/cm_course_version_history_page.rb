@@ -19,17 +19,11 @@ class CmCourseVersionHistoryPage < BasePage
   action(:close) { |b| b.frm.a(title: "Close").click }
 
   def select_version_by_index(index)
-    if version_history_checkbox(index).exists?
       version_history_checkbox(index).set
-    else
-      nil
-    end
   end
 
   def deselect_version_by_index(index)
-    if version_history_checkbox(index).exists?
       version_history_checkbox(index).clear
-    end
   end
 
 end

@@ -1,4 +1,4 @@
-Given(/^I find a course (.*?) with versions$/) do |view_course|
+When(/^I view the version history of (.*?)$/) do |view_course|
 
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format11 = (make CmFormatsObject,  :format_level => 1,
@@ -75,13 +75,9 @@ Given(/^I find a course (.*?) with versions$/) do |view_course|
                    :course_state => "ACTIVE"
   end
 
-end
-
-When(/^I view the version history$/) do
   @course.view_course
-  on CmReviewProposal do |review|
-    review.lookup_version_history
-  end
+  on(CmReviewProposal).lookup_version_history
+
 end
 
 Then(/^I can see the details of the course versions$/) do
@@ -104,19 +100,22 @@ Then(/^I can see the details of the course versions$/) do
   end
 end
 
-When(/^I select a single current version$/) do
-  @course.view_course
-  on CmReviewProposal do |review|
-    review.lookup_version_history
-  end
+Then(/^I can view the current course version details$/) do
   on CmCourseVersionHistoryPage do |page|
     page.select_version_by_index(0)
     page.show_versions
     sleep 2
   end
+  on CmReviewProposal do |review|
+    review.not_current_version_section.present?.should == false
+    review.course_title_review.should == @course.course_title
+    review.transcript_course_title.should == @course.transcript_course_title
+    review.subject_code_review.should == @course.subject_code
+    review.course_number_review.should == @course.course_number
+  end
 end
 
-Then(/^I can view the current course version details$/) do
+Then (/^I can view the current course version details after canceled out$/) do
   on CmReviewProposal do |review|
     review.not_current_version_section.present?.should == false
     review.course_title_review.should == @course.course_title
@@ -133,7 +132,7 @@ Then(/^I cannot select more than two versions$/) do
     page.select_version_by_index(1)
     page.select_version_by_index(2)
     page.select_version_by_index(3)
-    #but only 2 versions are selected
+    #Verifiy only 2 versions are selected (set)
     checked = 0;
     for i in 0..4
       if(page.version_history_checkbox(i).set?)
@@ -157,25 +156,16 @@ end
 When(/^I cancel out of the version history table$/) do
   on CmCourseVersionHistoryPage do |page|
       page.close_history_view
-      if(page.alert.exists?)
-        page.alert.ok
-      end
+      page.alert.ok if page.alert.exists?
   end
 end
 
-When(/^I select a single non\-current version$/) do
-  @course.view_course
-  on CmReviewProposal do |review|
-    review.lookup_version_history
-  end
+Then(/^I can view the non\-current course version details$/) do
   on CmCourseVersionHistoryPage do |page|
     page.select_version_by_index(1)
     page.show_versions
     sleep 2
   end
-end
-
-Then(/^I can view the non\-current course version details$/) do
   on CmReviewProposal do |review|
     review.not_current_version_section.present?.should == true
     review.course_title_review.should == "The Ancient World"
@@ -185,25 +175,23 @@ Then(/^I can view the non\-current course version details$/) do
   end
 end
 
-When(/^I select to view the current version$/) do
+Then(/^I can view the current course version details from the non\-current course version$/) do
+  on(CmReviewProposal).view_course_current_version
   on CmReviewProposal do |review|
-    review.view_course_current_version
+    review.not_current_version_section.present?.should == false
+    review.course_title_review.should == @course.course_title
+    review.transcript_course_title.should == @course.transcript_course_title
+    review.subject_code_review.should == @course.subject_code
+    review.course_number_review.should == @course.course_number
   end
 end
 
-When(/^I select two versions of a course$/) do
-  @course.view_course
-  on CmReviewProposal do |review|
-    review.lookup_version_history
-  end
+Then(/^I can compare two sets of the version details$/) do
   on CmCourseVersionHistoryPage do |page|
     page.select_version_by_index(0)
     page.select_version_by_index(1)
     page.show_versions
   end
-end
-
-Then(/^I can view both sets of the version details$/) do
   sleep 2
   on CmReviewProposal do |review|
     review.course_version1_number_review.text.should == "Version 2 (current version)"
@@ -224,10 +212,10 @@ end
 
 And(/^I can clearly see the data differences$/) do
   on CmReviewProposal do |review|
-    review.course_version1_number_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
-    review.course_title_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
-    review.transcript_course_ver1_title.parent.parent.attribute_value("class") == "cm-compare-highlighter"
-    review.start_term_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
-    review.end_term_ver1_review.parent.parent.attribute_value("class") == "cm-compare-highlighter"
-    end
+    review.course_version_number_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.course_title_version_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.transcript_course_title_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.start_term_version_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.end_term_version_diff_highlighter.should ==  "cm-compare-highlighter"
+  end
 end
