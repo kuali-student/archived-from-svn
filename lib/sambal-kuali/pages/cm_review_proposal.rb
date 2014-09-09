@@ -154,6 +154,11 @@ class CmReviewProposal < BasePage
   element(:withdraw_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Withdraw-Dialog-Explanation_control") }
   action(:confirmation_withdraw) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Withdraw").click; b.loading_wait }
 
+  #Retire
+  element(:retire_proposal_button) { |b| b.a(id: "CM-Course-RetireButton") }
+  action(:retire_proposal) { |b| b.retire_proposal_button.click; b.loading_wait }
+  action(:retire_continue) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Continue").click; b.loading_wait }
+  element(:curriculum_review_process) { |b| b.radio(value: "startRetireByProposal") }
 
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }

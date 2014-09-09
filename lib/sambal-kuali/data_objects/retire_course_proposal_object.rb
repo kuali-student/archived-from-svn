@@ -7,8 +7,8 @@ class CmRetireCourseProposal < DataFactory
   include Utilities
 
   attr_accessor :course,
-                :admin_retire,
-                :retire_by_proposal,
+                :admin_proposal,
+                :curriculum_review_process,
                 :retire_proposal_title,
                 :retirement_rationale,
                 :end_term,
@@ -23,7 +23,8 @@ class CmRetireCourseProposal < DataFactory
   def initialize(browser, opts={})
     @browser = browser
     defaults = {
-        :retire_by_proposal => :set,
+        :admin_proposal => false,
+        :curriculum_review_process => nil,
         :retire_proposal_title => random_alphanums(10,'test retirement proposal title '),
         :retirement_rationale => random_alphanums(20, 'test retirement rationale '),
         :end_term => '::random::',
@@ -38,7 +39,7 @@ class CmRetireCourseProposal < DataFactory
 
   def create
       select_course
-      select_retire_type
+      select_curr_review if @admin_proposal
       populate_retirement_info
       create_author
       create_supporting_docs
@@ -60,14 +61,14 @@ class CmRetireCourseProposal < DataFactory
   def select_course
     on CmReviewProposal do |course|
       @course.view_course
-      course.retire_proposal
+      course.retire_proposal_button
     end
   end
 
-  def select_retire_type
-    on CmRetireCourseStart do |retire|
-      fill_out retire, :admin_retire, :retire_by_proposal
-      retire.continue_retire
+  def select_curr_review
+    on CmReviewProposal do |retire|
+      fill_out retire, :curriculum_review_process
+      retire.retire_continue
     end
   end
 

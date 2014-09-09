@@ -31,11 +31,6 @@ end
 
 
 
-When(/^I submit the retire course proposal$/) do
-  @retire_proposal.submit_retire_proposal
-end
-
-
 And(/^I approve the retire course proposal as (.*?)$/) do |approver|
   log_in "carol", "carol" if approver == "Department Chair"
   log_in "earl", "earl" if approver == "College Approver"
