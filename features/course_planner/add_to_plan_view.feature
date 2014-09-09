@@ -16,6 +16,3 @@ Feature: BT.Add to plan view
    When I navigate to planner page
    Then the credit tally should exist on the credit line
 
-  Scenario: Verify that credit tally should exist on the credit line
-    When I navigate to planner page
-    Then the credit tally should exist on the credit line
