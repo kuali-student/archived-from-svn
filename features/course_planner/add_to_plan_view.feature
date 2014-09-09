@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: BT.Add to plan view
 
   Background:
@@ -15,4 +15,3 @@ Feature: BT.Add to plan view
   Scenario: Verify that credit tally should exist on the credit line
    When I navigate to planner page
    Then the credit tally should exist on the credit line
-
