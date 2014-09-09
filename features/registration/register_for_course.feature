@@ -117,3 +117,10 @@ Feature: REG.Register for course
     When I view my schedule
     And I am using a large screen size
     Then the course is present in my grid as a registered item
+
+ #KSENROLL-14641
+ Scenario: CR 4.3 As a student, I want to view the details of a course for which I am registered for a given term so I am aware of the course
+   Given I log in to student registration as student1
+   When I add a HIST course offering to my empty registration cart
+   And I click the details button for the course
+   Then I can see the details for my course

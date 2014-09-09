@@ -35,6 +35,7 @@ class RegistrationCart < RegisterForCourseBase
   element(:edit_course_options_button) { |course_code,reg_group_code,b| b.button(id: "edit_#{course_code}_#{reg_group_code}") }
   action(:edit_course_options) { |course_code,reg_group_code,b| b.edit_course_options_button(course_code,reg_group_code).when_present.click }
   element(:ao_type) { |course_code,reg_group_code,index,b| b.span(id: "ao_type_long_#{course_code}_#{reg_group_code}_#{index}").text }
+  element(:ao_type_div) { |course_code,reg_group_code,index,b| b.div(id: "ao_type_#{course_code}_#{reg_group_code}_#{index}").text }
   element(:course_schedule) { |course_code,reg_group_code,ao_index,index,b| b.div(id: "schedule_long_#{course_code}_#{reg_group_code}_#{ao_index}_#{index}").text }
 
   element(:registering_message) { |b| b.div(id: "registering_message") }
@@ -68,6 +69,9 @@ class RegistrationCart < RegisterForCourseBase
   element(:edit_cancel_button) { |course_code,reg_group_code,context,b| b.button(id: "#{context}_cancel_#{course_code}_#{reg_group_code}") }
   action(:cancel_edits) { |course_code,reg_group_code,context,b| b.edit_cancel_button(course_code,reg_group_code,context).click }
 
+  #RegCart
+  element(:course_details){|course_code,reg_group_code,b|b.button(id:"details_#{course_code}_#{reg_group_code}")}
+  action(:course_details_click){|course_code,reg_group_code,b|b.course_details(course_code, reg_group_code).click}
 
   def show_add_dialog
     toggle_add_dialog unless submit_button.visible?
