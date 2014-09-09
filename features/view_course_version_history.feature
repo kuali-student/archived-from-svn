@@ -9,7 +9,7 @@ Feature: GT.View Course Version History
     When I view the version history of ENGL212
     Then I can see the details of the course versions
 
-  Scenario: VH1.2 Version History Table displays details of all versions of a course
+  Scenario: VH1.2 Verify all the features of the Version History Table displays
     When I view the version history of ENGL212
     Then I cannot select more than two versions
     And I cannot Show versions without any versions selected
