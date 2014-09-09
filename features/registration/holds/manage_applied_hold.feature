@@ -1,5 +1,5 @@
 @blue_team
-Feature: Holds.Manage Hold
+Feature: REG.Manage Hold
   Hold2.1 As a Holds Functionary I want to enter a student id so that basic student info is displayed
   Hold2.2 As a Holds Functionary or Admin I want to view the applied holds for the specified student
 

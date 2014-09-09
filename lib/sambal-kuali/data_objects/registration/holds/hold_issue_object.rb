@@ -6,7 +6,7 @@ class HoldIssueObject < DataFactory
   include Workflows
 
   attr_accessor :name, :code, :category, :auth_org, :suffix,
-                :description, :owing_org, :org_contact,
+                :description, :owning_org, :org_contact,
                 :contact_address, :first_applied_date,
                 :last_applied_date, :term_based, :first_term,
                 :last_term, :hold_history, :authorising_orgs
@@ -20,7 +20,7 @@ class HoldIssueObject < DataFactory
         :suffix => nil,
         :category => "Academic Advising Issue",
         :description => random_alphanums(50),
-        :owing_org => nil,
+        :owning_org => nil,
         :org_contact => nil,
         :contact_address => nil,
         :first_applied_date => right_now[:date_w_slashes],

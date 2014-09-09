@@ -5,24 +5,19 @@ class CreateHold < BasePage
   validation_elements
 
   ######################################################################################################################
-  ###                                   Hold Constants                                          ###
+  ###                                   Hold Authorization Constants                                                 ###
   ######################################################################################################################
-  NAME = 0
   AUTH_ORG = 0
-  DIALOG_ACTION = 0
-  CODE = 1
   AUTH_APPLY = 1
-  CATEGORY = 2
   AUTH_EXPIRE = 2
-  DESCRIPTION = 3
-  OWNING_ORG = 4
-  START_DATE = 5
-  END_DATE = 6
-  AUTHORIZATION = 7
-  ACTIONS = 8
 
   ######################################################################################################################
-  ###                                   Hold Page Section                                  ###
+  ###                                   Hold Organization Lookup Constants                                           ###
+  ######################################################################################################################
+  DIALOG_ACTION = 0
+
+  ######################################################################################################################
+  ###                                   Hold Page Section                                                            ###
   ######################################################################################################################
   element(:hold_page) { |b| b.frm.main(id: "KS-Hold-Create-Page")}
 
@@ -33,15 +28,15 @@ class CreateHold < BasePage
   action(:save){ |b| b.loading.wait_while_present; b.save_btn.click}
 
   ######################################################################################################################
-  ###                                           Hold Input Fields                                        ###
+  ###                                           Hold Input Fields                                                    ###
   ######################################################################################################################
   #Details Section
   element(:hold_section) { |b| b.hold_page.section(id: "KS-CreateHold-HoldSection")}
 
-  element(:name_input) { |b| b.hold_section.text_field(name: /dataObject\.holdIssue\.name$/)}
-  element(:category_input) { |b| b.hold_section.select(name: /dataObject\.holdIssue\.typeKey$/)}
-  element(:code_input) { |b| b.hold_section.text_field(name: /dataObject\.holdIssue\.holdCode$/)}
-  element(:descr_input) { |b| b.hold_section.textarea(name: /dataObject\.descr$/)}
+  element(:name_input) { |b| b.hold_section.text_field(name: "document.newMaintainableObject.dataObject.holdIssue.name")}
+  element(:category_input) { |b| b.hold_section.select(name: "document.newMaintainableObject.dataObject.holdIssue.typeKey")}
+  element(:code_input) { |b| b.hold_section.text_field(name: "document.newMaintainableObject.dataObject.holdIssue.holdCode")}
+  element(:descr_input) { |b| b.hold_section.textarea(name: "document.newMaintainableObject.dataObject.descr")}
 
   element(:duplicate_error_message) { |b| b.hold_section.div(id: "KS-CreateHold-HoldSection_messages")}
   value(:get_duplicate_error_message){ |b| b.loading.wait_while_present; b.duplicate_error_message.text}
@@ -61,8 +56,9 @@ class CreateHold < BasePage
     owning_org_find
     loading.wait_while_present
 
+    org_dialog_name_input.when_present.set owning_org
     org_dialog_search
-    index = get_org_index owning_org if owning_org != nil
+    index = get_org owning_org if owning_org != nil
     org_dialog_select index
   end
 
@@ -114,7 +110,7 @@ class CreateHold < BasePage
     org_dialog_abbr_input.set( auth_org_abbr) if auth_org_abbr != nil
     org_dialog_search
 
-    dialog_index = get_org_index( auth_org_abbr) if auth_org_abbr != nil
+    dialog_index = get_org( auth_org_abbr) if auth_org_abbr != nil
     org_dialog_select dialog_index
   end
 
@@ -128,7 +124,7 @@ class CreateHold < BasePage
   end
 
   ######################################################################################################################
-  ###                                             Hold Org Dialog                                         ###
+  ###                                             Hold Org Dialog                                                    ###
   ######################################################################################################################
   element(:frm_popup) { |b| b.iframe(:class => "fancybox-iframe")}
 
@@ -144,7 +140,7 @@ class CreateHold < BasePage
   element(:org_dialog_search_btn){ |b| b.org_dialog.button(id: "button_search")}
   action(:org_dialog_search){ |b| b.org_dialog_search_btn.when_present.click}
 
-  def get_org_index org
+  def get_org org
     org_results_table.rows(text: /#{org}/).each do |row|
       return row.cells[DIALOG_ACTION].a().id[/\d+/]
     end
