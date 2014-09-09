@@ -1876,7 +1876,7 @@ Given /^I create a Course Offering from catalog with an Alternate Exam that has 
   @course_offering = create CourseOffering, :term=> Rollover::PUBLISHED_EO_CREATE_TERM, :course => "CHEM242", :final_exam_type => "ALTERNATE"
 
   @activity_offering = @course_offering.create_ao :ao_obj => (make ActivityOfferingObject, :format => "Lab/Lecture",
-                                                                   :activity_type => "Lab")
+                                                                   :activity_type => "Lecture")
   end_time = (DateTime.strptime("#{@matrix.rules[0].statements[0].start_time}", '%I:%M') + ("50".to_f/1440)).strftime( '%I:%M')
   @course_offering.activity_offering_cluster_list[0].ao_list[0].add_req_sched_info :rsi_obj => (make SchedulingInformationObject,
                                                      :days => @matrix.rules[0].statements[0].days,
