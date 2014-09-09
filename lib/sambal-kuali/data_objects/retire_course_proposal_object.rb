@@ -46,6 +46,14 @@ class CmRetireCourseProposal < DataFactory
 
 
   def edit (opts={})
+    return_to_cm_home
+    navigate_to_find_course
+    search
+    edit_retire_proposal
+      on CmRetirementInformation do |page|
+        page.retirement_information unless page.current_page('Retirement Information').exists?
+        page.retiremenet_rationale.set opts[:retirement_rationale]
+      end
     set_options(opts)
   end
 
@@ -81,8 +89,6 @@ class CmRetireCourseProposal < DataFactory
         authors.create
       end
     end
-
-
   end
 
   def create_supporting_docs
@@ -93,15 +99,21 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-  def review_retire_proposal
+  def review_retire_proposal_link
     on CmRetireCourseProposal do |retire|
         retire.supporting_documents unless retire.current_page('Supporting Documents').exists?
         retire.review_retire_proposal
     end
   end
 
-  def navigate_to_retire_review
+  def navigate_search_retire_proposal
+    navigate_rice_to_cm_home
     navigate_to_find_course
+    search
+    review_retire_proposal
+  end
+
+  def search
     on FindProposalPage do |page|
       page.name.wait_until_present
       page.name.set @retire_proposal_title
@@ -109,14 +121,20 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-  def approve_retire_proposal
-    navigate_to_retire_review
-    approve
+  def review_retire_proposal
+    on FindProposalPage do |page|
+      page.review_proposal_action_link(@retire_proposal_title)
+    end
+  end
+  
+  def edit_retire_proposal
+    on FindProposalPage do |page|
+      page.edit_proposal_action(@retire_proposal_title)
+    end
   end
 
   def approve
-    navigate_rice_to_cm_home
-    navigate_to_retire_review
+    navigate_search_retire_proposal
     on CmRetireProposalReviewPage do |approve|
       approve.decision_rationale.wait_until_present
       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
@@ -124,13 +142,22 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-
   def submit_retire_proposal
     on CmRetireProposalReviewPage do |page|
         page.submit_proposal
         page.submit_confirmation
     end
   end
+
+  def blanket_approve_retire_proposal
+    navigate_search_retire_proposal
+    on CmRetireProposalReviewPage do |blanket_approve|
+      blanket_approve.blanket_approve
+      blanket_approve.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
+      blanket_approve.confirmation_approval
+    end
+  end
+
 
 
 end
