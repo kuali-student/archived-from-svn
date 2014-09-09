@@ -198,6 +198,50 @@ When /^I edit the course in my schedule$/ do
                                    :context => "schedule"
 end
 
+When /^I attempt to edit the credits for one of the courses so my credit total exceeds the term credit limit$/ do
+  visit CourseSearchPage
+  @reg_request.edit_course_options :credit_option => "3.0",
+                                   :context => "schedule"
+end
+
+When /^I attempt to edit the grading method for the course$/ do
+  @reg_request.edit_course_options :grading_option => "Audit",
+                                   :context => "schedule"
+end
+
+When /^I attempt to edit the credits for the course$/ do
+  @reg_request.edit_course_options :credit_option => "1.5",
+                                   :context => "schedule"
+end
+
+Then /^there is a message indicating that the course edit failed due to (the credit limit|the timing of the edit)$/ do |fail_reason|
+  reason_msg = case fail_reason
+                 when "the credit limit" then "Reached maximum credit limit"
+                 when "the timing of the edit" then "Deadline for editing has passed"
+               end
+  on CourseSearchPage do |page|
+    page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should match /#{reason_msg}/i
+  end
+end
+
+And /^the course credits are unchanged$/ do
+  #close msg?
+  on CourseSearchPage do |page|
+    page.course_info_div(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
+    page.course_info(@reg_request.course_code,@reg_request.reg_group_code,"schedule").downcase.match("(.*) cr")[1].to_f.should == @orig_course_credit_count
+  end
+end
+
+And /^the course options are unchanged$/ do
+  #close msg?
+  on CourseSearchPage do |page|
+    page.course_info_div(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
+    page.course_info(@reg_request.course_code,@reg_request.reg_group_code,"schedule").downcase.match("(.*) cr")[1].to_f.should == @orig_course_credit_count
+    page.grading_badge_span(@reg_request.course_code,@reg_request.reg_group_code).visible?.should == false
+  end
+end
+
 Then /^the course is (present|not present) in my cart$/  do |presence|
   on RegistrationCart do |page|
     if presence == "present"
@@ -616,4 +660,31 @@ And /^I do not receive a warning message$/ do
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
     page.result_status_div(@reg_request.course_code, @reg_request.reg_group_code).exist?.should == false
   end
+end
+
+Given /^I am registered for courses in a fall term$/ do
+  steps %{Given I log in to student registration as L.VICTORP}
+  #This is one of the courses user has been set up with
+  @reg_request = make RegistrationRequest, :student_id=>"L.VICTORP",
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"CHEM699",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter", :credit_option => "2.0"),
+                      :course_has_options=> true
+  @orig_course_credit_count = @reg_request.course_options.credit_option.to_f
+end
+
+Given /^I am registered for a course and it is after the edit period has passed$/ do
+  steps %{Given I log in to student registration as R.IANK}
+  #This is one of the courses user has been set up with
+  @reg_request = make RegistrationRequest, :student_id=>"R.IANK",
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"CHEM399C",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter", :credit_option => "2.0"),
+                      :course_has_options=> true
+  @orig_course_credit_count = @reg_request.course_options.credit_option.to_f
+
 end

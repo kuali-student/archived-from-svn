@@ -29,8 +29,15 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   # Course cards
   element(:remove_course_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}remove_#{course_code}_#{reg_group_code}") }
   element(:course_code) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_code_#{course_code}_#{reg_group_code}") }
+  element(:course_info_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_info_#{course_code}_#{reg_group_code}") }
+  element(:course_info) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.course_info_div(course_code,reg_group_code,status).text }
   element(:edit_course_options_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}edit_#{course_code}_#{reg_group_code}") }
   action(:edit_course_options) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.edit_course_options_button(course_code,reg_group_code,status).click }
+
+  element(:reason_message_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_status_message_#{course_code}_#{reg_group_code}") }
+  element(:reason_message_heading) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_heading_#{course_code}_#{reg_group_code}") }
+  element(:reason_message_span) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_message_#{course_code}_#{reg_group_code}") }
+  element(:reason_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.reason_message_span(course_code,reg_group_code,status).txt }
 
 # EDIT COURSE OPTIONS DIALOG
 #   context = newItem or cart
@@ -42,6 +49,8 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   element(:grading_audit) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Audit") }
   element(:grading_letter) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Letter") }
   element(:grading_pass_fail) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Pass/Fail") }
+  #remove above 3
+  element(:grading_badge_span) { |course_code,reg_group_code,b| b.span(id: "grading_badge_#{course_code}_#{reg_group_code}") }
   element(:edit_save_button) { |course_code,reg_group_code,context,b| b.button(id: "#{context}_save_#{course_code}_#{reg_group_code}") }
   action(:save_edits) { |course_code,reg_group_code,context,b| b.edit_save_button(course_code,reg_group_code,context).click }
   element(:edit_cancel_button) { |course_code,reg_group_code,context,b| b.button(id: "#{context}_cancel_#{course_code}_#{reg_group_code}") }
