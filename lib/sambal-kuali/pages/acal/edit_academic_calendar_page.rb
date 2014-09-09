@@ -99,8 +99,8 @@ class EditAcademicCalendar < BasePage
 
   ###### confirm delete dialog
   element(:delete_dialog_div) { |b| b.frm.div(id: "KS-AcademicCalendar-ConfirmDelete-Dialog") }
-  action(:confirm_delete) { |b| b.delete_dialog_div.radio(index: 0).click; b.loading.wait_while_present }
-  action(:cancel_delete) { |b| b.delete_dialog_div.radio(index: 1).click ; b.loading.wait_while_present}
+  action(:confirm_delete) { |b| sleep 1; b.delete_dialog_div.radio(index: 0).click; b.loading.wait_while_present }
+  action(:cancel_delete) { |b| sleep 1; b.delete_dialog_div.radio(index: 1).click ; b.loading.wait_while_present}
   ########
 
   element(:add_holiday_calendar_div) { |b| b.frm.div(id: "acal-holidays_disclosureContent") }
