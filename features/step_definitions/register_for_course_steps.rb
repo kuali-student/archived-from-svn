@@ -724,6 +724,15 @@ Given /^I am registered for a course and it is after the drop period has passed$
                       :course_has_options=> true
 end
 
+Given /^I am registered for a HIST course$/ do
+  steps %{
+    Given I log in to student registration as student1
+    When I add a HIST course offering to my empty registration cart
+    And I register for the course
+    And I view my schedule
+  }
+end
+
 And /^I click the details button for the course$/ do
   on RegistrationCart do |page|
     page.wait_until { page.ao_type_div(@reg_request.course_code, @reg_request.reg_group_code,0) != "" }
@@ -733,9 +742,9 @@ And /^I click the details button for the course$/ do
   end
 end
 
-Then /^I can see the details for my course$/ do
+Then /^I can see the details of my course$/ do
   on CourseDetailsMobilePage do |page|
     page.details_course_description_div(@reg_request.course_code).wait_until_present
-    page.details_course_description(@reg_request.course_code).should =~ /The development of Europe in the Middle Ages; the role of religious values in shaping new social, economic, and political institutions; medieval literature, art and architecture./i
+    page.details_course_description(@reg_request.course_code).should =~ /The development of Europe in the Middle Ages; the role of religious values in shaping new social, economic, and political institutions; medieval literature, art and architecture/i
   end
 end
