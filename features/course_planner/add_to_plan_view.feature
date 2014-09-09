@@ -2,7 +2,7 @@
 Feature: BT.Add to plan view
 
   Background:
-   Given I am logged in as a student registered for courses
+   Given I am logged in as a student
 
   Scenario:  Academic Year per Planner Page
    When I navigate to planner page
@@ -15,3 +15,7 @@ Feature: BT.Add to plan view
   Scenario: Verify that credit tally should exist on the credit line
    When I navigate to planner page
    Then the credit tally should exist on the credit line
+
+  Scenario: Verify that credit tally should exist on the credit line
+    When I navigate to planner page
+    Then the credit tally should exist on the credit line
