@@ -119,55 +119,6 @@ Then(/^I should be able to view the format offerings for the course$/) do
     course_code=@course_search_result.course_code
     page.lecture_lab_discussion.exists?.should==true
     page.lecture.exists?.should==true
-    #page.lecture_lab_discussion.click
-   # page.ao_lecture(course_code).exists?.should==true
-    #page.ao_discussion(course_code).exists?.should==true
-   # page.ao_lecture(course_code).exists?.should==true
-
-   # codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-   # courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-   # formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
-   # formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].fo_format_level}"
-   # activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
-
-    #Validation for Lecture
-   # page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_code}/
-    #page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_instructor}/
-   # page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_days}/
-   # page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_1.activity_offering_time
-    #page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_location}/
-    #page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_1.activity_offering_seats}/
-
-    #codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-    #courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-    #formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
-    #formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[1].fo_format_level}"
-    #activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
-
-    #Validation for discussion
-    #page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_code}/
-    #page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_instructor}/
-   # page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_days}/
-   # page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_2.activity_offering_time
-   # page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_location}/
-    #page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_2.activity_offering_seats}/
-
-
-    #codescription_level= "#{@course_search_result. course_offering_description_list[0].courseofferingdescription_level}"
-    #courseterm_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].courseterm_level}"
-   # formatlist_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[1].formatlist_level}"
-   # formatoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[2].fo_format_level}"
-    #activityoffering_level="#{@course_search_result.course_offering_description_list[0].course_term_list[0].formatlist_list[0].fo_list[0].ao_list[0].ao_activityoffering_level}"
-
-    #Validation for Lab
-   # page.activity_offering_code(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_code}/
-   # page.activity_offering_instructor(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_instructor}/
-   # page.activity_offering_days(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_days}/
-   # page.activity_offering_time(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match @course_activityoffering_object_3.activity_offering_time
-   #page.activity_offering_location(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_location}/
-   # page.activity_offering_seats(codescription_level,courseterm_level,formatlist_level,formatoffering_level,activityoffering_level).should match /#{@course_activityoffering_object_3.activity_offering_seats}/
   end
 end
 

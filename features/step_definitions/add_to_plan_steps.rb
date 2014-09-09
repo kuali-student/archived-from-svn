@@ -131,12 +131,12 @@ When(/^I navigate to the course section details$/) do
   navigate_to_course_search_home
 
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present(200000)
+    page.course_search_results_facets.wait_until_present(90)
   end
   #navigate to course details page
   @course_search_result.navigate_course_detail_page
   on CourseSectionPage do |page|
-    page.course_termlist.wait_until_present(120)
+    page.course_termlist.wait_until_present(90)
   end
 end
 
@@ -147,7 +147,7 @@ And(/^I add the course from search to the backup section for a specific term$/) 
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-     page.planner_courses_detail_list.wait_until_present(200000)
+     page.planner_courses_detail_list.wait_until_present(90)
   end
   @course_search_result.remove_code_from_planned_backup
   navigate_to_course_search_home
@@ -160,7 +160,7 @@ end
 Then(/^the course should be there in the backup section of the planner$/) do
   navigate_to_course_planner_home
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present(200000)
+    page.planner_courses_detail_list.wait_until_present(90)
     page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
@@ -169,7 +169,7 @@ When(/^I search for a specific course$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present(200000)
+    page.course_search_results_facets.wait_until_present(90)
   end
 end
 
@@ -191,7 +191,7 @@ Then(/^the course should be there in the Backup section of the planner$/) do
   navigate_to_course_planner_home
 
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present(200000)
+    page.planner_courses_detail_list.wait_until_present(90)
     page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
@@ -207,7 +207,7 @@ When(/^I search for a course with single activity offerings$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present(200000)
+    page.planner_courses_detail_list.wait_until_present(90)
   end
 
   #delete an existing course
@@ -226,8 +226,8 @@ When(/^I search for a course with single activity offerings$/) do
   end
   # @course_search_result.navigate_course_detail_page
   on CourseSectionPage do |page|
-    page.ksap_loader.wait_while_present(200000)
-    page.course_termlist.wait_until_present(500)
+    page.ksap_loader.wait_while_present(90)
+    page.course_termlist.wait_until_present(90)
   end
 
 end
@@ -254,7 +254,7 @@ Then(/^I should be able to add the course to my plan$/) do
     sleep 5
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present(500)
+      page.planner_courses_detail_list.wait_until_present(90)
     end
     @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring",:planned_term=>"2014Summer1", :course_code => "WMST348"
     navigate_to_course_search_home
@@ -267,8 +267,8 @@ Then(/^I should be able to add the course to my plan$/) do
     end
     # @course_search_result.navigate_course_detail_page
     on CourseSectionPage do |page|
-      page.ksap_loader.wait_while_present(200000)
-      page.course_termlist.wait_until_present(500)
+      page.ksap_loader.wait_while_present(90)
+      page.course_termlist.wait_until_present(90)
     end
     puts page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
     @plannedcode.should==page.actual_course_code(singleao_add_plan_codescription_level,singleao_add_plan_co_term_level,singleao_add_plan_formatlist_level,singleao_add_plan_fo_level)
@@ -311,8 +311,8 @@ When(/^I add a course with multiple activity offerings to my plan$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.ksap_loader_planner.wait_while_present(20000)
-    page.planner_courses_detail_list.wait_until_present(20000)
+    page.ksap_loader_planner.wait_while_present(90)
+    page.planner_courses_detail_list.wait_until_present(90)
   end
 
   #delete an existing course
@@ -333,8 +333,8 @@ When(/^I add a course with multiple activity offerings to my plan$/) do
 
 
   on CourseSectionPage do |page|
-    page.ksap_loader.wait_while_present(200000)
-    page.course_termlist.wait_until_present(200000)
+    page.ksap_loader.wait_while_present(90)
+    page.course_termlist.wait_until_present(90)
   end
 
 
@@ -389,12 +389,12 @@ Then(/^the multiple activity offerings course should be successfully added to my
 
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present(20000)
+      page.planner_courses_detail_list.wait_until_present(90)
     end
     @course_search_result = make CourseSearchResults, :planned_term=>"2014Summer1", :course_code => "CHEM231", :term=>"Spring 2014"
     navigate_to_course_search_home
     on CourseSearch do |page|
-      page.course_search_results_facets.wait_until_present(2000)
+      page.course_search_results_facets.wait_until_present(90)
     end
     #navigate to course details page
     on CourseSearch  do |page|
@@ -403,8 +403,8 @@ Then(/^the multiple activity offerings course should be successfully added to my
     # @course_search_result.navigate_course_detail_page
 
     on CourseSectionPage do |page|
-      page.ksap_loader.wait_while_present(20000)
-      page.course_termlist.wait_until_present(500)
+      page.ksap_loader.wait_while_present(90)
+      page.course_termlist.wait_until_present(90)
     end
 
     #Code for refresh
@@ -461,7 +461,7 @@ When(/^I add a course with multiple format offerings to my plan$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present(20000)
+    page.planner_courses_detail_list.wait_until_present(90)
   end
 
   #delete an existing course
@@ -472,7 +472,7 @@ When(/^I add a course with multiple format offerings to my plan$/) do
   navigate_to_course_search_home
 
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present(2000)
+    page.course_search_results_facets.wait_until_present(90)
   end
   #navigate to course details page
   on CourseSearch  do |page|
@@ -481,8 +481,8 @@ When(/^I add a course with multiple format offerings to my plan$/) do
  # @course_search_result.navigate_course_detail_page
 
   on CourseSectionPage do |page|
-    page.ksap_loader.wait_while_present(20000)
-    page.course_termlist.wait_until_present(120)
+    page.ksap_loader.wait_while_present(90)
+    page.course_termlist.wait_until_present(90)
   end
   #To remove the course from planner
 
@@ -558,7 +558,7 @@ Then(/^the multiple format offerings course should be successfully added to my p
 
     on CourseSectionPage do |page|
       page.ksap_loader.wait_while_present
-      page.course_termlist.wait_until_present(500)
+      page.course_termlist.wait_until_present(90)
     end
 
 
