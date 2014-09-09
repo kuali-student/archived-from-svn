@@ -11,8 +11,8 @@ When(/^I navigate to planner page$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.ksap_loader_planner.wait_while_present(3000)
-    page.planner_courses_detail_list.wait_until_present(20000)
+    page.ksap_loader_planner.wait_while_present(90)
+    page.planner_courses_detail_list.wait_until_present(90)
     page.ksap.exists?.should==true
   end
 end
@@ -44,12 +44,12 @@ end
 Then(/^I should be able to see the View more details link in the bookmark section$/) do
   on CourseSectionPage do |page|
    page.plan_link_coursesection_click
-   page.ksap_loader.wait_while_present(70000)
+   page.ksap_loader.wait_while_present(90)
   end
 
   on CoursePlannerPage do |page|
-   page.ksap_loader_planner.wait_while_present(3000)
-   page.planner_courses_detail_list.wait_until_present(20000)
+   page.ksap_loader_planner.wait_while_present(90)
+   page.planner_courses_detail_list.wait_until_present(90)
    page.view_more_details.exists?.should==true
   end
 end
