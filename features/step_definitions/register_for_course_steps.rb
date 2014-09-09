@@ -216,8 +216,8 @@ end
 
 Then /^there is a message indicating that the course edit failed due to (the credit limit|the timing of the edit)$/ do |fail_reason|
   reason_msg = case fail_reason
-                 when "the credit limit" then "Reached maximum credit limit"
-                 when "the timing of the edit" then "Deadline for editing has passed"
+                 when "the credit limit" then "maximum credit limit"
+                 when "the timing of the edit" then "editing has passed"
                end
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
@@ -226,7 +226,6 @@ Then /^there is a message indicating that the course edit failed due to (the cre
 end
 
 And /^the course credits are unchanged$/ do
-  #close msg?
   on CourseSearchPage do |page|
     page.course_info_div(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
     page.course_info(@reg_request.course_code,@reg_request.reg_group_code,"schedule").downcase.match("(.*) cr")[1].to_f.should == @orig_course_credit_count

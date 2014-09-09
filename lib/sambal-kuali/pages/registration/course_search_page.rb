@@ -36,8 +36,9 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
 
   element(:reason_message_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_status_message_#{course_code}_#{reg_group_code}") }
   element(:reason_message_heading) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_heading_#{course_code}_#{reg_group_code}") }
-  element(:reason_message_span) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_message_#{course_code}_#{reg_group_code}") }
-  element(:reason_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.reason_message_span(course_code,reg_group_code,status).txt }
+  element(:reason_message_span) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_status_message_message_#{course_code}_#{reg_group_code}_0") }
+  # the _0 above represents a message index of 0
+  element(:reason_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.reason_message_span(course_code,reg_group_code,status).text }
 
 # EDIT COURSE OPTIONS DIALOG
 #   context = newItem or cart
