@@ -1,12 +1,12 @@
 When(/^I create a hold by completing the required information needed$/) do
-  @hold = create HoldIssueObject, :suffix => "88"
+  @hold = create HoldIssueObject, :suffix => "22"
 end
 
 And(/^the hold exists in the hold catalog$/) do
   @hold.manage
   on ManageHold do |page|
     page.loading.wait_while_present
-    page.get_hold_name_and_description(@hold.name, @hold.description).nil?.should be_false
+    page.get_hold_code(@hold.code).nil?.should be_false
   end
 end
 
@@ -33,7 +33,7 @@ Then(/^the hold is displayed in the catalog with the created authorizations$/) d
   @hold.manage
   on ManageHold do |page|
     page.loading.wait_while_present
-    page.get_hold_name_and_description(@hold.name, @hold.description).nil?.should be_false
+    page.get_hold_code(@hold.code).nil?.should be_false
   end
 
   @hold.edit
