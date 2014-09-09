@@ -277,6 +277,17 @@ class RegistrationRequest < DataFactory
     end
   end
 
+  def attempt_remove_course(do_navigation=false)
+    #try to remove course from schedule, with expectation that action will fail
+    status = STATUS_SCHEDULE
+    visit CourseSearchPage if do_navigation
+    on CourseSearchPage do |page|
+      page.course_code(@course_code,@reg_group_code,status).wait_until_present
+      page.show_course_details @course_code,@reg_group_code,status
+      page.remove_course_from_schedule @course_code,@reg_group_code
+    end
+  end
+
   def remove_from_schedule_and_cancel
     on StudentSchedule do |page|
       page.course_code(@course_code,@reg_group_code,STATUS_SCHEDULE).wait_until_present

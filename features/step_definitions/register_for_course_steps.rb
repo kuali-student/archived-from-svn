@@ -210,6 +210,11 @@ When /^I attempt to edit the grading method for the course$/ do
                                    :context => "schedule"
 end
 
+When /^I attempt to drop the course$/ do
+  visit CourseSearchPage
+  @reg_request.attempt_remove_course("schedule")
+end
+
 When /^I attempt to edit the credits for the course$/ do
   #close the previous message
   on CourseSearchPage do |page|
@@ -227,6 +232,20 @@ Then /^there is a message indicating that the course edit failed due to (the cre
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
     page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should match /#{reason_msg}/i
+  end
+end
+
+Then /^there is a message indicating that the course drop failed$/ do
+  on CourseSearchPage do |page|
+    page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should match /drop.* has passed/i
+  end
+end
+
+And /^the course is still in my schedule$/ do
+  on CourseSearchPage do |page|
+    page.course_code(@reg_request.course_code, @reg_request.reg_group_code, "schedule").wait_until_present
+    page.course_code(@reg_request.course_code, @reg_request.reg_group_code, "schedule").text.should_not be_nil
   end
 end
 
@@ -691,6 +710,18 @@ Given /^I am registered for a course and it is after the edit period has passed$
                       :course_has_options=> true
   @orig_course_credit_count = @reg_request.course_options.credit_option.to_f
 
+end
+
+Given /^I am registered for a course and it is after the drop period has passed$/ do
+  steps %{Given I log in to student registration as R.IANP}
+  #This is one of the courses user has been set up with
+  @reg_request = make RegistrationRequest, :student_id=>"R.IANP",
+                      :term_code=> "201208",
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"CHEM399C",
+                      :reg_group_code=>"1001",
+                      :course_options => (make CourseOptions, :grading_option => "Letter", :credit_option => "2.0"),
+                      :course_has_options=> true
 end
 
 And /^I click the details button for the course$/ do

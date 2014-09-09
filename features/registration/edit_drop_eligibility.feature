@@ -27,3 +27,10 @@ Feature: REG.Edit Drop Eligibility
     Then there is a message indicating that the course edit failed due to the timing of the edit
     And the course options are unchanged
 
+#KSENROLL-14640
+  Scenario: CR 28.4 Prevent student from dropping a course when outside of the course drop period.
+    Given I am registered for a course and it is after the drop period has passed
+    When I attempt to drop the course
+    Then there is a message indicating that the course drop failed
+    And the course is still in my schedule
+

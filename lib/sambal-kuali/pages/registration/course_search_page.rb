@@ -27,12 +27,14 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   action(:add_to_cart) { |b| b.submit_button.click }
 
   # Course cards
-  element(:remove_course_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}remove_#{course_code}_#{reg_group_code}") }
   element(:course_code) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_code_#{course_code}_#{reg_group_code}") }
   element(:course_info_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_info_#{course_code}_#{reg_group_code}") }
   element(:course_info) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.course_info_div(course_code,reg_group_code,status).text }
   element(:edit_course_options_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}edit_#{course_code}_#{reg_group_code}") }
   action(:edit_course_options) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.edit_course_options_button(course_code,reg_group_code,status).click }
+  element(:remove_course_button) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.button(id: "#{prefix(status)}remove_#{course_code}_#{reg_group_code}") }
+  element(:confirm_drop) { |course_code,reg_group_code,b| b.button(id: "dropRegGroup_#{course_code}_#{reg_group_code}") }
+  element(:cancel_drop) { |b| b.button(id: "dropRegGroupCancel") }
 
   element(:reason_message_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_status_message_#{course_code}_#{reg_group_code}") }
   action(:close_reason_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.reason_message_div(course_code,reg_group_code,status).span(class: "kscr-Card-statusRemove").a.click }
@@ -51,7 +53,6 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   element(:grading_audit) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Audit") }
   element(:grading_letter) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Letter") }
   element(:grading_pass_fail) { |course_code,reg_group_code,context,b| b.i(id: "#{context}_grading_#{course_code}_#{reg_group_code}_Pass/Fail") }
-  #remove above 3
   element(:grading_badge_span) { |course_code,reg_group_code,b| b.span(id: "grading_badge_#{course_code}_#{reg_group_code}") }
   element(:edit_save_button) { |course_code,reg_group_code,context,b| b.button(id: "#{context}_save_#{course_code}_#{reg_group_code}") }
   action(:save_edits) { |course_code,reg_group_code,context,b| b.edit_save_button(course_code,reg_group_code,context).click }
@@ -230,6 +231,13 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
 
   def remove_course_from_cart(course_code, reg_group_code)
     remove_course_button(course_code,reg_group_code,STATUS_SCHEDULE).click
+  end
+
+  def remove_course_from_schedule(course_code, reg_group_code)
+    remove_course_button(course_code,reg_group_code,STATUS_SCHEDULE).wait_until_present
+    remove_course_button(course_code,reg_group_code,STATUS_SCHEDULE).click
+    confirm_drop(course_code,reg_group_code).wait_until_present
+    confirm_drop(course_code,reg_group_code).click
   end
 
   def toggle_course_details(course_code, reg_group_code, course_status=STATUS_SCHEDULE)
