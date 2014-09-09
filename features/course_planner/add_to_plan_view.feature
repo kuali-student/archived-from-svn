@@ -2,11 +2,11 @@
 Feature: BT.Add to plan view
 
   Background:
-   Given I am logged in as a student with privilege
+   Given I am logged in as a student registered for courses
 
   Scenario:  Academic Year per Planner Page
    When I navigate to planner page
-   Then the relavent features of the page should be displayed
+   Then the relevant features of the page should be displayed
 
   Scenario:  View More Details Link
    When I bookmark a course

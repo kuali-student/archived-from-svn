@@ -30,6 +30,6 @@ end
 
 
 
-Given(/^I am logged in as a student with privilege$/) do
+Given(/^I am logged in as a student registered for courses$/) do
   log_in "b.nanal", "b.nanal"
 end

@@ -63,8 +63,8 @@ class CoursePlannerPage < BasePage
   #action(:course_page_click) {|b| b.div(id:"applicationNavigation").a(text:"Find Courses").click}
   element(:ksap_loader_planner) {|b|b.div(class:"kasp-loader")}
   element(:ksap) {|b|b.div(id:"applicationLogo")}
-  element(:plan) {|b|b.a(href:"planner?methodToCall=start&viewId=Planner-FormView")}
-  element(:find_courses) {|b|b.a(href:"course?methodToCall=start&viewId=CourseSearch-FormView&resetForm=true")}
+  element(:plan) {|b|b.div(id:"applicationNavigation").a(text:"Plan")}
+  element(:find_courses) {|b|b.div(id:"applicationNavigation").a(text:"Find Courses")}
   action(:find_courses_click) {|b|b.find_courses.click}
   element(:bookmarks) {|b|b.div(id:"applicationHeader").span(id:"Ksap-Header-Bookmark-Count-Label")}
   element(:academic_year_2014_2015) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
@@ -80,7 +80,7 @@ class CoursePlannerPage < BasePage
   element(:course_registered_term) {|term,b|b.div(id:/kuali-atp-#{term}_cart.*/)}
   element(:course_planned_term) {|term,b|b.div(id:/kuali-atp-#{term}_courses.*/)}
   element(:course_backup_term) {|term,b|b.div(id:/kuali-atp-#{term}_backup.*/)}
-  element(:credit_tally) {|b|b.div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
+  element(:credit_tally) {|b|b.div(id:"planner_courses_detail").div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
 
 
 
