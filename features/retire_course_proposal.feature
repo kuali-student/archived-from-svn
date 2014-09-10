@@ -26,8 +26,7 @@ Background:
     And I approve the retire course proposal as College Approver
     And I blanket approve the retire course proposal as Curriculum Specialist
     Then the retire course proposal is successfully approved
-    And a new course version is created with a state of Retired
-    And the previous version has been Superseded
+    And the course status is retired
 
   Scenario: RC1.5 Verify Curriculum Specialist can create an Admin Retire Proposal and Approve and Retire
     When I create a administrative retire as Curriculum Specialist

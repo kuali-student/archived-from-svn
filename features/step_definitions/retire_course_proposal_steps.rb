@@ -76,16 +76,12 @@ Then(/^the retire course proposal is successfully approved$/) do
     end
 end
 
-And(/^a new course version is created with a state of Retired$/) do
+And(/^the course status is retired$/) do
   steps %{Given I am logged in as Faculty}
   @course.view_course
   on CmReviewProposal do |course_review|
     course_review.course_state_review.should include @course.course_state
   end
-end
-
-And(/^the previous version has been Superseded$/) do
-  #TODO 2 add steps for verify course being superseded
 end
 
 

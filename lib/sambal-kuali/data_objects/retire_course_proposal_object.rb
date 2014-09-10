@@ -77,7 +77,7 @@ class CmRetireCourseProposal < DataFactory
     on CmRetirementInformation do |page|
       page.retirement_information unless page.current_page('Retirement Information').exists?
       fill_out page, :retire_proposal_title, :retirement_rationale, :other_comments
-      @start_term = page.start_term
+      @start_term = page.start_term #this is a read only field
       page.end_term.pick! @end_term
       page.last_term_offered.pick! @last_term_offered
       page.last_catalog_pub_year.pick! @last_catalog_pub_year
@@ -116,7 +116,7 @@ class CmRetireCourseProposal < DataFactory
     review_retire_proposal
   end
 
-  def search
+  def search # Module it
     on FindProposalPage do |page|
       page.name.wait_until_present
       page.name.set @retire_proposal_title
@@ -124,13 +124,13 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-  def review_retire_proposal
+  def review_retire_proposal # Module this
     on FindProposalPage do |page|
       page.review_proposal_action_link(@retire_proposal_title)
     end
   end
   
-  def edit_retire_proposal
+  def edit_retire_proposal # Module this
     on FindProposalPage do |page|
       page.edit_proposal_action(@retire_proposal_title)
     end
@@ -145,14 +145,14 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-  def submit_retire_proposal
+  def submit_retire_proposal #Module this
     on CmRetireProposalReviewPage do |page|
         page.submit_proposal
         page.submit_confirmation
     end
   end
 
-  def blanket_approve_retire_proposal
+  def blanket_approve_retire_proposal # Module this
     navigate_search_retire_proposal
     on CmRetireProposalReviewPage do |blanket_approve|
       blanket_approve.blanket_approve
