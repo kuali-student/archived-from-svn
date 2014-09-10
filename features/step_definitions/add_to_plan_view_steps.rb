@@ -17,7 +17,7 @@ When(/^I navigate to planner page$/) do
   end
 end
 
-Then(/^the relavent features of the page should be displayed$/) do
+Then(/^the relevant features of the page should be displayed$/) do
   on CoursePlannerPage do |page|
    page.ksap.exists?.should==true
    page.find_courses.exists?.should==true

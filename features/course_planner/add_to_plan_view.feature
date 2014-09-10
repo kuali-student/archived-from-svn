@@ -2,7 +2,7 @@
 Feature: BT.Add to plan view
 
   Background:
-   Given I am logged in as a student
+   Given I am logged in as a student registered for courses
 
   Scenario:  Academic Year per Planner Page
    When I navigate to planner page
