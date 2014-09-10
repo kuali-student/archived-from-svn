@@ -16,7 +16,6 @@ Feature: REG.Manage Hold
     Then no search results are displayed
 
   #KSENROLL-14530
-  @pending
   Scenario: Hold 1.5.1 Verify that a hold updates after editing the hold code and organization
     When I search for a hold with a valid hold code
     And I edit that hold by adding an owning organization
