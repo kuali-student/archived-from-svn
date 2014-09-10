@@ -11,9 +11,10 @@ class CmRetireCourseProposal < DataFactory
                 :curriculum_review_process,
                 :retire_proposal_title,
                 :retirement_rationale,
+                :start_term,
                 :end_term,
                 :last_term_offered,
-                :last_course_catalog_pub_year,
+                :last_catalog_pub_year,
                 :other_comments,
                 :author_list,
                 :supporting_doc_list,
@@ -61,7 +62,7 @@ class CmRetireCourseProposal < DataFactory
   def select_course
     on CmReviewProposal do |course|
       @course.view_course
-      course.retire_proposal_button
+      course.retire_proposal
     end
   end
 
@@ -76,6 +77,7 @@ class CmRetireCourseProposal < DataFactory
     on CmRetirementInformation do |page|
       page.retirement_information unless page.current_page('Retirement Information').exists?
       fill_out page, :retire_proposal_title, :retirement_rationale, :other_comments
+      @start_term = page.start_term
       page.end_term.pick! @end_term
       page.last_term_offered.pick! @last_term_offered
       page.last_catalog_pub_year.pick! @last_catalog_pub_year
@@ -100,8 +102,8 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
-  def review_retire_proposal_link
-    on CmRetireCourseProposal do |retire|
+  def navigate_to_retire_review
+    on CmRetirementInformation do |retire|
         retire.supporting_documents unless retire.current_page('Supporting Documents').exists?
         retire.review_retire_proposal
     end

@@ -2,7 +2,8 @@ Given(/^I have an active course$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                     :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
-                                                    :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
+                                                                             :outcome_list => [(make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample)],
+                                                                             :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
                                                     :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
@@ -16,7 +17,7 @@ When(/^I create a retire course proposal as Faculty$/) do
   course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
-  
+
   @retire_proposal = create CmRetireCourseProposal, :course => course,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list =>  [(make CmSupportingDocsObject)]
@@ -27,6 +28,31 @@ end
 And(/^I can review the retire course proposal details$/) do
   @retire_proposal.navigate_to_retire_review
   #TODO 4 add validation steps once review page is accessible KSCM-1817
+  on CmRetireProposalReviewPage do |retire|
+    retire.course_number_retire_review.should == @retire_proposal.course.course_code
+    retire.proposal_title_retire_review.should == @retire_proposal.retire_proposal_title
+    retire.retirement_rationale_retire_review.should == @retire_proposal.retirement_rationale
+    retire.start_term_retire_review.should == @retire_proposal.start_term
+    retire.end_term_retire_review.should == @retire_proposal.end_term
+    retire.last_term_offered_retire_review.should == @retire_proposal.last_term_offered
+    retire.last_catalog_pub_year_retire_review.should == @retire_proposal.last_catalog_pub_year
+    retire.other_comments_retire_review.should == @retire_proposal.other_comments
+
+    collection_index = 0
+
+    @retire_proposal.author_list.each do |author|
+      retire.author_name_review(@retire_proposal.author_list[collection_index].author_level).should include author.name
+      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "View" if author.permission == "View"
+      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comment, View"
+      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comment, View"
+      retire.action_request_review(@retire_proposal.author_list[collection_index].author_level).should == "FYI"
+      collection_index += 1
+    end
+
+    @retire_proposal.supporting_doc_list.each do |supporting_docs|
+      retire.supporting_docs_review.should include "#{supporting_docs.file_name}.#{supporting_docs.type}"
+    end
+  end
 end
 
 
@@ -64,18 +90,6 @@ end
 
 
 Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
-  # Create Course Proposal
-  steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                    :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
-                                                    :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
-                                                    :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
-
-  puts "Proposal Title: #{@course_proposal.proposal_title}"
-
-  # Activate Course
-  @course_proposal.approve_activate_proposal
-
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
   course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
@@ -96,7 +110,8 @@ Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
 end
 
 When(/^I attempt to create a second retire proposal as Faculty$/) do
-   @course.view_course
+    navigate_to_functional_home
+    @course.view_course
 end
 
 Then(/^I do not have the option to retire the course$/) do
@@ -110,18 +125,6 @@ Then(/^I do not have the option to retire the course$/) do
 end
 
 When(/^I create a retire course proposal with a missing required for submit detail as Faculty$/) do
-  # Create Course Proposal
-  steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                    :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
-                                                    :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
-                                                    :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
-
-  puts "Proposal Title: #{@course_proposal.proposal_title}"
-
-  # Activate Course
-  @course_proposal.approve_activate_proposal
-
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
   course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
@@ -134,7 +137,6 @@ When(/^I create a retire course proposal with a missing required for submit deta
                                                     :supporting_doc_list => [(make CmSupportingDocsObject)]
 
   # Navigate to review
-  navigate_to_cm_home
   @retire_proposal.navigate_to_retire_review
 end
 
@@ -166,18 +168,6 @@ end
 
 
 When(/^I submit a retire course proposal with all fields complete as Faculty$/) do
-  # Create Course Proposal
-  steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
-                                                     :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
-
-  puts "Proposal Title: #{@course_proposal.proposal_title}"
-
-  # Activate Course
-  @course_proposal.approve_activate_proposal
-
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
   course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
