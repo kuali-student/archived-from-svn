@@ -209,7 +209,7 @@ class AcademicCalendar < DataFactory
     on EditAcademicCalendar do |page|
       page.delete_draft
       page.confirm_delete
-      sleep 10 #TODO: should there be a growl message in this (single ACAL) view
+      sleep 20 #TODO: should there be a growl message in this (single ACAL) view
     end
   end
 
