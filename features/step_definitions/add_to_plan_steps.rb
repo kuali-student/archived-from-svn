@@ -334,7 +334,7 @@ When(/^I add a course with multiple activity offerings to my plan$/) do
 
   on CourseSectionPage do |page|
     page.ksap_loader.wait_while_present(90)
-    page.course_termlist.wait_until_present(90)
+    page.course_termlist.wait_until_present(120)
   end
 
 

@@ -267,8 +267,10 @@ class CourseSearchResults < DataFactory
     navigate_to_maintenance_portal
     navigate_to_course_search_home
     on CourseSearch do |page|
-      sleep 2
-      page.search_for_course.set text
+     # sleep 5
+      page.search_for_course.wait_until_present
+      page.search_for_course.send_keys([:control, 'a'])
+      page.search_for_course.send_keys text
       if @term_select != nil
         page.search_term_select.select term_select
       end
