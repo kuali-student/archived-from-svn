@@ -68,7 +68,7 @@ class ManageAppliedHold < BasePage
   ### Applied Holds error Methods
   #################################################################
 
-  element(:student_term_error_messages) { |b| b.manage_applied_hold_section.div(class: "alert alert-danger")}
+  element(:student_term_error_messages) { |b| b.manage_applied_hold_page.div(class: /alert alert-danger/)}
 
   def get_student_term_error_msg( section)
     student_term_error_messages.lis().each do |msg|

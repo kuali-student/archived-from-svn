@@ -6,7 +6,7 @@ class HoldIssueObject < DataFactory
   include Workflows
 
   attr_accessor :name, :code, :category, :auth_org, :suffix,
-                :description, :owning_org, :org_contact,
+                :description, :owning_org_abbr, :org_contact,
                 :contact_address, :first_applied_date,
                 :last_applied_date, :term_based, :first_term,
                 :last_term, :hold_history, :authorising_orgs
@@ -20,7 +20,7 @@ class HoldIssueObject < DataFactory
         :suffix => nil,
         :category => "Academic Advising Issue",
         :description => random_alphanums(50),
-        :owning_org => nil,
+        :owning_org_abbr => "UME-Wicomico",
         :org_contact => nil,
         :contact_address => nil,
         :first_applied_date => right_now[:date_w_slashes],
@@ -73,7 +73,7 @@ class HoldIssueObject < DataFactory
       page.name_input.set @name
       page.code_input.set @code
       page.descr_input.set @description
-      page.find_owning_org @owning_org
+      page.find_owning_org @owning_org_abbr
 
       @authorising_orgs.each do |auth_org|
         auth_org.parent = self
@@ -84,9 +84,58 @@ class HoldIssueObject < DataFactory
     end
   end
 
-  def edit
+  def edit opts = {}
+    defaults = {
+        :navigate_to_page => false,
+        :save_edit => true
+    }
+    options = defaults.merge(opts)
+
+    set_options(options)
+
+    manage if options[:navigate_to_page]
+
     on ManageHold do |page|
       page.edit_hold @name
+    end
+
+    on CreateHold do |page|
+      page.loading.wait_while_present
+
+      if options[:category] != nil
+        page.category_input.select options[:category]
+        @category = options[:category]
+      end
+
+      if options[:name] != nil
+        page.name_input.set options[:name]
+        @name = options[:name]
+      end
+
+      if options[:code] != nil
+        page.code_input.set options[:code]
+        @code = options[:code]
+      end
+
+      if options[:description] != nil
+        page.descr_input.set options[:description]
+        @description = options[:description]
+      end
+
+      if options[:owning_org_abbr] != nil
+        page.find_owning_org options[:owning_org_abbr]
+        @owning_org_abbr = options[:owning_org_abbr]
+      end
+
+      if options[:authorising_orgs] != nil
+        options[:authorising_orgs].each do |auth_org|
+          auth_org.parent = self
+          auth_org.create
+          @authorising_orgs << auth_org
+        end
+      end
+
+      page.save unless options[:defer_save]
     end
   end
 

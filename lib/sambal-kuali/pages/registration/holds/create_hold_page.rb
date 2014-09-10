@@ -56,7 +56,7 @@ class CreateHold < BasePage
     owning_org_find
     loading.wait_while_present
 
-    org_dialog_name_input.when_present.set owning_org
+    org_dialog_abbr_input.when_present.set owning_org
     org_dialog_search
     index = get_org owning_org if owning_org != nil
     org_dialog_select index

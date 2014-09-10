@@ -36,7 +36,7 @@ Then(/^the hold is displayed in the catalog with the created authorizations$/) d
     page.get_hold_code(@hold.code).nil?.should be_false
   end
 
-  @hold.edit
+  @hold.edit :defer_save => true
   on CreateHold do |page|
     page.auth_org_rows(@hold.authorising_orgs[0].auth_org).nil?.should be_false
     page.auth_org_rows(@hold.authorising_orgs[1].auth_org).nil?.should be_false
