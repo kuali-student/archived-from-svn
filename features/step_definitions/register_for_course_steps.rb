@@ -1,13 +1,6 @@
 When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |subj,empty|
 
-  # Get original counts before adding course to cart
-  if subj=="WMST" || subj=="BSCI2"
-    visit RegistrationCart do |page|
-      sleep 1
-      @orig_cart_course_count = page.credit_count_title.text.downcase.match('(\d*) course')[1].to_i
-      @orig_cart_credit_count = page.credit_count_title.text.downcase.match('\((.*) credit')[1].to_f
-    end
-  end
+
 
   # Assign values for course attributes
   case subj
@@ -149,6 +142,16 @@ When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |su
       @restResponse = make RegRestUtility
       @restResponse.clear_cart_and_schedule(term_code)
 
+  end
+
+  # Get original counts before adding course to cart
+  if subj=="WMST" || subj=="BSCI2"
+    visit RegistrationCart do |page|
+      sleep 1
+      page.change_term(term_descr)
+      @orig_cart_course_count = page.credit_count_title.text.downcase.match('(\d*) course')[1].to_i
+      @orig_cart_credit_count = page.credit_count_title.text.downcase.match('\((.*) credit')[1].to_f
+    end
   end
 
   course_options = (make CourseOptions, :credit_option => credit_option)
@@ -515,9 +518,9 @@ end
 Then /^the number of credits I am registered for is correctly updated in my schedule ?(after the drop)?$/ do  |drop|
   on StudentSchedule do |page|
     if drop == "after the drop"
-      page.user_message_div("schedule").wait_until_present
-      page.wait_until { page.user_message("schedule") =~ /drop processing/i }
-      page.wait_until { page.user_message("schedule") !~ /drop processing/i }
+      page.user_message_div(@reg_request.course_code, @reg_request.reg_group_code,"schedule").wait_until_present
+      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code,"schedule") =~ /drop processing/i }
+      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code,"schedule") !~ /drop processing/i }
       credits_to_drop = @reg_request.course_options.credit_option
       @cart_reg_credit_count -= credits_to_drop.to_f
     end

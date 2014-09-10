@@ -136,4 +136,13 @@ class RegistrationCart < RegisterForCourseBase
     sleep 1
   end
 
+  def change_term (term_descr)
+      # wait in case list has not loaded yet
+      menu_button.wait_until_present
+      menu
+      wait_until {term_select.include? term_descr }
+      select_term term_descr
+      menu
+  end
+
 end
