@@ -18,9 +18,9 @@ class CourseSearch < BasePage
   COURSE_PREFIX=0
 
 
-  element(:search_for_course) { |b| b.frm.text_field(id: "text_searchQuery_control") }
-  element(:search_term_select) { |b| b.frm.select(name:"searchTerm") }
-  action(:search) { |b| b.frm.button(id:"searchForCourses").click; b.loading.wait_while_present }
+  element(:search_for_course) { |b| b.text_field(id: "text_searchQuery_control") }
+  element(:search_term_select) { |b| b.select(name:"searchTerm") }
+  action(:search) { |b| b.button(id:"searchForCourses", class: "btn btn-primary btn btn-primary course-search-submit uif-boxLayoutHorizontalItem").when_present(90).click; b.loading.wait_while_present(90) }
   #element(:results_table){ |b| b.frm.div(id: /course_search_results/).table }
   element(:results_table) { |b| b.table(id: "course_search_results") }
   ################
