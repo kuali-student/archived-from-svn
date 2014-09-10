@@ -18,12 +18,10 @@ Feature: REG.Create Hold
     Then a duplicate check message is displayed
 
 #KSENROLL-14526
-  @pending
   Scenario: Hold 1.2.1 Verify that a hold is created and added to the catalog of holds after adding an organization for apply and another for expire
     When I create a hold with authorizing organization for apply as well as expire
     Then the hold is displayed in the catalog with the created authorizations
 
-  @pending
   Scenario: Hold 1.2.2 Verify that authorizing organization permission message is displayed after adding authorizing organization without apply and expire permission
     When I create a hold with authorizing organization without apply and expire permission
     Then a permission error message is displayed
