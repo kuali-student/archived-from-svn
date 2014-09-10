@@ -536,8 +536,8 @@ Then /^a message appears indicating that the effective date is required$/ do
 end
 
 When /^I attempt to edit the registered course$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-2070", :term_code=> "201208"
-  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL304",
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2070", :term_code=> "201401"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL301",
                                                              :section=> "1001", :register => true,
                                                              :confirm_registration => true)
 
@@ -593,7 +593,10 @@ When /^I attempt to drop a registered course$/ do
 end
 
 Then /^the student is no longer registered for the course$/ do
-  on(AdminRegistration).get_registered_course("#{ @admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})").nil?.should be_true
+  on AdminRegistration do |page|
+    page.wait_until { page.course_register_btn.visible? }
+    page.get_registered_course("#{ @admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})").nil?.should be_true
+  end
 end
 
 Then /^a message appears indicating that the course has been successfully dropped$/ do
@@ -637,7 +640,10 @@ When /^I drop the course for the first student$/ do
 end
 
 Then /^that student is no longer registered for the course$/ do
-  on(AdminRegistration).get_registered_course("#{ @admin_reg_student1.course_section_codes[0].course_code} (#{ @admin_reg_student1.course_section_codes[0].section})").nil?.should be_true
+  on AdminRegistration do |page|
+    page.wait_until { page.course_register_btn.visible? }
+    page.get_registered_course("#{ @admin_reg_student1.course_section_codes[0].course_code} (#{ @admin_reg_student1.course_section_codes[0].section})").nil?.should be_true
+  end
 end
 
 Then /^the second student's course has moved from waitlisted to registered$/ do
