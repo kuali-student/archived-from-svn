@@ -19,7 +19,6 @@ Feature: REG.Manage Hold
     Then a validation error is displayed stating "Student ID: Invalid student Id."
 
   #KSENROLL-14586
-  @pending
   Scenario: Hold2.2.1 Verify that applied holds are displayed after a valid student is entered
     When I attempt to load a student by valid student Id
     Then the applied hold information is displayed
