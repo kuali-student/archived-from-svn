@@ -67,22 +67,21 @@ class CoursePlannerPage < BasePage
   element(:find_courses) {|b|b.div(id:"applicationNavigation").a(text:"Find Courses")}
   action(:find_courses_click) {|b|b.find_courses.click}
   element(:bookmarks) {|b|b.div(id:"applicationHeader").span(id:"Ksap-Header-Bookmark-Count-Label")}
-  element(:academic_year_2014_2015) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
+  element(:academic_year_2013_2014) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
   element(:right_arrow) {|b|b.div(id:"planner_courses_detail").a(id:"next_year_button")}
   action(:right_arrow_click) {|b|b.right_arrow.click}
-  element(:academic_year_2015_2016) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
+  element(:academic_year_2014_2015) {|b|b.div(id:"planner_courses_detail").span(class:"uif-headerText-span")}
   element(:left_arrow) {|b|b.div(id:"planner_courses_detail").a(id:"previous_year_button")}
+  action(:left_arrow_click) {|b|b.left_arrow.click}
   element(:print) {|b|b.div(id:"planner_courses_detail").a(title:"Print")}
+  element(:fall_2013) {|b|b.div(id:"planner_courses_detail_list").span(text:"Fall 2013")}
+  element(:winter_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Winter 2014")}
   element(:spring_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Spring 2014")}
   element(:summer_1_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Summer I 2014")}
-  element(:fall_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Fall 2014")}
-  element(:winter_2015) {|b|b.div(id:"planner_courses_detail_list").span(text:"Winter 2015")}
   element(:course_registered_term) {|term,b|b.div(id:/kuali-atp-#{term}_cart.*/)}
   element(:course_planned_term) {|term,b|b.div(id:/kuali-atp-#{term}_courses.*/)}
   element(:course_backup_term) {|term,b|b.div(id:/kuali-atp-#{term}_backup.*/)}
   element(:credit_tally) {|b|b.div(id:"planner_courses_detail").div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
-
-
 
 end
 
