@@ -16,5 +16,7 @@ class CmCreateCourseStart < BasePage
   element(:cm_proposal_copy_course_code_field) {|b|b.text_field(id: "CM-Proposal-Course-Create-Start-CopyFromCourse_control")}
   element(:cm_proposal_copy_proposal_title_field) {|b|b.text_field(id: "CM-Proposal-Course-Create-Start-CopyFromProposal_control")}
 
+  element(:modify_course_this_version) { |b| b.radio(value: 'modifyThisVersion') }
+  element(:modify_course_new_version) { |b| b.radio(value: 'modifyNewVersion') }
 
 end #class

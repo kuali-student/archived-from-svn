@@ -151,11 +151,9 @@ class BasePage < PageFactory
       element(:print_icon) {|b|b.a(title: "Print").i(class: "ks-fontello-icon-print")}
 
       #Version
-      element(:cs_modify_button) {|b|b.button(id: "CM-VersionHistory-ModifyButton-CurriculumSpecialist")}
-      element(:faculty_modify_button) {|b|b.button(id: "CM-VersionHistory-ModifyButton-Faculty")}
+      element(:modify_button) {|b|b.button(id: "CM-VersionHistory-ModifyButton")}
+      action(:modify_course) { |b| b.modify_button.click;  b.loading_wait }
       element(:version_history_button) {|b|b.button(id: "CM-VersionHistory-Button")}
-      action(:cs_modify_course) { |b| b.cs_modify_button.click;  b.loading_wait }
-      action(:faculty_modify_course) { |b| b.faculty_modify_button.click;  b.loading_wait }
       action(:lookup_version_history) { |b| b.version_history_button.click }
 
     end
