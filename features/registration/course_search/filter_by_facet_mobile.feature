@@ -34,7 +34,7 @@ Feature: REG.Filter by Facets Mobile
     Then I should see only courses with the specific course level and the specific course prefix
 
 #KSENROLL-14158
-  Scenario: Verify that as a student I am able to undo any filtering performed using any facet
+  Scenario: CR 19.9 - Verify that as a student I am able to undo any filtering performed using any facet
     When I narrow the search results using any facet
     And I undo the filtering performed using the specified facet
     Then I should see the courses in the search results without any filtering being applied

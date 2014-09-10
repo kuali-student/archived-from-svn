@@ -133,12 +133,14 @@ When /^I narrow the search results using any facet$/ do
   sleep 1
   if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
+      sleep 5  # the results load in the background. Give it a few seconds
       @search_results_before_facet_selection=page.all_results(CourseSearchMobilePage::COURSE_CODE)
       page.select_facet("course_level",@course_search_result.course_level)
       page.toggle_show_facets
     end
   else
     on CourseSearchPage do |page|
+      sleep 5  # the results load in the background. Give it a few seconds
       @search_results_before_facet_selection=page.results_table.text
       page.select_facet("course_level",@course_search_result.course_level)
     end
@@ -148,17 +150,18 @@ end
 
 
 And(/^I undo the filtering performed using the specified facet$/) do
+  sleep 1
   if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on CourseSearchMobilePage do |page|
       page.clear_facet("course_level",@course_search_result.course_level)
       page.toggle_show_facets
-      sleep 4
+      sleep 5  # the results load in the background. Give it a few seconds
       @search_results_after_clearing=page.all_results(CourseSearchMobilePage::COURSE_CODE)
     end
   else
     on CourseSearchPage do |page|
       page.clear_facet("course_level",@course_search_result.course_level)
-      sleep 2
+      sleep 5  # the results load in the background. Give it a few seconds
       @search_results_after_clearing=page.results_table.text
     end
   end
