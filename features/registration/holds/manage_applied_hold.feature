@@ -1,3 +1,4 @@
+@nightly
 @blue_team
 Feature: REG.Manage Hold
   Hold2.1 As a Holds Functionary I want to enter a student id so that basic student info is displayed
