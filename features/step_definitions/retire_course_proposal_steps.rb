@@ -58,7 +58,7 @@ end
 
 
 And(/^I approve the retire course proposal as (.*?)$/) do |approver|
-  log_in "carol", "carol" if approver == "Department Chair"
+  log_in "carol", "carol" if approver == "Department Approver"
   log_in "earl", "earl" if approver == "College Approver"
   @retire_proposal.approve_retire_proposal
 end
