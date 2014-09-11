@@ -91,7 +91,7 @@ And(/^I navigate to the Course Section Details page$/) do
   @course_search_result.navigate_course_detail_page
 
   on CourseSectionPage do |page|
-  page.course_termlist.wait_until_present(120)
+  page.course_termlist.wait_until_present(90)
   end
 end
 

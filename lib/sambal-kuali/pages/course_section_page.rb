@@ -4,7 +4,7 @@ class CourseSectionPage < BasePage
 
   wrapper_elements
   frame_element
-  expected_element :course_termlist
+  expected_element :course_termlist,120
 
  #10-Elements in the course section
   element(:course_detail_header) { |b| b.main(id:"coursedetails-page").header(id:"courseCodeTitle")}
@@ -36,7 +36,7 @@ class CourseSectionPage < BasePage
   action(:ao_lecture){|course_code,b| b.div(id: /#{course_code}.*activity-offering-lecture/) }
   action(:ao_discussion){|course_code,b| b.div(id: /#{course_code}.*activity-offering-discussion/) }
   action(:ao_lab){|course_code,b| b.div(id: /#{course_code}.*activity-offering-lab/) }
-  element(:course_termlist) {|b|b.div(id:"course-term-list")}
+   element(:course_termlist) {|b|b.div(id:"course-term-list")}
   element(:term_credit) {|term_credit,b|b.a(id:/#{term_credit}_section_toggle/)}
   element(:course_variable_credit) {|course_variable_credit,course_code,b|b.a(id:/#{course_variable_credit}_#{course_code}_section_toggle/)}
   value(:actual_course_code) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"code_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
@@ -45,7 +45,7 @@ class CourseSectionPage < BasePage
   value(:actual_course_time) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"time_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
   value(:actual_course_location) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"location_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
   value(:actual_course_seatsopen) {|coursedesc_level,courseterm_level,formatlist_level,fo_level,b|b.div(id:"seats_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}").text}
-  element(:ksap_loader) {|b|b.div(class:"kasp-loader")}
+  element(:ksap_loader) {|b|b.div(class:"ksap-loader")}
   action(:plan_link_coursesection_click) {|b|b.a(href:"planner?methodToCall=start&viewId=Planner-FormView").click}
   end
 

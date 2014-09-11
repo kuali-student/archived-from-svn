@@ -332,9 +332,11 @@ When(/^I add a course with multiple activity offerings to my plan$/) do
   # @course_search_result.navigate_course_detail_page
 
 
+
+
   on CourseSectionPage do |page|
     page.ksap_loader.wait_while_present(90)
-    page.course_termlist.wait_until_present(120)
+    page.course_termlist.wait_until_present(70)
   end
 
 
