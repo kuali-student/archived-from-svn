@@ -73,7 +73,6 @@ class CmRetireCourseProposal < DataFactory
 
   def populate_retirement_info
     on CmRetirementInformation do |page|
-      page.retirement_information unless page.current_page('Retirement Information').exists?
       fill_out page, :retire_proposal_title, :retirement_rationale, :other_comments
       page.end_term.pick! @end_term
       page.last_term_offered.pick! @last_term_offered
@@ -101,7 +100,6 @@ class CmRetireCourseProposal < DataFactory
 
   def navigate_to_retire_review
     on CmRetirementInformation do |retire|
-        retire.supporting_documents unless retire.current_page('Supporting Documents').exists?
         retire.review_retire_proposal
     end
   end
@@ -166,9 +164,14 @@ class CmRetireCourseProposal < DataFactory
     on CmReviewProposal do |page|
       page.edit_retire_proposal_link
     end
-
   end
 
+  def approve_retire_proposal
+    on CmRetirementInformation do |retire|
+      retire.approve_and_retire
+      sleep 30 # to avoid workflow exceptions
+    end
+  end
 
 
 end

@@ -27,25 +27,24 @@ Background:
     And I blanket approve the retire course proposal as Curriculum Specialist
     Then the retire course proposal is successfully approved
     And the course status is retired
-  @draft
+
   Scenario: RC2.1 Verify Curriculum Specialist can create an Admin Retire Proposal and Approve and Retire
     When I create a administrative retire as Curriculum Specialist
     Then I can approve and retire the admin retire proposal
     And the course is retired
-  @draft
+
   Scenario: RC2.2 Verify Curriculum Specialist cannot create an admin retire proposal when a retire proposal is already in progress
     Given there is a retire course proposal created as Curriculum Specialist
     When I attempt to create a second admin retire proposal
     Then I do not have the option to retire the course
-  @draft
+
   Scenario: RC2.3 Verify Curriculum Specialist can create retire course proposal
-    When I create a retire course proposal as Curriculum Specialist
+    When there is a retire course proposal created as Curriculum Specialist
     Then I can review the retire course proposal details and submit
     And I approve the retire course proposal as Department Approver
     And I blanket approve the retire course proposal as Curriculum Specialist
     Then the retire course proposal is successfully approved
-    And a new course version is created with a state of Retired
-    And the previous version has been Superseded
+    And the course status is retired
 
 
 
