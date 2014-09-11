@@ -26,6 +26,11 @@ class CourseDetailsPage < RegisterForCourseBase
   element(:edit_save_button) { |course_code,reg_group_code,context,b| b.button(id: "#{context}_save_#{course_code}_#{reg_group_code}") }
   action(:save_edits) { |course_code,reg_group_code,context,b| b.edit_save_button(course_code,reg_group_code,context).click }
 
+  element(:add_to_waitlist_button) { |b| b.button(id: "search_details_add_to_waitlist") }
+  element(:add_button_dropdown) { |b| b.button(id: "search_details_add_dropdown") }
+  element(:alt_add_to_cart_link) { |b| b.a(id: "alt_add_to_cart") }
+  element(:direct_register_link) { |b| b.a(id: "direct_register") }
+
   # heading
   element(:details_heading) { |activity_type, b| b.div(id: "#{activity_type}_details_heading") }
 

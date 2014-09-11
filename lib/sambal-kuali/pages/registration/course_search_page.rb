@@ -104,11 +104,6 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   # Details view
   element(:back_to_search_results) { |b| b.a(id: "returnToSearch") }
   element(:course_description) { |b| b.div(id: "courseDescription").text }
-  element(:add_to_cart_button) { |b| b.button(id: "search_details_add_to_cart") }
-  element(:add_to_waitlist_button) { |b| b.button(id: "search_details_add_to_waitlist") }
-  element(:add_button_dropdown) { |b| b.button(id: "search_details_add_dropdown") }
-  element(:alt_add_to_cart_link) { |b| b.a(id: "alt_add_to_cart") }
-  element(:direct_register_link) { |b| b.a(id: "direct_register") }
 
   def self.prefix(status)
     return (status==STATUS_SCHEDULE)?"":PREFIX_WAITLIST
