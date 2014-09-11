@@ -69,6 +69,8 @@ public class AcademicPlanServiceConstants {
     public static final String PLACEHOLDER_ERROR = "org.kuali.student.ap.placeholder.error";
 
 	/* Degree Map invalid Status */
+    public static final String LEARNING_PLAN_INACTIVE_STATE_KEY  = "kuali.academicplan.plan.state.inactive";
+    public static final String LEARNING_PLAN_ARCHIVED_STATE_KEY  = "kuali.academicplan.plan.state.archived";
     public static final String LEARNING_PLAN_INVALID_STATE_KEY  = "kuali.academicplan.plan.state.invalid";
 
 }
