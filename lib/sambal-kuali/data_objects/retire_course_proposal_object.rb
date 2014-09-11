@@ -77,7 +77,6 @@ class CmRetireCourseProposal < DataFactory
     on CmRetirementInformation do |page|
       page.retirement_information unless page.current_page('Retirement Information').exists?
       fill_out page, :retire_proposal_title, :retirement_rationale, :other_comments
-      @start_term = page.start_term #this is a read only field
       page.end_term.pick! @end_term
       page.last_term_offered.pick! @last_term_offered
       page.last_catalog_pub_year.pick! @last_catalog_pub_year

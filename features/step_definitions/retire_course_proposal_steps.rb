@@ -14,20 +14,20 @@ end
 
 When(/^I create a retire course proposal as Faculty$/) do
   steps %{Given I am logged in as Faculty}
-  course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => course,
+  @retire_proposal = create CmRetireCourseProposal, :course => @course, :start_term => @course_proposal.submit_fields[0].start_term,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list =>  [(make CmSupportingDocsObject)]
 
+  puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 end
 
 
 And(/^I can review the retire course proposal details$/) do
   @retire_proposal.navigate_to_retire_review
-  #TODO 4 add validation steps once review page is accessible KSCM-1817
   on CmRetireProposalReviewPage do |retire|
     retire.course_number_retire_review.should == @retire_proposal.course.course_code
     retire.proposal_title_retire_review.should == @retire_proposal.retire_proposal_title
@@ -88,13 +88,15 @@ end
 Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
-  course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => course,
+  @retire_proposal = create CmRetireCourseProposal, :course => @course,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list =>  [(make CmSupportingDocsObject)]
+
+  puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 
   # Navigate to review
   @retire_proposal.navigate_to_retire_review
@@ -123,14 +125,16 @@ end
 When(/^I create a retire course proposal with a missing required for submit detail as Faculty$/) do
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
-  course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => course,
+  @retire_proposal = create CmRetireCourseProposal, :course => @course,
                                                     :retirement_rationale => nil,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list => [(make CmSupportingDocsObject)]
+
+  puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 
   # Navigate to review
   @retire_proposal.navigate_to_retire_review
@@ -166,14 +170,15 @@ end
 When(/^I submit a retire course proposal with all fields complete as Faculty$/) do
   # Create retire proposal
   steps %{Given I am logged in as Faculty}
-  course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => course,
+  @retire_proposal = create CmRetireCourseProposal, :course => @course,
                             :author_list => [(make CmAuthCollaboratorObject)],
                             :supporting_doc_list =>  [(make CmSupportingDocsObject)]
 
+  puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
   # Navigate to review
   @retire_proposal.navigate_to_retire_review
 
