@@ -1,5 +1,5 @@
 When(/^I attempt to load a student by valid student Id$/) do
-  @applied_hold = create AppliedHoldData
+  @applied_hold = create AppliedHold
 end
 
 Then(/^the student information is displayed$/) do
@@ -7,7 +7,7 @@ Then(/^the student information is displayed$/) do
 end
 
 When /^I attempt to load a student by invalid studentId$/ do
-  @applied_hold = create AppliedHoldData, :student_id=> "student1"
+  @applied_hold = create AppliedHold, :student_id=> "student1"
 end
 
 Then /^a validation error is displayed stating "([^"]+)"$/ do |exp_msg|

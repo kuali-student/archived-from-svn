@@ -1,4 +1,4 @@
-class ManageHold < BasePage
+class ManageHoldIssue < BasePage
 
   wrapper_elements
   frame_element

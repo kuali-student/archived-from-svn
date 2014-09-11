@@ -1,4 +1,4 @@
-class CreateHold < BasePage
+class HoldIssueCreateEdit < BasePage
 
   wrapper_elements
   frame_element

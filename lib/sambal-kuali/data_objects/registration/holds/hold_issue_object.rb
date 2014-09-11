@@ -1,4 +1,4 @@
-class HoldIssueObject < DataFactory
+class HoldIssue < DataFactory
 
   include Foundry
   include DateFactory
@@ -28,7 +28,7 @@ class HoldIssueObject < DataFactory
         :term_based => false,
         :first_term => nil,
         :last_term => nil,
-        :authorising_orgs =>  collection('HIAuthorisingOrg'),
+        :authorising_orgs =>  collection('HoldIssueAuthorisingOrg'),
         :hold_history => false,
         :defer_save => false
     }
@@ -49,7 +49,7 @@ class HoldIssueObject < DataFactory
   def manage
     search
 
-    on ManageHold do |page|
+    on ManageHoldIssue do |page|
       page.manage_hold_name_input.set @name
       page.manage_hold_code_input.set @code
       page.manage_hold_category_select.select @category
@@ -62,11 +62,11 @@ class HoldIssueObject < DataFactory
   def create
     search
 
-    on ManageHold do |page|
+    on ManageHoldIssue do |page|
       page.add_hold
     end
 
-    on CreateHold do |page|
+    on HoldIssueCreateEdit do |page|
       page.loading.wait_while_present
 
       page.category_input.select @category
@@ -95,11 +95,11 @@ class HoldIssueObject < DataFactory
 
     manage if options[:navigate_to_page]
 
-    on ManageHold do |page|
+    on ManageHoldIssue do |page|
       page.edit_hold @name
     end
 
-    on CreateHold do |page|
+    on HoldIssueCreateEdit do |page|
       page.loading.wait_while_present
 
       if options[:category] != nil

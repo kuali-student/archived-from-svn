@@ -1,4 +1,4 @@
-class HIAuthorisingOrgObject < DataFactory
+class HoldIssueAuthorisingOrg < DataFactory
 
   include Foundry
   include DateFactory
@@ -24,7 +24,7 @@ class HIAuthorisingOrgObject < DataFactory
 
   def create
 
-    on CreateHold do |page|
+    on HoldIssueCreateEdit do |page|
       page.add_auth_org
 
       index = page.get_index_for_empty_row
@@ -36,8 +36,8 @@ class HIAuthorisingOrgObject < DataFactory
 
 end
 
-class HIAuthorisingOrgCollection < CollectionsFactory
+class HoldIssueAuthorisingOrgCollection < CollectionsFactory
 
-  contains HIAuthorisingOrgObject
+  contains HoldIssueAuthorisingOrg
 
 end

@@ -1,4 +1,4 @@
-class AppliedHoldData < DataFactory
+class AppliedHold < DataFactory
 
   include Foundry
   include DateFactory
@@ -25,11 +25,11 @@ class AppliedHoldData < DataFactory
 
   def create
     search
+
     on ManageAppliedHold do |page|
       page.manage_applied_hold_studentid_input.set @student_id
       page.manage_applied_hold_show
     end
   end
-
 
 end
