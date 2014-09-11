@@ -563,6 +563,13 @@ Given /^I log in to student registration as ([\w\.]+)$/  do |user|
   puts "I am logged in to student registration as #{user}"
 end
 
+When /^I wait for student registration login to complete$/ do
+  on RestLoginPage do |page|
+    page.preformatted_text.wait_until_present
+    wait_until {page.preformatted_text.text =~ /Logged in/}
+  end
+end
+
 And /^I elect to keep the failed course in my cart$/ do
   on RegistrationCart do |page|
     page.keep_in_cart_button(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present

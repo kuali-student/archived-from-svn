@@ -10,7 +10,8 @@ class CourseSearch < DataFactory
               :course_code,
               :course_prefix,
               :course_level,
-              :selected_section
+              :selected_section,
+              :term
 
   MOBILE_BROWSER_WIDTH = 640
   # For some unknown reason, the dimensions in some browser objects are 2x what
@@ -24,14 +25,15 @@ class CourseSearch < DataFactory
         :course_code => nil,
         :course_prefix => nil,
         :course_level => nil,
-        :selected_section => nil
+        :selected_section => nil,
+        :term => "Fall 2012"
     }
     options = defaults.merge(opts)
     set_options(options)
   end
 
   def inspect
-    "Search string: #{@search_string}, course_code: #{@course_code}, course_level: #{@course_level}, course_prefix: #{@course_prefix}, selected_section: #{@selected_section}"
+    "Search string: #{@search_string}, course_code: #{@course_code}, course_level: #{@course_level}, course_prefix: #{@course_prefix}, selected_section: #{@selected_section}, term: #{@term}"
   end
   
   def search opts={}
@@ -82,6 +84,7 @@ class CourseSearch < DataFactory
     edit_course_code opts
     edit_course_prefix opts
     edit_selected_section opts
+    edit_term opts
   end
 
   def edit_course_level opts={}
@@ -107,6 +110,12 @@ class CourseSearch < DataFactory
     set_options(opts)
   end
   private :edit_selected_section
+
+  def edit_term opts={}
+    return nil if opts[:term].nil?
+    set_options(opts)
+  end
+  private :edit_term
 
   def check_sort_order_in_all_pages opts={}
     defaults = {

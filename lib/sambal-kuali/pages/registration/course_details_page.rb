@@ -30,6 +30,15 @@ class CourseDetailsPage < RegisterForCourseBase
   element(:add_button_dropdown) { |b| b.button(id: "search_details_add_dropdown") }
   element(:alt_add_to_cart_link) { |b| b.a(id: "alt_add_to_cart") }
   element(:direct_register_link) { |b| b.a(id: "direct_register") }
+  action(:direct_register) { |b| b.direct_register_link.click }
+
+  element(:reg_options_continue) { |course_code,reg_group_code,b| b.button(id: "directReg_save_#{course_code}_#{reg_group_code}") }
+  element(:reg_options_cancel) { |course_code,reg_group_code,b| b.button(id: "directReg_cancel_#{course_code}_#{reg_group_code}") }
+  element(:register_confirm_button) { |course_code,reg_group_code,b| b.button(id: "directReg_edit_#{course_code}_#{reg_group_code}") }
+  element(:register_cancel_button) { |course_code,reg_group_code,b| b.button(id: "directReg_remove_#{course_code}_#{reg_group_code}") }
+  element(:direct_register_popup_course) { |b| b.span(id: "direct_register_popup_course") }
+  element(:direct_register_popup_button) { |course_code,reg_group_code,b| b.button(id: "course_remove_#{course_code}_#{reg_group_code}") }
+  action(:close_direct_register_popup) { |course_code,reg_group_code,b| b.direct_register_popup_button(course_code,reg_group_code).click }
 
   # heading
   element(:details_heading) { |activity_type, b| b.div(id: "#{activity_type}_details_heading") }

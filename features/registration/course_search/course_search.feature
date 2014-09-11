@@ -77,3 +77,10 @@ Feature: REG.Course Search
     Then the Add to Cart option should change to a notice that the course is in my cart
     * I remove the course from my registration cart on the search page
     * I log out from student registration large format
+
+    #KSENROLL-14808
+  Scenario: CR 0.4 - Register for course directly from search
+    When I search for a WMST course and select a registration group
+    And I register directly for the registration group
+    Then there is a message indicating successful direct registration
+    And the course is in my schedule

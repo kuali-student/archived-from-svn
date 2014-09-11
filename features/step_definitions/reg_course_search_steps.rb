@@ -3,6 +3,55 @@ When /^I search for a course with "(.*?)" text option$/ do |text|
   @course_search_result.search :navigate=>true
 end
 
+When /^I search for a WMST course and select a registration group$/ do
+  steps %{
+    Given I log in to student registration as student2
+    * I wait for student registration login to complete
+  }
+  @course_search_result = make CourseSearch, :search_string=> "WMST", :course_code=> "WMST212"
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(@course_search_result.term)
+
+  @course_search_result.search :navigate=>true
+  on CourseSearchPage do |page|
+    page.course_code_result_row(@course_search_result.course_code).wait_until_present
+    page.select_course(@course_search_result.course_code)
+  end
+
+  @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"A"
+  @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"E"
+  @course_search_result.edit :selected_section => "1002"
+
+end
+
+When /^I register directly for the registration group$/ do
+  on CourseDetailsPage do |page|
+    page.add_button_dropdown.click
+    page.direct_register
+    page.reg_options_continue(@course_search_result.course_code,@course_search_result.selected_section).click
+    page.register_confirm_button(@course_search_result.course_code,@course_search_result.selected_section).click
+  end
+end
+
+Then /^there is a message indicating successful direct registration$/ do
+  on CourseDetailsPage do |page|
+    sleep 2
+    page.direct_register_popup_button(@course_search_result.course_code,@course_search_result.selected_section).wait_until_present
+    page.direct_register_popup_course.text.should include "#{@course_search_result.course_code}"
+    page.direct_register_popup_course.text.should include "#{@course_search_result.selected_section}"
+    page.close_direct_register_popup(@course_search_result.course_code,@course_search_result.selected_section)
+  end
+end
+
+And /^the course is in my schedule$/ do
+  on(CourseDetailsPage).return_to_search
+  on CourseSearchPage do |page|
+    page.course_code(@course_search_result.course_code, @course_search_result.selected_section, "schedule").wait_until_present
+    page.course_code(@course_search_result.course_code, @course_search_result.selected_section, "schedule").text.should_not be_nil
+  end
+end
+
 Then /^courses containing "(.*?)" course codes? appear$/ do |expected|
   # mobile
   if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
