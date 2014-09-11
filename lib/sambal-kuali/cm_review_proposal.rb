@@ -159,7 +159,7 @@ class CmReviewProposal < BasePage
   element(:retire_proposal_button) { |b| b.button(id: "CM-Course-RetireButton") }
   action(:retire_proposal) { |b| b.retire_proposal_button.click; b.loading_wait }
   action(:retire_continue) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Continue").click; b.loading_wait }
-  element(:curriculum_review_process) { |b| b.radio(value: "startRetireByProposal") }
+  element(:curriculum_review_process) { |b| b.checkbox(id: "CM-Proposal-Course-Retire-ReviewProcess_control") }
   action (:edit_retire_proposal_link) { |b| b.a(id: "CM-Proposal-Review-RetireCourse-Edit-Link").click; b.loading_wait }
 
   #COURSE STATUS
