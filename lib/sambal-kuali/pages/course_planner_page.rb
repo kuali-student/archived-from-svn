@@ -78,7 +78,7 @@ class CoursePlannerPage < BasePage
   element(:winter_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Winter 2014")}
   element(:spring_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Spring 2014")}
   element(:summer_1_2014) {|b|b.div(id:"planner_courses_detail_list").span(text:"Summer I 2014")}
-  element(:course_registered_term) {|term,b|b.div(id:/kuali-atp-#{term}_cart.*/)}
+  element(:course_registered_term) {|term,b|b.div(id:/kuali-atp-#{term}_registered.*/)}
   element(:course_planned_term) {|term,b|b.div(id:/kuali-atp-#{term}_courses.*/)}
   element(:course_backup_term) {|term,b|b.div(id:/kuali-atp-#{term}_backup.*/)}
   element(:credit_tally) {|b|b.div(id:"planner_courses_detail").div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
