@@ -84,6 +84,9 @@ class BasePage < PageFactory
       action(:confirm_cancel_proposal) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Confirm").click; b.loading.wait_while_present }
       element(:review_proposal_element) { |b| b.a(id: "CM-Proposal-Course-ReviewProposalLink") }
       action(:review_proposal) { |b| b.review_proposal_element.click; b.loading_wait }
+      element(:approve_and_retire_button) { |b| b.button(text: "Approve and Retire") }
+      element(:approve_and_retire_disabled) { |b| b.button(text: "Approve and Retire", class: /disabled/) }
+      action(:approve_and_retire) { |b| b.approve_and_retire_button.click }
 
       element(:save_continue) { |b| b.button(id: 'usave') }
       action(:save_and_continue) { |b| b.save_continue.click; b.saving_wait }
