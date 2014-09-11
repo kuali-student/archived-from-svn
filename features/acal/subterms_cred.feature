@@ -79,6 +79,7 @@ Feature: CO.Subterms CRED
     And I delete a subterm
     Then the subterm is no longer listed on the calendar
 
+  @bug @KSENROLL-14814
   Scenario: CAL 4.10A Delete draft academic calendar and ensure draft subterm is also deleted.
      Given I create an Academic Calendar with subterms
      When I delete the parent Academic Calendar draft

@@ -25,6 +25,7 @@ Feature: CO.Academic Calendar CRED
     When I update the Academic Calendar
     Then the academic calendar should reflect the updates
 
+   @bug @KSENROLL-14814
   Scenario: Delete Draft Academic Calendar
     When I delete the Academic Calendar draft
     And I search for the calendar
