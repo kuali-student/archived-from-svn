@@ -7,13 +7,11 @@ Feature: REG.Manage Hold
     Given I am logged in as admin
 
   #KSENROLL-14582
-  @pending
   Scenario: HOLD2.1.1 Verify that student info is displayed after valid student is entered
     When I attempt to load a student by valid student Id
     Then the student information is displayed
 
 #KSENROLL-14582
-  @pending
   Scenario: HOLD2.1.2 Verify error message when entering invalid student
     When I attempt to load a student by invalid studentId
     Then a validation error is displayed stating "Student ID: Invalid student Id."
