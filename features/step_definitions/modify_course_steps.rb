@@ -1,84 +1,48 @@
-Given(/^there is a course (.*?) without a draft version$/) do |view_course|
-  outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
-
-  if view_course == "BMGT202"
-    @course = make CmCourseObject, :search_term => view_course, :course_code => view_course,
-                   :subject_code => "BMGT", :course_number => "202",
-                   :course_title => "Decision Models with Spreadsheets", :transcript_course_title => "DCSN MODELS SPREADSHEETS",
-                   :description => "The main objective is to teach how to solve problems arising in modern business environments using a spreadsheet application. The course will begin by teaching common tools available in popular spreadsheet applications. Then it will introduce the students to a variety of analytical problems arising in modern businesses and present ways in which these problems can be solved using spreadsheet applications.",
-                   # GOVERNANCE
-                   :campus_location => "North",
-                   :curriculum_oversight => "BMGT-Robert H. Smith School of Business",
-                   # COURSE LOGISTICS
-                   :assessment_scale => "Pass/Fail Grading; Letter",
-                   :audit => "Yes",
-                   :pass_fail_transcript_grade => "Yes",
-                   :final_exam_status => "Standard Final Exam",
-                   :outcome_list => [outcome1],
-                   # ACTIVE DATES
-                   :start_term => "Fall 2009",
-                   :pilot_course => "No",
-                   :course_state => "ACTIVE"
-
-  else
-    @course = make CmCourseObject, :search_term => view_course, :course_code => view_course,
-                   :subject_code => "BMGT", :course_number => "230",
-                   :course_title => "Business Statistics", :transcript_course_title => "BUSINESS STATISTICS",
-                   :description => "Introductory course in probabilistic and statistical concepts including descriptive statistics, set-theoretic development of probability, the properties of discrete and continuous random variables, sampling theory, estimation, hypothesis testing, regression and decision theory and the application of these concepts to problem solving in business and the application of these concepts to problem solving in business and management.",
-                   # GOVERNANCE
-                   :campus_location => "North",
-                   :curriculum_oversight => "BMGT-Robert H. Smith School of Business",
-                   # COURSE LOGISTICS
-                   :assessment_scale => "Pass/Fail Grading; Letter",
-                   :audit => "Yes",
-                   :pass_fail_transcript_grade => "Yes",
-                   :final_exam_status => "Standard Final Exam",
-                   :outcome_list => [(outcome1)],
-                   # ACTIVE DATES
-                   :start_term => "Winter 2012",
-                   :pilot_course => "No",
-                   :course_state => "ACTIVE"
-  end
-
-  @course.view_course
-
-end
-
 When(/^I create a modify course proposal as Faculty$/) do
-  on(CmReviewProposal).faculty_modify_course
+  steps %{Given I am logged in as Faculty}
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 :course_state => "Active"
 
+  @modify_course_proposal = make CmCourseProposalObject, :proposal_title => "Modify " + @course_proposal.course_title,
+                                 :course_title => @course_proposal.course_title,
+                                 :subject_code => @course_proposal.subject_code,
+                                 :approve_fields => @course_proposal.approve_fields,
+                                 :submit_fields => @course_proposal.submit_fields,
+                                 :description_rationale => @course_proposal.description_rationale,
+                                 :proposal_rationale => @course_proposal.proposal_rationale,
+                                 :outcome_list => @course_proposal.outcome_list,
+                                 :format_list => @course_proposal.format_list
+  @course.view_course
 end
 
 Then(/^I can review the modify course proposal details compared to the course$/) do
-
-end
-
-Given(/^there is a course (.*?) with a draft version$/) do |view_course|
-
-  @course = make CmCourseObject, :search_term => view_course, :course_code => view_course,
-                 :subject_code => "BMGT", :course_number => "230",
-                 :course_title => "Business Statistics", :transcript_course_title => "BUSINESS STATISTICS",
-                 :description => "Introductory course in probabilistic and statistical concepts including descriptive statistics, set-theoretic development of probability, the properties of discrete and continuous random variables, sampling theory, estimation, hypothesis testing, regression and decision theory and the application of these concepts to problem solving in business and the application of these concepts to problem solving in business and management.",
-                 # GOVERNANCE
-                 :campus_location => "North",
-                 :curriculum_oversight => "BMGT-Robert H. Smith School of Business",
-                 # COURSE LOGISTICS
-                 :assessment_scale => "Pass/Fail Grading; Letter",
-                 :audit => "Yes",
-                 :pass_fail_transcript_grade => "Yes",
-                 :final_exam_status => "Standard Final Exam",
-                 :outcome_list => [(make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3")],
-                 # ACTIVE DATES
-                 :start_term => "Winter 2012",
-                 :pilot_course => "No",
-                 :course_state => "ACTIVE"
-
-  @course.view_course
-
-end
-
-When(/^I attempt to create a modify course proposal of the course as Faculty$/) do
   on(CmReviewProposal).modify_course
+
+  on CmReviewProposal do |review|
+    review.review_proposal_title_header.should include @course_proposal.course_title
+
+    review.new_proposal_title_review.should == @modify_course_proposal.course_title
+    review.new_proposal_rationale_review.should == ""
+    review.new_start_term_review.should == ""
+
+    review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.proposal_title_diff_highlighter.should ==  "cm-compare-highlighter"
+
+   # review.review_proposal_title_header.should_not include "Admin"
+
+  end
+
+end
+
+When(/^I attempt to create another modify course proposal of the course$/) do
+  navigate_to_cm_home
+  navigate_to_find_course
+  on CmFindACoursePage do |search|
+    search.course_code.set @course.search_term
+    search.find_courses
+    search.view_course(@course.search_term)
+  end
 end
 
 Then(/^I do not have the option to modify the course$/) do
@@ -87,29 +51,48 @@ Then(/^I do not have the option to modify the course$/) do
 end
 
 Given(/^there is a modify course proposal created as Faculty$/) do
-  steps %{Given I am logged in as Faculty}
+  steps %{When I create a modify course proposal as Faculty}
+  on(CmReviewProposal).modify_course
+  @modify_course_proposal.edit_course_information
+  @modify_course_proposal.edit  :proposal_title => @modify_course_proposal.proposal_title
+  puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
+  on(CmCourseInformation).review_proposal
 end
 
 
 Then(/^I cannot yet submit the modify course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.submit_button_disabled.exists?.should be_true
+  end
+
 end
 
 When(/^I complete the required for submit fields on the modify course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @modify_course_proposal.edit_course_information
+
+  @modify_course_proposal.submit_fields[0].edit :proposal_rationale => @modify_course_proposal.proposal_title + " Added test rationale.",
+                                                :exam_standard => "Standard Final Exam",
+                                                :start_term => 'Spring 2008'
+
+  on(CmCourseInformation).review_proposal
 end
 
 Then(/^I can submit the modify course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  @modify_course_proposal.submit_proposal
 end
 
 And(/^I perform a full search for the modify course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  navigate_to_cm_home
+  @modify_course_proposal.search
+  @modify_course_proposal.review_proposal_action
 end
 
 Then(/^I can see updated status of the modify course proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposal do |review|
+    review.proposal_status.should include "enroute"
+  end
+
 end
 
 When(/^I submit a modify course proposal as Faculty$/) do

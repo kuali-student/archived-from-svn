@@ -6,6 +6,7 @@ class CmReviewProposal < BasePage
   action(:submit) { |b| b.button(text: 'Submit').click; b.loading_wait }
   action(:edit_course_information) { |b| b.a(id: "CM-Proposal-Review-CourseInfo-Edit-Link").click }
   element(:review_proposal_header) { |b| b.div(id: "CM-Proposal-Course-Create-Header").p(class: "uif-viewHeader-supportTitle").text }
+  element(:review_proposal_title_header) { |b| b.header(id: "CM-Proposal-Course-Create-Header").span(class: "uif-headerText-span").text }
 
   # COURSE INFORMATION REVIEW FIELDS
   element(:proposal_title_element) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Proposal-Name_control") }
@@ -235,10 +236,25 @@ class CmReviewProposal < BasePage
   value(:end_term_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-ActiveDates-EndTermver1_label') }
   value(:pilot_course_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-ActiveDates-PilotCoursever1_label') }
 
-  # FINANCIAL FEES
+  # MODIFY COURSE PROPOSAL FIELDS COMPARE COURSE INFORMATION FIELDS
+  element(:new_proposal_title_element) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Proposal-Namenew_control") }
+  value(:proposal_title_diff_highlighter) { |b| b.label(id: "CM-ViewCourseView-CourseInfo-Proposal-Namenew_label").parent.parent.attribute_value("class") }
+  value(:new_proposal_title_review) { |b| b.new_proposal_title_element.text }
+  value(:new_transcript_course_title) { |b| b.textarea(id: /.*new_control/).text}
+  value(:old_transcript_course_title) { |b| b.div(id: /.*old/, data_label: "Transcript Course Title").text }
+  value(:new_course_title_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Course-Titlenew_control").text }
+  value(:old_course_title_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Course-Titleold").text }
+  value(:new_subject_code_review) { |b| b.textarea(id:"CM-ViewCourseView-CourseInfo-Subject-Areanew_control").text }
+  value(:old_subject_code_review) { |b| b.div(id:"CM-ViewCourseView-CourseInfo-Subject-Areaold").text }
+  value(:new_course_number_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixnew_control").text }
+  value(:old_course_number_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixold").text }
 
-  #AUTHORS & COLLABORATORS
+  value(:new_description_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Descrnew_control").text }
+  value(:old_description_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Descrold").text }
+  value(:new_proposal_rationale_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Rationalenew_control").text }
 
-  #SUPPORTING DOCS
+  value(:new_start_term_review) { |b| b.textarea(id: "CM-ViewCourseView-ActiveDates-StartTermnew_control").text }
+  element(:start_term_element) { |b| b.div(id: "CM-ViewCourseView-ActiveDates-StartTermnew") }
+  value(:start_term_diff_highlighter) {|b|b.start_term_element.parent.parent.attribute_value("class") }
 
 end

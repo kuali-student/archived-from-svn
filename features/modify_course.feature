@@ -1,16 +1,13 @@
 @wip
 Feature: GT.Modify Course
 
-  Scenario: MC1.1 Create and Save a Modify Proposal as Faculty
-    Given I am logged in as Faculty
-    Given there is a course BMGT202 without a draft version
+  Background:
+    Given I have an active course
+
+  Scenario: MC1.1 Create a Modify Course Proposal as Faculty; verify can not start another
     When I create a modify course proposal as Faculty
     Then I can review the modify course proposal details compared to the course
-
-  Scenario: MC1.2 Cannot modify if draft version in progress as Faculty
-    Given I am logged in as Faculty
-    Given there is a course BMGT230 with a draft version
-    When I attempt to create a modify course proposal of the course as Faculty
+    When I attempt to create another modify course proposal of the course
     Then I do not have the option to modify the course
 
   Scenario: MC1.3 Submit Modify Proposal as Faculty
