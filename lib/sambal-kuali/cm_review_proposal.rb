@@ -116,6 +116,7 @@ class CmReviewProposal < BasePage
 
   #SUBMITCmReviewProposal
   element(:submit_button) { |b| b.button(text: "Submit")}
+  element(:submit_button_disabled) { |b| b.button(text: "Submit", class: /disabled/) }
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
   action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
   element(:proposal_status_element) { |b| b.div(id: "CM-Proposal-Header-Right-Group-Status").p(id: /CM-Proposal-Status/) }
@@ -159,6 +160,7 @@ class CmReviewProposal < BasePage
   action(:retire_proposal) { |b| b.retire_proposal_button.click; b.loading_wait }
   action(:retire_continue) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Continue").click; b.loading_wait }
   element(:curriculum_review_process) { |b| b.radio(value: "startRetireByProposal") }
+  action (:edit_retire_proposal_link) { |b| b.a(id: "CM-Proposal-Review-RetireCourse-Edit-Link").click; b.loading_wait }
 
   #COURSE STATUS
   value(:course_state_review) { |b| b.div(id: /CM-ViewCourse-View/).text }

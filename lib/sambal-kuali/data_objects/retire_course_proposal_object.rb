@@ -48,13 +48,11 @@ class CmRetireCourseProposal < DataFactory
 
 
   def edit (opts={})
-    return_to_cm_home
-    navigate_to_find_course
-    search
-    edit_retire_proposal
+     edit_retire_proposal_information
       on CmRetirementInformation do |page|
         page.retirement_information unless page.current_page('Retirement Information').exists?
-        page.retiremenet_rationale.set opts[:retirement_rationale]
+        page.retirement_rationale.set opts[:retirement_rationale]
+        determine_save_action unless opts[:defer_save]
       end
     set_options(opts)
   end
@@ -110,7 +108,7 @@ class CmRetireCourseProposal < DataFactory
 
   def navigate_search_retire_proposal
     navigate_rice_to_cm_home
-    navigate_to_find_course
+    navigate_to_find_course_proposal
     search
     review_retire_proposal
   end
@@ -123,11 +121,14 @@ class CmRetireCourseProposal < DataFactory
     end
   end
 
+
+
   def review_retire_proposal # Module this
     on FindProposalPage do |page|
       page.review_proposal_action_link(@retire_proposal_title)
     end
   end
+
   
   def edit_retire_proposal # Module this
     on FindProposalPage do |page|
@@ -138,6 +139,7 @@ class CmRetireCourseProposal < DataFactory
   def approve
     navigate_search_retire_proposal
     on CmRetireProposalReviewPage do |approve|
+      approve.review_approval
       approve.decision_rationale.wait_until_present
       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
       approve.confirmation_approval
@@ -158,6 +160,13 @@ class CmRetireCourseProposal < DataFactory
       blanket_approve.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
       blanket_approve.confirmation_approval
     end
+  end
+
+  def edit_retire_proposal_information
+    on CmReviewProposal do |page|
+      page.edit_retire_proposal_link
+    end
+
   end
 
 
