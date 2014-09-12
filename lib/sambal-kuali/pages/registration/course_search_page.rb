@@ -13,7 +13,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   end
 
   # Search input
-  element(:course_input_div){ |b| b.div(class: "kscr-Responsive-searchFormWrapper kscr-SearchForm") }
+  element(:course_input_div){ |b| b.div(id: "searchForm") }
   element(:course_input){ |b| b.text_field(id: "courseSearchCriteria") }
   element(:course_input_button) { |b| b.button(id: "searchSubmit") }
   action(:begin_course_search) { |b| b.course_input_button.click}
