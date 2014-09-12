@@ -21,20 +21,16 @@ class ApplyHold < BasePage
   ######################################################################################################################
   ###                                      Apply Hold Input Fields                                         ###
   ######################################################################################################################
-  element(:hold_code) { |b| b.apply_hold_section.text_field(id: /holdCode/)}
-  element(:first_applied_date) { |b| b.apply_hold_section.text_field(id: /effectiveDate/)}
-
-  element(:first_term) { |b| b.apply_hold_section.text_field(id: /firstTerm/)}
+  element(:hold_code) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.holdCode")}
+  element(:first_applied_date) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.appliedHold.effectiveDate")}
+  element(:first_term) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.firstTerm")}
   ######################################################################################################################
   ###                                            Apply Hold Buttons                                         ###
   ######################################################################################################################
   element(:apply_hold_show_btn) { |b| b.apply_hold_section.button(id: "show_button")}
   action(:apply_hold_show){ |b| b.apply_hold_show_btn.when_present.click}
-  element(:apply_hold__btn) { |b| b.apply_hold_section.button(id: "applyHoldButton")}
+  element(:apply_hold_btn) { |b| b.apply_hold_section.button(id: "applyHoldButton")}
   action(:apply_hold){ |b| b.apply_hold__btn.when_present.click}
-
-
-
 
   ################################################################
   ### Apply Holds error Methods
