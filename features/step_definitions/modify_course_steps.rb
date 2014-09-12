@@ -52,6 +52,11 @@ end
 
 Given(/^there is a modify course proposal created as Faculty$/) do
   steps %{When I create a modify course proposal as Faculty}
+  @current_active_course_version_info = Array.new(4)
+  @current_active_course_version_info = @course.get_course_version_info version_index: 0
+  @course.close_version_history_dialog
+
+
   on(CmReviewProposal).modify_course
   @modify_course_proposal.edit_course_information
   @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
@@ -102,7 +107,6 @@ end
 
 And(/^I Blanket Approve the modify course proposal as CS adding an end term for the version to be superseded$/) do
   log_in "alice", "alice"
-  navigate_to_functional_home
   @modify_course_proposal.blanket_approve_with_rationale
   on CmReviewProposal do |review|
     review.growl_text.should include "Document was successfully approved"
@@ -111,8 +115,25 @@ And(/^I Blanket Approve the modify course proposal as CS adding an end term for 
 end
 
 Then(/^the modify course proposal is successfully approved$/) do
+  @new_active_course_version_info = Array.new(4)
+  @superseded_course_version_info = Array.new(4)
+
+  navigate_to_functional_home
+
   @course.view_course
-  on(CmReviewProposal).lookup_version_history
+  @new_active_course_version_info = @course.get_course_version_info version_index: 0
+  @superseded_course_version_info = @course.get_course_version_info version_index: 1
+  @course.close_version_history_dialog
+
+  @new_active_course_version_info[0].should == "2"
+  @new_active_course_version_info[1].should == 'Active'
+  @new_active_course_version_info[2].should == 'Spring 2008'
+
+  @superseded_course_version_info[0].should == "1"
+  @superseded_course_version_info[1].should == 'Superseded'
+
+  @current_active_course_version_info[0].should == "1"
+  @current_active_course_version_info[1].should == 'Active'
 
 end
 

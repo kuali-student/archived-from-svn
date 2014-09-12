@@ -72,6 +72,24 @@ class CmCourseObject < DataFactory
     end
   end
 
+  def get_course_version_info(opts={})
+    index = opts[:version_index]
+    on(CmReviewProposal).lookup_version_history
+    on CmCourseVersionHistoryPage do |page|
+      version = page.version_history_version(index).text
+      status = page.version_history_courseStatus(index).text
+      start_term = page.version_history_startTerm(index).text
+      end_term = page.version_history_endTerm(index).text
+      return version, status, start_term, end_term
+    end
+  end
+
+  def close_version_history_dialog
+    on CmCourseVersionHistoryPage do |page|
+      page.close_history_view
+      page.alert.ok if page.alert.exists?
+    end
+  end
 end
 
 
