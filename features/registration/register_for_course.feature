@@ -35,7 +35,7 @@ Feature: REG.Register for course
   #KSENROLL-11811 KSENROLL-12072
   Scenario: CR 1.6 I want to submit my list of course selections so that I can register for them
             CR 4.1: I want to view the courses for which I am registered for a given term so that I am aware of my schedule.
-    When I add a HIST course offering to my registration cart
+    When I add a HIST course offering to my empty registration cart
     Then the course is present in my cart
     And I register for the course
     Then there is a message indicating successful registration
@@ -45,7 +45,7 @@ Feature: REG.Register for course
 
   #KSENROLL-11922
   Scenario: CR 1.9 I want my course selections to persist so that I can return in another session and continue my registration process.
-    When I add a PHYS course offering to my registration cart
+    When I add a PHYS course offering to my empty registration cart
     Then the course is present in my cart
     And I log out
     When I am logged in as a Student
@@ -54,7 +54,7 @@ Feature: REG.Register for course
 
   #KSENROLL-11923
   Scenario: CR 1.10 I want to reverse my decision to remove a course from my selections so that I can continue my registration process.
-    When I add a BSCI1 course offering to my registration cart
+    When I add a BSCI1 course offering to my empty registration cart
     And I remove the course from my registration cart
     Then the course is not present in my cart
     Then I undo the drop action
