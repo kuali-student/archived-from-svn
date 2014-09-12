@@ -5,7 +5,8 @@ Feature:Apply Hold
   Background:
     Given I am logged in as admin
 
-  @draft #KSENROLL-14588
+  #KSENROLL-14588
+  @draft
   Scenario: HOLD2.3.1 Verify that hold is applied to student
     When I apply a hold to student by completing the required information needed for applied hold
     Then the applied hold exists in the student applied hold list
