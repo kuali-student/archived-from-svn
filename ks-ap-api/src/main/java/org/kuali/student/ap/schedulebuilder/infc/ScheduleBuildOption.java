@@ -41,5 +41,12 @@ public interface ScheduleBuildOption extends HasUniqueId, Serializable {
 	 * @return True if the option has been discarded, false if not.
 	 */
 	boolean isDiscarded();
+	
+	/**
+	 * Determine if the option has further information disclosed
+	 * 
+	 * @return True is the option has been disclosed, false if not.
+	 */
+	boolean isDisclosed();
 
 }

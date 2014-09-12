@@ -30,6 +30,9 @@ public class ScheduleBuildOptionInfo implements ScheduleBuildOption {
 
 	@XmlAttribute
 	private boolean discarded;
+	
+	@XmlAttribute
+	private boolean disclosed;
 
 	@XmlAnyElement
 	private List<?> _futureElements;
@@ -88,6 +91,15 @@ public class ScheduleBuildOptionInfo implements ScheduleBuildOption {
 
 	public void setDiscarded(boolean discarded) {
 		this.discarded = discarded;
+	}
+
+	@Override
+	public boolean isDisclosed() {
+		return disclosed;
+	}
+
+	public void setDisclosed(boolean disclosed) {
+		this.disclosed = disclosed;
 	}
 
 }
