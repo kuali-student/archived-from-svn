@@ -331,8 +331,8 @@ end
 
 Then /^there is a message indicating the course was dropped$/ do
   on StudentSchedule do |page|
-    page.user_message_div("schedule").wait_until_present
-    page.wait_until { page.user_message("schedule") =~ /dropped successfully/i }
+    page.user_message_div(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
+    page.wait_until { page.user_message(@reg_request.course_code,@reg_request.reg_group_code).include?("dropped successfully") }
   end
 end
 
@@ -519,8 +519,8 @@ Then /^the number of credits I am registered for is correctly updated in my sche
   on StudentSchedule do |page|
     if drop == "after the drop"
       page.user_message_div(@reg_request.course_code, @reg_request.reg_group_code,"schedule").wait_until_present
-      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code,"schedule") =~ /drop processing/i }
-      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code,"schedule") !~ /drop processing/i }
+      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code) =~ /drop processing/i }
+      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code) !~ /drop processing/i }
       credits_to_drop = @reg_request.course_options.credit_option
       @cart_reg_credit_count -= credits_to_drop.to_f
     end

@@ -7,9 +7,8 @@ class StudentSchedule < RegisterForCourseBase
   PREFIX_WAITLIST = "waitlist_"
 
   element(:reg_credit_count) { |b| b.span(id: "reg_credit_count").text }
-  element(:user_message_div) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.div(id: "#{prefix(status)}course_status_message_message_#{course_code}_#{reg_group_code}") }
-  element(:user_message) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.user_message_div(course_code, reg_group_code,status).span(index: 0).text }
-
+  element(:user_message_div) { |course_code,reg_group_code,b| b.div(id: "course_status_message_message_#{course_code}_#{reg_group_code}") }
+  element(:user_message) { |course_code,reg_group_code,b| b.user_message_div(course_code, reg_group_code).span(index: 0).text }
   element(:course_code) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_code_#{course_code}_#{reg_group_code}") }
 
   element(:course_title_div) { |course_code,reg_group_code,b| b.div(id: "title_#{course_code}_#{reg_group_code}") }
