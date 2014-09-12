@@ -61,7 +61,7 @@ end
 When /^multiple students attempted to register for an? full (\w+) course offering then get added to a waitlist$/  do |subj|
   steps %{
     And I log in to student registration as student1
-    And I add an #{subj} course offering to my registration cart
+    And I add an #{subj} course offering to my empty registration cart
     And I register for the course
     And I add myself to a waitlist for the course
     Then there is a message indicating that I have been added to the waitlist
@@ -69,7 +69,7 @@ When /^multiple students attempted to register for an? full (\w+) course offerin
   }
   sleep 2
   steps %{
-    And I add an #{subj} course offering to my registration cart
+    And I add an #{subj} course offering to my empty registration cart
     And I register for the course
     And I add myself to a waitlist for the course
     Then there is a message indicating that I have been added to the waitlist
@@ -164,8 +164,8 @@ Then /^they have been added to the end of the waitlist$/ do | |
   }
 
   waitlist_entry_size = @orig_waitlist.waitlist_entries.size
-  student1_position = @orig_waitlist.waitlist_entries["student1"].waitlist_position
-  student2_position = @orig_waitlist.waitlist_entries["student2"].waitlist_position
+  student1_position = @orig_waitlist.waitlist_entries["KS-10296"].waitlist_position
+  student2_position = @orig_waitlist.waitlist_entries["KS-5964"].waitlist_position
 
   student2_position.should == waitlist_entry_size
   student1_position.should == (waitlist_entry_size - 1)
@@ -178,8 +178,8 @@ Then /^the order of students remaining on the waitlist is adjusted correctly$/ d
     * I retrieve the updated waitlist roster
   }
 
-  student1_orig_position = @orig_waitlist.waitlist_entries["student1"].waitlist_position
-  student2_new_position = @updated_waitlist.waitlist_entries["student2"].waitlist_position
+  student1_orig_position = @orig_waitlist.waitlist_entries["KS-10296"].waitlist_position
+  student2_new_position = @updated_waitlist.waitlist_entries["KS-5964"].waitlist_position
 
   @updated_waitlist.waitlist_entries["student1"].should == nil   # student1 dropped the course
   student2_new_position.should == student1_orig_position    #student2 should be moved into student1's place
@@ -216,8 +216,8 @@ Then /^the first student is added to the end of the waitlist$/ do
     * I retrieve the updated waitlist roster
   }
   waitlist_entry_size = @updated_waitlist.waitlist_entries.size
-  student1_position = @updated_waitlist.waitlist_entries["student1"].waitlist_position
-  student2_position = @updated_waitlist.waitlist_entries["student2"].waitlist_position
+  student1_position = @updated_waitlist.waitlist_entries["KS-10296"].waitlist_position
+  student2_position = @updated_waitlist.waitlist_entries["KS-5964"].waitlist_position
 
   student1_position.should == waitlist_entry_size
   student2_position.should == (waitlist_entry_size - 1)
