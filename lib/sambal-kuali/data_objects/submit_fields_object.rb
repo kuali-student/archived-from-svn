@@ -142,8 +142,12 @@ class CmSubmitFieldsObject < DataFactory
       end
       #Edit Final Exam Status
       if opts[:final_exam_type] != nil
-        random_radio(opts[@final_exam_type])
-        fill_out page, :exam_standard, :exam_alternate, :exam_none
+        if opts[:exam_standard] != nil
+          page.exam_standard.set
+        else
+          random_radio(opts[@final_exam_type])
+          fill_out page, :exam_standard, :exam_alternate, :exam_none
+        end
         #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
         #if that radio is selected
         page.final_exam_rationale.wait_until_present unless page.exam_standard.set?

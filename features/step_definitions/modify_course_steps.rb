@@ -1,18 +1,18 @@
 When(/^I create a modify course proposal as Faculty$/) do
   steps %{Given I am logged in as Faculty}
-  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
-                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
-                 :course_state => "Active"
+  @course = make CmCourseObject, search_term: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 course_code: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 course_state: "Active"
 
-  @modify_course_proposal = make CmCourseProposalObject, :proposal_title => "Modify " + @course_proposal.course_title,
-                                 :course_title => @course_proposal.course_title,
-                                 :subject_code => @course_proposal.subject_code,
-                                 :approve_fields => @course_proposal.approve_fields,
-                                 :submit_fields => @course_proposal.submit_fields,
-                                 :description_rationale => @course_proposal.description_rationale,
-                                 :proposal_rationale => @course_proposal.proposal_rationale,
-                                 :outcome_list => @course_proposal.outcome_list,
-                                 :format_list => @course_proposal.format_list
+  @modify_course_proposal = make CmCourseProposalObject, proposal_title: "Modify " + @course_proposal.course_title,
+                                 course_title: @course_proposal.course_title,
+                                 subject_code: @course_proposal.subject_code,
+                                 approve_fields: @course_proposal.approve_fields,
+                                 submit_fields: @course_proposal.submit_fields,
+                                 description_rationale: @course_proposal.description_rationale,
+                                 proposal_rationale: @course_proposal.proposal_rationale,
+                                 outcome_list: @course_proposal.outcome_list,
+                                 format_list: @course_proposal.format_list
   @course.view_course
 end
 
@@ -54,7 +54,7 @@ Given(/^there is a modify course proposal created as Faculty$/) do
   steps %{When I create a modify course proposal as Faculty}
   on(CmReviewProposal).modify_course
   @modify_course_proposal.edit_course_information
-  @modify_course_proposal.edit  :proposal_title => @modify_course_proposal.proposal_title
+  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   on(CmCourseInformation).review_proposal
@@ -71,11 +71,10 @@ end
 When(/^I complete the required for submit fields on the modify course proposal$/) do
   @modify_course_proposal.edit_course_information
 
-  @modify_course_proposal.submit_fields[0].edit :proposal_rationale => @modify_course_proposal.proposal_title + " Added test rationale.",
-                                                :exam_standard => "Standard Final Exam",
-                                                :start_term => 'Spring 2008'
-
-  on(CmCourseInformation).review_proposal
+  @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
+                                                final_exam_type: [:exam_standard],
+                                                exam_standard: :set,
+                                                start_term: 'Spring 2008'
 end
 
 Then(/^I can submit the modify course proposal$/) do
@@ -96,15 +95,25 @@ Then(/^I can see updated status of the modify course proposal$/) do
 end
 
 When(/^I submit a modify course proposal as Faculty$/) do
-  steps %{Given I am logged in as Faculty}
+  steps %{Given there is a modify course proposal created as Faculty}
+  steps %{When I complete the required for submit fields on the modify course proposal}
+  @modify_course_proposal.submit_proposal
 end
 
 And(/^I Blanket Approve the modify course proposal as CS adding an end term for the version to be superseded$/) do
-  pending # express the regexp above with the code you wish you had
+  log_in "alice", "alice"
+  navigate_to_functional_home
+  @modify_course_proposal.blanket_approve_with_rationale
+  on CmReviewProposal do |review|
+    review.growl_text.should include "Document was successfully approved"
+  end
+  sleep 30 # to avoid workflow exceptions
 end
 
 Then(/^the modify course proposal is successfully approved$/) do
-  pending # express the regexp above with the code you wish you had
+  @course.view_course
+  on(CmReviewProposal).lookup_version_history
+
 end
 
 And(/^the Superseded version has a new end term and the new course version is Active$/) do
