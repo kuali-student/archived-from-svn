@@ -149,6 +149,7 @@ When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |su
     visit RegistrationCart do |page|
       sleep 1
       page.change_term(term_descr)
+      wait_until { page.credit_count_title.text != nil }
       @orig_cart_course_count = page.credit_count_title.text.downcase.match('(\d*) course')[1].to_i
       @orig_cart_credit_count = page.credit_count_title.text.downcase.match('\((.*) credit')[1].to_f
     end
@@ -498,7 +499,7 @@ end
 
 Then /^I can view the number of courses and credits I am registered for in my registration cart$/ do
   on RegistrationCart do |page|
-    sleep 2
+    page.course_code(@reg_request.course_code, @reg_request.reg_group_code).wait_until_present
     @updated_cart_course_count = page.credit_count_title.text.downcase.match('(\d*) course')[1].to_i
     @updated_cart_course_count.should == (@orig_cart_course_count + 1)
     @updated_cart_credit_count = page.credit_count_title.text.downcase.match('\((.*) credit')[1].to_f
@@ -518,9 +519,10 @@ end
 Then /^the number of credits I am registered for is correctly updated in my schedule ?(after the drop)?$/ do  |drop|
   on StudentSchedule do |page|
     if drop == "after the drop"
-      page.user_message_div(@reg_request.course_code, @reg_request.reg_group_code,"schedule").wait_until_present
-      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code) =~ /drop processing/i }
+      page.wait_until { page.user_message_div(@reg_request.course_code, @reg_request.reg_group_code).visible? }
       page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code) !~ /drop processing/i }
+      page.wait_until { page.user_message_div(@reg_request.course_code, @reg_request.reg_group_code).visible? }
+      page.wait_until { page.user_message(@reg_request.course_code, @reg_request.reg_group_code) =~ /dropped successfully/i }
       credits_to_drop = @reg_request.course_options.credit_option
       @cart_reg_credit_count -= credits_to_drop.to_f
     end
