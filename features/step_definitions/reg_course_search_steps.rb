@@ -165,8 +165,8 @@ Then /^I can see the selected section has been added to my cart$/ do
   else
     on CourseDetailsPage do |page|
       page.cart_course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
-      expected_text = "#{@reg_request.course_code} (#{@reg_request.reg_group_code})"
-      page.cart_course_code(@reg_request.course_code,@reg_request.reg_group_code).text.should == expected_text
+      expected_text = "#{@reg_request.reg_group_code}"
+      page.cart_course_code(@reg_request.course_code,@reg_request.reg_group_code).text.should match expected_text
     end
   end
 end
