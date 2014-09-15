@@ -24,7 +24,7 @@ When /^I edit a course offering with 2 format types$/ do
 end
 
 When /^I edit a course offering with multiple registration options and credit types$/ do
-  @course_offering = (make CourseOffering, :course=>"CHEM399A").copy
+  @course_offering = (make CourseOffering, :course=>'ENGL478E').copy
 end
 
 When /^I edit a course offering with multiple grading options$/ do
