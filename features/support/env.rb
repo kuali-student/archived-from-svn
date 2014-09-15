@@ -63,7 +63,7 @@ end
 
 def get_browser_connection
   client = Selenium::WebDriver::Remote::Http::Default.new
-  #client.timeout = 15 # seconds default is 60
+  client.timeout = 120 # seconds default is 60
 
   #Profile Proxy Configuration
   #profile = Selenium::WebDriver::Firefox::Profile.new
