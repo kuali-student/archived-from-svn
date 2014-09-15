@@ -15,7 +15,7 @@ end
 
 Then(/^I should see my comments on the course proposal$/) do
   steps %{And edit the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (1)"
     page.comment_content_text(0).should == @comment_add.commentText
   end
@@ -40,7 +40,7 @@ When(/^I edit a comment$/) do
   sleep 1
   @comment_add.edit :index=>0, :commentText=>random_alphanums(10,'edit proposal comment')
   @comment_add.close_comment_dialog
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     if(page.alert.exists?)
       page.alert.ok
     end
@@ -49,7 +49,7 @@ end
 
 Then(/^I should see my edited comments on the course proposal$/) do
   steps %{And edit the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (1)"
     page.comment_content_text(0).should == @comment_add.commentText
   end
@@ -64,7 +64,7 @@ end
 
 Then(/^I should not see any comments on the course proposal$/) do
   steps %{And edit the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (0)"
   end
 end
@@ -75,7 +75,7 @@ Given(/^I have a basic course admin proposal with comments created as CS$/) do
 end
 
 And(/^I undo delete of one comment$/) do
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (0)"
     page.undo_delete_comment_link.exists?.should == true
     page.undo_delete
@@ -85,7 +85,7 @@ end
 
 Then(/^I should see the undeleted comment on the course admin proposal$/) do
   steps %{And review the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (1)"
     page.comment_content_text(0).should == @comment_add.commentText
   end
@@ -102,7 +102,7 @@ end
 
 Then(/^I should see my comments and CS comments on the course proposal$/) do
   steps %{And review the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (2)"
     page.comment_content_text(0).should == @comment_add.commentText
     (page.comment_header_id_text(0).include? "alice").should == true
@@ -111,7 +111,7 @@ Then(/^I should see my comments and CS comments on the course proposal$/) do
 end
 
 And(/^I should not have edit or delete options for CS comments$/) do
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (2)"
     begin
     page.comment_edit_link(0).should_not exist
@@ -126,14 +126,14 @@ end
 
 Then(/^I should see CS comments on the course proposal$/) do
   steps %{And review the course proposal after finding it}
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_list_header_text.should == "Comments (1)"
     page.comment_content_text(0).should == @comment_add.commentText
   end
 end
 
 And(/^I should not have ability to add comments$/) do
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     begin
     page.comment_text_input.should_not exist
     page.add_comment_button.should_not exist

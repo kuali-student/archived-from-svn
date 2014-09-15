@@ -34,7 +34,7 @@ class CmAuthCollaboratorObject < DataFactory
   end
 
   def create
-    on CmAuthorsCollaborators do |page|
+    on CmAuthorsCollaboratorsPage do |page|
       page.authors_collaborators unless page.current_page('Authors & Collaborators').exists?
       page.add_person unless page.author_name(@author_level).exists?
       page.author_name(@author_level).set @lookup_value unless @lookup_value.nil?
@@ -54,7 +54,7 @@ class CmAuthCollaboratorObject < DataFactory
 
 
   def edit (opts={})
-    on CmAuthorsCollaborators do |page|
+    on CmAuthorsCollaboratorsPage do |page|
       page.authors_collaborators unless page.current_page('Authors & Collaborators').exists?
       page.add_person unless page.author_name(opts[:author_level]).exists?
       page.author_name(opts[:author_level]).set opts[:name] unless opts[:name].nil?
@@ -69,7 +69,7 @@ class CmAuthCollaboratorObject < DataFactory
 
 
   def delete (opts={})
-    on CmAuthorsCollaborators do |page|
+    on CmAuthorsCollaboratorsPage do |page|
       page.authors_collaborators unless page.current_page('Authors & Collaborators').exists?
       page.delete_author(opts[:author_level])
     end

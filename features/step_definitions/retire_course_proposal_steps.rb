@@ -76,7 +76,7 @@ end
 And(/^the course status is retired$/) do
   steps %{Given I am logged in as Faculty}
   @course.view_course
-  on CmReviewProposal do |course_review|
+  on CmReviewProposalPage do |course_review|
     course_review.course_state_review.should include @course.course_state.upcase
   end
 end
@@ -114,7 +114,7 @@ When(/^I attempt to create a second retire proposal on the same course as Facult
 end
 
 Then(/^I do not have the option to retire the course$/) do
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
       page.retire_proposal_button.exists?.should be_false
     rescue
@@ -142,7 +142,7 @@ When(/^I create a retire course proposal with a missing required for submit deta
 end
 
 Then(/^I cannot yet submit the retire course proposal$/) do
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
         page.submit_button_disabled.exists?.should be_true
   end
 end
@@ -212,7 +212,7 @@ end
 And(/^the course is retired$/) do
   steps %{Given I am logged in as Curriculum Specialist}
   @course.view_course
-  on CmReviewProposal do |course_review|
+  on CmReviewProposalPage do |course_review|
     course_review.course_state_review.should include @course.course_state.upcase
   end
 end

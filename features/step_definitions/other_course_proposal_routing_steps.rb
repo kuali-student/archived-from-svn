@@ -36,7 +36,7 @@ Then(/^I can resubmit the course proposal as (.*?)$/) do |author|
   @course_proposal.search
   @course_proposal.review_proposal_action
   @course_proposal.resubmit_proposal
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.proposal_status.should include "enroute"
   end
 
@@ -54,7 +54,7 @@ Then(/^I can FYI the course proposal as a (.*?)$/) do |fyi_reviewer|
   navigate_rice_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     proposal.fyi_button.exists?.should be_true
   end
   @course_proposal.fyi_review
@@ -68,7 +68,7 @@ When(/^I find the course proposal as a (.*?)$/) do |fyi_reviewer|
 end
 
 Then(/^I do not have the option to FYI the proposal$/) do
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       begin
         proposal.fyi_button.exists?.should be_false
       rescue
@@ -106,7 +106,7 @@ Then(/^I can see an Acknowledge decision$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   @course_proposal.load_decisions_action
-  on CmDecisions do |page|
+  on CmDecisionsPage do |page|
     acknowledge_text = page.row_by_index(1)
     acknowledge_content = acknowledge_text.split(' ', 5)
     acknowledge_content[0].should == "Acknowledged"
@@ -148,7 +148,7 @@ Then(/^I can see the Acknowledge decisions$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
   @course_proposal.load_decisions_action
-  on CmDecisions do |page|
+  on CmDecisionsPage do |page|
     author_ack_row = page.row_by_index(1)
     author_text = author_ack_row.split(' ', 5)
     author_text[0].should == "Acknowledged"
@@ -162,7 +162,7 @@ And(/^Acknowledge decision is not displayed for (.*?)$/) do |department_approver
   navigate_rice_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       begin
         page.acknowledge_button.exists?.should be_false
       rescue
@@ -183,13 +183,13 @@ Then(/^the course proposal is successfully rejected$/) do
   return_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     proposal.proposal_status.should include "rejected"
   end
 end
 
 Then(/^I do not have the option to Reject the proposal$/) do
-   on CmReviewProposal do |page|
+   on CmReviewProposalPage do |page|
     begin
       page.reject_button.exists?.should be_false
     rescue

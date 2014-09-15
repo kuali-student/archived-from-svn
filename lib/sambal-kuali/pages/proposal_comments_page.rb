@@ -1,4 +1,4 @@
-class CmProposalComments < BasePage
+class CmProposalCommentsPage < BasePage
 
   wrapper_elements
   cm_elements

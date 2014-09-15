@@ -57,7 +57,7 @@ class CmSubmitFieldsObject < DataFactory
 
   def create
 
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.subject_code.fit @subject_code
       page.auto_lookup @subject_code unless @subject_code.nil?
@@ -65,13 +65,13 @@ class CmSubmitFieldsObject < DataFactory
     end
     determine_save_action
 
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.curriculum_oversight.pick! @curriculum_oversight
     end
     determine_save_action
 
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
 
       page.loading_wait
@@ -102,7 +102,7 @@ class CmSubmitFieldsObject < DataFactory
     end
     determine_save_action
 
-    on CmActiveDates do |page|
+    on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?
       page.start_term.pick! @start_term unless start_term.nil?
     end
@@ -116,7 +116,7 @@ class CmSubmitFieldsObject < DataFactory
   def edit (opts={})
     determine_edit_action
 
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.subject_code.fit opts[:subject_code]
       page.auto_lookup opts[:subject_code] unless opts[:subject_code].nil?
@@ -126,14 +126,14 @@ class CmSubmitFieldsObject < DataFactory
     end
 
 
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.curriculum_oversight.pick! opts[:curriculum_oversight] unless opts[:curriculum_oversight].nil?
       determine_save_action unless opts[:defer_save]
     end
 
 
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       #Edit Assessment Scale\
       if opts[:assessment_scale] != nil
@@ -157,7 +157,7 @@ class CmSubmitFieldsObject < DataFactory
     end
 
 
-    on CmActiveDates do |page|
+    on CmActiveDatesPage do |page|
       #Active Dates
       page.active_dates unless page.current_page('Active Dates').exists?
       page.start_term.pick! opts[:start_term] unless opts[:start_term].nil?

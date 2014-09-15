@@ -28,7 +28,7 @@ class CmCrossListedObject < DataFactory
 
 
   def create
-      on CmCourseInformation do |page|
+      on CmCourseInformationPage do |page|
         page.course_information unless page.current_page('Course Information').exists?
         page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
         page.add_cross_listed_course unless page.cross_listed_course_subject(@cross_list_course_count).exists?
@@ -39,7 +39,7 @@ class CmCrossListedObject < DataFactory
   end
 
   def edit (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.cross_listed_course_subject(opts[:cross_list_course_count]).fit opts[:cross_list_subject_code]
       page.auto_lookup @cross_list_subject_code if @auto_lookup
@@ -52,7 +52,7 @@ class CmCrossListedObject < DataFactory
   end
   
   def delete (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.delete_cross_listed_course(opts[:cross_list_course_count])
     end

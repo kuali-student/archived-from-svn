@@ -28,7 +28,7 @@ end
 
 Then(/^I should see Optional\-Other details on the course proposal$/) do
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
 
@@ -102,7 +102,7 @@ end
 
 Then(/^I should see updated Optional Other details on the course proposal$/) do
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
 
@@ -162,7 +162,7 @@ end
 
 Then(/^I should no longer see Optional\-Other details on the course proposal$/) do
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
 
@@ -236,7 +236,7 @@ Then(/^I should see Learning Objective and category details on the course propos
   @course_proposal.review_proposal_action
 
   lo_list = @course_proposal.learning_objective_list
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     lo_list.each do |lo|
       page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
         lo.category_list.each do |cat|
@@ -253,7 +253,7 @@ Then(/^I should see Learning Objective details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
   lo_list = @course_proposal.learning_objective_list
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       lo_list.each do |lo|
         page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
       end
@@ -273,7 +273,7 @@ end
 Then(/^I should see author and collaborator details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
     collection_index = 0
@@ -315,7 +315,7 @@ end
 Then(/^I should see updated author and collaborator details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
     collection_index = 1
@@ -342,7 +342,7 @@ end
 Then(/^I should no longer see author and collaborator details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
     collection_index = 0
@@ -366,7 +366,7 @@ end
 Then(/^I should see Supporting Documents details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
 
@@ -409,7 +409,7 @@ end
 
 Then(/^I should see updated Supporting Documents details on the course proposal$/) do
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     collection_index = 2 #exclude deleted items [0] and [1]
     supporting_doc_list = @course_proposal.supporting_doc_list
     begin
@@ -432,7 +432,7 @@ end
 
 Then(/^I should no longer see Supporting Documents on the course proposal$/) do
   @course_proposal.review_proposal_action
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.proposal_title_review.should == @course_proposal.proposal_title
       page.course_title_review.should == @course_proposal.course_title
       @course_proposal.supporting_doc_list.each do |supporting_docs|

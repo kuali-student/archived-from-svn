@@ -25,7 +25,7 @@ class CmInstructorObject < DataFactory
   end
 
   def create
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.add_instructor unless page.instructor_name(@instructor_level).exists?
       page.instructor_name(@instructor_level).set @instructor_name
@@ -38,7 +38,7 @@ class CmInstructorObject < DataFactory
 
 
   def edit (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.add_instructor unless page.instructor_name(opts[:instructor_level]).exists?
       page.instructor_name(opts[:instructor_level]).fit opts[:instructor_name]
@@ -51,7 +51,7 @@ class CmInstructorObject < DataFactory
 
 
   def delete (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.delete_instructor(opts[:instructor_level])
     end
     determine_save_action unless opts[:defer_save]

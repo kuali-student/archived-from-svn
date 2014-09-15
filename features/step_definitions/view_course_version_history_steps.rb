@@ -76,7 +76,7 @@ When(/^I view the version history of (.*?)$/) do |view_course|
   end
 
   @course.view_course
-  on(CmReviewProposal).lookup_version_history
+  on(CmReviewProposalPage).lookup_version_history
 
 end
 
@@ -106,7 +106,7 @@ Then(/^I can view the current course version details$/) do
     page.show_versions
     sleep 2
   end
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.not_current_version_section.present?.should == false
     review.course_title_review.should == @course.course_title
     review.transcript_course_title.should == @course.transcript_course_title
@@ -116,7 +116,7 @@ Then(/^I can view the current course version details$/) do
 end
 
 Then (/^I can view the current course version details after canceled out$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.not_current_version_section.present?.should == false
     review.course_title_review.should == @course.course_title
     review.transcript_course_title.should == @course.transcript_course_title
@@ -166,7 +166,7 @@ Then(/^I can view the non\-current course version details$/) do
     page.show_versions
     sleep 2
   end
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.not_current_version_section.present?.should == true
     review.course_title_review.should == "The Ancient World"
     review.transcript_course_title.should == "HIST120IENT WORLD"
@@ -176,8 +176,8 @@ Then(/^I can view the non\-current course version details$/) do
 end
 
 Then(/^I can view the current course version details from the non\-current course version$/) do
-  on(CmReviewProposal).view_course_current_version
-  on CmReviewProposal do |review|
+  on(CmReviewProposalPage).view_course_current_version
+  on CmReviewProposalPage do |review|
     review.not_current_version_section.present?.should == false
     review.course_title_review.should == @course.course_title
     review.transcript_course_title.should == @course.transcript_course_title
@@ -193,7 +193,7 @@ Then(/^I can compare two sets of the version details$/) do
     page.show_versions
   end
   sleep 2
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.course_version1_number_review.text.should == "Version 2 (current version)"
     review.course_version2_number_review.text.should == "Version 1"
 
@@ -211,7 +211,7 @@ Then(/^I can compare two sets of the version details$/) do
 end
 
 And(/^I can clearly see the data differences$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.course_version_number_diff_highlighter.should ==  "cm-compare-highlighter"
     review.course_title_version_diff_highlighter.should ==  "cm-compare-highlighter"
     review.transcript_course_title_diff_highlighter.should ==  "cm-compare-highlighter"

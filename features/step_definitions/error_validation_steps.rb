@@ -1,8 +1,8 @@
 Given(/^I set the proposal title and course title to blank$/) do
   @course_proposal = make CourseProposalObject, proposal_title: '', course_title: ''
 
-  on(CmCurriculum).courseinformation
-  on CmCourseInformation do |page|
+  on(CmCurriculumPage).courseinformation
+  on CmCourseInformationPage do |page|
     page.proposal_title.fit @proposal_title
     page.course_title.fit @course_title
     page.save_and_continue
@@ -11,11 +11,11 @@ Given(/^I set the proposal title and course title to blank$/) do
 end
 
 Then(/^I should see the error message for proposal title$/) do
-  on(CmCourseInformation).proposal_title_error_state.should be_true
+  on(CmCourseInformationPage).proposal_title_error_state.should be_true
 end
 
 Then(/^I should see the error message for course title$/) do
-  on(CmCourseInformation).course_title_error_state.should be_true
+  on(CmCourseInformationPage).course_title_error_state.should be_true
 end
 
 Given(/^I have a course proposal with a missing required field$/) do
@@ -29,8 +29,8 @@ Given(/^I have a course proposal with a missing required field$/) do
 end
 
 When(/^I submit the course proposal on the review proposal page$/) do
-  on(CmCurriculum).review_proposal
-  on CmReviewProposal do |page|
+  on(CmCurriculumPage).review_proposal
+  on CmReviewProposalPage do |page|
     page.submit
   end
 end

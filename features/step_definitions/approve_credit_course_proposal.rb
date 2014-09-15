@@ -45,7 +45,7 @@ end
 
 Then(/^I cannot approve the incomplete proposal$/) do
   @course_proposal.review_proposal_action
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.approve_button_disabled.exists?.should be_true #currently has a bug fixed by KSCM-1648
     end
 end
@@ -111,13 +111,13 @@ And(/^I complete the missing fields on the proposal and approve as (.*?)$/) do |
                                                                                   :class_size => (1..9).to_a.sample)
 
 
-  on(CmCourseInformation).review_proposal
+  on(CmCourseInformationPage).review_proposal
   @course_proposal.approve
 
 end
 
 Then(/^missing fields are highlighted and proposal cannot be approved$/) do
-    on CmReviewProposal do |review_proposal|
+    on CmReviewProposalPage do |review_proposal|
       review_proposal.transcript_course_title_error.exists?.should be_true
       review_proposal.activity_format_error.exists?.should be_true
     end
@@ -126,7 +126,7 @@ end
 
 
 Then(/^the course proposal is successfully approved$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.growl_text.should include "Document was successfully approved"
   end
   steps %{Given I am logged in as Curriculum Specialist}
@@ -134,13 +134,13 @@ Then(/^the course proposal is successfully approved$/) do
   @course_proposal.search
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.proposal_status.should include "approved"
   end
 end
 
 Then(/^I see successful approve messaging$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.growl_text.should include "Document was successfully approved"
   end
 end
@@ -151,7 +151,7 @@ And(/^the new course is Active$/) do
                                  :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                  :course_state => "Active"
   @course.view_course
-  on CmReviewProposal do |course_review|
+  on CmReviewProposalPage do |course_review|
     course_review.course_state_review.capitalize.should include @course.course_state
     #COURSE INFORMATION
     course_review.course_title_review.should include "#{@course.course_title}"
@@ -180,7 +180,7 @@ end
 
 
 Then(/^missing fields are highlighted and proposal cannot be approved or activated$/) do
-  on CmCourseInformation do |proposal|
+  on CmCourseInformationPage do |proposal|
     proposal.course_information unless proposal.current_page('Course Information').exists?
     proposal.transcript_course_title_error.exists?.should be_true
     proposal.page_validation_text.should include "Transcript Course Title"
@@ -204,7 +204,7 @@ Then(/^the proposal is successfully approved$/) do
   navigate_rice_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     proposal.proposal_status.should include "approved"
   end
 end
@@ -250,7 +250,7 @@ end
 
 
 And(/^I cannot blanket approve the incomplete proposal$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.transcript_course_title_error.exists?.should be_true
     review.course_number_review_error_state.exists?.should be_true
     review.campus_locations_error.exists?.should be_true
@@ -287,7 +287,7 @@ end
 Then(/^I can blanket approve the course proposal$/) do
   navigate_to_functional_home
   @course_proposal.blanket_approve_with_rationale
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.growl_text.should include "Document was successfully approved"
   end
   sleep 30 # to avoid workflow exceptions

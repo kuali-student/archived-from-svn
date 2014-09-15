@@ -1,4 +1,4 @@
-class CmReviewProposal < BasePage
+class CmReviewProposalPage < BasePage
 
   wrapper_elements
   cm_elements

@@ -12,7 +12,7 @@ When(/^I create a basic course proposal with two basic Eligibility requisites$/)
   rule1 = (make CmRequisiteRuleObject, :rule => "Must have successfully completed <course>",
                 :complete_rule_text => "Must have successfully completed ENGL201")
   rule2 = (make CmRequisiteRuleObject, :logic_operator => "AND", :complete_rule_text => "Permission of instructor required")
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :right_group_node => rule2, :logic_operator => "AND", :rule_list => [(rule1), (rule2)])
+  requisite_obj1 = (make CmCourseRequisiteObject, :left_group_node => rule1, :right_group_node => rule2, :logic_operator => "AND", :rule_list => [(rule1), (rule2)])
 
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :proposal_title => random_alphanums(10,'test basic proposal title '),
@@ -34,7 +34,7 @@ When(/^I create a basic course proposal with Recommended Preparation rule with m
                :complete_rule_text => "Must successfully complete a minimum of 3 courses with a minimum grade of A from"
 
 
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :requisite_type => "Recommended Preparation", :logic_operator => "AND", :rule_list => [(rule1)])
+  requisite_obj1 = (make CmCourseRequisiteObject, :left_group_node => rule1, :requisite_type => "Recommended Preparation", :logic_operator => "AND", :rule_list => [(rule1)])
 
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :proposal_title => random_alphanums(10,'test basic proposal title '),
@@ -47,7 +47,7 @@ Then(/^I should see the the basic Eligibility requisites on the course proposal$
   @course_proposal.review_proposal_action
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Student Eligibility & Prerequisite"
@@ -67,7 +67,7 @@ Then(/^I should see the multiple variable requisite on the course proposal$/) do
   @course_proposal.review_proposal_action
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Recommended Preparation"
@@ -110,7 +110,7 @@ Then(/^I should see updated requisite details on the course proposal$/) do
   @course_proposal.review_proposal_action
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Student Eligibility & Prerequisite"
@@ -128,7 +128,7 @@ Then(/^I should no longer see with requisite details on the course proposal$/) d
   @course_proposal.review_proposal_action
   course_requisite_list = @course_proposal.course_requisite_list
   course_requisite_list.each do |requisite|
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       requisite_type = requisite.requisite_type
       begin
         case requisite_type
@@ -169,7 +169,7 @@ Given(/^I have a course proposal with requisite details$/) do
   rule3 = (make CmRequisiteRuleObject, :rule => "Must be in the English minor",
   :complete_rule_text => "Must be in the English minor", :logic_operator => "OR")
 
-  requisite_obj1 = (make CmCourseRequisite, :left_group_node => rule1, :right_group_node => rule2, :third_group_node => rule3, :rule_list => [rule1, rule2, rule3] )
+  requisite_obj1 = (make CmCourseRequisiteObject, :left_group_node => rule1, :right_group_node => rule2, :third_group_node => rule3, :rule_list => [rule1, rule2, rule3] )
 
 
   @course = make CmCourseObject, :search_term => "ENGL301", :course_code => "ENGL301",
@@ -198,7 +198,7 @@ Then(/^I should see updated requisite details on course proposal$/) do
   @course_proposal.review_proposal_action
   course_requisite_list = @course.course_requisite_list
   course_requisite_list.each do |requisite|
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       requisite_type = requisite.requisite_type
       case requisite_type
         when "Student Eligibility & Prerequisite"

@@ -1,4 +1,4 @@
-class CmAuthorsCollaborators < BasePage
+class CmAuthorsCollaboratorsPage < BasePage
 
   wrapper_elements
   cm_elements

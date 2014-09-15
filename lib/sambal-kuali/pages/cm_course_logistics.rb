@@ -1,4 +1,4 @@
-class CmCourseLogistics < BasePage
+class CmCourseLogisticsPage < BasePage
 
   wrapper_elements # needed for loading and saving waits
   cm_elements

@@ -23,7 +23,7 @@ class CmDecisionsObject < DataFactory
   end
 
   def show_decision (row)
-    on CmDecisions do |page|
+    on CmDecisionsPage do |page|
       decision_row_text = page.row_by_index(row)
       contents = decision_row_text.split(' ',5)
       @decision = contents[0]
@@ -34,7 +34,7 @@ class CmDecisionsObject < DataFactory
   end
 
   def close_decision_dialog()
-    on CmDecisions do |page|
+    on CmDecisionsPage do |page|
       page.close_dialog
       page.loading_wait
     end

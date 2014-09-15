@@ -22,7 +22,7 @@ class CmVersionCodeObject < DataFactory
   end
 
   def create
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.add_version_code unless page.version_code_code(@version_code_count).exists?
       page.version_code_code(@version_code_count).set @version_code
       page.version_code_title(@version_code_count).set @version_course_title
@@ -30,7 +30,7 @@ class CmVersionCodeObject < DataFactory
   end
 
   def edit (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.version_code_code(opts[:version_code_count]).fit opts[:version_code]
       page.version_code_title(opts[:version_code_count]).fit opts[:version_course_title]
@@ -44,7 +44,7 @@ class CmVersionCodeObject < DataFactory
 
 
   def delete (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.delete_version_code(opts[:version_code_count])
     end

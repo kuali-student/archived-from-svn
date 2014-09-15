@@ -169,7 +169,7 @@ Then(/^I should see updated Learning Objective details on the course proposal$/)
   @course_proposal.review_proposal_action
 
   lo_list = @course_proposal.learning_objective_list
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     lo_list.each do |lo|
       page.learning_objectives_review(lo.display_level).should include lo.learning_objective_text
       cat_included = false
@@ -207,7 +207,7 @@ Then(/^I should no longer see Learning Objective details on the course proposal$
 
   lo_list = @course_proposal.learning_objective_list
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.learning_objectives_empty_text.exists?.should == true #implication is that no information is displayed on Learning Objective section
   end
 end

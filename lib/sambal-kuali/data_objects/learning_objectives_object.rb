@@ -35,7 +35,7 @@ include Utilities
 
   def create
     view
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.add_learning_objective unless @advanced_search
       if @advanced_search
         advanced_find
@@ -58,7 +58,7 @@ include Utilities
 
 def edit (opts={})
   view
-  on CmLearningObjectives do |page|
+  on CmLearningObjectivesPage do |page|
     page.objective_detail(opts[:learning_objective_level]).set opts[:learning_objective_text] unless opts[:learning_objective_text].nil?
   end
   set_options(opts)
@@ -70,14 +70,14 @@ end
 
 def delete (opts={})
   view
-  on CmLearningObjectives do |page|
+  on CmLearningObjectivesPage do |page|
     page.delete_learning_objective(opts[:learning_objective_level])
    determine_save_action unless opts[:defer_save]
   end
 end
 
 def advanced_find
-     on(CmLearningObjectives).find_learning_objective
+     on(CmLearningObjectivesPage).find_learning_objective
      on CmFindLearningObjectivesPage do |advanced_lo_search|
        fill_out advanced_lo_search, :search_by_all, :search_by_course, :search_by_program
        advanced_lo_search.search_type.pick @search_type unless @search_type.nil?
@@ -96,19 +96,19 @@ def organize_learning_objective (opts={})
   case opts[:organize_action]
 
       when "Indent"
-        on CmLearningObjectives do |learn_obj|
+        on CmLearningObjectivesPage do |learn_obj|
           learn_obj.indent_lo(opts[:learning_objective_level])
         end
       when "Outdent"
-        on CmLearningObjectives do |learn_obj|
+        on CmLearningObjectivesPage do |learn_obj|
           learn_obj.outdent_lo(opts[:learning_objective_level])
         end
       when "Up"
-        on CmLearningObjectives do |learn_obj|
+        on CmLearningObjectivesPage do |learn_obj|
           learn_obj.move_up_lo(opts[:learning_objective_level])
         end
       when "Down"
-        on CmLearningObjectives do |learn_obj|
+        on CmLearningObjectivesPage do |learn_obj|
           learn_obj.move_down_lo(opts[:learning_objective_level])
         end
   end
@@ -131,7 +131,7 @@ def add_category (opts)
 end
 
    def view
-      on CmLearningObjectives do |page|
+      on CmLearningObjectivesPage do |page|
         page.learning_objectives unless page.current_page('Learning Objectives').exists?
       end
    end

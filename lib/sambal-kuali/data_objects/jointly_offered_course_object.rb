@@ -34,7 +34,7 @@ class CmJointlyOfferedObject < DataFactory
   end
 
   def create
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.add_jointly_offered_course unless page.jointly_offered_course(@jointly_offered_course_count).exists?
 
       if @auto_lookup
@@ -52,7 +52,7 @@ class CmJointlyOfferedObject < DataFactory
 
 
   def edit (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.jointly_offered_course(opts[:jointly_offered_course_count]).fit opts[:jointly_offered_course]
       page.auto_lookup(opts[:jointly_offered_course]) if opts[:auto_lookup]
@@ -90,7 +90,7 @@ class CmJointlyOfferedObject < DataFactory
   end
 
   def delete (opts={})
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
       page.delete_jointly_offered_course(opts[:jointly_offered_course_count])
     end

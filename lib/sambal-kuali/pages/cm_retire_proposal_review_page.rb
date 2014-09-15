@@ -1,4 +1,4 @@
-class CmRetireProposalReviewPage < CmReviewProposal
+class CmRetireProposalReviewPage < CmReviewProposalPage
 
   #wrapper_elements
   #cm_elements

@@ -93,14 +93,14 @@ And /^I can review the proposal created by (.*?)$/ do |proposal_to_review|
 
   if proposal_to_review == "Curriculum Specialist"
     @course_proposal_cs.review_proposal_action
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
         page.proposal_title_review_read_only.should == @course_proposal_cs.proposal_title
         page.course_title_review_read_only.should == @course_proposal_cs.course_title
         page.page_header_text.should == "#{@course_proposal_cs.proposal_title} (Admin Proposal)"
     end
   else
     @course_proposal_faculty.review_proposal_action
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.proposal_title_review.should == @course_proposal_faculty.proposal_title
       page.course_title_review.should == @course_proposal_faculty.course_title
       page.page_header_text.should == "#{@course_proposal_faculty.proposal_title} (Proposal)"
@@ -110,7 +110,7 @@ end
 
 And /^I can review the course (.*?)$/ do |proposal_type|
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #COURSE INFORMATION SECTION
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -164,7 +164,7 @@ And /^I can review the required fields on the (.*?)$/ do |proposal_type|
   @course_proposal.review_proposal_action
 
   #COURSE INFORMATION SECTION
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
     page.page_header_text.should == "#{@course_proposal.proposal_title} (Admin Proposal)" if proposal_type == "admin proposal"

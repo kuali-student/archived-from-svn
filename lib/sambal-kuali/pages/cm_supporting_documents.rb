@@ -1,4 +1,4 @@
-class CmSupportingDocuments < BasePage
+class CmSupportingDocumentsPage < BasePage
 
   wrapper_elements
   cm_elements

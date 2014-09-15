@@ -1,4 +1,4 @@
-class CmCourseFinancials < BasePage
+class CmCourseFinancialsPage < BasePage
 
   wrapper_elements
   cm_elements

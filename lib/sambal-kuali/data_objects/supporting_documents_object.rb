@@ -34,7 +34,7 @@ class CmSupportingDocsObject < DataFactory
 
   def create
     view
-    on CmSupportingDocuments do |attach|
+    on CmSupportingDocumentsPage do |attach|
       attach.add_supporting_doc unless attach.document_select(@document_level).exists?
       file_path = $target_folder+"/"+@file_name+"."+@type
       puts file_path
@@ -46,7 +46,7 @@ class CmSupportingDocsObject < DataFactory
   end
 
   def view
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.supporting_documents unless page.current_page('Supporting Documents').exists?
     end
 
@@ -55,7 +55,7 @@ class CmSupportingDocsObject < DataFactory
 
 
   def edit (opts={})
-    on CmAuthorsCollaborators do |attach|
+    on CmAuthorsCollaboratorsPage do |attach|
       attach.document_select(opts[:document_level]).set ($file_folder+opts[:file_name]) unless opts[:file_name].nil?
       attach.document_description(opts[:document_level]).fit opts[:description]
     end
@@ -67,7 +67,7 @@ class CmSupportingDocsObject < DataFactory
 
   def delete (opts={})
     view
-    on CmSupportingDocuments do |page|
+    on CmSupportingDocumentsPage do |page|
       page.delete(opts[:document_level])
       determine_save_action unless opts[:defer_save]
     end

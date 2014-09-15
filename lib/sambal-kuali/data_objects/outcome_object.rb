@@ -24,7 +24,7 @@ class CmOutcomeObject < DataFactory
   end
 
   def create
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       page.add_outcome unless page.outcome_type(@outcome_level).exists?
       page.outcome_type(@outcome_level).wait_until_present
@@ -40,7 +40,7 @@ class CmOutcomeObject < DataFactory
 
 
   def edit (opts={})
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       page.outcome_type(opts[:outcome_level]).pick! opts[:outcome_type] unless opts[:outcome_type].nil?
       page.credit_value(opts[:outcome_level]).fit opts[:credit_value]
@@ -52,7 +52,7 @@ class CmOutcomeObject < DataFactory
 
 
 def delete (opts={})
-  on CmCourseLogistics do |page|
+  on CmCourseLogisticsPage do |page|
     page.course_logistics unless page.current_page('Course Logistics').exists?
     page.delete_outcome(opts[:outcome_level])
     page.loading_wait

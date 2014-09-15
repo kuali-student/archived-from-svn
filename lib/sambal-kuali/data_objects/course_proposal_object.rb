@@ -85,7 +85,7 @@ class CmCourseProposalObject < DataFactory
         determine_save_action unless @defer_save
       elsif @copy_from_course
         create_proposal_by_copy_course unless @course_to_be_copied.nil?
-        on CmCourseInformation do |page|
+        on CmCourseInformationPage do |page|
           page.course_information unless page.current_page('Course Information').exists?
           fill_out page, :proposal_title, :course_title
           page.course_number.fit @approve_fields[0].course_number
@@ -94,7 +94,7 @@ class CmCourseProposalObject < DataFactory
         determine_save_action
       elsif @copy_from_proposal
         create_proposal_by_copy_proposal unless @proposal_to_be_copied.nil?
-        on CmCourseInformation do |page|
+        on CmCourseInformationPage do |page|
           page.course_information unless page.current_page('Course Information').exists?
           fill_out page, :proposal_title, :course_title
         end
@@ -107,7 +107,7 @@ class CmCourseProposalObject < DataFactory
   def edit (opts={})
     determine_edit_action
 
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.proposal_title.fit opts[:proposal_title]
       page.course_title.fit opts[:course_title]
@@ -119,7 +119,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def create_basic_proposal
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :proposal_title, :course_title
     end
@@ -138,11 +138,11 @@ class CmCourseProposalObject < DataFactory
   end
 
   def create_proposal_through_view_course
-    on CmReviewProposal do |review|
+    on CmReviewProposalPage do |review|
       review.copy_proposal
       review.loading_wait
     end
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :proposal_title, :course_title
       page.course_number.fit @approve_fields[0].course_number
@@ -152,7 +152,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def create_proposal_by_copy_course
-    on CmCreateCourseStart do |create|
+    on CmCreateCourseStartPage do |create|
       create.copy_approved_course.click
       create.cm_proposal_copy_course_code_field.set @course_to_be_copied.course_code
       create.auto_lookup @course_to_be_copied.course_code
@@ -162,7 +162,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def create_proposal_by_copy_proposal
-    on CmCreateCourseStart do |create|
+    on CmCreateCourseStartPage do |create|
       create.copy_proposed_course.click
       create.cm_proposal_copy_proposal_title_field.set @proposal_to_be_copied.proposal_title
       create.auto_lookup @proposal_to_be_copied.proposal_title
@@ -201,7 +201,7 @@ class CmCourseProposalObject < DataFactory
 
 
   def create_course_proposal_required_for_save
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
 
       fill_out page, :proposal_title, :course_title
@@ -211,7 +211,7 @@ class CmCourseProposalObject < DataFactory
 
 
   def create_course_proposal_required
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :proposal_title, :course_title
     end
@@ -278,7 +278,7 @@ class CmCourseProposalObject < DataFactory
   end # required proposal
 
   def course_proposal_nonrequired
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
 
       page.course_information unless page.current_page('Course Information').exists?
       page.loading_wait
@@ -298,7 +298,7 @@ class CmCourseProposalObject < DataFactory
       page.save_and_continue
     end
 
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
 
       # Admin organization in private method do to complexity of advanced search adding
@@ -307,7 +307,7 @@ class CmCourseProposalObject < DataFactory
       page.save_and_continue
     end
 
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       fill_out page, :term_any, :term_fall, :term_spring, :term_summer,
                :audit, :pass_fail_transcript_grade,
@@ -317,7 +317,7 @@ class CmCourseProposalObject < DataFactory
       page.save_and_continue
     end
 
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
       # TODO:: NEED TO MAKE TESTS FOR THIS PAGE
       page.save_and_continue
@@ -329,7 +329,7 @@ class CmCourseProposalObject < DataFactory
       end
     end
 
-    on CmAuthorsCollaborators do |page|
+    on CmAuthorsCollaboratorsPage do |page|
       page.authors_collaborators unless page.current_page('Authors Collaborators').exists?
       # Adding author name in private method do to complexity of advanced search adding
       adding_author_name
@@ -356,38 +356,38 @@ class CmCourseProposalObject < DataFactory
   end
 
   def cancel_create_course
-    on CmCreateCourseStart do |page|
+    on CmCreateCourseStartPage do |page|
       page.cancel
     end
   end
 
   def cancel_course_proposal
-     on CmCourseInformation do |page|
+     on CmCourseInformationPage do |page|
        page.cancel_action
      end
   end
 
   def cancel_proposal_document
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.cancel_proposal
       page.confirm_cancel_proposal
     end
   end
 
   def set_curriculum_review
-  on CmCreateCourseStart do |create|
+  on CmCreateCourseStartPage do |create|
     create.curriculum_review_process.fit checkbox_trans[@curriculum_review_process] unless @curriculum_review_process.nil?
   end
   end
 
   def create_course_continue
-    on CmCreateCourseStart do |create|
+    on CmCreateCourseStartPage do |create|
       create.continue
     end
   end
 
   def create_course_proposal_required_fields
-  on CmCourseInformation do |create|
+  on CmCourseInformationPage do |create|
     fill_out create, :proposal_title, :course_title
   end
   end
@@ -413,20 +413,20 @@ class CmCourseProposalObject < DataFactory
   end
 
   def load_comments_action
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.load_comments
     end
   end
 
 
   def load_comments_on_review_page
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.load_comments
     end
   end
 
   def load_decisions_action
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.load_decisions
     end
   end
@@ -447,7 +447,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def edit_course_information
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.edit_course_information
       page.loading_wait
     end
@@ -457,7 +457,7 @@ class CmCourseProposalObject < DataFactory
     #if current page is find a proposal click the pencil icon
 
 
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       if page.proposal_title_element.exists?
         edit_course_information
       end
@@ -516,23 +516,23 @@ class CmCourseProposalObject < DataFactory
   end
 
   def submit_proposal
-    on(CmCourseInformation).review_proposal
+    on(CmCourseInformationPage).review_proposal
     sleep 1
-    on(CmReviewProposal).submit_proposal
+    on(CmReviewProposalPage).submit_proposal
     sleep 1
-    on(CmReviewProposal).submit_confirmation
+    on(CmReviewProposalPage).submit_confirmation
     sleep 2
   end
 
   def submit_incomplete_proposal
-    on(CmCourseInformation).review_proposal
-    on(CmReviewProposal).submit_proposal
+    on(CmCourseInformationPage).review_proposal
+    on(CmReviewProposalPage).submit_proposal
   end
 
   def submit_button_disabled
-    on(CmCourseInformation).review_proposal
+    on(CmCourseInformationPage).review_proposal
     begin
-      on(CmReviewProposal).submit_proposal
+      on(CmReviewProposalPage).submit_proposal
     rescue Exception => e
       #element should be disabled
       (e.message.include? "object is disabled").should == true
@@ -545,7 +545,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def approve
-    on CmReviewProposal do |approve|
+    on CmReviewProposalPage do |approve|
       approve.review_approval
       approve.decision_rationale.wait_until_present
       approve.decision_rationale.set random_alphanums(10,'test decision rationale ')
@@ -555,14 +555,14 @@ class CmCourseProposalObject < DataFactory
 
 
   def approve_activate_proposal
-    on CmCourseInformation do |activate|
+    on CmCourseInformationPage do |activate|
       activate.approve_and_activate
       sleep 30 # to avoid workflow exceptions
     end
   end
 
   def blanket_approve
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.blanket_approve
       sleep 30 # to avoid workflow exceptions
     end
@@ -570,7 +570,7 @@ class CmCourseProposalObject < DataFactory
 
   def blanket_approve_with_rationale
     navigate_to_review
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.blanket_approve
       proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
       proposal.confirmation_approval
@@ -578,7 +578,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def return_proposal(return_level)
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.review_return
       proposal.return_to_node_list.select(return_level)
       proposal.return_rationale.wait_until_present
@@ -588,7 +588,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def resubmit_proposal
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.resubmit
       proposal.decision_rationale.set random_alphanums(10,'test resubmit rationale ')
       proposal.confirmation_approval
@@ -601,14 +601,14 @@ class CmCourseProposalObject < DataFactory
  end
 
  def fyi_review
-   on CmReviewProposal do |proposal|
+   on CmReviewProposalPage do |proposal|
      proposal.fyi_review
    end
  end
 
  def acknowledge
    navigate_to_review
-   on CmReviewProposal do |proposal|
+   on CmReviewProposalPage do |proposal|
      proposal.acknowledge
      proposal.acknowledge_rationale.set random_alphanums(10,'test acknowledge rationale ')
      proposal.confirmation_acknowledge
@@ -617,7 +617,7 @@ class CmCourseProposalObject < DataFactory
 
  def reject_with_rationale
    navigate_to_review
-   on CmReviewProposal do |proposal|
+   on CmReviewProposalPage do |proposal|
      proposal.reject
      proposal.reject_rationale.set random_alphanums(10,'test reject rationale ')
      proposal.confirmation_reject
@@ -634,7 +634,7 @@ class CmCourseProposalObject < DataFactory
   def withdraw_proposal
     navigate_to_functional_home
     navigate_to_review
-    on CmReviewProposal do |proposal|
+    on CmReviewProposalPage do |proposal|
       proposal.withdraw
       proposal.withdraw_rationale.set random_alphanums(10,'test withdraw rationale ')
       proposal.confirmation_withdraw
@@ -643,7 +643,7 @@ class CmCourseProposalObject < DataFactory
 
 
   def export_proposal
-     on CmCourseInformation do |page|
+     on CmCourseInformationPage do |page|
        page.export_action
      end
   end
@@ -666,7 +666,7 @@ class CmCourseProposalObject < DataFactory
 
 #COURSE INFORMATION
   def add_joint_offering
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       if @joint_offering_adding_data == 'auto_lookup'
         page.add_another_course
         page.joint_offering_number.fit @joint_offering_number
@@ -687,7 +687,7 @@ class CmCourseProposalObject < DataFactory
   end
 
   def add_instructor
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       if instructor_adding_method == 'advanced' or instructor_adding_method == 'adv_name' or instructor_adding_method == 'adv_username'
         page.instructor_advanced_search
         page.adv_name.fit @instructor_last_name if instructor_adding_method == 'adv_name' or instructor_adding_method == 'advanced'
@@ -712,7 +712,7 @@ class CmCourseProposalObject < DataFactory
 
 #GOVERNANCE
   def adding_admin_organization
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       if admin_org_adding_method == 'auto_lookup'
         page.administering_organization.fit @administering_organization
         #TODO: uncomment this when bug KSCM-1204 is fixed for auto lookup on administering org text field
@@ -734,7 +734,7 @@ class CmCourseProposalObject < DataFactory
 
   #AUTHORS AND COLLABORATORS
     def adding_author_name
-      on CmAuthorsCollaborators do |page|
+      on CmAuthorsCollaboratorsPage do |page|
         # Need to use auto lookup because when watir types in the parentheses are removed from text field
         if author_name_method == 'auto_lookup'
           page.author_name.fit @author_name_search
@@ -752,7 +752,7 @@ class CmCourseProposalObject < DataFactory
     end
   
     def cs_course_proposal_required
-      on CmCourseInformation do |page|
+      on CmCourseInformationPage do |page|
         page.course unless page.current_page('Course').exists?
 
         page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
@@ -761,7 +761,7 @@ class CmCourseProposalObject < DataFactory
         page.save_progress
       end
 
-      on CmCourseLogistics do |page|
+      on CmCourseLogisticsPage do |page|
         page.logistics unless page.current_page('Logistics').exists?
 
         page.loading_wait
@@ -778,7 +778,7 @@ class CmCourseProposalObject < DataFactory
         page.save_progress
       end
 
-      on CmCourseFinancials do |page|
+      on CmCourseFinancialsPage do |page|
         page.financials unless page.current_page('Financials').exists?
         page.loading_wait
         fill_out page, :course_fees

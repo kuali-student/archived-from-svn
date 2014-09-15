@@ -1,4 +1,4 @@
-class CmGovernance < BasePage
+class CmGovernancePage < BasePage
 
   wrapper_elements
   cm_elements

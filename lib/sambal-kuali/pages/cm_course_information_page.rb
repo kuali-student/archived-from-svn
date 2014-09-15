@@ -1,4 +1,4 @@
-class CmCourseInformation < BasePage
+class CmCourseInformationPage < BasePage
 
   wrapper_elements
   cm_elements

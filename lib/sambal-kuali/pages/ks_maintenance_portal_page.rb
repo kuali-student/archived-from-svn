@@ -1,4 +1,4 @@
-class KSMaintenancePortal < BasePage
+class KSMaintenancePortalPage < BasePage
 
   page_url "#{$test_site}/portal.do"
   #expected_title /Kuali Portal Index/

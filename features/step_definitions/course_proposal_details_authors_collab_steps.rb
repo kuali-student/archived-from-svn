@@ -45,7 +45,7 @@ Then(/^(.*?) can FYI the proposal$/) do |fyi_view_collaborator|
   log_in fyi_view_collaborator, fyi_view_collaborator
   @course_proposal.navigate_to_review
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
       page.edit_course_information.should_not exist
     rescue
@@ -58,7 +58,7 @@ end
 
 And(/^cannot comment on the proposal$/) do
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
       page.edit_course_information.should_not exist
     rescue
@@ -67,7 +67,7 @@ And(/^cannot comment on the proposal$/) do
   end
 
   @course_proposal.load_comments_action
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     begin
       page.comment_text_input.should_not exist
       page.add_comment_button.should_not exist
@@ -141,12 +141,12 @@ end
 And(/^(.*?) can FYI and comment on the proposal$/) do |fyi_comment_collaborator|
   log_in fyi_comment_collaborator, fyi_comment_collaborator
   @course_proposal.navigate_to_review
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.fyi_button.exists?.should be_true
   end
   @course_proposal.load_comments_action
 
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
       page.comment_text_input.should exist
       page.add_comment_button.should exist
     end
@@ -160,7 +160,7 @@ And(/^can Comment on the proposal$/) do
 end
 
 And(/^cannot edit the proposal$/) do
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
     page.edit_course_information.should_not exist
     rescue
@@ -172,7 +172,7 @@ end
 And(/^(.*?) Edits and Submits the proposal$/) do |fyi_edit_collaborator|
   log_in fyi_edit_collaborator, fyi_edit_collaborator
   @course_proposal.navigate_to_review
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.fyi_button.should exist
   end
   @course_proposal.edit :proposal_title => "updated #{random_alphanums(10,'by edit collaborator ') }"
@@ -183,7 +183,7 @@ end
 Then(/^(.*?) can no longer edit the proposal$/) do |fyi_edit_collaborator|
   navigate_to_functional_home
   @course_proposal.navigate_to_review
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.proposal_status.should include "enroute"
     begin
       page.edit_course_information.should_not exist
@@ -198,7 +198,7 @@ And(/^(.*?) can Acknowledge and Comment on the proposal$/) do |acknowledge_comme
   log_in acknowledge_comment_collaborator, acknowledge_comment_collaborator
   @course_proposal.navigate_to_review
   
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
       page.edit_course_information.should_not exist
     rescue
@@ -209,7 +209,7 @@ And(/^(.*?) can Acknowledge and Comment on the proposal$/) do |acknowledge_comme
 
   @course_proposal.load_comments_action
 
-  on CmProposalComments do |page|
+  on CmProposalCommentsPage do |page|
     page.comment_text_input.should exist
     page.add_comment_button.should exist
   end
@@ -220,7 +220,7 @@ end
 When(/^(.*?) Edits and Approves the proposal$/) do |approve_edit_collaborator|
     log_in approve_edit_collaborator, approve_edit_collaborator
     @course_proposal.navigate_to_review
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.approve_button.should exist
     end
     @course_proposal.edit :proposal_title => "updated #{random_alphanums(10,'by approve edit collaborator ') }"

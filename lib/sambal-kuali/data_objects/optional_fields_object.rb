@@ -43,7 +43,7 @@ class CmOptionalFieldsObject < DataFactory
   end
 
   def create
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
 
       if @instructor_list != nil
@@ -55,7 +55,7 @@ class CmOptionalFieldsObject < DataFactory
     end
     determine_save_action
     
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
 
       if @admin_org_list != nil
@@ -66,7 +66,7 @@ class CmOptionalFieldsObject < DataFactory
     end
     determine_save_action
 
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       fill_out page, :term_any, :term_fall, :term_spring, :term_summer
       page.duration_count_type.pick! @duration_type
@@ -75,7 +75,7 @@ class CmOptionalFieldsObject < DataFactory
     end
     determine_save_action
 
-    on CmActiveDates do |page|
+    on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?
       fill_out page, :pilot_course
       page.loading_wait
@@ -84,7 +84,7 @@ class CmOptionalFieldsObject < DataFactory
     determine_save_action
 
 
-    on CmCourseFinancials do |page|
+    on CmCourseFinancialsPage do |page|
       page.financials unless page.current_page('Financials').exists?
       fill_out page, :justification_of_fees
     end
@@ -96,7 +96,7 @@ class CmOptionalFieldsObject < DataFactory
 
 
   def edit (opts={})
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       #fill_out page, opts, opts[:term_fall], opts[:term_spring], opts[:term_summer]
       page.term_any.fit opts[:term_any]
@@ -110,7 +110,7 @@ class CmOptionalFieldsObject < DataFactory
       determine_save_action unless opts[:defer_save]
     end
 
-    on CmActiveDates do |page|
+    on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?
       page.pilot_course.fit opts[:pilot_course]
       page.loading_wait
@@ -118,7 +118,7 @@ class CmOptionalFieldsObject < DataFactory
       determine_save_action unless opts[:defer_save]
     end
 
-    on CmCourseFinancials do |page|
+    on CmCourseFinancialsPage do |page|
       page.financials unless page.current_page('Financials').exists?
       page.justification_of_fees.fit opts[:justification_of_fees]
       determine_save_action unless opts[:defer_save]

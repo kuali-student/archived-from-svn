@@ -49,7 +49,7 @@ class CmRetireCourseProposalObject < DataFactory
 
   def edit (opts={})
      edit_retire_proposal_information
-      on CmRetirementInformation do |page|
+      on CmRetirementInformationPage do |page|
         page.retirement_information unless page.current_page('Retirement Information').exists?
         page.retirement_rationale.set opts[:retirement_rationale]
         determine_save_action unless opts[:defer_save]
@@ -59,18 +59,18 @@ class CmRetireCourseProposalObject < DataFactory
 
   def select_course
     @course.view_course
-    on(CmReviewProposal).retire_proposal
+    on(CmReviewProposalPage).retire_proposal
   end
 
   def select_curr_review
-    on CmReviewProposal do |retire|
+    on CmReviewProposalPage do |retire|
       fill_out retire, :curriculum_review_process
       retire.retire_continue
     end
   end
 
   def populate_retirement_info
-    on CmRetirementInformation do |page|
+    on CmRetirementInformationPage do |page|
       fill_out page, :retire_proposal_title, :retirement_rationale, :other_comments
       page.end_term.pick! @end_term
       page.last_term_offered.pick! @last_term_offered
@@ -97,7 +97,7 @@ class CmRetireCourseProposalObject < DataFactory
   end
 
   def navigate_to_retire_review
-    on(CmRetirementInformation).review_retire_proposal
+    on(CmRetirementInformationPage).review_retire_proposal
   end
 
   def navigate_search_retire_proposal
@@ -157,11 +157,11 @@ class CmRetireCourseProposalObject < DataFactory
   end
 
   def edit_retire_proposal_information
-    on(CmReviewProposal).edit_retire_proposal_link
+    on(CmReviewProposalPage).edit_retire_proposal_link
   end
 
   def approve_retire_proposal
-    on(CmRetirementInformation).approve_and_retire
+    on(CmRetirementInformationPage).approve_and_retire
       sleep 30 # to avoid workflow exceptions
   end
 

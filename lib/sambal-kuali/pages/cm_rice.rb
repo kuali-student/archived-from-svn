@@ -1,4 +1,4 @@
-class CmRice < BasePage
+class CmRicePage < BasePage
 
   element(:curriculum_management_element) { |b| b.div(id: 'KS-StudentHome-CurriculumManagementKrad') }
   #element(:curriculum_management_element) { |b| b.span(text: 'Curriculum Management KRAD') }

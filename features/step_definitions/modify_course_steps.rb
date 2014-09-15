@@ -17,9 +17,9 @@ When(/^I create a modify course proposal as Faculty$/) do
 end
 
 Then(/^I can review the modify course proposal details compared to the course$/) do
-  on(CmReviewProposal).modify_course
+  on(CmReviewProposalPage).modify_course
 
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.review_proposal_title_header.should include @course_proposal.course_title
 
     review.new_proposal_title_review.should == @modify_course_proposal.course_title
@@ -47,7 +47,7 @@ end
 
 Then(/^I do not have the option to modify the course$/) do
   #no modify button is present
-  (on(CmReviewProposal).modify_button.exist?).should == false
+  (on(CmReviewProposalPage).modify_button.exist?).should == false
 end
 
 Given(/^there is a modify course proposal created as Faculty$/) do
@@ -57,17 +57,17 @@ Given(/^there is a modify course proposal created as Faculty$/) do
   @course.close_version_history_dialog
 
 
-  on(CmReviewProposal).modify_course
+  on(CmReviewProposalPage).modify_course
   @modify_course_proposal.edit_course_information
   @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
-  on(CmCourseInformation).review_proposal
+  on(CmCourseInformationPage).review_proposal
 end
 
 
 Then(/^I cannot yet submit the modify course proposal$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.submit_button_disabled.exists?.should be_true
   end
 
@@ -93,7 +93,7 @@ And(/^I perform a full search for the modify course proposal$/) do
 end
 
 Then(/^I can see updated status of the modify course proposal$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.proposal_status.should include "enroute"
   end
 
@@ -108,7 +108,7 @@ end
 And(/^I Blanket Approve the modify course proposal as CS adding an end term for the version to be superseded$/) do
   log_in "alice", "alice"
   @modify_course_proposal.blanket_approve_with_rationale
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.growl_text.should include "Document was successfully approved"
   end
   sleep 30 # to avoid workflow exceptions
@@ -160,8 +160,8 @@ When(/^I modify a course without a draft version$/) do
                  :course_state => "ACTIVE"
 
   @course.view_course
-  on(CmReviewProposal).modify_course
-  on CmCreateCourseStart do |page|
+  on(CmReviewProposalPage).modify_course
+  on CmCreateCourseStartPage do |page|
     page.modify_course_new_version.click
     page.curriculum_review_process.set
     page.continue

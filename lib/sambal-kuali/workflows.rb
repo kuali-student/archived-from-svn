@@ -4,11 +4,11 @@ module Workflows
 
   # Site Navigation helpers...
   def navigate_to_find_course_proposal
-    on(CmCurriculum).find_a_course_proposal
+    on(CmCurriculumPage).find_a_course_proposal
   end
 
   def navigate_to_find_course
-    on(CmCurriculum).find_a_course
+    on(CmCurriculumPage).find_a_course
   end
 
   def return_to_cm_home
@@ -16,23 +16,23 @@ module Workflows
   end
 
   def navigate_rice_to_cm_home
-    on CmRice do |create|
+    on CmRicePage do |create|
       #puts @assessment_a_f.inspect
       create.curriculum_management
     end
   end
 
   def navigate_to_lo_categories
-    on(CmCurriculum).learning_objective_categories
+    on(CmCurriculumPage).learning_objective_categories
   end
 
   def navigate_to_create_course_proposal
-    on(CmCurriculum).create_a_course
+    on(CmCurriculumPage).create_a_course
   end
 
   def navigate_to_cm_home
-    on(CmCourseInformation).cm_home_via_breadcrumb
-    on CmCourseInformation do |page|
+    on(CmCourseInformationPage).cm_home_via_breadcrumb
+    on CmCourseInformationPage do |page|
       if (page.alert.exists?)
         page.alert.ok
       end
@@ -40,11 +40,11 @@ module Workflows
   end
 
   def navigate_to_functional_home
-    on(CmCourseInformation).functional_home_via_breadcrumb
+    on(CmCourseInformationPage).functional_home_via_breadcrumb
   end
 
   def determine_save_action
-    on CmCourseInformation do |create|
+    on CmCourseInformationPage do |create|
       create.save_progress if create.logged_in_user.downcase == "alice"
       create.save_progress if create.logged_in_user.downcase == "martha"
       create.save_progress if create.logged_in_user.downcase == "carol"
@@ -56,7 +56,7 @@ module Workflows
 
   def determine_edit_action
     #if current page is find a proposal click the pencil icon
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       if page.proposal_title_element.exists?
         edit_course_information
       end
@@ -83,7 +83,7 @@ module Workflows
   def log_in(user, pwd)
     current_user = ""
 
-    visit KSFunctionalHome do |page|
+    visit KSFunctionalHomePage do |page|
       current_user = page.current_logged_in_user_id
       if current_user == :no_user
         page.login_with user, pwd

@@ -47,7 +47,7 @@ class CmRequisiteRuleObject < DataFactory
   end
 
   def create
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
 
       page.add_btn
       page.loading_wait
@@ -107,7 +107,7 @@ class CmRequisiteRuleObject < DataFactory
     rule_level = opts[:rule_level].to_i
     req_level = opts[:requisite_level].to_i
     operator_level = opts[:rule_level].to_i + 1
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
       page.rule_element_link(rule_level).click
       page.loading_wait
       page.edit_btn
@@ -118,20 +118,20 @@ class CmRequisiteRuleObject < DataFactory
   end
 
   def edit_operator (operator, req_level, operator_level)
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
       page.select_rule_operator(req_level, operator_level).fit operator
       page.loading_wait
     end
   end
 
   def preview_rule_changes
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
         page.preview_change
     end
   end
 
   def enter_rule_text (index)
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
       # Enter text
       if @add_method == 'text'
         puts 'add text ' + @course

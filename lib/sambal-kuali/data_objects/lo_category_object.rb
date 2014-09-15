@@ -43,7 +43,7 @@ class CmLoCategoryObject < DataFactory
 
   def delete (opts={})
     view
-    on CmLearningObjectives do |category|
+    on CmLearningObjectivesPage do |category|
       begin
         category.delete_category(opts[:lo_level], opts[:category_level])
       rescue
@@ -75,7 +75,7 @@ class CmLoCategoryObject < DataFactory
   end
 
   def auto_lookup_entry
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.category_detail(@lo_level,@category_level).set @category_name
       page.auto_lookup @category_name
       page.add_category(@lo_level, @category_level)
@@ -83,7 +83,7 @@ class CmLoCategoryObject < DataFactory
   end
 
   def on_the_fly_entry
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.category_detail(@lo_level, @category_level).set @category_name
       page.add_category(@lo_level, @category_level)
       page.category_type(@lo_level, @category_level).wait_until_present
@@ -93,7 +93,7 @@ class CmLoCategoryObject < DataFactory
   end
 
   def advanced_search
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.find_categories(1)
         on CmLOAdvancedSearchPage do |advance_search|
           advance_search.category_filter_input.set @category_name
@@ -106,7 +106,7 @@ class CmLoCategoryObject < DataFactory
   end
 
   def view
-    on CmLearningObjectives do |page|
+    on CmLearningObjectivesPage do |page|
       page.learning_objectives unless page.current_page('Learning Objectives').exists?
     end
   end

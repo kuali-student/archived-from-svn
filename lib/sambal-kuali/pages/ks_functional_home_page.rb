@@ -1,4 +1,4 @@
-class KSFunctionalHome < BasePage
+class KSFunctionalHomePage < BasePage
 
   page_url "#{$test_site}" #"#{$test_site}/kr-krad/launch?methodToCall=start&viewId=ksFunctionalHomeView"
 

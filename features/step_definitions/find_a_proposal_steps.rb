@@ -96,7 +96,7 @@ end
 
 
 Then(/^I can view all the details of the course$/) do
-    on CmReviewProposal do |review|
+    on CmReviewProposalPage do |review|
       review.course_state_review.capitalize.should include @course.course_state
       #COURSE INFORMATION
       review.course_title_review.should include @course.course_title

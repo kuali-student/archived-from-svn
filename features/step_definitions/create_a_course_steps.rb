@@ -21,7 +21,7 @@ When /^I create a course proposal from blank$/ do
 end
 
 Then /^I should see a blank course proposal$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.text.should == ""
     page.course_title.text.should == ""
   end
@@ -36,14 +36,14 @@ And /^I cancel the course proposal page$/ do
 end
 
 Then /^I should see CM Home$/ do
-  on CmCurriculum do |page|
+  on CmCurriculumPage do |page|
     page.cmcurriculum_header.exists?.should == true
   end
 end
 
 
 And /^I should see data in the course title on course information$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.course_information
     page.course_title.value.should == @course_proposal.course_title
   end
@@ -72,9 +72,9 @@ end
 Then /^I should see data in required fields for the (.*?)$/ do |proposal_type|
 
 
-  on(CmCourseInformation).course_information
+  on(CmCourseInformationPage).course_information
 
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
     page.growl_text.should == "Document was successfully saved."
@@ -87,7 +87,7 @@ Then /^I should see data in required fields for the (.*?)$/ do |proposal_type|
     page.proposal_rationale.value.should == @course_proposal.submit_fields[0].proposal_rationale
   end
 
-  on CmGovernance do |page|
+  on CmGovernancePage do |page|
     page.governance
     page.location_north.should be_checked if @course_proposal.approve_fields[0].location_north == :set
     page.location_south.should be_checked if @course_proposal.approve_fields[0].location_south == :set
@@ -96,7 +96,7 @@ Then /^I should see data in required fields for the (.*?)$/ do |proposal_type|
     page.curriculum_oversight_when_added(@course_proposal.submit_fields[0].curriculum_oversight).should be_present
   end
 
-  on CmCourseLogistics do |page|
+  on CmCourseLogisticsPage do |page|
     page.course_logistics
 
     #GRADES AND ASSESSMENTS
@@ -131,7 +131,7 @@ Then /^I should see data in required fields for the (.*?)$/ do |proposal_type|
 
   end
 
-  on CmActiveDates do |page|
+  on CmActiveDatesPage do |page|
 
     page.start_term.selected?(@course_proposal.submit_fields[0].start_term).should == true unless @course_proposal.submit_fields[0].start_term.nil?
     #page.pilot_course.should be_checked
@@ -149,7 +149,7 @@ And /^I click the save progress button$/ do
 end
 
 Then /^I should receive an error message about the proposal title and course title being required for save$/ do
- on CmCourseInformation do |page|
+ on CmCourseInformationPage do |page|
    #page.course_information
    page.proposal_title_error_state.exists?.should == true
    page.course_title_error_state.exists?.should == true
@@ -159,7 +159,7 @@ Then /^I should receive an error message about the proposal title and course tit
 end
 
 Then /^I should see data in required for save fields for the course proposal$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.course_information
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
@@ -170,13 +170,13 @@ end
 
 
 And /^I should see data in required for save fields on the Review Proposal page$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.review_proposal
     page.loading_wait
 
   end
  
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #puts "Original Proposal Title is #{page.proposal_title_review}"
     #puts "Original Course Title is #{page.course_title_review}"
     page.proposal_title_review.should == @course_proposal.proposal_title
@@ -243,12 +243,12 @@ Then /^I should not see the edit option in the search results for the Course Adm
 end
 
 And /^I should see the updated data on the Review proposal page$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.review_proposal
     page.loading_wait
   end
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #COURSE INFORMATION SECTION
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -314,7 +314,7 @@ And /^I should see updated data on the Review proposal page$/ do
   @course_proposal.search
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #COURSE INFORMATION SECTION
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -376,23 +376,23 @@ end
 
 And /^I should see updated data on the Review proposal page for course (.*?)$/ do |proposal_type|
   if proposal_type == "proposal"
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.review_proposal
       page.loading_wait
     end
 
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.growl_text.should == "Document was successfully saved."
       page.proposal_title_review.should == @course_proposal_faculty.proposal_title
       page.course_title_review.should == @course_proposal_faculty.course_title
     end
   else
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.review_proposal
       page.loading_wait
       page.growl_text.should == "Document was successfully saved."
     end
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.proposal_title_review.should == @course_proposal_cs.proposal_title
       page.course_title_review.should == @course_proposal_cs.course_title
     end
@@ -424,7 +424,7 @@ end
 Then(/^I should see alternate identifier details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
 
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -497,7 +497,7 @@ end
 Then(/^I should see updated alternate identifier details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
 
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -548,7 +548,7 @@ end
 Then(/^I should no longer see alternate identifier details on the course proposal$/) do
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
 
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -646,7 +646,7 @@ Then /^I should see data in required fields for the course proposal$/ do
     page.proposal_rationale.value.should == @course_proposal.proposal_rationale
   end
 
-  on CmGovernance do |page|
+  on CmGovernancePage do |page|
     page.governance
     page.curriculum_oversight_when_added(@course_proposal.curriculum_oversight).should be_present
   end
@@ -678,7 +678,7 @@ Then /^I should see data in required fields for the course proposal$/ do
     page.assessment_satisfactory.should be_checked if @course_proposal.assessment_satisfactory == :set
   end
 
-  on CmActiveDates do |page|
+  on CmActiveDatesPage do |page|
     page.active_dates
     page.start_term.selected?(@course_proposal.start_term).should == true unless @course_proposal.start_term.nil?
     page.pilot_course.should be_checked
@@ -819,7 +819,7 @@ end
 
 
 Then /^I should see data in all non required fields for the course proposal$/ do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.course_information
     page.transcript_course_title.value.should == @course_proposal.transcript_course_title
     #page.subject_code.value.should == @course_proposal.subject_code
@@ -831,7 +831,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.added_instructor_name.value.should == @course_proposal.instructor_display_name
   end
 
-  on CmGovernance do |page|
+  on CmGovernancePage do |page|
     page.governance
     #@course_proposal.verify_text_field(page, 'added_administering_organization' )
     page.added_administering_organization.value.should == @course_proposal.administering_organization unless @course_proposal.administering_organization.nil?
@@ -841,7 +841,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
     page.location_all.should be_checked if @course_proposal.location_all == 'set'
   end
 
-  on CmCourseLogistics do |page|
+  on CmCourseLogisticsPage do |page|
     page.course_logistics
     page.term_any.should be_checked if @course_proposal.term_any == 'set'
     page.term_fall.should be_checked if @course_proposal.term_fall == 'set'
@@ -887,7 +887,7 @@ Then /^I should see data in all non required fields for the course proposal$/ do
 
   end
 
-    on CmAuthorsCollaborators do |page|
+    on CmAuthorsCollaboratorsPage do |page|
     page.authors_collaborators
     page.added_author_information('edit').should be_present if @course_proposal.author_permission == 'Edit, Comment, View'
     page.added_author_information('comment').should be_present if @course_proposal.author_permission == 'Comment, View'
@@ -1135,7 +1135,7 @@ Then(/^I should see all the copied details of the course on the Review Proposal 
   @course_proposal.search
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #COURSE PROPOSAL INFO
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -1233,9 +1233,9 @@ When(/^I create a course proposal from a copy of an approved course$/) do
 end
 
 Then(/^I should see a new course proposal with a modified course title$/) do
-  on(CmCourseInformation).course_information
+  on(CmCourseInformationPage).course_information
 
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
   end
@@ -1288,9 +1288,9 @@ end
 
 
 Then(/^I should see a new course admin proposal with a modified course title$/) do
-  on(CmCourseInformation).course_information
+  on(CmCourseInformationPage).course_information
 
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
   end
@@ -1310,9 +1310,9 @@ When (/^I create a course proposal from a copy of a proposed course$/) do
 end
 
 Then (/^I should see a new course proposal with modified titles$/) do
-  on(CmCourseInformation).course_information
+  on(CmCourseInformationPage).course_information
 
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
   end
@@ -1329,9 +1329,9 @@ When (/^I create a course admin proposal from a copy of a proposed course$/) do
 end
 
 Then (/^I should see a new course admin proposal with modified titles$/) do
-  on(CmCourseInformation).course_information
+  on(CmCourseInformationPage).course_information
 
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.proposal_title.value.should == @course_proposal.proposal_title
     page.course_title.value.should == @course_proposal.course_title
   end
@@ -1363,7 +1363,7 @@ And (/^I should see all the copied details of the proposal on the Review Proposa
   @course_proposal.search
   @course_proposal.review_proposal_action
 
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     #COURSE PROPOSAL INFO
     page.proposal_title_review.should == @course_proposal.proposal_title
     page.course_title_review.should == @course_proposal.course_title
@@ -1588,7 +1588,7 @@ def generate_course_object_for_copy
 
   rule_group = make CmRequisiteRuleGroupObject, :left_rule => rule1, :right_rule => rule2, :logic_operator => "AND"
 
-  requisite_obj = (make CmCourseRequisite, :left_group_node => rule_group, :right_group_node => rule3,
+  requisite_obj = (make CmCourseRequisiteObject, :left_group_node => rule_group, :right_group_node => rule3,
                         :requisite_type => "Student Eligibility & Prerequisite",
                         :logic_operator => "AND", :rule_list => [(rule1), (rule2), (rule3)])
 

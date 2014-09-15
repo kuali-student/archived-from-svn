@@ -9,14 +9,14 @@ end
 
 
 Then(/^I can print the course proposal$/) do
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     page.print_icon.should exist
   end
 end
 
 And(/^export the course proposal$/) do
   @course_proposal.export_proposal # make the export popover appear
-  on CmCourseInformation do |page|
+  on CmCourseInformationPage do |page|
     # verify that the action links exist.
     page.export_as_pdf_link.should exist
     page.export_as_doc_link.should exist
@@ -49,14 +49,14 @@ When(/^I view the course details using Find a Course$/) do
 end
 
 Then(/^I can print the course details$/) do
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     page.print_icon.should exist
   end
 end
 
 And(/^export the course details$/) do
   @course.export_course #  make the export popover appear
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     # verify that the action links in the export popover exist.
     page.export_as_pdf_link.should exist
     page.export_as_doc_link.should exist

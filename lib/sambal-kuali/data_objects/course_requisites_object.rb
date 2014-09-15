@@ -9,7 +9,7 @@
 #
 # Note the use of the ruby options hash pattern re: setting attribute values
 
-class CmCourseRequisite < DataFactory
+class CmCourseRequisiteObject < DataFactory
 
   include Foundry
   include DateFactory
@@ -68,7 +68,7 @@ class CmCourseRequisite < DataFactory
     view
     if opts[:rule_logic_text] != nil
       on(CmCourseRequisitesPage).edit_rule_student_eligibility
-      on CmRequisiteRules do |rule|
+      on CmRequisiteRulesPage do |rule|
         rule.edit_rule_logic_action
         rule.rule_logic_text.wait_until_present
         rule.rule_logic_text.set opts[:rule_logic_text]
@@ -76,7 +76,7 @@ class CmCourseRequisite < DataFactory
         sleep 5 #TO avoid random edit failures.
         rule.update_rule_btn
         sleep 5 #TO avoid random edit failures.
-      on(CmCourseInformation).save_progress
+      on(CmCourseInformationPage).save_progress
       end
     end
 
@@ -91,7 +91,7 @@ class CmCourseRequisite < DataFactory
   end
 
   def view
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_requisites unless page.current_page('Course Requisites').exists?
     end
     on CmCourseRequisitesPage do |page|
@@ -142,7 +142,7 @@ class CmCourseRequisite < DataFactory
   end
 
   def update_adding_rules
-    on CmRequisiteRules do |page|
+    on CmRequisiteRulesPage do |page|
       page.update_rule_btn
       page.loading_wait
     end

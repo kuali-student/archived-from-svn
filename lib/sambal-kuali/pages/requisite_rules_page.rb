@@ -1,4 +1,4 @@
-class CmRequisiteRules < BasePage
+class CmRequisiteRulesPage < BasePage
 
   wrapper_elements
   cm_elements

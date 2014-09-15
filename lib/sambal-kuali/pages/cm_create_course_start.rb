@@ -1,4 +1,4 @@
-class CmCreateCourseStart < BasePage
+class CmCreateCourseStartPage < BasePage
 
   wrapper_elements
   cm_elements

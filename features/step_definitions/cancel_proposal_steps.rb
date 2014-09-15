@@ -18,7 +18,7 @@ Then(/^can see the proposal has been Withdrawn$/) do
   return_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     proposal.proposal_status.should include "withdrawn"
   end
 end
@@ -34,7 +34,7 @@ Then(/^I cannot cancel the proposal as (.*?)$/) do  |faculty|
   navigate_rice_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |page|
+  on CmReviewProposalPage do |page|
     begin
       page.withdraw_button.exists?.should be_false
     rescue
@@ -63,7 +63,7 @@ Then(/^can see the proposal has been cancelled$/) do
   return_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     proposal.proposal_status.should include "cancelled"
   end
 end
@@ -77,7 +77,7 @@ Then(/^I cannot cancel the proposal$/) do
   return_to_cm_home
   @course_proposal.search
   @course_proposal.review_proposal_action
-  on CmReviewProposal do |proposal|
+  on CmReviewProposalPage do |proposal|
     begin
       proposal.cancel_proposal_button.exists?.should be_false
     rescue

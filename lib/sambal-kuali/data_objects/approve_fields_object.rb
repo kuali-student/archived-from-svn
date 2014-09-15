@@ -33,19 +33,19 @@ class CmApproveFieldsObject < DataFactory
   end
 
   def create
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       fill_out page, :transcript_course_title, :course_number
       determine_save_action unless @defer_save
     end
 
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       fill_out page, :location_all, :location_extended, :location_north, :location_south
       determine_save_action unless @defer_save
     end
 
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
 
       if @format_list != nil
@@ -66,13 +66,13 @@ class CmApproveFieldsObject < DataFactory
   def edit (opts={})
     determine_edit_action
 
-    on CmCourseInformation do |page|
+    on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.transcript_course_title.fit opts[:transcript_course_title]
       page.course_number.fit opts[:course_number]
     end
 
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       if opts[:campus_location] != nil
         reset_campus(@campus_location) unless opts[:campus_location].nil?
@@ -85,7 +85,7 @@ class CmApproveFieldsObject < DataFactory
   end
 
   def add_campus
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.location_all.set
     end

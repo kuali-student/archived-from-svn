@@ -67,14 +67,14 @@ class CmCourseObject < DataFactory
 
 
   def export_course
-    on CmReviewProposal do |page|
+    on CmReviewProposalPage do |page|
       page.export_action
     end
   end
 
   def get_course_version_info(opts={})
     index = opts[:version_index]
-    on(CmReviewProposal).lookup_version_history
+    on(CmReviewProposalPage).lookup_version_history
     on CmCourseVersionHistoryPage do |page|
       version = page.version_history_version(index).text
       status = page.version_history_courseStatus(index).text

@@ -1,4 +1,4 @@
-class CmActiveDates < BasePage
+class CmActiveDatesPage < BasePage
 
   wrapper_elements
   cm_elements

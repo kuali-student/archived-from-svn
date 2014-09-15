@@ -21,7 +21,7 @@ class CmCommentsObject < DataFactory
   end
 
   def create
-    on CmProposalComments do |page|
+    on CmProposalCommentsPage do |page|
       page.comment_text_input.set @commentText
       page.add_comment
       page.loading_wait
@@ -29,7 +29,7 @@ class CmCommentsObject < DataFactory
   end
 
   def edit (opts={})
-    on CmProposalComments do |page|
+    on CmProposalCommentsPage do |page|
       page.edit_comment(opts[:index])
       if(page.alert.exists?)
         page.alert.ok
@@ -44,7 +44,7 @@ class CmCommentsObject < DataFactory
 
 
   def delete (opts={})
-    on CmProposalComments do |page|
+    on CmProposalCommentsPage do |page|
       page.delete_comment(opts[:index])
       if(page.alert.exists?)
         page.alert.ok
@@ -53,7 +53,7 @@ class CmCommentsObject < DataFactory
   end
 
   def close_comment_dialog()
-    on CmProposalComments do |page|
+    on CmProposalCommentsPage do |page|
       page.close.wait_until_present(60)
       page.close_dialog
       page.loading_wait

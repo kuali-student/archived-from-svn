@@ -35,7 +35,7 @@ class CmFormatsObject < DataFactory
   end
 
   def create
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       page.type(@format_level,@activity_level).pick! @type
       sleep 1 # to allow to drop down selection to catch up
@@ -49,7 +49,7 @@ class CmFormatsObject < DataFactory
 
 
   def edit (opts={})
-    on CmCourseLogistics do |page|
+    on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
       page.type(opts[:format_level],opts[:activity_level]).pick! opts[:type] unless opts[:type].nil?
       page.contacted_hours(opts[:format_level],opts[:activity_level]).fit opts[:contacted_hours]
@@ -64,7 +64,7 @@ class CmFormatsObject < DataFactory
 
 
   def delete (opts={})
-  on CmCourseLogistics do |page|
+  on CmCourseLogisticsPage do |page|
     page.course_logistics unless page.current_page('Course Logistics').exists?
     page.delete_format opts[:activity_level].nil?
     page.loading_wait

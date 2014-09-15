@@ -22,7 +22,7 @@ end
 Then(/^I can see updated status of the course proposal$/) do
   @course_proposal.review_proposal_action
   
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.proposal_status.should include "enroute"
   end
 
@@ -88,7 +88,7 @@ end
 Then(/^I should see the decisions on the course proposal$/) do
   @course_proposal.review_proposal_action
   @course_proposal.load_decisions_action
-  on CmDecisions do |page|
+  on CmDecisionsPage do |page|
     decision_text = page.row_by_index(1)
     contents = decision_text.split(' ',5)
     contents[0].should == "Approved"

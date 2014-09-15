@@ -25,7 +25,7 @@ class CmAdminOrgObject < DataFactory
   end
 
   def create
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.organization_add unless page.admin_org_name(@admin_org_level).exists?
       page.admin_org_name(@admin_org_level).set @admin_org_name
@@ -37,7 +37,7 @@ class CmAdminOrgObject < DataFactory
 
 
   def edit (opts={})
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.organization_add unless page.admin_org_name(opts[:admin_org_level]).exists?
       page.admin_org_name(opts[:admin_org_level]).fit opts[:admin_org_name]
@@ -51,7 +51,7 @@ class CmAdminOrgObject < DataFactory
 
 
   def delete (opts={})
-    on CmGovernance do |page|
+    on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
       page.delete_admin_org(opts[:admin_org_level])
     end

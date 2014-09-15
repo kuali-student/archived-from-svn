@@ -1,4 +1,4 @@
-class CmLearningObjectives < BasePage
+class CmLearningObjectivesPage < BasePage
 
   wrapper_elements
   cm_elements # for loading

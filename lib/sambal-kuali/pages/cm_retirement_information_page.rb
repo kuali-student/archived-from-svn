@@ -1,4 +1,4 @@
-class CmRetirementInformation < BasePage
+class CmRetirementInformationPage < BasePage
 
   wrapper_elements
   cm_elements

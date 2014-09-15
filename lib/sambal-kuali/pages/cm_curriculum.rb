@@ -1,4 +1,4 @@
-class CmCurriculum < BasePage
+class CmCurriculumPage < BasePage
 
   wrapper_elements
   cm_elements

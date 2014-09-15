@@ -1,4 +1,4 @@
-class CmDecisions < BasePage
+class CmDecisionsPage < BasePage
 
   wrapper_elements
   cm_elements
