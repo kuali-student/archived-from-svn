@@ -13,7 +13,7 @@ World DateFactory
 World Workflows
 
 client = Selenium::WebDriver::Remote::Http::Default.new
-#client.timeout = 15 # seconds default is 60
+client.timeout = 120 # seconds default is 60
 
 browser = nil
 headless = nil
