@@ -6,6 +6,7 @@ Given(/^I have an active course$/) do
                                                                              :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
                                                     :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
   puts "Proposal Title: #{@course_proposal.proposal_title}"
+  puts "course : #{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}"
 
   @course_proposal.approve_activate_proposal
 

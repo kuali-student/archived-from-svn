@@ -1,18 +1,6 @@
 When(/^I create a modify course proposal as Faculty$/) do
   steps %{Given I am logged in as Faculty}
-  @course = make CmCourseObject, search_term: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
-                 course_code: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
-                 course_state: "Active"
-
-  @modify_course_proposal = make CmCourseProposalObject, proposal_title: "Modify " + @course_proposal.course_title,
-                                 course_title: @course_proposal.course_title,
-                                 subject_code: @course_proposal.subject_code,
-                                 approve_fields: @course_proposal.approve_fields,
-                                 submit_fields: @course_proposal.submit_fields,
-                                 description_rationale: @course_proposal.description_rationale,
-                                 proposal_rationale: @course_proposal.proposal_rationale,
-                                 outcome_list: @course_proposal.outcome_list,
-                                 format_list: @course_proposal.format_list
+  generate_course_and_course_proposal
   @course.view_course
 end
 
@@ -35,7 +23,7 @@ Then(/^I can review the modify course proposal details compared to the course$/)
 
 end
 
-When(/^I attempt to create another modify course proposal of the course$/) do
+Then(/^I can not create another modify course$/) do
   navigate_to_cm_home
   navigate_to_find_course
   on CmFindACoursePage do |search|
@@ -43,17 +31,14 @@ When(/^I attempt to create another modify course proposal of the course$/) do
     search.find_courses
     search.view_course(@course.search_term)
   end
-end
-
-Then(/^I do not have the option to modify the course$/) do
   #no modify button is present
   (on(CmReviewProposalPage).modify_button.exist?).should == false
 end
 
 Given(/^there is a modify course proposal created as Faculty$/) do
   steps %{When I create a modify course proposal as Faculty}
-  @current_active_course_version_info = Array.new(4)
-  @current_active_course_version_info = @course.get_course_version_info version_index: 0
+  @old_active_course_version_info = Array.new(4)
+  @old_active_course_version_info = @course.get_course_version_info version_index: 0
   @course.close_version_history_dialog
 
 
@@ -115,50 +100,35 @@ And(/^I Blanket Approve the modify course proposal as CS adding an end term for 
 end
 
 Then(/^the modify course proposal is successfully approved$/) do
-  @new_active_course_version_info = Array.new(4)
-  @superseded_course_version_info = Array.new(4)
+  navigate_to_cm_home
+  @modify_course_proposal.search
+  @modify_course_proposal.review_proposal_action
 
-  navigate_to_functional_home
-
-  @course.view_course
-  @new_active_course_version_info = @course.get_course_version_info version_index: 0
-  @superseded_course_version_info = @course.get_course_version_info version_index: 1
-  @course.close_version_history_dialog
-
-  @new_active_course_version_info[0].should == "2"
-  @new_active_course_version_info[1].should == 'Active'
-  @new_active_course_version_info[2].should == 'Spring 2008'
-
-  @superseded_course_version_info[0].should == "1"
-  @superseded_course_version_info[1].should == 'Superseded'
-
-  @current_active_course_version_info[0].should == "1"
-  @current_active_course_version_info[1].should == 'Active'
+  on CmReviewProposalPage do |review|
+    review.proposal_status.should include 'approved'
+  end
 
 end
 
 And(/^the Superseded version has a new end term and the new course version is Active$/) do
-  pending # express the regexp above with the code you wish you had
+  navigate_to_functional_home
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.version_history_version(0).text.should == '2'
+    page.version_history_courseStatus(0).text.should == 'Active'
+    page.version_history_startTerm(0).text.should == 'Spring 2008'
+
+    page.version_history_version(1).text.should == '1'
+    page.version_history_courseStatus(1).text.should == 'Superseded'
+    page.version_history_startTerm(1).text.should == @old_active_course_version_info[2]
+#    page.version_history_endTerm(1).text.should_not == ''
+  end
 end
 
-When(/^I modify a course without a draft version$/) do
-  @course = make CmCourseObject, :search_term => "BMGT231", :course_code => "BMGT231",
-                 :subject_code => "BMGT", :course_number => "231",
-                 :course_title => "Statistical Models For Business", :transcript_course_title => "STAT MODELS BUSINESS",
-                 :description => "An introductory course in statistical concepts, including probability from a naive set theory approach, random variables and their properties and the probability distributions of selected discrete and continuous random variables. The concepts of sampling and sampling distributions and the application of these concepts to estimation and hypothesis testing are included as are brief surveys of the regression and ANOVA models.",                 # GOVERNANCE
-                 :campus_location => "North",
-                 :curriculum_oversight => "BMGT-Robert H. Smith School of Business",
-                 # COURSE LOGISTICS
-                 :assessment_scale => "Letter; Pass/Fail Grading",
-                 :audit => "Yes",
-                 :pass_fail_transcript_grade => "Yes",
-                 :final_exam_status => "Standard Final Exam",
-                 :outcome_list => [(make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3")],
-                 # ACTIVE DATES
-                 :start_term => "Spring 1989",
-                 :pilot_course => "No",
-                 :course_state => "ACTIVE"
-
+When(/^I create a modify course proposal as Curriculum Specialist$/) do
+  generate_course_and_course_proposal
+  navigate_to_functional_home
   @course.view_course
   on(CmReviewProposalPage).modify_course
   on CmCreateCourseStartPage do |page|
@@ -169,5 +139,84 @@ When(/^I modify a course without a draft version$/) do
 end
 
 Then(/^I can review the modify proposal compared to the course$/) do
-  sleep 5
+  on CmReviewProposal do |review|
+    review.review_proposal_title_header.should include @course_proposal.course_title
+
+    review.new_proposal_title_review.should == @modify_course_proposal.course_title
+    review.new_proposal_rationale_review.should == ""
+    review.new_start_term_review.should == ""
+
+    review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
+    review.proposal_title_diff_highlighter.should ==  "cm-compare-highlighter"
+
+    # review.review_proposal_title_header.should_not include "Admin"
+
+  end
+
+end
+
+Then(/^I do not have the option to modify the course with new version$/) do
+  navigate_to_cm_home
+  navigate_to_find_course
+  on CmFindACoursePage do |search|
+    search.course_code.set @course.search_term
+    search.find_courses
+    search.view_course(@course.search_term)
+  end
+  #no modify_course_new_version button is present
+  on(CmReviewProposalPage).modify_course
+  (on(CmCreateCourseStartPage).modify_course_new_version.exist?).should == false
+end
+
+And(/^the Superseded version has a new end term$/) do
+  navigate_to_functional_home
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.version_history_version(1).text.should == '1'
+    page.version_history_courseStatus(1).text.should == 'Superseded'
+    page.version_history_startTerm(1).text.should == @superseded_course_version_info[1]
+#    page.version_history_endTerm(1).text.should_not == ''
+  end
+
+end
+
+And(/^the new course version is Active$/) do
+  on CmCourseVersionHistoryPage do |page|
+    page.version_history_version(0).text.should == '2'
+    page.version_history_courseStatus(0).text.should == 'Active'
+    page.version_history_startTerm(0).text.should == 'Spring 2008'
+  end
+end
+
+When(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
+  log_in proposal_author, proposal_author
+
+  steps %{When I create a modify course proposal as Curriculum Specialist}
+  steps %{When I complete the required for submit fields on the modify course proposal}
+  @modify_course_proposal.submit_proposal
+end
+
+And(/^I approve the modify course proposal as (.*?)$/) do |approver|
+  sleep 30 # to avoid workflow exceptions
+  log_in approver, approver
+
+  @modify_course_proposal.approve_proposal
+end
+
+
+def generate_course_and_course_proposal
+  @course = make CmCourseObject, search_term: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 course_code: "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 course_state: "Active"
+
+  @modify_course_proposal = make CmCourseProposalObject, proposal_title: "Modify " + @course_proposal.course_title,
+                                 course_title: @course_proposal.course_title,
+                                 subject_code: @course_proposal.subject_code,
+                                 approve_fields: @course_proposal.approve_fields,
+                                 submit_fields: @course_proposal.submit_fields,
+                                 description_rationale: @course_proposal.description_rationale,
+                                 proposal_rationale: @course_proposal.proposal_rationale,
+                                 outcome_list: @course_proposal.outcome_list,
+                                 format_list: @course_proposal.format_list
 end

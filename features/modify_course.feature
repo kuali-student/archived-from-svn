@@ -7,8 +7,7 @@ Feature: GT.Modify Course
   Scenario: MC1.1 Create a Modify Course Proposal as Faculty; verify can not start another
     When I create a modify course proposal as Faculty
     Then I can review the modify course proposal details compared to the course
-    When I attempt to create another modify course proposal of the course
-    Then I do not have the option to modify the course
+    Then I can not create another modify course
 
   Scenario: MC1.3 Submit Modify Proposal as Faculty
     Given there is a modify course proposal created as Faculty
@@ -25,21 +24,21 @@ Feature: GT.Modify Course
     And the Superseded version has a new end term and the new course version is Active
 
   Scenario: MC2.1 Create and Save a Modify Proposal as CS
-    Given I am logged in as Curriculum Specialist
-    When I modify a course without a draft version
+    When I create a modify course proposal as Curriculum Specialist
     Then I can review the modify proposal compared to the course
+    Then I do not have the option to modify the course with new version
 
-  Scenario: MC2.2 CS cannot modify with version if draft version in progress
-    Given I am logged in as Curriculum Specialist
-    When I attempt to modify a course with a draft version as CS
-    Then I do not have the option to modify the course with version
-
-  Scenario: MC2.3 Approve a Modify Course Proposal by CS
-    Given I am logged in as Curriculum Specialist
-    When I submit a modify course proposal as CS <alice>
-    And I approve the modify course proposal as College_Approver <earl>
-    And I approve the modify course proposal as Senate_Committee_Approver
-    And I approve the modify course proposal as <publication_office_approver> adding an end term for the version to be superseded
+  Scenario Outline: MC2.3 Approve and Activate a Modify Course Proposal by CS
+    When I submit a modify course proposal as CS by <author>
+    And I approve the modify course proposal as <department_approver>
+    And I approve the modify course proposal as <college_approver>
+    And I approve the modify course proposal as <senate_committee_approver>
+    And I approve the modify course proposal as <publication_office_approver>
     Then the modify course proposal is successfully approved
-    And the Superseded version has a new end term and the new course version is Active
+    And the Superseded version has a new end term
+    And the new course version is Active
+  Examples:
+    |author|department_approver|college_approver|senate_committee_approver|publication_office_approver|
+    |alice |carol               |earl            |martha                   |alice                      |
+
 
