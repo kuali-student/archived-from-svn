@@ -6,16 +6,12 @@ Feature: REG.Manage Applied Hold
   Background:
     Given I am logged in as admin
 
-#KSENROLL-14582
-  Scenario: HOLD2.1.1 Verify that student info is displayed after valid student is entered
+#KSENROLL-14582\#KSENROLL-14586
+  Scenario: HOLD2.1.1\HOLD2.2.1 Verify that student info is displayed after valid student is entered
     When I attempt to load a student by valid student Id
     Then the student information is displayed
+    And the applied hold information is displayed
 
   Scenario: HOLD2.1.2 Verify error message when entering invalid student
     When I attempt to load a student by invalid studentId
-    Then a validation error is displayed stating "Student ID: Invalid student Id."
-
-#KSENROLL-14586
-  Scenario: HOLD2.2.1 Verify that applied holds are displayed after a valid student is entered
-    When I attempt to load a student by valid student Id
-    Then the applied hold information is displayed
+    Then a validation error is displayed stating "Student ID: Invalid student Id"

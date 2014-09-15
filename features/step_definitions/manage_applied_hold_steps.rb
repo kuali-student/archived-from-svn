@@ -1,13 +1,15 @@
 When(/^I attempt to load a student by valid student Id$/) do
-  @applied_hold = create AppliedHold
+  @applied_hold = make AppliedHold, :name => "Student last attended in", :code => "ACAD08"
+  @applied_hold.manage
 end
 
 Then(/^the student information is displayed$/) do
-  on(ManageAppliedHold).get_student_info.should match /FAULKNER, EMILY \(#{@applied_hold.student_id.upcase}\)/
+  on(ManageAppliedHold).get_student_info.should match /#{@applied_hold.student_name} \(#{@applied_hold.student_id.upcase}\)/
 end
 
 When /^I attempt to load a student by invalid studentId$/ do
-  @applied_hold = create AppliedHold, :student_id=> "student1"
+  @applied_hold = make AppliedHold, :student_id=> "student1"
+  @applied_hold.manage
 end
 
 Then /^a validation error is displayed stating "([^"]+)"$/ do |exp_msg|
@@ -17,5 +19,5 @@ Then /^a validation error is displayed stating "([^"]+)"$/ do |exp_msg|
 end
 
 And /^the applied hold information is displayed$/ do
-  on(ManageAppliedHold).applied_holds_results_rows.empty?.should be_false
+  on(ManageAppliedHold).get_hold_by_code( @applied_hold.code).text.should match /#{@applied_hold.name}/
 end
