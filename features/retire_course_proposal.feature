@@ -10,7 +10,7 @@ Background:
 
   Scenario: RC1.2 Verify Faculty cannot create a retire course proposal when a retire proposal is already in progress
     Given there is a retire course proposal created as Curriculum Specialist
-    When I attempt to create a second retire proposal as Faculty
+    When I attempt to create a second retire proposal on the same course as Faculty
     Then I do not have the option to retire the course
 
   Scenario: RC1.3 Verify Faculty can only submit a Retire Proposal with required for submit fields populated

@@ -17,7 +17,7 @@ When(/^I create a retire course proposal as Faculty$/) do
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => @course, :start_term => @course_proposal.submit_fields[0].start_term,
+  @retire_proposal = create CmRetireCourseProposalObject, :course => @course, :start_term => @course_proposal.submit_fields[0].start_term,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list =>  [(make CmSupportingDocsObject)]
 
@@ -89,7 +89,7 @@ Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :admin_proposal => true,
+  @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
                                                     :curriculum_review_process => :set,
                                                     :course => @course,
                                                     :start_term => @course_proposal.submit_fields[0].start_term,
@@ -108,7 +108,7 @@ Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
 
 end
 
-When(/^I attempt to create a second retire proposal as Faculty$/) do
+When(/^I attempt to create a second retire proposal on the same course as Faculty$/) do
     navigate_to_functional_home
     @course.view_course
 end
@@ -130,7 +130,7 @@ When(/^I create a retire course proposal with a missing required for submit deta
                                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => @course,
+  @retire_proposal = create CmRetireCourseProposalObject, :course => @course,
                                                     :retirement_rationale => nil,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
                                                     :supporting_doc_list => [(make CmSupportingDocsObject)]
@@ -175,7 +175,7 @@ When(/^I submit a retire course proposal with all fields complete as Faculty$/) 
                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                 :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :course => @course,
+  @retire_proposal = create CmRetireCourseProposalObject, :course => @course,
                             :author_list => [(make CmAuthCollaboratorObject)],
                             :supporting_doc_list => [(make CmSupportingDocsObject)]
 
@@ -195,7 +195,7 @@ When(/^I create a administrative retire as Curriculum Specialist$/) do
                  :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                  :course_state => "Retired"
 
-  @retire_proposal = create CmRetireCourseProposal, :admin_proposal => true,
+  @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
                                                     :course => @course,
                                                     :author_list => nil,
                                                     :supporting_doc_list =>  nil

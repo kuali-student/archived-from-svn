@@ -1,4 +1,4 @@
-class CmRetireCourseProposal < DataFactory
+class CmRetireCourseProposalObject < DataFactory
 
   include Foundry
   include DateFactory
