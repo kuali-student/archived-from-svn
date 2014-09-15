@@ -4,9 +4,6 @@ class CmFindLearningObjectivesPage < BasePage
 
   expected_element :add_learning_objectives_button
 
-  def frm
-    iframe(class: "fancybox-iframe")
-  end
 
   #filter
   element(:filter_results) { |b| b.frm.text_field(id: "LoDisplayInfoWrapper-LookupView-Filter-Input_control") }

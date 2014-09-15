@@ -1,9 +1,5 @@
 class CmCourseVersionHistoryPage < BasePage
 
-  def frm
-    self.iframe(class: "fancybox-iframe")
-  end
-
   action(:loading_wait) {|b| b.frm.image(alt: "Loading...").wait_while_present }
 
   element(:review_versions_button) {|b|b.frm.button(id: "CM-CourseVersion-Button-ShowVersions") }
