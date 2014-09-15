@@ -58,10 +58,8 @@ class CmRetireCourseProposal < DataFactory
   end
 
   def select_course
-    on CmReviewProposal do |course|
-      @course.view_course
-      course.retire_proposal
-    end
+    @course.view_course
+    on(CmReviewProposal).retire_proposal
   end
 
   def select_curr_review
@@ -99,9 +97,7 @@ class CmRetireCourseProposal < DataFactory
   end
 
   def navigate_to_retire_review
-    on CmRetirementInformation do |retire|
-        retire.review_retire_proposal
-    end
+    on(CmRetirementInformation).review_retire_proposal
   end
 
   def navigate_search_retire_proposal
@@ -161,18 +157,13 @@ class CmRetireCourseProposal < DataFactory
   end
 
   def edit_retire_proposal_information
-    on CmReviewProposal do |page|
-      page.edit_retire_proposal_link
-    end
+    on(CmReviewProposal).edit_retire_proposal_link
   end
 
   def approve_retire_proposal
-    on CmRetirementInformation do |retire|
-      retire.approve_and_retire
+    on(CmRetirementInformation).approve_and_retire
       sleep 30 # to avoid workflow exceptions
-    end
   end
-
 
 end
 

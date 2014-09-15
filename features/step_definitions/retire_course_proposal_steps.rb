@@ -41,10 +41,8 @@ And(/^I can review the retire course proposal details$/) do
 
     @retire_proposal.author_list.each do |author|
       retire.author_name_review(@retire_proposal.author_list[collection_index].author_level).should include author.name
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "View" if author.permission == "View"
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comment, View"
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comment, View"
-      retire.action_request_review(@retire_proposal.author_list[collection_index].author_level).should == "FYI"
+      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include author.permission
+      retire.action_request_review(@retire_proposal.author_list[collection_index].author_level).should include author.action_required
       collection_index += 1
     end
 
@@ -240,10 +238,8 @@ Then(/^I can review the retire course proposal details and submit$/) do
 
     @retire_proposal.author_list.each do |author|
       retire.author_name_review(@retire_proposal.author_list[collection_index].author_level).should include author.name
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "View" if author.permission == "View"
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Comment, View" if author.permission == "Comment, View"
-      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include "Edit, Comment, View" if author.permission == "Edit, Comment, View"
-      retire.action_request_review(@retire_proposal.author_list[collection_index].author_level).should == "FYI"
+      retire.author_permission_review(@retire_proposal.author_list[collection_index].author_level).should include author.permission
+      retire.action_request_review(@retire_proposal.author_list[collection_index].author_level).should include author.action_required
       collection_index += 1
     end
 
