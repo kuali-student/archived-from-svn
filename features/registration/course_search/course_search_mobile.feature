@@ -80,9 +80,9 @@ Feature: REG.Course Search Mobile
   Examples:
     | tab       | ao_type | ao_code | expected                                      |
     | time      | Lecture | Y       | Tu 6:30-9:30pm                                |
-    | instr     | Lecture | Y       | TERRI RAYMOND                                 |
+    | instr     | Lecture | Y       | Terri Raymond                                 |
     | seatsLoc  | Lecture | Y       | PLS 1140 48/48                                |
-    | all       | Lecture | Y       | Tu 6:30-9:30pm TERRI RAYMOND PLS 1140 48/48   |
+    | all       | Lecture | Y       | Tu 6:30-9:30pm Terri Raymond PLS 1140 48/48   |
 
   #KSENROLL-14161
   Scenario: CR 19.13 - Student is notified that course search selection is already in registration cart
