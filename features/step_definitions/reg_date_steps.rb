@@ -23,7 +23,7 @@ Then /^there is a message indicating that the registration period is (not open|n
     sleep 1
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
     page.wait_until { page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code).exists? }
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).include? error_message
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code).should include error_message
   end
 end
 
