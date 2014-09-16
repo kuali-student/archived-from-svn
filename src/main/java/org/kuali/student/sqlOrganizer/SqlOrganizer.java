@@ -43,9 +43,10 @@ public class SqlOrganizer {
     private static final Pattern DROP_SEQ_PATTERN = Pattern.compile("\\s*(drop|DROP)\\s*(sequence|SEQUENCE)\\s*(\\w*)");
     private static final Pattern NDX_RENAME_PATTERN = Pattern.compile("\\s*(alter|ALTER)\\s*(index|INDEX)\\s*(\\w*)\\s*(rename|RENAME)\\s*(to|TO)\\s*(\\w*)");
     private static final Pattern CNSTRT_RENAME_PATTERN = Pattern.compile("\\s*(alter|ALTER)\\s*(table|TABLE)\\s*(\\w*)\\s*(rename|RENAME)\\s*(constraint|CONSTRAINT)\\s*(\\w*)\\s*(to|TO)\\s*(\\w*)");
+    private static final Pattern ALTER_TABLE_PATTERN = Pattern.compile("\\s*(alter|ALTER)\\s*(table|TABLE)\\s*(\\w*)\\s*(modify|MODIFY|add|ADD)\\s*\\(");
     private static final Pattern CREATE_TABLE_PATTERN = Pattern.compile("\\s*(create|CREATE)\\s*(table|TABLE)\\s*(\\w*)");
     private static final Pattern COMPLEX_DROP_TABLE_PATTERN = Pattern.compile("IF\\s*TEMP\\s*>\\s*0\\s*THEN\\s*EXECUTE\\s*IMMEDIATE\\s*'DROP\\s*TABLE\\s*(\\w*)\\s*CASCADE\\s*CONSTRAINTS\\s*PURGE'");
-
+    private static final Pattern TRUNCATE_TABLE_PATTERN = Pattern.compile("^\\s*(delete|DELETE)\\s*\\s(?!from|FROM)\\s*(\\w*)\\s*$");
 
      public String[] splitStatements (String sqlStatements) {
         return sqlStatements.split("\n\\s*" + "/" + "\\s*" + "(\n|\\Z)");
@@ -66,7 +67,7 @@ public class SqlOrganizer {
             System.out.println("\n\nUnparsable Statements");
             StringBuilder sbStmts = new StringBuilder();
             for (String file: this.unparsableStmts.keySet()) {
-                sbStmts.append("---------- filename: " + file + " -------------");
+                sbStmts.append("---------- filename: " + file + " -------------\n");
                 List<String> stmts = this.unparsableStmts.get(file);
                 count += stmts.size();
                 for (String stmt : stmts) {
@@ -227,7 +228,7 @@ public class SqlOrganizer {
                 boolean wrongModule = false;
                 String cleanStmt = cleanStmt(statement);
 
-                StatementInfo statementInfo = getStatementInfoForStatement(sqlFile, cleanStmt);
+                StatementInfo statementInfo = getStatementInfoForStatement(filename, cleanStmt);
 
                 DatabaseDataType dataType = getDataType(statementInfo);
                 DatabaseModule module = getModule(statementInfo.getTableNames(), defaultModule);
@@ -295,7 +296,6 @@ public class SqlOrganizer {
             if (entry.getKey() != defaultModule) {
                 if (entry.getKey() == DatabaseModule.EXCEPTION) {
                     List<String> tables = entry.getValue();
-                    //System.out.println("Exception mapping table(s) to module: " + tables);
                     ret = DatabaseModule.EXCEPTION;
                 } else {
                     //System.out.println("Stmt moving to: " + entry.getKey().getEndsWith());
@@ -305,7 +305,7 @@ public class SqlOrganizer {
         } else if (entries.size() == 0) {
             //System.out.println("No module references found");
         } else {
-            //System.out.println("Stmt contains more than one module reference: " + tableNames.toString());
+            System.out.println("Stmt contains more than one module reference: " + tableNames.toString());
             ret = DatabaseModule.EXCEPTION;
         }
 
@@ -455,9 +455,14 @@ public class SqlOrganizer {
             return DatabaseModule.KSCM;
         } else if (isEnrTable(table)) {
             return DatabaseModule.KSENR;
+        } else if (isAPTable(table)) {
+            return DatabaseModule.KSAP;
+        } else if (isEnrTable(table)) {
+            return DatabaseModule.KSENR;
         } else if (isKSTable(table)) {
             return DatabaseModule.KSCORE;
         } else {
+            System.out.println("Unable to get module for table: " + table);
             return DatabaseModule.EXCEPTION;
         }
 
@@ -500,7 +505,7 @@ public class SqlOrganizer {
     }
 
 
-    public StatementInfo getStatementInfoForStatement(String sqlFile, String statement){
+    public StatementInfo getStatementInfoForStatement(String filename, String statement){
         StatementType statementType = null;
         List<String> tableNames = null;
         SQLParser parser = new SQLParser();
@@ -545,6 +550,18 @@ public class SqlOrganizer {
                                 if (matcher.find()) {
                                     statementType = StatementType.DDL;
                                     tableNames.add(matcher.group(1));
+                                } else {
+                                    matcher = ALTER_TABLE_PATTERN.matcher(statement);
+                                    if (matcher.find()) {
+                                        statementType = StatementType.DDL;
+                                        tableNames.add(matcher.group(3));
+                                    }  else {
+                                        matcher = TRUNCATE_TABLE_PATTERN.matcher(statement);
+                                        if (matcher.find()) {
+                                            statementType = StatementType.DDL;
+                                            tableNames.add(matcher.group(2));
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -552,11 +569,11 @@ public class SqlOrganizer {
                 }
             }
             if (tableNames.size() > 0) {
-                addUnparsableStmt(sqlFile, statement);
+                //addUnparsableStmt(filename, "-- " + tableNames.toString() + "\n" + statement);
                 //System.out.println("found non-ansi statement: " + statement + "\nusing objects:" + tableNames );
             } else {
-                //System.out.println("Error parsing statement: " + statement);
-                addUnparsableStmt(sqlFile, statement);
+                System.out.println("Error parsing statement: " + statement);
+                addUnparsableStmt(filename, statement);
                 tableNames.add("EXCEPTION");
                 //System.out.println(e);  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -566,15 +583,15 @@ public class SqlOrganizer {
         return statementInfo;
     }
 
-    private void addUnparsableStmt(String sqlFile, String statement) {
+    private void addUnparsableStmt(String filename, String statement) {
         List<String> stmts;
-        if(!this.unparsableStmts.containsKey(sqlFile)) {
+        if(!this.unparsableStmts.containsKey(filename)) {
             stmts = new ArrayList<String>();
         } else {
-            stmts = this.unparsableStmts.get(sqlFile);
+            stmts = this.unparsableStmts.get(filename);
         }
         stmts.add(statement);
-        this.unparsableStmts.put(sqlFile,stmts);
+        this.unparsableStmts.put(filename,stmts);
     }
 
 
