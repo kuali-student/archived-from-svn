@@ -139,7 +139,7 @@ When(/^I create a modify course proposal as Curriculum Specialist$/) do
 end
 
 Then(/^I can review the modify proposal compared to the course$/) do
-  on CmReviewProposal do |review|
+  on CmReviewProposalPage do |review|
     review.review_proposal_title_header.should include @course_proposal.course_title
 
     review.new_proposal_title_review.should == @modify_course_proposal.course_title
@@ -175,7 +175,6 @@ And(/^the Superseded version has a new end term$/) do
   on CmCourseVersionHistoryPage do |page|
     page.version_history_version(1).text.should == '1'
     page.version_history_courseStatus(1).text.should == 'Superseded'
-    page.version_history_startTerm(1).text.should == @superseded_course_version_info[1]
 #    page.version_history_endTerm(1).text.should_not == ''
   end
 
@@ -189,12 +188,18 @@ And(/^the new course version is Active$/) do
   end
 end
 
-When(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
-  log_in proposal_author, proposal_author
-
+Given(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
   steps %{When I create a modify course proposal as Curriculum Specialist}
-  steps %{When I complete the required for submit fields on the modify course proposal}
+  @modify_course_proposal.edit_course_information
+  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
+  puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
+
+  @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
+                                                final_exam_type: [:exam_standard],
+                                                exam_standard: :set,
+                                                start_term: 'Spring 2008'
   @modify_course_proposal.submit_proposal
+
 end
 
 And(/^I approve the modify course proposal as (.*?)$/) do |approver|

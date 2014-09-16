@@ -29,8 +29,8 @@ Feature: GT.Modify Course
     Then I do not have the option to modify the course with new version
 
   Scenario Outline: MC2.3 Approve and Activate a Modify Course Proposal by CS
-    When I submit a modify course proposal as CS by <author>
-    And I approve the modify course proposal as <department_approver>
+    Given I submit a modify course proposal as CS by <author>
+    When I approve the modify course proposal as <department_approver>
     And I approve the modify course proposal as <college_approver>
     And I approve the modify course proposal as <senate_committee_approver>
     And I approve the modify course proposal as <publication_office_approver>
