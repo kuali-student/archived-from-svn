@@ -44,3 +44,11 @@ Feature: GT.Modify Course
     |alice |carol               |earl            |martha                   |alice                      |
 
 
+  @wip
+  Scenario: MC3.1 Create, Approve & Activate an Admin Modify Proposal as CS
+    When I modify a course without curriculum review as Curriculum Specialist
+    Then I can not approve and activate the admin modify proposal
+    When I complete the required for approve fields on the modify course proposal
+    Then I Approve and Activate the modify course admin proposal
+    And the Superseded version has a new end term
+    And the new course version is Active

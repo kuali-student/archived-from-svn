@@ -256,5 +256,7 @@ class CmReviewProposalPage < BasePage
   value(:new_start_term_review) { |b| b.textarea(id: "CM-ViewCourseView-ActiveDates-StartTermnew_control").text }
   element(:start_term_element) { |b| b.div(id: "CM-ViewCourseView-ActiveDates-StartTermnew") }
   value(:start_term_diff_highlighter) {|b|b.start_term_element.parent.parent.attribute_value("class") }
+  element(:proposal_review_column_title) {|b|b.div(id: 'CM-ViewCourse-VersionNamenew')}
+  element(:original_course_review_column_title) {|b|b.div(id: 'CM-ViewCourse-VersionNameold')}
 
 end
