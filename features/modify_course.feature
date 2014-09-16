@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: GT.Modify Course
 
   Background:
@@ -23,11 +23,13 @@ Feature: GT.Modify Course
     Then the modify course proposal is successfully approved
     And the Superseded version has a new end term and the new course version is Active
 
+  @wip
   Scenario: MC2.1 Create and Save a Modify Proposal as CS
     When I create a modify course proposal as Curriculum Specialist
     Then I can review the modify proposal compared to the course
     Then I do not have the option to modify the course with new version
 
+  @wip
   Scenario Outline: MC2.3 Approve and Activate a Modify Course Proposal by CS
     Given I submit a modify course proposal as CS by <author>
     When I approve the modify course proposal as <department_approver>
