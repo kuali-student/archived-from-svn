@@ -231,18 +231,18 @@ end
 Then /^there is a message indicating that the course edit failed due to (the credit limit|the timing of the edit)$/ do |fail_reason|
   reason_msg = case fail_reason
                  when "the credit limit" then "maximum credit limit"
-                 when "the timing of the edit" then "editing has passed"
+                 when "the timing of the edit" then "Last day to modify was 9/12/2012"
                end
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should match /#{reason_msg}/i
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").include? reason_msg
   end
 end
 
 Then /^there is a message indicating that the course drop failed$/ do
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should match /drop.* has passed/i
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").include? "Last day to drop was 11/09/2012"
   end
 end
 
