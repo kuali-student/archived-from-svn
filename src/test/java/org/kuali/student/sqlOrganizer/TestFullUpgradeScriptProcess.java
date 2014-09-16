@@ -33,7 +33,7 @@ public class TestFullUpgradeScriptProcess {
         modules.add(DatabaseModule.KSAP);
         modules.add(DatabaseModule.KSENR);
         String ouptupFileName = "FR1.to.FR2-M1.upgrade.script.sql";
-        String organizedSqlPath = sqlOrganizer.getOutputDirPath();
+        String organizedSqlPath = sqlOrganizer.getConfig().outputDirPath;
 
         UpgradeCreationConfig config = new UpgradeCreationConfig(milestones, dataTypes, modules, ouptupFileName, organizedSqlPath);
         SqlUpgradeFileCreator.createSqlUpgradeFile(config);

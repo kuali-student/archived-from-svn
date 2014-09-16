@@ -35,9 +35,7 @@ public class SqlOrganizer {
     public String module;
     // file, list of unparsable statements
     public Map<String,List<String>> unparsableStmts;
-    private String projectPath;
-    private String outputDirPath;
-    private Map<DatabaseDataType, Set<String>> dataTypeTableSets;
+    private SqlOrganizerConfig config;
 
     private static final Pattern CREATE_SEQ_PATTERN = Pattern.compile("\\s*(create|CREATE)\\s*(sequence|SEQUENCE)\\s*(\\w*)");
     private static final Pattern DROP_SEQ_PATTERN = Pattern.compile("\\s*(drop|DROP)\\s*(sequence|SEQUENCE)\\s*(\\w*)");
@@ -47,18 +45,15 @@ public class SqlOrganizer {
     private static final Pattern CREATE_TABLE_PATTERN = Pattern.compile("\\s*(create|CREATE)\\s*(table|TABLE)\\s*(\\w*)");
     private static final Pattern COMPLEX_DROP_TABLE_PATTERN = Pattern.compile("IF\\s*TEMP\\s*>\\s*0\\s*THEN\\s*EXECUTE\\s*IMMEDIATE\\s*'DROP\\s*TABLE\\s*(\\w*)\\s*CASCADE\\s*CONSTRAINTS\\s*PURGE'");
     private static final Pattern TRUNCATE_TABLE_PATTERN = Pattern.compile("^\\s*(delete|DELETE)\\s*\\s(?!from|FROM)\\s*(\\w*)\\s*$");
+    private static final Pattern INCREMENT_SEQ_PATTERN = Pattern.compile("^\\s*SELECT\\s*(\\w*)\\.NEXTVAL FROM DUAL\\s*$");
 
-     public String[] splitStatements (String sqlStatements) {
+    public String[] splitStatements (String sqlStatements) {
         return sqlStatements.split("\n\\s*" + "/" + "\\s*" + "(\n|\\Z)");
     }
 
-    // TODO: convert to config
-    public void init(Map<DatabaseDataType, Set<String>> dataTypeTableSets, String project_path, String output_dir_path) {
+    public void init(SqlOrganizerConfig config){
+        this.config = config;
         this.unparsableStmts = new HashMap<String,List<String>>();
-        this.setDataTypeTableSets(dataTypeTableSets);
-        this.setOutputDirPath(output_dir_path);
-        this.setProjectPath(project_path);
-
     }
 
     public void printSummary() {
@@ -83,7 +78,7 @@ public class SqlOrganizer {
 
     // TODO: genericize these, move to configuration
     public void organizeAggregateFiles() throws IOException {
-        File root = new File(outputDirPath);
+        File root = new File(config.outputDirPath);
         DirManipulationUtils.cascadeDelDir(root);
         DirManipulationUtils.mkDirCascaded(root);
         organizeRiceProcessFiles();
@@ -96,35 +91,35 @@ public class SqlOrganizer {
     public void organizeEnrollProcessFiles() throws IOException {
         subProject = "ks-enroll";
         module = subProject + "-sql";
-        organizeProcessFiles(projectPath);
+        organizeProcessFiles();
     }
 
     public void organizeLumProcessFiles() throws IOException {
         subProject = "ks-lum";
         module = subProject + "-sql";
-        organizeProcessFiles(projectPath);
+        organizeProcessFiles();
     }
 
     public void organizeAPProcessFiles() throws IOException {
         subProject = "ks-ap";
         module = subProject + "-sql";
-        organizeProcessFiles(projectPath);
+        organizeProcessFiles();
     }
 
     public void organizeCoreProcessFiles() throws IOException {
         subProject = "ks-core";
         module = subProject + "-sql";
-        organizeProcessFiles(projectPath);
+        organizeProcessFiles();
     }
 
     public void organizeRiceProcessFiles() throws IOException {
         subProject = "ks-core";
         module = "ks-rice-sql";
-        organizeProcessFiles(projectPath);
+        organizeProcessFiles();
     }
 
-    private void organizeProcessFiles(String projectPath) throws IOException {
-        String modulePath = projectPath + "\\" + subProject + "\\" + module;
+    private void organizeProcessFiles() throws IOException {
+        String modulePath = config.projectPath + "\\" + subProject + "\\" + module;
         // TODO: move to configuration
         String resourceListingFile =  modulePath + "\\target\\classes\\META-INF\\org\\kuali\\student\\" + module + "\\oracle\\other.resources";
 
@@ -232,6 +227,9 @@ public class SqlOrganizer {
 
                 DatabaseDataType dataType = getDataType(statementInfo);
                 DatabaseModule module = getModule(statementInfo.getTableNames(), defaultModule);
+                if (module.getLabel().equals(DatabaseModule.EXCEPTION.getLabel())) {
+                    System.out.println(statement);
+                }
                 statementBuckets.get(dataType).get(module).append(statement + "\n/\n");
 
             }
@@ -255,7 +253,7 @@ public class SqlOrganizer {
     }
 
     private File copyFile(String origFile, String milestone, DatabaseDataType type, DatabaseModule module, String filename) throws IOException {
-        File newFile = new File(outputDirPath + milestone + "//" + type.toString() + "//" + module.getEndsWith() + "//" + filename);
+        File newFile = new File(config.outputDirPath + milestone + "//" + type.toString() + "//" + module.getEndsWith() + "//" + filename);
         File parent = newFile.getParentFile();
         DirManipulationUtils.mkDirCascaded(parent);
         FileUtils.copyFile(new File(origFile), newFile);
@@ -341,7 +339,7 @@ public class SqlOrganizer {
     private void writeToFile(String milestone, DatabaseDataType type, DatabaseModule module, String filename, String content) {
 
         try {
-            File file = new File(outputDirPath + milestone + "\\" + type.toString() + "\\" + module.getEndsWith() + "\\" + filename);
+            File file = new File(config.outputDirPath + milestone + "\\" + type.toString() + "\\" + module.getEndsWith() + "\\" + filename);
             File parent = file.getParentFile();
 
             if (!parent.exists()) {
@@ -495,9 +493,16 @@ public class SqlOrganizer {
     }
 
     private DatabaseDataType getTableDataType(String table) {
-        Set<Map.Entry<DatabaseDataType,Set<String>>> entries = dataTypeTableSets.entrySet();
-        for (Map.Entry<DatabaseDataType,Set<String>> entry : entries) {
+        Set<Map.Entry<DatabaseDataType,Set<String>>> tableSets = config.dataTypeTableSets.entrySet();
+        for (Map.Entry<DatabaseDataType,Set<String>> entry : tableSets) {
             if (entry.getValue().contains(table)) {
+                return entry.getKey();
+            }
+        }
+        Set<Map.Entry<DatabaseDataType,Pattern>> tablePatterns = config.dataTypeTablePatterns.entrySet();
+        for (Map.Entry<DatabaseDataType,Pattern> entry : tablePatterns) {
+            Matcher matcher = entry.getValue().matcher(table);
+            if (matcher.find()) {
                 return entry.getKey();
             }
         }
@@ -515,8 +520,18 @@ public class SqlOrganizer {
             nodeVisitor.traverse(stmt);
             tableNames = nodeVisitor.getTableNames();
             statementType = nodeVisitor.getStatementType();
+            if (onlyDual(tableNames)) {
+                statement = scrubStatement(statement);
+                Matcher matcher = INCREMENT_SEQ_PATTERN.matcher(statement);
+                if (matcher.find()) {
+                    statementType = StatementType.DML;
+                    tableNames.clear();
+                    tableNames.add(matcher.group(1));
+                }
+            }
             // sql parser had an issue so run attempt to handle some common scenarios.  the groups are based on the regex
         } catch (StandardException e) {
+            statement = scrubStatement(statement);
             tableNames = new ArrayList<String>();
             Matcher matcher = CNSTRT_RENAME_PATTERN.matcher(statement);
             if (matcher.find()) {
@@ -558,7 +573,7 @@ public class SqlOrganizer {
                                     }  else {
                                         matcher = TRUNCATE_TABLE_PATTERN.matcher(statement);
                                         if (matcher.find()) {
-                                            statementType = StatementType.DDL;
+                                            statementType = StatementType.DML;
                                             tableNames.add(matcher.group(2));
                                         }
                                     }
@@ -583,6 +598,16 @@ public class SqlOrganizer {
         return statementInfo;
     }
 
+    private boolean onlyDual(List<String> tableNames) {
+        return (tableNames.size() == 1 && tableNames.get(0).toUpperCase().equals("DUAL"));
+    }
+
+    private String scrubStatement(String statement) {
+        String scrubbed = statement.replaceAll("(^|\\n)--.*","\n").toUpperCase();
+        //System.out.println("stripped statement:" + stripped);
+        return scrubbed;
+    }
+
     private void addUnparsableStmt(String filename, String statement) {
         List<String> stmts;
         if(!this.unparsableStmts.containsKey(filename)) {
@@ -596,35 +621,14 @@ public class SqlOrganizer {
 
 
     public void removeEmptyOutputDirs() {
-        File root = new File(outputDirPath);
+        File root = new File(config.outputDirPath);
         DirManipulationUtils.delEmptyDirs(root);
     }
 
 
-    public String getProjectPath() {
-        return projectPath;
+    public SqlOrganizerConfig getConfig() {
+        return config;
     }
-
-    public void setProjectPath(String projectPath) {
-        this.projectPath = projectPath;
-    }
-
-    public String getOutputDirPath() {
-        return outputDirPath;
-    }
-
-    public void setOutputDirPath(String outputDirPath) {
-        this.outputDirPath = outputDirPath;
-    }
-
-    public Map<DatabaseDataType, Set<String>> getDataTypeTableSets() {
-        return dataTypeTableSets;
-    }
-
-    public void setDataTypeTableSets(Map<DatabaseDataType, Set<String>> dataTypeTableSets) {
-        this.dataTypeTableSets = dataTypeTableSets;
-    }
-
 
 
 

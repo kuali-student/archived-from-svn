@@ -21,7 +21,9 @@ delete from krim_perm_t where perm_id = 'KS-KRIM-PERM-1106'
 /
 delete from krim_perm_t where perm_id = 'KS-KRIM-PERM-1107'
 /
+-- asdlkasd aslskjfas;lkdfjf sad;lkfsjd;lkjsj;aldkjfdsa ;ldkfjas;dlkfj
 DECLARE TEMP NUMBER;
+-- l;sakdjfs;aldkfj sa;ldkfjsa; ldfkjsa;ldkjfs ;ldkjsds;lkjsa;lkjfdsf
 BEGIN
   SELECT COUNT(*) INTO TEMP FROM USER_TABLES WHERE TABLE_NAME = 'KSEN_SCHED_RQST_SET_ATTR';
         IF TEMP > 0 THEN EXECUTE IMMEDIATE 'DROP TABLE KSEN_SCHED_RQST_SET_ATTR CASCADE CONSTRAINTS PURGE'; END IF;
