@@ -2,6 +2,10 @@ class CmAdvancedSearchPage < BasePage
 
   expected_element :jointly_offered_given_name
 
+  def frm
+    self.iframe(class: "fancybox-iframe")
+  end
+
   element(:jointly_offered_search_by) { |b| b.frm.select(id: "CM-Proposal-Course-JointlyOffered-SearchBy_control") }
   element(:jointly_offered_given_name) { |b| b.frm.text_field(id: "CM-Proposal-Course-JointlyOffered-CourseTitleSearch_control")}
   element(:jointly_offered_course_code) { |b| b.frm.text_field(id: "CM-Proposal-Course-JointlyOffered-CourseCodeSearch_control") }

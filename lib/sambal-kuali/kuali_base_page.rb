@@ -29,10 +29,6 @@ class BasePage < PageFactory
 
     end
 
-    def frm
-      iframe(class: "fancybox-iframe")
-    end
-
     #def frame_element
     #  #element(:frm) { |b| b.frame(id: "iframeportlet") }
     #  element(:frm) { |b| b } #with iframe removed

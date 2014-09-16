@@ -4,6 +4,10 @@ class CmProposalCommentsPage < BasePage
   cm_elements
   expected_element :close
 
+  def frm
+    self.iframe(class: "fancybox-iframe")
+  end
+
   element(:comment_text_input) {|b| b.frm.textarea(id: 'CM-Proposal-Course-Comment-NewComment_control') }
   element(:comment_edit_link) {|index,b|b.frm.a(id: "CM-Proposal-Course-Comment-Edit_line#{index}")}
   element(:comment_delete_link) {|index,b|b.frm.a(id: "CM-Proposal-Course-Comment-Delete_line#{index}")}

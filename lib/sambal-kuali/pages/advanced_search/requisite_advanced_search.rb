@@ -2,6 +2,10 @@ class CmRequisiteAdvancedSearchPage < BasePage
 
   expected_element :search_course_code
 
+  def frm
+    self.iframe(class: "fancybox-iframe")
+  end
+
 
   action(:loading_wait) {|b| b.frm.image(alt: "Loading...").wait_while_present }
 
