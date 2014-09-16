@@ -180,11 +180,7 @@ Given /^I have added a CHEM course to my registration cart$/ do
   @reg_request = make RegistrationRequest, :term_descr=>"Fall 2012",
                       :course_code=>"CHEM241",
                       :reg_group_code=>"1014"
-  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
-    @reg_request.create
-  else
-    @reg_request.create_from_search
-  end
+  @reg_request.create
 end
 
 When /^I search for the same course$/ do
@@ -248,3 +244,56 @@ Then /^I see (.*) in the (\w+) details for activity offering "(\w+)"$/ do |expec
     results.should == expected
   end
 end
+
+When /^I search for a BSCI course and select a registration group$/ do
+  # first fill up the course as student2, then go on waitlist as student3
+  steps %{
+    Given I log in to student registration as student2
+    When I add a BSCI3 course offering to my registration cart
+    And I register for the course
+    And the registration process has finished
+    Given I log in to student registration as student3
+    * I wait for student registration login to complete
+  }
+  @course_search_result = make CourseSearch, :search_string=> "BSCI", :course_code=> "BSCI120"
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(@course_search_result.term)
+
+  @course_search_result.search :navigate=>true
+  on CourseSearchPage do |page|
+    page.course_code_result_row(@course_search_result.course_code).wait_until_present
+    page.select_course(@course_search_result.course_code)
+  end
+
+  @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"B"
+  @course_search_result.edit :selected_section => "1001"
+end
+
+When /^I waitlist directly for the registration group$/ do
+  on CourseDetailsPage do |page|
+    page.direct_waitlist
+    page.reg_options_continue(@course_search_result.course_code,@course_search_result.selected_section).when_present.click
+    page.register_confirm_button(@course_search_result.course_code,@course_search_result.selected_section).when_present.click
+  end
+end
+
+Then /^there is a message indicating successful direct addition to waitlist$/ do
+  on CourseDetailsPage do |page|
+    sleep 2
+    page.direct_register_popup_button(@course_search_result.course_code,@course_search_result.selected_section).wait_until_present
+    page.direct_register_popup_course.text.should include "#{@course_search_result.course_code}"
+    page.direct_register_popup_course.text.should include "#{@course_search_result.selected_section}"
+    page.direct_waitlist_message(@course_search_result.course_code,@course_search_result.selected_section).should match /Waitlist/i
+    page.close_direct_register_popup(@course_search_result.course_code,@course_search_result.selected_section)
+  end
+end
+
+And /^the course is waitlisted in my schedule$/ do
+  on(CourseDetailsPage).return_to_search
+  on CourseSearchPage do |page|
+    page.course_code(@course_search_result.course_code, @course_search_result.selected_section, "waitlist").wait_until_present
+    page.course_code(@course_search_result.course_code, @course_search_result.selected_section, "waitlist").text.should_not be_nil
+  end
+end
+

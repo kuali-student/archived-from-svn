@@ -84,3 +84,10 @@ Feature: REG.Course Search
     And I register directly for the registration group
     Then there is a message indicating successful direct registration
     And the course is in my schedule
+
+#KSENROLL-14809
+  Scenario: CR 0.5 - Waitlist a course directly from search
+    When I search for a BSCI course and select a registration group
+    And I waitlist directly for the registration group
+    Then there is a message indicating successful direct addition to waitlist
+    And the course is waitlisted in my schedule

@@ -324,7 +324,8 @@ Then /^there is a message indicating successful registration$/ do
 end
 
 And /^the registration process has finished$/ do
-  on RegistrationCart do |page|
+  page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? RegistrationCart : CourseSearchPage
+  on page_class do |page|
     page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
     sleep 1
   end

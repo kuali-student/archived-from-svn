@@ -25,6 +25,11 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   action(:toggle_add_dialog) { |b| b.add_to_cart_toggle.click }
   element(:submit_button) { |b| b.button(id: "submit") }
   action(:add_to_cart) { |b| b.submit_button.click }
+  element(:register_button) { |b| b.button(id: "register") }
+  action(:register) { |b| b.register_button.click }
+  element(:register_confirm_button) { |b| b.button(id: "confirmRegistration") }
+  action(:confirm_registration) { |b| b.register_confirm_button.click }
+  element(:registering_message) { |b| b.div(id: "registering_message") }
 
   # Course cards
   element(:course_code) { |course_code,reg_group_code,status=STATUS_SCHEDULE,b| b.span(id: "#{prefix(status)}course_code_#{course_code}_#{reg_group_code}") }

@@ -59,42 +59,13 @@ class RegistrationRequest < DataFactory
   end
 
   def create
-    visit RegistrationCart do |page|
-      # wait in case list has not loaded yet
-      page.menu_button.wait_until_present
-      page.menu
-      page.wait_until {page.term_select.include? @term_descr }
-      page.select_term @term_descr
-      page.menu
-      #Need to ensure term has actually changed
-      page.wait_until {page.header_term_name.text.include? @term_descr}
-      sleep 1
-      page.show_add_dialog
-      page.course_code_input.wait_until_present
-      page.course_code_input.set @course_code
-      page.reg_group_code_input.wait_until_present
-      page.reg_group_code_input.set @reg_group_code
-      page.submit_button.wait_until_present
-      page.add_to_cart
-      if @course_has_options
-        if @modify_course_options
-          page.edit_save_button(@course_code,@reg_group_code,CONTEXT_NEW_ITEM).wait_until_present
-          edit_course_options :credit_option=>@course_options.credit_option,
-                              :grading_option=>@course_options.grading_option,
-                              :context => CONTEXT_NEW_ITEM
-        else
-          page.edit_save_button(@course_code,@reg_group_code,CONTEXT_NEW_ITEM).wait_until_present
-          page.save_edits @course_code,@reg_group_code,CONTEXT_NEW_ITEM
-        end
+    page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? RegistrationCart : CourseSearchPage
+    visit page_class do |page|
+      if page_class == RegistrationCart
+        # wait in case list has not loaded yet
+        page.menu_button.wait_until_present
+        page.menu
       end
-    end
-  end
-
-  def create_from_search
-    visit CourseSearchPage do |page|
-      # wait in case list has not loaded yet
-      #page.menu_button.wait_until_present
-      #page.menu
       page.wait_until {page.term_select.include? @term_descr }
       page.select_term @term_descr
       page.menu
@@ -254,7 +225,8 @@ class RegistrationRequest < DataFactory
     options = defaults.merge(opts)
 
     visit RegistrationCart if options[:do_navigation]
-    on RegistrationCart do |page|
+    page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? RegistrationCart : CourseSearchPage
+    on page_class do |page|
       page.wait_until { page.register_button.enabled? }
       page.register
       page.register_confirm_button.wait_until_present
