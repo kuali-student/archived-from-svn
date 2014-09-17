@@ -49,17 +49,13 @@ class ApplyHold < BasePage
   element(:results_select_btn) { |index, b| b.dialog_results_table.rows[(index.to_i+1)].a( text: /Select/)}
 
   def results_select_by_code code
-    index = 0
-    index = get_hold( code) if code != nil
+    index = get_hold( code)
     results_select_btn(index).when_present.click
-
-    loading.wait_while_present
-    return hold_code_input.value
   end
 
   def get_hold( code)
     dialog_results_table.rows(text: /#{code}/).each do |row|
-      return row.cells[DIALOG_ACTION].a().id[/\d+/]
+      return row.cells[DIALOG_ACTION].a().id[/\d+$/]
     end
   end
 

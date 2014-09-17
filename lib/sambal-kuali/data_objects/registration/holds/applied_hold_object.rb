@@ -14,9 +14,9 @@ class AppliedHold < DataFactory
     defaults = {
         :student_id => "ks-2014",
         :student_name => "FAULKNER, EMILY",
-        :name => nil,
-        :code => nil,
-        :category => nil,
+        :name => "Academically Ineligible",
+        :code => "ACAD02",
+        :category => "Academic Progress Issue",
         :find_code_by_lookup => false
     }
 
@@ -50,13 +50,15 @@ class AppliedHold < DataFactory
     on ApplyHold do |page|
       page.loading.wait_while_present
 
-      if @code != nil and !@find_code_by_lookup
+      if !@find_code_by_lookup
         page.hold_code_input.set @code
-      elsif @find_code_by_lookup
+      else
         page.find_hold_code
-        page.dialog_code_input.set @code if @code != nil
+
+        wait_until { page.frm_popup.exists? }
+        page.dialog_code_input.set @code
         page.dialog_search
-        @code = page.results_select_by_code(@code)
+        page.results_select_by_code(@code)
       end
 
     end
