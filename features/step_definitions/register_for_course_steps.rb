@@ -235,14 +235,14 @@ Then /^there is a message indicating that the course edit failed due to (the cre
                end
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").include? reason_msg
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should include reason_msg
   end
 end
 
 Then /^there is a message indicating that the course drop failed$/ do
   on CourseSearchPage do |page|
     page.reason_message_span(@reg_request.course_code,@reg_request.reg_group_code,"schedule").wait_until_present
-    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").include? "Last day to drop was 11/09/2012"
+    page.reason_message(@reg_request.course_code,@reg_request.reg_group_code,"schedule").should include "Last day to drop was 11/09/2012"
   end
 end
 
