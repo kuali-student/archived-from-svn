@@ -758,6 +758,10 @@ end
 Then /^I can see the details of my course$/ do
   on CourseDetailsMobilePage do |page|
     page.details_course_description_div(@reg_request.course_code).wait_until_present
-    page.details_course_description(@reg_request.course_code).should =~ /The development of Europe in the Middle Ages; the role of religious values in shaping new social, economic, and political institutions; medieval literature, art and architecture/i
+    page.details_course_description(@reg_request.course_code).should =~ /The development of Europe in the Middle Ages/i
   end
 end
+
+# And /^I attempt to register for a course in (\w+\s+\d+)$/ do |term_desc|
+#   puts "term_desc = #{term_desc}"
+# end
