@@ -11,7 +11,7 @@ class CmRetirementInformationPage < BasePage
   element(:end_term) { |b| b.select_list(id: "CM-Proposal-RetireCourse-EndTerm_control") }
   element(:last_term_offered) { |b| b.select_list(id: "CM-Proposal-RetireCourse-LastTerm_control") }
   element(:last_catalog_pub_year) { |b| b.select_list(id: "CM-Proposal-RetireCourse-PublicationYear_control") }
-  element(:other_comments) { |b| b.textarea(id: "CM-Proposal-RetireCourse-OtherComment_control") }
+  element(:other_comments) { |b| b.textarea(id: "CM-Proposal-RetireCourse-RetirementComment_control") }
   action(:review_retire_proposal) { |b| b.a(id: "CM-Proposal-Course-Retire-ReviewProposalLink").click; b.loading_wait }
 
 end

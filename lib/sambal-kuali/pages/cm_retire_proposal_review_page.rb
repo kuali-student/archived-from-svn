@@ -13,7 +13,7 @@ class CmRetireProposalReviewPage < CmReviewProposalPage
   value(:end_term_retire_review) { |b| b.textarea(id:"CM-Proposal-Review-RetireCourse-EndTerm_control").text }
   value(:last_term_offered_retire_review) { |b| b.textarea(id:"CM-Proposal-Review-RetireCourse-LastTerm_control").text }
   value(:last_catalog_pub_year_retire_review) { |b| b.textarea(id:"CM-Proposal-Review-RetireCourse-PublicationYear_control").text }
-  value(:other_comments_retire_review) { |b| b.textarea(id:"CM-Proposal-Review-RetireCourse-OtherComment_control").text }
+  value(:other_comments_retire_review) { |b| b.textarea(id:"CM-Proposal-Review-RetireCourse-RetirementComment_control").text }
 
 
 end
