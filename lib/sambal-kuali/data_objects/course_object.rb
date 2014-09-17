@@ -1,10 +1,4 @@
-class CmCourseObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmCourseObject < CmBaseObject
 
   attr_accessor :course_code,
                 :search_term,

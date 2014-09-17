@@ -1,10 +1,5 @@
-class CmCourseProposalObject < DataFactory
+class CmCourseProposalObject < CmBaseObject
 
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
 
   # Course Information, Governance, Course Logistics, Active Dates completed
   attr_accessor :proposal_title, :course_title,  :subject_code,

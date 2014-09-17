@@ -1,10 +1,4 @@
-class CmInstructorObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmInstructorObject < CmBaseObject
 
   attr_reader :instructor_name,
               :instructor_level,

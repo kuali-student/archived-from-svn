@@ -1,10 +1,4 @@
-class CmLearningObjectiveObject < DataFactory
-
-include Foundry
-include DateFactory
-include StringFactory
-include Workflows
-include Utilities
+class CmLearningObjectiveObject < CmBaseObject
 
   attr_accessor :learning_objective_text,
                 :learning_objective_level,

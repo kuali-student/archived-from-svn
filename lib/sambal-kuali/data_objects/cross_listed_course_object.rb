@@ -1,9 +1,4 @@
-class CmCrossListedObject < DataFactory
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmCrossListedObject < CmBaseObject
 
   attr_reader     :cross_list_course_count,
                   :cross_list_subject_code,

@@ -1,10 +1,4 @@
-class CmOutcomeObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmOutcomeObject < CmBaseObject
 
   attr_accessor :outcome_type, :outcome_level, :credit_value, :defer_save
 

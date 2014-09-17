@@ -1,10 +1,4 @@
-class CmApproveFieldsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmApproveFieldsObject < CmBaseObject
 
   attr_accessor :transcript_course_title,
                 :course_number,

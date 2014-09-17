@@ -1,10 +1,4 @@
-class CmAuthCollaboratorObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmAuthCollaboratorObject < CmBaseObject
 
   attr_accessor  :name,
                  :look_value,

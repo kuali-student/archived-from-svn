@@ -1,10 +1,4 @@
-class CmSubmitFieldsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmSubmitFieldsObject < CmBaseObject
 
   attr_accessor :subject_code,
                 :description_rationale,

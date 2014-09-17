@@ -1,21 +1,4 @@
-# course requisite used for testing
-#
-# CMRequisites contained in Course Proposal
-#
-# class attributes are initialized with default data unless values are explicitly provided
-#
-# Methods:
-#  @initialize(browser, opts={})
-#
-# Note the use of the ruby options hash pattern re: setting attribute values
-
-class CmCourseRequisiteObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmCourseRequisiteObject < CmBaseObject
 
   attr_accessor :requisite_type,
                 :left_group_node,

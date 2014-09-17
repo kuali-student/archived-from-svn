@@ -1,10 +1,4 @@
-class CmLoCategoryObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmLoCategoryObject < CmBaseObject
 
   attr_accessor :category_name,
                 :category_type,

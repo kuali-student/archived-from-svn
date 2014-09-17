@@ -1,9 +1,4 @@
-class CmJointlyOfferedObject < DataFactory
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmJointlyOfferedObject < CmBaseObject
 
   attr_reader     :jointly_offered_course_count,
                   :jointly_offered_course,

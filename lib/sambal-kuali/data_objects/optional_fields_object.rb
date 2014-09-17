@@ -1,10 +1,4 @@
-class CmOptionalFieldsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmOptionalFieldsObject < CmBaseObject
 
   attr_accessor :instructor_list,
               :admin_org_list,

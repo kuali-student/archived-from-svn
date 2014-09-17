@@ -1,10 +1,4 @@
-class CmFormatsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmFormatsObject < CmBaseObject
 
   attr_accessor   :format_level,
                   :activity_level,

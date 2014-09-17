@@ -1,19 +1,4 @@
-# Created data used for testing
-#
-# CMRequisitesData contained in Course Proposal
-#
-# class attributes are initialized with default data unless values are explicitly provided
-#
-# Typical usage: (with optional setting of explicit data value in  )
-#  @editAgenda = make ManageCORequisitesData
-#  @editAgenda.create_data_advanced_search(section, course)
-# Methods:
-#  @initialize(browser, opts={})
-#
-# Note the use of the ruby options hash pattern re: setting attribute values
-
-class CmRequisiteRuleObject < DataFactory
-  include Foundry
+class CmRequisiteRuleObject < CmBaseObject
 
   attr_accessor :type,
                 :rule,

@@ -1,10 +1,4 @@
-class CmSupportingDocsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmSupportingDocsObject < CmBaseObject
 
   attr_accessor :type,
                 :file_name,

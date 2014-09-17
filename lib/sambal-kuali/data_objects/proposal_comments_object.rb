@@ -1,10 +1,4 @@
-class CmCommentsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmCommentsObject < CmBaseObject
 
   attr_accessor  :commentText, :index
 

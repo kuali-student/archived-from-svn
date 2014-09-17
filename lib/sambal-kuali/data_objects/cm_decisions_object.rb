@@ -1,10 +1,4 @@
-class CmDecisionsObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmDecisionsObject < CmBaseObject
 
   attr_accessor  :decision_text,
                  :decision,

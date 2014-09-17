@@ -1,9 +1,4 @@
-class CmVersionCodeObject < DataFactory
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmVersionCodeObject < CmBaseObject
 
   attr_accessor     :version_code_count,
                     :version_code,

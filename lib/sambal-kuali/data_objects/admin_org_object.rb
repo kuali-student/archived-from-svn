@@ -1,10 +1,4 @@
-class CmAdminOrgObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmAdminOrgObject < CmBaseObject
 
   attr_reader :admin_org_name,
               :admin_org_level,

@@ -1,5 +1,4 @@
-class CmRequisiteRuleGroupObject < DataFactory
-  include Foundry
+class CmRequisiteRuleGroupObject < CmBaseObject
 
   attr_accessor :logic_operator,
                 :left_rule,
@@ -22,7 +21,7 @@ class CmRequisiteRuleGroupObject < DataFactory
 end
 
 
-class CmRequisiteGroupNodeObject < DataFactory
+class CmRequisiteGroupNodeObject < CmBaseObject
   include Foundry
 
   attr_accessor :logic_operator,

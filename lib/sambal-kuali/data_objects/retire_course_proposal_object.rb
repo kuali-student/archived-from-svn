@@ -1,10 +1,4 @@
-class CmRetireCourseProposalObject < DataFactory
-
-  include Foundry
-  include DateFactory
-  include StringFactory
-  include Workflows
-  include Utilities
+class CmRetireCourseProposalObject < CmBaseObject
 
   attr_accessor :course,
                 :admin_proposal,
