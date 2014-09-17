@@ -23,13 +23,13 @@ Feature: GT.Modify Course
     Then the modify course proposal is successfully approved
     And the Superseded version has a new end term and the new course version is Active
 
-  @wip
+
   Scenario: MC2.1 Create and Save a Modify Proposal as CS
     When I create a modify course proposal as Curriculum Specialist
     Then I can review the modify proposal compared to the course
-    Then I do not have the option to modify the course with new version
+    And I do not have the option to modify the course with new version
 
-  @wip
+
   Scenario Outline: MC2.3 Approve and Activate a Modify Course Proposal by CS
     Given I submit a modify course proposal as CS by <author>
     When I approve the modify course proposal as <department_approver>
@@ -42,6 +42,16 @@ Feature: GT.Modify Course
   Examples:
     |author|department_approver|college_approver|senate_committee_approver|publication_office_approver|
     |alice |carol               |earl            |martha                   |alice                     |
+
+
+  @wip
+  Scenario: MC3.1 Create, Approve & Activate an Admin Modify Proposal as CS
+    When I modify a course without curriculum review as Curriculum Specialist
+    Then I can not approve and activate the admin modify proposal
+    When I complete the required for approve fields on the modify course proposal
+    Then I Approve and Activate the modify course admin proposal
+    And the Superseded version has a new end term
+    And the new course version is Active
 
 
   @wip
@@ -65,12 +75,3 @@ Feature: GT.Modify Course
     When I modify a retired course without creating a new version as Curriculum Specialist
     Then I can see but cannot edit the retired details
 
-
-  @wip
-  Scenario: MC3.1 Create, Approve & Activate an Admin Modify Proposal as CS
-    When I modify a course without curriculum review as Curriculum Specialist
-    Then I can not approve and activate the admin modify proposal
-    When I complete the required for approve fields on the modify course proposal
-    Then I Approve and Activate the modify course admin proposal
-    And the Superseded version has a new end term
-    And the new course version is Active

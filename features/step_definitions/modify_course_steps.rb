@@ -65,14 +65,14 @@ Then(/^I can review the modify course proposal details compared to the course$/)
   on CmReviewProposalPage do |review|
     review.review_proposal_title_header.should include @course_proposal.course_title
 
-    review.new_proposal_title_review.should == @modify_course_proposal.course_title
+    review.new_proposal_title_review.should == @modify_course_proposal.proposal_title
     review.new_proposal_rationale_review.should == ""
     review.new_start_term_review.should == ""
 
     review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
     review.proposal_title_diff_highlighter.should ==  "cm-compare-highlighter"
 
-   # review.review_proposal_title_header.should_not include "Admin"
+    review.review_proposal_title_header.should_not include "Admin"
 
   end
 
@@ -185,12 +185,8 @@ When(/^I create a modify course proposal as Curriculum Specialist$/) do
   generate_course_and_course_proposal
   navigate_to_functional_home
   @course.view_course
-  on(CmReviewProposalPage).modify_course
-  on CmCreateCourseStartPage do |page|
-    page.modify_course_new_version.click
-    page.curriculum_review_process.set
-    page.continue
-  end
+  @course.modify_course_with_version_and_curric_review
+
 end
 
 Then(/^I can review the modify proposal compared to the course$/) do
@@ -210,7 +206,7 @@ Then(/^I can review the modify proposal compared to the course$/) do
 
 end
 
-Then(/^I do not have the option to modify the course with new version$/) do
+And(/^I do not have the option to modify the course with new version$/) do
   navigate_to_cm_home
   navigate_to_find_course
   on CmFindACoursePage do |search|
@@ -253,13 +249,6 @@ Given(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
                                                 final_exam_type: [:exam_standard],
                                                 exam_standard: :set,
                                                 start_term: 'Spring 2008'
-  # on CmActiveDatesPage do |page|
-  #   #Active Dates
-  #   page.active_dates unless page.current_page('Active Dates').exists?
-  #   page.start_term.pick! 'Spring 2008'
-  #   page.save_progress
-  # end
-  # on(CmCourseInformationPage).review_proposal
 
   @modify_course_proposal.submit_proposal
 
@@ -277,11 +266,7 @@ When(/^I modify a course without curriculum review as Curriculum Specialist$/) d
   generate_course_and_course_proposal
   navigate_to_functional_home
   @course.view_course
-  on(CmReviewProposalPage).modify_course
-  on CmCreateCourseStartPage do |page|
-    page.modify_course_new_version.click
-    page.continue
-  end
+  @course.modify_course_with_version_without_curric_review
 end
 
 Then (/^I can not approve and activate the admin modify proposal$/) do

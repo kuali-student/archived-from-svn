@@ -93,6 +93,23 @@ class CmCourseObject < CmBaseObject
     end
   end
 
+  def modify_course_with_version_without_curric_review
+    on(CmReviewProposalPage).modify_course
+    on CmCreateCourseStartPage do |page|
+      page.modify_course_new_version.click
+      page.continue
+    end
+  end
+
+  def modify_course_with_version_and_curric_review
+    on(CmReviewProposalPage).modify_course
+    on CmCreateCourseStartPage do |page|
+      page.modify_course_new_version.click
+      page.curriculum_review_process.set
+      page.continue
+    end
+  end
+
   def modify_course_wo_version
     on(CmReviewProposalPage).modify_course
     on CmCreateCourseStartPage do |page|
