@@ -105,6 +105,7 @@ class CmSubmitFieldsObject < DataFactory
     on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?
       page.start_term.pick! @start_term unless start_term.nil?
+      page.loading_wait
     end
   end
 
@@ -161,6 +162,7 @@ class CmSubmitFieldsObject < DataFactory
       #Active Dates
       page.active_dates unless page.current_page('Active Dates').exists?
       page.start_term.pick! opts[:start_term] unless opts[:start_term].nil?
+      page.loading_wait
       determine_save_action unless opts[:defer_save]
     end
     set_options(opts)
