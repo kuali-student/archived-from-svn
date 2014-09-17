@@ -38,7 +38,7 @@ class CourseSearch < BasePage
   element(:results_list_next_enabled) { |b| b.a(id: "course_search_results_next") }
   element(:results_list_next_click) { |b| b.results_list_next_enabled.click }
   element(:results_list_next_disabled) { |b| b.a(class: "next paginate_button paginate_button_disabled",id:"course_search_results_next") }
-  action(:course_code_result_link) { |ccode,b| b.tr(id: "#{ccode}").a(class: "ksap-text-ellipsis").wait_until_present(120) }
+  action(:course_code_result_link) { |ccode,b| b.tr(id: "#{ccode}").a(class: "ksap-text-ellipsis")}
   action (:course_code_result_link_click) {|b| b.course_code_result_link.click }
   action(:course_description) { |co_code,b| b.div(id: "#{co_code}_description").p(class: "uif-message").text }
   element(:back_to_search_results) { |b| b.link(text: "Return to search results") }
