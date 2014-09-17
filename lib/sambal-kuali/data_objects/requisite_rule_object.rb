@@ -79,7 +79,7 @@ class CmRequisiteRuleObject < DataFactory
         end
 
         page.completed
-        page.loading_wait
+        page.loading_extended_wait
         page.grade_dropdown.fit "A"
       end
 
