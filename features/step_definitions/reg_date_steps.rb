@@ -16,7 +16,7 @@ end
 Then /^there is a message indicating that the registration period is (not open|not open yet|over)$/ do |period_status|
   error_message = case period_status
                     when "not open" then "Registration is not currently open"
-                    when "not open yet" then "First day of Registration is not until 8/28/2012"
+                    when "not open yet" then "First day of Registration is not until 8/29/2012"
                     when "over" then "Last day of Registration was 9/05/2012"
                   end
   on RegistrationCart do |page|
