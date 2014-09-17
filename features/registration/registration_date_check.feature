@@ -10,6 +10,7 @@ Feature: REG.Registration Date Check
 
   CR 16.1 and CR 17.1 - As an admin I want to prevent a student from accessing the registration functions
                         for a term because registration isn’t open
+  CR 30.1 - As an administrator I want to prevent a student from registering for courses prior to their registration appointment
 
   Background:
     Given I am using a mobile screen size
@@ -38,3 +39,17 @@ Feature: REG.Registration Date Check
     When I log in to student registration as a user configured for Fall 2012
     And I attempt to access registration for Fall 2012
     Then I am able to access registration features
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student with appointment with system date prior to early reg period - reg from cart
+    When I log in to student registration as A.TIMOTHYG
+    And I attempt to register for a course in Fall 2012
+    Then there is a message indicating that my registration appointment period has not begun
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student with appointment with system date prior to early reg period - reg from course search
+    Given I am using a large screen size
+    When I log in to student registration as A.TIMOTHYG
+    When I search for a course in Fall 2012 and select a registration group
+    And I register directly for the registration group
+    Then there is a message indicating that my registration appointment period has not begun

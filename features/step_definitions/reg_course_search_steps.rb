@@ -297,3 +297,21 @@ And /^the course is waitlisted in my schedule$/ do
   end
 end
 
+
+When /^I search for a course in Fall 2012 and select a registration group$/ do
+  @course_search_result = make CourseSearch, :search_string=> "CHEM", :course_code=> "CHEM231"
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(@course_search_result.term)
+
+  @course_search_result.search :navigate=>true
+  on CourseSearchPage do |page|
+    page.course_code_result_row(@course_search_result.course_code).wait_until_present
+    page.select_course(@course_search_result.course_code)
+  end
+
+  @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"A"
+  @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"E"
+  @course_search_result.edit :selected_section => "1001"
+  sleep 3
+end

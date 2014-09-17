@@ -38,6 +38,7 @@ class CourseDetailsPage < RegisterForCourseBase
   element(:register_confirm_button) { |course_code,reg_group_code,b| b.button(id: "directReg_edit_#{course_code}_#{reg_group_code}") }
   element(:register_cancel_button) { |course_code,reg_group_code,b| b.button(id: "directReg_remove_#{course_code}_#{reg_group_code}") }
   element(:direct_register_popup_course) { |b| b.span(id: "direct_register_popup_course") }
+  value(:direct_register_popup_reason_message) { |course_code,reg_group_code,b| b.span(id: "reason_message_#{course_code}_#{reg_group_code}").text }
   value(:direct_waitlist_message) { |course_code,reg_group_code,b| b.span(id: "waitlisted_#{course_code}_#{reg_group_code}").text }
   element(:direct_register_popup_button) { |course_code,reg_group_code,b| b.button(id: "course_remove_#{course_code}_#{reg_group_code}") }
   action(:close_direct_register_popup) { |course_code,reg_group_code,b| b.direct_register_popup_button(course_code,reg_group_code).click }
