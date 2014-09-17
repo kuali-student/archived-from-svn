@@ -1,4 +1,4 @@
-@wip
+@wipt
 Feature: BT.Add course to planner
 
   Background:
