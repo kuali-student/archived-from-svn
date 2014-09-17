@@ -47,12 +47,16 @@ class CmCourseObject < DataFactory
 
   end
 
+  def edit(opts={})
+
+  end
+
 
   def search_for_course
     navigate_rice_to_cm_home
     navigate_to_find_course
     on CmFindACoursePage do |search|
-      search.course_code.set search_term
+      search.course_code.set @search_term
       search.find_courses
     end
   end
@@ -60,6 +64,10 @@ class CmCourseObject < DataFactory
 
   def view_course
     search_for_course
+    view_selected_course
+  end
+
+  def view_selected_course
     on CmFindACoursePage do |view|
       view.view_course(@course_code)
     end
@@ -88,6 +96,14 @@ class CmCourseObject < DataFactory
     on CmCourseVersionHistoryPage do |page|
       page.close_history_view
       page.alert.ok if page.alert.exists?
+    end
+  end
+
+  def modify_course_wo_version
+    on(CmReviewProposalPage).modify_course
+    on CmCreateCourseStartPage do |page|
+      page.modify_course_this_version.click
+      page.continue
     end
   end
 end

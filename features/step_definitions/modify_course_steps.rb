@@ -331,3 +331,64 @@ def generate_course_and_course_proposal
                                  outcome_list: @course_proposal.outcome_list,
                                  format_list: @course_proposal.format_list
 end
+
+When(/^I modify a course without creating a new version as Curriculum Specialist$/) do
+  @course.modify_course_wo_version
+end
+
+
+Then(/^I can edit the course details of the current version$/) do
+  # Edit Transcript Course title and Description
+  @course_proposal.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}", :description => "updated #{random_alphanums(10,'description ')}"
+end
+
+And(/^the updates will persist to the current course version$/) do
+  navigate_to_functional_home
+  @course.search_for_course
+  on CmFindACoursePage do |page|
+    page.results_list_course_code.rows.count == 1
+  end
+  @course.view_selected_course
+  on CmReviewProposalPage do |page|
+    page.transcript_course_title.should == @course_proposal.transcript_course_title
+    page.description_review.should == @course_proposal.description_review
+    page.course_title_review.should include "Modify:"
+    page.review_proposal_title_header.should include "(Admin Update)"
+  end
+end
+
+Given(/^there is a course with a active modify proposal$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I cannot modify the Draft course version as Curriculum Specialist$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I reject the proposal as Department Reviewer$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I cannot modify the Not Approved course version as Curriculum Specialist$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^there is a course with a superseded version$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I only have the option to modify the superseded course without a version$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^there is a course with a retired version$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+When(/^I modify a retired course without creating a new version as Curriculum Specialist$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I can see but cannot edit the retired details$/) do
+  pending # express the regexp above with the code you wish you had
+end

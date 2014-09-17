@@ -41,7 +41,29 @@ Feature: GT.Modify Course
     And the new course version is Active
   Examples:
     |author|department_approver|college_approver|senate_committee_approver|publication_office_approver|
-    |alice |carol               |earl            |martha                   |alice                      |
+    |alice |carol               |earl            |martha                   |alice                     |
+
+
+  @wip
+  Scenario: MC4.1 Can Modify without version as CS
+    When I modify a course without creating a new version as Curriculum Specialist
+    Then I can edit the course details of the current version
+    And the updates will persist to the current course version
+  @wip
+  Scenario: MC4.2 Cannot Modify if Course version state is Draft for Not Approved
+    Given there is a course with a active modify proposal
+    Then I cannot modify the Draft course version as Curriculum Specialist
+    When I reject the proposal as Department Reviewer
+    Then I cannot modify the Not Approved course version as Curriculum Specialist
+  @wip
+  Scenario: MC4.3 Can only modify without version when course version state is Superseded
+    Given there is a course with a superseded version
+    Then I only have the option to modify the superseded course without a version
+  @wip
+  Scenario: MC4.4 Can see Retire info when modifying a Retired version
+    Given there is a course with a retired version
+    When I modify a retired course without creating a new version as Curriculum Specialist
+    Then I can see but cannot edit the retired details
 
 
   @wip
