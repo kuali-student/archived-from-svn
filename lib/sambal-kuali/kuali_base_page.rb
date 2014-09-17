@@ -95,12 +95,13 @@ class BasePage < PageFactory
       action(:auto_lookup) { |lookup_results, b| b.link(text: /#{lookup_results}/).when_present.click}
 
       #ADVANCED SEARCH BOXES
+      element(:frm) { |b| b.frame(:class=>"fancybox-iframe") }
       action(:advanced_search) { |b| b.link(text: 'Advanced Search').click; b.adv_search_button.wait_until_present}
       #Course Information:  Joint Offering
       element(:adv_search_by) { |b| b.frame(class: 'fancybox-iframe').select_list(name: 'lookupCriteria[searchBy]') }
       element(:adv_given_name) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseTitle]') }
       element(:adv_course_code) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[courseCode]') }
-      element(:adv_plain_text_description) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[descr.plain]') }
+
 
       element(:adv_course_title) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[title]') }
       element(:adv_course_code_rule) { |b| b.frame(class: 'fancybox-iframe').text_field(name: 'lookupCriteria[code]') }
@@ -158,6 +159,8 @@ class BasePage < PageFactory
       action(:modify_course) { |b| b.modify_button.click;  b.loading_wait }
       element(:version_history_button) {|b|b.button(id: "CM-VersionHistory-Button")}
       action(:lookup_version_history) { |b| b.version_history_button.click }
+
+
 
     end
 

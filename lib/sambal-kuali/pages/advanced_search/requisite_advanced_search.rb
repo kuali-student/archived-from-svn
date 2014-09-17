@@ -1,13 +1,7 @@
 class CmRequisiteAdvancedSearchPage < BasePage
 
+  cm_elements
   expected_element :search_course_code
-
-  def frm
-    self.iframe(class: "fancybox-iframe")
-  end
-
-
-  action(:loading_wait) {|b| b.frm.image(alt: "Loading...").wait_while_present }
 
   element(:search_course_title) { |b| b.frm.text_field(name: 'lookupCriteria[title]') }
   element(:search_course_code) { |b| b.frm.text_field(name: 'lookupCriteria[code]') }

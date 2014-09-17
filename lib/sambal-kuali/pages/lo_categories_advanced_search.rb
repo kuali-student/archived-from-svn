@@ -4,10 +4,6 @@ class CmLOAdvancedSearchPage < BasePage
 
   expected_element :add_categories_button
 
-  def frm
-    self.iframe(class: "fancybox-iframe")
-  end
-
   #Select Categories popup
   element(:type_select_all_link) {|b| b.frm.a(id: 'CM-Proposal-Course-LoCategory-SelectAll') }
   element(:type_clear_all_link)  {|b|b.frm.a(id: 'CM-Proposal-Course-LoCategoryDeselectAll')}
