@@ -6,7 +6,7 @@ class CoursePlannerPage < BasePage
   frame_element
 
 
-  expected_element :bookmark_gutter
+  expected_element :planner_courses_detail_list,120
   element(:course_planner_header) { |b| b.main(id:"plan-page").div(class:"uif-message")}
 
   #10 - planner page elements
@@ -82,6 +82,11 @@ class CoursePlannerPage < BasePage
   element(:course_planned_term) {|term,b|b.div(id:/kuali-atp-#{term}_courses.*/)}
   element(:course_backup_term) {|term,b|b.div(id:/kuali-atp-#{term}_backup.*/)}
   element(:credit_tally) {|b|b.div(id:"planner_courses_detail").div(class:"uif-messageField ksap-planner-credits uif-boxLayoutHorizontalItem")}
+  element(:quick_add) {|state,planned_term,b|b.a(id:/#{planned_term}_#{state}_Addcourse/)}
+  element(:course_code_quick_add) {|b|b.text_field(id:"uedhnkp_control")}
+  element(:add_to_plan_quick) {|b|b.button(id:"submit_dialog_button")}
+  element(:exception_message) {|b|b.main(id:"planner_add_course_page").div(class:"uif-horizontalBoxGroup uif-boxLayoutVerticalItem clearfix ksap-feedback error ks-Popover-error")}
+
 
 end
 
