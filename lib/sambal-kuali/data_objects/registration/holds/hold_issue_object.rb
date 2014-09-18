@@ -19,7 +19,7 @@ class HoldIssue < DataFactory
         :code => "AAI",
         :suffix => nil,
         :category => "Academic Advising Issue",
-        :description => random_alphanums(50),
+        :description => nil,
         :owning_org_abbr => "UME-Wicomico",
         :org_contact => nil,
         :contact_address => nil,
@@ -37,9 +37,10 @@ class HoldIssue < DataFactory
 
     set_options(options)
 
+    @description = random_alphanums(50) if @description == nil
     @suffix = rand(999) if @suffix == nil
-    @name = "#{@name} #{@suffix}"
-    @code = "#{@code.upcase}#{@suffix}"
+    @name = "#{@name} #{@suffix}" if @name == "Academic Advising Issue"
+    @code = "#{@code.upcase}#{@suffix}" if @code == "AAI"
   end
 
   def search
@@ -54,7 +55,6 @@ class HoldIssue < DataFactory
       page.manage_hold_code_input.set @code
       page.manage_hold_category_select.select @category
       page.manage_hold_descr_input.set @description
-
       page.manage_hold_show
     end
   end
@@ -74,6 +74,7 @@ class HoldIssue < DataFactory
       page.code_input.set @code
       page.descr_input.set @description
       page.find_owning_org @owning_org_abbr
+      page.history.set(@hold_history)
 
       @authorising_orgs.each do |auth_org|
         auth_org.parent = self
@@ -133,6 +134,11 @@ class HoldIssue < DataFactory
           auth_org.create
           @authorising_orgs << auth_org
         end
+      end
+
+      if options[:hold_history] != nil
+          page.history.set(options[:hold_history])
+          @hold_history = options[:hold_history]
       end
 
       page.save unless options[:defer_save]

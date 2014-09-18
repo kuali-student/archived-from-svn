@@ -71,7 +71,7 @@ class HoldIssueCreateEdit < BasePage
   element(:term_based) { |b| b.term_section.text_field(id: /holdTermBased/)}
   element(:first_term) { |b| b.term_section.text_field(id: /holdFirstAppTerm/)}
   element(:last_term) { |b| b.term_section.text_field(id: /holdLastAppTerm/)}
-  element(:history) { |b| b.term_section.text_field(id: /hold_History/)}
+  element(:history) { |b| b.term_section.checkbox(name: "document.newMaintainableObject.dataObject.holdHistory")}
 
   #Auth Org Section
   element(:auth_org_section) { |b| b.hold_page.section(id: "KS-CreateHold-AuthorizationSection")}

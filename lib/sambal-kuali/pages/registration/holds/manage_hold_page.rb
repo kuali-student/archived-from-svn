@@ -86,10 +86,10 @@ class ManageHoldIssue < BasePage
     return nil
   end
 
-  def edit_hold (hold_code)
+  def edit_hold (hold_name)
     loading.wait_while_present
-    wait_until { manage_hold_results_table.row(text: /#{hold_code}/).present? }
-    manage_hold_results_table.row(text: /#{hold_code}/).a(id: /manageHoldEditLink_line\d+/).click
+    wait_until { manage_hold_results_table.row(text: /#{hold_name}/).present? }
+    manage_hold_results_table.row(text: /#{hold_name}/).a(id: /manageHoldEditLink_line\d+/).click
   end
 
   ######################################################################################################################

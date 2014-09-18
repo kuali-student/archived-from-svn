@@ -1,5 +1,5 @@
 When(/^I search for a hold with a valid hold code$/) do
-  @manage_hold = create HoldIssue, :code => "FIN"
+  @manage_hold = create HoldIssue, :code => "AAI"
 end
 
 Then(/^a hold matching that code is displayed$/) do

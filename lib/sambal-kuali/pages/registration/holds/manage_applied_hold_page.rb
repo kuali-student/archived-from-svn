@@ -9,16 +9,18 @@ class ManageAppliedHold < BasePage
   ######################################################################################################################
   ###                                            Constants                                       ###
   ######################################################################################################################
-  APPLIED_HOLD  = 0
-  HOLD_CODE     = 1
-  CATEGORY      = 2
-  CONSEQUENCE   = 3
-  STATE         = 4
-  START_DATE    = 5
-  END_DATE      = 6
-  START_TERM    = 7
-  END_TERM      = 8
-  ACTIONS       = 9
+
+  CHECK_HOLD    = 0
+  APPLIED_HOLD  = 1
+  HOLD_CODE     = 2
+  CATEGORY      = 3
+  CONSEQUENCE   = 4
+  STATE         = 5
+  START_DATE    = 6
+  END_DATE      = 7
+  START_TERM    = 8
+  END_TERM      = 9
+  ACTIONS       = 10
 
   ######################################################################################################################
   ###                                            Manage Applied Hold Page                                ###
@@ -57,12 +59,26 @@ class ManageAppliedHold < BasePage
 
   element(:apply_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Add-Applied-Hold")}
   action(:apply_new_hold){ |b| b.apply_new_hold_btn.when_present.click}
+  element(:expire_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Expire-Applied-Hold")}
+  action(:expire_new_hold){ |b| b.expire_new_hold_btn.when_present.click}
 
   ######################################################################################################################
   ###                                            Results Section                                ###
   ######################################################################################################################
   element(:results_section) { |b| b.frm.div( id: "KS-AppliedHold-SearchResults")}
   element(:results_table) { |b| b.results_section.table}
+
+  def expire_hold (hold_code)
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
+          row.cells[CHECK_HOLD].click
+          loading.wait_while_present
+          expire_new_hold
+        end
+      end
+    end
+  end
 
   def get_hold_by_code( code)
     loading.wait_while_present
@@ -74,4 +90,16 @@ class ManageAppliedHold < BasePage
 
     return nil
   end
+
+  def get_holds_states (hold_code, hold_state)
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /#{Regexp.escape(hold_state)}/))
+          return row
+        end
+      end
+    end
+    return nil
+  end
+
 end

@@ -25,7 +25,7 @@ When(/^I create a hold with authorizing organization for apply as well as expire
   auth_orgs = []
   auth_orgs << (make HoldIssueAuthorisingOrg, :auth_org => "Graduate Studies", :auth_expire => false)
   auth_orgs << (make HoldIssueAuthorisingOrg, :auth_org => "Ctr Study & Resp to Terrorism", :auth_apply => false)
-  @hold = create HoldIssue, :name => "Academic Advising Issue", :code => "Acad",
+  @hold = create HoldIssue, :name => "Academic Advising Issue", :code => "AAI",
                  :category => "Academic Advising Issue", :authorising_orgs => auth_orgs
 end
 
