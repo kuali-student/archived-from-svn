@@ -37,7 +37,7 @@ class HoldIssue < DataFactory
 
     set_options(options)
 
-    @description = random_alphanums(50) if @description == nil
+    @description = ("AFT created Description " + random_alphanums(50)) if @description == nil
     @suffix = rand(999) if @suffix == nil
     @name = "#{@name} #{@suffix}" if @name == "Academic Advising Issue"
     @code = "#{@code.upcase}#{@suffix}" if @code == "AAI"
