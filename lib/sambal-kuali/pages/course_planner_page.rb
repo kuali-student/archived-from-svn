@@ -86,6 +86,8 @@ class CoursePlannerPage < BasePage
   element(:course_code_quick_add) {|b|b.text_field(id:"uedhnkp_control")}
   element(:add_to_plan_quick) {|b|b.button(id:"submit_dialog_button")}
   element(:exception_message) {|b|b.main(id:"planner_add_course_page").div(class:"uif-horizontalBoxGroup uif-boxLayoutVerticalItem clearfix ksap-feedback error ks-Popover-error")}
+  action(:course_indicator) {|ccode,term,condition,b|b.p(id:/#{ccode}_kuali-atp-#{term}_#{condition}_statusMessage/).fire_event 'mouseover'}
+  value(:indicator_popup) {|b|b.form(id:"kualiForm").td(class:"jquerybubblepopup-innerHtml").text}
 
 
 end
