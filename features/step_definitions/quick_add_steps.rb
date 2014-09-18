@@ -1,6 +1,6 @@
 
 When(/^I add a course from the quick add to the planned section in the planner$/) do
-  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer 1 2014", :state => "Planned"
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer 1 2014", :state => "planned"
   @course_search_result.course_search
   on CourseSearch do |page|
     page.course_search_results_facets.wait_until_present
@@ -11,6 +11,7 @@ When(/^I add a course from the quick add to the planned section in the planner$/
   on CoursePlannerPage do |page|
    page.planner_courses_detail_list.wait_until_present
    @course_search_result.remove_code_from_planned_backup
+   sleep 15
    page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
    page.course_code_quick_add.wait_until_present(60)
    page.course_code_quick_add.set @course_search_result.course_code
@@ -46,7 +47,7 @@ Then(/^I should get a relevant exception message$/) do
 end
 
 When(/^I add a course from the quick add to the backup section in the planner$/) do
-  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer 1 2014", :state => "Planned"
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer 1 2014", :state => "backup"
   @course_search_result.course_search
   on CourseSearch do |page|
     page.course_search_results_facets.wait_until_present
@@ -59,8 +60,9 @@ When(/^I add a course from the quick add to the backup section in the planner$/)
       page.planner_courses_detail_list.wait_until_present
       @course_search_result.remove_code_from_planned_backup
       #This would change for backup
+      sleep 15
       page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
-      page.course_code_quick_add.wait_until_present(60)
+      page.course_code_quick_add.wait_until_present(120)
       page.course_code_quick_add.set @course_search_result.course_code
       page.add_to_plan_quick.click
     end
@@ -71,7 +73,7 @@ Then(/^I should be able to view the course in the backup section$/) do
     page.course_code_quick_add.wait_while_present(120)
     page.planner_courses_detail_list.wait_until_present(60)
     #This would change for backup
-    page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
+    page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
 
@@ -80,9 +82,11 @@ And(/^I add the course again to the same backup section in the term$/) do
   on CoursePlannerPage do |page|
     page.refresh
     page.planner_courses_detail_list.wait_until_present
-    page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
 
-#  page.course_code_quick_add.wait_until_present
+    #This would change for backup
+
+    page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
+    page.course_code_quick_add.wait_until_present(120)
     page.course_code_quick_add.set @course_search_result.course_code
     page.add_to_plan_quick.click
   end

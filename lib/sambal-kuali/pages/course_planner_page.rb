@@ -17,6 +17,7 @@ class CoursePlannerPage < BasePage
   element(:credit) { |b| b.frm.text_field(name: "courseCredit") }
   element(:notes) { |b| b.frm.text_field(name: "courseNote") }
   action(:course_code_term) { |term,code,b| b.div(id:"kuali-atp-#{term}_courses_#{code}_code").p(class: "uif-message").text }
+#  action(:course_code_term_backup) { |term,code,b| b.div(id:"kuali-atp-#{term}_backup_#{code}_code").p(class: "uif-message").text }
   action(:course_code_term_click) { |term,code,b| b.div(id:"kuali-atp-#{term}_courses_#{code}_code").p(class: "uif-message").click }
 
   #action(:course_code_term_backup) { |term,code,b| b.div(id:"kuali-atp-#{term}_backup_#{code}_code").p(class: "uif-message").text }
