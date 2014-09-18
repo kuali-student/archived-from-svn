@@ -44,7 +44,7 @@ Feature: REG.Registration Date Check
   Scenario: CR 30.1 Student with appointment with system date prior to early reg period - reg from cart
     When I log in to student registration as A.TIMOTHYG
     And I attempt to register for a course in Fall 2012
-    Then there is a message indicating that my registration appointment period has not begun
+    Then there is a message indicating that registration appointment period for TIMOTHYG has not begun
 
   #KSENROLL-14904
   Scenario: CR 30.1 Student with appointment with system date prior to early reg period - reg from course search
@@ -52,4 +52,28 @@ Feature: REG.Registration Date Check
     When I log in to student registration as A.TIMOTHYG
     When I search for a course in Fall 2012 and select a registration group
     And I register directly for the registration group
-    Then there is a message indicating that my registration appointment period has not begun
+    Then there is a message indicating that registration appointment period for TIMOTHYG has not begun
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student with appointment with system date within early reg period but prior to appointment date - reg from cart
+    When I log in to student registration as A.TOBIASJ
+    And I attempt to register for a course in Fall 2012
+    Then there is a message indicating that registration appointment period for TOBIASJ has not begun
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student with appointment with system date within appointment period - reg from cart
+    When I log in to student registration as A.TRAVISC
+    And I attempt to register for a course in Fall 2012
+    Then there is a message indicating successful registration
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student without appointment with system date within appointment period - reg from cart
+    When I log in to student registration as A.TERRYM
+    And I attempt to register for a course in Fall 2012
+    Then there is a message indicating that no registration appointment has been scheduled
+
+  #KSENROLL-14904
+  Scenario: CR 30.1 Student without appointment with system date within open reg period - reg from cart
+    When I log in to student registration as A.SUSANH
+    And I attempt to register for a course in Fall 2012
+    Then there is a message indicating successful registration
