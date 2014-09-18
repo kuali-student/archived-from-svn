@@ -34,11 +34,7 @@ class CmSubmitFieldsObject < CmBaseObject
         assessment_scale:           [:assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail, :assessment_percentage, :assessment_satisfactory],
         final_exam_type:            [:exam_standard, :exam_alternate, :exam_none],
         final_exam_rationale:       random_alphanums(10,'test final exam rationale '),
-        outcome_list: [
-            (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
-            (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
-            (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}"),
-            ],
+        outcome_list: [(make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample)],
         start_term: '::random::'
     }
     set_options(defaults.merge(opts))

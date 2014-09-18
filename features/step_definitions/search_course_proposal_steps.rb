@@ -1,21 +1,30 @@
 Given /^I have a course proposal created as Curriculum Specialist$/ do
   steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
-                            :submit_fields => [(make CmSubmitFieldsObject)]
+                            :submit_fields => [(make CmSubmitFieldsObject, :outcome_list => [ (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
+                                                                                              (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
+                                                                                              (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}")]
+                                               )]
 end
 
 Given /^I have a course admin proposal created as Curriculum Specialist$/ do
   steps %{Given I am logged in as Curriculum Specialist}
   @course_proposal = create CmCourseProposalObject, :curriculum_review_process => "Yes",
                                                     :required_fields_only => false,
-                                                    :submit_fields => [(make CmSubmitFieldsObject)],
+                                                    :submit_fields => [(make CmSubmitFieldsObject, :outcome_list => [ (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
+                                                                                                                      (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
+                                                                                                                      (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}")]
+                                                                       )],
                                                     :approve_fields => [(make CmApproveFieldsObject)]
 end
 
 Given /^I have a course proposal created as Faculty$/ do
   steps %{Given I am logged in as Faculty}
   @course_proposal = create CmCourseProposalObject, :required_fields_only => false,
-                                                    :submit_fields => [(make CmSubmitFieldsObject)],
+                                                    :submit_fields => [(make CmSubmitFieldsObject, :outcome_list => [ (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
+                                                                                                                      (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
+                                                                                                                      (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}")]
+                                                                                                                    )],
                                                     :approve_fields => [(make CmApproveFieldsObject)]
 
 end
