@@ -59,8 +59,7 @@ class ManageAppliedHold < BasePage
 
   element(:apply_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Add-Applied-Hold")}
   action(:apply_new_hold){ |b| b.apply_new_hold_btn.when_present.click}
-  element(:expire_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Expire-Applied-Hold")}
-  action(:expire_new_hold){ |b| b.expire_new_hold_btn.when_present.click}
+  element(:expire_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Expire-Applied-Hold")}
 
   ######################################################################################################################
   ###                                            Results Section                                ###
@@ -73,8 +72,7 @@ class ManageAppliedHold < BasePage
       results_table.rows[1..-1].each do |row|
         if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
           row.cells[CHECK_HOLD].click
-          loading.wait_while_present
-          expire_new_hold
+          expire_hold_btn.when_present.click
         end
       end
     end
@@ -94,7 +92,7 @@ class ManageAppliedHold < BasePage
   def get_holds_states (hold_code, hold_state)
     if results_table.exists?
       results_table.rows[1..-1].each do |row|
-        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /#{Regexp.escape(hold_state)}/))
+        if row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/ and row.cells[STATE].text=~ /#{Regexp.escape(hold_state)}/
           return row
         end
       end

@@ -57,3 +57,12 @@ Then(/^a permission error message is displayed$/) do
     result_error.should match /At least one permission must be selected for each organization/
   end
 end
+
+
+Given(/^there exists a hold that does not maintain history$/) do
+  @hold_issue = create HoldIssue, :hold_history => false
+end
+
+Given(/^there exists a hold that maintains history$/) do
+  @hold_issue = create HoldIssue, :hold_history => true
+end
