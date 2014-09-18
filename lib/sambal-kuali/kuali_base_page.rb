@@ -135,6 +135,7 @@ class BasePage < PageFactory
       value(:page_header_text) { |b| b.header(id: "CM-Proposal-Course-Create-Header").span(class: "uif-headerText-span").text }
 
       #element(:search_results_table) {|b| b.frame(class: 'fancybox-iframe').div(class: 'dataTables_wrapper').table }
+      value(:page_validation_message) { |b| b.div(id: "CM-Proposal-Course-Create-Page_messages").text }
       value(:page_validation_header) { |b| b.div(id: "CM-Proposal-Course-Create-Page_messages").h3(id: "pageValidationHeader").text }
       value(:review_proposal_error) { |b| b.p(id: "CM-Proposal-Review-Error-Message").text }
 

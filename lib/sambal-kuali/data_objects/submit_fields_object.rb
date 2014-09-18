@@ -135,6 +135,8 @@ class CmSubmitFieldsObject < CmBaseObject
       if opts[:final_exam_type] != nil
         if opts[:exam_standard] != nil
           page.exam_standard.set
+        elsif opts[:exam_alternate] != nil
+          page.exam_alternate.set
         else
           random_radio(opts[@final_exam_type])
           fill_out page, :exam_standard, :exam_alternate, :exam_none

@@ -271,13 +271,14 @@ end
 
 Then (/^I can not approve and activate the admin modify proposal$/) do
   on CmReviewProposalPage do |review|
-    review.review_proposal_title_header.should include 'Modify: ' + @course_proposal.course_title
+    review.review_proposal_title_header.should include @modify_course_proposal.proposal_title
     review.review_proposal_title_header.should include '(Admin Proposal)'
   end
   @course_proposal.approve_activate_proposal
   on CmCourseInformationPage do |page|
     #page.course_information
-    page.page_validation_header.should include "Start Term: For Approval, Start Term is a required field"
+    page.page_validation_header.should include "This page has 3 errors"
+    page.page_validation_message.should include "Start Term: For Approval, Start Term is a required field"
   end
 
 end
@@ -287,12 +288,9 @@ When (/^I complete the required for approve fields on the modify course proposal
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
-                                                final_exam_type: [:exam_standard],
-                                                exam_standard: :set,
+                                                final_exam_type: [:exam_alternate],
+                                                exam_alternate: :set,
                                                 start_term: 'Spring 2008'
-
-
-  @modify_course_proposal.approve_activate_proposal
 
 end
 
@@ -318,6 +316,9 @@ def generate_course_and_course_proposal
 end
 
 When(/^I modify a course without creating a new version as Curriculum Specialist$/) do
+  generate_course_and_course_proposal
+  navigate_to_functional_home
+  @course.view_course
   @course.modify_course_wo_version
 end
 
