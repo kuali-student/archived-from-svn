@@ -1067,7 +1067,7 @@ class CourseOffering < DataFactory
       else
         page.cancel_delete
       end
-      page.loading.wait_while_present
+      page.loading.wait_while_present(60)
     end
     confirmation_message
   end
