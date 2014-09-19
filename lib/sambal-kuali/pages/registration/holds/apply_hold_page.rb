@@ -25,9 +25,6 @@ class ApplyHold < BasePage
   element(:apply_hold_section) { |b| b.frm.section(id: "KS-ApplyHold-HoldSection")}
   element(:hold_code_section) { |b| b.apply_hold_section.div(class: "input-group")}
 
-  element(:code_details) { |b| b.apply_hold_section.div(id: "KS-ApplyHold-HoldCode-Section")}
-  action (:code_details_show){ |b| b.code_details.button.when_present.click}
-
   element(:hold_code_input) { |b| b.hold_code_section.text_field(name: "document.newMaintainableObject.dataObject.holdCode")}
   element(:find_hold_code_link) { |b| b.hold_code_section.a(id: "KS-ApplyHold-HoldCode-Section-CodeInput_quickfinder_act")}
   action(:find_hold_code){ |b| b.find_hold_code_link.when_present.click}

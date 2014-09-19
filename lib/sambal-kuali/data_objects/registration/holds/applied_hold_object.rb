@@ -89,7 +89,6 @@ class AppliedHold < DataFactory
       end
 
       if @apply_hold != false
-        page.code_details_show
         page.loading.wait_while_present
         page.apply_hold
       end
