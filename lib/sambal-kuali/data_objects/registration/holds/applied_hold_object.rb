@@ -6,7 +6,8 @@ class AppliedHold < DataFactory
   include Workflows
 
   attr_accessor :student_id, :student_name, :name, :code,
-                :category, :find_code_by_lookup, :apply_hold
+                :category, :find_code_by_lookup, :apply_hold,
+                :state, :exp_success
 
   def initialize(browser, opts={})
     @browser = browser
@@ -18,7 +19,8 @@ class AppliedHold < DataFactory
         :code => "ACAD02",
         :category => "Academic Progress Issue",
         :find_code_by_lookup => false,
-        :apply_hold => false
+        :apply_hold => false,
+        :state => "Active"
     }
 
     options = defaults.merge(opts)
@@ -30,13 +32,20 @@ class AppliedHold < DataFactory
     go_to_manage_applied_hold
   end
 
-  def expire
+  def expire opts = {}
+    defaults = {
+        :exp_success=> true,
+    }
+    options = defaults.merge(opts)
+
     on ManageAppliedHold do |page|
       page.expire_hold(@code)
     end
     on ExpireAppliedHold do |page|
       page.confirm_expire_hold(right_now[:date_w_slashes])
     end
+
+    @state = "Expired" if options[:exp_success]
   end
 
   def manage

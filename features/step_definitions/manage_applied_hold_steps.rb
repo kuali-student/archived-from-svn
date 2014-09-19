@@ -19,7 +19,7 @@ Then /^a validation error is displayed stating "([^"]+)"$/ do |exp_msg|
 end
 
 And /^the applied hold information is displayed$/ do
-  on(ManageAppliedHold).get_hold_by_code( @applied_hold.code).text.should match /#{@applied_hold.name}/
+  on(ManageAppliedHold).get_hold_by_code(@applied_hold.code).text.should match /#{@applied_hold.name}/
 end
 
 When(/^I expire that hold$/) do
@@ -27,9 +27,9 @@ When(/^I expire that hold$/) do
 end
 
 Then(/^the hold no longer displayed for the student$/) do
-  on(ManageAppliedHold).get_holds_states(@hold_issue.code, "Expired").nil?.should be_true
+  on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).nil?.should be_true
 end
 
 Then(/^the expired hold is displayed for the student$/) do
-  on(ManageAppliedHold).get_holds_states(@hold_issue.code, "Expired").nil?.should be_false
+  on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).text.should match /#{@hold_issue.code}.*#{@applied_hold.state}/m
 end

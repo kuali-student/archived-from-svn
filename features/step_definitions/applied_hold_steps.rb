@@ -15,5 +15,5 @@ Then /^the selected hold code is populated$/ do
 end
 
 And(/^I apply the hold to a student$/) do
-  @applied_hold = create AppliedHold, :student_id=> "KS-2060", :code => @hold_issue.code, :apply_hold => true
+  @applied_hold = create AppliedHold, :student_id=> "KS-2042", :code => @hold_issue.code, :apply_hold => true
 end

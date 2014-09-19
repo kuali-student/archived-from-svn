@@ -89,15 +89,4 @@ class ManageAppliedHold < BasePage
     return nil
   end
 
-  def get_holds_states (hold_code, hold_state)
-    if results_table.exists?
-      results_table.rows[1..-1].each do |row|
-        if row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/ and row.cells[STATE].text=~ /#{Regexp.escape(hold_state)}/
-          return row
-        end
-      end
-    end
-    return nil
-  end
-
 end
