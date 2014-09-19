@@ -11,9 +11,9 @@ class CreatePopulation < PopulationsBase
 
   action(:by_using_populations) { |b| b.frm.link(id: "link_byUsingPopulations").click; b.loading.wait_while_present }
   action(:by_rule) { |b| b.frm.link(id: "link_byRule").click; b.loading.wait_while_present }
-  action(:union) { |b| b.union_radio.set }
-  action(:intersection) { |b| b.frm.radio(value: "kuali.population.rule.type.intersection").set }
-  action(:exclusion) { |b| b.frm.radio(value: "kuali.population.rule.type.exclusion").set }
+  action(:union) { |b| b.union_radio.set; b.loading.wait_while_present }
+  action(:intersection) { |b| b.frm.radio(value: "kuali.population.rule.type.intersection").set; b.loading.wait_while_present }
+  action(:exclusion) { |b| b.frm.radio(value: "kuali.population.rule.type.exclusion").set; b.loading.wait_while_present }
   action(:create) { |b| b.frm.button(id: "button_createPopulation").click; b.loading.wait_while_present }
   action(:cancel) { |b| b.frm.link(id: "link_cancelPopulation").click; b.loading.wait_while_present }
 

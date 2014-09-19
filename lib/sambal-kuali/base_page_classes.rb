@@ -22,7 +22,7 @@ class PopulationsBase < BasePage
       element(:reference_population) { |b| b.frm.text_field(name: "document.newMaintainableObject.dataObject.referencePopulation.name") }
 
       action(:lookup_population) { |b| b.frm.div(data_parent: 'populations_table').link(text: 'Find a Name').click; b.loading.wait_while_present }
-      action(:lookup_ref_population) { |b| b.frm.div(data_label: 'Reference Population').link(text: 'Find a Population').click; b.loading.wait_while_present }
+      action(:lookup_ref_population) { |b| b.frm.div(data_label: 'Reference Population').when_present.link(text: 'Find a Population').click; b.loading.wait_while_present }
       action(:add) { |b| b.child_populations_table.button(text: "add").click; b.loading.wait_while_present; sleep 1.5 }
     end
 
@@ -183,9 +183,14 @@ module CalendarStickyFooter
     loading.wait_while_present #solves general sync issues
     #find elements directly to avoid 'Element is no longer attached to the DOM' error
     @browser.div(class: /uif-stickyButtonFooter/,data_parent: /CalendarEditPage/).button(text: "Save").when_present.click
+    puts 'clicked'
     loading.wait_until_present(60) #UI just hangs here when saving large ACAL
+    # (0..20).each do
+    #   puts loading.present?
+    #   sleep 0.2
+    # end
     loading.wait_while_present(60)
-    if options[:exp_success] then
+    if options[:exp_success]
       growl_msg_txt = growl_text
       raise "save was not successful - growl text: #{growl_msg_txt}" unless growl_msg_txt.match /saved successfully/
       growl_div.div(class: "jGrowl-close").click
