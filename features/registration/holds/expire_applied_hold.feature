@@ -11,7 +11,7 @@ Feature: REG.Expire Applied Hold
     Given there exists a hold that does not maintain history
     And I apply the hold to a student
     When I expire that hold
-    Then the hold no longer displayed for the student
+    Then the hold is no longer displayed for the student
 
 #KSENROLL-14604
   @pending
