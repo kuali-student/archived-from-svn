@@ -26,10 +26,18 @@ When(/^I expire that hold$/) do
   @applied_hold.expire
 end
 
+When(/^I delete that hold$/) do
+  @applied_hold.delete
+end
+
 Then(/^the hold no longer displayed for the student$/) do
   on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).nil?.should be_true
 end
 
 Then(/^the expired hold is displayed for the student$/) do
   on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).text.should match /#{@hold_issue.code}.*#{@applied_hold.state}/m
+end
+
+Then(/^the deleted hold is displayed for the student$/) do
+  on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).nil?.should be_true
 end

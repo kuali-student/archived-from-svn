@@ -60,6 +60,7 @@ class ManageAppliedHold < BasePage
   element(:apply_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Add-Applied-Hold")}
   action(:apply_new_hold){ |b| b.apply_new_hold_btn.when_present.click}
   element(:expire_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Expire-Applied-Hold")}
+  element(:delete_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Delete-Applied-Hold")}
 
   ######################################################################################################################
   ###                                            Results Section                                ###
@@ -73,6 +74,17 @@ class ManageAppliedHold < BasePage
         if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
           row.cells[CHECK_HOLD].click
           expire_hold_btn.when_present.click
+        end
+      end
+    end
+  end
+
+  def delete_hold (hold_code)
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
+          row.cells[CHECK_HOLD].click
+          delete_hold_btn.when_present.click
         end
       end
     end

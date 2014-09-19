@@ -48,6 +48,15 @@ class AppliedHold < DataFactory
     @state = "Expired" if options[:exp_success]
   end
 
+  def delete
+    on ManageAppliedHold do |page|
+      page.delete_hold(@code)
+    end
+    on DeleteAppliedHold do |page|
+      page.confirm_delete_hold
+    end
+  end
+
   def manage
     search
     on ManageAppliedHold do |page|
