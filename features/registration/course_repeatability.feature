@@ -9,6 +9,8 @@ Feature: REG.Course Repeatability
             so that they know this is the last allowed attempt
   CR 18.4 - As an administrator I want to exclude repeatable courses from the repeatability
             check so students can register for the course, repeatedly
+  CR 18.9 - As an administrator I want to prevent students from registering for the same course multiple times
+            in a term so that they don’t consume more than one seat in a course
 
   Background:
     Given I am using a mobile screen size
@@ -42,3 +44,11 @@ Feature: REG.Course Repeatability
     When I register for a course that is not subject to repeatability rules for the third time
     Then there is a message indicating successful registration
     And I do not receive a warning message
+
+#KSENROLL-14887
+  Scenario: CR 18.9 Prevent students from registering for multiple sections of the same course in a term
+    Given I log in to student registration as student
+    When I register for a course with multiple non-conflicting sections
+    Then I register for a different non-conflicting section of the same course
+    Then there is a message indicating that registration failed
+    And there is a message indicating that I am already registered for the course

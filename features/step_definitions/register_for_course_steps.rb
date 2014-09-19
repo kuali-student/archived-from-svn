@@ -772,3 +772,29 @@ And /^I attempt to register for a course in (\w+\s+\d+)$/ do |term_desc|
   @reg_request.create
   @reg_request.register
 end
+
+When /^I register for a course with multiple non\-conflicting sections$/ do
+  course_options = (make CourseOptions)
+  @reg_request = make RegistrationRequest,
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"CHEM231",
+                      :reg_group_code=>"1005",
+                      :course_options => course_options,
+                      :course_has_options=> true
+  @reg_request.create
+  @reg_request.register
+end
+
+When /^I register for a different non\-conflicting section of the same course$/ do
+  @reg_request.edit :reg_group_code=>"1018"
+  @reg_request.create
+  @reg_request.register
+end
+
+
+And /^there is a message indicating that I am already registered for the course$/ do
+  on RegistrationCart do |page|
+    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
+    page.result_status(@reg_request.course_code,@reg_request.reg_group_code).should include "You are already registered for #{@reg_request.course_code}"
+  end
+end
