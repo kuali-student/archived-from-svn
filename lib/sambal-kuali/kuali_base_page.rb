@@ -78,6 +78,8 @@ class BasePage < PageFactory
       element(:approve_and_activate_button) { |b| b.button(text: "Approve and Activate") }
       element(:approve_and_activate_disabled) { |b| b.button(text: "Approve and Activate", class: /disabled/) }
       action(:approve_and_activate) { |b| b.approve_and_activate_button.click }
+      element(:complete_modification_button) { |b| b.button(text: "Complete Modification") }
+      element(:complete_modification) { |b| b.complete_modification_button.click }
       action(:cancel_action) { |b| b.link(id: "CM-Proposal-Course-View-Cancel").click; b.loading.wait_while_present }
       element(:cancel_proposal_button) { |b| b.div(id: "CM-Proposal-Course-Create-RightHeader").link(title: "Cancel Proposal") }
       action(:cancel_proposal) { |b| b.cancel_proposal_button.click; b.loading.wait_while_present }

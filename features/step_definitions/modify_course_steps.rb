@@ -119,7 +119,7 @@ When(/^I complete the required for submit fields on the modify course proposal$/
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_standard],
                                                 exam_standard: :set,
-                                                start_term: 'Spring 2008'
+                                                start_term: 'Spring 2018'
 end
 
 Then(/^I can submit the modify course proposal$/) do
@@ -172,7 +172,7 @@ And(/^the Superseded version has a new end term and the new course version is Ac
   on CmCourseVersionHistoryPage do |page|
     page.version_history_version(0).text.should == '2'
     page.version_history_courseStatus(0).text.should == 'Active'
-    page.version_history_startTerm(0).text.should == 'Spring 2008'
+    page.version_history_startTerm(0).text.should == 'Spring 2018'
 
     page.version_history_version(1).text.should == '1'
     page.version_history_courseStatus(1).text.should == 'Superseded'
@@ -235,7 +235,7 @@ And(/^the new course version is Active$/) do
   on CmCourseVersionHistoryPage do |page|
     page.version_history_version(0).text.should == '2'
     page.version_history_courseStatus(0).text.should == 'Active'
-    page.version_history_startTerm(0).text.should == 'Spring 2008'
+    page.version_history_startTerm(0).text.should == 'Spring 2018'
   end
 end
 
@@ -248,7 +248,7 @@ Given(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_standard],
                                                 exam_standard: :set,
-                                                start_term: 'Spring 2008'
+                                                start_term: 'Spring 2018'
 
   @modify_course_proposal.submit_proposal
 
@@ -290,7 +290,7 @@ When (/^I complete the required for approve fields on the modify course proposal
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_alternate],
                                                 exam_alternate: :set,
-                                                start_term: 'Spring 2008'
+                                                start_term: 'Spring 2018'
 
 end
 
@@ -344,37 +344,121 @@ And(/^the updates will persist to the current course version$/) do
 end
 
 Given(/^there is a course with a active modify proposal$/) do
-  pending # express the regexp above with the code you wish you had
+  generate_course_and_course_proposal
+  navigate_to_functional_home
+  @course.view_course
+  @course.modify_course_with_version_and_curric_review
+  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
+  puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
+
+  @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
+                                                final_exam_type: [:exam_alternate],
+                                                exam_alternate: :set,
+                                                start_term: 'Spring 2018'
+  @modify_course_proposal.submit_proposal
+
 end
 
 Then(/^I cannot modify the Draft course version as Curriculum Specialist$/) do
-  pending # express the regexp above with the code you wish you had
+  navigate_to_functional_home
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(0)
+    page.show_versions
+  end
+  sleep 2
+  (on(CmReviewProposalPage).modify_button.exist?).should == false
+
 end
 
 When(/^I reject the proposal as Department Reviewer$/) do
-  pending # express the regexp above with the code you wish you had
+  sleep 10 # to avoid workflow exceptions
+  log_in 'carol', 'carol'
+  @modify_course_proposal.reject_with_rationale
+
 end
 
 Then(/^I cannot modify the Not Approved course version as Curriculum Specialist$/) do
-  pending # express the regexp above with the code you wish you had
+  log_in 'alice', 'alice'
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(0)
+    page.version_history_courseStatus(0).text.should == 'NotApproved'
+    page.show_versions
+  end
+  sleep 2
+  (on(CmReviewProposalPage).modify_button.exist?).should == false
 end
 
 Given(/^there is a course with a superseded version$/) do
-  pending # express the regexp above with the code you wish you had
+  generate_course_and_course_proposal
+  navigate_to_functional_home
+  @course.view_course
+  @course.modify_course_with_version_and_curric_review
+  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
+  puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
+
+  @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
+                                                final_exam_type: [:exam_alternate],
+                                                exam_alternate: :set,
+                                                start_term: 'Spring 2018'
+
+
+  @modify_course_proposal.blanket_approve_with_rationale
 end
 
 Then(/^I only have the option to modify the superseded course without a version$/) do
-  pending # express the regexp above with the code you wish you had
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(1)  #select the superseded version
+    page.version_history_courseStatus(1).text.should == 'Superseded'
+    page.show_versions
+  end
+  sleep 2
+  on(CmReviewProposalPage).modify_course
+  on CmCreateCourseStartPage do |page|
+    (page..modify_course_new_version.exist?).should == false
+    (page.modify_course_this_version.exist?).should == true
+  end
 end
 
 Given(/^there is a course with a retired version$/) do
-  pending # express the regexp above with the code you wish you had
+  @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
+                 :course_state => "Retired"
+
+  @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
+                            :course => @course,
+                            :author_list => nil,
+                            :supporting_doc_list =>  nil
+
+  puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
+
+  @retire_proposal.approve_retire_proposal
 end
 
 When(/^I modify a retired course without creating a new version as Curriculum Specialist$/) do
-  pending # express the regexp above with the code you wish you had
+  @course.view_course
+  on(CmReviewProposalPage).lookup_version_history
+  on CmCourseVersionHistoryPage do |page|
+    page.select_version_by_index(0)  #select the retired version
+    page.version_history_courseStatus(0).text.should == 'Retired'
+    page.show_versions
+  end
+  sleep 2
+  on(CmReviewProposalPage).modify_course
+  on CmCreateCourseStartPage do |page|
+    (page..modify_course_new_version.exist?).should == false
+    page.modify_course_this_version.click
+    page.continue
+  end
 end
 
 Then(/^I can see but cannot edit the retired details$/) do
-  pending # express the regexp above with the code you wish you had
+  on CmReviewProposalPage do |page|
+    (page.complete_modification_button..exist?).should == true
+  end
 end
