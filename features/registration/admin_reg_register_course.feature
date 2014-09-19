@@ -40,10 +40,6 @@ Feature: REG.Register Course on Admin Registration
     Then a message indicating the course has been successfully registered appears
     And the student is registered for the course
 
-  Scenario: CR22.17.2 Verify the registration date is displayed as float over if the effective date has been changed
-    When I change the effective date of a course before confirming registration
-    Then the registration date is displayed as a float-over message
-
-  Scenario: CR22.17.3 Verify the credit total for the term updates after registering a course
+  Scenario: CR22.17.2 Verify the credit total for the term updates after registering a course
     When I register a student for a course
     Then the student's registered courses credit total for the term should be updated
