@@ -11,7 +11,7 @@ When(/^I add a course from the quick add to the planned section in the planner$/
   on CoursePlannerPage do |page|
    page.planner_courses_detail_list.wait_until_present
    @course_search_result.remove_code_from_planned_backup
-   sleep 15
+   page.quick_add(@course_search_result.state,@course_search_result.planned_term).wait_until_present(120)
    page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
    page.course_code_quick_add.wait_until_present(60)
    page.course_code_quick_add.set @course_search_result.course_code
@@ -34,7 +34,7 @@ And(/^I add the same course again to the same section in the term$/) do
     page.planner_courses_detail_list.wait_until_present
   page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
 
-#  page.course_code_quick_add.wait_until_present
+  page.course_code_quick_add.wait_until_present(120)
   page.course_code_quick_add.set @course_search_result.course_code
   page.add_to_plan_quick.click
   end
@@ -60,7 +60,7 @@ When(/^I add a course from the quick add to the backup section in the planner$/)
       page.planner_courses_detail_list.wait_until_present
       @course_search_result.remove_code_from_planned_backup
       #This would change for backup
-      sleep 15
+      page.quick_add(@course_search_result.state,@course_search_result.planned_term).wait_until_present(120)
       page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
       page.course_code_quick_add.wait_until_present(120)
       page.course_code_quick_add.set @course_search_result.course_code
