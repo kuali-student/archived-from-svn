@@ -539,6 +539,7 @@ Then /^I have access to edit waitlist options$/ do
   on ActivityOfferingMaintenance do |page|
     page.waitlist_checkbox.enabled?.should be_true
     page.waitlist_checkbox.set
+    page.loading.wait_while_present
     page.waitlist_confirmation_radio.present?.should be_true
     page.waitlist_automatic_radio.present?.should be_true
     page.waitlist_manual_radio.present?.should be_true

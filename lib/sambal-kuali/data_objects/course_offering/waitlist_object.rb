@@ -59,6 +59,7 @@ class Waitlist < DataFactory
     if !opts[:enabled].nil?
       on ActivityOfferingMaintenance do |page|
         options[:enabled] ? page.waitlist_checkbox.set : page.waitlist_checkbox.clear
+        page.loading.wait_while_present
         @enabled = options[:enabled]
       end
     end

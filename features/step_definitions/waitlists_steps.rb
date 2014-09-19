@@ -212,6 +212,7 @@ Given /^I re-enable the waitlists option for the activity offering the modified 
 
   on ActivityOfferingMaintenance do |page|
     page.waitlist_checkbox.set
+    page.loading.wait_while_present
     page.waitlist_processing_type.should == @activity_offering.waitlist_config.type
     page.waitlist_limit_checkbox.set?.should == @activity_offering.waitlist_config.limit_size > 0
     page.waitlist_limit.value.to_i.should == @activity_offering.waitlist_config.limit_size
