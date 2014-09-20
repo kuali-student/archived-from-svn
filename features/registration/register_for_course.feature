@@ -5,6 +5,8 @@ Feature: REG.Register for course
   course options where applicable. I also want to be able to edit and delete courses in my
   registration cart.
 
+  CR 0.2 - As an administrator, I want to ensure students can only register for Offered Registration Groups
+
   Background:
     Given I am using a mobile screen size
     Given I log in to student registration as student
@@ -123,3 +125,13 @@ Feature: REG.Register for course
    Given I am registered for a HIST course
    When I click the details button for the course
    Then I can see the details of my course
+
+ #KSENROLL-14363
+ Scenario: CR 0.2 Verify cannot register for a course whose state has been changed from Offered to Cancelled
+   Given I am logged in as admin
+   When I add an ENGL6 course offering to my registration cart
+   And I manage the course I added to my registration cart
+   Then I cancel the activity offering
+   When I navigate to my registration cart and register for the course
+   Then there is a message indicating that registration failed
+   And there is a message indicating that the course has been cancelled

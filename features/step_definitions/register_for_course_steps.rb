@@ -74,6 +74,13 @@ When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |su
       term_descr = "Fall 2012"
       credit_option = "3.0"
       course_has_options = true
+    when "ENGL6" then
+      course_code = "ENGL295"
+      reg_group_code = "1002"
+      term_code = "201208"
+      term_descr = "Fall 2012"
+      credit_option = "3.0"
+      course_has_options = true
     when "HIST" then
       course_code = "HIST111"
       reg_group_code = "1001"
@@ -309,8 +316,8 @@ Then /^the course is present in my cart, with the updated options$/  do
   end
 end
 
-And /^I (attempt to )?register for the courses?$/ do |attempt|
-  @reg_request.register
+And /^I (attempt to |navigate to my registration cart and )?register for the courses?$/ do |attempt|
+  @reg_request.register :do_navigation=>(attempt.include? "navigate")
   sleep 3
 end
 
@@ -796,5 +803,21 @@ And /^there is a message indicating that I am already registered for the course$
   on RegistrationCart do |page|
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.result_status(@reg_request.course_code,@reg_request.reg_group_code).should include "You are already registered for #{@reg_request.course_code}"
+  end
+end
+
+And /^I manage the course I added to my registration cart$/ do
+  @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL295")
+  sleep 2
+  @course_offering.initialize_with_actual_values
+
+  @activity_offering = @course_offering.get_ao_obj_by_code("A")
+  @activity_offering.edit :send_to_scheduler => true
+end
+
+And /^there is a message indicating that the course has been cancelled$/ do
+  on RegistrationCart do |page|
+    page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
+    page.result_status(@reg_request.course_code,@reg_request.reg_group_code).should include "#{@reg_request.course_code} (#{@reg_request.reg_group_code}) is cancelled for #{@reg_request.term_descr}"
   end
 end
