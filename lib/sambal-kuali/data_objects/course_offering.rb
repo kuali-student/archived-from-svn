@@ -802,6 +802,76 @@ class CourseSearchResults < DataFactory
       end
     end
   end
-end
 
+
+  def quick_add_planned
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    on CourseSearch do |page|
+      page.plan_page_click
+    end
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+      remove_code_from_planned_backup
+      page.quick_add(@state,@planned_term).wait_until_present(120)
+      page.quick_add(@state,@planned_term).click
+      page.course_code_quick_add.when_present(60).set @course_code
+      page.course_code_quick_add.send_keys :tab
+      page.add_to_plan_quick.click
+    end
+  end
+
+
+
+  def quick_add_backup
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    on CourseSearch do |page|
+      page.plan_page_click
+    end
+
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+      remove_code_from_planned_backup
+      #This would change for backup
+      page.quick_add(@state,@planned_term).wait_until_present(120)
+      page.quick_add(@state,@planned_term).click
+      page.course_code_quick_add.wait_until_present(120)
+      page.course_code_quick_add.set @course_code
+      page.course_code_quick_add.send_keys :tab
+      page.add_to_plan_quick.click
+    end
+  end
+
+  def add_same_course
+    on CoursePlannerPage do |page|
+      page.refresh
+      page.planner_courses_detail_list.wait_until_present
+      page.quick_add(@state,@planned_term).click
+      page.course_code_quick_add.wait_until_present(120)
+      page.course_code_quick_add.set @course_code
+      page.course_code_quick_add.send_keys :tab
+      page.add_to_plan_quick.click
+    end
+
+  end
+
+  def add_same_course_backup
+    on CoursePlannerPage do |page|
+      page.refresh
+      page.planner_courses_detail_list.wait_until_present
+
+      #This would change for backup
+
+      page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
+      page.course_code_quick_add.wait_until_present(120)
+      page.course_code_quick_add.set @course_search_result.course_code
+      page.course_code_quick_add.send_keys :tab
+      page.add_to_plan_quick.click
+    end
+  end
+
+end
 
