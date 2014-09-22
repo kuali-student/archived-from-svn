@@ -701,7 +701,7 @@ Then /^I do not have access to create a new joint offered course offering$/ do
   end
 end
 
-When /^there is a course with a co-located SI in my admin org/ do
+When /^there is a course with a co-located activity offering in my admin org/ do
   step "I am logged in as a Schedule Coordinator"
   @course_offering = (make CourseOffering, :course=>"ENGL462", :term=>@term_for_test).copy
   @course_offering.initialize_with_actual_values
@@ -717,7 +717,7 @@ When /^there is a course with a co-located SI in my admin org/ do
 end
 
 Then /^I do not have access to edit the co-located Activity Offering$/ do
-  @course_offering.initialize_with_actual_values
+  @course_offering.manage
   on ManageCourseOfferings do |page|
     page.edit_link("A").present?.should == false
   end
