@@ -549,10 +549,9 @@ class CourseOffering < DataFactory
     options = defaults.merge(opts)
 
     search_by_subjectcode
-    existing_co = on(ManageCourseOfferingList).select_co_by_status(options[:co_status])
-    if existing_co != nil
-      @course = existing_co
-    else
+    co_status = on(ManageCourseOfferingList).co_status(@course)
+    #existing_co = on(ManageCourseOfferingList).select_co_by_status(options[:co_status])
+    if options[:co_status] != co_status
       new_course = self.copy
       @course = new_course.course
       on(ManageCourseOfferings).list_all_courses
@@ -561,7 +560,7 @@ class CourseOffering < DataFactory
         approve_co
       end
     end
-    if options[:select_co] then
+    if options[:select_co]
       on(ManageCourseOfferingList).select_co(@course)
     else
       on(ManageCourseOfferingList).deselect_co(@course)

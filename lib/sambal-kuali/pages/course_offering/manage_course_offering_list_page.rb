@@ -68,7 +68,7 @@ class ManageCourseOfferingList < BasePage
   end
 
   def select_co_by_status(costatus)
-    if row_by_status(costatus).exists? then
+    if row_by_status(costatus).exists?
       row_by_status(costatus).checkbox.set
       return row_by_status(costatus).cells[CO_CODE_COLUMN].text
     else
