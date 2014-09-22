@@ -89,7 +89,19 @@ class CoursePlannerPage < BasePage
   element(:exception_message) {|b|b.main(id:"planner_add_course_page").div(class:"uif-horizontalBoxGroup uif-boxLayoutVerticalItem clearfix ksap-feedback error ks-Popover-error")}
   action(:course_indicator) {|ccode,term,condition,b|b.p(id:/#{ccode}_kuali-atp-#{term}_#{condition}_statusMessage/).fire_event 'mouseover'}
   value(:indicator_popup) {|b|b.form(id:"kualiForm").td(class:"jquerybubblepopup-innerHtml").text}
-
-
+  # Elements added for Add course to Bookmark
+  element(:term_note_button) { |b| b.img(id:"_termNote") }
+  element(:add_course_bookmark_gutter) { |course_code,b| b.div(id: "planner_sidebar_section").p(text: "#{course_code}").parent.attribute_value("id") }
+  action(:add_course_bookmark_gutter_click) { |parent_id,b| b.div(id: "planner_sidebar_section").div(id: "#{parent_id}").a(id: /addLink/).click }
+  element(:select_term_year) { |b| b.div(id: "planner_term_input").select(id: "planner_term_input_control") }
+  action(:select_next_term_year) { |b| b.div(id: "planner_term_input").select(id: "planner_term_input_control").option(index: 0).text }
+  element(:text_note) { |b| b.div(id: "notes").textarea(name: "courseNote")}
+  element(:mark_as_backup_checkbox) { |b| b.input(type: "checkbox") }
+  element(:add_to_plan_dialog){ |b| b.div(id: "KSAP-AddToPlanDialog-FormView") }
+  element(:add_course_bookmark_page) { |course_code,b| b.a(id: "#{course_code}_addLink") }
+  element(:add_course_bookmark_header) { |course_code,b| b.a(id: "#{course_code}_addLink").parent.attribute_value("id") }
+  action(:add_course_bookmark_header_click) { |parent_id,b| b.div(id: "#{parent_id}").a(id: /addLink/).click }
+  element(:added_course_planned) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_code") }
+  element(:added_course_backup) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_code") }
 end
 
