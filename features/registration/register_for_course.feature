@@ -126,7 +126,8 @@ Feature: REG.Register for course
    When I click the details button for the course
    Then I can see the details of my course
 
- #KSENROLL-14363
+ #KSENROLL-14886
+ @wip
  Scenario: CR 0.2 Verify cannot register for a course whose state has been changed from Offered to Cancelled
    Given I am logged in as admin
    When I add an ENGL6 course offering to my registration cart
