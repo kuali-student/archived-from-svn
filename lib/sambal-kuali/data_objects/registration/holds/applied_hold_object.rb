@@ -7,7 +7,7 @@ class AppliedHold < DataFactory
 
   attr_accessor :student_id, :student_name, :name, :code,
                 :category, :find_code_by_lookup, :apply_hold,
-                :state, :exp_success
+                :state, :exp_success,:first_term, :effective_date
 
   def initialize(browser, opts={})
     @browser = browser
@@ -20,7 +20,9 @@ class AppliedHold < DataFactory
         :category => "Academic Progress Issue",
         :find_code_by_lookup => false,
         :apply_hold => false,
-        :state => "Active"
+        :state => "Active",
+        :first_term => nil,
+        :effective_date => nil
     }
 
     options = defaults.merge(opts)
@@ -90,6 +92,9 @@ class AppliedHold < DataFactory
 
       if @apply_hold != false
         page.loading.wait_while_present
+        if @first_term != nil
+          page.first_term.set @first_term
+        end
         page.apply_hold
       end
     end

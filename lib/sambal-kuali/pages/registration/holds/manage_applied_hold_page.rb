@@ -101,4 +101,15 @@ class ManageAppliedHold < BasePage
     return nil
   end
 
+
+  def get_applied_hold_by_code (hold_code)
+   if results_table.exists?
+     results_table.rows[1..-1].each do |row|
+        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
+          return row
+        end
+      end
+    end
+    return nil
+  end
 end

@@ -29,7 +29,7 @@ class ApplyHold < BasePage
   element(:find_hold_code_link) { |b| b.hold_code_section.a(id: "KS-ApplyHold-HoldCode-Section-CodeInput_quickfinder_act")}
   action(:find_hold_code){ |b| b.find_hold_code_link.when_present.click}
   element(:effective_date) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.appliedHold.effectiveDate")}
-  element(:first_term) { |b| b.apply_hold_section.text_field(id: /firstTerm/)}
+  element(:first_term) { |b| b.apply_hold_section.text_field(name:"document.newMaintainableObject.dataObject.effectiveTerm")}
 
   element(:show_btn) { |b| b.apply_hold_section.button(id: "show_button")}
   action(:show){ |b| b.show_btn.when_present.click}
