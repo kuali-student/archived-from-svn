@@ -58,11 +58,14 @@ Then(/^a permission error message is displayed$/) do
   end
 end
 
-
 Given(/^there exists a hold that does not maintain history$/) do
-  @hold_issue = create HoldIssue, :hold_history => false
+  @hold_issue = create HoldIssue
 end
 
 Given(/^there exists a hold that maintains history$/) do
   @hold_issue = create HoldIssue, :hold_history => true
+end
+
+Given /^there exists a term based hold issue$/ do
+  @hold_issue = create HoldIssue, :term_based => true, :first_term => "201208", :last_term => "201301"
 end

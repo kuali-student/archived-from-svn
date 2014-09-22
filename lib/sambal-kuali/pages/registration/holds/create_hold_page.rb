@@ -65,13 +65,19 @@ class HoldIssueCreateEdit < BasePage
   #Term Section
   element(:term_section) { |b| b.hold_page.div(id: "KS-CreateHold-TermSection")}
 
-  element(:first_applied_date) { |b| b.term_section.text_field(id: /holdFirstAppliedDate/)}
-  element(:last_applied_date) { |b| b.term_section.text_field(id: /holdLastAppliedDate/)}
+  element(:first_applied_date_input) { |b| b.term_section.text_field(name: "document.newMaintainableObject.dataObject.holdIssue.firstAppliedDate")}
+  element(:last_applied_date_input) { |b| b.term_section.text_field(name: "document.newMaintainableObject.dataObject.holdIssue.lastAppliedDate")}
 
-  element(:term_based) { |b| b.term_section.text_field(id: /holdTermBased/)}
-  element(:first_term) { |b| b.term_section.text_field(id: /holdFirstAppTerm/)}
-  element(:last_term) { |b| b.term_section.text_field(id: /holdLastAppTerm/)}
-  element(:history) { |b| b.term_section.checkbox(name: "document.newMaintainableObject.dataObject.holdHistory")}
+  element(:term_based_chkbox) { |b| b.term_section.checkbox(name: "document.newMaintainableObject.dataObject.termBased")}
+  action(:set_term_based) { |b| b.term_based_chkbox.set}
+  action(:clear_term_based) { |b| b.term_based_chkbox.clear}
+
+  element(:first_term_input) { |b| b.term_section.text_field(name: "document.newMaintainableObject.dataObject.firstTerm")}
+  element(:last_term_input) { |b| b.term_section.text_field(name: "document.newMaintainableObject.dataObject.lastTerm")}
+
+  element(:history_chkbox) { |b| b.term_section.checkbox(name: "document.newMaintainableObject.dataObject.holdHistory")}
+  action(:set_history) { |b| b.history_chkbox.set}
+  action(:clear_history) { |b| b.history_chkbox.clear}
 
   #Auth Org Section
   element(:auth_org_section) { |b| b.hold_page.section(id: "KS-CreateHold-AuthorizationSection")}

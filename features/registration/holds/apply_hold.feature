@@ -9,15 +9,11 @@ Feature: REG.Apply Hold
 #KSENROLL-14588
   @pending
   Scenario: HOLD2.3.1 Verify that hold is applied to student
-    When I apply a hold to student by completing the required information needed for applied hold
-    Then the applied hold exists in the student applied hold result list
+    When I apply a hold to student by completing the required information needed
+    Then the hold exists for the student with an effective date
 
+#KSENROLL-14588\#KSENROLL-14592
   @pending
-  Scenario: HOLD2.3.2 Verify that a term based hold is applied to student
-    When I apply a term based hold to student by completing the required information needed for applied hold
-    Then the applied hold exists in the student applied hold result list
-    
-#KSENROLL-14592
-  Scenario: HOLD2.5.1 As a Holds Functionary I want to identify a hold to apply
-    When I search for a hold code
-    Then the selected hold code is populated
+  Scenario: HOLD2.3.2\HOLD2.5.1 Verify that a term based hold is applied to student
+    When I apply a term based hold to student by completing the required information needed
+    Then the hold exists for the student with an effective start term

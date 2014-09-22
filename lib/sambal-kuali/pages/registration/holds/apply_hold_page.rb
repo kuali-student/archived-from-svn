@@ -18,6 +18,8 @@ class ApplyHold < BasePage
 
   element(:apply_hold_btn) { |b| b.apply_hold_page.button(id: "applyHoldButton")}
   action(:apply_hold){ |b| b.apply_hold_btn.when_present.click}
+  element(:cancel_link) { |b| b.apply_hold_page.a(text: "Cancel")}
+  action(:cancel) { |b| b.cancel_link.when_present.click}
 
   ######################################################################################################################
   ###                                            Apply Hold Section                                         ###
@@ -26,13 +28,12 @@ class ApplyHold < BasePage
   element(:hold_code_section) { |b| b.apply_hold_section.div(class: "input-group")}
 
   element(:hold_code_input) { |b| b.hold_code_section.text_field(name: "document.newMaintainableObject.dataObject.holdCode")}
+
   element(:find_hold_code_link) { |b| b.hold_code_section.a(id: "KS-ApplyHold-HoldCode-Section-CodeInput_quickfinder_act")}
   action(:find_hold_code){ |b| b.find_hold_code_link.when_present.click}
-  element(:effective_date) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.appliedHold.effectiveDate")}
-  element(:first_term) { |b| b.apply_hold_section.text_field(name:"document.newMaintainableObject.dataObject.effectiveTerm")}
 
-  element(:show_btn) { |b| b.apply_hold_section.button(id: "show_button")}
-  action(:show){ |b| b.show_btn.when_present.click}
+  element(:effective_term) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.effectiveTerm")}
+  element(:effective_date) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.appliedHold.effectiveDate")}
 
   ######################################################################################################################
   ###                                             Active Hold Issue Dialog                                         ###

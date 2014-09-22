@@ -74,7 +74,14 @@ class HoldIssue < DataFactory
       page.code_input.set @code
       page.descr_input.set @description
       page.find_owning_org @owning_org_abbr
-      page.history.set(@hold_history)
+
+      if @term_based
+        page.set_term_based
+        page.first_term_input.when_present.set @first_term
+        page.last_term_input.when_present.set @last_term
+      end
+
+      page.set_history if @hold_history
 
       @authorising_orgs.each do |auth_org|
         auth_org.parent = self

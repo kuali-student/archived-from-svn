@@ -74,6 +74,7 @@ class ManageAppliedHold < BasePage
         if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
           row.cells[CHECK_HOLD].click
           expire_hold_btn.when_present.click
+          break
         end
       end
     end
@@ -85,6 +86,7 @@ class ManageAppliedHold < BasePage
         if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
           row.cells[CHECK_HOLD].click
           delete_hold_btn.when_present.click
+          break
         end
       end
     end
@@ -93,7 +95,7 @@ class ManageAppliedHold < BasePage
   def get_hold_by_code( code)
     loading.wait_while_present
     if results_table.exists?
-      results_table.rows( ).each do |row|
+      results_table.rows[1..-1].each do |row|
         return row if row.text =~ /#{code}/
       end
     end
