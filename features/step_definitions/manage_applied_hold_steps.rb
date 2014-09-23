@@ -63,3 +63,57 @@ end
 When /^I expire the hold with an expiration date that is later than the effective date$/ do
   @applied_hold.expire_hold :expiration_date => tomorrow[:date_w_slashes]
 end
+
+When(/^I attempt to apply the hold, with an effective date before the first applied date, to a student$/) do
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :find_code_by_lookup => true, :hold_issue => @hold_issue
+  @applied_hold.apply_hold :effective_date => last_year[:date_w_slashes]
+end
+
+Then(/^an effective date error message is displayed stating "(.*?)"$/) do |exp_msg|
+  on(ApplyHold).get_apply_error_msg.should match /#{Regexp.escape(exp_msg)} #{@hold_issue.first_applied_date}/
+end
+
+Then(/^an invalid effective date message is displayed stating "(.*?)"$/) do |exp_msg|
+  on(ApplyHold).get_apply_error_msg.should match /#{Regexp.escape(exp_msg)} #{@applied_hold.effective_date} - #{@hold_issue.last_applied_date}/
+end
+
+Then(/^the end term defaults to the last applied term$/) do
+  on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).text.should match /#{@hold_issue.code}.*#{@hold_issue.last_term}/m
+end
+
+Then(/^the end date defaults to the last applied date$/) do
+  puts @hold_issue.last_applied_date
+  on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).text.should match /#{@hold_issue.code}.*#{@hold_issue.last_applied_date}/m
+end
+
+When(/^I attempt to apply the hold, with an effective date after the last applied date, to a student$/) do
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :find_code_by_lookup => true, :hold_issue => @hold_issue
+  @applied_hold.apply_hold :effective_date => in_a_year[:date_w_slashes]
+end
+
+When(/^I attempt to apply the hold, with an effective term before the first applied term, to a student$/) do
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :find_code_by_lookup => true, :hold_issue => @hold_issue
+  @applied_hold.apply_hold :effective_term => "201101"
+end
+
+When(/^I attempt to apply the hold, with an effective term after the last applied term, to a student$/) do
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :find_code_by_lookup => true, :hold_issue => @hold_issue
+  @applied_hold.apply_hold :effective_term => "201508"
+end
+
+Then(/^an effective term error message is displayed stating "([^"]*)"$/) do |exp_msg|
+  on(ApplyHold).get_apply_error_msg.should match /#{Regexp.escape(exp_msg)} #{@hold_issue.first_term}/
+end
+
+Then(/^an invalid effective term message is displayed stating "([^"]*)"$/) do |exp_msg|
+  on(ApplyHold).get_apply_error_msg.should match /#{Regexp.escape(exp_msg)} #{@hold_issue.last_term}/
+end
+
+When(/^I attempt to apply the hold, with an invalid effective term, to a student$/) do
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :find_code_by_lookup => true, :hold_issue => @hold_issue
+  @applied_hold.apply_hold :effective_term => "101101"
+end
+
+Then(/^an invalid term error message is displayed stating "([^"]*)"$/) do |exp_msg|
+  on(ApplyHold).get_apply_error_msg.should match /#{Regexp.escape(exp_msg)} #{@applied_hold.effective_term}/
+end

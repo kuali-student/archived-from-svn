@@ -35,6 +35,10 @@ class ApplyHold < BasePage
   element(:effective_term) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.effectiveTerm")}
   element(:effective_date) { |b| b.apply_hold_section.text_field(name: "document.newMaintainableObject.dataObject.appliedHold.effectiveDate")}
 
+  element(:apply_error_msg_section) { |b| b.apply_hold_section.div(id: "KS-ApplyHold-HoldSection_messages")}
+  element(:apply_error_msg) { |b| b.apply_error_msg_section.ul(class: "uif-validationMessagesList")}
+  value(:get_apply_error_msg) { |b| b.apply_error_msg.when_present.text}
+
   ######################################################################################################################
   ###                                             Active Hold Issue Dialog                                         ###
   ######################################################################################################################

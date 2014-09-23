@@ -24,6 +24,6 @@ Then /^the hold exists for the student with an effective start term$/ do
 end
 
 And(/^I apply the hold to a student$/) do
-  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :hold_issue => @hold_issue
-  @applied_hold.apply_hold :find_code_by_lookup => true
+  @applied_hold = create AppliedHold, :student_id=> "KS-2032", :hold_issue => @hold_issue, :find_code_by_lookup => true
+  @applied_hold.apply_hold
 end
