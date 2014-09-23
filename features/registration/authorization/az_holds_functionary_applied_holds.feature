@@ -2,6 +2,7 @@
 Feature: REG.Holds Functionary using Applied Holds
   Hold2.8 As a Holds Functionary I want to be the appropriate Role to expire an applied hold
   Hold2.9 As a Holds Functionary I want to be the appropriate Role to delete an applied hold
+  Hold2.10 As a Holds Functionary I want to be the appropriate Role to apply a hold to a student
 
 #KSENROLL-14598
   @draft
@@ -31,4 +32,14 @@ Feature: REG.Holds Functionary using Applied Holds
     When I attempt to delete that hold
     Then a delete hold authorization error message is displayed
 
-
+#KSENROLL-14602
+  @draft
+  Scenario: HOLD2.10.1 Validate that a Holds Functionary can apply a hold to a student
+    Given I am logged in as a Holds Functionary
+    When I apply a hold to student by completing the required information
+    Then the hold exists for the student with an effective date
+  @draft
+  Scenario: Hold2.10.2 Validate that a non Holds Functionary can not apply a hold to a student
+    Given I am logged in as a non Holds Functionary
+    When I apply a hold to student by completing the required information
+    Then an apply hold authorization error message is displayed

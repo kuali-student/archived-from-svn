@@ -28,7 +28,6 @@ And(/^I apply a hold for deletion to a student$/) do
   @applied_hold.apply_hold
 end
 
-
 Then(/^the deleted hold no longer displays for the student$/) do
   on(ManageAppliedHold).get_hold_by_code("ACAD01").nil?.should be_true
 end
@@ -45,7 +44,11 @@ When(/^I attempt to delete that hold$/) do
   end
 end
 
-
+Then /^an apply hold authorization error message is displayed$/ do
+  on ApplyHold do |page|
+    page.get_validation_message.should match /Not authorized to apply hold/
+  end
+end
 
 
 

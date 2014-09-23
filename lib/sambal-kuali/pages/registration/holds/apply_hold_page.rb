@@ -64,4 +64,9 @@ class ApplyHold < BasePage
     end
   end
 
+  ######################################################################################################################
+  ###                                             Apply Hold page validation                                         ###
+  ######################################################################################################################
+  element(:validation_messages) { |b| b.apply_hold_page.div(class: /alert alert-danger/)}
+  value(:get_validation_message){ |b| b.loading.wait_while_present; b.validation_messages.text}
 end
