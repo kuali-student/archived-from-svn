@@ -587,6 +587,16 @@ class CmCourseProposalObject < CmBaseObject
     end
   end
 
+  def direct_blanket_approve_with_rationale
+    on(CmCourseInformationPage).review_proposal
+    on CmReviewProposalPage do |proposal|
+      proposal.blanket_approve
+      proposal.blanket_approve_rationale.set random_alphanums(10,'test blanket approve rationale ')
+      proposal.confirmation_approval
+      sleep 30 # to avoid workflow exceptions
+    end
+  end
+
   def return_proposal(return_level)
     on CmReviewProposalPage do |proposal|
       proposal.review_return

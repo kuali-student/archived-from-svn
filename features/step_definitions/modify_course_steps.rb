@@ -414,19 +414,21 @@ Given(/^there is a course with a superseded version$/) do
   navigate_to_functional_home
   @course.view_course
   @course.modify_course_with_version_and_curric_review
+  @modify_course_proposal.edit_course_information
   @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_alternate],
                                                 exam_alternate: :set,
-                                                start_term: 'Spring 2018'
+                                                start_term: 'Spring 2018',
+                                                cs_with_cr: 'yes'
 
-
-  @modify_course_proposal.blanket_approve_with_rationale
+  @modify_course_proposal.direct_blanket_approve_with_rationale
 end
 
 Then(/^I only have the option to modify the superseded course without a version$/) do
+  navigate_to_functional_home
   @course.view_course
   on(CmReviewProposalPage).lookup_version_history
   on CmCourseVersionHistoryPage do |page|
@@ -447,6 +449,7 @@ Given(/^there is a course with a retired version$/) do
                  :course_code => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",
                  :course_state => "Retired"
 
+  navigate_to_functional_home
   @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
                             :course => @course,
                             :author_list => nil,
@@ -458,6 +461,7 @@ Given(/^there is a course with a retired version$/) do
 end
 
 When(/^I modify a retired course without creating a new version as Curriculum Specialist$/) do
+  navigate_to_functional_home
   @course.view_course
   on(CmReviewProposalPage).lookup_version_history
   on CmCourseVersionHistoryPage do |page|
@@ -474,7 +478,7 @@ When(/^I modify a retired course without creating a new version as Curriculum Sp
 end
 
 Then(/^I can edit the retirement details of the current version$/) do
-  on CmReviewProposalPage do |page|
+  on CmCourseInformationPage do |page|
     (page.save_modification_button.exist?).should == true
   end
 end
