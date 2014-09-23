@@ -117,7 +117,13 @@ class CmCourseProposalObject < CmBaseObject
       page.course_title.fit opts[:course_title]
     end
 
+    if opts[:cs_without_cr]
+      on CmCourseInformationPage do |page|
+        page.save_modification
+      end
+    else
       determine_save_action unless opts[:defer_save]
+    end
 
     set_options(opts)
   end

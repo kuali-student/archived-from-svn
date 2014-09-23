@@ -15,6 +15,7 @@ class CmCourseInformationPage < BasePage
   element(:course_number) { |b| b.text_field(id: 'CM-Proposal-Course-CourseInfo-CourseNumSuffix_control') }
   action(:cancel) { |b| b.a(id: 'ucancel').click; b.loading_wait }
 
+  element(:course_description_and_rationale) {|b|b.textarea(id: 'CM-Proposal-Course-CourseInfo-Description_control')}
 #CROSS LIST SECTION
   element(:course_listing_section_collapsed) { |b| b.img(id: /^KS-CrossListingEtcDisclosure-Section/, alt: 'collapse') }
   #action(:expand_course_listing_section) { |b| b.a(id: 'KS-CrossListingEtcDisclosure-Section_toggle').span(class: 'uif-headerText-span').click; b.add_version_code_button.wait_until_present }

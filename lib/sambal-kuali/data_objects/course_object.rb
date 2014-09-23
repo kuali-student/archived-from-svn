@@ -42,6 +42,13 @@ class CmCourseObject < CmBaseObject
   end
 
   def edit(opts={})
+    on CmCourseInformationPage do |page|
+      page.course_information unless page.current_page('Course Information').exists?
+      page.transcript_course_title.fit opts[:transcript_course_title]
+      page.course_description_and_rationale.fit opts[:description]
+      page.save_modification
+    end
+    set_options(opts)
 
   end
 

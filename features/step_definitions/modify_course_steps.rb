@@ -342,21 +342,21 @@ Then(/^I can edit the course details of the current version$/) do
     page.page_header_text.should include "Admin Update"
   end
 
-  @course_proposal.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}",
-                        :description => "updated #{random_alphanums(10,'description ')}",
-                        :cs_without_cr => 'yes'
+  @course.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}",
+               :description => "updated #{random_alphanums(10,'description ')}"
+
 end
 
 And(/^the updates will persist to the current course version$/) do
   navigate_to_functional_home
   @course.search_for_course
   on CmFindACoursePage do |page|
-    page.results_list_course_code.rows.count == 1
+    page.results_list_course_code.length.should == 1
   end
   @course.view_selected_course
   on CmReviewProposalPage do |page|
-    page.transcript_course_title.should == @course_proposal.transcript_course_title
-    page.description_review.should == @course_proposal.description_review
+    page.description_review.should == @course.description
+    page.transcript_course_title.should == @course.transcript_course_title
   end
 end
 
