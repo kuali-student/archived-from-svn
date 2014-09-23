@@ -384,7 +384,7 @@ When /^I open the term for registration in the Academic Calendar$/ do
 end
 
 And /^I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-10296", :term_code => "201405"
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-10296", :term_code => "201401"
 end
 
 Then /^no failed term eligibility warning message is displayed$/ do
@@ -407,7 +407,7 @@ When /^I decide to continue with the selected term$/ do
 end
 
 When /^I attempt to load a Term by valid Term Id for student with Registered or Wait-listed courses$/ do
-  @admin_reg = create AdminRegistrationData
+  @admin_reg = create AdminRegistrationData, :term_code => "201208", :term_description => "Fall 2012"
 end
 
 Then /^a warning message along with the Registered and Wait-listed courses are displayed$/ do
