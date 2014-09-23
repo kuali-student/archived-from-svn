@@ -35,14 +35,13 @@ Then(/^I should be able to view the course in the backup section$/) do
   on CoursePlannerPage do |page|
     page.course_code_quick_add.wait_while_present(120)
     page.planner_courses_detail_list.wait_until_present(60)
-    #This would change for backup
-    page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
+    page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code).should==@course_search_result.course_code
   end
 end
 
 
 And(/^I add the course again to the same backup section in the term$/) do
-
+  @course_search_result.add_same_course_backup
 
 end
 
