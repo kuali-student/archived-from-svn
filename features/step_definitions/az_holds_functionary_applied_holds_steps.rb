@@ -38,9 +38,7 @@ When(/^I attempt to delete that hold$/) do
 end
 
 Then /^an apply hold authorization error message is displayed$/ do
-  on ApplyHold do |page|
-    page.get_validation_message.should match /Not authorized to apply hold/
-  end
+  on(ApplyHold).get_validation_message.should match /Not authorized to apply hold/
 end
 
 
