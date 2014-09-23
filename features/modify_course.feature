@@ -73,5 +73,5 @@ Feature: GT.Modify Course
   Scenario: MC4.4 Can see Retire info when modifying a Retired version
     Given there is a course with a retired version
     When I modify a retired course without creating a new version as Curriculum Specialist
-    Then I can see but cannot edit the retired details
-
+    Then I can edit the retirement details of the current version
+    And the updates will persist to the current retired course version

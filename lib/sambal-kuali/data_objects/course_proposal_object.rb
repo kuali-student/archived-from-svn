@@ -100,7 +100,16 @@ class CmCourseProposalObject < CmBaseObject
 
 
   def edit (opts={})
-    determine_edit_action
+    if opts[:cs_with_cr]
+      on CmReviewProposalPage do |page|
+        page.edit_course_information
+        page.loading_wait
+      end
+    elsif opts[:cs_without_cr]
+
+    else
+        determine_edit_action
+    end
 
     on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
@@ -108,7 +117,7 @@ class CmCourseProposalObject < CmBaseObject
       page.course_title.fit opts[:course_title]
     end
 
-    determine_save_action unless opts[:defer_save]
+      determine_save_action unless opts[:defer_save]
 
     set_options(opts)
   end

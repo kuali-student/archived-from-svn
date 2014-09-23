@@ -45,9 +45,24 @@ Given(/^I have an active course created for modify$/) do
   # Curriculum Oversight
   # Outcome
   # Active Dates
-  # Term
+  # Start Term
   # Final Exam Rationale
+  on CmCourseInformationPage do |page|
+    page.course_information unless page.current_page('Course Information').exists?
+    page.transcript_course_title.fit @source_course.transcript_course_title
+  end
 
+  @course_proposal.submit_fields[0].add_outcome outcome: (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value => 3),
+                                                defer_save: 'true'
+
+  @course_proposal.submit_fields[0].edit  description_rationale: "updated #{random_alphanums(20, 'test description rationale ')}",
+                                          proposal_rationale: "updated #{random_alphanums(20, 'test proposal rationale ')}",
+                                          curriculum_oversight: @source_course.curriculum_oversight,
+                                          final_exam_type: [:exam_alternate],
+                                          exam_alternate: :set,
+                                          start_term: @source_course.start_term
+
+  determine_save_action
 
   @course_proposal.approve_activate_proposal
 
@@ -70,7 +85,6 @@ Then(/^I can review the modify course proposal details compared to the course$/)
     review.new_start_term_review.should == ""
 
     review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
-    review.proposal_title_diff_highlighter.should ==  "cm-compare-highlighter"
 
     review.review_proposal_title_header.should_not include "Admin"
 
@@ -324,8 +338,13 @@ end
 
 
 Then(/^I can edit the course details of the current version$/) do
-  # Edit Transcript Course title and Description
-  @course_proposal.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}", :description => "updated #{random_alphanums(10,'description ')}"
+  on CmCourseInformationPage do |page|
+    page.page_header_text.should include "Admin Update"
+  end
+
+  @course_proposal.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}",
+                        :description => "updated #{random_alphanums(10,'description ')}",
+                        :cs_without_cr => 'yes'
 end
 
 And(/^the updates will persist to the current course version$/) do
@@ -338,8 +357,6 @@ And(/^the updates will persist to the current course version$/) do
   on CmReviewProposalPage do |page|
     page.transcript_course_title.should == @course_proposal.transcript_course_title
     page.description_review.should == @course_proposal.description_review
-    page.course_title_review.should include "Modify:"
-    page.review_proposal_title_header.should include "(Admin Update)"
   end
 end
 
@@ -348,7 +365,7 @@ Given(/^there is a course with a active modify proposal$/) do
   navigate_to_functional_home
   @course.view_course
   @course.modify_course_with_version_and_curric_review
-  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title
+  @modify_course_proposal.edit  proposal_title: @modify_course_proposal.proposal_title, cs_with_cr: 'yes'
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
@@ -451,14 +468,20 @@ When(/^I modify a retired course without creating a new version as Curriculum Sp
   sleep 2
   on(CmReviewProposalPage).modify_course
   on CmCreateCourseStartPage do |page|
-    (page..modify_course_new_version.exist?).should == false
     page.modify_course_this_version.click
     page.continue
   end
 end
 
-Then(/^I can see but cannot edit the retired details$/) do
+Then(/^I can edit the retirement details of the current version$/) do
   on CmReviewProposalPage do |page|
-    (page.complete_modification_button..exist?).should == true
+    (page.save_modification_button.exist?).should == true
   end
+end
+
+And(/^the updates will persist to the current retired course version$/) do
+  navigate_to_functional_home
+  @course.search_for_course
+  @course.view_selected_course
+# How to evaluate the modifications? need to be cleared.
 end
