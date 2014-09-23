@@ -69,6 +69,7 @@ end
 
 Then /^I verify each Registration Window is created within each period/ do
   on RegistrationWindowsCreate do |page|
+    # Need to switch period type before checking .is_window_created
     page.is_window_created(@registration_window.appointment_window_info_name, @registration_window.period_key).should be_true
     page.is_window_created(@registration_window2.appointment_window_info_name, @registration_window2.period_key).should be_true
   end
@@ -127,7 +128,7 @@ When /^I add a Registration Window with Start Date falling out of the period dat
 end
 
 When /^I add a Registration Window with End Date falling out of the period dates$/ do
-  @registration_window = make RegistrationWindow, :end_date => RegistrationWindowsConstants::DATE_BEFORE
+  @registration_window = make RegistrationWindow, :end_date => RegistrationWindowsConstants::DATE_AFTER
   @registration_window.create
 end
 
@@ -137,7 +138,7 @@ When /^I add a Registration Window with Start Date after the End Date$/ do
 end
 
 When /^I add a Registration Window with the same Start Date and End Date whose End Time is before the Start Time$/ do
-  @registration_window = make RegistrationWindow, :start_time => '10:00', :end_time => '09:00', :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE
+  @registration_window = make RegistrationWindow, :start_time => '10:00 AM', :end_time => '09:00 AM', :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE
   @registration_window.create
 end
 
@@ -149,9 +150,8 @@ end
 When /^I add two Registration Windows with the same name for the same Period$/ do
   @registration_window = make RegistrationWindow
   @registration_window.create
-  on(RegistrationWindowsCreate).cancel_and_leave
   @registration_window2 = make RegistrationWindow, :appointment_window_info_name => @registration_window.appointment_window_info_name
-  @registration_window.create
+  @registration_window2.create
 end
 
 When /^I add two Registration Windows with the same name in two different Periods$/ do

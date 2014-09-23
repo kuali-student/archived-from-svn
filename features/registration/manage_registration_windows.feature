@@ -13,37 +13,37 @@ Feature: REG.Manage registration windows
     Given I successfully add a Registration Window for a period using one slot per window allocation
     Then I verify the new Registration Window's buttons are created
     And I verify the new Registration Window's read-only and editable fields
-  @wip
+  @nightly
   Scenario: Successfully add a new Registration Window using max slotted allocation
     Given I successfully add a Registration Window for a period using max slotted allocation
     Then I verify the new Registration Window's buttons are created
     And I verify the new Registration Window's read-only and editable fields
-  @wip
+  @nightly
   Scenario: Successfully add a new Registration Window using uniform slotted method allocation
     Given I successfully add a Registration Window for a period using uniform slotted method allocation
     Then I verify the new Registration Window's buttons are created
     And I verify the new Registration Window's read-only and editable fields
-  @wip
+  @nightly
   Scenario: Add a new Registration Window whose Start Date falls out of the period dates
     Given I add a Registration Window with Start Date falling out of the period dates
     Then I verify that the registration window is not created
-  @wip
+  @nightly
   Scenario: Add a new Registration Window whose End Date falls out of the period dates
     Given I add a Registration Window with End Date falling out of the period dates
     Then I verify that the registration window is not created
-  @wip
+  @nightly
   Scenario: Add a new Registration Window whose Start Date is after the End Date
     Given I add a Registration Window with Start Date after the End Date
     Then I verify that the registration window is not created
-  @wip
+  @nightly
   Scenario: Add a new Registration Window with the same Start Date and End Date whose End Time is before the Start Time
     Given I add a Registration Window with the same Start Date and End Date whose End Time is before the Start Time
     Then I verify that the registration window is not created
-  @wip
+  @nightly
   Scenario: Add a new Registration Window with the same Start Date and End Date whose End Time is in AM and its Start Time is in PM
     Given I add a Registration Window with the same Start Date and End Date whose End Time is in AM and its Start Time is in PM
     Then I verify that the registration window is not created
-  @wip
+  @nightly
   Scenario: Add two Registration Windows with the same name in the same Period
     Given I add two Registration Windows with the same name for the same Period
     Then I verify the Registration Window is unique within the same period
