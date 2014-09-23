@@ -1,6 +1,6 @@
+#Tagging as nightly for test run on CI
+#JIRA for incoporating review comments of KSAP-1885==>KSAP-2081.The JIRA would be completed in this sprint or next sprint
 @nightly
-  #Tagging as nightly for test run on CI
-  #JIRA for incoporating review comments of KSAP-1885==>KSAP-2081.The JIRA would be completed in this sprint or next sprint
 Feature: Add course to plan from bookmark
 
   Background:
