@@ -20,15 +20,16 @@ Feature: REG.Holds Functionary using Applied Holds
     Then an expire hold authorization error message is displayed
 
 #KSENROLL-14600
-  @draft
+  @pending
   Scenario: HOLD2.9.1 Validate that a Holds Functionary can delete an applied hold
     Given I am logged in as a Holds Functionary
     And I apply a hold for deletion to a student
     When I delete that hold
     Then the deleted hold no longer displays for the student
-  @draft
+
+  @pending
   Scenario: Hold2.9.2 Validate that a non Holds Functionary can not delete an applied hold
-    Given I am logged in as a non Holds Functionary
+    Given I am logged in as a Schedule Coordinator
     And I find a hold
     When I attempt to delete that hold
     Then a delete hold authorization error message is displayed

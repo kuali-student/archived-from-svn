@@ -32,15 +32,11 @@ Then(/^the deleted hold no longer displays for the student$/) do
 end
 
 Then /^a delete hold authorization error message is displayed$/ do
-  on ManageAppliedHold do |page|
-    page.get_validation_message.should match /will not be deleted as you don't have authorization to delete this hold/
-  end
+  on(ManageAppliedHold).get_validation_message.should match /will not be deleted as you don't have authorization to delete this hold/
 end
 
 When(/^I attempt to delete that hold$/) do
-  on ManageAppliedHold do |page|
-    page.delete_hold("ACAD02")
-  end
+  on(ManageAppliedHold).delete_hold(@hold_issue.code)
 end
 
 Then /^an apply hold authorization error message is displayed$/ do
