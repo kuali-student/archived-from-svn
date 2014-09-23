@@ -31,7 +31,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
 
   expected_element  :window_collection_table
 
-  element(:window_collection_div) { |b| b.frm.div(id: "addRegistrationWindowCollection_disclosureContent") }
+  element(:window_collection_div) { |b| b.frm.div(id: "addRegistrationWindowCollection") }
   element(:window_collection_table) { |b| b.window_collection_div.table() }
 
   COLUMN_PERIOD_NAME = 0
