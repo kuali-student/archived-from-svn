@@ -1,4 +1,4 @@
-When(/^I apply a hold to student by completing the required information needed$/) do
+When(/^I apply a hold to student by completing the required information$/) do
   @applied_hold = create AppliedHold, :student_id => "KS-6509", :hold_issue => (make HoldIssue, :code => "ACAD03")
   @applied_hold.apply_hold
 end
@@ -10,7 +10,7 @@ Then(/^the hold exists for the student with an effective date$/) do
   end
 end
 
-When(/^I apply a term based hold to student by completing the required information needed$/) do
+When(/^I apply a term based hold to student by completing the required information$/) do
   @applied_hold = create AppliedHold, :student_id => "KS-6510", :find_code_by_lookup => true,
                          :hold_issue => (make HoldIssue, :code => "ADMIS03", :first_term => "201208", :term_based => true)
   @applied_hold.apply_hold
