@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: BT.Planner Indicators and Real Time Data
 
   Background:
