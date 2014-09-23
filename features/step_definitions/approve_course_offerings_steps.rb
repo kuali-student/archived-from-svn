@@ -42,7 +42,7 @@ Given /^I manage a course offering with a canceled activity offering present in 
 end
 
 Given /^I manage a course offering with multiple canceled activity offerings present in draft SOC state$/ do
-  @course_offering = (make CourseOffering, :term=> "202000" , :course => "ENGL243").copy
+  @course_offering = (make CourseOffering, :term=> "202000" , :course => "ENGL245").copy
   @course_offering.initialize_with_actual_values
 
   @canceled_ao1 = @course_offering.get_ao_obj_by_code("A")
@@ -58,7 +58,7 @@ Given /^I manage a course offering with multiple canceled activity offerings pre
 end
 
 Given /^I manage a course offering with canceled and draft activity offerings present in draft SOC state$/ do
-  @course_offering = (make CourseOffering, :term=> "202000" , :course => "ENGL243").copy
+  @course_offering = (make CourseOffering, :term=> "202000" , :course => "ENGL245").copy
   @course_offering.initialize_with_actual_values
 
   @canceled_ao = @course_offering.get_ao_obj_by_code("A")
@@ -159,7 +159,7 @@ Given /^a new academic term has course and activity offerings in canceled and su
 
   @activity_offering_canceled = create ActivityOfferingObject, :parent_cluster => @course_offering_canceled.default_cluster,
                                        :activity_type => "Lecture"
-  @activity_offering_canceled.cancel
+  @activity_offering_canceled.cancel :navigate_to_page => false
 
   @course_offering_suspended = make CourseOffering, :term=> @calendar.terms[0].term_code,
                                       :course => "ENGL211"
@@ -171,7 +171,7 @@ Given /^a new academic term has course and activity offerings in canceled and su
   @activity_offering_suspended = create ActivityOfferingObject, :parent_cluster => @course_offering_suspended.default_cluster,
                                         :activity_type => "Lecture"
 
-  @activity_offering_suspended.approve
+  @activity_offering_suspended.approve :navigate_to_page => false
   @manage_soc.advance_soc_from_open_to_final_edits
   @activity_offering_suspended.suspend
 end

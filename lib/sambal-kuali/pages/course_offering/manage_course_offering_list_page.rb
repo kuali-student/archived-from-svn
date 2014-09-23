@@ -63,14 +63,15 @@ class ManageCourseOfferingList < BasePage
     loading.wait_while_present
   end
 
-  def row_by_status(costatus)
-    course_offering_results_table.row(text: /\b#{Regexp.escape(costatus)}\b/)
+  def row_by_status(co_status, course_code_filter)
+    course_offering_results_table.row(text: /#{course_code_filter}.*\n#{Regexp.escape(co_status)}/)
   end
 
-  def select_co_by_status(costatus)
-    if row_by_status(costatus).exists?
-      row_by_status(costatus).checkbox.set
-      return row_by_status(costatus).cells[CO_CODE_COLUMN].text
+  def select_co_by_status(co_status, course_code_filter)
+    row = row_by_status(co_status, course_code_filter)
+    if row.exists?
+      row.checkbox.set
+      return row.cells[CO_CODE_COLUMN].text
     else
       return nil
     end

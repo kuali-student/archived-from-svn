@@ -161,7 +161,7 @@ end
 
 When /^I select a course offering in "([^"]*)" status$/ do |co_status|
   on ManageCourseOfferingList do |page|
-    page.select_co_by_status(co_status)
+    page.select_co_by_status(co_status, @course_offering.course[0,4])
   end
 end
 

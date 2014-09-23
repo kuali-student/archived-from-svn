@@ -192,23 +192,25 @@ class CourseOffering < DataFactory
     defaults = {
         :exclude_cancelled_aos => false,
         :exclude_scheduling => false,
-        :exclude_instructor => false
+        :exclude_instructor => false,
+        :navigate_to_page => true
     }
     options = defaults.merge(opts)
 
-    go_to_manage_course_offerings
-    on ManageCourseOfferings do |page|
-      page.term.set term
-      page.input_code.set @course[0,4] #subject code + course level (assumes always more than one CO returned)
-      page.show
-      #make sure showing list
-      begin
-        on ManageCourseOfferings do |page|
-          page.list_all_course_link.wait_until_present(5)
-          page.list_all_courses
+    if options[:navigate_to_page]
+      on ManageCourseOfferings do |page|
+        page.term.set term
+        page.input_code.set @course[0,4] #subject code + course level (assumes always more than one CO returned)
+        page.show
+        #make sure showing list
+        begin
+          on ManageCourseOfferings do |page|
+            page.list_all_course_link.wait_until_present(5)
+            page.list_all_courses
+          end
+        rescue Watir::Wait::TimeoutError
+          #means a list was already returned
         end
-      rescue Watir::Wait::TimeoutError
-        #means a list was already returned
       end
     end
 
@@ -490,18 +492,18 @@ class CourseOffering < DataFactory
       page.show
       end_time = Time.new
       #in case there is only 1 course, want to show list
-      if page.list_all_course_link.exists? then
+      if page.list_all_course_link.exists?
         page.list_all_courses
       end
       puts "#{@course[0,4]} subj code search time: #{end_time-st_time}"
     end
   end
 
-  def search_by_coursecode
+  def search_by_coursecode(course_code=@course)
     go_to_manage_course_offerings
     on ManageCourseOfferings do |page|
       page.term.set @term
-      page.input_code.set @course
+      page.input_code.set course_code
       page.show
     end
   end
@@ -535,6 +537,7 @@ class CourseOffering < DataFactory
   end
 
   # checks to see if course offering specified state is present, otherwise creates a new course offering
+  # only looks at courses with the same course code, different suffixes, will not update ref data
   # @example
   #  @course_offering.check_course_in_status(opts)
   # updates the @course instance variable
@@ -548,10 +551,22 @@ class CourseOffering < DataFactory
 
     options = defaults.merge(opts)
 
-    search_by_subjectcode
-    co_status = on(ManageCourseOfferingList).co_status(@course)
-    #existing_co = on(ManageCourseOfferingList).select_co_by_status(options[:co_status])
-    if options[:co_status] != co_status
+    existing_co_status = nil
+    existing_co = nil
+
+    search_by_coursecode(@course[0,7])
+
+    on ManageCourseOfferings do |page|
+      #in case there is only 1 course, want to show list
+      if page.list_all_course_link.exists?
+        page.list_all_courses
+      end
+    end
+
+    existing_co = on(ManageCourseOfferingList).select_co_by_status(options[:co_status],@course)
+    if existing_co != nil
+      @course = existing_co
+    else
       new_course = self.copy
       @course = new_course.course
       on(ManageCourseOfferings).list_all_courses
@@ -835,7 +850,7 @@ class CourseOffering < DataFactory
   # @returns boolean - delete operation was available
   def attempt_co_delete_by_status(co_state)
     on ManageCourseOfferingList do |page|
-      @course = page.select_co_by_status(co_state)
+      @course = page.select_co_by_status(co_state,@course[0,4]) #select any course from subj
       if page.delete_cos_button.enabled?
         page.delete_cos
       else
