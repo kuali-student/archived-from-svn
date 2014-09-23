@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: BT.Quick Add
 
   Background:
