@@ -317,7 +317,7 @@ Then /^the course is present in my cart, with the updated options$/  do
 end
 
 And /^I (attempt to |navigate to my registration cart and )?register for the courses?$/ do |attempt|
-  @reg_request.register :do_navigation=>(attempt.include? "navigate")
+  @reg_request.register :do_navigation=>(!attempt.nil? && (attempt.include? "navigate"))
   sleep 3
 end
 
@@ -793,7 +793,7 @@ When /^I register for a course with multiple non\-conflicting sections$/ do
 end
 
 When /^I register for a different non\-conflicting section of the same course$/ do
-  @reg_request.edit :reg_group_code=>"1018"
+  @reg_request.reg_group_code="1018"
   @reg_request.create
   @reg_request.register
 end
@@ -810,9 +810,7 @@ And /^I manage the course I added to my registration cart$/ do
   @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL295")
   sleep 2
   @course_offering.initialize_with_actual_values
-
   @activity_offering = @course_offering.get_ao_obj_by_code("A")
-  @activity_offering.edit :send_to_scheduler => true
 end
 
 And /^there is a message indicating that the course has been cancelled$/ do

@@ -79,6 +79,12 @@ class CourseSearch < DataFactory
     end
   end
 
+  def select_course
+    on CourseSearchPage do |page|
+      page.course_code_result_row(@course_code).wait_until_present
+      page.select_course(@course_code)
+    end
+  end
   def edit opts={}
     edit_course_level opts
     edit_course_code opts

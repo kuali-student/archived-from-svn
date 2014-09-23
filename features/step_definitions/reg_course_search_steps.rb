@@ -14,10 +14,7 @@ When /^I search for a WMST course and select a registration group$/ do
   @restResponse.clear_cart_and_schedule(@course_search_result.term)
 
   @course_search_result.search :navigate=>true
-  on CourseSearchPage do |page|
-    page.course_code_result_row(@course_search_result.course_code).wait_until_present
-    page.select_course(@course_search_result.course_code)
-  end
+  @course_search_result.select_course
 
   @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"A"
   @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"E"
@@ -261,10 +258,7 @@ When /^I search for a BSCI course and select a registration group$/ do
   @restResponse.clear_cart_and_schedule(@course_search_result.term)
 
   @course_search_result.search :navigate=>true
-  on CourseSearchPage do |page|
-    page.course_code_result_row(@course_search_result.course_code).wait_until_present
-    page.select_course(@course_search_result.course_code)
-  end
+  @course_search_result.select_course
 
   @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"B"
   @course_search_result.edit :selected_section => "1001"
@@ -305,10 +299,7 @@ When /^I search for a course in Fall 2012 and select a registration group$/ do
   @restResponse.clear_cart_and_schedule(@course_search_result.term)
 
   @course_search_result.search :navigate=>true
-  on CourseSearchPage do |page|
-    page.course_code_result_row(@course_search_result.course_code).wait_until_present
-    page.select_course(@course_search_result.course_code)
-  end
+  @course_search_result.select_course
 
   @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"A"
   @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"E"

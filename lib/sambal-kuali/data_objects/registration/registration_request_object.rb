@@ -10,7 +10,7 @@ class RegistrationRequest < DataFactory
   include Workflows
 
   #string - generally set using options hash
-  attr_reader   :student_id,
+  attr_accessor :student_id,
                 :term_code,
                 :term_descr,              #TODO - get term descr from term_code so they are always in sync
                 :course_code,
