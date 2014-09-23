@@ -9,9 +9,7 @@ And(/^I find a hold$/) do
 end
 
 Then /^an expire hold authorization error message is displayed$/ do
-  on ManageAppliedHold do |page|
-    page.get_validation_message.should match /will not be expired as you don't have authorization to expire this hold/
-  end
+  on(ManageAppliedHold).get_validation_message.should match /will not be expired as you don't have authorization to expire this hold/
 end
 
 When(/^I attempt to expire that hold$/) do
