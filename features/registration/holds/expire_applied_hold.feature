@@ -7,28 +7,24 @@ Feature: REG.Expire Applied Hold
     Given I am logged in as admin
 
 #KSENROLL-14594
-  @pending
   Scenario: HOLD2.6.1 Verify that a term based applied hold can't be expired if the expiration term is before the effective term
     Given there exists a term based hold issue
     And I apply the hold to a student
     When I attempt to expire the hold with an expiration term earlier than the effective term
     Then an expiration term error message is displayed stating "Applied expiration term should not be earlier than hold issue's last Term:"
 
-  @pending
   Scenario: HOLD2.6.2 Verify that a term based applied hold can be expired if the expiration term is after the effective term
     Given there exists a term based hold issue
     And I apply the hold to a student
     When I expire the hold with an expiration term that is after the effective term
     Then the hold is no longer displayed for the student
 
-  @pending
   Scenario: HOLD2.6.3 Verify that an applied hold can't be expired if the expiration date is earlier than the effective date
     Given there exists a hold that does not maintain history
     And I apply the hold to a student
     When I attempt to expire the hold with an expiration date earlier than the effective date
     Then an invalid date range error message is displayed
 
-  @pending
   Scenario: HOLD2.6.4 Verify that an applied hold can be expired if the expiration date is later than the effective date
     Given there exists a hold that does not maintain history
     And I apply the hold to a student
