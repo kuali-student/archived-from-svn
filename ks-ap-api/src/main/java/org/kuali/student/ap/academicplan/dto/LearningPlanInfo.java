@@ -28,6 +28,10 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.kuali.student.ap.academicplan.infc.DegreeMapAssociation;
 import org.kuali.student.ap.academicplan.infc.LearningPlan;
+import org.kuali.student.ap.schedulebuilder.dto.PossibleScheduleOptionInfo;
+import org.kuali.student.ap.schedulebuilder.dto.ReservedTimeInfo;
+import org.kuali.student.ap.schedulebuilder.infc.PossibleScheduleOption;
+import org.kuali.student.ap.schedulebuilder.infc.ReservedTime;
 import org.kuali.student.r2.common.dto.IdEntityInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.w3c.dom.Element;
@@ -41,7 +45,7 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LearningPlanInfo", propOrder = { "studentId", "id", "typeKey",
-		"degreeMapAssociationInfos", "stateKey", "shared", "programId",
+		"degreeMapAssociationInfos", "resrvedTimeInfos", "possibleScheduleOptionInfos", "stateKey", "shared", "programId",
 		"effectiveDate", "expirationDate", "name", "descr", "meta",
 		"attributes", "_futureElements" })
 public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
@@ -65,6 +69,12 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 
 	@XmlElement
 	private List<DegreeMapAssociationInfo> degreeMapAssociationInfos;
+	
+	@XmlElement
+	private List<ReservedTimeInfo> reservedTimeInfos;
+	
+	@XmlElement
+	private List<PossibleScheduleOptionInfo> possibleScheduleOptionInfos;
 
 	@XmlAnyElement
 	private List<Element> _futureElements;
@@ -91,6 +101,27 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 					assocInfos.add(new DegreeMapAssociationInfo(assoc));
 				this.setDegreeMapAssociationInfos(assocInfos);
 			}
+	
+			List<? extends ReservedTime> rts = plan
+					.getReservedTimes();
+			if (rts != null) {
+				List<ReservedTimeInfo> rtInfos = new ArrayList<ReservedTimeInfo>(
+						rts.size());
+				for (ReservedTime rt : rts)
+					rtInfos.add(new ReservedTimeInfo(rt));
+				this.setReservedTimeInfos(rtInfos);
+			}
+		
+			List<? extends PossibleScheduleOption> psos = plan
+					.getPossibleScheduleOptions();
+			if (psos != null) {
+				List<PossibleScheduleOptionInfo> psoInfos = new ArrayList<PossibleScheduleOptionInfo>(
+						psos.size());
+				for (PossibleScheduleOption pso : psos)
+					psoInfos.add(new PossibleScheduleOptionInfo(pso));
+				this.setPossibleScheduleOptionInfos(psoInfos);
+			}
+
 		}
 	}
 
@@ -152,4 +183,39 @@ public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
 		this.degreeMapAssociationInfos = degreeMapAssociationInfos;
 	}
 
+
+	@Override
+	public List<ReservedTime> getReservedTimes() {
+		return reservedTimeInfos == null ? null
+				: Collections
+						.<ReservedTime> unmodifiableList(reservedTimeInfos);
+	}
+
+	public List<ReservedTimeInfo> getReservedTimeInfos() {
+		return reservedTimeInfos;
+	}
+
+	public void setReservedTimeInfos(
+			List<ReservedTimeInfo> reservedTimeInfos) {
+		this.reservedTimeInfos = reservedTimeInfos;
+	}
+	
+
+	@Override
+	public List<PossibleScheduleOption> getPossibleScheduleOptions() {
+		return possibleScheduleOptionInfos == null ? null
+				: Collections
+						.<PossibleScheduleOption> unmodifiableList(possibleScheduleOptionInfos);
+	}
+
+	public List<PossibleScheduleOptionInfo> getPossibleScheduleOptionInfos() {
+		return possibleScheduleOptionInfos;
+	}
+
+	public void setPossibleScheduleOptionInfos(
+			List<PossibleScheduleOptionInfo> possibleScheduleOptionInfos) {
+		this.possibleScheduleOptionInfos = possibleScheduleOptionInfos;
+	}
+	
+	
 }
