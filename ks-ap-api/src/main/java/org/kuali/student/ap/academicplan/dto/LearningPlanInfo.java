@@ -45,7 +45,7 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LearningPlanInfo", propOrder = { "studentId", "id", "typeKey",
-		"degreeMapAssociationInfos", "resrvedTimeInfos", "possibleScheduleOptionInfos", "stateKey", "shared", "programId",
+		"degreeMapAssociationInfos", "reservedTimeInfos", "possibleScheduleOptionInfos", "stateKey", "shared", "programId",
 		"effectiveDate", "expirationDate", "name", "descr", "meta",
 		"attributes", "_futureElements" })
 public class LearningPlanInfo extends IdEntityInfo implements LearningPlan {
