@@ -28,7 +28,8 @@ class CourseSearchResults < DataFactory
                 :gened_course,
                 :course_level,
                 :course_offering_description_list,
-                :state
+                :state,
+                :message_status
 
   def initialize(browser, opts={})
     @browser = browser
@@ -54,6 +55,7 @@ class CourseSearchResults < DataFactory
         :course_level=> '3',
         :course_prefix=> 'ENGL',
         :state=>'Planned',
+        :message_status=>'Section 1012 has been suspended.',
          course_offering_description_list:[
             (make CourseOfferingDescriptionObject, :courseofferingdescription_level => 0),
             (make CourseOfferingDescriptionObject, :courseofferingdescription_level => 1)
@@ -828,7 +830,7 @@ class CourseSearchResults < DataFactory
     on CourseSearch do |page|
       page.course_search_results_facets.wait_until_present
     end
-    on CourseSearch do |page|
+    on(CourseSearch) do |page|
       page.plan_page_click
     end
 
@@ -838,8 +840,7 @@ class CourseSearchResults < DataFactory
       #This would change for backup
       page.quick_add(@state,@planned_term).wait_until_present(120)
       page.quick_add(@state,@planned_term).click
-      page.course_code_quick_add.wait_until_present(120)
-      page.course_code_quick_add.set @course_code
+      page.course_code_quick_add.when_present(60).set @course_code
       page.course_code_quick_add.send_keys :tab
       page.add_to_plan_quick.click
     end
@@ -850,8 +851,7 @@ class CourseSearchResults < DataFactory
       page.refresh
       page.planner_courses_detail_list.wait_until_present
       page.quick_add(@state,@planned_term).click
-      page.course_code_quick_add.wait_until_present(120)
-      page.course_code_quick_add.set @course_code
+      page.course_code_quick_add.when_present(60).set @course_code
       page.course_code_quick_add.send_keys :tab
       page.add_to_plan_quick.click
     end
@@ -865,9 +865,8 @@ class CourseSearchResults < DataFactory
 
       #This would change for backup
 
-      page.quick_add(@course_search_result.state,@course_search_result.planned_term).click
-      page.course_code_quick_add.wait_until_present(120)
-      page.course_code_quick_add.set @course_search_result.course_code
+      page.quick_add(@state,@planned_term).click
+      page.course_code_quick_add.when_present(60).set @course_code
       page.course_code_quick_add.send_keys :tab
       page.add_to_plan_quick.click
     end
