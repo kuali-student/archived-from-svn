@@ -23,6 +23,27 @@ Then(/^the expired hold is no longer displayed for the student$/) do
   on(ManageAppliedHold).get_hold_by_code("ACAD05").nil?.should be_true
 end
 
+And(/^I apply a hold for deletion to a student$/) do
+  @applied_hold = create AppliedHold, :student_id => "KS-1675", :hold_issue => (make HoldIssue, :code => "ACAD01")
+  @applied_hold.apply_hold
+end
+
+
+Then(/^the deleted hold no longer displays for the student$/) do
+  on(ManageAppliedHold).get_hold_by_code("ACAD01").nil?.should be_true
+end
+
+Then /^a delete hold authorization error message is displayed$/ do
+  on ManageAppliedHold do |page|
+    page.get_validation_message.should match /will not be deleted as you don't have authorization to delete this hold/
+  end
+end
+
+When(/^I attempt to delete that hold$/) do
+  on ManageAppliedHold do |page|
+    page.delete_hold("ACAD02")
+  end
+end
 
 
 
