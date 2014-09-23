@@ -87,12 +87,11 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
   end
 
   element(:yes_label) { |b| b.frm.span(text: "Yes") }
-  element(:delete_popup_div) { |b| b.frm.div(id: "KS-Uif-Confirmation-Dialog") }
-  #element(:delete_popup_div) { |b| b.frm.div(id: "KS-RegistrationWindowsManagement-ConfirmDelete-Dialog") }
+  element(:delete_popup_div) { |b| b.frm.section(id: "KS-RegistrationWindowsManagement-ConfirmDelete-Dialog") }
   action(:confirm_delete) { |b| b.delete_popup_div.radio(index:0).click; b.loading.wait_while_present }
   action(:cancel_delete) { |b| b.delete_popup_div.radio(index:1).click; b.loading.wait_while_present }
 
-  element(:break_appointments_popup_div) { |b| b.frm.div(id: "KS-RegistrationWindowsManagement-ConfirmBreakAppointments-Dialog") }
+  element(:break_appointments_popup_div) { |b| b.frm.section(id: "KS-RegistrationWindowsManagement-ConfirmBreakAppointments-Dialog") }
   action(:confirm_break_appointments) { |b| b.break_appointments_popup_div.radio(index: 0).click; b.loading.wait_while_present }
   action(:cancel_break_appointments) { |b| b.break_appointments_popup_div.radio(index: 1).click; b.loading.wait_while_present }
 
@@ -142,7 +141,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
       ret_value = ret_value || row.cells[COLUMN_END_TIME].text_field.type.eql?("text")
     end
 
-    method = row.cells[COLUMN_METHOD].span.text
+    method = row.cells[COLUMN_METHOD].div.text
 
     if method.strip.eql?(RegistrationWindowsConstants::METHOD_MAX_SLOTTED_WINDOW) || method.strip.eql?(RegistrationWindowsConstants::METHOD_UNIFORM_SLOTTED_WINDOW)
       ret_value = ret_value || row.cells[COLUMN_RULE].select.exists?
@@ -239,7 +238,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
   end
 
   def remove(window_name, period_key)
-    get_target_row(window_name, period_key).cells[COLUMN_ACTION].button(text: "X").click
+    get_target_row(window_name, period_key).cells[COLUMN_ACTION].a(id: /deleteRegistrationWindowRow/).click
     loading.wait_while_present
   end
 

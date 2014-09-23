@@ -76,22 +76,22 @@ Feature: REG.Manage registration windows
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window with the same Start Date and End Date setting its End Time in AM and its Start Time in PM
     Then I verify that the Registration Window is not modified
-  @wip
+  @nightly
   Scenario: Delete a Registration Window
     Given I successfully add a Registration Window for a period
     And I delete the Registration Window
     Then I verify that the Registration Window is deleted
-  @wip
+  @nightly
   Scenario: Cancel Deleting a Registration Window by canceling the popup dialog
     Given I successfully add a Registration Window for a period
     And I try deleting of the Registration Window but I cancel the delete
     Then I verify that the Registration Window is not deleted
-  @wip
+  @nightly
   Scenario: Assign Student Appointments in Registration Window
     Given I successfully add a Registration Window for a period
     And I assign Student Appointments in Registration Window
     Then I verify that no field is editable in Registration Window and the Window Name is a link to a popup
-  @wip
+  @nightly
   Scenario: Break Student Appointments in Registration Window
     Given I successfully add a Registration Window for a period
     And I assign Student Appointments in Registration Window
