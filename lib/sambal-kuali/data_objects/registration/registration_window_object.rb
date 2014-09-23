@@ -19,8 +19,7 @@ class RegistrationWindow < DataFactory
 
   #access using options hash
   attr_accessor :term_type, :year, :period_id, :period_key, :appointment_window_info_name, :assigned_population_name,
-                :start_time, :start_time_am_pm,
-                :end_time, :end_time_am_pm, :window_type_key, :max_allocation, :slot_rule_enum_type
+                :start_time, :end_time, :window_type_key, :max_allocation, :slot_rule_enum_type
   # access using options hash - populate using RegistrationWindowsConstants
   attr_accessor  :end_date,:start_date
 
@@ -34,10 +33,8 @@ class RegistrationWindow < DataFactory
   #    :assigned_population_name => 'ENGL',
   #    :start_date => RegistrationWindowsConstants::DATE_WITHIN,
   #    :start_time => '09:00',
-  #    :start_time_am_pm => 'am',
   #    :end_date => RegistrationWindowsConstants::DATE_WITHIN,
   #    :end_time => '10:00',
-  #    :end_time_am_pm => 'am',
   #    :window_type_key => 'One Slot per Window',
   #    :max_allocation => '10'
   #    :slot_rule_enum_type => 'Undergrad Standard'
@@ -54,11 +51,9 @@ class RegistrationWindow < DataFactory
         :appointment_window_info_name => random_string,
         :assigned_population_name => 'ENGL',
         :start_date => RegistrationWindowsConstants::DATE_WITHIN,
-        :start_time => '09:00',
-        :start_time_am_pm => 'am',
+        :start_time => '09:00 AM',
         :end_date => RegistrationWindowsConstants::DATE_WITHIN,
-        :end_time => '10:00',
-        :end_time_am_pm => 'am',
+        :end_time => '10:00 AM',
         :window_type_key => 'One Slot per Window',
         :max_allocation => '10',
         :slot_rule_enum_type => 'Undergrad Standard'
@@ -95,11 +90,8 @@ class RegistrationWindow < DataFactory
       #page.start_date.set get_date_for(RegistrationWindowsConstants::DATE_BOUND_START, @start_date, @period_key)
       page.start_date.set @start_date
       page.start_time.set @start_time
-      page.start_time_am_pm.select @start_time_am_pm
-      #page.end_date.set get_date_for(RegistrationWindowsConstants::DATE_BOUND_END, @end_date, @period_key)
       page.end_date.set @end_date
       page.end_time.set @end_time
-      page.end_time_am_pm.select @end_time_am_pm
       page.window_type_key.select @window_type_key
       page.loading.wait_while_present
       if (page.max_appointments_per_slot.present?)
@@ -141,10 +133,8 @@ class RegistrationWindow < DataFactory
         :assigned_population_name => @assigned_population_name,
         :start_date => @start_date,
         :start_time => @start_time,
-        :start_time_am_pm => @start_time_am_pm,
         :end_date => @end_date,
         :end_time => @end_time,
-        :end_time_am_pm => @end_time_am_pm,
         :window_type_key => @window_type_key,
         :max_allocation => @max_allocation,
         :slot_rule_enum_type => @slot_rule_enum_type
@@ -157,7 +147,7 @@ class RegistrationWindow < DataFactory
     puts "Editing Registration Window #{options[:appointment_window_info_name]} for Period #{options[:period_key]}. Start Date = #{@start_date} and End Date = #{@end_date}"
 
     on RegistrationWindowsCreate do |page|
-      page.edit(options[:appointment_window_info_name], options[:period_key], options[:start_date], options[:start_time], options[:start_time_am_pm], options[:end_date], options[:end_time], options[:end_time_am_pm])
+      page.edit(options[:appointment_window_info_name], options[:period_key], options[:start_date], options[:start_time], options[:end_date], options[:end_time])
       page.save
     end
     if (options[:update_opts])

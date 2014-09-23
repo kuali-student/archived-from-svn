@@ -39,16 +39,14 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
   COLUMN_STUDENT_GROUP = 2
   COLUMN_START_DATE = 3
   COLUMN_START_TIME = 4
-  COLUMN_START_TIME_AM_PM = 5
-  COLUMN_END_DATE = 6
-  COLUMN_END_TIME = 7
-  COLUMN_END_TIME_AM_PM = 8
-  COLUMN_METHOD = 9
-  COLUMN_MAX = 10
-  COLUMN_RULE = 11
-  COLUMN_ACTION = 12
-  COLUMN_ASSIGN_STUDENTS = 12
-  COLUMN_BREAK_APPOINTMENTS = 12
+  COLUMN_END_DATE = 5
+  COLUMN_END_TIME = 6
+  COLUMN_METHOD = 7
+  COLUMN_MAX = 8
+  COLUMN_RULE = 9
+  COLUMN_ACTION = 10
+  COLUMN_ASSIGN_STUDENTS = 10
+  COLUMN_BREAK_APPOINTMENTS = 10
 
   def get_target_row(window_name, period_key)
     window_collection_table.rows.each do |r|
@@ -64,10 +62,8 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
   element(:period_key) { |b| b.window_collection_table.rows[1].cells[COLUMN_PERIOD_NAME].select }
   element(:start_date) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].startDate") }
   element(:start_time) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].startTime") }
-  element(:start_time_am_pm) { |b| b.frm.select(name: "newCollectionLines['appointmentWindows'].startTimeAmPm") }
   element(:end_date) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].endDate") }
   element(:end_time) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].endTime") }
-  element(:end_time_am_pm) { |b| b.frm.select(name: "newCollectionLines['appointmentWindows'].endTimeAmPm") }
   element(:window_type_key) { |b| b.frm.select(name: "newCollectionLines['appointmentWindows'].windowTypeKey") }
   element(:slot_rule_enum_type) { |b| b.frm.select(name: "newCollectionLines['appointmentWindows'].slotRuleEnumType") }
   element(:max_appointments_per_slot) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].appointmentWindowInfo.maxAppointmentsPerSlot") }
@@ -133,9 +129,6 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     puts "Checking to see if the editable fields are editable for #{window_name} in period #{period_key}"
     ret_value = false;
     row = get_target_row(window_name, period_key)
-    ret_value = ret_value || row.cells[COLUMN_START_TIME_AM_PM].select.exists?
-    ret_value = ret_value || row.cells[COLUMN_END_TIME_AM_PM].select.exists?
-    #ret_value = ret_value || row.cells[COLUMN_RULE].select.exists?
     if row.cells[COLUMN_START_DATE].text_field.exists?
       ret_value = ret_value || row.cells[COLUMN_START_DATE].text_field.type.eql?("text")
     end
@@ -261,14 +254,12 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     return ''
   end
 
-  def edit(window_name, period_key, start_date, start_time, start_time_am_pm, end_date, end_time, end_time_am_pm)
+  def edit(window_name, period_key, start_date, start_time, end_date, end_time)
     row = get_target_row(window_name, period_key)
     row.cells[COLUMN_START_DATE].text_field.set start_date
     row.cells[COLUMN_START_TIME].text_field.set start_time
-    row.cells[COLUMN_START_TIME_AM_PM].select.select start_time_am_pm
     row.cells[COLUMN_END_DATE].text_field.set end_date
     row.cells[COLUMN_END_TIME].text_field.set end_time
-    row.cells[COLUMN_END_TIME_AM_PM].select.select end_time_am_pm
 
     save
     loading.wait_while_present
@@ -285,10 +276,8 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     return_value = return_value && assigned_population_name.exists?
     return_value = return_value && start_date.exists?
     return_value = return_value && start_time.exists?
-    return_value = return_value && start_time_am_pm.exists?
     return_value = return_value && end_date.exists?
     return_value = return_value && end_time.exists?
-    return_value = return_value && end_time_am_pm.exists?
     return_value = return_value && window_type_key.exists?
     return_value = return_value && slot_rule_enum_type.exists?
     return_value = return_value && add.exists?
@@ -311,15 +300,13 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     #return return_value
   end
 
-  def validate_values(window_name, period_key, start_date, start_time, start_time_am_pm, end_date, end_time, end_time_am_pm)
+  def validate_values(window_name, period_key, start_date, start_time, end_date, end_time)
     ret_value = true
     row = get_target_row(window_name, period_key)
     return_value = return_value && row.cells[COLUMN_START_DATE].text_field.value.eql?(start_date)
     return_value = return_value && row.cells[COLUMN_START_TIME].text_field.value.eql?(start_time)
-    return_value = return_value && row.cells[COLUMN_START_TIME_AM_PM].select.selected_options.first.text.eql?(start_time_am_pm)
     return_value = return_value && row.cells[COLUMN_END_DATE].text_field.value.eql?(end_date)
     return_value = return_value && row.cells[COLUMN_END_TIME].text_field.value.eql?(end_time)
-    return_value = return_value && row.cells[COLUMN_END_TIME_AM_PM].select.selected_options.first.text.eql?(end_time_am_pm)
     return ret_value
   end
 
@@ -328,10 +315,8 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     row = get_target_row(window_name, period_key)
     row_object[:start_date] = row.cells[COLUMN_START_DATE].text_field.value
     row_object[:start_time] = row.cells[COLUMN_START_TIME].text_field.value
-    row_object[:start_time_am_pm] = row.cells[COLUMN_START_TIME_AM_PM].select.selected_options.first.text
     row_object[:end_date] = row.cells[COLUMN_END_DATE].text_field.value
     row_object[:end_time] = row.cells[COLUMN_END_TIME].text_field.value
-    row_object[:end_time_am_pm] = row.cells[COLUMN_END_TIME_AM_PM].select.selected_options.first.text
 
     if (row.cells[COLUMN_MAX].text_field.exists? && row.cells[COLUMN_MAX].text_field.type.eql?("text"))
       row_object[:max_appointments_per_slot] = row.cells[COLUMN_MAX].text_field.value

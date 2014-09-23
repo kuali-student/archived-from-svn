@@ -86,10 +86,8 @@ Then /^I verify that the Registration Window is not modified$/ do
     row_object = page.get_row_object(@registration_window.appointment_window_info_name, @registration_window.period_key)
     row_object[:start_date].should == @registration_window.start_date
     row_object[:start_time].should == @registration_window.start_time
-    row_object[:start_time_am_pm].should == @registration_window.start_time_am_pm
     row_object[:end_date].should == @registration_window.end_date
     row_object[:end_time].should == @registration_window.end_time
-    row_object[:end_time_am_pm].should == @registration_window.end_time_am_pm
   end
   @registration_window.delete
   on(RegistrationWindowsCreate).cancel_and_leave
@@ -144,7 +142,7 @@ When /^I add a Registration Window with the same Start Date and End Date whose E
 end
 
 When /^I add a Registration Window with the same Start Date and End Date whose End Time is in AM and its Start Time is in PM$/ do
-  @registration_window = make RegistrationWindow, :start_time_am_pm => 'pm', :end_time_ap_pm => 'am', :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE
+  @registration_window = make RegistrationWindow, :start_time => '09:00 PM', :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE
   @registration_window.create
 end
 
@@ -180,7 +178,7 @@ When /^I edit a Registration Window with the same Start Date and End Date settin
 end
 
 When /^I edit a Registration Window with the same Start Date and End Date setting its End Time in AM and its Start Time in PM$/ do
-  @registration_window.edit :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE, :start_time_am_pm => 'pm', :end_time_ap_pm => 'am'
+  @registration_window.edit :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE, :start_time => '09:00 PM'
 end
 
 When /^I delete the Registration Window$/ do
