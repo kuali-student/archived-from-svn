@@ -4,11 +4,11 @@ Feature: REG.Manage registration windows
   Background:
     Given I am logged in as a Schedule Coordinator
 
-  @wip
+  @nightly
   Scenario: Successfully search for Registration Windows
     When I manage Registration Windows for a term and a period
     Then I verify that all Registration Window fields are present
-  @wip
+  @nightly
   Scenario: Successfully add a new Registration Window using one slot per window allocation
     Given I successfully add a Registration Window for a period using one slot per window allocation
     Then I verify the new Registration Window's buttons are created

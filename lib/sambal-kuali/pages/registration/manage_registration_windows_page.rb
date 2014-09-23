@@ -87,9 +87,9 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
   end
 
   element(:yes_label) { |b| b.frm.span(text: "Yes") }
-  element(:delete_popup_div) { |b| b.frm.section(id: "KS-RegistrationWindowsManagement-ConfirmDelete-Dialog") }
-  action(:confirm_delete) { |b| b.delete_popup_div.radio(index:0).click; b.loading.wait_while_present }
-  action(:cancel_delete) { |b| b.delete_popup_div.radio(index:1).click; b.loading.wait_while_present }
+  element(:delete_popup_section) { |b| b.frm.section(id: "KS-RegistrationWindowsManagement-ConfirmDelete-Dialog") }
+  action(:confirm_delete) { |b| b.delete_popup_section.radio(index:0).click; b.loading.wait_while_present }
+  action(:cancel_delete) { |b| b.delete_popup_section.radio(index:1).click; b.loading.wait_while_present }
 
   element(:break_appointments_popup_div) { |b| b.frm.section(id: "KS-RegistrationWindowsManagement-ConfirmBreakAppointments-Dialog") }
   action(:confirm_break_appointments) { |b| b.break_appointments_popup_div.radio(index: 0).click; b.loading.wait_while_present }
@@ -234,7 +234,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
 
   def does_window_contain_elements(window_name, period_key)
     row = get_target_row(window_name, period_key)
-    return row.cells[COLUMN_ACTION].button(text: "X").visible? && row.cells[COLUMN_ACTION].button(text: "Assign Students").visible?
+    return row.cells[COLUMN_ACTION].link(id: /deleteRegistrationWindowRow/).visible? && row.cells[COLUMN_ACTION].button(text: "Assign Students").visible?
   end
 
   def remove(window_name, period_key)
