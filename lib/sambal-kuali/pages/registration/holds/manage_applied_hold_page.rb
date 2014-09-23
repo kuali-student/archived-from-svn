@@ -114,4 +114,13 @@ class ManageAppliedHold < BasePage
     end
     return nil
   end
+
+
+  ######################################################################################################################
+  ###                                             Applied Hold page validation                                       ###
+  ######################################################################################################################
+  element(:validation_messages) { |b| b.manage_applied_hold_view.div(class: /alert alert-danger/)}
+  value(:get_validation_message){ |b| b.loading.wait_while_present; b.validation_messages.text}
+
+
 end

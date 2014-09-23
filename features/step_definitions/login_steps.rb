@@ -18,6 +18,14 @@ Given /^I am logged in as a Central Registration Personnel$/ do
   log_in "admin", "admin"
 end
 
+Given /^I am logged in as a Holds Functionary/ do
+  log_in "carol", "carol"
+end
+
+Given /^I am logged in as a non Holds Functionary/ do
+  log_in "martha", "martha"
+end
+
 Given /^I log out$/ do
     log_out
 end
