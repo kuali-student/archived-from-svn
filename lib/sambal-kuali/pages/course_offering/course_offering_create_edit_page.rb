@@ -12,7 +12,7 @@ class CourseOfferingCreateEdit < BasePage
 
   element(:sticky_footer_div) { |b| b.frm.div(class: "ks-uif-footer clearfix uif-stickyFooter uif-stickyButtonFooter") }
   element(:create_offering_button) { |b| b.frm.button(id: "createUpdateFromCatalog_btn") }
-  action(:create_offering) { |b| b.create_offering_button.click; b.loading.wait_while_present }
+  action(:create_offering) { |b| b.create_offering_button.click; b.loading.wait_while_present(60) }
   action(:cancel) { |b| b.sticky_footer_div.link(text: "Cancel").click; b.loading.wait_while_present }
 
   # CO-navigation carousel (and confirmation dialog)
