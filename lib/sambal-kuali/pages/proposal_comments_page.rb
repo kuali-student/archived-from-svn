@@ -2,7 +2,7 @@ class CmProposalCommentsPage < BasePage
 
   wrapper_elements
   cm_elements
-  expected_element :close
+  expected_element :close, timeout = 120
 
   element(:comment_text_input) {|b| b.frm.textarea(id: 'CM-Proposal-Course-Comment-NewComment_control') }
   element(:comment_edit_link) {|index,b|b.frm.a(id: "CM-Proposal-Course-Comment-Edit_line#{index}")}
