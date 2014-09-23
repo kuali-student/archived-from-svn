@@ -4,7 +4,8 @@ And(/^I apply a hold for expiration to a student$/) do
 end
 
 And(/^I find a hold$/) do
-  @applied_hold = create AppliedHold, :student_id=> "KS-1675", :hold_issue => (make HoldIssue, :code => "ACAD02")
+@hold_issue = make HoldIssue, :code => "ACAD02"
+@applied_hold = create AppliedHold, :student_id=> "KS-1675", :hold_issue => @hold_issue
 end
 
 Then /^an expire hold authorization error message is displayed$/ do
@@ -14,9 +15,7 @@ Then /^an expire hold authorization error message is displayed$/ do
 end
 
 When(/^I attempt to expire that hold$/) do
-  on ManageAppliedHold do |page|
-    page.expire_hold("ACAD02")
-  end
+  on(ManageAppliedHold).expire_hold(@hold_issue.code)
 end
 
 Then(/^the expired hold is no longer displayed for the student$/) do
