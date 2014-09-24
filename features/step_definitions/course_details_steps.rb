@@ -24,7 +24,7 @@ When /^I search for a certain course on course search page$/ do
                                :subject=>"English"
   @course_section_object=make CourseSectionObject
   @course_activityoffering_object=make CourseActivityOfferingObject,
-                                       :activity_offering_seats =>'35/35',
+                                       :activity_offering_seats =>'31/35',
                                        :activity_offering_code=>"A",
                                        :activity_offering_instructor=>"ROBINSON, CHARLES",
                                        :activity_offering_days=>"MWF",
