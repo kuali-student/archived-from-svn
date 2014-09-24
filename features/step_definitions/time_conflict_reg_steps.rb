@@ -13,7 +13,7 @@ end
 
 When /^I attempt to register for a PHYS course and an ENGL course whose times conflict$/ do
   steps %{
-    When I add a PHYS2 course offering to my registration cart
+    When I add a PHYS2 course offering to my empty registration cart
     And I register for the course
     Then there is a message indicating successful registration
   }
