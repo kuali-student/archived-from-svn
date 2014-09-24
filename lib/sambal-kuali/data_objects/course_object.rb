@@ -25,7 +25,8 @@ class CmCourseObject < CmBaseObject
                 # ACTIVE DATES
                 :start_term,
                 :pilot_course,
-                :course_state
+                :course_state,
+                :rationale_for_retirement
 
 
 
@@ -46,6 +47,9 @@ class CmCourseObject < CmBaseObject
       page.course_information unless page.current_page('Course Information').exists?
       page.transcript_course_title.fit opts[:transcript_course_title]
       page.course_description_and_rationale.fit opts[:description]
+      if opts[:rationale_for_retirement]
+        page.rationale_for_retirement.fit opts[:rationale_for_retirement]
+      end
       page.save_modification
     end
     set_options(opts)

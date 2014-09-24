@@ -18,7 +18,7 @@ Feature: GT.Modify Course
     Then I can see updated status of the modify course proposal
 
   Scenario: MC1.4 Blanket Approve a Modify Course Proposal
-    When I submit a modify course proposal 1.4 Faculty
+    When I submit a modify course proposal as Faculty
     And I Blanket Approve the modify course proposal as CS adding an end term for the version to be superseded
     Then the modify course proposal is successfully approved
     And the Superseded version has a new end term and the new course version is Active
@@ -44,7 +44,6 @@ Feature: GT.Modify Course
     |alice |carol               |earl            |martha                   |alice                     |
 
 
-  @wip
   Scenario: MC3.1 Create, Approve & Activate an Admin Modify Proposal as CS
     When I modify a course without curriculum review as Curriculum Specialist
     Then I can not approve and activate the admin modify proposal
@@ -54,12 +53,11 @@ Feature: GT.Modify Course
     And the new course version is Active
 
 
-  @wip
   Scenario: MC4.1 Can Modify without version as CS
     When I modify a course without creating a new version as Curriculum Specialist
     Then I can edit the course details of the current version
     And the updates will persist to the current course version
-  @wip
+
   Scenario: MC4.2 Cannot Modify if Course version state is Draft for Not Approved
     Given there is a course with a active modify proposal
     Then I cannot modify the Draft course version as Curriculum Specialist
@@ -69,7 +67,7 @@ Feature: GT.Modify Course
   Scenario: MC4.3 Can only modify without version when course version state is Superseded
     Given there is a course with a superseded version
     Then I only have the option to modify the superseded course without a version
-  @wip
+
   Scenario: MC4.4 Can see Retire info when modifying a Retired version
     Given there is a course with a retired version
     When I modify a retired course without creating a new version as Curriculum Specialist

@@ -212,8 +212,6 @@ Then(/^I can review the modify proposal compared to the course$/) do
     review.new_start_term_review.should == ""
 
     review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
-    review.proposal_title_diff_highlighter.should ==  "cm-compare-highlighter"
-
     review.review_proposal_title_header.should_not include "Admin"
 
   end
@@ -439,7 +437,7 @@ Then(/^I only have the option to modify the superseded course without a version$
   sleep 2
   on(CmReviewProposalPage).modify_course
   on CmCreateCourseStartPage do |page|
-    (page..modify_course_new_version.exist?).should == false
+    (page.modify_course_new_version.exist?).should == false
     (page.modify_course_this_version.exist?).should == true
   end
 end
@@ -478,14 +476,18 @@ When(/^I modify a retired course without creating a new version as Curriculum Sp
 end
 
 Then(/^I can edit the retirement details of the current version$/) do
-  on CmCourseInformationPage do |page|
-    (page.save_modification_button.exist?).should == true
-  end
+  @course.edit :transcript_course_title => "UPDT #{random_alphanums(10, 'TRNSCRPT')}",
+               :description => "updated #{random_alphanums(10,'description ')}",
+               :rationale_for_retirement => "updated #{random_alphanums(10,'rationale for retirement')}"
+
 end
 
 And(/^the updates will persist to the current retired course version$/) do
   navigate_to_functional_home
   @course.search_for_course
   @course.view_selected_course
-# How to evaluate the modifications? need to be cleared.
+  on CmReviewProposalPage do |page|
+    page.description_review.should == @course.description
+    page.transcript_course_title.should == @course.transcript_course_title
+  end
 end

@@ -57,6 +57,7 @@ class CmCourseInformationPage < BasePage
   element(:error_popup) { |b| b.div(text: 'The form contains errors. Please correct these errors and try again.') }
   action(:error_message) { |error_number='2', b| b.h3(text: "This page has #{error_number} errors") }
 
+  element(:rationale_for_retirement) {|b|b.textarea(id: "CM-Modify-RetireCourse-Rationale_control")}
 
 
   # table results
