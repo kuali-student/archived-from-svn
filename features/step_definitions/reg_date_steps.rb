@@ -1,8 +1,8 @@
 And /^I attempt to register for a course in a subterm whose registration period is (open|closed)$/ do |term_reg_status|
   # the user for this test (student8) is assigned a current time after the close of registration for
-  # Half Fall 1 (CHEM105), but should still be able to register for CHEM147 in Half Fall 2
+  # Half Fall 1 (ENGL206), but should still be able to register for CHEM147 in Half Fall 2
   course_code = case term_reg_status
-                  when "closed" then "CHEM105"
+                  when "closed" then "ENGL206"
                   when "open" then "CHEM147"
                 end
   @reg_request = make RegistrationRequest,
@@ -16,8 +16,8 @@ end
 Then /^there is a message indicating that the registration period is (not open|not open yet|over)$/ do |period_status|
   error_message = case period_status
                     when "not open" then "Registration is not currently open"
-                    when "not open yet" then "First day of Registration is not until 5/10/2012"
-                    when "over" then "Last day of Registration was 9/05/2012"
+                    when "not open yet" then "First day of Registration is not until 5/11/2012"
+                    when "over" then "Last day of Registration was 9/12/2012"
                   end
   on RegistrationCart do |page|
     sleep 1
