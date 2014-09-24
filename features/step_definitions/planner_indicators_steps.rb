@@ -25,7 +25,7 @@ end
 
 
 When(/^I navigate to the planner page to view a course planned for suspended registration groups$/) do
-  @course_search_result = make CourseSearchResults, :course_code => "CHEM271",:planned_term=>"2014Spring",:state=>"planned",:term=> "Spring 2014",:message_status=>"Section 1012 has been suspended."
+  @course_search_result = make CourseSearchResults, :course_code => "CHEM271",:planned_term=>"2014Spring",:state=>"planned",:term=> "Spring 2014",:message_status=>"Section 1012 has been suspended/canceled."
   @course_search_result.course_search
   navigate_to_course_planner_home
 end
@@ -39,7 +39,7 @@ end
   end
 
 When(/^I navigate to the planner page to view a course planned for cancelled course offering$/) do
-  @course_search_result = make CourseSearchResults, :course_code => "ENGL388",:planned_term=>"2014Spring",:state=>"planned",:term=> "Spring 2014",:message_status=>"Section 1001 has been canceled."
+  @course_search_result = make CourseSearchResults, :course_code => "ENGL388",:planned_term=>"2014Spring",:state=>"planned",:term=> "Spring 2014",:message_status=>"Section 1001 has been suspended/canceled."
   @course_search_result.course_search
   navigate_to_course_planner_home
 end
