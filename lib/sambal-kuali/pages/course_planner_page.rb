@@ -94,7 +94,7 @@ class CoursePlannerPage < BasePage
   element(:add_course_bookmark_gutter) { |course_code,b| b.div(id: "planner_sidebar_section").p(text: "#{course_code}").parent.attribute_value("id") }
   action(:add_course_bookmark_gutter_click) { |parent_id,b| b.div(id: "planner_sidebar_section").div(id: "#{parent_id}").a(id: /addLink/).click }
   element(:select_term_year) { |b| b.div(id: "planner_term_input").select(id: "planner_term_input_control") }
-  action(:select_next_term_year) { |b| b.div(id: "planner_term_input").select(id: "planner_term_input_control").option(index: 0).text }
+  action(:select_next_term_year) { |b| b.div(id: "planner_term_input").select(id: "planner_term_input_control").option(index:1).text }
   element(:text_note) { |b| b.div(id: "notes").textarea(name: "courseNote")}
   element(:mark_as_backup_checkbox) { |b| b.input(type: "checkbox") }
   element(:add_to_plan_dialog){ |b| b.div(id: "KSAP-AddToPlanDialog-FormView") }
