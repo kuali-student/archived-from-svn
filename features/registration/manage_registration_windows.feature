@@ -51,27 +51,27 @@ Feature: REG.Manage registration windows
   Scenario: Add two Registration Windows with the same name in two different Periods
     Given I add two Registration Windows with the same name in two different Periods
     Then I verify each Registration Window is created within each period
-  @wip
+  @nightly
   Scenario: Edit a Registration Window setting its Start Date outside the period dates
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window setting its Start Date outside the period dates
     Then I verify that the Registration Window is not modified
-  @wip
+  @nightly
   Scenario: Edit a Registration Window set its End Date outside the period dates
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window setting its End Date outside the period dates
     Then I verify that the Registration Window is not modified
-  @wip
+  @nightly
   Scenario: Edit a Registration Window set its Start Date after its End Date
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window setting its Start Date after its End Date
     Then I verify that the Registration Window is not modified
-  @wip
+  @nightly
   Scenario: Edit a Registration Window with the same Start Date and End Date set its Start Time after its End Time
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window with the same Start Date and End Date setting its Start Time after its End Time
     Then I verify that the Registration Window is not modified
-  @wip
+  @nightly
   Scenario: Edit a Registration Window with the same Start Date and End Date set its End Time in AM and its Start Time in PM
     Given I successfully add a Registration Window for a period
     And I edit a Registration Window with the same Start Date and End Date setting its End Time in AM and its Start Time in PM

@@ -85,6 +85,10 @@ Then /^I verify that the Registration Window is not modified$/ do
   on RegistrationWindowsCreate do |page|
     puts "Verifying the Registration Window #{@registration_window.appointment_window_info_name} for period #{@registration_window.period_key} is not modified."
     row_object = page.get_row_object(@registration_window.appointment_window_info_name, @registration_window.period_key)
+    # times are shown with initial 0s stripped here, so add them back in for comparison
+    row_object[:start_time] = "0" + row_object[:start_time] if @registration_window.start_time.start_with?("0")
+    row_object[:end_time] = "0" + row_object[:end_time] if @registration_window.end_time.start_with?("0")
+
     row_object[:start_date].should == @registration_window.start_date
     row_object[:start_time].should == @registration_window.start_time
     row_object[:end_date].should == @registration_window.end_date
@@ -174,7 +178,7 @@ When /^I edit a Registration Window setting its Start Date after its End Date/ d
 end
 
 When /^I edit a Registration Window with the same Start Date and End Date setting its Start Time after its End Time$/ do
-  @registration_window.edit :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE, :start_time => '10:00', :end_time => '09:00'
+  @registration_window.edit :end_date => RegistrationWindowsConstants::DATE_WITHIN_REVERSE, :start_time => '10:00 AM', :end_time => '09:00 AM'
 end
 
 When /^I edit a Registration Window with the same Start Date and End Date setting its End Time in AM and its Start Time in PM$/ do
