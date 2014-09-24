@@ -88,8 +88,8 @@ end
 
 Then /^there is a message indicating that registration appointment period for (\w+) has not begun$/ do |user|
   error_message = case user
-                    when "TIMOTHYG" then "Registration Appointment is March 14, 2012, 9:15 AM"
-                    when "TOBIASJ" then "Registration Appointment is April 14, 2012, 9:30 AM"
+                    when "TIMOTHYG" then "Registration Appointment is March 14, 2012, 3:15 PM"
+                    when "TOBIASJ" then "Registration Appointment is April 14, 2012, 3:30 PM"
                   end
   if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
     on RegistrationCart do |page|
