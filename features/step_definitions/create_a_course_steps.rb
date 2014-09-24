@@ -1633,3 +1633,87 @@ def get_activity_from_format_list (format_list, activity_type)
     end
   end
 end
+
+When(/^I complete all fields on the create course admin proposal$/) do
+
+  @course_proposal = create CmCourseProposalObject, :submit_fields => [(make CmSubmitFieldsObject)],
+                            :approve_fields => [(make CmApproveFieldsObject, :defer_save => true)],
+                            :cross_listed_course_list =>    [(make CmCrossListedObject, :defer_save => true)],
+                            :jointly_offered_course_list => [(make CmJointlyOfferedObject, :defer_save => true)],
+                            :version_code_list => [(make CmVersionCodeObject, :defer_save => true)],
+                            :learning_objective_list => [(make CmLearningObjectiveObject, :defer_save => true)],
+                            :course_requisite_list => [(make CmCourseRequisiteObject, :defer_save => true)],
+                            :author_list => [(make CmAuthCollaboratorObject, :defer_save => true)],
+                            :supporting_doc_list => [(make CmSupportingDocsObject)],
+                            :optional_fields => [(make CmOptionalFieldsObject ,:instructor_list => [(make CmInstructorObject, :instructor_name => "t.andrewj")],:admin_org_list => [(make CmAdminOrgObject)],:defer_save => true)]
+end
+
+
+And /^I perform a full search for the create course admin proposal$/ do
+  navigate_to_cm_home
+  @course_proposal.search
+end
+
+Then(/^I can review all details on the create course admin proposal$/) do
+  @course_proposal.review_proposal_action
+
+  on CmReviewProposalPage do |page|
+
+      page.proposal_title_review.should == @course_proposal.proposal_title
+      page.course_title_review.should == @course_proposal.course_title
+      page.transcript_course_title.should == @course_proposal.approve_fields[0].transcript_course_title
+      page.subject_code_review.should == "MATH"
+      page.course_number_review.should == @course_proposal.approve_fields[0].course_number
+      page.cross_listed_courses_review.should include @course_proposal.cross_listed_course_list[0].cross_list_subject_code+@course_proposal.cross_listed_course_list[0].cross_list_course_number.to_s
+      page.cross_listed_courses_review.should include @course_proposal.cross_listed_course_list[0].cross_list_course_number.to_s
+      page.jointly_offered_courses_review.should == @course_proposal.jointly_offered_course_list[0].jointly_offered_course
+      page.version_codes_review.should == @course_proposal.version_code_list[0].version_code+": "+@course_proposal.version_code_list[0].version_course_title
+      page.instructors_review.should include @course_proposal.optional_fields[0].instructor_list[0].instructor_name
+      page.description_review.should == @course_proposal.submit_fields[0].description_rationale
+      page.proposal_rationale_review.should == @course_proposal.submit_fields[0].proposal_rationale
+      page.campus_locations_review.should == "North" if @course_proposal.approve_fields[0].location_north == :set
+      page.campus_locations_review.should == "South" if @course_proposal.approve_fields[0].location_south == :set
+      page.campus_locations_review.should == "Extended" if @course_proposal.approve_fields[0].location_extended == :set
+      page.campus_locations_review.should == "All" if @course_proposal.approve_fields[0].location_all == :set
+      page.curriculum_oversight_review.should == @course_proposal.submit_fields[0].curriculum_oversight
+      page.administering_org_review.should include @course_proposal.optional_fields[0].admin_org_list[0].admin_org_name
+      page.terms_review.should include "Any" if @course_proposal.optional_fields[0].term_any == :set
+      page.terms_review.should include "Fall" if @course_proposal.optional_fields[0].term_fall == :set
+      page.terms_review.should include "Spring" if @course_proposal.optional_fields[0].term_spring == :set
+      page.terms_review.should include "Summer" if @course_proposal.optional_fields[0].term_summer == :set
+      page.duration_review.should include @course_proposal.optional_fields[0].duration_count.to_s
+      page.duration_review.should include @course_proposal.optional_fields[0].duration_type
+      page.assessment_scale_review.should include plus_minus if @course_proposal.submit_fields[0].assessment_a_f == :set
+      page.assessment_scale_review.should include completed_notation if @course_proposal.submit_fields[0].assessment_notation == :set
+      page.assessment_scale_review.should include letter if @course_proposal.submit_fields[0].assessment_letter == :set
+      page.assessment_scale_review.should include pass_fail if @course_proposal.submit_fields[0].assessment_pass_fail == :set
+      page.assessment_scale_review.should include percentage if @course_proposal.submit_fields[0].assessment_percentage == :set
+      page.assessment_scale_review.should include satisfactory if @course_proposal.submit_fields[0].assessment_satisfactory == :set
+      page.audit_review.should == "Yes"  if @course_proposal.optional_fields[0].audit == :set
+      page.pass_fail_transcript_review.should == "Yes" if @course_proposal.optional_fields[0].pass_fail_transcript_grade == :set
+      page.final_exam_status_review.should == standard_exam unless @course_proposal.submit_fields[0].exam_standard.nil?
+      page.final_exam_status_review.should == alternate_exam unless @course_proposal.submit_fields[0].exam_alternate.nil?
+      page.final_exam_status_review.should == no_exam unless @course_proposal.submit_fields[0].exam_none.nil?
+      page.final_exam_rationale_review.should == @course_proposal.submit_fields[0].final_exam_rationale unless @course_proposal.submit_fields[0].exam_standard == :set
+      page.format_level_review(@course_proposal.approve_fields[0].format_list[0].format_level).should == "Format #{@course_proposal.approve_fields[0].format_list[0].format_level}"
+      page.activity_type_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].type}".gsub(/\s+/, "") unless @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+      page.activity_type_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "ExperientialLearningOROther" if @course_proposal.approve_fields[0].format_list[0].type == "Experiential Learning/Other"
+      page.activity_contact_hours_frequency_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].contacted_hours}"
+      page.activity_contact_hours_frequency_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].contact_frequency}"
+      page.activity_duration_type_count_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_type}"
+      page.activity_duration_type_count_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should include "#{@course_proposal.approve_fields[0].format_list[0].duration_count}"
+      page.activity_class_size_review(@course_proposal.approve_fields[0].format_list[0].format_level, @course_proposal.approve_fields[0].format_list[0].activity_level).should == "#{@course_proposal.approve_fields[0].format_list[0].class_size}"
+      page.learning_objectives_review(1).should include @course_proposal.learning_objective_list[0].learning_objective_text
+      page.start_term_review.should == @course_proposal.submit_fields[0].start_term
+      page.end_term_review.should == @course_proposal.optional_fields[0].end_term
+      page.pilot_course_review.should == "Yes" if @course_proposal.optional_fields[0].pilot_course == :set
+      page.fee_justification_review.should == @course_proposal.optional_fields[0].justification_of_fees
+      page.author_name_review(1).should include @course_proposal.author_list[0].name
+      page.author_permission_review(1).should include "View"
+      page.action_request_review(1).should == "FYI"
+      page.supporting_docs_review.should include "test_file"
+      page.supporting_docs_review.should include @course_proposal.supporting_doc_list[0].type
+      page.supporting_docs_review.should include @course_proposal.supporting_doc_list[0].description unless @course_proposal.supporting_doc_list[0].description == " "
+
+  end
+end

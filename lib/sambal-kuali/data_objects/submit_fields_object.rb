@@ -17,7 +17,8 @@ class CmSubmitFieldsObject < CmBaseObject
                 :exam_alternate,
                 :exam_none,
                 :outcome_list,
-                :start_term
+                :start_term,
+                :defer_save
 
 
 
@@ -35,7 +36,8 @@ class CmSubmitFieldsObject < CmBaseObject
         final_exam_type:            [:exam_standard, :exam_alternate, :exam_none],
         final_exam_rationale:       random_alphanums(10,'test final exam rationale '),
         outcome_list: [(make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample)],
-        start_term: '::random::'
+        start_term: '::random::',
+        defer_save: false
     }
     set_options(defaults.merge(opts))
   # random_checkbox and random_radio is used to select a random checkbox/radio on a page.
@@ -53,13 +55,14 @@ class CmSubmitFieldsObject < CmBaseObject
       page.auto_lookup @subject_code unless @subject_code.nil?
       fill_out page, :description_rationale, :proposal_rationale
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
     on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
-      page.curriculum_oversight.pick! @curriculum_oversight
+      page.loading_extended_wait
+      page.curriculum_oversight.when_present.pick! @curriculum_oversight
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
     on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
@@ -90,7 +93,7 @@ class CmSubmitFieldsObject < CmBaseObject
       end
 
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
     on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?

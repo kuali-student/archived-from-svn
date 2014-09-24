@@ -283,7 +283,13 @@ class CmCourseProposalObject < CmBaseObject
         end
       end
 
-  determine_save_action unless @defer_save
+      unless @optional_fields.nil?
+        @optional_fields.each do |optional|
+          optional.create
+        end
+      end
+
+    determine_save_action unless @defer_save
 
   end # required proposal
 

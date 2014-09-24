@@ -1,7 +1,7 @@
 class CmAuthCollaboratorObject < CmBaseObject
 
   attr_accessor  :name,
-                 :look_value,
+                 :lookup_value,
                  :permission,
                  :action_required,
                  :author_notation,
@@ -35,7 +35,7 @@ class CmAuthCollaboratorObject < CmBaseObject
       page.author_name(@author_level).set @name if @lookup_value.nil?
       page.auto_lookup @name if @auto_lookup
       page.action_required(@author_level).pick! @action_required
-      page.loading_wait
+      page.loading_extended_wait
       page.author_permission(@author_level).wait_until_present
       page.author_permission(@author_level).select @permission
       page.author_notation(@author_level).fit @author_notation if @author_notation == :set

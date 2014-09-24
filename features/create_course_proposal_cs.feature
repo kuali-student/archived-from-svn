@@ -58,3 +58,13 @@ Given I have a course proposal created as Faculty
 When I create a course admin proposal from a copy of a proposed course
 Then I should see a new course admin proposal with modified titles
 And I should see all the copied details of the proposal on the Review Proposal page
+
+
+Scenario: CC4.3 Create a course admin proposal with all fields and review
+When I complete all fields on the create course admin proposal
+And I perform a full search for the create course admin proposal
+Then I can review all details on the create course admin proposal
+
+
+
+

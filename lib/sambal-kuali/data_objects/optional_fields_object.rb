@@ -47,7 +47,7 @@ class CmOptionalFieldsObject < CmBaseObject
       end
 
     end
-    determine_save_action
+    determine_save_action unless @defer_save
     
     on CmGovernancePage do |page|
       page.governance unless page.current_page('Governance').exists?
@@ -58,7 +58,7 @@ class CmOptionalFieldsObject < CmBaseObject
         end
       end
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
     on CmCourseLogisticsPage do |page|
       page.course_logistics unless page.current_page('Course Logistics').exists?
@@ -67,7 +67,7 @@ class CmOptionalFieldsObject < CmBaseObject
       page.duration_count_count.set @duration_count
       fill_out page, :audit, :pass_fail_transcript_grade
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
     on CmActiveDatesPage do |page|
       page.active_dates unless page.current_page('Active Dates').exists?
@@ -75,14 +75,14 @@ class CmOptionalFieldsObject < CmBaseObject
       page.loading_wait
       page.end_term.pick! @end_term
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
 
     on CmCourseFinancialsPage do |page|
       page.financials unless page.current_page('Financials').exists?
       fill_out page, :justification_of_fees
     end
-    determine_save_action
+    determine_save_action unless @defer_save
 
 
     

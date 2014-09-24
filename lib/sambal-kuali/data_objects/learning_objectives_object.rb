@@ -30,6 +30,7 @@ class CmLearningObjectiveObject < CmBaseObject
   def create
     view
     on CmLearningObjectivesPage do |page|
+      page.loading_extended_wait
       page.add_learning_objective unless @advanced_search
       if @advanced_search
         advanced_find
