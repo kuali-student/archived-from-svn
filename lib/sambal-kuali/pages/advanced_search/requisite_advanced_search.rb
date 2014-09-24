@@ -3,6 +3,10 @@ class CmRequisiteAdvancedSearchPage < BasePage
   cm_elements
   expected_element :search_course_code
 
+  def frm
+    self.iframe(class: "fancybox-iframe")
+  end
+
   element(:search_course_title) { |b| b.frm.text_field(name: 'lookupCriteria[title]') }
   element(:search_course_code) { |b| b.frm.text_field(name: 'lookupCriteria[code]') }
   element(:adv_plain_text_description) { |b| b.frm.text_field(name: 'lookupCriteria[description]') }

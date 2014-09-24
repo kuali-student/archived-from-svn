@@ -18,7 +18,7 @@ Feature: GT.Modify Course
     Then I can see updated status of the modify course proposal
 
   Scenario: MC1.4 Blanket Approve a Modify Course Proposal
-    When I submit a modify course proposal as Faculty
+    When I submit a modify course proposal 1.4 Faculty
     And I Blanket Approve the modify course proposal as CS adding an end term for the version to be superseded
     Then the modify course proposal is successfully approved
     And the Superseded version has a new end term and the new course version is Active
