@@ -69,11 +69,12 @@ end
 
 Then /^I verify each Registration Window is created within each period/ do
   on RegistrationWindowsCreate do |page|
-    # Need to switch period type before checking .is_window_created
-    page.is_window_created(@registration_window.appointment_window_info_name, @registration_window.period_key).should be_true
     page.is_window_created(@registration_window2.appointment_window_info_name, @registration_window2.period_key).should be_true
+    @registration_window2.delete
+    page.show_windows_by_period @registration_window.period_key
+    page.is_window_created(@registration_window.appointment_window_info_name, @registration_window.period_key).should be_true
+    @registration_window.delete
   end
-  @registration_window.delete
   on(RegistrationWindowsCreate).cancel_and_leave
 end
 

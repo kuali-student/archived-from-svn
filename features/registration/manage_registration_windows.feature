@@ -2,7 +2,7 @@
 Feature: REG.Manage registration windows
 
   Background:
-    Given I am logged in as a Schedule Coordinator
+    Given I am logged in as admin
 
   @nightly
   Scenario: Successfully search for Registration Windows
@@ -47,7 +47,7 @@ Feature: REG.Manage registration windows
   Scenario: Add two Registration Windows with the same name in the same Period
     Given I add two Registration Windows with the same name for the same Period
     Then I verify the Registration Window is unique within the same period
-  @wip
+  @nightly
   Scenario: Add two Registration Windows with the same name in two different Periods
     Given I add two Registration Windows with the same name in two different Periods
     Then I verify each Registration Window is created within each period

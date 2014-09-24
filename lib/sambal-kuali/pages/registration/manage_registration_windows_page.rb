@@ -56,6 +56,14 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     end
   end
 
+  element(:period_id) { |b| b.frm.select(name: "periodId") }
+  action(:show) { |b| b.frm.button(text: "Show").click; b.loading.wait_while_present }
+
+  def show_windows_by_period(period='All Registration Periods for this Term')
+    period_id.select period
+    show
+  end
+
   element(:appointment_window_info_name) { |b| b.window_collection_table.rows[1].cells[COLUMN_WINDOW_NAME].text_field() }
   element(:assigned_population_name) { |b| b.frm.text_field(name: "newCollectionLines['appointmentWindows'].assignedPopulationName") }
   #element(:assigned_population_name) { |b| b.window_collection_table.rows[1].cells[COLUMN_PERIOD_NAME].select }
