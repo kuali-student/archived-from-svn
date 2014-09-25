@@ -6,7 +6,7 @@ class CourseOfferingCreateEdit < BasePage
 
   expected_element :suffix
 
-  action(:submit) { |b| b.frm.button(text: "Update").click; b.loading.wait_while_present(60) }
+  action(:submit) { |b| b.frm.button(text: "Update").click; b.loading.wait_while_present(90) }
   action(:save_progress) { |b| b.frm.button(text: "Save Progress").click; b.loading.wait_while_present }
   #action(:cancel) { |b| b.frm.link(id: "COEdit_CancelLink").click; b.loading.wait_while_present }
 
