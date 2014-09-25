@@ -119,7 +119,7 @@ class CmReviewProposalPage < BasePage
   element(:submit_button) { |b| b.button(text: "Submit")}
   element(:submit_button_disabled) { |b| b.button(text: "Submit", class: /disabled/) }
   action(:submit_proposal) { |b| b.button(text: "Submit").click; b.loading_wait }
-  action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_wait }
+  action(:submit_confirmation) { |b| b.div(class: "fancybox-outer").span(class: "ui-button-text", text: "Submit").click; b.loading_extended_wait }
   element(:proposal_status_element) { |b| b.div(id: "CM-Proposal-Header-Right-Group-Status").p(id: /CM-Proposal-Status/) }
   value(:proposal_status) { |b| b.proposal_status_element.text.downcase }
 
@@ -130,7 +130,7 @@ class CmReviewProposalPage < BasePage
   element(:decision_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-Approve-Dialog-Explanation_control") }
   element(:blanket_approve_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-BlanketApprove-Dialog-Explanation_control") }
   element(:return_rationale) { |b| b.div(class: "fancybox-inner").textarea(id: "CM-ReturnToPrevious-Dialog-Explanation_control") }
-  action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click; b.loading_wait }
+  action(:confirmation_approval) { |b| b.div(class: "fancybox-inner").span(class: "ui-button-text", text: "Approve").click; b.loading_extended_wait }
   element(:blanket_approve_button) { |b| b.button(text: "Blanket Approve") }
   element(:blanket_approve_disabled) { |b| b.button(text: "Blanket Approve", class: /disabled/)}
   action(:blanket_approve) { |b| b.blanket_approve_button.click; b.loading_wait }
