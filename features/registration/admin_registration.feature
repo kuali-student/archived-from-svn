@@ -102,7 +102,8 @@ Feature: REG.Admin Registration
     Then a warning message along with the Registered and Wait-listed courses are displayed
 
   Scenario: CR22.12.2 Verify that the term eligibility check passes for a term that is open for registration
-    When I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses
+    Given there exists a term for which registration is open
+    When I load a Term for a student with no Registered or Wait-listed courses
     Then no failed term eligibility warning message is displayed
 
 #KSENROLL-13720

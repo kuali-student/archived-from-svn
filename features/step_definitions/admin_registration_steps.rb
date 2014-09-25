@@ -364,7 +364,7 @@ Then /^the student's registered courses credit total for the term should be upda
   end
 end
 
-When /^I open the term for registration in the Academic Calendar$/ do
+Given /^there exists a term for which registration is open$/ do
   @calendar = make AcademicCalendar, :year => "2014", :name => "2014-2015 Academic Calendar"
 
   term = make AcademicTermObject, :parent_calendar => @calendar, :term => "Summer I", :term_type => "Summer 1"
@@ -383,8 +383,8 @@ When /^I open the term for registration in the Academic Calendar$/ do
   @calendar.terms[0].add_key_date_group keydategroup
 end
 
-And /^I attempt to load a Term by valid Term Id for a student with no Registered or Wait-listed courses$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-10296", :term_code => "201401"
+When /^I load a Term for a student with no Registered or Wait-listed courses$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-10296", :term_code => "201405"
 end
 
 Then /^no failed term eligibility warning message is displayed$/ do
