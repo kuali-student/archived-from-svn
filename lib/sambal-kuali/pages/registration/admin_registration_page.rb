@@ -150,14 +150,12 @@ class AdminRegistration < BasePage
 
   def registered_courses_rows
     array = []
-
     loading.wait_while_present
     if registered_courses_table.exists?
       registered_courses_table.rows().each do |row|
         array << row
       end
     end
-
     return array
   end
 
@@ -173,14 +171,14 @@ class AdminRegistration < BasePage
 
   def edit_registered_course(course, section)
     loading.wait_while_present
-    wait_until { registered_courses_table.row(text: /#{course} \(#{section}\)/).present? }
+    wait_until(60) { registered_courses_table.row(text: /#{course} \(#{section}\)/).present? }
     actions = registered_courses_table.row(text: /#{course} \(#{section}\)/).cells[ACTIONS]
     actions.a(id: /registeredEditLink_line\d+/).click
   end
 
   def delete_registered_course(course, section)
     loading.wait_while_present
-    wait_until { registered_courses_table.row(text: /#{course} \(#{section}\)/).present? }
+    wait_until(60) { registered_courses_table.row(text: /#{course} \(#{section}\)/).present? }
     actions = registered_courses_table.row(text: /#{course} \(#{section}\)/).cells[ACTIONS]
     actions.a(id: /registeredDropLink_line\d+/).click
   end
@@ -217,14 +215,12 @@ class AdminRegistration < BasePage
 
   def waitlisted_courses_rows
     array = []
-
     loading.wait_while_present
     if waitlisted_courses_table.exists?
       waitlisted_courses_table.rows().each do |row|
         array << row
       end
     end
-
     return array
   end
 

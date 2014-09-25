@@ -10,11 +10,7 @@ Then /^the student information and term description is displayed$/ do
 end
 
 Then /^I am able to enter a course code for registration$/ do
-  on AdminRegistration do |page|
-    page.course_code_input.nil?.should be_false
-
-    page.student_term_go
-  end
+  on(AdminRegistration).course_code_input.nil?.should be_false
 end
 
 When /^I attempt to load a student by invalid student Id$/ do
@@ -22,11 +18,7 @@ When /^I attempt to load a student by invalid student Id$/ do
 end
 
 Then /^a validation error message is displayed stating "([^"]+)"$/ do |exp_msg|
-  on AdminRegistration do |page|
-    page.get_student_term_error_msg( "student").should match /#{exp_msg}/
-
-    page.student_term_go
-  end
+  on(AdminRegistration).get_student_term_error_msg( "student").should match /#{exp_msg}/
 end
 
 When /^I attempt to load a Term by valid term Id for student with no registered courses$/ do
@@ -46,13 +38,7 @@ When /^I attempt to load a Term by invalid term Id$/ do
 end
 
 Then /^an error message is displayed stating "(.*?)"$/ do |exp_msg|
-  on AdminRegistration do |page|
-    page.get_student_term_error_msg( "term").should match /#{exp_msg} #{@admin_reg.term_code}/
-
-    #Needed to get the page out of a dirty state
-    page.term_code_input.set "201401"
-    page.student_term_go
-  end
+  on(AdminRegistration).get_student_term_error_msg( "term").should match /#{exp_msg} #{@admin_reg.term_code}/
 end
 
 When /^I attempt to load a Term without entering a term Id$/  do
@@ -80,8 +66,6 @@ And /^the total number of credits for registered courses are displayed$/ do
       credits += page.get_registered_course_credits(row).to_i
     end
     page.registered_courses_header.should match /#{credits.to_s}/
-
-    page.student_term_go
   end
 end
 
@@ -319,11 +303,7 @@ Then /^a message indicating the course has been successfully registered appears$
 end
 
 Then /^the student is(?: | still )registered for the course$/ do
-  on AdminRegistration do |page|
-    page.get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})").nil?.should be_false
-
-    page.student_term_go
-  end
+  on(AdminRegistration).get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})").nil?.should be_false
 end
 
 When /^I attempt to register a student for a course that failed eligibility$/ do
@@ -356,12 +336,7 @@ When /^I register a student for a course$/ do
 end
 
 Then /^the student's registered courses credit total for the term should be updated$/ do
-  on AdminRegistration do |page|
-    updated_credits = page.calculate_registered_credits
-    updated_credits.equal?(@credits).should be_false
-
-    page.student_term_go
-  end
+  on(AdminRegistration).calculate_registered_credits.equal?(@credits).should be_false
 end
 
 Given /^there exists a term for which registration is open$/ do
@@ -391,8 +366,6 @@ Then /^no failed term eligibility warning message is displayed$/ do
   on AdminRegistration do |page|
     page.loading.wait_while_present
     page.term_warning_message.exists?.should be_false
-
-    page.student_term_go
   end
 end
 
@@ -414,8 +387,6 @@ Then /^a warning message along with the Registered and Wait-listed courses are d
   on AdminRegistration do |page|
     page.get_term_warning_message.should match /Registration for #{@admin_reg.term_description} is not currently open/
     page.reg_for_section.visible?.should == true
-
-    page.student_term_go
   end
 end
 
@@ -475,8 +446,6 @@ Then /^multiple failed eligibility messages appear$/ do
     result_warning = page.get_results_warning
     result_warning.should match /Day and Time schedule conflict/
     result_warning.should match /Reached maximum credit limit/
-
-    page.student_term_go
   end
 end
 
@@ -511,8 +480,6 @@ Then /^the default values are displayed on edit course dialog$/ do
     page.get_edit_course_credits.should match /#{@admin_reg.course_section_codes[0].requested_credits}/
     page.get_edit_course_reg_options.should match /#{@admin_reg.course_section_codes[0].requested_reg_options}/
     page.cancel_edited_course
-
-    page.student_term_go
   end
 end
 
@@ -549,8 +516,6 @@ Then /^a message appears indicating that the course has been updated successfull
   on AdminRegistration do |page|
     page.loading.wait_while_present
     page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
-
-    page.student_term_go
   end
 end
 
@@ -600,11 +565,7 @@ Then /^the student is no longer registered for the course$/ do
 end
 
 Then /^a message appears indicating that the course has been successfully dropped$/ do
-  on AdminRegistration do |page|
-    page.growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
-
-    page.student_term_go
-  end
+  on(AdminRegistration).growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
 end
 
 When /^I register multiple students for the same course$/ do
@@ -652,8 +613,6 @@ Then /^the second student's course has moved from waitlisted to registered$/ do
   on AdminRegistration do |page|
     page.get_registered_course("#{ @admin_reg_student2.course_section_codes[0].course_code} (#{ @admin_reg_student2.course_section_codes[0].section})").nil?.should be_false
     page.get_waitlisted_course("#{ @admin_reg_student2.course_section_codes[0].course_code} (#{ @admin_reg_student2.course_section_codes[0].section})").nil?.should be_true
-
-    page.student_term_go
   end
 end
 
@@ -677,8 +636,6 @@ Then /^the registered course is updated with the new Registration Options$/ do
 
     row = page.get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})")
     page.get_registered_course_reg_options(row).should match /#{@admin_reg.course_section_codes[0].requested_reg_options}/
-
-    page.student_term_go
   end
 end
 

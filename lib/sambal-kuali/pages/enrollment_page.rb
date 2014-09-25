@@ -34,4 +34,5 @@ class Enrollment < BasePage
   action(:manage_final_exam_matrix) { |b| b.frm.link(text: "Manage Final Exam Matrix").click }
   action(:manage_time_slots) { |p| p.frm.link(text: "Manage Time Slots").click }
   action(:manage_populations) { |p| p.frm.link(text: "Manage Populations").click }
+  action(:manage_hold_catalog) { |b| b.link(text: "Manage Hold Catalog").click }
 end

@@ -82,7 +82,6 @@ Then(/^the end term defaults to the last applied term$/) do
 end
 
 Then(/^the end date defaults to the last applied date$/) do
-  puts @hold_issue.last_applied_date
   on(ManageAppliedHold).get_hold_by_code(@hold_issue.code).text.should match /#{@hold_issue.code}.*#{@hold_issue.last_applied_date}/m
 end
 

@@ -110,7 +110,7 @@ module Workflows
   end
 
   def go_to_manage_hold_catalog
-    visit KSMaintenancePortal do |page|
+    visit Enrollment do |page|
       page.manage_hold_catalog
     end
   end
@@ -120,7 +120,6 @@ module Workflows
       page.manage_applied_hold
     end
   end
-
 
   def log_in(user, pwd)
     current_user = ""

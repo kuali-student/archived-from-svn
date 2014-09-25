@@ -121,6 +121,7 @@ class HoldIssueCreateEdit < BasePage
   end
 
   def auth_org_rows( org)
+    loading.wait_while_present
     auth_org_table.rows[1..-1].each do |row|
       if row.cells[AUTH_ORG].text_field().value == org
         return row

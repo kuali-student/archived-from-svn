@@ -117,7 +117,7 @@ class ARCourseSectionObject < DataFactory
 
     on AdminRegistration do |page|
       page.edit_registered_course @course_code, @section
-      page.loading.wait_while_present
+      page.loading.wait_while_present(60)
 
       if options[:edit_course_credits] != nil and page.set_edit_course_credits.exists?
         page.set_edit_course_credits.select options[:edit_course_credits]

@@ -72,6 +72,8 @@ class AppliedHold < DataFactory
         wait_until { page.frm_popup.exists? }
         page.dialog_code_input.set @hold_issue.code
         page.dialog_search
+
+        page.loading.wait_while_present
         page.results_select_by_code(@hold_issue.code)
       end
 
