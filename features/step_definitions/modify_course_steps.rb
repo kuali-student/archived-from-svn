@@ -32,8 +32,8 @@ Given(/^I have an active course created for modify$/) do
 
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
                             :copy_from_course => true, :course_to_be_copied => @source_course,
-                            :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @source_course.course_title,
-                            :course_title => "copy of " + @source_course.course_title,
+                            :proposal_title => "copy of " + random_alphanums(10,'test proposal title '),
+                            :course_title => "copy of " + random_alphanums(10,'course title'),
                             :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                             :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
 
@@ -60,7 +60,8 @@ Given(/^I have an active course created for modify$/) do
                                           curriculum_oversight: @source_course.curriculum_oversight,
                                           final_exam_type: [:exam_alternate],
                                           exam_alternate: :set,
-                                          start_term: @source_course.start_term
+                                          start_term: @source_course.start_term,
+                                          defer_save: 'yes'
 
   determine_save_action
 

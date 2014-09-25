@@ -63,7 +63,7 @@ Feature: GT.Modify Course
     Then I cannot modify the Draft course version as Curriculum Specialist
     When I reject the proposal as Department Reviewer
     Then I cannot modify the Not Approved course version as Curriculum Specialist
-  @wip
+
   Scenario: MC4.3 Can only modify without version when course version state is Superseded
     Given there is a course with a superseded version
     Then I only have the option to modify the superseded course without a version
