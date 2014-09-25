@@ -20,13 +20,13 @@ Feature: REG.Expire Applied Hold
     Then the hold is no longer displayed for the student
 
   Scenario: HOLD2.6.3 Verify that an applied hold can't be expired if the expiration date is earlier than the effective date
-    Given there exists a hold that does not maintain history
+    Given there exists a hold issue
     And I apply the hold to a student
     When I attempt to expire the hold with an expiration date earlier than the effective date
     Then an invalid date range error message is displayed
 
   Scenario: HOLD2.6.4 Verify that an applied hold can be expired if the expiration date is later than the effective date
-    Given there exists a hold that does not maintain history
+    Given there exists a hold issue
     And I apply the hold to a student
     When I expire the hold with an expiration date that is later than the effective date
     Then the hold is no longer displayed for the student

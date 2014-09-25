@@ -73,3 +73,7 @@ end
 Given(/^there exists a hold with a last applied date$/) do
   @hold_issue = create HoldIssue, :last_applied_date => tomorrow[:date_w_slashes]
 end
+
+Given(/^there exists a hold issue$/) do
+  @hold_issue = create HoldIssue
+end
