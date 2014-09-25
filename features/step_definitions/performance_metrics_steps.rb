@@ -202,8 +202,7 @@ When /^I add a registration window and save$/ do
     page.appointment_window_info_name.set "TestDate"
     page.assigned_population_name.set "Athlete"
     page.start_date.set "03/30/2012"
-    page.start_time.set "10:00"
-    page.start_time_am_pm.select "am"
+    page.start_time.set "10:00 AM"
     page.window_type_key.select "One Slot per Window"
     page.loading.wait_while_present
     page.add
