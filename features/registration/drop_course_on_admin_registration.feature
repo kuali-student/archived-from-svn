@@ -1,6 +1,7 @@
 @nightly @blue_team
 Feature: REG.Drop Course on Admin Registration
-  CR23.4 As a Central Registration Personnel I want to be able to drop a course for the student and term, specifying the effective drop date so that i can make changes to the registered courses for the student
+  CR23.4 As a Central Registration Personnel I want to be able to drop a course for the student and term, specifying the
+         effective drop date so that i can make changes to the registered courses for the student
 
   Background:
     Given I am logged in as admin

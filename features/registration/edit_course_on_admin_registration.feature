@@ -1,8 +1,9 @@
 @nightly @blue_team
 Feature: REG.Edit Course on Admin Registration
-  CR23.1 As a Central Registration Personnel I want to the system to check Eligibility checks on edit of the student course registration so that i can ensure the student is stil eligibile for the registered courses
-
-  CR23.2 As a Central Registration Personnel I want to be able to edit options for Registered courses for the student and term so that i can make changes to grading options; credit options and effective date
+  CR23.1 As a Central Registration Personnel I want to the system to check Eligibility checks on edit of the student
+         course registration so that i can ensure the student is stil eligibile for the registered courses
+  CR23.2 As a Central Registration Personnel I want to be able to edit options for Registered courses for the student and
+         term so that i can make changes to grading options; credit options and effective date
 
   Background:
     Given I am logged in as admin

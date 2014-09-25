@@ -1,22 +1,20 @@
 @nightly @blue_team
 Feature: REG.Admin Registration
-  CR22.1 As a Central Registration Personnel I want to enter a student id so that basic student info is display and I can register the student
-
-  CR22.2 As Central Registration Personnel I want to select a term so that I can display basic info of the term and register a student
-
-  CR22.3 As Central Registration Personnel I want to view the Registered Courses for the Student and Term so that I can see if any additional actions are required for the registration of the student
-
-  CR22.4 As Central Registration Personnel I want to view the Waitlisted Courses for the student and term so that I can see if any additional actions are required for the registration of the student
-
-  CR22.5 As a Central Registration Personnel I want to enter a Course Code so that I can register a student
-
-  CR22.6 As a Central Registration Personnel I want to enter a Section so that I can register a student for the default options (credit & registration options)
-
-  CR22.8 As a Central Registration Personnel I want to be able to add multiple course for a student so that i can register the student for multiple courses at once
-
-  CR22.12 As a Central Registration Personnel I want the system to perform Registration Eligibility checks once i've entered the term so that I can register the student for the correct term
-
-  CR22.15 As a Central Registration Personnel I want to be able to remove unwanted courses i've entered before registering the student for them so that i can remove a course without registering for it
+  CR22.1  As a Central Registration Personnel I want to enter a student id so that basic student info is display and I can register the student
+  CR22.2  As Central Registration Personnel I want to select a term so that I can display basic info of the term and register a student
+  CR22.3  As Central Registration Personnel I want to view the Registered Courses for the Student and Term so that I can
+          see if any additional actions are required for the registration of the student
+  CR22.4  As Central Registration Personnel I want to view the Waitlisted Courses for the student and term so that I can
+          see if any additional actions are required for the registration of the student
+  CR22.5  As a Central Registration Personnel I want to enter a Course Code so that I can register a student
+  CR22.6  As a Central Registration Personnel I want to enter a Section so that I can register a student for the default
+          options (credit & registration options)
+  CR22.8  As a Central Registration Personnel I want to be able to add multiple course for a student so that i can
+          register the student for multiple courses at once
+  CR22.12 As a Central Registration Personnel I want the system to perform Registration Eligibility checks once i've
+          entered the term so that I can register the student for the correct term
+  CR22.15 As a Central Registration Personnel I want to be able to remove unwanted courses i've entered before registering
+          the student for them so that i can remove a course without registering for it
 
   Background:
     Given I am logged in as admin

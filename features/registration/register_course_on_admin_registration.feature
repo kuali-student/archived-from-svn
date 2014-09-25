@@ -1,10 +1,11 @@
 @nightly @blue_team
 Feature: REG.Register Course on Admin Registration
-  CR22.7 As Central Registration Personnel I want to enter a section and change the default options (if available) so that i can register a student for the selected options (credit & registration & effective date options)
-
-  CR22.16 As a Central Registration Personnel I want to the system to display any failed eligibility check messages for the Course code as Errors with Additional Actions so that i can decide if i want to proceed with the registration or not
-
-  CR22.17 As a Central Registration Personnel I want to view the Registered Courses for the Student and Term once I've registered him for one or more so that i can see if any additional actions are required for the registration of the student
+  CR22.7  As Central Registration Personnel I want to enter a section and change the default options (if available) so
+          that i can register a student for the selected options (credit & registration & effective date options)
+  CR22.16 As a Central Registration Personnel I want to the system to display any failed eligibility check messages for
+          the Course code as Errors with Additional Actions so that i can decide if i want to proceed with the registration or not
+  CR22.17 As a Central Registration Personnel I want to view the Registered Courses for the Student and Term once I've
+          registered him for one or more so that i can see if any additional actions are required for the registration of the student
 
   Background:
     Given I am logged in as admin
