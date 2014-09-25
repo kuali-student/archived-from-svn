@@ -49,6 +49,9 @@ end
 
 Given /^I register for an? full (\w+) course offering that (has|does not have) a waitlist$/ do |subj,waitlist|
   #course has 1 remaining seat, so first fill it as student, then try to register as student1
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule("201208")
   steps %{
     When I add an #{subj} course offering to my registration cart
     And I register for the course
