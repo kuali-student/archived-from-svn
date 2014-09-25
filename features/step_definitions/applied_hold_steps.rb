@@ -1,5 +1,5 @@
 When(/^I apply a hold to student by completing the required information$/) do
-  @applied_hold = create AppliedHold, :student_id => "KS-6509", :hold_issue => (make HoldIssue, :code => "ACAD03")
+  @applied_hold = create AppliedHold, :student_id => "KS-6509", :hold_issue => (make HoldIssue, :code => "ACAD06")
   @applied_hold.apply_hold
 end
 
