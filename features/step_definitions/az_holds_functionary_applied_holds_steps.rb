@@ -1,6 +1,8 @@
-And(/^I apply a hold for expiration to a student$/) do
-  @applied_hold = create AppliedHold, :student_id => "KS-1675", :hold_issue => (make HoldIssue, :code => "ACAD05", :first_term => "201208", :term_based => true)
+And(/^I edit a hold to add an expiration date to a student record$/) do
+  hold_issue = make HoldIssue, :code => "ACAD05", :first_term => "201208", :term_based => true
+  @applied_hold = create AppliedHold, :student_id => "KS-1675", :hold_issue => hold_issue
   @applied_hold.apply_hold
+  on(ManageAppliedHold).expire_hold(hold_issue.code)
 end
 
 And(/^I find a hold$/) do

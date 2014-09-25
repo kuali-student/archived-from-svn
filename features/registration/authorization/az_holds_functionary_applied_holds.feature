@@ -8,8 +8,7 @@ Feature: REG.Holds Functionary using Applied Holds
   @pending
   Scenario: HOLD2.8.1 Validate that a Holds Functionary can expire an applied hold
     Given I am logged in as a Holds Functionary
-    And I apply a hold for expiration to a student
-    When I expire the hold with an expiration date that is later than the effective date
+    When I edit a hold to add an expiration date to a student record
     Then the expired hold is no longer displayed for the student
 
   @pending
