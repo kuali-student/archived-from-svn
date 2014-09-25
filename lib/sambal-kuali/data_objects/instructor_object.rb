@@ -22,8 +22,7 @@ class CmInstructorObject < CmBaseObject
     on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.add_instructor unless page.instructor_name(@instructor_level).exists?
-      page.instructor_name(@instructor_level).set @instructor_name
-      page.auto_lookup @instructor_name
+      auto_lookup_select
     end
   end
 
@@ -50,6 +49,17 @@ class CmInstructorObject < CmBaseObject
     end
     determine_save_action unless opts[:defer_save]
   end
+
+
+  def auto_lookup_select
+    on CmCourseInformationPage do |page|
+      boundary = 3 # to trigger auto suggest query
+      head = @instructor_name.slice(0, boundary)
+      page.instructor_name(@instructor_level).set head
+      page.auto_lookup @instructor_name
+    end
+  end
+
 
 
 end
