@@ -20,9 +20,10 @@ Then(/^the expired hold is no longer displayed for the student$/) do
   on(ManageAppliedHold).get_hold_by_code("ACAD05").nil?.should be_true
 end
 
-And(/^I apply a hold for deletion to a student$/) do
+And(/^I delete a hold on a student record$/) do
   @applied_hold = create AppliedHold, :student_id => "KS-1675", :hold_issue => (make HoldIssue, :code => "ACAD01")
   @applied_hold.apply_hold
+  @applied_hold.delete_hold
 end
 
 Then(/^the deleted hold no longer displays for the student$/) do

@@ -23,8 +23,7 @@ Feature: REG.Holds Functionary using Applied Holds
   @pending
   Scenario: HOLD2.9.1 Validate that a Holds Functionary can delete an applied hold
     Given I am logged in as a Holds Functionary
-    And I apply a hold for deletion to a student
-    When I delete that hold
+    When I delete a hold on a student record
     Then the deleted hold no longer displays for the student
 
   @pending
