@@ -395,12 +395,14 @@
                   <stringProp name="Argument.name">methodToCall</stringProp>
                   <stringProp name="Argument.value">start</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
                 <elementProp name="viewId" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.name">viewId</stringProp>
                   <stringProp name="Argument.value">ksFunctionalHomeView</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
@@ -444,6 +446,15 @@
                 </elementProp>
               </collectionProp>
             </HeaderManager>
+            <hashTree/>
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="sessionid" enabled="true">
+              <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+              <stringProp name="RegexExtractor.refname">sessionid</stringProp>
+              <stringProp name="RegexExtractor.regex">name=&quot;sessionId&quot; value=&quot;(.*)&quot;</stringProp>
+              <stringProp name="RegexExtractor.template">$1$</stringProp>
+              <stringProp name="RegexExtractor.default">broken</stringProp>
+              <stringProp name="RegexExtractor.match_number">1</stringProp>
+            </RegexExtractor>
             <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/themes/ksboot/images/homepage/cm.png" enabled="true">
@@ -3208,23 +3219,23 @@
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].courseOfferingCode" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].courseOfferingCode</stringProp>
+                  <elementProp name="newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.courseOfferingCode" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.courseOfferingCode</stringProp>
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].editRenderHelper.termId" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].editRenderHelper.termId</stringProp>
+                  <elementProp name="newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.editRenderHelper.termId" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.editRenderHelper.termId</stringProp>
                     <stringProp name="Argument.value">kuali.atp.2013Spring</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].activityOfferingCode" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">newCollectionLines[&apos;document.newMaintainableObject.dataObject.colocatedActivities&apos;].activityOfferingCode</stringProp>
+                  <elementProp name="newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.activityOfferingCode" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">newCollectionLines%5B%27document.newMaintainableObject.dataObject.colocatedActivities%27%5D.activityOfferingCode</stringProp>
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -3243,9 +3254,9 @@
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.editRenderHelper.manageSeperateEnrollmentList[0].maxEnrollmentCount" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.editRenderHelper.manageSeperateEnrollmentList[0].maxEnrollmentCount</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.editRenderHelper.manageSeperateEnrollmentList%5B0%5D.maxEnrollmentCount" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.editRenderHelper.manageSeperateEnrollmentList%5B0%5D.maxEnrollmentCount</stringProp>
                     <stringProp name="Argument.value">160</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -3306,30 +3317,30 @@
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personId" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personId</stringProp>
-                    <stringProp name="Argument.value">R.TALALH</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.personId" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.personId</stringProp>
+                    <stringProp name="Argument.value">KS-2010</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personName" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personName</stringProp>
-                    <stringProp name="Argument.value">ROSE, TALAL</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.personName" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.personName</stringProp>
+                    <stringProp name="Argument.value">ROSE%2C+TALAL</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.typeKey" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.typeKey</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.typeKey" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors%5B0%5D.offeringInstructorInfo.typeKey</stringProp>
                     <stringProp name="Argument.value">kuali.lpr.type.instructor.main</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.instructors[0].sEffort" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors[0].sEffort</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.instructors%5B0%5D.sEffort" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors%5B0%5D.sEffort</stringProp>
                     <stringProp name="Argument.value">100</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -3376,30 +3387,30 @@
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.seatpools[0].seatPool.processingPriority" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools[0].seatPool.processingPriority</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.processingPriority" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.processingPriority</stringProp>
                     <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.seatpools[0].seatPool.seatLimit" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools[0].seatPool.seatLimit</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.seatLimit" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.seatLimit</stringProp>
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.seatpools[0].seatPoolPopulation.name" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools[0].seatPoolPopulation.name</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPoolPopulation.name" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPoolPopulation.name</stringProp>
                     <stringProp name="Argument.value"></stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
-                  <elementProp name="document.newMaintainableObject.dataObject.seatpools[0].seatPool.expirationMilestoneTypeKey" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools[0].seatPool.expirationMilestoneTypeKey</stringProp>
+                  <elementProp name="document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.expirationMilestoneTypeKey" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.name">document.newMaintainableObject.dataObject.seatpools%5B0%5D.seatPool.expirationMilestoneTypeKey</stringProp>
                     <stringProp name="Argument.value">NONE</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
@@ -3477,7 +3488,7 @@
                   <elementProp name="sessionId" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">false</boolProp>
                     <stringProp name="Argument.name">sessionId</stringProp>
-                    <stringProp name="Argument.value">${sessionId}</stringProp>
+                    <stringProp name="Argument.value">${sessionid}</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
@@ -3551,7 +3562,7 @@
               <stringProp name="HTTPSampler.connect_timeout"></stringProp>
               <stringProp name="HTTPSampler.response_timeout"></stringProp>
               <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
               <stringProp name="HTTPSampler.path">/kr-krad/activityOffering</stringProp>
               <stringProp name="HTTPSampler.method">POST</stringProp>
               <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -3571,19 +3582,15 @@
                   </elementProp>
                   <elementProp name="Accept-Language" elementType="Header">
                     <stringProp name="Header.name">Accept-Language</stringProp>
-                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                    <stringProp name="Header.value">en-US</stringProp>
                   </elementProp>
                   <elementProp name="Accept" elementType="Header">
                     <stringProp name="Header.name">Accept</stringProp>
-                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                    <stringProp name="Header.value">text/html, application/xhtml+xml, */*</stringProp>
                   </elementProp>
                   <elementProp name="User-Agent" elementType="Header">
                     <stringProp name="Header.name">User-Agent</stringProp>
-                    <stringProp name="Header.value">Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:29.0) Gecko/20100101 Firefox/29.0</stringProp>
-                  </elementProp>
-                  <elementProp name="Referer" elementType="Header">
-                    <stringProp name="Header.name">Referer</stringProp>
-                    <stringProp name="Header.value">http://env17.ks.kuali.org/kr-krad/activityOffering?courseOfferingId=65fa037e-55ae-42e6-b047-382dfc1213e2&amp;methodToCall=maintenanceEdit&amp;aoInfo.id=5648dc5a-d4f4-47e8-ac67-706cfc3df5f5&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper&amp;formKey=591427b0-6f33-4e69-af21-5c743486a1d0&amp;cacheKey=597yqxtz9gahiifoshkcbj</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)</stringProp>
                   </elementProp>
                   <elementProp name="DNT" elementType="Header">
                     <stringProp name="Header.name">DNT</stringProp>
@@ -3592,6 +3599,14 @@
                   <elementProp name="Accept-Encoding" elementType="Header">
                     <stringProp name="Header.name">Accept-Encoding</stringProp>
                     <stringProp name="Header.value">gzip, deflate</stringProp>
+                  </elementProp>
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://env17.ks.kuali.org/kr-krad/activityOffering?courseOfferingId=65fa037e-55ae-42e6-b047-382dfc1213e2&amp;methodToCall=maintenanceEdit&amp;aoInfo.id=5648dc5a-d4f4-47e8-ac67-706cfc3df5f5&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper&amp;formKey=1be5f651-3084-494e-86a4-7094b3ec0c9a&amp;cacheKey=s888ykhmpryg9j9rdml2qouf</stringProp>
+                  </elementProp>
+                  <elementProp name="Pragma" elementType="Header">
+                    <stringProp name="Header.name">Pragma</stringProp>
+                    <stringProp name="Header.value">no-cache</stringProp>
                   </elementProp>
                 </collectionProp>
               </HeaderManager>
@@ -3778,7 +3793,7 @@
                   <elementProp name="document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personId" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">true</boolProp>
                     <stringProp name="Argument.name">document.newMaintainableObject.dataObject.instructors[0].offeringInstructorInfo.personId</stringProp>
-                    <stringProp name="Argument.value">R.TALALH</stringProp>
+                    <stringProp name="Argument.value">KS-2010</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
@@ -3953,7 +3968,7 @@
                   <elementProp name="sessionId" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">false</boolProp>
                     <stringProp name="Argument.name">sessionId</stringProp>
-                    <stringProp name="Argument.value">${sessionId}</stringProp>
+                    <stringProp name="Argument.value">${sessionid}</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                     <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   </elementProp>
@@ -4047,19 +4062,15 @@
                   </elementProp>
                   <elementProp name="Accept-Language" elementType="Header">
                     <stringProp name="Header.name">Accept-Language</stringProp>
-                    <stringProp name="Header.value">en-US,en;q=0.5</stringProp>
+                    <stringProp name="Header.value">en-US</stringProp>
                   </elementProp>
                   <elementProp name="Accept" elementType="Header">
                     <stringProp name="Header.name">Accept</stringProp>
-                    <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+                    <stringProp name="Header.value">text/html, application/xhtml+xml, */*</stringProp>
                   </elementProp>
                   <elementProp name="User-Agent" elementType="Header">
                     <stringProp name="Header.name">User-Agent</stringProp>
-                    <stringProp name="Header.value">Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:29.0) Gecko/20100101 Firefox/29.0</stringProp>
-                  </elementProp>
-                  <elementProp name="Referer" elementType="Header">
-                    <stringProp name="Header.name">Referer</stringProp>
-                    <stringProp name="Header.value">http://env17.ks.kuali.org/kr-krad/activityOffering?courseOfferingId=65fa037e-55ae-42e6-b047-382dfc1213e2&amp;methodToCall=maintenanceEdit&amp;aoInfo.id=5648dc5a-d4f4-47e8-ac67-706cfc3df5f5&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper&amp;formKey=09a1e1e3-7dfe-4316-930b-03e9a345f449&amp;cacheKey=lc05e91cvelosik1g2xsf</stringProp>
+                    <stringProp name="Header.value">Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)</stringProp>
                   </elementProp>
                   <elementProp name="DNT" elementType="Header">
                     <stringProp name="Header.name">DNT</stringProp>
@@ -4068,6 +4079,14 @@
                   <elementProp name="Accept-Encoding" elementType="Header">
                     <stringProp name="Header.name">Accept-Encoding</stringProp>
                     <stringProp name="Header.value">gzip, deflate</stringProp>
+                  </elementProp>
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://env17.ks.kuali.org/kr-krad/activityOffering?courseOfferingId=65fa037e-55ae-42e6-b047-382dfc1213e2&amp;methodToCall=maintenanceEdit&amp;aoInfo.id=5648dc5a-d4f4-47e8-ac67-706cfc3df5f5&amp;dataObjectClassName=org.kuali.student.enrollment.class2.courseoffering.dto.ActivityOfferingWrapper&amp;formKey=62052e56-d1c1-4e34-831b-f5418078e818&amp;cacheKey=ix7wucomsdnktoc0bcuy85wr</stringProp>
+                  </elementProp>
+                  <elementProp name="Pragma" elementType="Header">
+                    <stringProp name="Header.name">Pragma</stringProp>
+                    <stringProp name="Header.value">no-cache</stringProp>
                   </elementProp>
                 </collectionProp>
               </HeaderManager>
