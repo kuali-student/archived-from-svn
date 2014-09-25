@@ -2,7 +2,7 @@
 Feature: GT.Modify Course
 
   Background:
-    Given I have an active course
+    Given I have an active course created for modify
 
   Scenario: MC1.1 Create a Modify Course Proposal as Faculty; verify can not start another
     When I create a modify course proposal as Faculty

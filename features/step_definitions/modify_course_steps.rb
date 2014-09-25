@@ -26,7 +26,7 @@ Given(/^I have an active course created for modify$/) do
                  :outcome_list => [outcome1],
                  :format_list => [format],
                  # ACTIVE DATES
-                 :start_term => "Fall 2007",
+                 :start_term => 'Spring 1998',
                  :pilot_course => "No",
                  :course_state => "ACTIVE"
 
@@ -59,9 +59,10 @@ Given(/^I have an active course created for modify$/) do
                                           proposal_rationale: "updated #{random_alphanums(20, 'test proposal rationale ')}",
                                           curriculum_oversight: @source_course.curriculum_oversight,
                                           final_exam_type: [:exam_alternate],
+                                          final_exam_rationale: "updated #{random_alphanums(10,'test final exam rationale ')}",
                                           exam_alternate: :set,
                                           start_term: @source_course.start_term,
-                                          defer_save: 'yes'
+                                          defer_save: 'true'
 
   determine_save_action
 
@@ -192,7 +193,7 @@ And(/^the Superseded version has a new end term and the new course version is Ac
     page.version_history_version(1).text.should == '1'
     page.version_history_courseStatus(1).text.should == 'Superseded'
     page.version_history_startTerm(1).text.should == @old_active_course_version_info[2]
-#    page.version_history_endTerm(1).text.should_not == ''
+    page.version_history_endTerm(1).text.should == 'Winter 2018'
   end
 end
 
@@ -239,7 +240,7 @@ And(/^the Superseded version has a new end term$/) do
   on CmCourseVersionHistoryPage do |page|
     page.version_history_version(1).text.should == '1'
     page.version_history_courseStatus(1).text.should == 'Superseded'
-#    page.version_history_endTerm(1).text.should_not == ''
+    page.version_history_endTerm(1).text.should == 'Winter 2018'
   end
 
 end
