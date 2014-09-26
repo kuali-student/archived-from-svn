@@ -32,6 +32,11 @@ class PerformRollover < BasePage
   element(:rollover_button) { |b| b.frm.button(text: /Rollover/) }
 
   action(:rollover_course_offerings) { |b| b.rollover_button.click; b.loading.wait_while_present; sleep 2 }
+  #rollover confirm dialog
+  element(:confirm_rollover_dialog_div)  { |b| b.frm.div(id: 'complexRollOverMatrixOverrideConfirmDialog') }
+  element(:confirm_rollover_button) { |b| b.frm.button(id: 'complex_rollover_override_yes_button') }
+  action(:confirm_rollover) { |b| b.confirm_rollover_button.when_present.click }
+  #
 
   #continue_wo_exams_dialog
   element(:continue_wo_exams_dialog_div)  { |b| b.frm.div(class: "fancybox-wrap fancybox-desktop fancybox-type-html fancybox-opened") }

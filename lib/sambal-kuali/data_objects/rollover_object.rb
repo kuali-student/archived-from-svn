@@ -71,6 +71,7 @@ class Rollover < DataFactory
       puts "Rollover initiated - source term: #{@source_term}"
       puts "Rollover initiated - target term: #{@target_term}"
       page.rollover_course_offerings
+      page.confirm_rollover
     end
 
     if @exp_success then
@@ -138,6 +139,17 @@ class Rollover < DataFactory
     on RolloverDetails do |page|
       raise "release to depts not completed" unless page.status_detail_msg =~ /released to the departments/
     end
+  end
+
+  def completed?
+    status = nil
+    go_to_rollover_details
+    on RolloverDetails do |page|
+      page.term.set @target_term
+      page.go
+      status = page.completed_status if page.completed_status_element.exists?
+    end
+    status == 'RELEASED TO DEPARTMENTS' || 'COMPLETE'
   end
 
 end
