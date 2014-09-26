@@ -222,7 +222,7 @@ class AcademicCalendar < DataFactory
     term_object.parent_calendar = self
     term_object.create
     @terms << term_object
-    on(EditAcademicTerms).save
+    #on(EditAcademicTerms).save
   end
 
   #holiday_calendar is created separately
@@ -426,16 +426,6 @@ class AcademicTermObject < DataFactory
     on(EditAcademicTerms).save :exp_success => options[:exp_success]
   end
 
-  #TODO - move should statements to step definitions
-  def verify
-    on EditAcademicTerms do |page|
-      page.get_term_type(0).should == @term_name
-      page.get_term_start_date(0).should == @start_date
-      page.get_term_end_date(0).should == @end_date
-    end
-    @keyDateGroup[0].verify
-  end
-
   def search
     go_to_calendar_search
 
@@ -579,10 +569,6 @@ class KeyDateGroupObject < DataFactory
     end
   end
 
-  def verify
-    @key_dates[0].verify
-  end
-
   def add_key_date key_date_object
     key_date_object.parent_term = @parent_term
     key_date_object.parent_key_date_group = self
@@ -638,11 +624,11 @@ class KeyDateObject < DataFactory
 
         if !page.key_date_dropdown_addline(@term_index, key_date_group_index).present?
           page.key_date_button( @term_index, key_date_group_index).click
-          sleep 1 #wait til new row
-          page.key_date_dropdown_addline(@term_index, key_date_group_index).wait_until_present
+          wait_until { page.key_date_dropdown_addline(@term_index, key_date_group_index).selected_options[0].text =~ /Select/ }
         end
 
         page.key_date_dropdown_addline( @term_index, key_date_group_index).select @key_date_type
+        wait_until { page.key_date_dropdown_addline(@term_index, key_date_group_index).selected_options[0].text == @key_date_type }
         page.key_date_start_date_addline( @term_index,key_date_group_index).set @start_date
         page.key_date_end_date_addline( @term_index,key_date_group_index).set @end_date
       else

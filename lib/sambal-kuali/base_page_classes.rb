@@ -181,14 +181,11 @@ module CalendarStickyFooter
     }
     options = defaults.merge(opts)
     loading.wait_while_present #solves general sync issues
+    sleep 2
     #find elements directly to avoid 'Element is no longer attached to the DOM' error
     @browser.div(class: /uif-stickyButtonFooter/,data_parent: /CalendarEditPage/).button(text: "Save").when_present.click
-    puts 'clicked'
-    loading.wait_until_present(60) #UI just hangs here when saving large ACAL
-    # (0..20).each do
-    #   puts loading.present?
-    #   sleep 0.2
-    # end
+    #usual way of finding loading icon can be too slow here
+    @browser.h1(index: -1).image(alt: "Loading...").wait_until_present(60) #UI just hangs here when saving large ACAL
     loading.wait_while_present(60)
     if options[:exp_success]
       growl_msg_txt = growl_text
