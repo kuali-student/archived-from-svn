@@ -222,8 +222,7 @@ When /^I attempt to edit the grading method for the course$/ do
 end
 
 When /^I attempt to drop the course$/ do
-  visit CourseSearchPage
-  @reg_request.attempt_remove_course("schedule")
+  @reg_request.attempt_remove_course(true)
 end
 
 When /^I attempt to edit the credits for the course$/ do
