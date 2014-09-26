@@ -127,7 +127,6 @@ Feature: REG.Register for course
    Then I can see the details of my course
 
  #KSENROLL-14886
- @wip
  Scenario: CR 0.2 Verify cannot register for a course whose state has been changed from Offered to Cancelled
    Given I log in to student registration as R.AARONE
    And I view my registration cart for the current term
