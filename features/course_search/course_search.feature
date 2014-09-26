@@ -3,7 +3,7 @@ Feature: BT.Course Search
 
   Background:
     Given I am logged in as a Student
-
+@smoke_test
   Scenario: CS2.1.1 Successfully search for a course and clear search results
     When I search for a course
     Then the course "should" appear in the search results

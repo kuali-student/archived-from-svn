@@ -3,7 +3,7 @@
 Feature: BT.Filter by Facet Requirement
   Background:
     Given I am logged in as a Student
-
+@smoke_test
   Scenario:CS 17.1:Verify course search results using Terms facet
     When I search for courses in the Course Search Page
     And I narrow the search results by a specific term

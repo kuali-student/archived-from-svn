@@ -5,7 +5,7 @@ Feature: BT.Bookmark a course
 
     Given I am logged in as a Student
 
-
+@smoke_test
   Scenario: BK 2.0.1 Verify that I can see a gutter for the bookmarks
     When I navigate to the Planner page
     Then I should see a gutter for bookmarks

@@ -3,7 +3,7 @@ Feature: BT.Add to plan view
 
   Background:
    Given I am logged in as a student registered for courses
-
+@smoke_test
   Scenario:  Academic Year per Planner Page
    When I navigate to planner page
    Then the relevant features of the page should be displayed

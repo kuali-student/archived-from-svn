@@ -3,7 +3,7 @@ Feature: BT.Add note to planner
 
   Background:
     Given I am logged in as a Student
-
+@smoke_test
   Scenario: PL 1.0.1 Add course from search to planned section
     When I search for a course in the course search page
     And I add the course from search to the planned section for a specific term

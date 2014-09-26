@@ -3,7 +3,7 @@ Feature: BT.Course Section
 
 Background:
 Given I am logged in as a Student
-
+@smoke_test
   Scenario: Verify that I am able to see the section details of the course in the Course Details page
     When I search for a certain course on course search page
     And I navigate to the Course Section Details page
