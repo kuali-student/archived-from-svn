@@ -316,8 +316,8 @@ Then /^the course is present in my cart, with the updated options$/  do
   end
 end
 
-And /^I (attempt to |navigate to my registration cart and )?register for the courses?$/ do |attempt|
-  @reg_request.register :do_navigation=>(!attempt.nil? && (attempt.include? "navigate"))
+And /^I (attempt to )?register for the courses?$/ do |attempt|
+  @reg_request.register
   sleep 3
 end
 
@@ -437,14 +437,16 @@ Then /^I? ?undo the drop action$/ do
   end
 end
 
-And /^I? ?view my registration cart$/ do
+And /^I? ?view my registration cart( for the current term)?$/ do |curr_term|
   visit RegistrationCart do |page|
-    term_descr = "Spring 2012"
-    page.menu_button.wait_until_present
-    page.menu
-    page.wait_until {page.term_select.include? term_descr }
-    page.select_term term_descr
-    page.menu
+    if (curr_term.nil? || (curr_term==""))
+      term_descr = "Spring 2012"
+      page.menu_button.wait_until_present
+      page.menu
+      page.wait_until {page.term_select.include? term_descr }
+      page.select_term term_descr
+      page.menu
+    end
   end
 end
 
@@ -817,5 +819,18 @@ And /^there is a message indicating that the course has been cancelled$/ do
   on RegistrationCart do |page|
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.result_status(@reg_request.course_code,@reg_request.reg_group_code).should include "#{@reg_request.course_code} (#{@reg_request.reg_group_code}) is cancelled for #{@reg_request.term_descr}"
+  end
+end
+
+Then /^a canceled course is present in my cart$/ do
+  @reg_request = make RegistrationRequest,
+                      :term_descr=> "Fall 2012",
+                      :course_code=>"ENGL101",
+                      :reg_group_code=>"1093",
+                      :course_options => (make CourseOptions, :grading_option => "Letter", :credit_option => "3.0"),
+                      :course_has_options=> false
+  on RegistrationCart do |page|
+    sleep 2
+    page.course_code(@reg_request.course_code, @reg_request.reg_group_code).should_not be_nil
   end
 end

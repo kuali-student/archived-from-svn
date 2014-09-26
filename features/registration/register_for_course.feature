@@ -129,10 +129,9 @@ Feature: REG.Register for course
  #KSENROLL-14886
  @wip
  Scenario: CR 0.2 Verify cannot register for a course whose state has been changed from Offered to Cancelled
-   Given I am logged in as admin
-   When I add an ENGL6 course offering to my registration cart
-   And I manage the course I added to my registration cart
-   Then I cancel the activity offering
-   When I navigate to my registration cart and register for the course
+   Given I log in to student registration as R.AARONE
+   And I view my registration cart for the current term
+   Then a canceled course is present in my cart
+   When I register for the course
    Then there is a message indicating that registration failed
    And there is a message indicating that the course has been cancelled
