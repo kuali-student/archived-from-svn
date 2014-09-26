@@ -371,7 +371,10 @@ Given(/^there is a course with a active modify proposal$/) do
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_alternate],
                                                 exam_alternate: :set,
-                                                start_term: 'Spring 2018'
+                                                start_term: 'Spring 2018',
+                                                defer_save: 'true'
+
+  determine_save_action
   @modify_course_proposal.submit_proposal
 
 end
@@ -422,7 +425,10 @@ Given(/^there is a course with a superseded version$/) do
                                                 final_exam_type: [:exam_alternate],
                                                 exam_alternate: :set,
                                                 start_term: 'Spring 2018',
-                                                cs_with_cr: 'yes'
+                                                cs_with_cr: 'yes',
+                                                defer_save: 'true'
+
+  determine_save_action
 
   @modify_course_proposal.direct_blanket_approve_with_rationale
 end
