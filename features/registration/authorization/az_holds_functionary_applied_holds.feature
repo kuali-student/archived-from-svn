@@ -1,17 +1,15 @@
-@blue_team
+@nightly @blue_team
 Feature: REG.Holds Functionary using Applied Holds
   Hold2.8 As a Holds Functionary I want to be the appropriate Role to expire an applied hold
   Hold2.9 As a Holds Functionary I want to be the appropriate Role to delete an applied hold
   Hold2.10 As a Holds Functionary I want to be the appropriate Role to apply a hold to a student
 
 #KSENROLL-14598
-  @pending
   Scenario: HOLD2.8.1 Validate that a Holds Functionary can expire an applied hold
     Given I am logged in as a Holds Functionary
     When I edit a hold to add an expiration date to a student record
     Then the expired hold is no longer displayed for the student
 
-  @pending
   Scenario: Hold2.8.2 Validate that a non Holds Functionary can not expire an applied hold
     Given I am logged in as a Schedule Coordinator
     And I find a hold
