@@ -134,9 +134,9 @@ class AdminRegistration < BasePage
   #################################################################
   ### Register Courses Table
   #################################################################
-  element(:registered_courses_section) { |b| b.frm.section( id: "KS-AdminRegistration-Registered")}
-  element(:registered_courses_table) { |b| b.registered_courses_section.table}
-  value(:registered_courses_header) { |b| b.registered_courses_section.h4(class: "uif-headerText").text}
+  element(:registered_courses_div) { |b| b.frm.div( id: "KS-AdminRegistration-Registered")}
+  element(:registered_courses_table) { |b| b.registered_courses_div.table}
+  value(:registered_courses_header) { |b| b.registered_courses_div.h4(class: "uif-headerText").text}
   value(:get_registered_course_code_sort){ |b| b.loading.wait_while_present; b.registered_courses_table.th(class: "sorting_asc").text}
 
   value(:get_registered_course_credits){ |row, b| b.loading.wait_while_present; row.cells[CREDITS].text}
