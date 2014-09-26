@@ -29,13 +29,11 @@ Feature: REG.Holds Functionary using Applied Holds
     Then a delete hold authorization error message is displayed
 
 #KSENROLL-14602
-  @pending
   Scenario: HOLD2.10.1 Validate that a Holds Functionary can apply a hold to a student
     Given I am logged in as a Holds Functionary
     When I apply a hold to student by completing the required information
     Then the hold exists for the student with an effective date
 
-  @pending
   Scenario: Hold2.10.2 Validate that a non Holds Functionary can not apply a hold to a student
     Given I am logged in as a Schedule Coordinator
     When I apply a hold to student by completing the required information
