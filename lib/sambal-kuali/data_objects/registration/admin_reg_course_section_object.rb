@@ -94,9 +94,9 @@ class ARCourseSectionObject < DataFactory
       end
       page.loading.wait_while_present
 
-      page.wait_until { page.course_register_btn.visible? }
-
+      page.wait_until(60) { page.course_register_btn.visible? }
       page.loading.wait_while_present
+
       if page.growl_div.exists? and options[:dismiss_result]
         page.growl_div.div(class: "jGrowl-close").click
       end
