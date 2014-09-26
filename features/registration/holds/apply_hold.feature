@@ -38,9 +38,9 @@ Feature: REG.Apply Hold
 
   @pending
   Scenario: HOLD2.4.2.1 Verify that a hold with an effective date before the first applied date is not applied to a student
-    Given there exists a hold with a last applied date
+    Given there exists a hold with a first applied date
     When I attempt to apply the hold where the effective date is before the first applied date
-    Then an effective date error message is displayed stating
+    Then an effective date error message is displayed
 
   @pending
   Scenario: HOLD2.4.2.2 Verify that a hold with an effective date after the last applied date is not applied to a student

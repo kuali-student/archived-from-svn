@@ -69,7 +69,7 @@ When(/^I attempt to apply the hold where the effective date is before the first 
   @applied_hold.apply_hold :effective_date => last_year[:date_w_slashes]
 end
 
-Then(/^an effective date error message is displayed stating$/) do
+Then(/^an effective date error message is displayed$/) do
   on(ApplyHold).get_apply_error_msg.should match /Applied effective date should not be earlier.*#{@hold_issue.first_applied_date}/
 end
 

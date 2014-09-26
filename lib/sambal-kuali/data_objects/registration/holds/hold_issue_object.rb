@@ -74,7 +74,7 @@ class HoldIssue < DataFactory
       page.code_input.set @code
       page.descr_input.set @description
       page.find_owning_org @owning_org_abbr
-      page.last_applied_date_input.set @last_applied_date if @last_applied_date != nil
+      page.last_applied_date_input.fit @last_applied_date
 
       if @term_based
         page.set_term_based
