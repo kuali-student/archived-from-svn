@@ -22,6 +22,6 @@ Feature: Add course to plan from bookmark
     When I add a course from the bookmark page to the backup section
     Then the course is added
 
-  Scenario: PL 2.0.5 Verify that I am not able to add a duplicate course to plan from bookmark section
-    When I try to add a duplicate course from the bookmark section
-    Then the term should be deactivated
+  Scenario: PL 2.0.5 Verify that I am not able to add a duplicate course from bookmark section
+    When I try to add a duplicate course to term from the bookmark section
+    Then the term is showing as planned
