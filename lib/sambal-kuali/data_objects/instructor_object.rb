@@ -56,6 +56,7 @@ class CmInstructorObject < CmBaseObject
       boundary = 3 # to trigger auto suggest query
       head = @instructor_name.slice(0, boundary)
       page.instructor_name(@instructor_level).set head
+      page.instructor_name(@instructor_level).click
       page.auto_lookup @instructor_name
     end
   end

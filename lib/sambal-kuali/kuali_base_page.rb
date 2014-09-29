@@ -94,7 +94,7 @@ class BasePage < PageFactory
       action(:save_and_continue) { |b| b.save_continue.click; b.saving_wait }
 
       # For Auto Lookup drop down that appears in KRAD
-      action(:auto_lookup) { |lookup_results, b| b.link(text: /#{lookup_results}/).when_present(90).click}
+      action(:auto_lookup) { |lookup_results, b| b.link(text: /#{lookup_results}/).when_present(90).click }
 
       #ADVANCED SEARCH BOXES
       element(:frm) { |b| b.frame(:class=>"fancybox-iframe") }

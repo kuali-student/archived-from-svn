@@ -12,6 +12,11 @@ Feature: GT.Create a Course Proposal as Faculty
     And I perform a full search for the course proposal
     Then I can review the required fields on the course proposal
 
+  Scenario: CC2.2 Create a course proposal with all fields and review
+    When I complete all fields on the course proposal
+    And I perform a full search for the course proposal
+    Then I can review all fields on the course proposal
+
   Scenario: CC6.3 Copy a Course to a new Course Proposal
     When I find an approved Course and select copy
     Then I should see a new course proposal with a modified course title
