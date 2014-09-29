@@ -19,6 +19,9 @@ class CmFindACoursePage < BasePage
 
   def results_list_course_code
     code_list = []
+    if results_table.exist? == false
+      return code_list
+    end
     results_table.rows.each do |row|
       sleep(1)
       code_list << row[COURSE_CODE].text

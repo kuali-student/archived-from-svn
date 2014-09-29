@@ -1,7 +1,19 @@
 
-Given(/^I have an active course with (.*?) created for modify$/) do |given_course_number|
+Given(/^I have an active course created for modify$/) do
 
   steps %{Given I am logged in as Curriculum Specialist}
+
+  course_list = make CmCourseObject, :search_term => "ENGL9", :course_code => "ENGL9"
+  course_list.search_for_course
+  list_course_code = (on CmFindACoursePage).results_list_course_code
+  given_course_number = 901
+  start_course_code = "ENGL#{given_course_number}"
+  while list_course_code.include? start_course_code do
+    given_course_number += 1
+    start_course_code = "ENGL#{given_course_number}"
+  end
+
+  navigate_to_functional_home
 
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format = (make CmFormatsObject,  :format_level => 1,
