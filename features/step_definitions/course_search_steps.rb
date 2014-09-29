@@ -18,6 +18,9 @@ end
 Then /^the course "(.*?)" appear in the search results$/ do |test_condition|
   on CourseSearch do |page|
     if test_condition == "should"
+      on CourseSearch do |page|
+        page.course_search_results_facets.wait_until_present
+      end
       page.results_list.should include @course_search_result.course_code
     else
       begin
