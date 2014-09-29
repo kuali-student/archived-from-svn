@@ -115,10 +115,9 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   end
 
   # Results table column indexes
-  COURSE_SEATS_INDICATOR = 0
-  COURSE_CODE = 1
-  COURSE_DESC = 2
-  COURSE_CRED = 3
+  COURSE_CODE = 0
+  COURSE_DESC = 1
+  COURSE_CRED = 2
 
   COLUMN_HEADINGS = ["","Code","Title","Credits"]
 
@@ -254,7 +253,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   def results_list (column=COURSE_CODE)
     list = []
     no_of_rows = get_results_table_rows_no - 1
-    (0..no_of_rows).each { |index| list << get_table_row_value(index, column).upcase }   # convert to uppercase because application sort is case-insensitive
+    (1..no_of_rows).each { |index| list << get_table_row_value(index, column).upcase }   # convert to uppercase because application sort is case-insensitive
     list.delete_if { |item| item == COLUMN_HEADINGS[column].upcase }
     list.delete_if {|item| item == "" }
     list
