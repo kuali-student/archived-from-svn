@@ -1,4 +1,4 @@
-@test_data
+@test_data @test
 Feature: Test Data Creation Feature
 
   Scenario: Create a proposal with all fields filled in
