@@ -226,11 +226,13 @@ class CmReviewProposalPage < BasePage
   #LEARNING OBJECTIVES
 
   #COURSE REQUISITES
+  element(:course_requisite_section) {|b|b.div(id: 'CM-ViewCourse-View-Course-Requisites-CollectionSection')}
   #Student Eligibility & Prerequisite
   #Corequisite
 
   #ACTIVITY FORMATS
-
+  element(:course_format_activity_ver1) {|index, b|b.div(id: "CM-ViewCourse-View-Course-ActivitySectionver1ver2_line#{index}")}
+  element(:course_format_activity_ver2) {|index, b|b.div(id: "CM-ViewCourse-View-Course-ActivitySectionver1ver2_line#{index}")}
   # ACTIVE DATES REVIEW FIELDS
   element(:start_term_ver1_review) { |b| b.label(id: "CM-ViewCourseView-ActiveDates-StartTermver1_label") }
   value(:end_term_ver1_review) { |b| b.label(id: 'CM-ViewCourseView-ActiveDates-EndTermver1_label') }

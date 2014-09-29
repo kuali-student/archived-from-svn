@@ -1,5 +1,8 @@
-Given(/^I have an active course created for modify$/) do
+
+Given(/^I have an active course with (.*?) created for modify$/) do |given_course_number|
+
   steps %{Given I am logged in as Curriculum Specialist}
+
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
@@ -35,7 +38,7 @@ Given(/^I have an active course created for modify$/) do
                             :proposal_title => "copy of " + random_alphanums(10,'test proposal title '),
                             :course_title => "copy of " + random_alphanums(10,'course title'),
                             :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => given_course_number)]
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
   puts "course : #{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}"
