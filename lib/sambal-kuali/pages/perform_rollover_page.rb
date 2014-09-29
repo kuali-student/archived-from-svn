@@ -35,8 +35,7 @@ class PerformRollover < BasePage
   #rollover confirm dialog
   element(:confirm_rollover_dialog_div)  { |b| b.frm.div(id: 'complexRollOverMatrixOverrideConfirmDialog') }
   element(:confirm_rollover_button) { |b| b.frm.button(id: 'complex_rollover_override_yes_button') }
-  action(:confirm_rollover) { |b| b.confirm_rollover_button.when_present.click }
-  #
+  action(:confirm_rollover) { |b| b.confirm_rollover_button.when_present.click; sleep 3 } #sleep required after closing dialog, issue across this project  #
 
   #continue_wo_exams_dialog
   element(:continue_wo_exams_dialog_div)  { |b| b.frm.div(class: "fancybox-wrap fancybox-desktop fancybox-type-html fancybox-opened") }
