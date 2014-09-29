@@ -78,7 +78,7 @@ And(/^I add the course from search to the planned section for a specific term$/)
   end
 
   on CoursePlannerPage do |page|
-  page.planner_courses_detail_list.wait_until_present
+  page.planner_courses_detail_list.wait_until_present(120)
   @course_search_result.remove_code_from_planned_backup
   navigate_to_course_search_home
   @course_search_result.select_add_to_plan
@@ -89,7 +89,7 @@ Then(/^the course should be there in the planner$/) do
   navigate_to_course_planner_home
 
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(120)
   page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
 end
