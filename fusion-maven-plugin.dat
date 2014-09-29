@@ -1,12 +1,12 @@
 # module = ks-ap branch Path = enrollment/ks-ap/tags/builds/ks-ap-0.8/0.8.0-rice242upgrade/build-88 revision = 76978
-ks-ap::enrollment_ks-ap_tags_builds_ks-ap-0.8_0.8.0-rice242upgrade_build-88::543f6a82977e4dfbd8e3132f5fb4e70395c416aa
+ks-ap::enrollment_ks-ap_tags_builds_ks-ap-0.8_0.8.0-rice242upgrade_build-88::e9bcb72ef93f522df5dd9a895fc364cbfe20983c
 # module = ks-api branch Path = enrollment/ks-api/tags/builds/ks-api-2.1/2.1.1-rice242upgrade/build-88 revision = 76978
-ks-api::enrollment_ks-api_tags_builds_ks-api-2.1_2.1.1-rice242upgrade_build-88::46d7d9ddba50671bd9ab6ef85e9c2907a0ead290
+ks-api::enrollment_ks-api_tags_builds_ks-api-2.1_2.1.1-rice242upgrade_build-88::469f9d300020c1b02b7bb9d274c26c78a68d76fd
 # module = ks-core branch Path = enrollment/ks-core/tags/builds/ks-core-2.1/2.1.1-rice242upgrade/build-88 revision = 76978
-ks-core::enrollment_ks-core_tags_builds_ks-core-2.1_2.1.1-rice242upgrade_build-88::48c656d77f1929466497686a407716dee130737d
+ks-core::enrollment_ks-core_tags_builds_ks-core-2.1_2.1.1-rice242upgrade_build-88::5f38d9d9e555d4d01966a66972b08d98b35f799a
 # module = ks-deployments branch Path = enrollment/ks-deployments/tags/builds/ks-deployments-2.1/2.1.1-rice242upgrade/build-88 revision = 76978
-ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.1_2.1.1-rice242upgrade_build-88::40f6e4753cd744f02d41c094e68d08e9e8be6fdd
+ks-deployments::enrollment_ks-deployments_tags_builds_ks-deployments-2.1_2.1.1-rice242upgrade_build-88::bbe5e83eaaac092ecacedf1308998b6221432043
 # module = ks-enroll branch Path = enrollment/ks-enroll/tags/builds/ks-enroll-0.2/0.2.0-rice242upgrade/build-88 revision = 76978
-ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-0.2_0.2.0-rice242upgrade_build-88::bc948b9c2677fbce0fa4531c2d53706c54b30c74
+ks-enroll::enrollment_ks-enroll_tags_builds_ks-enroll-0.2_0.2.0-rice242upgrade_build-88::dd27df786b23237567715b0cae84cf8d193eeafa
 # module = ks-lum branch Path = enrollment/ks-lum/tags/builds/ks-lum-2.1/2.1.1-rice242upgrade/build-88 revision = 76978
-ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.1_2.1.1-rice242upgrade_build-88::c1d65eae7dfe72019dfcff95e1b8dadbb16cc04d
+ks-lum::enrollment_ks-lum_tags_builds_ks-lum-2.1_2.1.1-rice242upgrade_build-88::29dc5f68ac5ab377a030d83079cc79a73004fc77
