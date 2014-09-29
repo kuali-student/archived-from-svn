@@ -119,7 +119,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   COURSE_DESC = 1
   COURSE_CRED = 2
 
-  COLUMN_HEADINGS = ["","Code","Title","Credits"]
+  COLUMN_HEADINGS = ["Code","Title","Credits"]
 
   #Gives the digit for course level comparison, eg ENGL200 would have 2 extracted and compared
   value(:courseLevel){ |row,b| row.cells[COURSE_CODE].text.slice(4,1) }
