@@ -861,7 +861,7 @@ class CourseSearchResults < DataFactory
   def add_same_course_backup
     on CoursePlannerPage do |page|
       page.refresh
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(120)
 
       #This would change for backup
 
