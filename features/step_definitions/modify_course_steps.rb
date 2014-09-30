@@ -1,19 +1,11 @@
-
 Given(/^I have an active course created for modify$/) do
 
   steps %{Given I am logged in as Curriculum Specialist}
 
-  course_list = make CmCourseObject, :search_term => "ENGL9", :course_code => "ENGL9"
-  course_list.search_for_course
-  list_course_code = (on CmFindACoursePage).results_list_course_code
-  given_course_number = 901
-  start_course_code = "ENGL#{given_course_number}"
-  while list_course_code.include? start_course_code do
-    given_course_number += 1
-    start_course_code = "ENGL#{given_course_number}"
-  end
+  subject_code = "ENGL"
+  course_number = course_number_generator(subject_code)
 
-  navigate_to_functional_home
+
 
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format = (make CmFormatsObject,  :format_level => 1,
@@ -49,8 +41,8 @@ Given(/^I have an active course created for modify$/) do
                             :copy_from_course => true, :course_to_be_copied => @source_course,
                             :proposal_title => "copy of " + random_alphanums(10,'test proposal title '),
                             :course_title => "copy of " + random_alphanums(10,'course title'),
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => given_course_number)]
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
   puts "course : #{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}"

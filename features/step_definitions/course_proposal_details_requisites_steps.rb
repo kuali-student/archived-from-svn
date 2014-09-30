@@ -160,6 +160,9 @@ Given(/^I have a course proposal with requisite details$/) do
 
   steps %{Given I am logged in as Faculty}
 
+  subject_code = "ENGL"
+  course_number = course_number_generator(subject_code)
+
   rule1 = (make CmRequisiteRuleObject, :rule => "Must have been admitted to the English Language and Literature program",
   :complete_rule_text => "Must have been admitted to the English Language and Literature program" )
 
@@ -185,7 +188,7 @@ Given(/^I have a course proposal with requisite details$/) do
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copied " + @course.course_title,
                             :use_view_course => true,
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 end
 
 When(/^I update the requisite details on the course proposal using Edit Rule Logic$/) do

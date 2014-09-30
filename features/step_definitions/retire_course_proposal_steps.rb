@@ -1,17 +1,3 @@
-Given(/^I have an active course$/) do
-  steps %{Given I am logged in as Curriculum Specialist}
-  @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                    :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
-                                                                             :outcome_list => [(make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample)],
-                                                                             :final_exam_type => [:exam_alternate, :exam_none], :start_term => "Spring 1988")], #excluded Standard Final exam due to a backlog bug
-                                                    :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
-  puts "Proposal Title: #{@course_proposal.proposal_title}"
-  puts "course : #{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}"
-
-  @course_proposal.approve_activate_proposal
-
-end
-
 When(/^I create a retire course proposal as Faculty$/) do
   steps %{Given I am logged in as Faculty}
   @course = make CmCourseObject, :search_term => "#{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}",

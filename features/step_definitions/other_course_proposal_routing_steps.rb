@@ -1,17 +1,19 @@
 Given(/^I have a course proposal with submit and approve fields submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author, proposal_author
+  subject_code = "CHEM"
+  course_number = course_number_generator(subject_code)
 
   if proposal_author == "fred"
 
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "CHEM")],
-                              :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                              :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "CHEM")],
-                              :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                              :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
   end
 
   puts @course_proposal.proposal_title
@@ -82,9 +84,12 @@ Given(/^I have a course proposal Blanket Approved by (.*?)$/) do |blanket_approv
   @blanket_approver = blanket_approver
   log_in "fred", "fred"
 
+  subject_code = "CHEM"
+  course_number = course_number_generator(subject_code)
+
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "CHEM")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   puts @course_proposal.proposal_title
   @course_proposal.submit_proposal
@@ -117,9 +122,11 @@ end
 
 Given(/^I have a course proposal Approved by (.*?)$/) do |department_chair|
   log_in "fred", "fred"
+  subject_code = "ENGL"
+  course_number = course_number_generator(subject_code)
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   puts @course_proposal.proposal_title
   @course_proposal.submit_proposal

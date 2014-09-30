@@ -52,18 +52,21 @@ end
 
 Given(/^I have a course proposal with approve fields submitted by (.*?)$/) do |proposal_author|
   log_in proposal_author, proposal_author
+  subject_code = "CHEM"
+  course_number = course_number_generator(subject_code)
 
   if proposal_author == "fred"
 
+
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                                                    :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "CHEM")],
-                                                    :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                                                    :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                                                    :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                       :curriculum_review_process => "Yes",
-                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "CHEM")],
-                                                      :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
+                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                                                      :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number )]
   end
 
   puts @course_proposal.proposal_title
@@ -163,9 +166,12 @@ end
 
 When(/^I have a credit course admin proposal with approve fields partially completed created as Curriculum Specialist$/) do
   steps %{Given I am logged in as Curriculum Specialist}
+  subject_code = "ENGL"
+  course_number = course_number_generator(subject_code)
+
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}",
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number,
                                                                              :transcript_course_title => nil,
                                                                              :campus_location => nil)]
 
@@ -191,10 +197,12 @@ end
 
 Given(/^I have a credit course admin proposal with approve fields completed created as Curriculum Specialist$/) do
   steps %{Given I am logged in as Curriculum Specialist}
+  subject_code = "ENGL"
+  course_number = course_number_generator(subject_code)
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL",
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code,
                                                      :final_exam_type => [:exam_alternate, :exam_none])], #excluded Standard Final exam due to a backlog bug
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number )]
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
 end

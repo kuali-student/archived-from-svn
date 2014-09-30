@@ -82,6 +82,9 @@ end
 Given(/^I have a proposal with submit and approve fields with collaborators submitted as (.*?)$/) do |author|
   log_in author, author
 
+  subject_code = "MATH"
+  course_number = course_number_generator(subject_code)
+
   outcome = (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample)
   submit_fields = (make CmSubmitFieldsObject, :subject_code => "ENGL",
                         :outcome_list => [outcome],
@@ -89,7 +92,7 @@ Given(/^I have a proposal with submit and approve fields with collaborators subm
 
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                             :submit_fields => [submit_fields],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}" )],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)],
                             :author_list => []
 
   puts @course_proposal.proposal_title

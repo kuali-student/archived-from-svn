@@ -1,9 +1,12 @@
 Given(/^I have a proposal submitted as Faculty$/) do
   steps %{Given I am logged in as Faculty}
 
+  subject_code = "BMGT"
+  course_number = course_number_generator(subject_code)
+
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
-                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
 
   puts @course_proposal.proposal_title

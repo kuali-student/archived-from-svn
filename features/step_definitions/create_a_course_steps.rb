@@ -1050,6 +1050,9 @@ end
 
 #create proposal from copy a course as faculty
 When(/^I find an approved Course and select copy$/) do
+  subject_code = "HIST"
+  course_number = course_number_generator(subject_code)
+
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format11 = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
@@ -1128,7 +1131,7 @@ When(/^I find an approved Course and select copy$/) do
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copied " + @course.course_title,
                             :use_view_course => true,
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 
   sleep 30 #TODO to avoid Format Offering sorting issues.
 
@@ -1234,13 +1237,15 @@ end
 #create proposal from copy a course as cs
 When(/^I create a course proposal from a copy of an approved course$/) do
   generate_course_object_for_copy
+  subject_code = "PHYS"
+  course_number = course_number_generator(subject_code)
 
   @course_proposal = create CmCourseProposalObject, :create_new_proposal => false,
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copy of " + @course.course_title,
                             :curriculum_review_process => "Yes",
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 end
 
 Then(/^I should see a new course proposal with a modified course title$/) do
@@ -1253,6 +1258,9 @@ Then(/^I should see a new course proposal with a modified course title$/) do
 end
 
 When(/^I create a course admin proposal from a copy of an approved course$/) do
+  subject_code = "CHEM"
+  course_number = course_number_generator(subject_code)
+
   outcome1 = make CmOutcomeObject, :outcome_type =>"Fixed", :outcome_level => 0, :credit_value => "3"
   format = (make CmFormatsObject,  :format_level => 1,
                  :activity_level => 1,
@@ -1294,7 +1302,7 @@ When(/^I create a course admin proposal from a copy of an approved course$/) do
                             :copy_from_course => true, :course_to_be_copied => @course,
                             :proposal_title => "copy of #{random_alphanums(10,'course title')}" + @course.course_title,
                             :course_title => "copy of " + @course.course_title,
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => "#{(900..999).to_a.sample}")]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
 end
 
 
