@@ -2,7 +2,8 @@ class CmInstructorObject < CmBaseObject
 
   attr_reader :instructor_name,
               :instructor_level,
-              :defer_save
+              :defer_save,
+              :defer_set
 
 
 
@@ -12,7 +13,8 @@ class CmInstructorObject < CmBaseObject
     defaults = {
         instructor_name: "TYSON",
         instructor_level: 1,
-        defer_save: false
+        defer_save: false,
+        defer_set: false
     }
     set_options(defaults.merge(opts))
 
@@ -22,7 +24,11 @@ class CmInstructorObject < CmBaseObject
     on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
       page.add_instructor unless page.instructor_name(@instructor_level).exists?
-      auto_lookup_select
+      if @defer_set
+        instructor_select
+      else
+       auto_lookup_select
+      end
     end
   end
 
@@ -62,6 +68,18 @@ class CmInstructorObject < CmBaseObject
   end
 
 
+  def instructor_select
+    on CmCourseInformationPage do |page|
+
+      for letter in 0..((@instructor_name.length)-1) do
+        page.instructor_name(@instructor_level).send_keys @instructor_name[letter]
+        sleep 1
+      end
+      page.auto_lookup @instructor_name
+
+    end
+
+  end
 
 end
 

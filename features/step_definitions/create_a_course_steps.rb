@@ -1648,7 +1648,7 @@ When(/^I complete all fields on the create course admin proposal$/) do
                             :course_requisite_list => [requisite_obj1],
                             :author_list => [(make CmAuthCollaboratorObject, :defer_save => true)],
                             :supporting_doc_list => [(make CmSupportingDocsObject)],
-                            :optional_fields => [(make CmOptionalFieldsObject ,:instructor_list => [(make CmInstructorObject, :instructor_name => "TYSON")],:admin_org_list => [(make CmAdminOrgObject)],:defer_save => true)]
+                            :optional_fields => [(make CmOptionalFieldsObject ,:instructor_list => [(make CmInstructorObject, :instructor_name => "TYSON",:defer_set => true)],:admin_org_list => [(make CmAdminOrgObject)],:defer_save => true)]
 end
 
 
@@ -1737,7 +1737,7 @@ When(/^I complete all fields on the course proposal$/) do
                             :course_requisite_list =>  [requisite_obj1],
                             :author_list => [(make CmAuthCollaboratorObject, :defer_save => true)],
                             :supporting_doc_list => [(make CmSupportingDocsObject)],
-                            :optional_fields => [(make CmOptionalFieldsObject ,:instructor_list => [(make CmInstructorObject, :instructor_name => "TYSON")],:admin_org_list => [(make CmAdminOrgObject)],:defer_save => true)]
+                            :optional_fields => [(make CmOptionalFieldsObject ,:instructor_list => [(make CmInstructorObject, :instructor_name => "TYSON",:defer_set => true)],:admin_org_list => [(make CmAdminOrgObject)],:defer_save => true)]
 
 end
 
