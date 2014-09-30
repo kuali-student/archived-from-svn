@@ -253,7 +253,7 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   def results_list (column=COURSE_CODE)
     list = []
     no_of_rows = get_results_table_rows_no - 1
-    (1..no_of_rows).each { |index| list << get_table_row_value(index, column).upcase }   # convert to uppercase because application sort is case-insensitive
+    (0..no_of_rows).each { |index| list << get_table_row_value(index, column).upcase }   # convert to uppercase because application sort is case-insensitive
     list.delete_if { |item| item == COLUMN_HEADINGS[column].upcase }
     list.delete_if {|item| item == "" }
     list
