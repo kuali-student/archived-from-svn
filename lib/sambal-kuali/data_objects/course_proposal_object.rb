@@ -209,17 +209,6 @@ class CmCourseProposalObject < CmBaseObject
     end
   end
 
-
-  def create_course_proposal_required_for_save
-    on CmCourseInformationPage do |page|
-      page.course_information unless page.current_page('Course Information').exists?
-
-      fill_out page, :proposal_title, :course_title
-      determine_save_action
-    end
-  end
-
-
   def create_course_proposal_required
     on CmCourseInformationPage do |page|
       page.course_information unless page.current_page('Course Information').exists?
@@ -293,84 +282,8 @@ class CmCourseProposalObject < CmBaseObject
 
   end # required proposal
 
-  def course_proposal_nonrequired
-    on CmCourseInformationPage do |page|
-
-      page.course_information unless page.current_page('Course Information').exists?
-      page.loading_wait
-      page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
-
-
-      page.add_another_course_listing unless @course_listing_subject.nil? and @course_listing_number.nil?
-      fill_out page, :course_listing_number
-
-      page.course_listing_subject.fit @course_listing_subject
-      page.auto_lookup @course_listing_subject unless @course_listing_subject.nil?
-
-      #Joint offering adding and instructor adding in private methods do to complexity of advanced search adding
-      add_joint_offering
-      add_instructor
-
-      page.save_and_continue
-    end
-
-    on CmGovernancePage do |page|
-      page.governance unless page.current_page('Governance').exists?
-
-      # Admin organization in private method do to complexity of advanced search adding
-      adding_admin_organization
-
-      page.save_and_continue
-    end
-
-    on CmCourseLogisticsPage do |page|
-      page.course_logistics unless page.current_page('Course Logistics').exists?
-      fill_out page, :term_any, :term_fall, :term_spring, :term_summer,
-               :audit, :pass_fail_transcript_grade,
-               :duration_type, :duration_count,
-               :activity_contacted_hours, :activity_class_size,
-               :activity_duration_count, :activity_frequency, :activity_duration_type
-      page.save_and_continue
-    end
-
-    on CmLearningObjectivesPage do |page|
-      page.learning_objectives unless page.current_page('Learning Objectives').exists?
-      # TODO:: NEED TO MAKE TESTS FOR THIS PAGE
-      page.save_and_continue
-    end
-
-    unless @course_requisite_list.nil?
-      @course_requisite_list.each do |requisite|
-        requisite.create
-      end
-    end
-
-    on CmAuthorsCollaboratorsPage do |page|
-      page.authors_collaborators unless page.current_page('Authors Collaborators').exists?
-      # Adding author name in private method do to complexity of advanced search adding
-      adding_author_name
-
-      fill_out page, :author_permission, :action_request, :author_notation
-      page.add_author
-      page.save_and_continue
-     end
-
-  end # non-required
-
-
   #Used for Advanced Search to "Return Value" of the result that matches
   #Defaults to 4th Column to match instructor display name but can be altered for different advacned search results by passing in a number of the column
-  def return_search_result(search_result_value_to_match, row_number=3)
-    on CmCourseRequistitesPage do |page|
-    page.search_results_table.rows.each do |row|
-        if row.cells[row_number].text == search_result_value_to_match
-          row.cells[0].link(text: 'return value').click
-          break
-        end
-      end
-    end
-  end
-
   def cancel_create_course
     on CmCreateCourseStartPage do |page|
       page.cancel
@@ -401,13 +314,6 @@ class CmCourseProposalObject < CmBaseObject
       create.continue
     end
   end
-
-  def create_course_proposal_required_fields
-  on CmCourseInformationPage do |create|
-    fill_out create, :proposal_title, :course_title
-  end
-  end
-
 
   def search
     navigate_to_find_course_proposal
@@ -682,15 +588,7 @@ class CmCourseProposalObject < CmBaseObject
      { "Yes" => :set, "No" => :clear }
   end
 
-
-
-  def random_radio(pass_in_an_array)
-    @sample_radio = pass_in_an_array.sample unless pass_in_an_array.nil?
-    set(@sample_radio, :set)  unless pass_in_an_array.nil?
-  end
-
-
-#COURSE INFORMATION
+  #COURSE INFORMATION
   def add_joint_offering
     on CmCourseInformationPage do |page|
       if @joint_offering_adding_data == 'auto_lookup'
@@ -736,86 +634,6 @@ class CmCourseProposalObject < CmBaseObject
     end
   end
 
-#GOVERNANCE
-  def adding_admin_organization
-    on CmGovernancePage do |page|
-      if admin_org_adding_method == 'auto_lookup'
-        page.administering_organization.fit @administering_organization
-        #TODO: uncomment this when bug KSCM-1204 is fixed for auto lookup on administering org text field
-        #page.auto_lookup @administering_organization unless @administering_organization.nil?
-        page.organization_add unless @administering_organization.nil?
-      end
-
-      if admin_org_adding_method == 'advanced'
-        page.adv_search_admin_org
-        page.adv_identifier.fit @adv_admin_org_identifier
-        page.adv_org_name.fit @adv_admin_org_name
-        page.adv_abbreviation.fit @adv_admin_org_abbreviation
-        page.adv_search
-        page.adv_admin_org_return_value(@adv_admin_org_name, @adv_admin_org_abbreviation)
-        page.organization_add unless @administering_organization.nil?
-      end
-    end
-  end
-
-  #AUTHORS AND COLLABORATORS
-    def adding_author_name
-      on CmAuthorsCollaboratorsPage do |page|
-        # Need to use auto lookup because when watir types in the parentheses are removed from text field
-        if author_name_method == 'auto_lookup'
-          page.author_name.fit @author_name_search
-          page.auto_lookup @author_display_name
-        end
-
-        if author_name_method == 'advanced_name' or author_name_method == 'advanced_username'
-          page.advanced_search
-          page.adv_name.fit @author_name_search if author_name_method == 'advanced_name'
-          page.adv_username_capD.fit @author_username_search if author_name_method == 'advanced_username'
-          page.adv_search
-          page.adv_return_value_name @author_display_name
-        end
-      end
-    end
-  
-    def cs_course_proposal_required
-      on CmCourseInformationPage do |page|
-        page.course unless page.current_page('Course').exists?
-
-        page.expand_course_listing_section unless page.collapse_course_listing_section.visible?
-
-        fill_out page, :description_rationale, :proposal_rationale
-        page.save_progress
-      end
-
-      on CmCourseLogisticsPage do |page|
-        page.logistics unless page.current_page('Logistics').exists?
-
-        page.loading_wait
-
-        fill_out page,
-                 :assessment_a_f, :assessment_notation, :assessment_letter, :assessment_pass_fail,
-                 :assessment_percentage, :assessment_satisfactory
-
-        fill_out page, :exam_standard, :exam_alternate, :exam_none
-
-        #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
-        #if that radio is selected
-        page.final_exam_rationale.fit @final_exam_rationale unless page.exam_standard.set?
-        page.save_progress
-      end
-
-      on CmCourseFinancialsPage do |page|
-        page.financials unless page.current_page('Financials').exists?
-        page.loading_wait
-        fill_out page, :course_fees
-
-        page.save_progress
-
-      end
-
-    end
-  
-  
 
 end #class
 
