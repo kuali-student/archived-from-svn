@@ -11,6 +11,7 @@ Feature: REG.Course Search
   CR 19.14  As a student I want to know if my selection is already in my
             registration cart so that I do not have duplicate entries (large format)
   Background:
+    Given I am using a large screen size
     Given I am logged in as a Student
 
   #KSENROLL-13740 (all CR 19.2.x scenarios)
