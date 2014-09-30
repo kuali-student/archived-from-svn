@@ -18,7 +18,7 @@ class CmLearningObjectivesPage < BasePage
   action(:category_detail) { |objective_level,category_level,b| b.div(id: "learning_objective_section_#{objective_level-1}").text_field(id: "CM-Proposal-Course-LearningObjectives-Category_line#{category_level-1}_add_control") }
   action(:category_type) { |objective_level,category_level, b| b.div(id: "learning_objective_section_#{objective_level-1}").select_list(id: "CM-Proposal-Course-LearningObjectives-CategoryType_line#{category_level-1}_add_control") }
   action(:find_categories) { |category_level, b| b.a(id: "CM-Proposal-Course-LearningObjectives-Category-QuickFinder_line#{category_level-1}_act").click; b.loading_wait }
-  action(:add_category) { |objective_level,category_level,b| b.div(id: "learning_objective_section_#{objective_level-1}").button(id: "CM-Proposal-Course-LearningObjectives-AddCategory_line#{category_level-1}_add").click; b.loading_wait }
+  action(:add_category) { |objective_level,category_level,b| b.div(id: "learning_objective_section_#{objective_level-1}").button(id: "CM-Proposal-Course-LearningObjectives-AddCategory_line#{category_level-1}_add").click; b.loading_extended_wait }
 
   action(:category_detail_added) { |objective_level,category_level,b| b.text_field(id: "CM-Proposal-Course-LearningObjectives-Category_line#{objective_level-1}_line#{category_level-1}" ) }
   action(:delete_category) { |objective_level,category_level,b| b.a(id: "CM-Proposal-Course-LearningObjectives-DeleteCategory_line#{objective_level-1}_line#{category_level-1}").i(class: "ks-fontello-icon-cancel").click; b.loading_wait }
