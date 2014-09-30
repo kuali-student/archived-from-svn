@@ -52,3 +52,13 @@ Then(/^the course should indicate that the registration group has been cancelled
   end
 
 end
+
+
+Then(/^I should be able view the current term highlighted in blue$/) do
+  on CoursePlannerPage do |page|
+
+    page_colour= page.current_term.style 'background-color'.to_s
+    puts page_colour
+    page_colour.should == @course_search_result.color
+    end
+end

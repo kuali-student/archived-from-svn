@@ -100,5 +100,6 @@ class CoursePlannerPage < BasePage
   element(:add_course_bookmark_page) { |course_code,b| b.a(id: "#{course_code}_addLink") }
   element(:added_course_planned) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_code") }
   element(:added_course_backup) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_code") }
+  element(:current_term) {|b|b.h4(class:"uif-headerText")}
 end
 

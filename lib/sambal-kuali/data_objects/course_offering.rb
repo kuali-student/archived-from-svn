@@ -29,7 +29,8 @@ class CourseSearchResults < DataFactory
                 :course_level,
                 :course_offering_description_list,
                 :state,
-                :message_status
+                :message_status,
+                :color
 
   def initialize(browser, opts={})
     @browser = browser
@@ -55,6 +56,7 @@ class CourseSearchResults < DataFactory
         :course_level=> '3',
         :course_prefix=> 'ENGL',
         :state=>'Planned',
+        :color=>'transparent',
         :message_status=>'Section 1012 has been suspended.',
          course_offering_description_list:[
             (make CourseOfferingDescriptionObject, :courseofferingdescription_level => 0),

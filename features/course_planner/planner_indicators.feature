@@ -23,5 +23,11 @@ Feature: BT.Planner Indicators and Real Time Data
     Then the course should indicate that the registration group has been cancelled
 
 
+  Scenario: VP 5.0.4 Verify that current term is identified within the current academic year
+   When I navigate to planner page
+   Then I should be able view the current term highlighted in blue
+
+
+
 
 
