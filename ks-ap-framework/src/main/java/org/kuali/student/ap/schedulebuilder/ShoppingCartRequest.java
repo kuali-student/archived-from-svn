@@ -18,13 +18,18 @@ import java.util.List;
 public interface ShoppingCartRequest extends HasUniqueId {
 
 	/**
-	 * Determine if the indicated course should be added or removed from the
-	 * cart.
+	 * Determine if the indicated course should be added to the cart.
 	 * 
-	 * @return True if the course should be added, false if it should be
-	 *         removed.
+	 * @return True if the course should be added.
 	 */
 	boolean isAddToCart();
+
+	/**
+	 * Determine if the indicated course should be removed from the cart.
+	 * 
+	 * @return True if the course should be removed.
+	 */
+	boolean isRemoveFromCart();
 
 	/**
 	 * Get the course.

@@ -20,8 +20,8 @@ import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "uniqueId", "course", "term", "primaryRegistrationCode",
-		"secondaryRegistrationCode", "credits", "addToCart", "processed",
-		"error", "message", "_futureElements" })
+		"secondaryRegistrationCode", "credits", "addToCart", "removeFromCart",
+		"processed", "error", "message", "_futureElements" })
 public class ShoppingCartRequestInfo implements ShoppingCartRequest,
 		Serializable {
 
@@ -41,6 +41,8 @@ public class ShoppingCartRequestInfo implements ShoppingCartRequest,
 	private BigDecimal credits;
 	@XmlAttribute
 	private boolean addToCart;
+	@XmlAttribute
+	private boolean removeFromCart;
 	@XmlAttribute
 	private boolean processed;
 	@XmlAttribute
@@ -64,6 +66,7 @@ public class ShoppingCartRequestInfo implements ShoppingCartRequest,
 		if (regCodes != null)
 			setSecondaryRegistrationCodes(new ArrayList<String>(regCodes));
 		setAddToCart(copy.isAddToCart());
+		setRemoveFromCart(copy.isRemoveFromCart());
 		setProcessed(copy.isProcessed());
 		setError(copy.isError());
 		setMessage(copy.getMessage());
@@ -103,6 +106,15 @@ public class ShoppingCartRequestInfo implements ShoppingCartRequest,
 
 	public void setAddToCart(boolean addToCart) {
 		this.addToCart = addToCart;
+	}
+
+	@Override
+	public boolean isRemoveFromCart() {
+		return removeFromCart;
+	}
+
+	public void setRemoveFromCart(boolean removeFromCart) {
+		this.removeFromCart = removeFromCart;
 	}
 
 	@Override
@@ -167,8 +179,8 @@ public class ShoppingCartRequestInfo implements ShoppingCartRequest,
 				+ ", primaryRegistrationCode=" + primaryRegistrationCode
 				+ ", secondaryRegistrationCodes=" + secondaryRegistrationCodes
 				+ ", credits=" + credits + ", addToCart=" + addToCart
-				+ ", processed=" + processed + ", error=" + error
-				+ ", message=" + message + "]";
+				+ ", removeFromCart=" + removeFromCart + ", processed="
+				+ processed + ", error=" + error + ", message=" + message + "]";
 	}
 
 }

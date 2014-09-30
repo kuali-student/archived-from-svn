@@ -23,14 +23,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-public class DefaultShoppingCartForm extends AbstractPlanItemForm implements ShoppingCartForm {
+public class DefaultShoppingCartForm extends AbstractPlanItemForm implements
+		ShoppingCartForm {
 
 	private static final long serialVersionUID = 674405491584786921L;
 
 	private String activityOfferingId;
 	private String possibleScheduleId;
 
-	private List<ShoppingCartRequest> shoppingCartRequests;
+	private List<? extends ShoppingCartRequest> shoppingCartRequests;
 	private List<CourseOption> courseOptions;
 
 	private transient List<CourseOption> removeFromCart;
@@ -52,7 +53,8 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 		if (pso == null)
 			return;
 
-		CourseHelper courseHelper = KsapFrameworkServiceLocator.getCourseHelper();
+		CourseHelper courseHelper = KsapFrameworkServiceLocator
+				.getCourseHelper();
 		Map<String, ActivityOption> byRegCode = new HashMap<String, ActivityOption>();
 		for (ActivityOption ao : pso.getActivityOptions())
 			byRegCode.put(ao.getRegistrationCode(), ao);
@@ -76,9 +78,11 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 						assert pao != null : preg;
 						List<ActivityOption> addList = addMap.get(courseId);
 						if (addList == null)
-							addMap.put(courseId, addList = new ArrayList<ActivityOption>());
+							addMap.put(courseId,
+									addList = new ArrayList<ActivityOption>());
 						// used to tie processing results in to the front end
-						((ActivityOptionInfo) pao).setUniqueId(req.getUniqueId());
+						((ActivityOptionInfo) pao).setUniqueId(req
+								.getUniqueId());
 						addList.add(pao);
 					}
 					if (sreg != null)
@@ -87,7 +91,9 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 							assert sao != null : reg;
 							List<ActivityOption> addList = addMap.get(courseId);
 							if (addList == null)
-								addMap.put(courseId, addList = new ArrayList<ActivityOption>());
+								addMap.put(
+										courseId,
+										addList = new ArrayList<ActivityOption>());
 							addList.add(sao);
 						}
 				} else {
@@ -95,11 +101,15 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 							.getScheduleBuildStrategy();
 					if (preg != null) {
 						assert !byRegCode.containsKey(preg) : preg;
-						List<ActivityOption> removeList = removeMap.get(courseId);
+						List<ActivityOption> removeList = removeMap
+								.get(courseId);
 						if (removeList == null)
-							removeMap.put(courseId, removeList = new ArrayList<ActivityOption>());
-						ActivityOptionInfo ao = (ActivityOptionInfo)
-								sb.getActivityOption(pso.getTermId(), req.getCourse().getId(), preg);
+							removeMap
+									.put(courseId,
+											removeList = new ArrayList<ActivityOption>());
+						ActivityOptionInfo ao = (ActivityOptionInfo) sb
+								.getActivityOption(pso.getTermId(), req
+										.getCourse().getId(), preg);
 						// used to tie processing results in to the front end
 						ao.setUniqueId(req.getUniqueId());
 						removeList.add(ao);
@@ -107,18 +117,22 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 					if (sreg != null)
 						for (String reg : sreg) {
 							assert !byRegCode.containsKey(preg) : reg;
-							List<ActivityOption> removeList = removeMap.get(courseId);
+							List<ActivityOption> removeList = removeMap
+									.get(courseId);
 							if (removeList == null)
-								removeMap.put(courseId,
-										removeList = new ArrayList<ActivityOption>());
-							removeList.add(sb.getActivityOption(pso.getTermId(), req.getCourse()
-									.getId(), reg));
+								removeMap
+										.put(courseId,
+												removeList = new ArrayList<ActivityOption>());
+							removeList.add(sb.getActivityOption(
+									pso.getTermId(), req.getCourse().getId(),
+									reg));
 						}
 				}
 			}
 
 		removeFromCart = new ArrayList<CourseOption>(removeMap.size());
-		for (Entry<String, List<ActivityOption>> removeEntry : removeMap.entrySet()) {
+		for (Entry<String, List<ActivityOption>> removeEntry : removeMap
+				.entrySet()) {
 			Course course = courseMap.get(removeEntry.getKey());
 			CourseOptionInfo coi = new CourseOptionInfo();
 			coi.setUniqueId(UUID.randomUUID().toString());
@@ -149,7 +163,8 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 
 			List<ActivityOption> keepList = keepMap.get(courseId);
 			if (keepList == null)
-				keepMap.put(courseId, keepList = new ArrayList<ActivityOption>());
+				keepMap.put(courseId,
+						keepList = new ArrayList<ActivityOption>());
 			keepList.add(keep);
 		}
 
@@ -169,7 +184,8 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 
 	@Override
 	public String getShoppingCartUrl() {
-		return ConfigContext.getCurrentContextConfig().getProperty("ks.ap.sb.cart.url");
+		return ConfigContext.getCurrentContextConfig().getProperty(
+				"ks.ap.sb.cart.url");
 	}
 
 	@Override
@@ -193,11 +209,12 @@ public class DefaultShoppingCartForm extends AbstractPlanItemForm implements Sho
 		keepInCart = null;
 	}
 
-	public List<ShoppingCartRequest> getShoppingCartRequests() {
+	public List<? extends ShoppingCartRequest> getShoppingCartRequests() {
 		return shoppingCartRequests;
 	}
 
-	public void setShoppingCartRequests(List<ShoppingCartRequest> shoppingCartRequests) {
+	public void setShoppingCartRequests(
+			List<? extends ShoppingCartRequest> shoppingCartRequests) {
 		this.shoppingCartRequests = shoppingCartRequests;
 		removeFromCart = null;
 		addToCart = null;

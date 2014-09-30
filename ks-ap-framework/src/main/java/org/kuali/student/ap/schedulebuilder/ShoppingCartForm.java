@@ -61,7 +61,7 @@ public interface ShoppingCartForm extends PlanItemForm {
 	 * 
 	 * @return The shopping cart request.
 	 */
-	List<ShoppingCartRequest> getShoppingCartRequests();
+	List<? extends ShoppingCartRequest> getShoppingCartRequests();
 
 	/**
 	 * Populate the shopping cart request.
@@ -69,6 +69,6 @@ public interface ShoppingCartForm extends PlanItemForm {
 	 * @param shoppingCartRequest
 	 *            The shopping cart request.
 	 */
-	void setShoppingCartRequests(List<ShoppingCartRequest> shoppingCartRequest);
+	void setShoppingCartRequests(List<? extends ShoppingCartRequest> shoppingCartRequest);
 
 }

@@ -1,6 +1,16 @@
 package org.kuali.student.ap.schedulebuilder.support;
 
-import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
@@ -25,17 +35,6 @@ import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
 import org.kuali.student.r2.common.infc.Attribute;
 import org.kuali.student.r2.core.acal.dto.TermInfo;
 import org.kuali.student.r2.core.acal.infc.Term;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 		Serializable {
@@ -91,7 +90,8 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 			// The selected flag on the course option dictates whether we are
 			// adding or removing from the shopping cart when passed to
 			// createRequests() --
-			// When item category is cart, the request will be to remove from the
+			// When item category is cart, the request will be to remove from
+			// the
 			// cart. For other items types, the request will be to add.
 			((CourseOptionInfo) courseOption).setSelected(!planItem
 					.getCategory().equals(
@@ -161,19 +161,19 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 		List<PlanItemInfo> planItems;
 		try {
 			planItems = academicPlanService.getPlanItemsInPlanByCategory(
-					learningPlanId, AcademicPlanServiceConstants.ItemCategory.CART,
-					context);
+					learningPlanId,
+					AcademicPlanServiceConstants.ItemCategory.CART, context);
 		} catch (InvalidParameterException e) {
 			throw new IllegalArgumentException("CO lookup failure", e);
 		} catch (MissingParameterException e) {
 			throw new IllegalArgumentException("CO lookup failure", e);
 		} catch (OperationFailedException e) {
 			throw new IllegalArgumentException("CO lookup failure", e);
-        } catch (PermissionDeniedException e) {
-            throw new IllegalArgumentException("CO lookup permission falure", e);
-        }
+		} catch (PermissionDeniedException e) {
+			throw new IllegalArgumentException("CO lookup permission falure", e);
+		}
 
-        for (PlanItemInfo planItem : planItems) {
+		for (PlanItemInfo planItem : planItems) {
 			if (!PlanConstants.COURSE_TYPE.equals(planItem.getRefObjectType()))
 				continue;
 
@@ -191,6 +191,7 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 			String courseId = planItem.getRefObjectId();
 			ShoppingCartRequestInfo cartRequest = new ShoppingCartRequestInfo();
 			cartRequest.setAddToCart(false);
+			cartRequest.setRemoveFromCart(true);
 			cartRequest.setCourse(KsapFrameworkServiceLocator.getCourseHelper()
 					.getCourseInfo(courseId));
 			cartRequest.setPrimaryRegistrationCode(acodes.get(0));
@@ -201,7 +202,7 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 				cartRequest.setSecondaryRegistrationCodes(Collections
 						.<String> emptyList());
 			cartRequest.setTerm(termInfo);
-			
+
 			rmap.put(courseId, cartRequest);
 		}
 
@@ -230,8 +231,9 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 		for (Entry<String, List<ActivityOption>> aoe : aomap.entrySet()) {
 			String courseId = aoe.getKey();
 
-			ShoppingCartRequestInfo cartRequest = rmap.remove(courseId);
+			ShoppingCartRequestInfo cartRequest = rmap.get(courseId);
 			if (cartRequest != null) {
+				cartRequest.setRemoveFromCart(false);
 				Set<String> acodes = new HashSet<String>();
 				acodes.add(cartRequest.getPrimaryRegistrationCode());
 				for (String regcode : cartRequest
@@ -257,10 +259,10 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 				cartRequest.setCourse(KsapFrameworkServiceLocator
 						.getCourseHelper().getCourseInfo(courseId));
 				List<ActivityOption> aol = aoe.getValue();
-                if(!aol.isEmpty()){
-				    cartRequest.setPrimaryRegistrationCode(aol.get(0)
-						.getRegistrationCode());
-                }
+				if (!aol.isEmpty()) {
+					cartRequest.setPrimaryRegistrationCode(aol.get(0)
+							.getRegistrationCode());
+				}
 				if (aol.size() > 1) {
 					List<String> scodes = new ArrayList<String>(aol.size() - 1);
 					for (ActivityOption ao : aol.subList(1, aol.size()))
@@ -273,15 +275,15 @@ public class DefaultShoppingCartStrategy implements ShoppingCartStrategy,
 				rv.add(cartRequest);
 			}
 		}
-		
+
 		rv.addAll(rmap.values());
 
 		return rv;
 	}
 
 	@Override
-	public List<ShoppingCartRequest> processRequests(
-			List<ShoppingCartRequest> requests) {
+	public List<? extends ShoppingCartRequest> processRequests(
+			List<? extends ShoppingCartRequest> requests) {
 		throw new UnsupportedOperationException(
 				"Not implemented in KS - override at the institution level");
 	}

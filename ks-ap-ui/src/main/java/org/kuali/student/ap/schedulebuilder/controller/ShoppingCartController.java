@@ -188,7 +188,7 @@ public class ShoppingCartController extends UifControllerBase {
 		if (plan == null)
 			return null;
 
-		List<ShoppingCartRequest> cartRequests = form.getShoppingCartRequests();
+		List<? extends ShoppingCartRequest> cartRequests = form.getShoppingCartRequests();
 		if (cartRequests == null || cartRequests.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
 					"No shopping cart requests posted");
