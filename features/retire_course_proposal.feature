@@ -21,6 +21,7 @@ Background:
     And I perform a full search for the retire course proposal
     Then I can see updated status of the retire course proposal
 
+@smoke_test
   Scenario: RC1.4 Verify retire course proposal can be approved and retired by Curriculum Specialist
     When I submit a retire course proposal with all fields complete as Faculty
     And I approve the retire course proposal as Department Approver
