@@ -86,14 +86,14 @@ class CmCourseProposalObject < CmBaseObject
           page.course_number.fit @approve_fields[0].course_number
         end
 
-        determine_save_action
+        determine_save_action  unless @defer_save
       elsif @copy_from_proposal
         create_proposal_by_copy_proposal unless @proposal_to_be_copied.nil?
         on CmCourseInformationPage do |page|
           page.course_information unless page.current_page('Course Information').exists?
           fill_out page, :proposal_title, :course_title
         end
-        determine_save_action
+        determine_save_action  unless @defer_save
       end
     end
   end

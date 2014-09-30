@@ -42,7 +42,8 @@ Given(/^I have an active course created for modify$/) do
                             :proposal_title => "copy of " + random_alphanums(10,'test proposal title '),
                             :course_title => "copy of " + random_alphanums(10,'course title'),
                             :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
-                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)]
+                            :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number)],
+                            :defer_save => 'true'
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
   puts "course : #{@course_proposal.submit_fields[0].subject_code}#{@course_proposal.approve_fields[0].course_number}"

@@ -171,7 +171,7 @@ class CmSubmitFieldsObject < CmBaseObject
     options = defaults.merge(opts)
     options[:outcome].create
     @outcome_list << options[:outcome]
-    determine_save_action
+    determine_save_action unless opts[:defer_save]
   end
 
 
