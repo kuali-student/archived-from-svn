@@ -148,7 +148,6 @@ When /^I add an? (\w+) course offering to my (empty )?registration cart$/ do |su
       # Clear cart and schedule
       @restResponse = make RegRestUtility
       @restResponse.clear_cart_and_schedule(term_code)
-
   end
 
   # Get original counts before adding course to cart

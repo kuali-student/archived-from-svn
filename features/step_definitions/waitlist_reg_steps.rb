@@ -56,7 +56,7 @@ Given /^I register for an? full (\w+) course offering that (has|does not have) a
     When I add an #{subj} course offering to my registration cart
     And I register for the course
     And I log in to student registration as student1
-    And I add an #{subj} course offering to my registration cart
+    And I add an #{subj} course offering to my empty registration cart
     And I register for the course
   }
 end
