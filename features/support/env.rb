@@ -1,4 +1,4 @@
-#$test_site = "http://localhost:8081/ks-with-rice-bundled-dev" #Local Env
+# $test_site = "http://localhost:8081/ks-with-rice-bundled-dev" #Local Env
 $test_site = "http://env2.ks.kuali.org"
 $test_site = ENV['TEST_SITE'] unless ENV['TEST_SITE'] == nil
 
@@ -30,6 +30,9 @@ if ENV['HEADLESS']
   headless = Headless.new(:reuse => false, :destroy_at_exit => true, :display => headless_display)
   headless.start
 end
+
+#boost timeout value
+Watir.default_timeout = 90
 
 #re-use browser for each scenario
 Before do
