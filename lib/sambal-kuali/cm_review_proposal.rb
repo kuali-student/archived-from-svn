@@ -250,6 +250,8 @@ class CmReviewProposalPage < BasePage
   value(:old_subject_code_review) { |b| b.div(id:"CM-ViewCourseView-CourseInfo-Subject-Areaold").text }
   value(:new_course_number_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixnew_control").text }
   value(:old_course_number_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-CourseNumberSuffixold").text }
+  value(:course_number_diff_highlighter) {|b|b.label(id: 'CM-ViewCourseView-CourseInfo-CourseNumberSuffixnew_label').parent.parent.attribute_value("class") }
+  value(:course_title_diff_highlighter) {|b|b.label(id: 'CM-ViewCourseView-CourseInfo-Course-Titlenew_label').parent.parent.attribute_value("class") }
 
   value(:new_description_review) { |b| b.textarea(id: "CM-ViewCourseView-CourseInfo-Descrnew_control").text }
   value(:old_description_review) { |b| b.div(id: "CM-ViewCourseView-CourseInfo-Descrold").text }
@@ -260,5 +262,9 @@ class CmReviewProposalPage < BasePage
   value(:start_term_diff_highlighter) {|b|b.start_term_element.parent.parent.attribute_value("class") }
   element(:proposal_review_column_title) {|b|b.div(id: 'CM-ViewCourse-VersionNamenew')}
   element(:original_course_review_column_title) {|b|b.div(id: 'CM-ViewCourse-VersionNameold')}
+
+  element(:new_view_course_outcome_detail) {|b|b.div(id: 'CM-ViewCourseView-Outcome-Detailsnew')}
+  element(:old_view_course_outcome_detail) {|b|b.div(id: 'CM-ViewCourseView-Outcome-Detailsold')}
+  value(:outcome_detail_diff_highlighter) { |b| b.new_view_course_outcome_detail.section(id: /.*_line0/).attribute_value("class") }
 
 end

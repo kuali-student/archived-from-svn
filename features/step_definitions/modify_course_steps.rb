@@ -223,6 +223,13 @@ Then(/^I can review the modify proposal compared to the course$/) do
     review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
     review.review_proposal_title_header.should_not include "Admin"
 
+    review.new_course_title_review.should == review.old_course_title_review
+    review.course_title_diff_highlighter.should_not include "cm-compare-highlighter"
+    review.new_course_number_review.should == review.old_course_number_review
+    review.course_number_diff_highlighter.should_not include "cm-compare-highlighter"
+    review.new_view_course_outcome_detail.text.should == review.old_view_course_outcome_detail.text
+    review.outcome_detail_diff_highlighter.should_not include "cm-compare-highlighter"
+
   end
 
 end
