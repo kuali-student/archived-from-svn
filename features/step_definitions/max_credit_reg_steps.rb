@@ -1,7 +1,6 @@
 When /^I add courses to my registration cart that would exceed the spring term credit limit$/ do
   # Spring (& Fall) credit limit is 20
-  # TODO: first make sure user's schedule is clear (using REST call in KSENROLL-13175)
-  # then add six 3-credit courses and one 4-credit (last one added to cart should fail)
+  # clear cart/schedule then add six 3-credit courses and one 4-credit (last one added to cart should fail)
   reg_group_code = "1001"
   term_code = "201101"
   term_descr = "Spring 2011"
@@ -35,8 +34,7 @@ end
 
 When /^I add courses to my registration cart that would exceed the summer term credit limit$/ do
   # Summer credit limit is 8
-  # TODO: first make sure user's schedule is clear (using REST call in KSENROLL-13175)
-  # then add two 3-credit courses and one 2.5-credit (last one added to cart should fail)
+  # clear cart/schedule then add two 3-credit courses and one 2.5-credit (last one added to cart should fail)
   reg_group_code = "1001"
   term_code = "201205"
   term_descr = "Summer I 2012"
@@ -76,6 +74,7 @@ Then /^there is a message indicating that I have registered for a credit amount 
                when "summer" then 8
              end
   on RegistrationCart do |page|
+    page.wait_until(60) { !page.registering_message.visible? } if page.registering_message.visible?
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page_status = page.result_status(@reg_request.course_code,@reg_request.reg_group_code)
     page_status.should =~ /maximum credit limit \(#{term_max}/i

@@ -322,7 +322,7 @@ end
 Then /^there is a message indicating successful registration$/ do
   on RegistrationCart do |page|
     sleep 2
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until(60) { !page.registering_message.visible? } if page.registering_message.visible?
     page.course_code_message(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.course_code_message(@reg_request.course_code,@reg_request.reg_group_code).text.should include "Success"
   end
@@ -331,7 +331,7 @@ end
 And /^the registration process has finished$/ do
   page_class = (@browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH) ? RegistrationCart : CourseSearchPage
   on page_class do |page|
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until(60) { !page.registering_message.visible? } if page.registering_message.visible?
     sleep 1
   end
 end
@@ -630,7 +630,7 @@ Then /^there is a message indicating this is the last allowable repeat$/ do
   on RegistrationCart do |page|
     page.course_code(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     sleep 1
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until(60) { !page.registering_message.visible? } if page.registering_message.visible?
     page_status = page.result_status(@reg_request.course_code, @reg_request.reg_group_code)
     page_status.should =~ /This will be your 2nd attempt of #{@reg_request.course_code}/i
     page_status.should =~ /This course cannot be attempted more than twice/i
@@ -700,7 +700,7 @@ end
 
 And /^I do not receive a warning message$/ do
   on RegistrationCart do |page|
-    page.wait_until { !page.registering_message.visible? } if page.registering_message.visible?
+    page.wait_until(60) { !page.registering_message.visible? } if page.registering_message.visible?
     page.result_status_div(@reg_request.course_code, @reg_request.reg_group_code).exist?.should == false
   end
 end
