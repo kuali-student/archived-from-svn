@@ -65,7 +65,7 @@ When(/^I search for a course in the course search page$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
+    page.course_search_results_facets.wait_until_present(120)
   end
 end
 
@@ -89,8 +89,9 @@ Then(/^the course should be there in the planner$/) do
   navigate_to_course_planner_home
 
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present(120)
-  page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
+    page.refresh
+    page.planner_courses_detail_list.wait_until_present(240)
+  page.course_code_term(@course_search_result.planned_term, @course_search_result.course_code).should==@course_search_result.course_code
   end
 end
 
@@ -112,7 +113,7 @@ When(/^I navigate to the course section details$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
-    page.course_search_results_facets.wait_until_present
+    page.course_search_results_facets.wait_until_present(60)
   end
 
   #navigate to planner page
@@ -120,7 +121,7 @@ When(/^I navigate to the course section details$/) do
     page.plan_page_click
   end
   on CoursePlannerPage do |page|
-    page.planner_courses_detail_list.wait_until_present
+    page.planner_courses_detail_list.wait_until_present(60)
   end
 
   #delete an existing course
