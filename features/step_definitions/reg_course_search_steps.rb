@@ -26,7 +26,9 @@ When /^I register directly for the registration group$/ do
   on CourseDetailsPage do |page|
     page.add_button_dropdown.click
     page.direct_register
+    page.reg_options_continue(@course_search_result.course_code,@course_search_result.selected_section).wait_until_present
     page.reg_options_continue(@course_search_result.course_code,@course_search_result.selected_section).click
+    page.register_confirm_button(@course_search_result.course_code,@course_search_result.selected_section).wait_until_present
     page.register_confirm_button(@course_search_result.course_code,@course_search_result.selected_section).click
   end
 end

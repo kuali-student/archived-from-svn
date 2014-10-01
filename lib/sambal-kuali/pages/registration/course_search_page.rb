@@ -232,8 +232,8 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
                when "credits" then
                  COLUMN_HEADINGS[COURSE_CRED]
              end
-      wait_until { sort_selector(column).visible? }
-      sort_results_by(column)
+    wait_until { sort_selector(column).present? }
+    sort_results_by(column)
   end
 
   def navigate_to_course_detail_page opts={}
@@ -270,18 +270,18 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
 
   def results_all_pages (column=COURSE_CODE)
     complete_list = []
-    first_page if first_page_on.visible?
-    if next_page_on.visible?
-      until next_page_off.visible?
+    first_page if first_page_on.present?
+    if next_page_on.present?
+      until next_page_off.present?
         partial_list = results_list column
         complete_list.concat(partial_list)
         next_page_on.wait_until_present
         next_page
-        wait_until { next_page_on.visible? || next_page_off.visible? }
+        wait_until { next_page_on.present? || next_page_off.present? }
       end
       partial_list = results_list column
       complete_list.concat(partial_list)
-      wait_until { next_page_on.visible? || next_page_off.visible? }
+      wait_until { next_page_on.present? || next_page_off.present? }
     else
       complete_list = results_list
     end
