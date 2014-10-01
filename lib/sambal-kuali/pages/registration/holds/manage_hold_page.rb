@@ -30,7 +30,7 @@ class ManageHoldIssue < BasePage
   ###                                            Manage Hold Section                                                 ###
   ######################################################################################################################
   element(:manage_hold_page) { |b| b.main(id: "KS-HoldIssue-SearchInput-Page")}
-  element(:manage_hold_section) { |b| b.manage_hold_page.div(id: "KS-HoldIssue-CriteriaSection")}
+  element(:manage_hold_section) { |b| b.manage_hold_page.section(id: "KS-HoldIssue-CriteriaSection")}
 
   ######################################################################################################################
   ###                                       Manage Hold Input Fields                                                 ###
@@ -45,7 +45,8 @@ class ManageHoldIssue < BasePage
   ######################################################################################################################
   element(:manage_hold_show_btn) { |b| b.manage_hold_section.button(id: "show_button")}
   action(:manage_hold_show){ |b| b.manage_hold_show_btn.when_present.click}
-  action(:add_hold) { |b| b.manage_hold_section.a( text: "Add Hold").when_present.click;}
+  element(:add_hold_btn) { |b| b.manage_hold_section.button(id: "addHoldButton")}
+  action(:add_hold){ |b| b.add_hold_btn.when_present.click}
   
   ######################################################################################################################
   ###                                      Manage Hold Results Table                                                 ###
