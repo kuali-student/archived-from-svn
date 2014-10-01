@@ -31,7 +31,7 @@ class CmCourseLogisticsPage < BasePage
   element(:exam_standard) { |b| b.radio(value: 'STD') }
   element(:exam_alternate) { |b| b.radio(value: 'ALT') }
   element(:exam_none) { |b| b.radio(value: 'None') }
-  element(:final_exam_rationale) { |b| b.text_field(name: 'document.newMaintainableObject.dataObject.finalExamRationale') }
+  element(:final_exam_rationale) { |b| b.textarea(id: 'CM-Proposal-Course-Logistics-FinalExamRationale_control') }
 
 #OUTCOME
   action(:add_outcome) {|b| b.button(id: 'CM-Proposal-Course-Logistics-AddOutcome').click; b.loading_extended_wait }
