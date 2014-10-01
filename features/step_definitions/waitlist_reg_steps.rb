@@ -6,6 +6,7 @@ end
 
 When /^I add myself to a waitlist for the course$/ do
   on RegistrationCart do |page|
+    page.add_to_waitlist_button(@reg_request.course_code,@reg_request.reg_group_code).wait_until_present
     page.add_to_waitlist(@reg_request.course_code,@reg_request.reg_group_code)
   end
 end
@@ -184,7 +185,7 @@ Then /^the order of students remaining on the waitlist is adjusted correctly$/ d
   student1_orig_position = @orig_waitlist.waitlist_entries["KS-10296"].waitlist_position
   student2_new_position = @updated_waitlist.waitlist_entries["KS-5964"].waitlist_position
 
-  @updated_waitlist.waitlist_entries["student1"].should == nil   # student1 dropped the course
+  @updated_waitlist.waitlist_entries["KS-10296"].should == nil   # student1 dropped the course
   student2_new_position.should == student1_orig_position    #student2 should be moved into student1's place
 end
 

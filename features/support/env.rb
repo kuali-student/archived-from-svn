@@ -32,7 +32,7 @@ if ENV['HEADLESS']
 end
 
 #boost timeout value
-Watir.default_timeout = 90
+Watir.default_timeout = 120
 
 #re-use browser for each scenario
 Before do
