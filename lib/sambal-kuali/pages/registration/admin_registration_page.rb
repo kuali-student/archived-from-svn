@@ -30,6 +30,27 @@ class AdminRegistration < BasePage
   element(:header_section) { |b| b.admin_registration_page.h1(class: "uif-headerText")}
 
   #################################################################
+  ### Student Term Issues
+  #################################################################
+  element(:term_issues_section) { |b| b.frm.div(id: "KS-AdminRegistration-TermEligibility-Results")}
+  element(:term_issues_table) { |b| b.term_issues_section.table}
+  element(:term_warning_row) { |b| b.term_issues_table.row(class: "alert-warning")}
+
+  element(:dismiss_term_btn) { |b| b.term_results_success.i(class: "ks-fontello-icon-cancel")}
+  action(:dismiss_term){ |b| b.loading.wait_while_present; b.dismiss_term_btn.click}
+
+  def get_term_warning(term_descr)
+    loading.wait_while_present
+    if term_issues_table.exists?
+      term_issues_table.rows[1..-1].each do |row|
+        return row if row.text =~ /#{term_descr}/
+      end
+    end
+
+    return nil
+  end
+
+  #################################################################
   ### Student and Term
   #################################################################
   element(:student_term_section) { |b| b.frm.div(id: "KS-AdminRegistration-StudentAndTermSection")}

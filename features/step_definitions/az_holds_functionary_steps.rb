@@ -1,3 +1,8 @@
+When(/^I apply a hold to a student by completing the required information$/) do
+  @applied_hold = create AppliedHold, :student_id => "KS-2056", :hold_issue => (make HoldIssue, :code => "ACAD01")
+  @applied_hold.apply_hold
+end
+
 And(/^I edit a hold to add an expiration date to a student record$/) do
   hold_issue = make HoldIssue, :code => "ACAD05", :first_term => "201208", :term_based => true
   @applied_hold = create AppliedHold, :student_id => "KS-1675", :find_code_by_lookup => true, :hold_issue => hold_issue

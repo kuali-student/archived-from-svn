@@ -1,5 +1,5 @@
 @nightly @blue_team
-Feature: REG.Holds Functionary using Applied Holds
+Feature: REG.AZ Holds Functionary using Applied Holds
   Hold2.8 As a Holds Functionary I want to be the appropriate Role to expire an applied hold
   Hold2.9 As a Holds Functionary I want to be the appropriate Role to delete an applied hold
   Hold2.10 As a Holds Functionary I want to be the appropriate Role to apply a hold to a student
@@ -31,10 +31,10 @@ Feature: REG.Holds Functionary using Applied Holds
 #KSENROLL-14602
   Scenario: HOLD2.10.1 Validate that a Holds Functionary can apply a hold to a student
     Given I am logged in as a Holds Functionary
-    When I apply a hold to student by completing the required information
+    When I apply a hold to a student by completing the required information
     Then the hold exists for the student with an effective date
 
   Scenario: Hold2.10.2 Validate that a non Holds Functionary can not apply a hold to a student
     Given I am logged in as a Schedule Coordinator
-    When I apply a hold to student by completing the required information
+    When I apply a hold to a student by completing the required information
     Then an apply hold authorization error message is displayed

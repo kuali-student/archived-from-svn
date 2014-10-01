@@ -77,7 +77,7 @@ class AppliedHold < DataFactory
         page.results_select_by_code(@hold_issue.code)
       end
 
-      if @hold_issue.term_based
+      if @hold_issue.term_based or options[:term_based]
         if options[:effective_term] != nil
           page.effective_term.set options[:effective_term]
           @effective_term = options[:effective_term]

@@ -14,13 +14,12 @@ class ManageAppliedHold < BasePage
   APPLIED_HOLD  = 1
   HOLD_CODE     = 2
   CATEGORY      = 3
-  CONSEQUENCE   = 4
-  STATE         = 5
-  START_DATE    = 6
-  END_DATE      = 7
-  START_TERM    = 8
-  END_TERM      = 9
-  ACTIONS       = 10
+  STATE         = 4
+  START_DATE    = 5
+  END_DATE      = 6
+  START_TERM    = 7
+  END_TERM      = 8
+  ACTIONS       = 9
 
   ######################################################################################################################
   ###                                            Manage Applied Hold Page                                ###
@@ -99,15 +98,13 @@ class ManageAppliedHold < BasePage
         return row if row.text =~ /#{code}/
       end
     end
-
     return nil
   end
 
-
   def get_applied_hold_by_code (hold_code)
-   if results_table.exists?
-     results_table.rows[1..-1].each do |row|
-        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/ and row.cells[STATE].text=~ /Active/
           return row
         end
       end
@@ -115,12 +112,10 @@ class ManageAppliedHold < BasePage
     return nil
   end
 
-
   ######################################################################################################################
   ###                                             Applied Hold page validation                                       ###
   ######################################################################################################################
   element(:validation_messages) { |b| b.manage_applied_hold_view.div(class: /alert alert-danger/)}
   value(:get_validation_message){ |b| b.loading.wait_while_present; b.validation_messages.text}
-
 
 end

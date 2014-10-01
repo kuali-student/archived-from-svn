@@ -386,7 +386,7 @@ end
 
 Then /^a warning message along with the Registered and Wait-listed courses are displayed$/ do
   on AdminRegistration do |page|
-    page.get_term_warning_message.should match /Registration for #{@admin_reg.term_description} is not currently open/
+    page.get_term_warning(@admin_reg.term_description).text.should match /#{@admin_reg.term_description}/m
     page.reg_for_section.visible?.should == true
   end
 end
