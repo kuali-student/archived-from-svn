@@ -224,6 +224,7 @@ Then(/^I can review the modify proposal compared to the course$/) do
     review.start_term_diff_highlighter.should ==  "cm-compare-highlighter"
     review.review_proposal_title_header.should_not include "Admin"
 
+    #KSCM-2779 Compare View - AFTs
     review.new_course_title_review.should == review.old_course_title_review
     review.course_title_diff_highlighter.should_not include "cm-compare-highlighter"
     review.new_course_number_review.should == review.old_course_number_review
@@ -277,7 +278,10 @@ Given(/^I submit a modify course proposal as CS by (.*?)$/) do |proposal_author|
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_standard],
                                                 exam_standard: :set,
-                                                start_term: 'Spring 2018'
+                                                start_term: 'Spring 2018',
+                                                defer_save: 'true'
+
+  determine_save_action
 
   @modify_course_proposal.submit_proposal
 
@@ -319,7 +323,10 @@ When (/^I complete the required for approve fields on the modify course proposal
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
                                                 final_exam_type: [:exam_alternate],
                                                 exam_alternate: :set,
-                                                start_term: 'Spring 2018'
+                                                start_term: 'Spring 2018',
+                                                defer_save: 'true'
+
+  determine_save_action
 
 end
 
@@ -474,7 +481,10 @@ Given(/^there is a course with a retired version$/) do
   @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
                             :course => @course,
                             :author_list => nil,
-                            :supporting_doc_list =>  nil
+                            :supporting_doc_list =>  nil,
+                            defer_save: 'true'
+
+  determine_save_action
 
   puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 
