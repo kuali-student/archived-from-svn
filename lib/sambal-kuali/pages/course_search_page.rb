@@ -105,6 +105,7 @@ class CourseSearch < BasePage
   action(:set_star_bookmark) { |b| b.star_bookmark_off.click; b.star_bookmark_on.wait_until_present  }
   #action(:clear_star_bookmark) { |b| b.star_bookmark_on.click; b.star_bookmark_off.wait_until_present }
   action(:clear_star_bookmark) { |b| b.star_bookmark_on.click }
+  element(:ksap_loader_search) {|b|b.div(class:"kasp-loader")}
   #Navigation plan to find course  and vice versa
   #action(:plan_page_click) {|b| b.div(id:"applicationNavigation").a(text:"Plan").click}
 
