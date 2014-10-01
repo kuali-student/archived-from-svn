@@ -8,7 +8,7 @@ When /^I search for a WMST course and select a registration group$/ do
     Given I log in to student registration as student2
     * I wait for student registration login to complete
   }
-  @course_search_result = make CourseSearch, :search_string=> "WMST", :course_code=> "WMST212"
+  @course_search_result = make CourseSearch, :search_string=> "WMST", :course_code=> "WMST298D"
   # Clear cart and schedule
   @restResponse = make RegRestUtility
   @restResponse.clear_cart_and_schedule(@course_search_result.term_descr)
@@ -18,7 +18,7 @@ When /^I search for a WMST course and select a registration group$/ do
 
   @course_search_result.select_ao :ao_type=>"Lecture", :ao_code=>"A"
   @course_search_result.select_ao :ao_type=>"Discussion", :ao_code=>"E"
-  @course_search_result.edit :selected_section => "1002"
+  @course_search_result.edit :selected_section => "1001"
 
 end
 
