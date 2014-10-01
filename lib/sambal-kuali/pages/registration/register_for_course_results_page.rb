@@ -21,8 +21,8 @@ class RegisterForCourseSearchResults < RegisterForCourseBase
   COURSE_DESC = 1
   COURSE_CRED = 2
 
-  def go_to_results_page (search_string)
-    page_url = "#{$test_site}/registration/index.jsp#/search/#{search_string}"
+  def go_to_results_page (search_string,term_code)
+    page_url = "#{$test_site}/registration/#/search/?searchCriteria=#{search_string}&term=#{term_code}"
     @browser.goto page_url
   end
 

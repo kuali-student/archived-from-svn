@@ -2,8 +2,8 @@ class CourseSearchMobilePage < RegisterForCourseBase
 
   page_url "#{$test_site}/registration/#/search"
 
-  def go_to_results_page (search_string)
-    new_url = "#{$test_site}/registration/index.jsp#/search/#{search_string}"
+  def go_to_results_page (search_string,term_code)
+    new_url = "#{$test_site}/registration/#/search/?searchCriteria=#{search_string}&term=#{term_code}"
     @browser.goto new_url
     course_input_div.wait_until_present
   end
