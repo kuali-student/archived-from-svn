@@ -161,6 +161,7 @@ end
 Then(/^the course should be there in the backup section of the planner$/) do
   navigate_to_course_planner_home
   on CoursePlannerPage do |page|
+    page.refresh
     page.planner_courses_detail_list.wait_until_present(90)
     page.course_code_term_backup(@course_search_result.planned_term, @course_search_result.course_code)==@course_search_result.course_code
   end
