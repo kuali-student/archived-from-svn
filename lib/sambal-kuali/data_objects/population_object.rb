@@ -179,7 +179,7 @@ class Population < DataFactory
       page.return_value child_population
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.child_population.value == child_population }
+      page.wait_until { page.child_population.value == child_population }
       page.add
     end
   end
@@ -193,7 +193,7 @@ class Population < DataFactory
       page.return_value population
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.child_population.value == population }
+      page.wait_until { page.child_population.value == population }
       page.add
     end
     population
@@ -210,7 +210,7 @@ class Population < DataFactory
       page.return_value population
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.reference_population.value == population }
+      page.wait_until { page.reference_population.value == population }
     end
   end
 
@@ -223,7 +223,7 @@ class Population < DataFactory
       page.return_value population
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.reference_population.value == population }
+      page.wait_until { page.reference_population.value == population }
     end
     population
   end
@@ -237,7 +237,7 @@ class Population < DataFactory
       page.return_value pop
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.reference_population.value == pop }
+      page.wait_until { page.reference_population.value == pop }
     end
   end
 
@@ -251,7 +251,7 @@ class Population < DataFactory
       page.return_value pop
     end
     on CreatePopulation do |page|
-      page.wait_until(30) { page.reference_population.value == pop }
+      page.wait_until { page.reference_population.value == pop }
     end
     pop
   end
