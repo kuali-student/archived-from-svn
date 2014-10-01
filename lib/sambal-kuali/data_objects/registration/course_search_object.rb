@@ -11,7 +11,8 @@ class CourseSearch < DataFactory
               :course_prefix,
               :course_level,
               :selected_section,
-              :term
+              :term_code,
+              :term_descr
 
   MOBILE_BROWSER_WIDTH = 640
   # For some unknown reason, the dimensions in some browser objects are 2x what
@@ -26,24 +27,26 @@ class CourseSearch < DataFactory
         :course_prefix => nil,
         :course_level => nil,
         :selected_section => nil,
-        :term => "Fall 2012"
+        :term_code => "201208",
+        :term_descr => "Fall 2012"
     }
     options = defaults.merge(opts)
     set_options(options)
   end
 
   def inspect
-    "Search string: #{@search_string}, course_code: #{@course_code}, course_level: #{@course_level}, course_prefix: #{@course_prefix}, selected_section: #{@selected_section}, term: #{@term}"
+    "Search string: #{@search_string}, course_code: #{@course_code}, course_level: #{@course_level}, course_prefix: #{@course_prefix}, selected_section: #{@selected_section}, term: #{@term_code} (#{@term_descr})"
   end
   
   def search opts={}
     defaults = {
         :search_string => @search_string,
+        :term_code => @term_code,
         :navigate=>false
     }
     options = defaults.merge(opts)
 
-    return nil if options[:search_string].nil?
+    return nil if (options[:search_string].nil? || options[:term_code].nil?)
 
     # Check to see whether we're in mobile or large format, and branch accordingly
     browser_size = @browser.window.size
@@ -54,7 +57,7 @@ class CourseSearch < DataFactory
 
     on page_class do |page|
       sleep 2
-      page.go_to_results_page options[:search_string]
+      page.go_to_results_page options[:search_string],options[:term_code]
     end
 
     set_options(options)
@@ -90,7 +93,8 @@ class CourseSearch < DataFactory
     edit_course_code opts
     edit_course_prefix opts
     edit_selected_section opts
-    edit_term opts
+    edit_term_code opts
+    edit_term_descr opts
   end
 
   def edit_course_level opts={}
@@ -117,11 +121,17 @@ class CourseSearch < DataFactory
   end
   private :edit_selected_section
 
-  def edit_term opts={}
-    return nil if opts[:term].nil?
+  def edit_term_code opts={}
+    return nil if opts[:term_code].nil?
     set_options(opts)
   end
-  private :edit_term
+  private :edit_term_code
+
+  def edit_term_descr opts={}
+    return nil if opts[:term_descr].nil?
+    set_options(opts)
+  end
+  private :edit_term_descr
 
   def check_sort_order_in_all_pages opts={}
     defaults = {

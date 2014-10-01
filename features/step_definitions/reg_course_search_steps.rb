@@ -296,7 +296,7 @@ When /^I search for a course in Fall 2012 and select a registration group$/ do
   @course_search_result = make CourseSearch, :search_string=> "CHEM", :course_code=> "CHEM231"
   # Clear cart and schedule
   @restResponse = make RegRestUtility
-  @restResponse.clear_cart_and_schedule(@course_search_result.term)
+  @restResponse.clear_cart_and_schedule(@course_search_result.term_descr)
 
   @course_search_result.search :navigate=>true
   @course_search_result.select_course
