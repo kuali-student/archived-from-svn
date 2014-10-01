@@ -36,6 +36,9 @@ class CmRetireCourseProposalObject < CmBaseObject
       select_course
       select_curr_review if @admin_proposal
       populate_retirement_info
+      if @defer_save
+        determine_save_action
+      end
       create_author
       create_supporting_docs
   end

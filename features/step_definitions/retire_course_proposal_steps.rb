@@ -81,8 +81,9 @@ Given(/^there is a retire course proposal created as Curriculum Specialist$/) do
                                                     :course => @course,
                                                     :start_term => @course_proposal.submit_fields[0].start_term,
                                                     :author_list => [(make CmAuthCollaboratorObject)],
-                                                    :supporting_doc_list =>  [(make CmSupportingDocsObject)]
-
+                                                    :supporting_doc_list =>  [(make CmSupportingDocsObject)],
+                                                    :defer_save => true
+  determine_save_action
 
   puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 
@@ -185,7 +186,9 @@ When(/^I create a administrative retire as Curriculum Specialist$/) do
   @retire_proposal = create CmRetireCourseProposalObject, :admin_proposal => true,
                                                     :course => @course,
                                                     :author_list => nil,
-                                                    :supporting_doc_list =>  nil
+                                                    :supporting_doc_list =>  nil,
+                                                    :defer_save => 'true'
+  determine_save_action
 
   puts "Retire Proposal Title: #{@retire_proposal.retire_proposal_title}"
 
