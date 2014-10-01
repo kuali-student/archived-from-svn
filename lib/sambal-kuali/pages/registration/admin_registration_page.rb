@@ -124,19 +124,31 @@ class AdminRegistration < BasePage
   #################################################################
   element(:registration_issues_section) { |b| b.frm.div(id: "KS-AdminRegistration-Results")}
   element(:registration_issues_table) { |b| b.registration_issues_section.table}
-  element(:results_warning_row) { |b| b.registration_issues_table.row(class: "alert-warning")}
+  element(:results_warning_rows) { |b| b.registration_issues_table.row(class: "alert-warning")}
 
   element(:dismiss_results_btn) { |b| b.registration_results_success.i(class: "ks-fontello-icon-cancel")}
   action(:dismiss_results){ |b| b.loading.wait_while_present; b.dismiss_results_btn.click}
 
-  value(:get_results_warning) { |b| b.loading.wait_while_present; b.results_warning_row.div(class: "uif-horizontalBoxGroup clearfix").text}
+  def get_results_warning
+    array = []
+    loading.wait_while_present
+    if registration_issues_table.exists?
+      registration_issues_table.rows[1..-1].each do |row|
+        if row.attribute_value('class') =~ /alert-warning/
+          array << row.text
+        end
+      end
+    end
+    array.to_s
+  end
 
   #################################################################
   ### Register Courses Table
   #################################################################
-  element(:registered_courses_div) { |b| b.frm.div( id: "KS-AdminRegistration-Registered")}
-  element(:registered_courses_table) { |b| b.registered_courses_div.table}
-  value(:registered_courses_header) { |b| b.registered_courses_div.h4(class: "uif-headerText").text}
+  element(:registered_courses_div) { |b| b.frm.div( id: "KS-AdminRegistration-RegisteredTab")}
+  element(:registered_courses_table) { |b| b.registered_courses_div.div(id: "KS-AdminRegistration-Registered").table}
+  element(:registered_header) { |b| b.registered_courses_div.div( id: "KS-AdminRegistration-RegisteredHeaderText")}
+  value(:registered_courses_header) { |b| b.registered_header.h4(class: "uif-headerText").text}
   value(:get_registered_course_code_sort){ |b| b.loading.wait_while_present; b.registered_courses_table.th(class: "sorting_asc").text}
 
   value(:get_registered_course_credits){ |row, b| b.loading.wait_while_present; row.cells[CREDITS].text}
@@ -156,6 +168,7 @@ class AdminRegistration < BasePage
         array << row
       end
     end
+
     return array
   end
 
@@ -183,19 +196,21 @@ class AdminRegistration < BasePage
     actions.a(id: /registeredDropLink_line\d+/).click
   end
 
-  def get_transaction_date_float date
-    registered_courses_rows[1..-1].each do |row|
-      loading.wait_while_present
-      row.cells[EFFECTIVE_DATE].click
-      table = transaction_date_float_table
-      table.rows(text: /#{date}/).each do |row|
-        return row.text
-      end
-    end
-    return nil
-  end
+  # def get_transaction_date_float date
+  #   loading.wait_while_present
+  #   registered_courses_rows[1..-1].each do |row|
+  #     loading.wait_while_present
+  #     row.cells[EFFECTIVE_DATE].click
+  #     table = transaction_date_float_table
+  #     table.rows(text: /#{date}/).each do |row|
+  #       return row.text
+  #     end
+  #   end
+  #   return nil
+  # end
 
   def calculate_registered_credits
+    loading.wait_while_present
     credits = 0
     registered_courses_rows.each do |row|
       credits += get_registered_course_credits(row).to_i
@@ -206,9 +221,10 @@ class AdminRegistration < BasePage
   #################################################################
   ### Wait listed Courses Table
   #################################################################
-  element(:waitlisted_courses_section) { |b| b.frm.section( id: "KS-AdminRegistration-Waitlist")}
+  element(:waitlisted_courses_section) { |b| b.registered_courses_div.div( id: "KS-AdminRegistration-Waitlist")}
   element(:waitlisted_courses_table) { |b| b.waitlisted_courses_section.table}
-  value(:waitlisted_courses_header) { |b| b.waitlisted_courses_section.h4(class: "uif-headerText").text}
+  element(:waitlisted_header) { |b| b.registered_courses_div.div( id: "KS-AdminRegistration-WaitlistedHeaderText")}
+  value(:waitlisted_courses_header) { |b| b.waitlisted_header.h4(class: "uif-headerText").text}
   value(:get_waitlisted_course_code_sort){ |b| b.waitlisted_courses_table.th(class: "sorting_asc").text}
 
   value(:get_waitlisted_course_credits){ |row, b| b.loading.wait_while_present; row.cells[CREDITS].text}
@@ -225,6 +241,7 @@ class AdminRegistration < BasePage
   end
 
   def get_waitlisted_course (course)
+    loading.wait_while_present
     if waitlisted_courses_table.exists?
       waitlisted_courses_table.rows[1..-1].each do |row|
         return row.text if row.text=~ /#{Regexp.escape(course)}/

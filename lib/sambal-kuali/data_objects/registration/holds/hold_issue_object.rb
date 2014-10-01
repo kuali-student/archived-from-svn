@@ -15,10 +15,10 @@ class HoldIssue < DataFactory
     @browser = browser
 
     defaults = {
-        :name => "Academic Advising Issue",
-        :code => "AAI",
+        :name => nil,
+        :code => nil,
         :suffix => nil,
-        :category => "Academic Advising Issue",
+        :category => nil,
         :description => nil,
         :owning_org_abbr => "UME-Wicomico",
         :org_contact => nil,
@@ -37,10 +37,7 @@ class HoldIssue < DataFactory
 
     set_options(options)
 
-    @description = ("AFT created Description " + random_alphanums(50)) if @description == nil
     @suffix = rand(999) if @suffix == nil
-    @name = "#{@name} #{@suffix}" if @name == "Academic Advising Issue"
-    @code = "#{@code.upcase}#{@suffix}" if @code == "AAI"
   end
 
   def search
@@ -51,15 +48,17 @@ class HoldIssue < DataFactory
     search
 
     on ManageHoldIssue do |page|
-      page.manage_hold_name_input.set @name
-      page.manage_hold_code_input.set @code
-      page.manage_hold_category_select.select @category
-      page.manage_hold_descr_input.set @description
-      page.manage_hold_show
+      page.manage_hold_name_input.fit @name
+      page.manage_hold_code_input.fit @code
+      page.manage_hold_category_select.fit @category
+      page.manage_hold_descr_input.fit @description
+
+      page.manage_hold_search
     end
   end
 
   def create
+
     search
 
     on ManageHoldIssue do |page|
@@ -69,10 +68,18 @@ class HoldIssue < DataFactory
     on HoldIssueCreateEdit do |page|
       page.loading.wait_while_present
 
+      @category = "Academic Advising Issue" if @category == nil
       page.category_input.select @category
+
+      @name = "Academic Advising Issue #{@suffix}" if @name == nil
       page.name_input.set @name
+
+      @code = "AAI#{@suffix}" if @code == nil
       page.code_input.set @code
+
+      @description = ("AFT created Description " + random_alphanums(40)) if @description == nil
       page.descr_input.set @description
+
       page.find_owning_org @owning_org_abbr
       page.last_applied_date_input.fit @last_applied_date
 

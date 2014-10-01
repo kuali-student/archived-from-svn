@@ -52,4 +52,3 @@ Feature: REG.Apply Hold
     Given there exists a hold with a last applied date
     When I apply the hold to a student
     Then the end date defaults to the last applied date
-

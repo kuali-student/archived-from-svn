@@ -319,9 +319,10 @@ end
 Then /^a message indicating failed eligibility for course registration appears$/ do
   on AdminRegistration do |page|
     result_warning = page.get_results_warning
-    result_warning.should match /Day and Time schedule conflict/
+    puts result_warning
+    result_warning.should match /Day and Time schedule conflict/m
 
-    if result_warning =~ /([A-Z]{4}[0-9]{3}[A-Z]*\s\([0-9]{4}\))/
+    if result_warning =~ /([A-Z]{4}[0-9]{3}[A-Z]*\s\([0-9]{4}\))/m
       @course_and_section = $1
     end
   end
@@ -444,8 +445,8 @@ end
 Then /^multiple failed eligibility messages appear$/ do
   on AdminRegistration do |page|
     result_warning = page.get_results_warning
-    result_warning.should match /Day and Time schedule conflict/
-    result_warning.should match /Reached maximum credit limit/
+    result_warning.should match /Day and Time schedule conflict/m
+    result_warning.should match /Reached maximum credit limit/m
   end
 end
 
@@ -537,15 +538,15 @@ When(/^I attempt to drop the registered course$/) do
   @admin_reg.course_section_codes[0].delete_course :confirm_drop => true
 end
 
-Then(/^a message appears indicating that I need to allow or deny the drop of the course$/) do
-  on AdminRegistration do |page|
-    page.loading.wait_while_present
-    page.get_results_warning.should match /Registration is not currently open/
-    page.deny_registration_issue
-
-    page.student_term_go
-  end
-end
+# Then(/^a message appears indicating that I need to allow or deny the drop of the course$/) do
+#   on AdminRegistration do |page|
+#     page.loading.wait_while_present
+#     page.get_results_warning.should match /Registration is not currently open/m
+#     page.deny_registration_issue
+#
+#     page.student_term_go
+#   end
+# end
 
 When /^I attempt to drop a registered course$/ do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2020"
@@ -670,7 +671,7 @@ end
 And /^a message appears indicating that the updated course failed eligibility$/ do
   on AdminRegistration do |page|
     page.loading.wait_while_present
-    page.get_results_warning.should match /Reached maximum credit limit/
+    page.get_results_warning.should match /Reached maximum credit limit/m
 
     page.student_term_go
   end

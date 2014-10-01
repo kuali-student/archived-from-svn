@@ -1,5 +1,5 @@
 @nightly @blue_team
-Feature: REG.Create Hold
+Feature: REG.Create Hold Issue
   Hold 1.1 As an admin I want to create the general information for a hold so that the hold can be added to the catalog of holds
   Hold 1.2 As an admin I want to add which Organizations can apply and expire a hold in the catalog so that only those
            people in those Organizations have access to apply and expire the hold
