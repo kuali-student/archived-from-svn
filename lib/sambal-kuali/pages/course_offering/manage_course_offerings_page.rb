@@ -151,6 +151,11 @@ class ManageCourseOfferings < BasePage
     raise "error in target_row: #{cluster_private_name}.#{code} not found"
   end
 
+  def ao_exists?(code, cluster_private_name = :default_cluster)
+    row = activity_offering_results_table(cluster_private_name).row(text: /\b#{Regexp.escape(code)}\b/)
+    return row.exists?
+  end
+
   #for future use
   def ao_db_id(code, cluster_private_name = :default_cluster)
     target_row(code, cluster_private_name).cells[AO_CODE].link.attribute_value("href").scan(/aoInfo.id=(.*)&dataObjectClassName/)[0][0]
@@ -158,6 +163,10 @@ class ManageCourseOfferings < BasePage
 
   def ao_status(code, cluster_private_name = :default_cluster)
     target_row(code, cluster_private_name).cells[AO_STATUS].text
+  end
+
+  def ao_instructor(code, cluster_private_name = :default_cluster)
+    target_row(code, cluster_private_name).cells[AO_INSTRUCTOR].text
   end
 
   #gets the first row for a given status

@@ -219,14 +219,17 @@ class ActivityOfferingObject < DataFactory
     si_days = ao_table_row.cells[ManageCourseOfferings::AO_DAYS].text.split("\n")
     st_times = ao_table_row.cells[ManageCourseOfferings::AO_ST_TIME].text.split("\n")
     end_times = ao_table_row.cells[ManageCourseOfferings::AO_END_TIME].text.split("\n")
-    fac_names = ao_table_row.cells[ManageCourseOfferings::AO_BLDG].text.split("\n")
-    #get facility long name from tool tip
-    div_id = ao_table_row.cells[ManageCourseOfferings::AO_BLDG].div.id
-    ao_table_row.cells[ManageCourseOfferings::AO_BLDG].div.fire_event 'mouseover'
-    popup_text = on(ManageCourseOfferings).div(id: /jquerybubblepopup/, data_for: "#{div_id}").table.text
+    fac_names_text = ao_table_row.cells[ManageCourseOfferings::AO_BLDG].text
     fac_long_names = []
-    if !popup_text.nil? && popup_text != ''
-      fac_long_names = popup_text.split("\n")
+    if fac_names_text != ''
+      fac_names = fac_names_text.split("\n")
+      #get facility long name from tool tip
+      div_id = ao_table_row.cells[ManageCourseOfferings::AO_BLDG].div.id
+      ao_table_row.cells[ManageCourseOfferings::AO_BLDG].div.fire_event 'mouseover'
+      popup_text = on(ManageCourseOfferings).div(id: /jquerybubblepopup/, data_for: "#{div_id}").table.text
+      if !popup_text.nil? && popup_text != ''
+        fac_long_names = popup_text.split("\n")
+      end
     end
     rooms = ao_table_row.cells[ManageCourseOfferings::AO_ROOM].text.split("\n")
 

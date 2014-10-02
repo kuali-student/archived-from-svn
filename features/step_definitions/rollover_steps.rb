@@ -133,16 +133,16 @@ And /^I setup a second target term with those subterms setup$/ do
   @calendar_target2.add_term @term_target2
 
   @calendar_target2.terms[0].add_subterm (make AcademicTermObject,
-                                      :parent_calendar => @calendar_target2,
-                                      :term_type=> "Half Fall 1",
-                                      :subterm => true)
+                                               :parent_calendar => @calendar_target2,
+                                               :term_type=> "Half Fall 1",
+                                               :subterm => true)
 
   @calendar_target2.terms[0].add_subterm (make AcademicTermObject,
                                                :parent_calendar => @calendar_target2,
                                                :term_type=> "Half Fall 2",
                                                :subterm => true)
 
-    @calendar_target2.terms[0].subterms.each do |subterm|
+  @calendar_target2.terms[0].subterms.each do |subterm|
     subterm.make_official
   end
 
@@ -156,10 +156,10 @@ And /^I rollover the subterms' parent term to a target term with those subterms 
   @calendar_target.add_term term_target
 
   @calendar_target.terms[0].add_subterm  (make AcademicTermObject, :parent_calendar => @calendar_target, :term_type=> "Half Fall 1",
-                                 :parent_term=> "Fall Term", :subterm => true)
+                                               :parent_term=> "Fall Term", :subterm => true)
 
   @calendar_target.terms[0].add_subterm (make AcademicTermObject, :parent_calendar => @calendar_target, :term_type=> "Half Fall 2",
-                                 :parent_term=> "Fall Term", :subterm => true)
+                                              :parent_term=> "Fall Term", :subterm => true)
 
   @calendar_target.terms[0].subterms.each do |subterm|
     subterm.make_official
@@ -254,37 +254,37 @@ Then /^the Activity Offerings are assigned to the target subterms$/ do
   @course_offering_target = make CourseOffering, :course => @course_offering.course, :term => @calendar_target.terms[0].term_code
   @course_offering_target.manage
 
-  @activity_offering_target = make ActivityOfferingObject, :code => @activity_offering.code, :parent_cluster => @course_offering_target.default_cluster
+  activity_offering_target = make ActivityOfferingObject, :code => activity_offering.code, :parent_cluster => @course_offering_target.default_cluster
   on ManageCourseOfferings do |page|
-    page.has_subterm_icon(@activity_offering_target.code).should == true
-    page.view_activity_offering(@activity_offering_target.code)
+    page.has_subterm_icon(activity_offering_target.code).should == true
+    page.view_activity_offering(activity_offering_target.code)
   end
 
   on ActivityOfferingInquiry do |page|
-    page.subterm.should == @activity_offering.subterm
+    page.subterm.should == activity_offering.subterm
     page.close
   end
 
-  @activity_offering_target.edit :defer_save => true
+  activity_offering_target.edit :defer_save => true
   on ActivityOfferingMaintenance do |page|
-    page.subterm.should == @activity_offering.subterm
+    page.subterm.should == activity_offering.subterm
     page.cancel
   end
 
-  @activity_offering_target2 = make ActivityOfferingObject, :code => @activity_offering2.code, :parent_cluster => @course_offering_target.default_cluster
+  activity_offering_target2 = make ActivityOfferingObject, :code => activity_offering2.code, :parent_cluster => @course_offering_target.default_cluster
   on ManageCourseOfferings do |page|
-    page.has_subterm_icon(@activity_offering_target2.code).should == true
-    page.view_activity_offering(@activity_offering_target2.code)
+    page.has_subterm_icon(activity_offering_target2.code).should == true
+    page.view_activity_offering(activity_offering_target2.code)
   end
 
   on ActivityOfferingInquiry do |page|
-    page.subterm.should == @activity_offering2.subterm
+    page.subterm.should == activity_offering2.subterm
     page.close
   end
 
-  @activity_offering_target2.edit :defer_save => true
+  activity_offering_target2.edit :defer_save => true
   on ActivityOfferingMaintenance do |page|
-    page.subterm.should == @activity_offering2.subterm
+    page.subterm.should == activity_offering2.subterm
     page.cancel
   end
 end
@@ -296,10 +296,10 @@ end
 Then /^the Activity Offerings for the copied CO are assigned to the target subterms$/ do
   @course_offering_copy.manage
 
-  @activity_offering_copy = make ActivityOfferingObject, :code =>"A", :parent_cluster => @course_offering_copy.default_cluster
+  activity_offering_copy = make ActivityOfferingObject, :code =>"A", :parent_cluster => @course_offering_copy.default_cluster
   on ManageCourseOfferings do |page|
-    page.has_subterm_icon(@activity_offering_copy.code).should == true
-    page.view_activity_offering(@activity_offering_copy.code)
+    page.has_subterm_icon(activity_offering_copy.code).should == true
+    page.view_activity_offering(activity_offering_copy.code)
   end
 
   on ActivityOfferingInquiry do |page|
@@ -307,16 +307,16 @@ Then /^the Activity Offerings for the copied CO are assigned to the target subte
     page.close
   end
 
-  @activity_offering_copy.edit :defer_save => true
+  activity_offering_copy.edit :defer_save => true
   on ActivityOfferingMaintenance do |page|
     page.subterm.should == @calendar_target2.terms[0].subterms[0].subterm_type
     page.cancel
   end
 
-  @activity_offering_target2 = make ActivityOfferingObject, :code => "B", :parent_cluster => @course_offering_copy.default_cluster
+  activity_offering_target2 = make ActivityOfferingObject, :code => "B", :parent_cluster => @course_offering_copy.default_cluster
   on ManageCourseOfferings do |page|
-    page.has_subterm_icon(@activity_offering_target2.code).should == true
-    page.view_activity_offering(@activity_offering_target2.code)
+    page.has_subterm_icon(activity_offering_target2.code).should == true
+    page.view_activity_offering(activity_offering_target2.code)
   end
 
   on ActivityOfferingInquiry do |page|
@@ -324,7 +324,7 @@ Then /^the Activity Offerings for the copied CO are assigned to the target subte
     page.close
   end
 
-  @activity_offering_target2.edit :defer_save => true
+  activity_offering_target2.edit :defer_save => true
   on ActivityOfferingMaintenance do |page|
     page.subterm.should == @calendar_target2.terms[0].subterms[1].subterm_type
     page.cancel
@@ -357,7 +357,360 @@ And /^the exam offerings are successfully generated$/ do
     page.co_eo_bldg.should == @matrix.rules[0].facility
     page.co_eo_room.should == @matrix.rules[0].room
   end
+end
+
+Given(/^a term has been rolled over$/) do
+  @rollover = make Rollover, :source_term => Rollover::SOC_STATES_SOURCE_TERM, :target_term => 202300
+  if !@rollover.completed?
+    @rollover.perform_rollover
+    @rollover.wait_for_rollover_to_complete
+    @rollover.release_to_depts
+  end
+end
+
+Given(/^that a default institutional rollover configuration is defined in the GES with a value of 'copy' for scheduling information$/) do
+  #no UI for this
+end
+
+And(/^'copy' for Bldg\/Rm information$/) do
+  #no UI for this
+end
+
+And(/^'not copy' for canceled AOs$/) do
+  #no UI for this
+end
+
+And(/^'copy' for instructional assignments$/) do
+  #no UI for this
+end
+
+When(/^the rollover is executed for a term with the specified course offering$/) do
+  @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
+  term = make AcademicTermObject, :parent_calendar => @calendar
+  @calendar.add_term term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "ENGL462"
+  course_offering.delivery_format_list[0].format = "Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target
+  @calendar_target.add_term term_target
+  term_target.make_official
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
+end
+
+And(/^the rollover is executed for a term with course offerings that are not covered by a more granular rollover rule$/) do
+  @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
+  term = make AcademicTermObject, :parent_calendar => @calendar
+  @calendar.add_term term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "CHEM105"
+  course_offering.delivery_format_list[0].format = "Discussion/Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target
+  @calendar_target.add_term term_target
+  term_target.make_official
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
+end
+
+Then(/^course offerings? (?:is|are) copied from the source term to the target term$/) do
+  #confirm exist on source term
+  @co_list.each do |co|
+    co.term = @calendar.terms[0].term_code
+    co.exists?.should be_true
+  end
+
+  @co_list.each do |co|
+    #confirm exist on source term
+    co.term = @calendar_target.terms[0].term_code
+    co.exists?.should be_true
+  end
+end
+
+And(/^the scheduling information including Bldg\/Rm info is copied to the target term AOs$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      ao_row = page.target_row('B')
+      existing_sched_info = co.get_ao_list[1].get_existing_scheduling_information(ao_row)[0]
+      existing_sched_info.days.should == co.get_ao_list[1].requested_scheduling_information_list[0].days
+      existing_sched_info.start_time.should == co.get_ao_list[1].requested_scheduling_information_list[0].start_time
+      existing_sched_info.start_time_ampm.should == co.get_ao_list[1].requested_scheduling_information_list[0].start_time_ampm
+      existing_sched_info.end_time.should == co.get_ao_list[1].requested_scheduling_information_list[0].end_time
+      existing_sched_info.end_time_ampm.should == co.get_ao_list[1].requested_scheduling_information_list[0].end_time_ampm
+      existing_sched_info.facility.should == co.get_ao_list[1].requested_scheduling_information_list[0].facility
+      existing_sched_info.room.should == co.get_ao_list[1].requested_scheduling_information_list[0].room
+    end
+  end
+end
+
+And(/^the scheduling information excluding Bldg\/Rm info is copied to the target term AOs$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      ao_row = page.target_row('B')
+      existing_sched_info = co.get_ao_list[1].get_existing_scheduling_information(ao_row)[0]
+      existing_sched_info.days.should == co.get_ao_list[1].requested_scheduling_information_list[0].days
+      existing_sched_info.start_time.should == co.get_ao_list[1].requested_scheduling_information_list[0].start_time
+      existing_sched_info.start_time_ampm.should == co.get_ao_list[1].requested_scheduling_information_list[0].start_time_ampm
+      existing_sched_info.end_time.should == co.get_ao_list[1].requested_scheduling_information_list[0].end_time
+      existing_sched_info.end_time_ampm.should == co.get_ao_list[1].requested_scheduling_information_list[0].end_time_ampm
+      existing_sched_info.facility.should == ''
+      existing_sched_info.room.should == ''
+    end
+  end
+end
 
 
+And(/^activity offerings are copied to the target term excluding those in cancelled status$/) do
+  @co_list.each do |co|
+    #confirm exist on source term
+    co.term = @calendar.terms[0].term_code
+    co.manage
 
+    on ManageCourseOfferings do |page|
+      page.ao_status('A').should == ActivityOfferingObject::CANCELED_STATUS
+      page.ao_status('B').should == ActivityOfferingObject::APPROVED_STATUS
+    end
+  end
+
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      page.ao_exists?('A').should be_false
+      page.ao_status('B').should == ActivityOfferingObject::DRAFT_STATUS
+    end
+  end
+end
+
+And(/^instructional assignments are copied to the target term AOs$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      page.ao_instructor('B').should == co.get_ao_list[1].personnel_list[0].name
+    end
+  end
+end
+
+And(/^activity offerings are copied to the target term including those in cancelled status$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      page.ao_status('A').should == ActivityOfferingObject::DRAFT_STATUS
+      page.ao_status('B').should == ActivityOfferingObject::DRAFT_STATUS
+    end
+  end
+end
+
+Given(/^that a subject level rollover configuration is defined for ENGL in the GES with no value for scheduling information$/) do
+  #no UI for this
+end
+
+And(/^'not copy' for instructional assignments$/) do
+  #no UI for this
+end
+
+And(/^'copy' for canceled AOs$/) do
+  #no UI for this
+end
+
+And(/^the rollover is executed for a term with course offerings with ENGL subject code that are not covered by a more granular rollover rule$/) do
+  @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
+  term = make AcademicTermObject, :parent_calendar => @calendar
+  @calendar.add_term term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "ENGL211"
+  course_offering.delivery_format_list[0].format = "Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target
+  @calendar_target.add_term term_target
+  term_target.make_official
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
+end
+
+And(/^the instructional assignments are not copied to the target term AOs$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      page.ao_instructor('A').should == co.get_ao_list[0].personnel_list[0].name
+      page.ao_instructor('B').should == co.get_ao_list[1].personnel_list[0].name
+    end
+  end
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      page.ao_instructor('A').should == ''
+      page.ao_instructor('B').should == ''
+    end
+  end
+end
+
+Given(/^that a course code rollover configuration is defined for a specific course in the GES with a value of 'not copy' for scheduling information$/) do
+  #no UI for this -- ENGL462 is configured in GES
+end
+
+And(/^the scheduling information is not copied to the target term AOs$/) do
+  @co_list.each do |co|
+    #confirm exist on target term
+    co.term = @calendar_target.terms[0].term_code
+    co.manage
+
+    on ManageCourseOfferings do |page|
+      ao_row = page.target_row('B')
+      existing_sched_info = co.get_ao_list[1].get_existing_scheduling_information(ao_row)[0]
+      existing_sched_info.nil?.should be_true
+    end
+  end
 end
