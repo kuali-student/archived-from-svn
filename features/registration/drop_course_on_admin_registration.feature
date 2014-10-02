@@ -8,6 +8,12 @@ Feature: REG.Drop Course on Admin Registration
 
 #KSENROLL-13778
   Scenario: CR23.4.1 Verify that a student is no longer registered for a course after it has been dropped
-    When I attempt to drop a registered course
+    When I drop a registered course
     Then the student is no longer registered for the course
     And a message appears indicating that the course has been successfully dropped
+
+ #KSENROLL-15089
+  @pending
+  Scenario: CR-Drop.1 Verify that invalid drop period is displayed for a course after it has been dropped
+    When I attempt to drop a registered course
+    Then a message appears indicating that the drop period is invalid

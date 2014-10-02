@@ -548,7 +548,7 @@ end
 #   end
 # end
 
-When /^I attempt to drop a registered course$/ do
+When /^I drop a registered course$/ do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2020"
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL201",
                                                              :section=> "1001", :register => true,
@@ -734,6 +734,24 @@ When /^I allow the edited course to be updated$/ do
   on AdminRegistration do |page|
     page.confirm_registration_issue
     page.loading.wait_while_present
+  end
+end
+
+When(/^I attempt to drop a registered course$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2014", :term_code => "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "CHEM399C",
+                                                             :section=> "1001", :register => true,
+                                                             :confirm_registration => false)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true,
+                                                          :confirm_course_credits => "2.0"
+
+  @admin_reg.course_section_codes[0].delete_course :confirm_drop => true, :effective_date => tomorrow[:date_w_slashes]
+end
+
+Then(/^a message appears indicating that the drop period is invalid$/) do
+  on AdminRegistration do |page|
+    page.loading.wait_while_present
+    page.get_results_warning.should match /Last day to drop was/
   end
 end
 

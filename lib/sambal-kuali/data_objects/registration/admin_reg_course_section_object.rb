@@ -72,12 +72,12 @@ class ARCourseSectionObject < DataFactory
 
     on AdminRegistration do |page|
       page.loading.wait_while_present
-      if options[:confirm_course_credits] != nil and page.set_confirm_course_credits(@course_code).exists?
+      if options[:confirm_course_credits] != nil and page.set_confirm_course_credits(@course_code, @section).exists?
         page.set_confirm_course_credits(@course_code, @section).select options[:confirm_course_credits]
         @requested_credits = options[:confirm_course_credits]
       end
 
-      if options[:confirm_course_reg_options] != nil and page.set_confirm_course_reg_options(@course_code).exists?
+      if options[:confirm_course_reg_options] != nil and page.set_confirm_course_reg_options(@course_code, @section).exists?
         page.set_confirm_course_reg_options(@course_code, @section).select options[:confirm_course_reg_options]
         @requested_reg_options = options[:confirm_course_reg_options]
       end
