@@ -324,7 +324,7 @@ class RegisterForCourseBase < BasePage
   element(:logout_button) { |b| b.cr_header_div.button(id: "logout") }
   action(:logout) { |b| b.logout_button.click }
 
-  element(:reg_locked_message) { |b| b.span(id: "reg_locked_message") }
+  element(:reg_locked_message) { |b| b.div(id: "reg_locked_message") }
 
   def select_term(term)
     term_select.select(term)
@@ -344,7 +344,7 @@ class LargeFormatRegisterForCourseBase < BasePage
   element(:logout_link) { |b| b.li(id:"reg_user_menu_logout") }
   action(:logout) { |b| b.logout_link.click }
 
-  element(:reg_locked_message) { |b| b.span(id: "reg_locked_message").text }
+  element(:reg_locked_message) { |b| b.div(id: "reg_locked_message").text }
 
   def select_term(term)
     term_select.select(term)
