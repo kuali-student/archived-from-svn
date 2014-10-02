@@ -23,7 +23,7 @@ class ARCourseSectionObject < DataFactory
         :confirm_registration => false,
         :requested_credits => nil,
         :requested_reg_options => nil,
-        :requested_effective_date => nil
+        :requested_effective_date => right_now[:date_w_slashes]
     }
     options = defaults.merge(opts)
 
@@ -41,7 +41,8 @@ class ARCourseSectionObject < DataFactory
         page.section_code_input.when_present.set @section
 
         if @register
-          page.wait_until { page.course_register_btn.visible? }
+          wait_until { page.course_register_btn.visible? }
+
           page.course_register
 
           confirm_registration if @confirm_registration
@@ -72,6 +73,8 @@ class ARCourseSectionObject < DataFactory
 
     on AdminRegistration do |page|
       page.loading.wait_while_present
+      wait_until { page.confirm_registration_btn.visible? }
+
       if options[:confirm_course_credits] != nil and page.set_confirm_course_credits(@course_code, @section).exists?
         page.set_confirm_course_credits(@course_code, @section).select options[:confirm_course_credits]
         @requested_credits = options[:confirm_course_credits]
@@ -92,14 +95,16 @@ class ARCourseSectionObject < DataFactory
       else
         page.cancel_registration
       end
-      page.loading.wait_while_present
-
-      page.wait_until(60) { page.course_register_btn.visible? }
-      page.loading.wait_while_present
 
       if page.growl_div.exists? and options[:dismiss_result]
-        page.growl_div.div(class: "jGrowl-close").click
+        begin
+          page.growl_div.div(class: "jGrowl-close").when_present.click
+        rescue Watir::Wait::TimeoutError(30)
+          puts "Growl message appeared after registering course, but could not click close button"
+          sleep 5 #Adding sleep so that the growl message gets more time to disappear on its own
+        end
       end
+      page.loading.wait_while_present
     end
   end
 
@@ -117,7 +122,9 @@ class ARCourseSectionObject < DataFactory
 
     on AdminRegistration do |page|
       page.edit_registered_course @course_code, @section
-      page.loading.wait_while_present(60)
+
+      page.loading.wait_while_present
+      wait_until { page.course_edit_save_btn.visible? }
 
       if options[:edit_course_credits] != nil and page.set_edit_course_credits.exists?
         page.set_edit_course_credits.select options[:edit_course_credits]
@@ -156,7 +163,9 @@ class ARCourseSectionObject < DataFactory
 
     on AdminRegistration do |page|
       page.delete_registered_course @course_code, @section
+
       page.loading.wait_while_present
+      wait_until { page.confirm_course_drop_btn.visible? }
 
       if options[:drop_course_effective_date] != nil
         page.drop_registered_effective_date.set options[:drop_course_effective_date]

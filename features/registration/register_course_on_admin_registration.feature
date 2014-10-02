@@ -59,7 +59,6 @@ Feature: REG.Register Course on Admin Registration
     But the student is still registered for the course
 
 #KSENROLL-15091
-  @pending
   Scenario: CR-Register.4 Verify that a message appears when registering a student for a course more than once in a term
     When I register a student for the course more than once
     Then an already registered message appears

@@ -104,6 +104,7 @@ class AdminRegistration < BasePage
   action(:course_register){ |b| b.loading.wait_while_present; b.course_register_btn.click}
   element(:course_delete_btn) { |index, b| b.reg_for_section.button(id: /KS-AdminRegistration-RegFor_del_line#{index}/)}
   action(:course_delete) { |index, b| b.loading.wait_while_present; b.course_delete_btn(index).click}
+  element(:registering_in_progress) { |b| b.reg_for_section.div(id: "KS-AdminRegistration-Registering").img(class: "uif-image", alt: "Registration in progress.....")}
 
   def get_blank_row(cell_type)
     loading.wait_while_present
@@ -152,7 +153,6 @@ class AdminRegistration < BasePage
 
   def get_results_warning
     array = []
-    loading.wait_while_present
     if registration_issues_table.exists?
       registration_issues_table.rows[1..-1].each do |row|
         if row.attribute_value('class') =~ /alert-warning/
@@ -216,19 +216,6 @@ class AdminRegistration < BasePage
     actions = registered_courses_table.row(text: /#{course} \(#{section}\)/).cells[ACTIONS]
     actions.a(id: /registeredDropLink_line\d+/).click
   end
-
-  # def get_transaction_date_float date
-  #   loading.wait_while_present
-  #   registered_courses_rows[1..-1].each do |row|
-  #     loading.wait_while_present
-  #     row.cells[EFFECTIVE_DATE].click
-  #     table = transaction_date_float_table
-  #     table.rows(text: /#{date}/).each do |row|
-  #       return row.text
-  #     end
-  #   end
-  #   return nil
-  # end
 
   def calculate_registered_credits
     loading.wait_while_present
@@ -328,7 +315,7 @@ class AdminRegistration < BasePage
   #################################################################
   ### Drop Course Dialog
   #################################################################
-  element(:drop_course_dialog) { |b| b.section(id: "dropCourseDialog")}
+  element(:drop_course_dialog) { |b| b.frm.section(id: "dropCourseDialog")}
   element(:drop_registered_effective_date) { |b| b.drop_course_dialog.text_field(name: "pendingDropCourse.registeredDropDate")}
 
   element(:confirm_course_drop_btn) { |b| b.drop_course_dialog.button(id: "confirmRegDropBtn")}

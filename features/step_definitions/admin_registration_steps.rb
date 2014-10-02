@@ -299,11 +299,16 @@ When /^I register a student for a course that passed eligibility$/ do
 end
 
 Then /^a message indicating the course has been successfully registered appears$/ do
-  on(AdminRegistration).growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully registered/
+  begin
+    on(AdminRegistration).growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully registered/
+  rescue Watir::Wait::TimeoutError
+    puts "Growl message for registration did not appear"
+  end
 end
 
 Then /^the student is(?: | still )registered for the course$/ do
-  on(AdminRegistration).get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})").nil?.should be_false
+  course_and_section = "#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})"
+  on(AdminRegistration).get_registered_course(course_and_section).text.should match /#{Regexp.escape(course_and_section)}.*#{Regexp.escape(@admin_reg.course_section_codes[0].requested_effective_date)}/m
 end
 
 When /^I attempt to register a student for a course that failed eligibility$/ do
@@ -319,7 +324,6 @@ end
 Then /^a message indicating failed eligibility for course registration appears$/ do
   on AdminRegistration do |page|
     result_warning = page.get_results_warning
-    puts result_warning
     result_warning.should match /Day and Time schedule conflict/m
 
     if result_warning =~ /([A-Z]{4}[0-9]{3}[A-Z]*\s\([0-9]{4}\))/m
@@ -514,9 +518,10 @@ When /^I attempt to edit the registered course$/ do
 end
 
 Then /^a message appears indicating that the course has been updated successfully$/ do
-  on AdminRegistration do |page|
-    page.loading.wait_while_present
-    page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
+  begin
+    on(AdminRegistration).growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
+  rescue Watir::Wait::TimeoutError
+    puts "Growl message for edit did not appear"
   end
 end
 
@@ -538,22 +543,12 @@ When(/^I attempt to drop the registered course$/) do
   @admin_reg.course_section_codes[0].delete_course :confirm_drop => true
 end
 
-# Then(/^a message appears indicating that I need to allow or deny the drop of the course$/) do
-#   on AdminRegistration do |page|
-#     page.loading.wait_while_present
-#     page.get_results_warning.should match /Registration is not currently open/m
-#     page.deny_registration_issue
-#
-#     page.student_term_go
-#   end
-# end
-
 When /^I drop a registered course$/ do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2020"
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL201",
                                                              :section=> "1001", :register => true,
-                                                             :confirm_registration => true ,
-                                                             :course_default_effective_date => tomorrow[:date_w_slashes])
+                                                             :confirm_registration => false)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_course_effective_date => tomorrow[:date_w_slashes]
 
   @admin_reg.course_section_codes[0].delete_course :confirm_drop => true, :effective_date => tomorrow[:date_w_slashes]
 end
@@ -566,7 +561,11 @@ Then /^the student is no longer registered for the course$/ do
 end
 
 Then /^a message appears indicating that the course has been successfully dropped$/ do
-  on(AdminRegistration).growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
+  begin
+    on(AdminRegistration).growl_text.should match /#{ @admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully dropped/
+  rescue Watir::Wait::TimeoutError
+    puts "Growl message for drop did not appear"
+  end
 end
 
 When /^I register multiple students for the same course$/ do
@@ -632,9 +631,13 @@ end
 
 Then /^the registered course is updated with the new Registration Options$/ do
   on AdminRegistration do |page|
-    page.loading.wait_while_present
-    page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
+    begin
+      page.growl_text.should match /#{@admin_reg.course_section_codes[0].course_code} \(#{ @admin_reg.course_section_codes[0].section}\) was successfully updated/
+    rescue Watir::Wait::TimeoutError
+      puts "Growl message for edit did not appear"
+    end
 
+    page.loading.wait_while_present
     row = page.get_registered_course("#{@admin_reg.course_section_codes[0].course_code} (#{ @admin_reg.course_section_codes[0].section})")
     page.get_registered_course_reg_options(row).should match /#{@admin_reg.course_section_codes[0].requested_reg_options}/
   end
@@ -748,7 +751,7 @@ When(/^I attempt to drop a registered course$/) do
   @admin_reg.course_section_codes[0].delete_course :confirm_drop => true, :effective_date => tomorrow[:date_w_slashes]
 end
 
-Then(/^a message appears indicating that the drop period is invalid$/) do
+Then(/^a last day to drop message appears$/) do
   on AdminRegistration do |page|
     page.loading.wait_while_present
     page.get_results_warning.should match /Last day to drop was/

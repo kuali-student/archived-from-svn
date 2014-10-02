@@ -46,7 +46,6 @@ Feature: REG.Edit Course on Admin Registration
     Then a message appears indicating that the course has been updated successfully
 
 #KSENROLL-15090
-  @pending
   Scenario: CR-Edit.1 Verify that a message appears when editing a registered course after the edit period has passed
     When I attempt to edit a registered course after edit period has passed
     Then a last day to modify message appears
