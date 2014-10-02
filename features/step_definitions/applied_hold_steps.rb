@@ -74,8 +74,8 @@ When /^I attempt to expire the hold with an expiration term earlier than the eff
   @applied_hold.expire_hold :exp_success => false, :expiration_term => "201201"
 end
 
-Then /^an expiration term error message is displayed stating "(.*?)"$/ do |exp_msg|
-  on(ExpireAppliedHold).get_expire_error_msg.should match /#{Regexp.escape(exp_msg)} #{@hold_issue.first_term}/m
+Then /^an earlier than applied effective term error message is displayed$/ do
+  on(ExpireAppliedHold).get_expire_error_msg.should match /Applied expiration term should not be earlier than Applied effective Term: #{@hold_issue.first_term}/m
 end
 
 When /^I expire the hold with an expiration term that is after the effective term$/ do
@@ -104,7 +104,7 @@ Then(/^an effective date error message is displayed$/) do
 end
 
 Then(/^an invalid effective date range message is displayed$/) do
-  on(ApplyHold).get_apply_error_msg.should match /Has invalid date range. #{@applied_hold.effective_date} must be before the Hold's Last Applied Date #{@hold_issue.last_applied_date}/m
+  on(ApplyHold).get_apply_error_msg.should match /Has invalid date range\. #{@applied_hold.effective_date} must be before the Hold's Last Applied Date #{@hold_issue.last_applied_date}/m
 end
 
 Then(/^the end term defaults to the last applied term$/) do

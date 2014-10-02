@@ -95,15 +95,18 @@ class ARCourseSectionObject < DataFactory
       else
         page.cancel_registration
       end
+      page.loading.wait_while_present
 
-      if page.growl_div.exists? and options[:dismiss_result]
-        begin
+      begin
+        wait_until { page.growl_message_div.exists? }
+
+        if page.growl_div.exists? and options[:dismiss_result]
           page.growl_div.div(class: "jGrowl-close").when_present.click
-        rescue Watir::Wait::TimeoutError(30)
-          puts "Growl message appeared after registering course, but could not click close button"
-          sleep 5 #Adding sleep so that the growl message gets more time to disappear on its own
         end
+      rescue Watir::Wait::TimeoutError(30)
+        puts "Growl message for register did not appear"
       end
+
       page.loading.wait_while_present
     end
   end

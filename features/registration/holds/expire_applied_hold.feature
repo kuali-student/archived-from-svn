@@ -11,7 +11,7 @@ Feature: REG.Expire Applied Hold
     Given there exists a term based hold issue
     And I apply the hold to a student
     When I attempt to expire the hold with an expiration term earlier than the effective term
-    Then an expiration term error message is displayed stating "Applied expiration term should not be earlier than hold issue's Effective Term:"
+    Then an earlier than applied effective term error message is displayed
 
   Scenario: HOLD2.6.2 Verify that a term based applied hold can be expired if the expiration term is after the effective term
     Given there exists a term based hold issue

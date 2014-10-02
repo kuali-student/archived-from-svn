@@ -153,6 +153,7 @@ class AdminRegistration < BasePage
 
   def get_results_warning
     array = []
+    loading.wait_while_present
     if registration_issues_table.exists?
       registration_issues_table.rows[1..-1].each do |row|
         if row.attribute_value('class') =~ /alert-warning/
