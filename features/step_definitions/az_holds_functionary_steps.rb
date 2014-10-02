@@ -1,5 +1,5 @@
 When(/^I apply a hold to a student by completing the required information$/) do
-  @applied_hold = create AppliedHold, :student_id => "KS-2056", :hold_issue => (make HoldIssue, :code => "ACAD01")
+  @applied_hold = create AppliedHold, :student_id => "KS-2056", :hold_issue => (make HoldIssue, :code => "ACAD04")
   @applied_hold.apply_hold
 end
 
@@ -28,7 +28,7 @@ Then(/^the expired hold is no longer displayed for the student$/) do
 end
 
 And(/^I delete a hold on a student record$/) do
-  @applied_hold = create AppliedHold, :student_id => "KS-1675", :hold_issue => (make HoldIssue, :code => "ACAD01")
+  @applied_hold = create AppliedHold, :student_id => "KS-2058", :hold_issue => (make HoldIssue, :code => "ACAD02")
   @applied_hold.apply_hold
   @applied_hold.delete_hold
 end

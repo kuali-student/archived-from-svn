@@ -83,7 +83,7 @@ When(/^I create a hold with authorizing organization without apply and expire pe
   auth_orgs << (make HoldIssueAuthorisingOrg, :auth_org => "Graduate Studies", :auth_expire => false, :auth_apply => false)
   num = rand(999)
   @hold = create HoldIssue, :name => "Academic Advising Issue #{num}", :code => "ACAD#{num}",
-                 :category => "Academic Progress Issue", :authorising_orgs => auth_orgs
+                 :category => "Academic Advising Issue", :authorising_orgs => auth_orgs
 end
 
 Then(/^a permission error message is displayed$/) do

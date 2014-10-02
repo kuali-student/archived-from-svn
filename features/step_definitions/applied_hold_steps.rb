@@ -29,7 +29,7 @@ And(/^I apply the hold to a student$/) do
 end
 
 When(/^I attempt to load a student by valid student Id$/) do
-  @applied_hold = create AppliedHold, :name => "Student last attended in", :code => "ACAD08", :hold_issue => (make HoldIssue)
+  @applied_hold = create AppliedHold, :hold_issue => (make HoldIssue, :name => "Student Record", :code => "ACAD08")
 end
 
 Then(/^the student information is displayed$/) do
