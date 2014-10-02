@@ -770,3 +770,19 @@ end
 Then(/^a course not offered message appears$/) do
   on(AdminRegistration).get_results_warning.should match /Section is not offered/
 end
+
+When(/^I register a student for the course more than once$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code=> "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL202",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code=> "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL202",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+end
+
+Then(/^an already registered message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /Student is already registered for this course/
+end
