@@ -1,6 +1,9 @@
 And /^I attempt to register for a course in a subterm whose registration period is (open|closed)$/ do |term_reg_status|
   # the user for this test (student8) is assigned a current time after the close of registration for
   # Half Fall 1 (ENGL206), but should still be able to register for CHEM147 in Half Fall 2
+
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule("201208")
   course_code = case term_reg_status
                   when "closed" then "ENGL206"
                   when "open" then "CHEM147"

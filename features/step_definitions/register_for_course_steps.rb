@@ -770,6 +770,13 @@ Then /^I can see the details of my course$/ do
 end
 
 And /^I attempt to register for a course in (\w+\s+\d+)$/ do |term_desc|
+  term, year = term_desc.split(" ")
+  term_code = case term
+                when "Fall" then year+"08"
+                when "Spring" then year+"01"
+              end
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(term_code)
   @reg_request = make RegistrationRequest,
                       :term_descr=> term_desc,
                       :course_code=>"CHEM231",
