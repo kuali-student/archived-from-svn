@@ -786,3 +786,17 @@ end
 Then(/^an already registered message appears$/) do
   on(AdminRegistration).get_results_warning.should match /Student is already registered for this course/
 end
+
+When /^I attempt to edit a registered course after edit period has passed$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code=> "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL301",
+                                                             :section=> "1001", :register => true,
+                                                             :confirm_registration => true)
+
+  @admin_reg.course_section_codes[0].edit_course :edit_course_effective_date => in_a_week[:date_w_slashes],
+                                                 :edit_course_reg_options => "Audit"
+end
+
+Then(/^a last day to modify message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /Last day to modify was/
+end
