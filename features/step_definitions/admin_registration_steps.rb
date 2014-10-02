@@ -740,6 +740,24 @@ When /^I allow the edited course to be updated$/ do
   end
 end
 
+Given(/^a student was registered for a course in a previous term$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2162", :term_code=> "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+end
+
+When(/^I register the student for the same course in a following term$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2162", :term_code=> "201401"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+end
+
+Then(/^a course repeatability message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /This will be your \d.*attempt. This course cannot be attempted more than \d time\(s\)/
+end
+
 When(/^I attempt to drop a registered course$/) do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2014", :term_code => "201208"
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "CHEM399C",

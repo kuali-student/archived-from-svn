@@ -45,6 +45,14 @@ Feature: REG.Register Course on Admin Registration
     When I register a student for a course
     Then the student's registered courses credit total for the term should be updated
 
+#KSENROLL-14116
+  @pending
+  Scenario: CR-Register.1 Verify that a course repeatability message appears when registering a student for a previously enrolled course
+    Given a student was registered for a course in a previous term
+    When I register the student for the same course in a following term
+    Then a course repeatability message appears
+    But the student is still registered for the course
+
 #KSENROLL-15067
   @pending
   Scenario: CR-Register.2 Verify that a message appears when registering a student for a course with a suspended section
