@@ -72,6 +72,7 @@ class CourseSearchMobilePage < RegisterForCourseBase
                           when COURSE_CRED then "creditOptions"
                         end
     results = []
+    results_list.wait_until_present
     results_list.divs(class: "kscr-Search-result-column-#{class_name_suffix}").each do |div|
       results << div.text
     end

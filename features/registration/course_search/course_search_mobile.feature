@@ -30,7 +30,7 @@ Feature: REG.Course Search Mobile
     | text                    | expected                                                                     |
     | ENGL101 CHEM231         | ENGL101, ENGL101A, ENGL101C, ENGL101H, ENGL101M, ENGL101S, ENGL101X, CHEM231 |
     | PHYS374 CHEM231         | PHYS374, CHEM231                                                             |
-    | ENGL211 BSCI120 ENGL212 | ENGL211, BSCI120, ENGL212                                                    |
+    | ENGL202 BSCI120 ENGL206 | ENGL202, BSCI120, ENGL206                                                    |
 
   Scenario Outline: CR 19.1.3 Search by Subject Code
     When I search for a course with "<text>" text option
