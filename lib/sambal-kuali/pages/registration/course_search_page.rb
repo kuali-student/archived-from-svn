@@ -115,11 +115,12 @@ class CourseSearchPage < LargeFormatRegisterForCourseBase
   end
 
   # Results table column indexes
-  COURSE_CODE = 0
-  COURSE_DESC = 1
-  COURSE_CRED = 2
+  COURSE_INDICATOR = 0
+  COURSE_CODE = 1
+  COURSE_DESC = 2
+  COURSE_CRED = 3
 
-  COLUMN_HEADINGS = ["Code","Title","Credits"]
+  COLUMN_HEADINGS = ["","Code","Title","Credits"]
 
   #Gives the digit for course level comparison, eg ENGL200 would have 2 extracted and compared
   value(:courseLevel){ |row,b| row.cells[COURSE_CODE].text.slice(4,1) }

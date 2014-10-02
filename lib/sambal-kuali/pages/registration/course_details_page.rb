@@ -56,12 +56,13 @@ class CourseDetailsPage < RegisterForCourseBase
   action(:toggle_ao_select) { |ao_code, b| b.select_box(ao_code).click }
 
   # Detail AO table column indexes
-  AO_DAYS = 0
-  AO_TIME = 1
-  AO_INSTRUCTOR = 2
-  AO_LOCATION = 3
-  AO_SEATS = 4
-  AO_SELECT = 5
+  AO_INDICATOR = 0
+  AO_DAYS = 1
+  AO_TIME = 2
+  AO_INSTRUCTOR = 3
+  AO_LOCATION = 4
+  AO_SEATS = 5
+  AO_SELECT = 6
 
   # course code in cart
   element(:cart_course_code) { |course_code,reg_group_code,b| b.span(id: "course_code_#{course_code}_#{reg_group_code}") }
