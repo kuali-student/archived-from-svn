@@ -104,7 +104,7 @@ Then(/^an effective date error message is displayed$/) do
 end
 
 Then(/^an invalid effective date range message is displayed$/) do
-  on(ApplyHold).get_apply_error_msg.should match /Has invalid date range #{@applied_hold.effective_date} - #{@hold_issue.last_applied_date}/m
+  on(ApplyHold).get_apply_error_msg.should match /Has invalid date range. #{@applied_hold.effective_date} must be before the Hold's Last Applied Date #{@hold_issue.last_applied_date}/m
 end
 
 Then(/^the end term defaults to the last applied term$/) do
