@@ -736,3 +736,37 @@ When /^I allow the edited course to be updated$/ do
     page.loading.wait_while_present
   end
 end
+
+When(/^I register a student for a course with a suspended section$/) do
+  @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL202").copy
+  @course_offering.initialize_with_actual_values
+
+  @activity_offering = @course_offering.get_ao_obj_by_code("A")
+  @activity_offering.suspend :navigate_to_page => false
+
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2037", :term_code=> @course_offering.term
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> @course_offering.course,
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+end
+
+Then(/^a suspended section message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /Section is suspended/
+end
+
+When(/^I register a student for the course with a pending state$/) do
+  @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL202").copy
+  @course_offering.initialize_with_actual_values
+
+  @activity_offering = @course_offering.get_ao_obj_by_code("A")
+  @activity_offering.approve :navigate_to_page => false
+
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2039", :term_code=> @course_offering.term
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> @course_offering.course,
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
+end
+
+Then(/^a course not offered message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /Section is not offered/
+end

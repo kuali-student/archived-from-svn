@@ -44,3 +44,16 @@ Feature: REG.Register Course on Admin Registration
   Scenario: CR22.17.2 Verify the credit total for the term updates after registering a course
     When I register a student for a course
     Then the student's registered courses credit total for the term should be updated
+
+#KSENROLL-15067
+  @pending
+  Scenario: CR-Register.2 Verify that a message appears when registering a student for a course with a suspended section
+    When I register a student for a course with a suspended section
+    Then a suspended section message appears
+    But the student is still registered for the course
+
+  @pending
+  Scenario: CR-Register.3 Verify that a message appears when registering a student for a course with a pending state
+    When I register a student for the course with a pending state
+    Then a course not offered message appears
+    But the student is still registered for the course
