@@ -154,10 +154,5 @@ end
 
 When(/^I have applied a registration hold to a student$/) do
   @applied_hold = create AppliedHold, :student_id => "KS-2094", :hold_issue => (make HoldIssue, :code => "ADV01")
-  @applied_hold.apply_hold :effective_term => "201208", :term_based => true
-end
-
-When(/^I have applied a registration hold to student$/) do
-  @applied_hold = create AppliedHold, :student_id => "KS-2095", :hold_issue => (make HoldIssue, :code => "ADV01")
-  @applied_hold.apply_hold :effective_term => "201208", :term_based => true
+  @applied_hold.apply_hold :effective_term => "201401", :term_based => true
 end

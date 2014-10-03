@@ -50,6 +50,20 @@ class AdminRegistration < BasePage
     return nil
   end
 
+
+  def get_term_warning
+    array = []
+    loading.wait_while_present
+    if term_issues_table.exists?
+      term_issues_table.rows[1..-1].each do |row|
+        if row.attribute_value('class') =~ /alert-warning/
+          array << row.text
+        end
+      end
+    end
+    array.to_s
+  end
+
   #################################################################
   ### Student and Term
   #################################################################

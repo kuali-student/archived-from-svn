@@ -903,17 +903,17 @@ When /^I drop a registered course for the student which is in a different term$/
 end
 
 When /^I access registration for that student and term$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201208"
-end
-
-When /^I access registration for that student and a different term$/ do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201401"
 end
 
+When /^I access registration for that student in a different term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201501"
+end
+
 Then(/^a message appears informing the user of a hold on the student$/) do
-  on(AdminRegistration).get_term_warning("Mandatory Advising").text.should match /Mandatory Advising: Academically ineligible for #{@admin_reg.term_description}/
+  on(AdminRegistration).get_term_warning.should match /Mandatory Advising: Academically ineligible for #{@admin_reg.term_description}/m
 end
 
 Then /^no message appears informing the user of a hold on the student$/ do
-  on(AdminRegistration).get_term_warning().nil?.should be_true
+  on(AdminRegistration).get_term_warning.should_not match /Mandatory Advising: Academically ineligible for #{@admin_reg.term_description}/m
 end

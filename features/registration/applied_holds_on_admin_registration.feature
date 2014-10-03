@@ -16,8 +16,8 @@ Feature: REG.Applied Holds on Admin Registration
 
   @draft @bug @KSENROLL-15163
   Scenario: HOLD3.1.2 Verify that no warning message appears when accessing registration for a student that has a registration hold but for a different term
-    When I have applied a registration hold to student
-    And I access registration for that student and a different term
+    When I have applied a registration hold to a student
+    And I access registration for that student in a different term
     Then no message appears informing the user of a hold on the student
 
 #KSENROLL-15159
