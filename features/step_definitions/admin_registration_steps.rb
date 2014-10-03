@@ -903,11 +903,11 @@ When /^I drop a registered course for the student which is in a different term$/
 end
 
 When /^I access registration for that student and term$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201401"
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => @applied_hold.effective_term
 end
 
 When /^I access registration for that student in a different term$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201501"
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201501"
 end
 
 Then(/^a message appears informing the user of a hold on the student$/) do
