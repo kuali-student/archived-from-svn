@@ -45,7 +45,7 @@ class CourseDetailsMobilePage < RegisterForCourseBase
   # activities
   element(:select_box) { |ao_code, b| b.div(id: "select_#{ao_code}") }
   action(:toggle_ao_select) { |ao_code, b| b.select_box(ao_code).click }
-  element(:details) { |ao_code,tab,b| b.span(id: "detail_#{ao_code}_#{tab}").text }
+  element(:details) { |ao_code,tab,b| b.div(id: "detail_#{ao_code}_#{tab}").text }
 
   # Detail AO table column indexes
   AO_DAYS = 0
