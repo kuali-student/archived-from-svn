@@ -917,3 +917,18 @@ end
 Then /^no message appears informing the user of a hold on the student$/ do
   on(AdminRegistration).get_term_warning.should_not match /Mandatory Advising: Academically ineligible for #{@admin_reg.term_description}/m
 end
+
+Given(/^I have registered a student for a course$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2171", :term_code => "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration
+end
+
+When(/^I attempt to drop the course with a blank date$/) do
+  @admin_reg.course_section_codes[0].delete_course :drop_course_effective_date => "", :confirm_drop => true
+end
+
+Then(/^a drop date required message appears$/) do
+  on(AdminRegistration).drop_course_dialog_error_msg.should match /Effective drop date is required/
+end

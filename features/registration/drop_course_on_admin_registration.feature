@@ -12,6 +12,12 @@ Feature: REG.Drop Course on Admin Registration
     Then a message appears indicating that the course has been successfully dropped
     And the student is no longer registered for the course
 
+#KSENROLL-15150
+  Scenario: CR23.4.2 Verify that a message appears if no drop date is used when attempting to drop a registered course
+    Given I have registered a student for a course
+    When I attempt to drop the course with a blank date
+    Then a drop date required message appears
+
 #KSENROLL-15089
   Scenario: CR-Drop.1 Verify that a message appears when dropping a registered course after the drop period has passed
     When I attempt to drop a registered course

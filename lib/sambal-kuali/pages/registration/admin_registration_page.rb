@@ -333,6 +333,8 @@ class AdminRegistration < BasePage
   element(:drop_course_dialog) { |b| b.frm.section(id: "dropCourseDialog")}
   element(:drop_registered_effective_date) { |b| b.drop_course_dialog.text_field(name: "pendingDropCourse.registeredDropDate")}
 
+  value(:drop_course_dialog_error_msg) { |b| b.drop_course_dialog.div(class: /uif-messageField uif-boxLayoutVerticalItem/).text}
+
   element(:confirm_course_drop_btn) { |b| b.drop_course_dialog.button(id: "confirmRegDropBtn")}
   action(:confirm_course_drop) { |b| b.loading.wait_while_present; b.confirm_course_drop_btn.click}
   element(:cancel_course_drop_btn) { |b| b.drop_course_dialog.a(text: /Cancel/)}
