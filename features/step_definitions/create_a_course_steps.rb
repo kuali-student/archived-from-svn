@@ -53,14 +53,17 @@ When /^I complete the required fields for save on the new course proposal$/ do
   @course_proposal = create CmCourseProposalObject
 end
 
-When /^I complete the required for save fields on the course proposal and save$/ do
+When /^I complete the required fields on the course proposal and save$/ do
   @course_proposal = create CmCourseProposalObject, :curriculum_review_process => "Yes",
                                                     :required_fields_only => false,
                                                     :submit_fields => [(make CmSubmitFieldsObject, :outcome_list => [ (make CmOutcomeObject, :outcome_type => "Fixed", :outcome_level => 0, :credit_value=>(1..5).to_a.sample),
                                                                                                                       (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
                                                                                                                       (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}")]
                                                                        )],
-                                                    :approve_fields => [(make CmApproveFieldsObject)]
+                                                    :approve_fields => [(make CmApproveFieldsObject, defer_save: 'true')],
+                                                    defer_save: 'true'
+
+  determine_save_action
 end
 
 
@@ -71,8 +74,10 @@ When /^I complete the required fields on the course admin proposal$/ do
                                                         (make CmOutcomeObject, :outcome_type => "Multiple",:outcome_level => 1, :credit_value => "#{(1..4).to_a.sample},#{(5..9).to_a.sample}"),
                                                         (make CmOutcomeObject, :outcome_type => "Range", :outcome_level => 2, :credit_value => "#{(1..4).to_a.sample}-#{(5..9).to_a.sample}")
                                                     ])],
-                                                    :approve_fields => [(make CmApproveFieldsObject)]
+                                                    :approve_fields => [(make CmApproveFieldsObject)],
+                                                    defer_save: 'true'
 
+  determine_save_action
 end
 
 
@@ -209,7 +214,6 @@ And /^I edit the course proposal$/ do
                                          :final_exam_type => [:exam_standard, :exam_alternate, :exam_none],
                                          :final_exam_rationale => "updated #{random_alphanums(10,'test final exam rationale ')}",
                                          :start_term => '::random::'
-
 
 
   @course_proposal.submit_fields[0].outcome_list[0].delete :defer_save => true, :outcome_level => 0
@@ -499,10 +503,6 @@ When(/^I update Alternate Identifier details on the course proposal$/) do
   @course_proposal.version_code_list[1].edit :version_code => "Z",
                                              :version_course_title => "edited title",
                                              :version_code_count => 1
-
-
-
-
 end
 
 Then(/^I should see updated alternate identifier details on the course proposal$/) do

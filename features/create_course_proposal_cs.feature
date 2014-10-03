@@ -15,9 +15,8 @@ Then I should see CM Home
 
 
 Scenario: CC.3.1 Create a course proposal with only required fields
-When I complete the required for save fields on the course proposal and save
-Then I should see data in required for save fields for the course proposal
-And I should see data in required for save fields on the Review Proposal page
+When I complete the required fields on the course proposal and save
+Then I should see data in required for save fields on the Review Proposal page
 And I edit the required for save fields and save
 Then I should see the updated data on the Review proposal page
 
