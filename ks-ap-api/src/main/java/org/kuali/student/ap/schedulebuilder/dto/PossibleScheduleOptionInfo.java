@@ -46,6 +46,8 @@ public class PossibleScheduleOptionInfo extends ScheduleBuildOptionInfo
 		if (copyDescr != null)
 			description = new RichTextInfo(copyDescr.getPlain(),
 					copyDescr.getFormatted());
+		id = copy.getId();
+		termId = copy.getTermId();
 		setActivityOptions(copy.getActivityOptions());
 	}
 
