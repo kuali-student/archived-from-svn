@@ -8,8 +8,10 @@ Given(/^I have a course proposal with approve fields partially completed submitt
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                       :curriculum_review_process => "Yes",
-                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL" )],
-                                                      :approve_fields => [(make CmApproveFieldsObject, :course_number => nil, :campus_location => nil)]
+                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", defer_save: 'true' )],
+                                                      :approve_fields => [(make CmApproveFieldsObject, :course_number => nil, :campus_location => nil, defer_save: 'true')],
+                                                      defer_save: 'true'
+    determine_save_action
   end
 
   puts @course_proposal.proposal_title
