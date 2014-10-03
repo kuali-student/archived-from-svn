@@ -43,6 +43,7 @@ end
 
 Then /^I verify that all editable fields in Registration Window are editable and Window Name is not a link$/ do
   puts "Verifying that all editable fields in registration window #{@registration_window.appointment_window_info_name} for priod #{@registration_window.period_key} are editable and Window Name is not a link."
+  @browser.refresh # reload the page
   on RegistrationWindowsCreate do |page|
     page.are_editable_window_fields_editable(@registration_window.appointment_window_info_name, @registration_window.period_key).should be_true
     page.is_anchor(@registration_window.appointment_window_info_name, @registration_window.period_key).should be_false

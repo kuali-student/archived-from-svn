@@ -190,7 +190,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     puts "Assigning Students for #{window_name} in period #{period_key}"
     # ToDo add period_key to the get_target_row
     row = get_target_row(window_name, period_key)
-    row.cells[COLUMN_ASSIGN_STUDENTS].button(text: "Assign Students").click
+    row.cells[COLUMN_ASSIGN_STUDENTS].button(text: "Assign").click
     loading.wait_while_present(60)
     while true
       begin
@@ -207,7 +207,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
     puts "Breaking Appointments for #{window_name} in period #{period_key}"
     # ToDo add period_key to the get_target_row
     row = get_target_row(window_name, period_key)
-    row.cells[COLUMN_BREAK_APPOINTMENTS].button(text: "Break Appointments").click
+    row.cells[COLUMN_BREAK_APPOINTMENTS].button(text: "Break").click
     loading.wait_while_present(60)
     while true
       begin

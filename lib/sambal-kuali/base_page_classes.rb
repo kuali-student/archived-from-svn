@@ -282,7 +282,7 @@ class RegistrationWindowsBase < BasePage
     def registration_window_lookup_elements
       element(:term_type) { |b| b.frm.select(name: "termType") }
       element(:year) { |b| b.frm.text_field(name: "termYear") }
-      action(:search) { |b| b.frm.button(text: "Search").click; b.loading.wait_while_present } # Persistent ID needed!
+      action(:search) { |b| b.frm.button(text: "Show").click; b.loading.wait_while_present } # Persistent ID needed!
     end
 
     def registration_window_period_lookup_elements
