@@ -79,10 +79,11 @@ Feature: REG.Course Search Mobile
     Then I see <expected> in the <tab> details for activity offering "<ao_code>"
   Examples:
     | tab       | ao_type | ao_code | expected                                      |
-    | time      | Lecture | Y       | Tu 6:30-9:30pm                                |
+    | time      | Lecture | Y       | Tu  6:30-9:30pm                               |
     | instr     | Lecture | Y       | Terri Raymond                                 |
-    | seatsLoc  | Lecture | Y       | PLS 1140 48/48                                |
-    | all       | Lecture | Y       | Tu 6:30-9:30pm Terri Raymond PLS 1140 48/48   |
+    | loc       | Lecture | Y       | PLS 1140                                      |
+    | seats     | Lecture | Y       | 48/48                                         |
+    | all       | Lecture | Y       | Tu  6:30-9:30pm Terri Raymond PLS 1140 48/48  |
 
   #KSENROLL-14161
   Scenario: CR 19.13 - Student is notified that course search selection is already in registration cart

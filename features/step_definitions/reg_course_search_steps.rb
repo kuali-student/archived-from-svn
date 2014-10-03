@@ -232,13 +232,15 @@ Then /^I see (.*) in the (\w+) details for activity offering "(\w+)"$/ do |expec
   on CourseDetailsMobilePage do |page|
     results = case tab
                 when "time" then
-                  "#{page.details(ao_code, 'days')} #{page.details(ao_code, 'time')}"
+                  "#{page.details(ao_code, 'dateTime')}"
                 when "instr" then
                   "#{page.details(ao_code, 'instructor')}"
-                when "seatsLoc" then
-                  "#{page.details(ao_code, 'location')} #{page.details(ao_code, 'seatsOpen')}"
+                when "loc" then
+                  "#{page.details(ao_code, 'location')}"
+                when "seats" then
+                  "#{page.details(ao_code, 'seatsOpen')}"
                 when "all" then
-                  "#{page.details(ao_code, 'days')} #{page.details(ao_code, 'time')} #{page.details(ao_code, 'instructor')} #{page.details(ao_code, 'location')} #{page.details(ao_code, 'seatsOpen')}"
+                  "#{page.details(ao_code, 'dateTime')} #{page.details(ao_code, 'instructor')} #{page.details(ao_code, 'location')} #{page.details(ao_code, 'seatsOpen')}"
               end
     results.should == expected
   end
