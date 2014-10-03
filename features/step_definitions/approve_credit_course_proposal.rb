@@ -91,8 +91,10 @@ Given(/^I have a course proposal with some approve fields missing submitted by (
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
-                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil, :format_list => [])]
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", defer_save: 'true')],
+                              :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil, :format_list => [], defer_save: 'true')],
+                              defer_save: 'true'
+    determine_save_action
   end
 
   puts "Proposal Title: #{@course_proposal.proposal_title}"
@@ -238,12 +240,13 @@ Given(/^I have an incomplete course proposal with submit fields submitted by (.*
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", :defer_save => true)],
                               :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
                                                         :course_number => nil,
                                                         :campus_location => nil,
-                                                        :format_list => [])]
-
+                                                        :format_list => [], :defer_save => true)],
+                              :defer_save => true
+    determine_save_action
 
   end
   puts "Proposal Title: #{@course_proposal.proposal_title}"
