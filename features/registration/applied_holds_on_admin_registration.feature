@@ -1,10 +1,24 @@
 @blue_team
 Feature: REG.Applied Holds on Admin Registration
+  Holds 3.1 As Holds Functionary, when accessing registration for a term, I want to be informed if a student has a hold so that I know how to perform registration tasks
   Holds 3.2 As a Holds Functionary, while registering a student for classes, I want to be informed if a student has a
             hold so that I know how to perform registration tasks
 
   Background:
     Given I am logged in as admin
+
+#KSENROLL-15159
+  @pending
+  Scenario: HOLD3.1.1 Verify that a warning message appears when accessing registration for a student that has a registration hold
+    When I have applied a registration hold to a student
+    And I access registration for that student and term
+    Then a message appears informing the user of a hold on the student
+
+  @draft @bug @KSENROLL-15163
+  Scenario: HOLD3.1.2 Verify that no warning message appears when accessing registration for a student that has a registration hold but for a different term
+    When I have applied a registration hold to student
+    And I access registration for that student and a different term
+    Then no message appears informing the user of a hold on the student
 
 #KSENROLL-15159
   @pending

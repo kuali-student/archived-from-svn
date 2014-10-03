@@ -901,3 +901,19 @@ When /^I drop a registered course for the student which is in a different term$/
   @admin_reg.course_section_codes[0].delete_course :navigate_to_page => true, :confirm_drop => true,
                                                  :drop_course_effective_date => in_a_week[:date_w_slashes]
 end
+
+When /^I access registration for that student and term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201208"
+end
+
+When /^I access registration for that student and a different term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2094", :term_code => "201401"
+end
+
+Then(/^a message appears informing the user of a hold on the student$/) do
+  on(AdminRegistration).get_term_warning("Mandatory Advising").text.should match /Mandatory Advising: Academically ineligible for #{@admin_reg.term_description}/
+end
+
+Then /^no message appears informing the user of a hold on the student$/ do
+  on(AdminRegistration).get_term_warning().nil?.should be_true
+end
