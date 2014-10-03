@@ -242,7 +242,7 @@ class RegistrationWindowsCreate < RegistrationWindowsBase
 
   def does_window_contain_elements(window_name, period_key)
     row = get_target_row(window_name, period_key)
-    return row.cells[COLUMN_ACTION].link(id: /deleteRegistrationWindowRow/).visible? && row.cells[COLUMN_ACTION].button(text: "Assign Students").visible?
+    return row.cells[COLUMN_ACTION].link(id: /deleteRegistrationWindowRow/).visible? && row.cells[COLUMN_ACTION].button(text: "Assign").visible?
   end
 
   def remove(window_name, period_key)

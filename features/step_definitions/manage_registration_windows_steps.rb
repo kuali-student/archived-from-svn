@@ -97,6 +97,7 @@ Then /^I verify that the Registration Window is not modified$/ do
     row_object[:end_time].should == @registration_window.end_time
   end
   @registration_window.delete
+  @browser.refresh
   on(RegistrationWindowsCreate).cancel_and_leave
 end
 
