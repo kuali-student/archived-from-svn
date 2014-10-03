@@ -101,11 +101,33 @@ class ManageAppliedHold < BasePage
     return nil
   end
 
-  def get_applied_hold_by_code (hold_code)
+  def get_applied_hold_by_code( code)
     if results_table.exists?
       results_table.rows[1..-1].each do |row|
-        if row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/ and row.cells[STATE].text=~ /Active/
+        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
           return row
+        end
+      end
+    end
+    return nil
+  end
+
+  def get_applied_hold_effective_term( code)
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
+          return row.cells[START_TERM].text
+        end
+      end
+    end
+    return nil
+  end
+
+  def get_applied_hold_effective_date( code)
+    if results_table.exists?
+      results_table.rows[1..-1].each do |row|
+        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
+          return row.cells[START_DATE].text
         end
       end
     end

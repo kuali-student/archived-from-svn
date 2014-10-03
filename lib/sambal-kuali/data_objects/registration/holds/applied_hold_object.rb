@@ -48,53 +48,69 @@ class AppliedHold < DataFactory
     end
   end
 
+  def exists?
+    if on(ManageAppliedHold).get_applied_hold_by_code( @hold_issue.code).nil?
+      return false
+    end
+
+    return true
+  end
+
   def apply_hold opts = {}
     defaults = {
         :exp_success => true
     }
     options = defaults.merge(opts)
 
-    on ManageAppliedHold do |page|
-      page.apply_new_hold
-    end
-
-    on ApplyHold do |page|
-      page.loading.wait_while_present
-
-      if !@find_code_by_lookup
-        page.hold_code_input.set @hold_issue.code
-
-        page.send_keys :tab
-        page.loading.wait_while_present
-      else
-        page.find_hold_code
-
-        wait_until { page.frm_popup.exists? }
-        page.dialog_code_input.set @hold_issue.code
-        page.dialog_search
-
-        page.loading.wait_while_present
-        page.results_select_by_code(@hold_issue.code)
+    if exists?
+      on ManageAppliedHold do |page|
+        @effective_term = page.get_applied_hold_effective_term( @hold_issue.code)
+        @effective_date = page.get_applied_hold_effective_date( @hold_issue.code)
+      end
+    else
+      on ManageAppliedHold do |page|
+        page.apply_new_hold
       end
 
-      if @hold_issue.term_based or options[:term_based]
-        if options[:effective_term] != nil
-          page.effective_term.when_present.set options[:effective_term]
-          @effective_term = options[:effective_term]
+      on ApplyHold do |page|
+        page.loading.wait_while_present
+
+        if !@find_code_by_lookup
+          page.hold_code_input.set @hold_issue.code
+
+          page.send_keys :tab
+          page.loading.wait_while_present
         else
-          page.effective_term.set @effective_term
+          page.find_hold_code
+
+          wait_until { page.frm_popup.exists? }
+          page.dialog_code_input.set @hold_issue.code
+          page.dialog_search
+
+          page.loading.wait_while_present
+          page.results_select_by_code(@hold_issue.code)
         end
-      end
 
-      if options[:effective_date] != nil
-        page.effective_date.set options[:effective_date]
-        @effective_date = options[:effective_date]
-      else
-        page.effective_date.set @effective_date
-      end
+        if @hold_issue.term_based or options[:term_based]
+          if options[:effective_term] != nil
+            page.effective_term.when_present.set options[:effective_term]
+            @effective_term = options[:effective_term]
+          else
+            page.effective_term.set @effective_term
+          end
+        end
 
-      page.apply_hold if options[:exp_success]
+        if options[:effective_date] != nil
+          page.effective_date.set options[:effective_date]
+          @effective_date = options[:effective_date]
+        else
+          page.effective_date.set @effective_date
+        end
+
+        page.apply_hold if options[:exp_success]
+      end
     end
+
   end
 
   def expire_hold opts = {}

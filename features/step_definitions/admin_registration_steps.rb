@@ -839,3 +839,65 @@ end
 Then(/^a last day to modify message appears$/) do
   on(AdminRegistration).get_results_warning.should match /Last day to modify was/
 end
+
+When /^I register that student for a course$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => @applied_hold.effective_term
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL301",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+end
+
+Then /^a warning message appears indicating that the student has too many registration transactions in the term$/ do
+  on(AdminRegistration).get_results_warning.should match /Too many registration transactions for #{@admin_reg.term_description}/
+end
+
+When /^I register that student for a course in a different term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL304",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+end
+
+Then /^no warning message about the student having too many registration transactions appears$/ do
+  on(AdminRegistration).get_results_warning.should_not match /Too many registration transactions for #{@admin_reg.term_description}/
+end
+
+When /^I edit a registered course for the student$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => @applied_hold.effective_term
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL312",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+
+  @admin_reg.course_section_codes[0].edit_course :navigate_to_page => true,
+                                                 :edit_course_effective_date => in_a_week[:date_w_slashes]
+end
+
+When /^I edit a registered course for the student which is in a different term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL312",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+
+  @admin_reg.course_section_codes[0].edit_course :navigate_to_page => true,
+                                                 :edit_course_effective_date => in_a_week[:date_w_slashes]
+end
+
+When /^I drop a registered course for the student$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => @applied_hold.effective_term
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL305",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+
+  @admin_reg.course_section_codes[0].delete_course :navigate_to_page => true, :confirm_drop => true,
+                                                 :drop_course_effective_date => in_a_week[:date_w_slashes]
+end
+
+When /^I drop a registered course for the student which is in a different term$/ do
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code => "ENGL305",
+                                                             :section => "1001", :register => true,
+                                                             :confirm_registration => true)
+
+  @admin_reg.course_section_codes[0].delete_course :navigate_to_page => true, :confirm_drop => true,
+                                                 :drop_course_effective_date => in_a_week[:date_w_slashes]
+end
