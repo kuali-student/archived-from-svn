@@ -227,3 +227,22 @@ Then /^the first student is added to the end of the waitlist$/ do
   student2_position.should == (waitlist_entry_size - 1)
 
 end
+
+When /^I increase the seats available for a course with students on the waitlist$/ do
+
+  #following is our ref data for this scenario:
+  course_options = (make CourseOptions, :credit_option => "3.0")
+
+  @reg_request = make RegistrationRequest, :student_id=>"B.EILEENL",
+                      :term_code=> 201208,
+                      :term_descr=> "Fall 2012",
+                      :course_code=> "ENGL101",
+                      :reg_group_code=> "1012",
+                      :course_options => course_options,
+                      :course_has_options=> false
+
+  course_offering = make CourseOffering, :course=>@reg_request.course_code, :term=>@reg_request.term_code
+  course_offering.manage
+  actvity_offering = make ActivityOfferingObject, :parent_cluster => course_offering.default_cluster, :code => 'AJ'
+  actvity_offering.edit :max_enrollment => 4
+end

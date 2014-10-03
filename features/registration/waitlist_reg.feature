@@ -75,3 +75,12 @@ Feature: REG.Wait List
     And I log in to student registration as B.EILEENL
     Then I can go to My Schedule and verify I am not on the waitlist
     And the course is present in my schedule
+
+#KSENROLL-15078
+  Scenario: CR 11.4 - Student is automatically registered when admin increases seats available for an activity
+    Given I am using a large screen size
+    Given I am logged in as admin
+    When I increase the seats available for a course with students on the waitlist
+    And I log in to student registration as B.EILEENL
+    Then I can go to My Schedule and verify I am not on the waitlist
+    And the course is present in my schedule
