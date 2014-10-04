@@ -221,6 +221,7 @@ class ActivityOfferingObject < DataFactory
     end_times = ao_table_row.cells[ManageCourseOfferings::AO_END_TIME].text.split("\n")
     fac_names_text = ao_table_row.cells[ManageCourseOfferings::AO_BLDG].text
     fac_long_names = []
+    fac_names = []
     if fac_names_text != ''
       fac_names = fac_names_text.split("\n")
       #get facility long name from tool tip
