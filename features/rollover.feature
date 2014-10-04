@@ -7,6 +7,8 @@ Feature: CO.Rollover
   MSR 1.1: As Central Administrator, I want actual scheduling information on AOs in a source term to be copied to
   requested scheduling information on AOs in the target term when performing a simple rollover
 
+  CO 28.1 As a central administrator I want a rollover option to exclude room assignments for an Activity Offering from Rollover
+
   CO 28.2 As a Central Administrator I want a rollover option to exclude scheduling information for an Activity Offering from Rollover
 
   CO 28.3 As a Central Administrator I want a rollover option to exclude instructional assignments for an Activity Offering
@@ -18,6 +20,10 @@ Feature: CO.Rollover
   CO 28.10: As a Central Administrator I want to apply a rollover configuration for courses in a particular subject code
 
   CO 28.11: As a Central Administrator I want to apply a rollover configuration for a specific course
+
+  CO 28.12: As a Central Administrator I want to have different rollover configurations for different term types
+
+  CO 28.13: As a Central Administrator I want to have a rollover configuration to apply only to a specific term
 
   Background:
     Given I am logged in as a Schedule Coordinator
@@ -63,28 +69,26 @@ Feature: CO.Rollover
     And instructional assignments are copied to the target term AOs
 
     @draft
-  Scenario: Confirm that when a course is rolled over and the GES settings specify that the SI should not be copied, but the Bldg/Rm data should that no scheduling info is copied to the target course
-    Given that a course code rollover configuration has been defined for a specific course in the GES with a value of 'not copy' for scheduling information
-    And no specific rule has been configured at the specific course code for Bldg/Rm
-    But a rule has been configured at a higher level that applies to the specified course code of 'copy' for Bldg/Rm
-    When the rollover is executed
-    And I view the specified course offering
+  Scenario: CO 28.2.1 Confirm that when a course is rolled over and the GES settings specify that the scheduling information should not be copied, that the Bldg/Rm data is not copied regardless of the applicable Bdlg/Rm rollover config
+    recheck this in terry's doc Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'not copy' for scheduling information
+    And no specific rule is configured at the specific course code for Bldg/Rm
+    But a 'copy' Bldg/Rm rule is configured at the term level that applies to the specified course code
+    When the rollover is executed for a term with the Bldg/Rm rule and with the specified course offering
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term
-    And the scheduling information is not copied to the target AOs
+    And activity offerings are copied to the target term excluding those in cancelled status
+    And the scheduling information including Bldg/Rm info is copied to the target term AOs
 
   @draft
-  Scenario: Confirm that when a course is rolled over and the GES settings specify that the SI should be copied, but the Bldg/Rm data should not be copied that only day and time scheduling data is copied to the target course
-    Given that a course code rollover configuration has been defined for a specific course in the GES with a value of 'copy' for scheduling information
+  Scenario: CO 28.1.1 Confirm GES settings to copy scheduling information but exclude Bldg/Rm data
+    recheck terry's wording Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'copy' for scheduling information
     And 'not copy' for Bldg/Rm
-    When the rollover is executed
-    And I view the specified course offering
+    When the rollover is executed for a term with the specific course with Bldg/Rm and scheduling information rules
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term
-    And day and time information is included in the scheduling information on the target AOs, but bldg./rm data is not
+    And activity offerings are copied to the target term excluding those in cancelled status
+    And the scheduling information excluding Bldg/Rm info is copied to the target term AOs
 
   @draft
-  Scenario: Apply term type rules for a subject level rollover configuration
+  Scenario: CO 28.12.1 Apply term type rules for a subject level rollover configuration
     Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term type
     And there is a value of 'copy' for instructional assignments
     And 'not copy' for canceled AOs
@@ -95,7 +99,7 @@ Feature: CO.Rollover
     And the instructional assignments are copied to the target AOs
 
   @draft
-  Scenario: Apply term-specific rules for a subject level rollover configuration
+  Scenario: CO 28.13.1 Apply term-specific rules for a subject level rollover configuration
     Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term
     And there is a value of 'not copy' for instructional assignments
     And 'copy' for canceled Bldg/Rm

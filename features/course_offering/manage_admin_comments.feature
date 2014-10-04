@@ -133,3 +133,6 @@ Feature: CO.Manage Admin Comments
     And I manage comments for an activity offering with existing comments
     When I edit a comment and format (bold) some of the text
     Then the activity offering comment is saved with the typography elements displayed
+
+  @wip
+  Scenario: CO 28.8.? Verify admin comments are not copied to a new term when a rollover is performed
