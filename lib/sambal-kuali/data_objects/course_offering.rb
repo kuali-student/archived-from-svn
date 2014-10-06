@@ -9,7 +9,7 @@ class CourseSearchResults < DataFactory
   COURSE_ARRAY = 0
   COURSE_CODE = 0
   COURSE_NAME = 1
-  attr_accessor :course_code,
+attr_accessor :course_code,
                 :credit,
                 :notes,
                 :planned_term,
@@ -30,7 +30,8 @@ class CourseSearchResults < DataFactory
                 :course_offering_description_list,
                 :state,
                 :message_status,
-                :color
+                :color,
+                :notes_update
 
   def initialize(browser, opts={})
     @browser = browser
@@ -58,6 +59,7 @@ class CourseSearchResults < DataFactory
         :state=>'Planned',
         :color=>'transparent',
         :message_status=>'Section 1012 has been suspended.',
+        :notes_update=>'UPDATED',
          course_offering_description_list:[
             (make CourseOfferingDescriptionObject, :courseofferingdescription_level => 0),
             (make CourseOfferingDescriptionObject, :courseofferingdescription_level => 1)
@@ -825,7 +827,24 @@ class CourseSearchResults < DataFactory
       page.add_to_plan_quick.click
     end
   end
-
+  def quick_add_planned_notes
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present
+    end
+    on CourseSearch do |page|
+      page.plan_page_click
+    end
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present
+      remove_code_from_planned_backup
+      page.quick_add(@state,@planned_term).wait_until_present(120)
+      page.quick_add(@state,@planned_term).click
+      page.course_code_quick_add.when_present(60).set @course_code
+      page.course_code_quick_add.send_keys :tab
+      page.quick_add_notes.set "TEST"
+      page.add_to_plan_quick.click
+    end
+  end
 
 
   def quick_add_backup
@@ -874,5 +893,95 @@ class CourseSearchResults < DataFactory
     end
   end
 
+  def update_notes
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present(120)
+      page.course_code_term_click(@planned_term, @course_code)
+      page.course_code_edit_click
+      page.edit_course.wait_until_present
+      page.edit_course.click
+    end
+  end
+
+
+  def successful_updation
+    on CoursePlannerPage do |page|
+      page.quick_add_notes.send_keys  [:control, 'a'], :backspace
+      page.quick_add_notes.set "UPDATED TEST"
+      page.add_to_plan_quick.click
+      page.added_course_note(planned_term,course_code).wait_until_present(120)
+      end
+  end
+
+
+  def successful_deletion
+    on CoursePlannerPage do |page|
+      page.quick_add_notes.send_keys  [:control, 'a']
+      for i in 1..4
+        page.quick_add_notes.send_keys  :backspace
+      end
+      page.edit_course.click
+      puts page.added_course_note(@planned_term, @course_code).attribute_value("data-content")
+    end
+  end
+
+
+  def enter_note
+    on CoursePlannerPage do |page|
+      page.refresh
+      page.planner_courses_detail_list.wait_until_present(120)
+      page.course_code_term(@planned_term, @course_code).should==@course_code
+      puts page.added_course_note(planned_term, @course_code).attribute_value("data-content")
+    end
+  end
+
+  def enter_note_through_cdp
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present(60)
+    end
+    #navigate to planner page
+    on CourseSearch do |page|
+      page.plan_page_click
+    end
+    on CoursePlannerPage do |page|
+      page.planner_courses_detail_list.wait_until_present(60)
+    end
+    #delete an existing course
+   remove_code_from_planned_backup
+    #navigate to course search
+    #@course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
+    navigate_to_course_search_home
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present(90)
+    end
+    #navigate to course details page
+    navigate_course_detail_page
+    on CourseSectionPage do |page|
+      page.course_termlist.wait_until_present(90)
+    end
+    on CourseDetailPage do |page|
+      page.add_to_plan.click
+      page.term_cdp.wait_until_present
+      page.term_cdp.select @term
+      page.add_to_plan_notes_cdp.set @notes
+      page.add_to_plan_button_cdp
+    end
+  end
+
+
+  def  enter_note_adding_from_plan
+    on CourseSearch do |page|
+      page.course_search_results_facets.wait_until_present(120)
+      on CourseSearch do |page|
+        page.plan_page_click
+      end
+      on CoursePlannerPage do |page|
+        page.planner_courses_detail_list.wait_until_present(120)
+        remove_code_from_planned_backup
+        navigate_to_course_search_home
+        select_add_to_plan
+      end
+    end
+  end
 end
 

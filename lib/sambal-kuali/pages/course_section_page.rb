@@ -27,6 +27,7 @@ class CourseSectionPage < BasePage
   #Checkbox for adding to plan
   element(:activityoffering_checkbox){|coursedesc_level,courseterm_level,formatlist_level,fo_level,ao_level,b|b.checkbox(id:"select_line#{coursedesc_level}_line#{courseterm_level}_line#{formatlist_level}_line#{fo_level}_line#{ao_level}_control")}
   element(:add_to_button_enabled) {|b|b.button(class:"btn btn-primary btn btn-primary uif-boxLayoutHorizontalItem")}
+  action(:add_to_plan_click) { |b| b.add_to_button_enabled.when_present(60).click }
   element(:add_to_button_disabled) {|b|b.button(id:/addButton/,class:"btn btn-primary btn btn-primary uif-boxLayoutHorizontalItem disabled")}
   element(:add_to_plan_link) {|b|b.a(id:/addLink/)}
 #  action(:lecture_lab_discussion) { |course_code,b| b.div(id: /#{course_code}_formatOfferingOptions/).radio(index:0) }

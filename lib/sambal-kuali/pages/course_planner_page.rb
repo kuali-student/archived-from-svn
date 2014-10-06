@@ -32,6 +32,7 @@ class CoursePlannerPage < BasePage
 
   action(:edit_plan_item_click) { |b| b.td(class: "jquerybubblepopup-innerHtml").a(:id => /planner_menu_edit_plan_item*/).click }
   action(:course_code_delete_click) { |b| b.td(class: "jquerybubblepopup-innerHtml").a(:id => /planner_menu_delete_plan_item*/).click }
+  action(:course_code_edit_click) { |b| b.td(class: "jquerybubblepopup-innerHtml").link(:id => /planner_menu_edit_plan_item_popup*/).click }
 
   #40 - view course details popover elements
   element(:course_code_current_term_credit) { |b| b.div(class: "uif-messageField credit ks-plan-Bucket-itemCreditCount uif-boxLayoutHorizontalItem").span(class: "uif-message").text }
@@ -101,5 +102,13 @@ class CoursePlannerPage < BasePage
   element(:added_course_planned) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_code") }
   element(:added_course_backup) { |planned_term,course_code,b| b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_code") }
   element(:current_term) {|b|b.h4(class:"uif-headerText")}
+
+  # Elements for notes validation
+  element(:edit_course) { |b| b.frm.button(text: "Save") }
+  element(:quick_add_notes) { |b|b.text_field(id:"notes_control")}
+  element(:added_course_note) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_courseNote")}
+  element(:added_course_note_backup) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_courseNote")}
+
+
 end
 
