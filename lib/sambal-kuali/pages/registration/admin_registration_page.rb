@@ -109,8 +109,8 @@ class AdminRegistration < BasePage
   value(:get_course_description_message){ |index, b| b.loading.wait_while_present; b.course_description_message(index).text}
   element(:reg_for_error_message) { |b| b.reg_for_section.div(id: "KS-AdminRegistration-RegFor_messages")}
   value(:get_reg_for_error_message){ |b| b.loading.wait_while_present; b.reg_for_error_message.text}
-  element(:cancelled_section_error_message) { |b| b.reg_for_error_message.li(class: 'uif-errorMessageItem')}
-  value(:get_cancelled_section_error_message){ |b| b.loading.wait_while_present; b.cancelled_section_error_message.text}
+  element(:section_error_message) { |b| b.reg_for_error_message.li(class: 'uif-errorMessageItem')}
+  value(:get_section_error_message){ |b| b.loading.wait_while_present; b.section_error_message.text}
 
   element(:course_addline_btn) { |b| b.reg_for_section.button(id: "addLineButton")}
   action(:course_addline){ |b| b.loading.wait_while_present; b.course_addline_btn.click}

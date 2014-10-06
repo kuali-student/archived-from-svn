@@ -269,7 +269,7 @@ When /^an error message appears indicating that the section was cancelled for th
   section = @admin_reg.course_section_codes[0].section
   course = @admin_reg.course_section_codes[0].course_code
   on AdminRegistration do |page|
-    page.get_cancelled_section_error_message.should match /Section #{section}.*for #{course}.*was cancelled for the selected term./
+    page.get_section_error_message.should match /Section #{section}.*for #{course}.*was cancelled for the selected term./
 
     page.student_term_go
   end
@@ -776,7 +776,7 @@ Then(/^a last day to drop message appears$/) do
   end
 end
 
-When(/^I register a student for a course with a suspended section$/) do
+When(/^I attempt to register a student for a course with a suspended section$/) do
   @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL202").copy
   @course_offering.initialize_with_actual_values
 
@@ -786,14 +786,19 @@ When(/^I register a student for a course with a suspended section$/) do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2037", :term_code=> @course_offering.term
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> @course_offering.course,
                                                              :section=> "1001", :register => true)
-  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
 end
 
-Then(/^a suspended section message appears$/) do
-  on(AdminRegistration).get_results_warning.should match /Section is suspended/
+Then(/^a suspended section error message appears$/) do
+  section = @admin_reg.course_section_codes[0].section
+  course = @admin_reg.course_section_codes[0].course_code
+  on AdminRegistration do |page|
+    page.get_section_error_message.should match /Section #{section}.*for #{course}.*was suspended for the selected term./
+
+    page.student_term_go
+  end
 end
 
-When(/^I register a student for the course with a pending state$/) do
+When(/^I attempt to register a student for the course with a pending state$/) do
   @course_offering = (make CourseOffering, :term=> "201208", :course => "ENGL202").copy
   @course_offering.initialize_with_actual_values
 
@@ -803,11 +808,16 @@ When(/^I register a student for the course with a pending state$/) do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2039", :term_code=> @course_offering.term
   @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> @course_offering.course,
                                                              :section=> "1001", :register => true)
-  @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
 end
 
-Then(/^a course not offered message appears$/) do
-  on(AdminRegistration).get_results_warning.should match /Section is not offered/
+Then(/^a course not offered error message appears$/) do
+  section = @admin_reg.course_section_codes[0].section
+  course = @admin_reg.course_section_codes[0].course_code
+  on AdminRegistration do |page|
+    page.get_section_error_message.should match /Section #{section}.*for #{course}.*is not offered for the selected term./
+
+    page.student_term_go
+  end
 end
 
 When(/^I register a student for the course more than once$/) do

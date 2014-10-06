@@ -55,16 +55,14 @@ Feature: REG.Register Course on Admin Registration
 
 #KSENROLL-15067
   @pending
-  Scenario: CR-Register.2 Verify that a message appears when registering a student for a course with a suspended section
-    When I register a student for a course with a suspended section
-    Then a suspended section message appears
-    But the student is still registered for the course
+  Scenario: CR-Register.2 Verify that an error message appears when attempting to register a student for a course with a suspended section
+    When I attempt to register a student for a course with a suspended section
+    Then a suspended section error message appears
 
   @pending
-  Scenario: CR-Register.3 Verify that a message appears when registering a student for a course with a pending state
-    When I register a student for the course with a pending state
-    Then a course not offered message appears
-    But the student is still registered for the course
+  Scenario: CR-Register.3 Verify that an error message appears when attempting to register a student for a course with a pending state
+    When I attempt to register a student for the course with a pending state
+    Then a course not offered error message appears
 
 #KSENROLL-15091
   Scenario: CR-Register.4 Verify that a message appears when registering a student for a course more than once in a term
