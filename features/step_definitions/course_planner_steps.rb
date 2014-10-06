@@ -49,3 +49,36 @@ Then /^variable credit and note details are displayed under the future term$/ do
     page.edit_plan_cancel
   end
 end
+
+When(/^I add a note to term$/) do
+  @course_search_result = make CourseSearchResults,  :course_code => "ENGL101",
+                               :planned_term => "2014Summer1",
+                               :term => "Summer I 2014"
+  @course_search_result.add_note_to_term
+end
+
+Then(/^the term note should be successfully added$/) do
+  @course_search_result.saved_text_term
+end
+
+When(/^I edit the term note$/) do
+  @course_search_result = make CourseSearchResults,  :course_code => "ENGL101",
+                               :planned_term => "2014Summer1",
+                               :term => "Summer I 2014"
+  @course_search_result.edit_note_term
+end
+
+Then(/^the term note should be successfully edited$/) do
+  @course_search_result.edited_text_term
+end
+
+When(/^I delete the term note$/) do
+  @course_search_result = make CourseSearchResults,  :course_code => "ENGL101",
+                               :planned_term => "2014Summer1",
+                               :term => "Summer I 2014"
+  @course_search_result.delete_note_term
+end
+
+Then(/^the term note should be deleted from the term$/) do
+  @course_search_result.deleted_text_term
+end

@@ -108,7 +108,13 @@ class CoursePlannerPage < BasePage
   element(:quick_add_notes) { |b|b.text_field(id:"notes_control")}
   element(:added_course_note) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_courseNote")}
   element(:added_course_note_backup) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_courseNote")}
-
+  #Elements for term notes validation
+  element(:term_fall) { |b| b.header(id: /_line0/).div(id: /_termNote/) }
+  element(:term_winter) { |b| b.header(id: /_line1/).div(id: /_termNote/) }
+  element(:term_spring) { |b| b.header(id: /_line2/).div(id: /_termNote/) }
+  element(:term_summer) { |b| b.header(id: /_line3/).div(id: /_termNote/) }
+  element(:term_note_dialog) { |b| b.div(id: "KSAP-TermNoteDialog-FormView") }
+  element(:save_term_note) { |b| b.div(id: "KSAP-TermNoteDialog-FormView").button(id: "submit_dialog_button") }
+  element(:term_note) { |b| b.div(id: "KSAP-TermNoteDialog-FormView").textarea(name: "termNote") }
 
 end
-
