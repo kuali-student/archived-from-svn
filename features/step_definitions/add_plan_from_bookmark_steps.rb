@@ -6,7 +6,7 @@ When(/^I add a course from the bookmark gutter to the planned section$/) do
   @BookmarkObject.add_course_bookmark_gutter_to_plan
 end
 
-Then(/^the course should be successfully added$/) do
+Then(/^the course should be successfully added to the planned section$/) do
   @BookmarkObject.verify_added_course_planned
 end
 #------------------------------
@@ -18,7 +18,7 @@ When(/^I add a course from the bookmark gutter to the backup section$/) do
   @BookmarkObject.add_course_bookmark_gutter_to_backup
 end
 
-Then(/^the course is successfully added$/) do
+Then(/^the course is successfully added to the backup section$/) do
   @BookmarkObject.verify_added_course_backup
 end
 #------------------------------
@@ -30,7 +30,7 @@ When(/^I add a course from the bookmark page to the planned section$/) do
   @BookmarkObject.add_course_bookmark_page_to_plan
 end
 
-Then(/^the course should be added$/) do
+Then(/^the course should be added to the planned section$/) do
   @BookmarkObject.verify_added_course_planned
 end
 #------------------------------
@@ -42,7 +42,7 @@ When(/^I add a course from the bookmark page to the backup section$/) do
   @BookmarkObject.add_course_bookmark_page_to_backup
 end
 
-Then(/^the course is added$/) do
+Then(/^the course is added to the backup section$/) do
   @BookmarkObject.verify_added_course_backup
 end
 #------------------------------
