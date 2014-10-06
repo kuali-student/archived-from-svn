@@ -31,9 +31,9 @@ class ActivityOfferingRequisites < BasePage
   element(:eligibility_prereq_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleA")}
   element(:eligibility_prereq_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleA")}
   element(:prereq_compare_link) { |b| b.eligibility_prereq_edit_links.a(:text => /Compare/)}
-  action(:prereq_compare) { |b| b.prereq_compare_link.click; b.loading.wait_while_present(60) }
+  action(:prereq_compare) { |b| b.prereq_compare_link.click; b.loading.wait_while_present }
   element(:prereq_edit_link) { |b| b.eligibility_prereq_edit_links.a(:text => /Edit Rule/)}
-  action(:prereq_edit) { |b| b.prereq_edit_link.click; b.loading.wait_while_present(60) }
+  action(:prereq_edit) { |b| b.prereq_edit_link.click; b.loading.wait_while_present }
   element(:prereq_edit_suppress_link) { |b| b.eligibility_prereq_edit_links.a(:text => /Suppress Rule/)}
   action(:prereq_edit_suppress) { |b| b.prereq_edit_suppress_link.click; b.loading.wait_while_present }
   element(:prereq_revert_link) { |b| b.eligibility_prereq_edit_links.a(:text => /Revert to Course Offering/)}
@@ -55,9 +55,9 @@ class ActivityOfferingRequisites < BasePage
   element(:corequisite_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleB")}
   element(:corequisite_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleB")}
   element(:coreq_compare_link) { |b| b.corequisite_edit_links.a(:text => /Compare/)}
-  action(:coreq_compare) { |b| b.coreq_compare_link.click; b.loading.wait_while_present(60) }
+  action(:coreq_compare) { |b| b.coreq_compare_link.click; b.loading.wait_while_present }
   element(:coreq_edit_link) { |b| b.corequisite_edit_links.a(:text => /Edit Rule/)}
-  action(:coreq_edit) { |b| b.coreq_edit_link.click; b.loading.wait_while_present(60) }
+  action(:coreq_edit) { |b| b.coreq_edit_link.click; b.loading.wait_while_present }
   element(:coreq_edit_suppress_link) { |b| b.corequisite_edit_links.a(:text => /Suppress Rule/)}
   action(:coreq_edit_suppress) { |b| b.coreq_edit_suppress_link.click; b.loading.wait_while_present }
   element(:coreq_revert_link) { |b| b.corequisite_edit_links.a(:text => /Revert to Course Offering/)}
@@ -79,9 +79,9 @@ class ActivityOfferingRequisites < BasePage
   element(:recommended_prep_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleC")}
   element(:recommended_prep_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleC")}
   element(:prep_compare_link) { |b| b.recommended_prep_edit_links.a(:text => /Compare/)}
-  action(:prep_compare) { |b| b.prep_compare_link.click; b.loading.wait_while_present(60) }
+  action(:prep_compare) { |b| b.prep_compare_link.click; b.loading.wait_while_present }
   element(:prep_edit_link) { |b| b.recommended_prep_edit_links.a(:text => /Edit Rule/)}
-  action(:prep_edit) { |b| b.prep_edit_link.click; b.loading.wait_while_present(60) }
+  action(:prep_edit) { |b| b.prep_edit_link.click; b.loading.wait_while_present }
   element(:prep_edit_suppress_link) { |b| b.recommended_prep_edit_links.a(:text => /Suppress Rule/)}
   action(:prep_edit_suppress) { |b| b.prep_edit_suppress_link.click; b.loading.wait_while_present }
   element(:prep_revert_link) { |b| b.recommended_prep_edit_links.a(:text => /Revert to Course Offering/)}
@@ -101,9 +101,9 @@ class ActivityOfferingRequisites < BasePage
   element(:antirequisite_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleD")}
   element(:antirequisite_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleD")}
   element(:antireq_compare_link) { |b| b.antirequisite_edit_links.a(:text => /Compare/)}
-  action(:antireq_compare) { |b| b.antireq_compare_link.click; b.loading.wait_while_present(60) }
+  action(:antireq_compare) { |b| b.antireq_compare_link.click; b.loading.wait_while_present }
   element(:antireq_edit_link) { |b| b.antirequisite_edit_links.a(:text => /Edit Rule/)}
-  action(:antireq_edit) { |b| b.antireq_edit_link.click; b.loading.wait_while_present(60) }
+  action(:antireq_edit) { |b| b.antireq_edit_link.click; b.loading.wait_while_present }
   element(:antireq_edit_suppress_link) { |b| b.antirequisite_edit_links.a(:text => /Suppress Rule/)}
   action(:antireq_edit_suppress) { |b| b.antireq_edit_suppress_link.click; b.loading.wait_while_present }
   element(:antireq_revert_link) { |b| b.antirequisite_edit_links.a(:text => /Revert to Course Offering/)}
@@ -123,9 +123,9 @@ class ActivityOfferingRequisites < BasePage
   element(:repeatable_credit_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleE")}
   element(:repeatable_credit_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleE")}
   element(:repeat_compare_link) { |b| b.repeatable_credit_edit_links.a(:text => /Compare/)}
-  action(:repeat_compare) { |b| b.repeat_compare_link.click; b.loading.wait_while_present(60) }
+  action(:repeat_compare) { |b| b.repeat_compare_link.click; b.loading.wait_while_present }
   element(:repeat_edit_link) { |b| b.repeatable_credit_edit_links.a(:text => /Edit Rule/)}
-  action(:repeat_edit) { |b| b.repeat_edit_link.click; b.loading.wait_while_present(60) }
+  action(:repeat_edit) { |b| b.repeat_edit_link.click; b.loading.wait_while_present }
   element(:repeat_edit_suppress_link) { |b| b.repeatable_credit_edit_links.a(:text => /Suppress Rule/)}
   action(:repeat_edit_suppress) { |b| b.repeat_edit_suppress_link.click; b.loading.wait_while_present }
   element(:repeat_revert_link) { |b| b.repeatable_credit_edit_links.a(:text => /Revert to Course Offering/)}
@@ -145,9 +145,9 @@ class ActivityOfferingRequisites < BasePage
   element(:restricted_credit_edit_links) {|b| b.frm.div( id: "KSAO-RuleEdit-ActionLinks_ruleF")}
   element(:restricted_credit_add_links) {|b| b.frm.div( id: "KSAO-RuleAdd-ActionLink_ruleF")}
   element(:restrict_compare_link) { |b| b.restricted_credit_edit_links.a(:text => /Compare/)}
-  action(:restrict_compare) { |b| b.restrict_compare_link.click; b.loading.wait_while_present(60) }
+  action(:restrict_compare) { |b| b.restrict_compare_link.click; b.loading.wait_while_present }
   element(:restrict_edit_link) { |b| b.resctricted_credit_edit_links.a(:text => /Edit Rule/)}
-  action(:restrict_edit) { |b| b.restrict_edit_link.click; b.loading.wait_while_present(60) }
+  action(:restrict_edit) { |b| b.restrict_edit_link.click; b.loading.wait_while_present }
   element(:restrict_edit_suppress_link) { |b| b.resctricted_credit_edit_links.a(:text => /Suppress Rule/)}
   action(:restrict_edit_suppress) { |b| b.restrict_edit_suppress_link.click; b.loading.wait_while_present }
   element(:restrict_revert_link) { |b| b.restricted_credit_edit_links.a(:text => /Revert to Course Offering/)}

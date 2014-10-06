@@ -304,10 +304,10 @@ class Holiday < DataFactory
       page.holiday_end_date.click
       page.holiday_end_date.set @end_date
       #page.start_time
-      if !@instructional then
+      if !@instructional
         page.instructional.clear
         #make sure date is not on a weekend
-        if options[:exp_success] then
+        if options[:exp_success]
           st_date = Date.strptime( @start_date , '%m/%d/%Y')
           #e_date = Date.strptime( @end_date , '%m/%d/%Y') unless @end_date.nil? or @end_date == ""
           while st_date.saturday? or st_date.sunday? do

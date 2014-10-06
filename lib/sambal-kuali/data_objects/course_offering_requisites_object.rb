@@ -101,7 +101,7 @@ class CORequisitesData < DataFactory
                 "Repeatable for Credit"=>:repeatable_credit_section,
                 "Course that Restricts Credits"=>:restricted_credit_section}
     on CourseOfferingRequisites do |page|
-      page.loading.wait_while_present(60)
+      page.loading.wait_while_present
       if !page.send(sections[@section]).span(id: /KSCO-AgendaManage-RulePrototype_rule[A-Z]_toggle_exp/).visible?
         page.send(sections[@section]).when_present.click
       end
@@ -278,7 +278,7 @@ class CORequisitesData < DataFactory
 
   def switch_tabs
     on ManageCORequisites do |page|
-      page.edit_loading.wait_while_present(60)
+      page.edit_loading.wait_while_present
       tab = page.tab_section.li(:class => /active/).text
       if tab == "Edit Rule"
         page.logic_tab.when_present.click

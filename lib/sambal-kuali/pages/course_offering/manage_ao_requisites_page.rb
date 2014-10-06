@@ -26,14 +26,14 @@ class ManageAORequisites < BasePage
   action(:up_btn) { |b| b.frm.button(:text => /Move Up/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:left_btn) { |b| b.frm.button(:text => /Move Out/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:right_btn) { |b| b.frm.button(:text => /Move In/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
-  action(:preview_btn) { |b| b.frm.button(:text => /Preview Change/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present(60)}
+  action(:preview_btn) { |b| b.frm.button(:text => /Preview Change/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:copy_btn) { |b| b.frm.button(:text => /Copy/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:cut_btn) { |b| b.frm.button(:text => /Cut/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:paste_btn) { |b| b.frm.button(:text => /Paste/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:del_btn) { |b| b.frm.button(:text => /Delete/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:add_line_btn) { |b| b.frm.button(:id=>/KRMS-ApprovedCourseStackedCollectionGroup_.*add/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
   action(:delete_line_btn) { |b| b.frm.button(:text => /delete/).when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
-  action(:update_rule_btn) { |b| b.frm.button(text: "Update Rule").when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present(60)}
+  action(:update_rule_btn) { |b| b.frm.button(text: "Update Rule").when_present.click; b.edit_loading.wait_while_present; b.loading.wait_while_present}
 
   element(:right_btn_element) { |b| b.frm.button(:text => /Move In/) }
   element(:cancel_update_link) { |b| b.frm.a(id: "KSAO-CancelRule-Button")}

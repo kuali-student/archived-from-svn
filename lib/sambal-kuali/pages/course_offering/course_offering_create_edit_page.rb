@@ -6,13 +6,13 @@ class CourseOfferingCreateEdit < BasePage
 
   expected_element :suffix
 
-  action(:submit) { |b| b.frm.button(text: "Update").click; b.loading.wait_while_present(90) }
+  action(:submit) { |b| b.frm.button(text: "Update").click; b.loading.wait_while_present }
   action(:save_progress) { |b| b.frm.button(text: "Save Progress").click; b.loading.wait_while_present }
   #action(:cancel) { |b| b.frm.link(id: "COEdit_CancelLink").click; b.loading.wait_while_present }
 
   element(:sticky_footer_div) { |b| b.frm.div(class: "ks-uif-footer clearfix uif-stickyFooter uif-stickyButtonFooter") }
   element(:create_offering_button) { |b| b.frm.button(id: "createUpdateFromCatalog_btn") }
-  action(:create_offering) { |b| b.create_offering_button.click; b.loading.wait_while_present(60) }
+  action(:create_offering) { |b| b.create_offering_button.click; b.loading.wait_while_present }
   action(:cancel) { |b| b.sticky_footer_div.link(text: "Cancel").click; b.loading.wait_while_present }
 
   # CO-navigation carousel (and confirmation dialog)
@@ -230,7 +230,7 @@ class CourseOfferingCreateEdit < BasePage
   action(:lookup_org_new) { |b| b.lookup_org_new_element.click; b.loading.wait_while_present }
 
   element(:add_org_button) { |b| b.button(id: "KS-CourseOfferingEdit-OrganizationSection_add") }
-  action(:add_org) { |b| b.add_org_button.click; b.loading.wait_while_present() }
+  action(:add_org) { |b| b.add_org_button.click; b.loading.wait_while_present }
 
   def get_org_name(id)
     target_orgs_row(id).cells[NAME_COLUMN].text  #cell is hard-coded, getting this value was very problematic

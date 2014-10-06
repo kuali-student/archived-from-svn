@@ -106,7 +106,7 @@ class ManageCourseOfferingList < BasePage
     copy_link(co_code).wait_until_present
     copy_link(co_code).focus
     copy_link(co_code).click
-    loading.wait_while_present(30)
+    loading.wait_while_present
   end
 
   def copy_link(co_code)

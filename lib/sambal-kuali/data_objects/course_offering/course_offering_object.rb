@@ -1082,7 +1082,7 @@ class CourseOffering < DataFactory
       else
         page.cancel_delete
       end
-      page.loading.wait_while_present(60)
+      page.loading.wait_while_present
     end
     confirmation_message
   end

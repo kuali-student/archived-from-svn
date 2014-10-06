@@ -99,7 +99,7 @@ class AORequisitesData < DataFactory
                 "Repeatable for Credit"=>:repeatable_credit_section_link,
                 "Course that Restricts Credits"=>:restricted_credit_section_link}
     on ActivityOfferingRequisites do |page|
-      page.loading.wait_while_present(60)
+      page.loading.wait_while_present
       if !page.send(sections[@section]).span(id: /KSAO-AgendaManage-RulePrototype_rule[A-Z]_toggle_exp/).visible?
         page.send(sections[@section]).when_present.click
       end
