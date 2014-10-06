@@ -17,7 +17,7 @@ Feature: REG.Manage Applied Hold
     When I attempt to load a student by invalid studentId
     Then a validation error is displayed stating "Student ID: Invalid student Id"
 
-    #KSENROLL-14575
+#KSENROLL-14575
   @pending
   Scenario: Hold2.18.1 Verify that hold catalog info of applied or expired hold
     When I load a student to view the hold code information

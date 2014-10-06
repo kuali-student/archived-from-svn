@@ -120,7 +120,8 @@ class AppliedHold < DataFactory
     options = defaults.merge(opts)
 
     on ManageAppliedHold do |page|
-      page.expire_hold(@hold_issue.code)
+      page.select_hold( @hold_issue.code)
+      page.expire_hold
     end
 
     on ExpireAppliedHold do |page|
@@ -141,7 +142,10 @@ class AppliedHold < DataFactory
   end
 
   def delete_hold
-    on(ManageAppliedHold).delete_hold(@hold_issue.code)
+    on ManageAppliedHold do |page|
+      page.select_hold( @hold_issue.code)
+      page.delete_hold
+    end
 
     on(DeleteAppliedHold).confirm_delete_hold
   end

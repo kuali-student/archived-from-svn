@@ -39,18 +39,6 @@ class AdminRegistration < BasePage
   element(:dismiss_term_btn) { |b| b.term_results_success.i(class: "ks-fontello-icon-cancel")}
   action(:dismiss_term){ |b| b.loading.wait_while_present; b.dismiss_term_btn.click}
 
-  def get_term_warning(term_descr)
-    loading.wait_while_present
-    if term_issues_table.exists?
-      term_issues_table.rows[1..-1].each do |row|
-        return row if row.text =~ /#{term_descr}/
-      end
-    end
-
-    return nil
-  end
-
-
   def get_term_warning
     array = []
     loading.wait_while_present

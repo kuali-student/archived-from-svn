@@ -390,7 +390,7 @@ end
 
 Then /^a warning message along with the Registered and Wait-listed courses are displayed$/ do
   on AdminRegistration do |page|
-    page.get_term_warning(@admin_reg.term_description).text.should match /#{@admin_reg.term_description}/m
+    page.get_term_warning.should match /#{@admin_reg.term_description}/m
     page.reg_for_section.visible?.should == true
   end
 end
@@ -940,5 +940,10 @@ When(/^I attempt to drop the course with a blank date$/) do
 end
 
 Then(/^a drop date required message appears$/) do
-  on(AdminRegistration).drop_course_dialog_error_msg.should match /Effective drop date is required/
+  on AdminRegistration do |page|
+    page.drop_course_dialog_error_msg.should match /Effective drop date is required/
+
+    page.cancel_course_drop
+    page.student_term_go
+  end
 end

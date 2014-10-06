@@ -61,7 +61,9 @@ class ManageAppliedHold < BasePage
   element(:apply_new_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Add-Applied-Hold")}
   action(:apply_new_hold){ |b| b.apply_new_hold_btn.when_present.click}
   element(:expire_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Expire-Applied-Hold")}
+  action(:expire_hold){ |b| b.expire_hold_btn.when_present.click}
   element(:delete_hold_btn) { |b| b.toolbar_section.button(id: "KS-Hold-ToolBar-Delete-Applied-Hold")}
+  action(:delete_hold){ |b| b.delete_hold_btn.when_present.click}
 
   ######################################################################################################################
   ###                                            Results Section                                ###
@@ -71,31 +73,18 @@ class ManageAppliedHold < BasePage
   element(:hold_code_info_link) { |code, b| b.results_table.a(class: "uif-link", text: /#{code}/i)}
   action(:hold_code_info) { |code, b| b.hold_code_info_link(code).when_present.click}
 
-  def expire_hold (hold_code)
+  def get_active_applied_hold_by_code( code, state = "Active")
     if results_table.exists?
       results_table.rows[1..-1].each do |row|
-        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
-          row.cells[CHECK_HOLD].click
-          expire_hold_btn.when_present.click
-          break
+        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /^#{state}/
+          return row
         end
       end
     end
+    return nil
   end
 
-  def delete_hold (hold_code)
-    if results_table.exists?
-      results_table.rows[1..-1].each do |row|
-        if((row.cells[HOLD_CODE].text=~ /#{Regexp.escape(hold_code)}/) and (row.cells[STATE].text=~ /Active/))
-          row.cells[CHECK_HOLD].click
-          delete_hold_btn.when_present.click
-          break
-        end
-      end
-    end
-  end
-
-  def get_hold_by_code( code)
+  def get_applied_hold_by_code( code)
     loading.wait_while_present
     if results_table.exists?
       results_table.rows[1..-1].each do |row|
@@ -105,35 +94,23 @@ class ManageAppliedHold < BasePage
     return nil
   end
 
-  def get_applied_hold_by_code( code)
-    if results_table.exists?
-      results_table.rows[1..-1].each do |row|
-        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
-          return row
-        end
-      end
-    end
-    return nil
+  def select_hold( code)
+    row = get_active_applied_hold_by_code( code)
+    row.cells[CHECK_HOLD].checkbox(name: /^holdResultList\[\d+\]\.isCheckedByCluster$/).set if !row.nil?
   end
 
   def get_applied_hold_effective_term( code)
-    if results_table.exists?
-      results_table.rows[1..-1].each do |row|
-        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
-          return row.cells[START_TERM].text
-        end
-      end
+    row = get_active_applied_hold_by_code( code)
+    if !row.nil?
+      return row.cells[START_TERM].text
     end
     return nil
   end
 
   def get_applied_hold_effective_date( code)
-    if results_table.exists?
-      results_table.rows[1..-1].each do |row|
-        if row.cells[HOLD_CODE].text =~ /#{Regexp.escape(code)}/ and row.cells[STATE].text =~ /Active/
-          return row.cells[START_DATE].text
-        end
-      end
+    row = get_active_applied_hold_by_code( code)
+    if !row.nil?
+      return row.cells[START_DATE].text
     end
     return nil
   end
@@ -147,11 +124,6 @@ class ManageAppliedHold < BasePage
   ######################################################################################################################
   ###                                            Inquiry Popup Section                                               ###
   ######################################################################################################################
-  HOLDISSUE_CODE = 0;
-  HOLDISSE_DESC = 1;
-  HOLDISSE_CATAGORY  = 2;
-
-
   element(:inquiry_holdissue) { |b| b.frm_popup.div(id: "KS-HoldIssue-InquiryView")}
   element(:inquiry_holdissue_table){ |b| b.inquiry_holdissue.table}
 

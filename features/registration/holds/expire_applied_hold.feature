@@ -29,7 +29,7 @@ Feature: REG.Expire Applied Hold
     Given there exists a hold issue
     And I apply the hold to a student
     When I expire the hold with an expiration date that is later than the effective date
-    Then the hold is no longer displayed for the student
+    Then the expired hold should still be active
 
 #KSENROLL-14604
   Scenario: HOLD2.14.1 Verify that an expired hold, that's not set to maintain history, doesn't display for a student

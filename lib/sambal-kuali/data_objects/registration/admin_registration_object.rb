@@ -24,7 +24,7 @@ class AdminRegistrationData < DataFactory
     term_descriptions = {"0" => "Winter", "1" => "Spring", "5" => "Summer", "8" => "Fall"}
     term_identifier = @term_code[5]
     if @term_description.reverse[0,4].reverse != @term_code[0,4] and term_descriptions[term_identifier] !~ /#{@term_description}/
-      @term_description = term_descriptions[term_identifier] + " " + @term_code[0,4]
+      @term_description = "#{term_descriptions[term_identifier]} #{@term_code[0,4]}"
     end
   end
 
