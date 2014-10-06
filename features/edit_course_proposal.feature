@@ -11,16 +11,16 @@ Scenario: CC8.1 Edit the Course Proposal - CS
 Scenario: CC8.2 Edit the Course Proposal - Faculty
   Given I have a course proposal created as Faculty
   When I perform a full search for the course proposal
-  Then I edit the course proposal
-  And I should see updated data on the Review proposal page
+  Then I edit the course proposal created as Faculty
+  And I should see updated data of the Faculty proposal on the Review proposal page
 
 
 Scenario: CC8.3 Edit the faculty proposal - CS
   Given I have a course proposal created as Faculty
   When I am logged in as Curriculum Specialist
   Then I perform a search for the course proposal
-  And I edit the course proposal
-  And I should see updated data on the Review proposal page
+  And I edit the basic details of the course proposal
+  And I should see the basic details of of the updated data on the Review proposal page
 
 
 Scenario: CC8.4 Faculty cannot edit CS proposal

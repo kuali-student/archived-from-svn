@@ -116,7 +116,12 @@ class CmSubmitFieldsObject < CmBaseObject
       page.auto_lookup opts[:subject_code] unless opts[:subject_code].nil?
       page.description_rationale.fit opts[:description_rationale]
       page.proposal_rationale.fit opts[:proposal_rationale]
-      determine_save_action unless opts[:defer_save]
+      if page.logged_in_user.downcase == "fred"
+        determine_save_action
+      else
+        determine_save_action unless opts[:defer_save]
+
+      end
     end
 
 
