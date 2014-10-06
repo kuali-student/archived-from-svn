@@ -10,7 +10,6 @@ Feature: REG.Registration Holds
     Given I am using a mobile screen size
 
   #KSENROLL-15134
-  @wip
   Scenario: CR 3.5 - student is unable to access registration because of holds
     Given I log in to student registration as A.JAYR
     And I attempt to access registration for Fall 2012
