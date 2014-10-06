@@ -6,6 +6,8 @@ class ManageAppliedHold < BasePage
 
   expected_element :student_id_input
 
+  element(:frm_popup) { |b| b.iframe(:class=>"fancybox-iframe")}
+
   ######################################################################################################################
   ###                                            Constants                                       ###
   ######################################################################################################################
@@ -66,6 +68,8 @@ class ManageAppliedHold < BasePage
   ######################################################################################################################
   element(:results_section) { |b| b.frm.div( id: "KS-AppliedHold-SearchResults")}
   element(:results_table) { |b| b.results_section.table}
+  element(:hold_code_info_link) { |code, b| b.results_table.a(class: "uif-link", text: /#{code}/i)}
+  action(:hold_code_info) { |code, b| b.hold_code_info_link(code).when_present.click}
 
   def expire_hold (hold_code)
     if results_table.exists?
@@ -139,5 +143,27 @@ class ManageAppliedHold < BasePage
   ######################################################################################################################
   element(:validation_messages) { |b| b.manage_applied_hold_view.div(class: /alert alert-danger/)}
   value(:get_validation_message){ |b| b.loading.wait_while_present; b.validation_messages.text}
+
+  ######################################################################################################################
+  ###                                            Inquiry Popup Section                                               ###
+  ######################################################################################################################
+  HOLDISSUE_CODE = 0;
+  HOLDISSE_DESC = 1;
+  HOLDISSE_CATAGORY  = 2;
+
+
+  element(:inquiry_holdissue) { |b| b.frm_popup.div(id: "KS-HoldIssue-InquiryView")}
+  element(:inquiry_holdissue_table){ |b| b.inquiry_holdissue.table}
+
+  def get_inquiry_holdissue_info
+    array = []
+    loading.wait_while_present
+    if inquiry_holdissue_table.exists?
+      inquiry_holdissue_table.rows[1..-1].each do |row|
+        array << row.text
+      end
+    end
+    array.to_s
+  end
 
 end

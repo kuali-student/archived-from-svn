@@ -156,3 +156,13 @@ When(/^I have applied a registration hold to a student$/) do
   @applied_hold = create AppliedHold, :student_id => "KS-2094", :hold_issue => (make HoldIssue, :code => "ADV01")
   @applied_hold.apply_hold :effective_term => "201401", :term_based => true
 end
+
+When(/^I load a student to view the hold code information$/) do
+  @applied_hold = create AppliedHold, :hold_issue => (make HoldIssue, :category => "Student Record", :code => "ACAD08")
+
+  on(ManageAppliedHold).hold_code_info( @applied_hold.code)
+end
+
+Then(/^the inquiry view displays the hold catalog information$/) do
+  on(ManageAppliedHold).get_inquiry_holdissue_info.should match /#{@applied_hold.code}.*#{@applied_hold.category}/
+end
