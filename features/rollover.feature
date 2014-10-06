@@ -69,18 +69,18 @@ Feature: CO.Rollover
     And instructional assignments are copied to the target term AOs
 
     @draft
-  Scenario: CO 28.2.1 Confirm that when a course is rolled over and the GES settings specify that the scheduling information should not be copied, that the Bldg/Rm data is not copied regardless of the applicable Bdlg/Rm rollover config
-    recheck this in terry's doc Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'not copy' for scheduling information
+  Scenario: CO 28.2.1 Confirm GES rollover settings that specify the scheduling information should not be copied, then the Bldg/Rm data is not copied regardless of the applicable Bdlg/Rm rollover config
+    Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'not copy' for scheduling information
     And no specific rule is configured at the specific course code for Bldg/Rm
     But a 'copy' Bldg/Rm rule is configured at the term level that applies to the specified course code
     When the rollover is executed for a term with the Bldg/Rm rule and with the specified course offering
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term excluding those in cancelled status
-    And the scheduling information including Bldg/Rm info is copied to the target term AOs
+    And activity offerings are copied to the target term including those in cancelled status
+    And the scheduling information (including bldg/room info) is not copied to the target term AOs
 
-  @draft
-  Scenario: CO 28.1.1 Confirm GES settings to copy scheduling information but exclude Bldg/Rm data
-    recheck terry's wording Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'copy' for scheduling information
+  @fails_on_bldg_not_blank
+  Scenario: CO 28.1.1 Confirm GES settings to rollover scheduling information but exclude Bldg/Rm data
+    Given that a course code rollover configuration is defined for a specific course in the GES with a value of 'copy' for scheduling information
     And 'not copy' for Bldg/Rm
     When the rollover is executed for a term with the specific course with Bldg/Rm and scheduling information rules
     Then course offerings are copied from the source term to the target term
@@ -92,19 +92,18 @@ Feature: CO.Rollover
     Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term type
     And there is a value of 'copy' for instructional assignments
     And 'not copy' for canceled AOs
-    When the rollover is executed for the specified term type
-    And the ENGL courses I am viewing are not covered by a more granular rollover rule
+    When the rollover is executed for the specified term type with ENGL courses not covered by a more granular rules
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term excluding those in canceled status
-    And the instructional assignments are copied to the target AOs
+    And activity offerings are copied to the target term excluding those in cancelled status
+    And instructional assignments are copied to the target term AOs
 
-  @draft
+  @draft @run_one_time_only_terms_hard_coded
   Scenario: CO 28.13.1 Apply term-specific rules for a subject level rollover configuration
     Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term
     And there is a value of 'not copy' for instructional assignments
     And 'copy' for canceled Bldg/Rm
     When the rollover is executed for the specified term
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term
-    And Bldg/Rm data is copied to the target AOs
-    And the instructional assignments are not copied to the target AOs
+    And activity offerings are copied to the target term excluding those in cancelled status
+    And the scheduling information including Bldg/Rm info is copied to the target term AOs
+    And the instructional assignments are not copied to the target term AOs

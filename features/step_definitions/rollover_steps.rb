@@ -444,7 +444,13 @@ end
 
 When(/^the rollover is executed for a term with the Bldg\/Rm rule and with the specified course offering$/) do
   @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
-  term = make AcademicTermObject, :parent_calendar => @calendar, :term_type => 'Summer'
+  term = make AcademicTermObject, :parent_calendar => @calendar,
+              :term => 'Summer I',
+              :term_type => 'Summer 1',
+              :term_name => "Summer 1 #{@calendar.year.to_i + 1}",
+              :term_code => "#{@calendar.year.to_i + 1}05",
+              :start_date => "05/12/#{@calendar.year.to_i + 1}",
+              :end_date => "06/12/#{@calendar.year.to_i + 1}"
   @calendar.add_term term
 
   @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
@@ -490,7 +496,14 @@ When(/^the rollover is executed for a term with the Bldg\/Rm rule and with the s
   @co_list << course_offering
 
   @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
-  term_target = make AcademicTermObject, :parent_calendar => @calendar_target
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target,
+      :term => 'Summer I',
+      :term_type => 'Summer 1',
+      :term_name => "Summer 1 #{@calendar_target.year.to_i + 1}",
+      :term_code => "#{@calendar_target.year.to_i + 1}05",
+      :start_date => "05/12/#{@calendar_target.year.to_i + 1}",
+      :end_date => "06/12/#{@calendar_target.year.to_i + 1}"
+
   @calendar_target.add_term term_target
   term_target.make_official
 
@@ -759,7 +772,7 @@ Given(/^that a course code rollover configuration is defined for a specific cour
   #no UI for this -- ENGL462 is configured in GES
 end
 
-And(/^the scheduling information is not copied to the target term AOs$/) do
+And(/^the scheduling information.*is not copied to the target term AOs$/) do
   @co_list.each do |co|
     #confirm exist on target term
     co.term = @calendar_target.terms[0].term_code
@@ -769,15 +782,243 @@ And(/^the scheduling information is not copied to the target term AOs$/) do
       ao_row = page.target_row('B')
       existing_sched_info = co.get_ao_list[1].get_existing_scheduling_information(ao_row)[0]
       existing_sched_info.nil?.should be_true
+      ao_row.cells[ManageCourseOfferings::AO_BLDG].text = ''
+      ao_row.cells[ManageCourseOfferings::AO_ROOM].text = ''
     end
   end
 end
 
 
 And(/^no specific rule is configured at the specific course code for Bldg\/Rm$/) do
-  pending
+  #no UI for this
 end
 
 But(/^a 'copy' Bldg\/Rm rule is configured at the term level that applies to the specified course code$/) do
-  pending
+  #no UI for this
+end
+
+Given(/^that a course code rollover configuration is defined for a specific course in the GES with a value of 'copy' for scheduling information$/) do
+  #no UI for this
+end
+
+And(/^'not copy' for Bldg\/Rm$/) do
+  #no UI for this
+end
+
+When(/^the rollover is executed for a term with the specific course with Bldg\/Rm and scheduling information rules$/) do
+  @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
+  term = make AcademicTermObject, :parent_calendar => @calendar
+  @calendar.add_term term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "ENGL243"
+  course_offering.delivery_format_list[0].format = "Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target
+  @calendar_target.add_term term_target
+  term_target.make_official
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
+end
+
+Given(/^that a subject level rollover configuration has been defined for ENGL in the GES for a specific term type$/) do
+  #no UI for this
+end
+
+And(/^there is a value of 'copy' for instructional assignments$/) do
+  #no UI for this
+end
+
+When(/^the rollover is executed for the specified term type with ENGL courses not covered by a more granular rules$/) do
+  @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
+  term = make AcademicTermObject, :parent_calendar => @calendar,
+              :term => 'Summer I',
+              :term_type => 'Summer 1',
+              :term_name => "Summer 1 #{@calendar.year.to_i + 1}",
+              :term_code => "#{@calendar.year.to_i + 1}05",
+              :start_date => "05/12/#{@calendar.year.to_i + 1}",
+              :end_date => "06/12/#{@calendar.year.to_i + 1}"
+  @calendar.add_term term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "ENGL211"
+  course_offering.delivery_format_list[0].format = "Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = create AcademicCalendar, :year => @calendar.year.to_i + 1 #,:name => "6aXt9C4nbM"
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target,
+                     :term => 'Summer I',
+                     :term_type => 'Summer 1',
+                     :term_name => "Summer 1 #{@calendar_target.year.to_i + 1}",
+                     :term_code => "#{@calendar_target.year.to_i + 1}05",
+                     :start_date => "05/12/#{@calendar_target.year.to_i + 1}",
+                     :end_date => "06/12/#{@calendar_target.year.to_i + 1}"
+  @calendar_target.add_term term_target
+  term_target.make_official
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
+end
+
+Given(/^that a subject level rollover configuration has been defined for ENGL in the GES for a specific term$/) do
+  #no UI for this
+end
+
+And(/^there is a value of 'not copy' for instructional assignments$/) do
+  #no UI for this
+end
+
+And(/^'copy' for canceled Bldg\/Rm$/) do
+  #no UI for this
+end
+
+When(/^the rollover is executed for the specified term$/) do
+  @calendar = make AcademicCalendar , :year => '2018', :name => '2018-2019 Academic Calendar'
+  term = make AcademicTermObject, :parent_calendar => @calendar,
+              :term => 'Summer I',
+              :term_type => 'Summer 1',
+              :term_name => "Summer 1 #{@calendar.year.to_i + 1}",
+              :term_code => "#{@calendar.year.to_i + 1}05",
+              :start_date => "05/31/#{@calendar.year.to_i + 1}",
+              :end_date => "07/08/#{@calendar.year.to_i + 1}"
+  @calendar.terms << term
+
+  @manage_soc = make ManageSoc, :term_code => @calendar.terms[0].term_code
+  @manage_soc.set_up_soc
+  @manage_soc.perform_manual_soc_state_change
+
+  course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
+                         :course => "ENGL211"
+  course_offering.delivery_format_list[0].format = "Lecture"
+  course_offering.delivery_format_list[0].grade_format = "Lecture"
+  course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
+
+  course_offering.create
+
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+                                      :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "TH",
+                 :start_time => "11:00", :start_time_ampm => "am",
+                 :end_time => "11:50", :end_time_ampm => "am",
+                 :facility => 'TWS', :room => '1100'
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
+  activity_offering_canceled.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
+
+  activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
+                             :activity_type => "Lecture"
+  si_obj =  make SchedulingInformationObject, :days => "W",
+                 :start_time => "09:00", :start_time_ampm => "am",
+                 :end_time => "09:50", :end_time_ampm => "am",
+                 :facility => 'KEY', :room => '0117'
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+
+  person = make PersonnelObject, :id => "KS-4611", :name => "KEY, ALAN", :affiliation => "Instructor", :inst_effort => 100
+  activity_offering.add_personnel person
+  on(ActivityOfferingMaintenance).submit
+  activity_offering.approve :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering
+  @co_list = []
+  @co_list << course_offering
+
+  @calendar_target = make AcademicCalendar, :year => '2019',:name => '2019-2020 Academic Calendar'
+  term_target = make AcademicTermObject, :parent_calendar => @calendar_target,
+                     :term => 'Summer I',
+                     :term_type => 'Summer 1',
+                     :term_name => "Summer 1 #{@calendar_target.year.to_i + 1}",
+                     :term_code => "#{@calendar_target.year.to_i + 1}05",
+                     :start_date => "05/12/#{@calendar_target.year.to_i + 1}",
+                     :end_date => "06/12/#{@calendar_target.year.to_i + 1}"
+
+  @calendar_target.terms << term_target
+
+  @rollover = make Rollover, :target_term => @calendar_target.terms[0].term_code , :source_term => @calendar.terms[0].term_code
+  @rollover.perform_rollover
+  @rollover.wait_for_rollover_to_complete
+  @rollover.release_to_depts
 end

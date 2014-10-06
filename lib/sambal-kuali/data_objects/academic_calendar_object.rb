@@ -432,7 +432,11 @@ class AcademicTermObject < DataFactory
     term_criteria = "Academic Term"
     term_criteria = "Sub Term" if @subterm
     on CalendarSearch do |page|
-      page.search_for term_criteria, @term_name, @parent_calendar.year
+      search_year = @parent_calendar.year
+      if @term_type =~ /Summer|Spring|Winter/
+        search_year = @parent_calendar.year.to_i + 1
+      end
+      page.search_for term_criteria, @term_name, search_year
     end
   end
 
