@@ -12,14 +12,18 @@ end
 Then(/^I should be able to successfully update the notes$/) do
   @course_search_result.successful_updation
   on CoursePlannerPage do |page|
+    page.refresh
+    page.planner_courses_detail_list.wait_until_present(120)
+    #page.added_course_note(@course_search_result.planned_term, @course_search_result.course_code).wait_until_present(120)
     page.added_course_note(@course_search_result.planned_term, @course_search_result.course_code).attribute_value("data-content").should include @course_search_result.notes_update
   end
  end
 
 Then(/^I should be able to successfully delete the notes$/) do
   @course_search_result.successful_deletion
-  page.added_course_note(@course_search_result.planned_term, @course_search_result.course_code).wait_until_present(120)
   on CoursePlannerPage do |page|
+    page.refresh
+    page.planner_courses_detail_list.wait_until_present(120)
     page.added_course_note(@course_search_result.planned_term, @course_search_result.course_code).attribute_value("data-content").should==""
   end
 end

@@ -896,7 +896,8 @@ attr_accessor :course_code,
   def update_notes
     on CoursePlannerPage do |page|
       page.planner_courses_detail_list.wait_until_present(120)
-      page.course_code_term_click(@planned_term, @course_code)
+      sleep 5
+      page.course_code_term_click(@planned_term,@course_code)
       page.course_code_edit_click
       page.edit_course.wait_until_present
       page.edit_course.click
