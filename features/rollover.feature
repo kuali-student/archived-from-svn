@@ -85,22 +85,24 @@ Feature: CO.Rollover
     And activity offerings are copied to the target term excluding those in cancelled status
     And the scheduling information excluding Bldg/Rm info is copied to the target term AOs
 
-  Scenario: CO 28.12.1 Apply term type rules for a subject level rollover configuration
-    Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term type
-    And there is a value of 'copy' for instructional assignments
-    And 'not copy' for canceled AOs
-    When the rollover is executed for the specified term type with ENGL courses not covered by a more granular rules
+  Scenario: CO 28.12.1 - Scenario: Apply term type rules (Summer 1) for a course level rollover configuration (ENGL243) to confirm they can differ from term specific rules
+    Given that a course code level rollover configuration has been defined for ENGL243 in the GES for a specific term type
+    And there is a value of 'copy' for scheduling information
+    And blank for all other GES rollover term type/course specific options
+    When the rollover is executed for the specified term type with ENGL243 not covered by a more granular rules
     Then course offerings are copied from the source term to the target term
     And activity offerings are copied to the target term excluding those in cancelled status
     And instructional assignments are copied to the target term AOs
+    And the scheduling information excluding Bldg/Rm info is copied to the target term AOs
 
   @run_one_time_only_terms_hard_coded
-  Scenario: CO 28.13.1 Apply term-specific rules for a subject level rollover configuration
-    Given that a subject level rollover configuration has been defined for ENGL in the GES for a specific term
+  Scenario: CO 28.13.1 - Scenario: Apply term-specific rules (202005) for a course level rollover configuration (ENGL243) to confirm they can differ from term type rules
+    Given that a subject level rollover configuration has been defined for ENGL243 in the GES for a specific term
     And there is a value of 'not copy' for instructional assignments
-    And 'copy' for canceled Bldg/Rm
+    And 'copy' for canceled AOs
+    And 'not copy' for scheduling information
     When the rollover is executed for the specified term
     Then course offerings are copied from the source term to the target term
-    And activity offerings are copied to the target term
-    And the scheduling information including Bldg/Rm info is copied to the target term AOs
+    And activity offerings are copied to the target term including those in cancelled status
     And the instructional assignments are not copied to the target term AOs
+    And the scheduling information is not copied to the target term AOs

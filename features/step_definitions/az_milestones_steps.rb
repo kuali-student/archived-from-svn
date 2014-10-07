@@ -81,7 +81,7 @@ When /^I do not have access to edit maximum enrollment$/ do
 end
 
 When /^I verify the exam periods for the milestones test fall and spring terms$/ do
-  @calendar = make AcademicCalendar, :year => Rollover::PUBLISHED_MILESTONES_SOC_TERM_YEAR.to_i-1
+  @calendar = make AcademicCalendar, :year => Rollover::PUBLISHED_MILESTONES_SOC_TERM_YEAR.to_i
   @term = make AcademicTermObject, :parent_calendar => @calendar, :term => "Fall"
   @calendar.terms << @term
 

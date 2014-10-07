@@ -679,7 +679,7 @@ Given(/^that a subject level rollover configuration is defined for ENGL in the G
   #no UI for this
 end
 
-And(/^'not copy' for instructional assignments$/) do
+And(/^.*'not copy' for instructional assignments$/) do
   #no UI for this
 end
 
@@ -762,8 +762,8 @@ And(/^the instructional assignments are not copied to the target term AOs$/) do
     co.manage
 
     on ManageCourseOfferings do |page|
-      page.ao_instructor('A').should == ''
-      page.ao_instructor('B').should == ''
+      page.ao_instructor('A').should == '' if page.ao_exists?('A')
+      page.ao_instructor('B').should == '' if page.ao_exists?('B')
     end
   end
 end
@@ -871,7 +871,7 @@ And(/^there is a value of 'copy' for instructional assignments$/) do
   #no UI for this
 end
 
-When(/^the rollover is executed for the specified term type with ENGL courses not covered by a more granular rules$/) do
+When(/^the rollover is executed for the specified term type with ENGL243 not covered by a more granular rules$/) do
   @calendar = create AcademicCalendar #, :year => "2235", :name => "fSZtG62zfU"
   term = make AcademicTermObject, :parent_calendar => @calendar,
               :term => 'Summer I',
@@ -887,7 +887,7 @@ When(/^the rollover is executed for the specified term type with ENGL courses no
   @manage_soc.perform_manual_soc_state_change
 
   course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
-                         :course => "ENGL211"
+                         :course => "ENGL243"
   course_offering.delivery_format_list[0].format = "Lecture"
   course_offering.delivery_format_list[0].grade_format = "Lecture"
   course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
@@ -941,14 +941,6 @@ When(/^the rollover is executed for the specified term type with ENGL courses no
   @rollover.release_to_depts
 end
 
-Given(/^that a subject level rollover configuration has been defined for ENGL in the GES for a specific term$/) do
-  #no UI for this
-end
-
-And(/^there is a value of 'not copy' for instructional assignments$/) do
-  #no UI for this
-end
-
 And(/^'copy' for canceled Bldg\/Rm$/) do
   #no UI for this
 end
@@ -969,26 +961,26 @@ When(/^the rollover is executed for the specified term$/) do
   @manage_soc.perform_manual_soc_state_change
 
   course_offering = make CourseOffering, :term=> @calendar.terms[0].term_code,
-                         :course => "ENGL211"
+                         :course => "ENGL243"
   course_offering.delivery_format_list[0].format = "Lecture"
   course_offering.delivery_format_list[0].grade_format = "Lecture"
   course_offering.delivery_format_list[0].final_exam_activity = "Lecture"
 
   course_offering.create
 
-  activity_offering = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
                                       :activity_type => "Lecture"
   si_obj =  make SchedulingInformationObject, :days => "TH",
                  :start_time => "11:00", :start_time_ampm => "am",
                  :end_time => "11:50", :end_time_ampm => "am",
                  :facility => 'TWS', :room => '1100'
-  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
 
   person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
-  activity_offering.add_personnel person
+  activity_offering_canceled.add_personnel person
   on(ActivityOfferingMaintenance).submit
-
-  course_offering.get_ao_list << activity_offering
+  activity_offering_canceled.cancel :navigate_to_page => false
+  course_offering.get_ao_list << activity_offering_canceled
 
   activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
                              :activity_type => "Lecture"
@@ -1021,4 +1013,24 @@ When(/^the rollover is executed for the specified term$/) do
   @rollover.perform_rollover
   @rollover.wait_for_rollover_to_complete
   @rollover.release_to_depts
+end
+
+And(/^'not copy' for scheduling information$/) do
+  #no UI for this
+end
+
+Given(/^that a subject level rollover configuration has been defined for ENGL243 in the GES for a specific term$/) do
+  #no UI for this
+end
+
+And(/^there is a value of 'copy' for scheduling information$/) do
+  #no UI for this
+end
+
+Given(/^that a course code level rollover configuration has been defined for ENGL243 in the GES for a specific term type$/) do
+  #no UI for this
+end
+
+And(/^blank for all other GES rollover term type\/course specific options$/) do
+  #no UI for this
 end
