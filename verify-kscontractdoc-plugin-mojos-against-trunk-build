@@ -24,7 +24,7 @@ fi
 
 rm -rf ks-api-co
 
-svn export https://svn.kuali.org/repos/student/enrollment/ks-api/tags/builds/ks-api-2.1/2.1.1-FR2-M1/build-$KS_BUILD_NUMBER ks-api-co
+svn export -q https://svn.kuali.org/repos/student/enrollment/ks-api/tags/builds/ks-api-2.1/2.1.1-FR2-M1/build-$KS_BUILD_NUMBER ks-api-co
 
 cd ks-api-co
 
