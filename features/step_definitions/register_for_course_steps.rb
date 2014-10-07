@@ -540,10 +540,18 @@ Then /^the number of credits I am registered for is correctly updated in my sche
 end
 
 Then /^I log out from student registration$/ do
-  on RegisterForCourseBase do |page|
-    page.menu
-    page.logout_button.wait_until_present
-    page.logout
+  if @browser.window.size.width <= CourseSearch::MOBILE_BROWSER_WIDTH
+    on RegisterForCourseBase do |page|
+      page.menu
+      page.logout_button.wait_until_present
+      page.logout
+    end
+  else
+    on LargeFormatRegisterForCourseBase do |page|
+      page.user_menu
+      page.logout_link.wait_until_present
+      page.logout
+    end
   end
 end
 

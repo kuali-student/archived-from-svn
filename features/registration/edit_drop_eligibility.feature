@@ -33,4 +33,5 @@ Feature: REG.Edit Drop Eligibility
     When I attempt to drop the course
     Then there is a message indicating that the course drop failed
     And the course is still in my schedule
+    * I log out from student registration
 
