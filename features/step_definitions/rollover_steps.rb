@@ -662,7 +662,7 @@ And(/^instructional assignments are copied to the target term AOs$/) do
   end
 end
 
-And(/^activity offerings are copied to the target term including those in cancelled status$/) do
+And(/^activity offerings are copied to the target term(?: including those in cancelled status)?$/) do
   @co_list.each do |co|
     #confirm exist on target term
     co.term = @calendar_target.terms[0].term_code
@@ -782,8 +782,8 @@ And(/^the scheduling information.*is not copied to the target term AOs$/) do
       ao_row = page.target_row('B')
       existing_sched_info = co.get_ao_list[1].get_existing_scheduling_information(ao_row)[0]
       existing_sched_info.nil?.should be_true
-      ao_row.cells[ManageCourseOfferings::AO_BLDG].text = ''
-      ao_row.cells[ManageCourseOfferings::AO_ROOM].text = ''
+      ao_row.cells[ManageCourseOfferings::AO_BLDG].text.should == ''
+      ao_row.cells[ManageCourseOfferings::AO_ROOM].text.should == ''
     end
   end
 end
@@ -976,19 +976,19 @@ When(/^the rollover is executed for the specified term$/) do
 
   course_offering.create
 
-  activity_offering_canceled = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
+  activity_offering = create ActivityOfferingObject, :parent_cluster =>  course_offering.default_cluster,
                                       :activity_type => "Lecture"
   si_obj =  make SchedulingInformationObject, :days => "TH",
                  :start_time => "11:00", :start_time_ampm => "am",
                  :end_time => "11:50", :end_time_ampm => "am",
                  :facility => 'TWS', :room => '1100'
-  activity_offering_canceled.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
+  activity_offering.add_req_sched_info :rsi_obj => si_obj, :defer_save => true
 
   person = make PersonnelObject, :id => "KS-10175", :name => "SMITH, DAVID", :affiliation => "Instructor", :inst_effort => 30
-  activity_offering_canceled.add_personnel person
+  activity_offering.add_personnel person
   on(ActivityOfferingMaintenance).submit
-  activity_offering_canceled.cancel :navigate_to_page => false
-  course_offering.get_ao_list << activity_offering_canceled
+
+  course_offering.get_ao_list << activity_offering
 
   activity_offering = create ActivityOfferingObject, :parent_cluster => course_offering.default_cluster,
                              :activity_type => "Lecture"
