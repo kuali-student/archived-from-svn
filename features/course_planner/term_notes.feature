@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: Add note to terms
 
   Background:
