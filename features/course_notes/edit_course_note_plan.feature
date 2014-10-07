@@ -1,4 +1,4 @@
-@draft
+@nightly
 Feature: BT.Edit Course Note
   Background:
     Given I am logged in as a Student

@@ -1,4 +1,4 @@
-@wip
+@nightly
 Feature: BT.Add Note to Planner
 Background:
 Given I am logged in as a Student
