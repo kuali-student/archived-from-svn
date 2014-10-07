@@ -36,5 +36,5 @@ Feature: REG.AZ Holds Functionary using Applied Holds
 
   Scenario: Hold2.10.2 Validate that a non Holds Functionary can not apply a hold to a student
     Given I am logged in as a Schedule Coordinator
-    When I apply a hold to a student by completing the required information
+    When I attempt to apply a hold to a student
     Then an apply hold authorization error message is displayed

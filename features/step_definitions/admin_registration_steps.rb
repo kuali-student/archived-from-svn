@@ -345,9 +345,10 @@ Then /^the student's registered courses credit total for the term should be upda
 end
 
 Given /^there exists a term for which registration is open$/ do
-  @calendar = make AcademicCalendar, :year => "2014", :name => "2014-2015 Academic Calendar"
+  @calendar = make AcademicCalendar, :year => "2013", :name => "2013-2014 Academic Calendar"
 
-  term = make AcademicTermObject, :parent_calendar => @calendar, :term => "Summer I", :term_type => "Summer 1"
+  term = make AcademicTermObject, :parent_calendar => @calendar, :term => "Summer I", :term_type => "Summer 1",
+              :term_name => "Summer I 2014"
   @calendar.terms << term
 
   @calendar.terms[0].edit :defer_save => true
@@ -771,7 +772,7 @@ end
 
 Then(/^a last day to drop message appears$/) do
   on AdminRegistration do |page|
-    page.loading.wait_while_present
+    sleep 10 #Adding a sleep temporarily to allow the test to pass. Test intermittently fails
     page.get_results_warning.should match /Last day to drop was/
   end
 end
