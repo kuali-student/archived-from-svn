@@ -46,7 +46,6 @@ Feature: REG.Register Course on Admin Registration
     Then the student's registered courses credit total for the term should be updated
 
 #KSENROLL-14116
-  @pending
   Scenario: CR-Register.1 Verify that a course repeatability message appears when registering a student for a previously enrolled course
     Given a student was registered for a course in a previous term
     When I register the student for the same course in a following term
@@ -54,12 +53,10 @@ Feature: REG.Register Course on Admin Registration
     But the student is still registered for the course
 
 #KSENROLL-15067
-  @pending
   Scenario: CR-Register.2 Verify that an error message appears when attempting to register a student for a course with a suspended section
     When I attempt to register a student for a course with a suspended section
     Then a suspended section error message appears
 
-  @pending
   Scenario: CR-Register.3 Verify that an error message appears when attempting to register a student for a course with a pending state
     When I attempt to register a student for the course with a pending state
     Then a course not offered error message appears
