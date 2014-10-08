@@ -17,6 +17,7 @@ import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants.
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.infc.DegreeMapRequirement;
+import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.ap.academicplan.infc.Placeholder;
 import org.kuali.student.ap.academicplan.infc.PlaceholderInstance;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
@@ -32,6 +33,7 @@ import org.kuali.student.common.collection.KSCollectionUtils;
 import org.kuali.student.enrollment.academicrecord.dto.StudentCourseRecordInfo;
 import org.kuali.student.enrollment.courseoffering.dto.ActivityOfferingInfo;
 import org.kuali.student.r2.common.dto.AttributeInfo;
+import org.kuali.student.r2.common.dto.ContextInfo;
 import org.kuali.student.r2.common.dto.RichTextInfo;
 import org.kuali.student.r2.common.exceptions.AlreadyExistsException;
 import org.kuali.student.r2.common.exceptions.DataValidationErrorException;
@@ -167,6 +169,25 @@ public class DefaultPlanHelper implements PlanHelper, Serializable {
 			throw new IllegalStateException("LP lookup failure", e);
 		} catch (PermissionDeniedException e) {
 			throw new IllegalStateException("LP lookup permission failure", e);
+		}
+	}
+
+	@Override
+	public void updateLearningPlan(LearningPlan learningPlan) {
+		LearningPlanInfo lpInfo = new LearningPlanInfo(learningPlan);
+		String lpId = learningPlan.getId();
+		ContextInfo context = KsapFrameworkServiceLocator.getContext()
+				.getContextInfo();
+
+		try {
+			KsapFrameworkServiceLocator.getAcademicPlanService()
+					.updateLearningPlan(lpId, lpInfo, context);
+		} catch (DataValidationErrorException | InvalidParameterException
+				| MissingParameterException | OperationFailedException
+				| PermissionDeniedException | DoesNotExistException
+				| VersionMismatchException e) {
+			throw new IllegalArgumentException("Academic Plan service failure",
+					e);
 		}
 	}
 

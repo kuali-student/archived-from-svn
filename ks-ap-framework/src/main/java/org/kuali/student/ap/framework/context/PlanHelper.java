@@ -8,6 +8,7 @@ import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants.
 import org.kuali.student.ap.academicplan.dto.LearningPlanInfo;
 import org.kuali.student.ap.academicplan.dto.PlanItemInfo;
 import org.kuali.student.ap.academicplan.infc.DegreeMapRequirement;
+import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.ap.academicplan.infc.Placeholder;
 import org.kuali.student.ap.academicplan.infc.PlaceholderInstance;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
@@ -30,11 +31,12 @@ public interface PlanHelper {
 	 * @return Default Learning Plan
 	 */
 	LearningPlanInfo getDefaultLearningPlan();
-	
+
 	/**
 	 * Update the default learning plan for the current session.
 	 * 
-	 * @param learningPlanId learning plan ID
+	 * @param learningPlanId
+	 *            learning plan ID
 	 */
 	void setDefaultLearningPlan(String learningPlanId);
 
@@ -46,6 +48,14 @@ public interface PlanHelper {
 	 * @return Learning Plan
 	 */
 	LearningPlanInfo getLearningPlan(String learningPlanId);
+
+	/**
+	 * Update a learning plan.
+	 * 
+	 * @param learningPlan
+	 *            The learning plan to update.
+	 */
+	void updateLearningPlan(LearningPlan learningPlan);
 
 	/**
 	 * Gets the plan items in a learning plan.

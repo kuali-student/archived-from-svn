@@ -14,27 +14,20 @@
  */
 package org.kuali.student.ap.planner.support;
 
+import java.util.List;
+
 import org.kuali.rice.krad.web.bind.RequestAccessible;
 import org.kuali.rice.krad.web.form.UifFormBase;
 import org.kuali.student.ap.academicplan.constants.AcademicPlanServiceConstants;
-import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
-import org.kuali.student.ap.framework.context.PlanConstants;
-import org.kuali.student.ap.planner.PlanItemForm;
-import org.kuali.student.r2.common.exceptions.PermissionDeniedException;
-import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.ap.academicplan.infc.LearningPlan;
 import org.kuali.student.ap.academicplan.infc.PlanItem;
-import org.kuali.student.r2.common.exceptions.DoesNotExistException;
-import org.kuali.student.r2.common.exceptions.InvalidParameterException;
-import org.kuali.student.r2.common.exceptions.MissingParameterException;
-import org.kuali.student.r2.common.exceptions.OperationFailedException;
+import org.kuali.student.ap.framework.config.KsapFrameworkServiceLocator;
+import org.kuali.student.ap.planner.PlanItemForm;
+import org.kuali.student.r2.core.acal.infc.Term;
 import org.kuali.student.r2.lum.course.infc.Course;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-
-import java.util.Collections;
-import java.util.List;
 
 public abstract class AbstractPlanItemForm extends UifFormBase implements PlanItemForm {
 
@@ -70,15 +63,19 @@ public abstract class AbstractPlanItemForm extends UifFormBase implements PlanIt
 
 	public void setLearningPlanId(String learningPlanId) {
 		this.learningPlanId = StringUtils.hasText(learningPlanId) ? learningPlanId : null;
-		this.learningPlan = null;
-		this.planItem = null;
-		this.course = null;
-		this.existingPlanItems = null;
+		resetLearningPlan();
 		try {
 			KsapFrameworkServiceLocator.getPlanHelper().setDefaultLearningPlan(
 					learningPlanId);
 		} catch (UnsupportedOperationException e) {
 		}
+	}
+	
+	public void resetLearningPlan() {
+		this.learningPlan = null;
+		this.planItem = null;
+		this.course = null;
+		this.existingPlanItems = null;
 	}
 
 	@Override
