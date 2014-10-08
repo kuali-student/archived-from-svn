@@ -310,7 +310,7 @@ Then (/^I can not approve and activate the admin modify proposal$/) do
   @course_proposal.approve_activate_proposal
   on CmCourseInformationPage do |page|
     #page.course_information
-    page.page_validation_header.should include "This page has 3 errors"
+    page.page_validation_header.should include "This page has 2 errors"
     page.page_validation_message.should include "Start Term: For Approval, Start Term is a required field"
   end
 
