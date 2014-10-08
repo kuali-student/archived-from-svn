@@ -88,7 +88,7 @@ class CmSubmitFieldsObject < CmBaseObject
         fill_out page, :exam_standard, :exam_alternate, :exam_none
         #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
         #if that radio is selected
-        page.loading_wait
+        page.loading_extended_wait
         page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
         page.final_exam_rationale.fit @final_exam_rationale unless page.exam_standard.set?
       end
@@ -152,7 +152,7 @@ class CmSubmitFieldsObject < CmBaseObject
         end
         #This 'UNLESS' is required for 'Standard Exam' which, does not have rationale and should skip filling in final_exam_rationale
         #if that radio is selected
-        page.loading_wait
+        page.loading_extended_wait
         page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
         page.final_exam_rationale.fit opts[:final_exam_rationale] unless page.exam_standard.set?
       end
