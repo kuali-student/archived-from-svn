@@ -2,7 +2,7 @@ class CmProposalCommentsPage < BasePage
 
   wrapper_elements
   cm_elements
-  expected_element :close
+  expected_element :close, timeout = 90
 
   def frm
     self.iframe(class: "fancybox-iframe")

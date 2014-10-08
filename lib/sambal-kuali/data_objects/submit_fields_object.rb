@@ -164,7 +164,7 @@ class CmSubmitFieldsObject < CmBaseObject
       #Active Dates
       page.active_dates unless page.current_page('Active Dates').exists?
       page.start_term.pick! opts[:start_term] unless opts[:start_term].nil?
-      page.loading_wait
+      page.loading_extended_wait
       sleep 2
       determine_save_action unless opts[:defer_save]
     end
