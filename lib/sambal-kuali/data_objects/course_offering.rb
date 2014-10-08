@@ -818,7 +818,7 @@ attr_accessor :course_code,
       page.plan_page_click
     end
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(120)
       remove_code_from_planned_backup
       page.quick_add(@state,@planned_term).wait_until_present(120)
       page.quick_add(@state,@planned_term).click
@@ -835,7 +835,7 @@ attr_accessor :course_code,
       page.plan_page_click
     end
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(120)
       remove_code_from_planned_backup
       page.quick_add(@state,@planned_term).wait_until_present(120)
       page.quick_add(@state,@planned_term).click
