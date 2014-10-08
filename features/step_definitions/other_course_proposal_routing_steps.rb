@@ -12,7 +12,7 @@ Given(/^I have a course proposal with submit and approve fields submitted by (.*
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code, :defer_save=> true)],
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
                               :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number, :defer_save=> true)],
                               :defer_save=> true
 

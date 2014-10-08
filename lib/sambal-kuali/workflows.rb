@@ -97,10 +97,10 @@ module Workflows
   end
 
   def course_number_generator(subject_code)
+    given_course_number = "#{(901..999).to_a.sample}"
     course_list = make CmCourseObject, :search_term => "#{subject_code}9", :course_code => "#{subject_code}9"
     course_list.search_for_course
     list_course_code = (on CmFindACoursePage).results_list_course_code
-    given_course_number = "#{(901..999).to_a.sample}"
     start_course_code = "#{subject_code}#{given_course_number}"
     while list_course_code.include? start_course_code do
       given_course_number = "#{(901..999).to_a.sample}"

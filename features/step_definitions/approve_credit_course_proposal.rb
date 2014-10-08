@@ -8,7 +8,7 @@ Given(/^I have a course proposal with approve fields partially completed submitt
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                       :curriculum_review_process => "Yes",
-                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", defer_save: 'true' )],
+                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                                                       :approve_fields => [(make CmApproveFieldsObject, :course_number => nil, :campus_location => nil, defer_save: 'true')],
                                                       defer_save: 'true'
     determine_save_action
@@ -67,7 +67,7 @@ Given(/^I have a course proposal with approve fields submitted by (.*?)$/) do |p
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                                                       :curriculum_review_process => "Yes",
-                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code, defer_save: 'true')],
+                                                      :submit_fields => [(make CmSubmitFieldsObject, :subject_code => subject_code)],
                                                       :approve_fields => [(make CmApproveFieldsObject, :course_number => course_number, defer_save: 'true' )],
                                                       defer_save: 'true'
     determine_save_action
@@ -91,7 +91,7 @@ Given(/^I have a course proposal with some approve fields missing submitted by (
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", defer_save: 'true')],
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                               :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil, :format_list => [], defer_save: 'true')],
                               defer_save: 'true'
     determine_save_action
@@ -240,7 +240,7 @@ Given(/^I have an incomplete course proposal with submit fields submitted by (.*
   elsif proposal_author == "alice"
     @course_proposal = create CmCourseProposalObject, :create_new_proposal => true,
                               :curriculum_review_process => "Yes",
-                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL", :defer_save => true)],
+                              :submit_fields => [(make CmSubmitFieldsObject, :subject_code => "ENGL")],
                               :approve_fields => [(make CmApproveFieldsObject, :transcript_course_title => nil,
                                                         :course_number => nil,
                                                         :campus_location => nil,
