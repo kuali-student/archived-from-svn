@@ -948,3 +948,14 @@ Then(/^a drop date required message appears$/) do
     page.student_term_go
   end
 end
+
+When(/^I register a student out of his registration appointment time window$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-6892", :term_code => "201208"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "CHEM231",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration
+end
+
+Then(/^an invalid Registration Appointment date message appears$/) do
+  on(AdminRegistration).get_results_warning.should match /Last day of Registration was/m
+end
