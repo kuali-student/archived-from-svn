@@ -17,7 +17,7 @@ When(/^I enter a note while quick adding a course to the backup section$/) do
   @course_search_result.quick_add_planned_notes
 end
 
-When(/^I enter a note while  adding a course to the plan in the course search page$/) do
+When(/^I enter a note while adding a course to the plan in the course search page$/) do
   @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL201", :term=>"Summer I 2014",:notes => "TEST"
   @course_search_result.course_search
   @course_search_result.enter_note_adding_from_plan
