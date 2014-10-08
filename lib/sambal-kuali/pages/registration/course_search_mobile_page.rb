@@ -89,9 +89,9 @@ class CourseSearchMobilePage < RegisterForCourseBase
   def select_facet(facet_type,facet_value=nil)
     show_facets_toggle.wait_until_present
     toggle_show_facets if show_facets.visible?
+    seats_avail_facet_div.wait_until_present
     case facet_type
       when "avail_seats" then
-        seats_avail_facet_div.wait_until_present
         toggle_seats_avail unless seats_avail_toggle.attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
         clear_seats_avail_facet.wait_until_present
       when "credit" then
