@@ -856,7 +856,7 @@ attr_accessor :course_code,
     end
 
     on CoursePlannerPage do |page|
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(120)
       remove_code_from_planned_backup
       #This would change for backup
       page.quick_add(@state,@planned_term).wait_until_present(120)
@@ -870,7 +870,7 @@ attr_accessor :course_code,
   def add_same_course
     on CoursePlannerPage do |page|
       page.refresh
-      page.planner_courses_detail_list.wait_until_present
+      page.planner_courses_detail_list.wait_until_present(120)
       page.quick_add(@state,@planned_term).click
       page.course_code_quick_add.when_present(60).set @course_code
       page.course_code_quick_add.send_keys :tab
