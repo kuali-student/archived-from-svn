@@ -135,7 +135,7 @@
                 <elementProp name="j_username" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.name">j_username</stringProp>
-                  <stringProp name="Argument.value">C.COLETB</stringProp>
+                  <stringProp name="Argument.value">${p_username}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
