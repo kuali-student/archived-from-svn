@@ -896,7 +896,7 @@ attr_accessor :course_code,
   def update_notes
     on CoursePlannerPage do |page|
       page.planner_courses_detail_list.wait_until_present(120)
-      sleep 5
+      sleep 7
       page.course_code_term_click(@planned_term,@course_code)
       page.course_code_edit_click
       page.edit_course.wait_until_present
@@ -910,6 +910,7 @@ attr_accessor :course_code,
       page.quick_add_notes.send_keys  [:control, 'a'], :backspace
       page.quick_add_notes.set "UPDATED TEST"
       page.add_to_plan_quick.click
+      sleep 5
       page.added_course_note(planned_term,course_code).wait_until_present(120)
       end
   end
@@ -922,6 +923,7 @@ attr_accessor :course_code,
         page.quick_add_notes.send_keys  :backspace
       end
       page.edit_course.click
+      sleep 5
       puts page.added_course_note(@planned_term, @course_code).attribute_value("data-content")
     end
   end
