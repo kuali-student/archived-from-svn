@@ -989,103 +989,59 @@ attr_accessor :course_code,
   def add_note_to_term
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      click_term_note_icon_fall
-      add_note
-      click_term_note_icon_winter
-      add_note
-      click_term_note_icon_spring
-      add_note
-      click_term_note_icon_summer
+      click_term_note_icon
       add_note
     end
   end
 
   def saved_text_term
     on CoursePlannerPage do |page|
-      click_term_note_icon_spring
-      get_text=page.term_note.value
+      click_term_note_icon
+      @get_text=page.term_note.value
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
-      get_text.should == "Test Term Note"
     end
   end
 
   def edit_note_term
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      click_term_note_icon_fall
-      edit_note
-      click_term_note_icon_winter
-      edit_note
-      click_term_note_icon_spring
-      edit_note
-      click_term_note_icon_summer
+      click_term_note_icon
       edit_note
     end
   end
 
   def edited_text_term
     on CoursePlannerPage do |page|
-      click_term_note_icon_winter
-      get_text=page.term_note.value
+      click_term_note_icon
+      @get_text=page.term_note.value
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
-      get_text.should == "Edit Term Note"
     end
   end
 
   def delete_note_term
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
-      click_term_note_icon_fall
-      delete_note
-      click_term_note_icon_winter
-      delete_note
-      click_term_note_icon_spring
-      delete_note
-      click_term_note_icon_summer
+      click_term_note_icon
       delete_note
     end
   end
 
   def deleted_text_term
     on CoursePlannerPage do |page|
-      click_term_note_icon_winter
-      get_text=page.term_note.value
+      click_term_note_icon
+      @get_text=page.term_note.value
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
-      get_text.should == ""
     end
   end
 
-  def click_term_note_icon_fall
+  def click_term_note_icon
     on CoursePlannerPage do |page|
-      page.term_fall.wait_until_present(120)
-      page.term_fall.click
-      page.term_note_dialog.wait_until_present
-    end
-  end
-
-  def click_term_note_icon_winter
-    on CoursePlannerPage do |page|
-      page.term_winter.wait_until_present(120)
-      page.term_winter.click
-      page.term_note_dialog.wait_until_present
-    end
-  end
-
-  def click_term_note_icon_spring
-    on CoursePlannerPage do |page|
-      page.term_spring.wait_until_present(120)
-      page.term_spring.click
-      page.term_note_dialog.wait_until_present
-    end
-  end
-
-  def click_term_note_icon_summer
-    on CoursePlannerPage do |page|
-      page.term_summer.wait_until_present(120)
-      page.term_summer.click
+      page.planner_courses_detail_list.wait_until_present(120)
+      header_id=page.term_note_header_id(@term)
+      page.term_note_icon_click(header_id)
       page.term_note_dialog.wait_until_present
     end
   end
@@ -1093,7 +1049,7 @@ attr_accessor :course_code,
   def add_note
     on CoursePlannerPage do |page|
       page.term_note_dialog.wait_until_present
-      page.term_note.set "Test Term Note"
+      page.term_note.set @notes
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
     end
@@ -1102,7 +1058,7 @@ attr_accessor :course_code,
   def edit_note
     on CoursePlannerPage do |page|
       page.term_note_dialog.wait_until_present
-      page.term_note.set "Edit Term Note"
+      page.term_note.set @notes
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
     end
@@ -1111,7 +1067,7 @@ attr_accessor :course_code,
   def delete_note
     on CoursePlannerPage do |page|
       page.term_note_dialog.wait_until_present
-      page.term_note.set ""
+      page.term_note.set @notes
       page.save_term_note.click
       page.term_note_dialog.wait_while_present
     end
