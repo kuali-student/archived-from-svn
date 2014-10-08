@@ -70,7 +70,6 @@ Feature: REG.Register Course on Admin Registration
     Then an already registered message appears
 
 #KSENROLL-15114
-  @pending
   Scenario: CR-Register.5 Verify that a message appears when registering a student out of his registration appointment time window
     When I register a student out of his registration appointment time window
     Then an invalid Registration Appointment date message appears
