@@ -80,6 +80,12 @@ class AppliedHold < DataFactory
 
           page.send_keys :tab
           page.loading.wait_while_present
+
+          #Sometimes the tab out does not load the term and date input fields, which causes a timeout error since those fields aren't visible
+          #so adding this to make sure those fields did load properly
+          if !page.effective_date.visible?
+            page.apply_hold_btn.focus
+          end
         else
           page.find_hold_code
 

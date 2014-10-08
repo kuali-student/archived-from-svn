@@ -918,7 +918,7 @@ When /^I access registration for that student and term$/ do
 end
 
 When /^I access registration for that student in a different term$/ do
-  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201501"
+  @admin_reg = create AdminRegistrationData, :student_id => @applied_hold.student_id, :term_code => "201201"
 end
 
 Then(/^a message appears informing the user of a hold on the student$/) do
