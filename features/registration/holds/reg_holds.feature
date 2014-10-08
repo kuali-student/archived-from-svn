@@ -19,8 +19,37 @@ Feature: REG.Registration Holds
     Then there is a message indicating that registration is unavailable for the term
     And there is a message indicating I have a mandatory advising hold
 
-  #KSENROLL-15184
-  Scenario: CR 3.6 - student is unable to register for a course because of holds
+  #KSENROLL-15184 - CR 3.6 - 5 scenarios
+
+  Scenario: 1 - student is unable to register for a course because of holds
     Given I log in to student registration as A.JANED
     And I attempt to register for a course in Fall 2012
-    Then there is a message indicating that I cannot register because I have too many registration transactions
+    Then there is a message in my cart indicating that I have too many registration transactions
+
+  Scenario: 2 - student is unable to edit a registered course because of holds
+    Given I log in to student registration as A.JANED
+    And I am registered for a course with variable credit and grading options
+    And I go to my schedule
+    And I edit the course in my schedule
+    Then there is a message on my schedule indicating that I have too many registration transactions
+
+  Scenario: 3 - student is unable to edit a waitlisted course because of holds
+    Given I log in to student registration as A.JANED
+    And I am waitlisted for a course with variable credit and grading options
+    And I go to my schedule
+    And I edit the course in my waitlist
+    Then there is a message on my waitlist indicating that I have too many registration transactions
+
+  Scenario: 4 - student is unable to drop a registered course because of holds
+    Given I log in to student registration as A.JANED
+    And I am registered for a course with variable credit and grading options
+    And I go to my schedule
+    And I remove the course from my schedule
+    Then there is a message on my schedule indicating that I have too many registration transactions
+
+  Scenario: 5 - student is unable to drop a waitlisted course because of holds
+    Given I log in to student registration as A.JANED
+    And I am waitlisted for a course with variable credit and grading options
+    And I go to my schedule
+    And I remove myself from the waitlist
+    Then there is a message on my waitlist indicating that I have too many registration transactions

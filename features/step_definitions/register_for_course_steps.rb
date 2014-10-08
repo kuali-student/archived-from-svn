@@ -684,6 +684,11 @@ When /^I register for a course that is secondary alias of a cross-listed course$
                       :reg_group_code=>"1001",
                       :course_options => (make CourseOptions, :grading_option => "Letter"),
                       :course_has_options=> true
+
+  # Clear cart and schedule
+  @restResponse = make RegRestUtility
+  @restResponse.clear_cart_and_schedule(@reg_request.term_code)
+
   @reg_request.create
   @reg_request.register
 end

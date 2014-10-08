@@ -434,7 +434,6 @@ end
 class RegRestUtility < DataFactory
   def initialize(browser, opts={})
     @browser = browser
-
   end
 
 
