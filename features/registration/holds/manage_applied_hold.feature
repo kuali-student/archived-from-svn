@@ -18,7 +18,6 @@ Feature: REG.Manage Applied Hold
     Then a validation error is displayed stating "Student ID: Invalid student Id"
 
 #KSENROLL-14575
-  @pending
-  Scenario: Hold2.18.1 Verify that hold catalog info of applied or expired hold
+  Scenario: Hold2.18.1 Verify that the hold issue's catalog information is displayed on the inquiry view
     When I load a student to view the hold code information
     Then the inquiry view displays the hold catalog information
