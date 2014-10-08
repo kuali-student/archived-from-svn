@@ -900,8 +900,7 @@ attr_accessor :course_code,
       page.course_code_term_click(@planned_term,@course_code)
       page.course_code_edit_click
       page.edit_course.wait_until_present
-      page.edit_course.click
-    end
+      end
   end
 
 
@@ -909,7 +908,7 @@ attr_accessor :course_code,
     on CoursePlannerPage do |page|
       page.quick_add_notes.send_keys  [:control, 'a'], :backspace
       page.quick_add_notes.set "UPDATED TEST"
-      page.add_to_plan_quick.click
+      page.edit_course.click
       sleep 5
       page.added_course_note(planned_term,course_code).wait_until_present(120)
       end

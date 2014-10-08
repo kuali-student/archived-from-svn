@@ -104,7 +104,7 @@ class CoursePlannerPage < BasePage
   element(:current_term) {|b|b.h4(class:"uif-headerText")}
 
   # Elements for notes validation
-  element(:edit_course) { |b| b.frm.button(text: "Save") }
+  element(:edit_course) { |b| b.frm.button(text: "Save",id:"submit_dialog_button") }
   element(:quick_add_notes) { |b|b.text_field(id:"notes_control")}
   element(:added_course_note) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_courses_#{course_code}_courseNote")}
   element(:added_course_note_backup) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_courseNote")}
