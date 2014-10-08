@@ -44,7 +44,7 @@ class CoursePlannerPage < BasePage
   action(:save_click) { |b| b.save.click}
 
   #50 - delete course popover
-  element(:delete_course) { |b| b.frm.button(text: "Delete") }
+  element(:delete_course) { |b| b.frm.button(text: "Remove") }
   action(:delete_course_click) { |b| b.delete_course.click }
 
 
