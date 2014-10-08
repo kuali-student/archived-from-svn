@@ -13,7 +13,6 @@ Feature: REG.Drop Course on Admin Registration
     And the student is no longer registered for the course
 
 #KSENROLL-15150
-  @pending
   Scenario: CR23.4.2 Verify that a message appears if no drop date is used when attempting to drop a registered course
     Given I have registered a student for a course
     When I attempt to drop the course with a blank date
