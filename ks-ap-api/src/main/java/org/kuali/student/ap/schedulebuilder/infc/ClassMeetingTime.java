@@ -41,4 +41,11 @@ public interface ClassMeetingTime extends ScheduleBuildEvent, HasId, HasUniqueId
 	 */
 	String getLocation();
 
+	/**
+	 * Get the building description.
+	 * 
+	 * @return The building description.
+	 */
+	String getBuildingDescr();
+
 }

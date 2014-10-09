@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ClassMeetingTimeInfo", propOrder = { "id", "uniqueId",
-		"instructorName", "location", "arranged", "tba" })
+		"instructorName", "location", "buildingDescr", "arranged", "tba" })
 public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 		ClassMeetingTime {
 
@@ -28,11 +28,14 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 	private String location;
 
 	@XmlAttribute
+	private String buildingDescr;
+
+	@XmlAttribute
 	private boolean arranged;
 
 	@XmlAttribute
 	private boolean tba;
-
+	
 	public ClassMeetingTimeInfo() {
 	}
 
@@ -42,6 +45,7 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 		uniqueId = copy.getUniqueId();
 		instructorName = copy.getInstructorName();
 		location = copy.getLocation();
+		buildingDescr = copy.getBuildingDescr();
 		arranged = copy.isArranged();
 		tba = copy.isTba();
 	}
@@ -80,6 +84,15 @@ public class ClassMeetingTimeInfo extends ScheduleBuildEventInfo implements
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	@Override
+	public String getBuildingDescr() {
+		return buildingDescr;
+	}
+
+	public void setBuildingDescr(String buildingDescr) {
+		this.buildingDescr = buildingDescr;
 	}
 
 	@Override
