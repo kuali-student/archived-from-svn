@@ -72,7 +72,6 @@ Feature: REG.Register Course on Admin Registration
     Then an invalid Registration Appointment date message appears
 
 #KSENROLL-15174
-  @pending
   Scenario: CR-Register.6 Verify that a student is still registered when a class is full
     When I register the student for a course with a full class
     Then a seat count failure message appears
