@@ -336,6 +336,7 @@ class CmCourseProposalObject < CmBaseObject
 
   def load_comments_action
     on CmCourseInformationPage do |page|
+      page.comments_link.wait_until_present(90)
       page.load_comments
     end
   end
