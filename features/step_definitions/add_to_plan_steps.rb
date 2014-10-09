@@ -62,7 +62,7 @@ end
 
 
 When(/^I search for a course in the course search page$/) do
-  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer I 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
     page.course_search_results_facets.wait_until_present(120)
@@ -74,15 +74,17 @@ end
 And(/^I add the course from search to the planned section for a specific term$/) do
   on CourseSearch do |page|
     page.plan_page_click
-
   end
 
   on CoursePlannerPage do |page|
+    page.refresh
   page.planner_courses_detail_list.wait_until_present(120)
+  end
   @course_search_result.remove_code_from_planned_backup
+
   navigate_to_course_search_home
   @course_search_result.select_add_to_plan
-end
+
 end
 
 Then(/^the course should be there in the planner$/) do
@@ -168,7 +170,7 @@ Then(/^the course should be there in the backup section of the planner$/) do
 end
 
 When(/^I search for a specific course$/) do
-  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Spring", :course_code => "ENGL206", :term=>"Spring 2014"
+  @course_search_result = make CourseSearchResults,  :planned_term=>"2014Summer1", :course_code => "ENGL206", :term=>"Summer I 2014"
   @course_search_result.course_search
   on CourseSearch do |page|
     page.course_search_results_facets.wait_until_present(90)
