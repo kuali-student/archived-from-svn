@@ -110,7 +110,7 @@ class CoursePlannerPage < BasePage
   element(:added_course_note_backup) { |planned_term,course_code,b|b.div(id: "kuali-atp-#{planned_term}_backup_#{course_code}_courseNote")}
   #Elements for term notes validation
   value(:term_note_header_id) { |term,b| b.span(text:"#{term}").parent.parent.attribute_value("id") }
-  action(:term_note_icon_click) { |header_id,b| b.header(id: "#{header_id}").div(id: /_termNote/).click }
+  action(:term_note_icon_click) { |header_id,b| b.header(id: "#{header_id}").div(id: /_termNote$/).click }
   element(:term_note_dialog) { |b| b.div(id: "KSAP-TermNoteDialog-FormView") }
   element(:save_term_note) { |b| b.div(id: "KSAP-TermNoteDialog-FormView").button(id: "submit_dialog_button") }
   element(:term_note) { |b| b.div(id: "KSAP-TermNoteDialog-FormView").textarea(name: "termNote") }

@@ -61,6 +61,12 @@ Then(/^the term note should be successfully added$/) do
   @get_text.should == @notes
 end
 
+Given(/^I have a term with notes$/) do
+  @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
+                               :notes => "#{random_alphanums(7).strip}_pub"
+  @course_search_result.add_note_to_term
+end
+
 When(/^I edit the term note$/) do
   @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
                                :notes => "#{random_alphanums(9).strip}_pub"
