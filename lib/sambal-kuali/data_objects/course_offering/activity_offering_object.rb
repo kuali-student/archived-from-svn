@@ -346,7 +346,7 @@ class ActivityOfferingObject < DataFactory
             page.colocated_co_input_field.value = ao_to_colo.parent_cluster.parent_course_offering.course
             page.colocated_ao_input_field.value = ao_to_colo.code
             page.add_colocated
-            page.add_colocate_ao_confirmation_add
+#            page.add_colocate_ao_confirmation_add
             @colocate_ao_list << ao_to_colo
           end
         end
