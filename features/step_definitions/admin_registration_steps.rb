@@ -743,14 +743,14 @@ end
 
 Given(/^a student was registered for a course in a previous term$/) do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2162", :term_code=> "201201"
-  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL201",
                                                              :section=> "1001", :register => true)
   @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
 end
 
 When(/^I register the student for the same course in a following term$/) do
   @admin_reg = create AdminRegistrationData, :student_id => "KS-2162", :term_code=> "201401"
-  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL201",
                                                              :section=> "1001", :register => true)
   @admin_reg.course_section_codes[0].confirm_registration :confirm_registration => true
 end
@@ -958,4 +958,18 @@ end
 
 Then(/^an invalid Registration Appointment date message appears$/) do
   on(AdminRegistration).get_results_warning.should match /Last day of Registration was/m
+end
+
+When(/^I register the student for a course with a full class$/) do
+  @admin_reg = create AdminRegistrationData, :student_id => "KS-2238", :term_code => "201201"
+  @admin_reg.add_course_section :course_section_obj => (make ARCourseSectionObject, :course_code=> "ENGL101",
+                                                             :section=> "1001", :register => true)
+  @admin_reg.course_section_codes[0].confirm_registration
+end
+
+Then(/^a seat count failure message appears$/) do
+  on AdminRegistration do |page|
+    page.get_results_warning.should match /No seats available/m
+    page.student_term_go
+  end
 end

@@ -150,7 +150,8 @@ Then(/^an invalid term error message is displayed$/) do
 end
 
 Given /^I have applied a Hold Issue to a student$/ do
-  @applied_hold = create AppliedHold, :student_id => "KS-2101", :hold_issue => (make HoldIssue, :code => "ACAD07")
+  @applied_hold = create AppliedHold, :student_id => "KS-2101",  :find_code_by_lookup => true,
+                                      :hold_issue => (make HoldIssue, :code => "ACAD07")
   @applied_hold.apply_hold :term_based => true, :effective_term => "201401"
 end
 

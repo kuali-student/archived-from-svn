@@ -70,3 +70,10 @@ Feature: REG.Register Course on Admin Registration
   Scenario: CR-Register.5 Verify that a message appears when registering a student out of his registration appointment time window
     When I register a student out of his registration appointment time window
     Then an invalid Registration Appointment date message appears
+
+#KSENROLL-15174
+  @pending
+  Scenario: CR-Register.6 Verify that a student is still registered when a class is full
+    When I register the student for a course with a full class
+    Then a seat count failure message appears
+    But the student is still registered for the course
