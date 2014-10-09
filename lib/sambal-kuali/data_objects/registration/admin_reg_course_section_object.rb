@@ -31,7 +31,7 @@ class ARCourseSectionObject < DataFactory
   end
 
   def create
-    @parent.search if @navigate_to_page
+    @parent.create if @navigate_to_page
 
     on AdminRegistration do |page|
       if @parent.term_code != nil
