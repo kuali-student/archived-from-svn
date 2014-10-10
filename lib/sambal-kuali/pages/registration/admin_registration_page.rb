@@ -40,16 +40,20 @@ class AdminRegistration < BasePage
   action(:dismiss_term){ |b| b.loading.wait_while_present; b.dismiss_term_btn.click}
 
   def get_term_warning
-    array = []
-    loading.wait_while_present
-    if term_issues_table.exists?
+    begin
+      wait_until(120) { term_issues_table.exists? }
+
+      array = []
       term_issues_table.rows[1..-1].each do |row|
         if row.attribute_value('class') =~ /alert-warning/
           array << row.text
         end
       end
+
+      return array.to_s
+    rescue Watir::Wait::TimeoutError
+      return "Term Eligibility warning took longer than 120s to appear"
     end
-    array.to_s
   end
 
   #################################################################
@@ -154,16 +158,20 @@ class AdminRegistration < BasePage
   action(:dismiss_results){ |b| b.loading.wait_while_present; b.dismiss_results_btn.click}
 
   def get_results_warning
-    array = []
-    loading.wait_while_present
-    if registration_issues_table.exists?
+    begin
+      wait_until(120) { registration_issues_table.exists? }
+
+      array = []
       registration_issues_table.rows[1..-1].each do |row|
         if row.attribute_value('class') =~ /alert-warning/
           array << row.text
         end
       end
+
+      return array.to_s
+    rescue Watir::Wait::TimeoutError
+      return "Registration results took longer than 120s to appear"
     end
-    array.to_s
   end
 
   #################################################################
