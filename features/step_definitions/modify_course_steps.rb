@@ -66,9 +66,8 @@ Given(/^I have an active course created for modify$/) do
   @course_proposal.submit_fields[0].edit  description_rationale: "updated #{random_alphanums(20, 'test description rationale ')}",
                                           proposal_rationale: "updated #{random_alphanums(20, 'test proposal rationale ')}",
                                           curriculum_oversight: @source_course.curriculum_oversight,
-                                          final_exam_type: [:exam_alternate],
-                                          final_exam_rationale: "updated #{random_alphanums(10,'test final exam rationale ')}",
-                                          exam_alternate: :set,
+                                          final_exam_type: [:exam_standard],
+                                          exam_standard: :set,
                                           start_term: @source_course.start_term,
                                           defer_save: 'true'
 
