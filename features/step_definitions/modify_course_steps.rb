@@ -320,8 +320,8 @@ When (/^I complete the required for approve fields on the modify course proposal
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
-                                                final_exam_type: [:exam_alternate],
-                                                exam_alternate: :set,
+                                                final_exam_type: [:exam_standard],
+                                                exam_standard: :set,
                                                 start_term: 'Spring 2018',
                                                 defer_save: 'true'
 
@@ -390,8 +390,8 @@ Given(/^there is a course with a active modify proposal$/) do
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
-                                                final_exam_type: [:exam_alternate],
-                                                exam_alternate: :set,
+                                                final_exam_type: [:exam_standard],
+                                                exam_standard: :set,
                                                 start_term: 'Spring 2018',
                                                 defer_save: 'true'
 
@@ -443,8 +443,8 @@ Given(/^there is a course with a superseded version$/) do
   puts "modify course proposal: #{@modify_course_proposal.proposal_title}"
 
   @modify_course_proposal.submit_fields[0].edit proposal_rationale: @modify_course_proposal.proposal_title + " Added test rationale.",
-                                                final_exam_type: [:exam_alternate],
-                                                exam_alternate: :set,
+                                                final_exam_type: [:exam_standard],
+                                                exam_standard: :set,
                                                 start_term: 'Spring 2018',
                                                 cs_with_cr: 'yes',
                                                 defer_save: 'true'
