@@ -986,49 +986,15 @@ attr_accessor :course_code,
     end
   end
 
-  def add_note_to_term
+  def enter_note_in_term
     navigate_to_course_planner_home
     on CoursePlannerPage do |page|
       click_term_note_icon
-      add_note
+      enter_the_note
     end
   end
 
-  def saved_text_term
-    on CoursePlannerPage do |page|
-      click_term_note_icon
-      @get_text=page.term_note.value
-      page.save_term_note.click
-      page.term_note_dialog.wait_while_present
-    end
-  end
-
-  def edit_note_term
-    navigate_to_course_planner_home
-    on CoursePlannerPage do |page|
-      click_term_note_icon
-      edit_note
-    end
-  end
-
-  def edited_text_term
-    on CoursePlannerPage do |page|
-      click_term_note_icon
-      @get_text=page.term_note.value
-      page.save_term_note.click
-      page.term_note_dialog.wait_while_present
-    end
-  end
-
-  def delete_note_term
-    navigate_to_course_planner_home
-    on CoursePlannerPage do |page|
-      click_term_note_icon
-      delete_note
-    end
-  end
-
-  def deleted_text_term
+  def text_in_term
     on CoursePlannerPage do |page|
       click_term_note_icon
       @get_text=page.term_note.value
@@ -1046,25 +1012,7 @@ attr_accessor :course_code,
     end
   end
 
-  def add_note
-    on CoursePlannerPage do |page|
-      page.term_note_dialog.wait_until_present
-      page.term_note.set @notes
-      page.save_term_note.click
-      page.term_note_dialog.wait_while_present
-    end
-  end
-
-  def edit_note
-    on CoursePlannerPage do |page|
-      page.term_note_dialog.wait_until_present
-      page.term_note.set @notes
-      page.save_term_note.click
-      page.term_note_dialog.wait_while_present
-    end
-  end
-
-  def delete_note
+  def enter_the_note
     on CoursePlannerPage do |page|
       page.term_note_dialog.wait_until_present
       page.term_note.set @notes

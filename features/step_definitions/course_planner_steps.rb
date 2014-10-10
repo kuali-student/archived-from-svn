@@ -53,38 +53,38 @@ end
 When(/^I add a note to term$/) do
   @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
                                :notes => "#{random_alphanums(5).strip}_pub"
-  @course_search_result.add_note_to_term
+  @course_search_result.enter_note_in_term
 end
 
 Then(/^the term note should be successfully added$/) do
-  @course_search_result.saved_text_term
+  @course_search_result.text_in_term
   @get_text.should == @notes
 end
 
 Given(/^I have a term with notes$/) do
   @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
                                :notes => "#{random_alphanums(7).strip}_pub"
-  @course_search_result.add_note_to_term
+  @course_search_result.enter_note_in_term
 end
 
 When(/^I edit the term note$/) do
   @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
                                :notes => "#{random_alphanums(9).strip}_pub"
-  @course_search_result.edit_note_term
+  @course_search_result.enter_note_in_term
 end
 
 Then(/^the term note should be successfully edited$/) do
-  @course_search_result.edited_text_term
+  @course_search_result.text_in_term
   @get_text.should == @notes
 end
 
 When(/^I delete the term note$/) do
   @course_search_result = make CourseSearchResults, :term => "Summer I 2014",
                                :notes => "#{random_alphanums(0).strip}"
-  @course_search_result.delete_note_term
+  @course_search_result.enter_note_in_term
 end
 
 Then(/^the term note should be deleted from the term$/) do
-  @course_search_result.deleted_text_term
+  @course_search_result.text_in_term
   @get_text.should == @notes
 end
