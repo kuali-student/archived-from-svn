@@ -792,8 +792,8 @@ And /^I attempt to register for a course in (\w+\s+\d+)$/ do |term_desc|
   @restResponse.clear_cart_and_schedule(term_code)
   @reg_request = make RegistrationRequest,
                       :term_descr=> term_desc,
-                      :course_code=>"CHEM231",
-                      :reg_group_code=>"1001",
+                      :course_code=>"BSCI120",
+                      :reg_group_code=>"1003",
                       :course_options => (make CourseOptions, :grading_option => "Letter", :credit_option => "3.0"),
                       :course_has_options=> true
   @reg_request.create
