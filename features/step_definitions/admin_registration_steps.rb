@@ -967,6 +967,5 @@ end
 Then(/^a seat count failure message appears$/) do
   on AdminRegistration do |page|
     page.get_results_warning.should match /No seats available/m
-    page.student_term_go
   end
 end
