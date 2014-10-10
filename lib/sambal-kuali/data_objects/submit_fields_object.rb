@@ -90,6 +90,7 @@ class CmSubmitFieldsObject < CmBaseObject
         #if that radio is selected
         page.loading_extended_wait
         page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
+        sleep 5
         page.final_exam_rationale.fit @final_exam_rationale unless page.exam_standard.set?
       end
 
@@ -154,6 +155,7 @@ class CmSubmitFieldsObject < CmBaseObject
         #if that radio is selected
         page.loading_extended_wait
         page.final_exam_rationale.wait_until_present unless page.exam_standard.set?
+        sleep 5
         page.final_exam_rationale.fit opts[:final_exam_rationale] unless page.exam_standard.set?
       end
       determine_save_action unless opts[:defer_save]
