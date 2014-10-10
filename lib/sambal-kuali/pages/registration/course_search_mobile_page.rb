@@ -92,18 +92,19 @@ class CourseSearchMobilePage < RegisterForCourseBase
     seats_avail_facet_div.wait_until_present
     case facet_type
       when "avail_seats" then
+        seats_avail_toggle.wait_until_present
         toggle_seats_avail unless seats_avail_toggle.attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
         clear_seats_avail_facet.wait_until_present
       when "credit" then
-        credit_facet_div.wait_until_present
+        credits_toggle(facet_value).wait_until_present
         toggle_credits(facet_value) unless credits_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
         clear_credit_facet.wait_until_present
       when "course_level"
-        course_level_facet_div.wait_until_present
+        course_level_toggle(facet_value).wait_until_present
         toggle_course_level(facet_value) unless course_level_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
         clear_level_facet.wait_until_present
       when "course_prefix"
-        course_prefix_facet_div.wait_until_present
+        course_prefix_toggle(facet_value).wait_until_present
         toggle_course_prefix(facet_value) unless course_prefix_toggle(facet_value).attribute_value("class") =~ /kscr-SearchFacet-option--Selected/i
         clear_prefix_facet.wait_until_present
     end
