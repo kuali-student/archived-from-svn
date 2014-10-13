@@ -485,7 +485,9 @@ Then /^the default values are displayed on edit course dialog$/ do
   on AdminRegistration do |page|
     page.get_edit_course_credits.should match /#{@admin_reg.course_section_codes[0].requested_credits}/
     page.get_edit_course_reg_options.should match /#{@admin_reg.course_section_codes[0].requested_reg_options}/
+
     page.cancel_edited_course
+    page.student_term_go
   end
 end
 
